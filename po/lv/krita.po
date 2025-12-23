@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-20 02:02+0000\n"
+"POT-Creation-Date: 2025-12-23 02:05+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -39176,7 +39176,7 @@ msgstr "Krāsu pāreja"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:264
+#: plugins/tools/basictools/kis_tool_gradient.cc:256
 #, fuzzy, kde-format
 msgid "Repeat:"
 msgstr "Atkārtot:"
@@ -50266,7 +50266,7 @@ msgstr "Ķieģeļi"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:249
+#: plugins/tools/basictools/kis_tool_gradient.cc:241
 #, fuzzy, kde-format
 msgid "Shape:"
 msgstr "Figūra:"
@@ -52276,84 +52276,84 @@ msgid "&Gradient..."
 msgstr "Krāsu pāreja"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:244
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "Lineārs"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:253
+#: plugins/tools/basictools/kis_tool_gradient.cc:245
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "Lineārs"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:254
+#: plugins/tools/basictools/kis_tool_gradient.cc:246
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "Radiāls"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:255
+#: plugins/tools/basictools/kis_tool_gradient.cc:247
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "Kvadrāts"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:256
+#: plugins/tools/basictools/kis_tool_gradient.cc:248
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "Kanāls"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:257
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "Simetrisks"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:258
+#: plugins/tools/basictools/kis_tool_gradient.cc:250
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "Divkāršot Ota"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:259
+#: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "Noņemt grupu"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:260
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "Figūra:"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#: plugins/tools/basictools/kis_tool_gradient.cc:259
 #, fuzzy, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "Nav"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:268
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, fuzzy, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "Četras joslas"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:269
+#: plugins/tools/basictools/kis_tool_gradient.cc:261
 #, fuzzy, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -52403,7 +52403,7 @@ msgstr "&Nosaukums:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#: plugins/tools/basictools/kis_tool_gradient.cc:266
 #, fuzzy, kde-format
 msgid "Anti-alias threshold:"
 msgstr "Krāsošanas Jūtība:"
@@ -63869,19 +63869,19 @@ msgstr ""
 msgid "Fill Tool"
 msgstr "Elipse"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:166
+#: plugins/tools/basictools/kis_tool_gradient.cc:157
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Krāsu pāreja"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:282
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "Reverss"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:287
+#: plugins/tools/basictools/kis_tool_gradient.cc:279
 #, fuzzy, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-20 02:02+0000\n"
+"POT-Creation-Date: 2025-12-23 02:05+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -41400,7 +41400,7 @@ msgstr "메시 그라디언트"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:264
+#: plugins/tools/basictools/kis_tool_gradient.cc:256
 #, kde-format
 msgid "Repeat:"
 msgstr "반복:"
@@ -52991,7 +52991,7 @@ msgstr "조리개"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:249
+#: plugins/tools/basictools/kis_tool_gradient.cc:241
 #, kde-format
 msgid "Shape:"
 msgstr "모양:"
@@ -55051,84 +55051,84 @@ msgid "&Gradient..."
 msgstr "그라디언트(&G)..."
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:244
 #, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "선형"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:253
+#: plugins/tools/basictools/kis_tool_gradient.cc:245
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "이중 선형"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:254
+#: plugins/tools/basictools/kis_tool_gradient.cc:246
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "방사형"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:255
+#: plugins/tools/basictools/kis_tool_gradient.cc:247
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "사각형"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:256
+#: plugins/tools/basictools/kis_tool_gradient.cc:248
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "원뿔형"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:257
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "원추형 대칭"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:258
+#: plugins/tools/basictools/kis_tool_gradient.cc:250
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "나선형"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:259
+#: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "나선형 반전"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:260
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "선택한 모양"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#: plugins/tools/basictools/kis_tool_gradient.cc:259
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "없음"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:268
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "전진"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:269
+#: plugins/tools/basictools/kis_tool_gradient.cc:261
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -55178,7 +55178,7 @@ msgstr "상대"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#: plugins/tools/basictools/kis_tool_gradient.cc:266
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "앤티에일리어싱 임곗값:"
@@ -67013,18 +67013,18 @@ msgstr ""
 msgid "Fill Tool"
 msgstr "채우기 도구"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:166
+#: plugins/tools/basictools/kis_tool_gradient.cc:157
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "그라디언트"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:282
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "반전"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:287
+#: plugins/tools/basictools/kis_tool_gradient.cc:279
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"

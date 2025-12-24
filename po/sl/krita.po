@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-23 02:05+0000\n"
-"PO-Revision-Date: 2025-12-18 10:42+0100\n"
+"POT-Creation-Date: 2025-12-24 02:13+0000\n"
+"PO-Revision-Date: 2025-12-23 01:01+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7768,26 +7768,23 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"Naj prvo izbrano besedilo poteka po liku. Če že obstajajo liki, v katerih je "
+"potekalo, bo lik dodan v potek."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subtract Shape from Text Flow Area"
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "Odštej lik od območja tekočega besedila"
+msgstr "Odštej lik od tekočega besedila"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make shapes part of the subtracted shapes of the first selected text."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
-msgstr "Liki naj bodo del odštetih likov prvega izbranega besedila."
+msgstr "Liki naj bodo del odštetih površin likov prvega izbranega besedila."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7805,18 +7802,14 @@ msgstr "Naj prvo izbrano besedilo teče po prvi izbrani poti."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Shapes from Text Flow"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
 msgstr "Odstrani like iz tekočega besedila"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove shapes from text flow and add them to the layer."
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
 msgstr "Odstrani like iz tekočega besedila in jih doda v plast."
@@ -7852,11 +7845,7 @@ msgstr "Lik poteka nastavi kot zadnjega"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the last in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
@@ -7868,58 +7857,53 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "Prej v zaporedju poteka."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "Ta lik premaknite prej v zaporedju poteka besedila."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Premakne lik prej v zaporedju poteka."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "Kasneje v zaporedju poteka"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "Ta lik premakne kasneje v zaporedju poteka besedila."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Premaknite lik kasneje v zaoredju poteka."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Zamik prve vrstice"
+msgstr "Prvi v zaporedju poteka"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the first in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
@@ -7929,12 +7913,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set Flow Shape as First"
+#, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr "Lik poteka nastavi kot prvega"
+msgstr "Nastavite lik kot prvega v zaporedju poteka"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -20470,30 +20452,30 @@ msgid "Character Variant %1"
 msgstr "Različica znakov %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Besedilo ograde"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2598
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Besedilo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
-#: libs/flake/text/KoSvgTextShape.cpp:2608
+#: libs/flake/text/KoSvgTextShape.cpp:2601
+#: libs/flake/text/KoSvgTextShape.cpp:2609
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Besedilni lik SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2606
+#: libs/flake/text/KoSvgTextShape.cpp:2607
 #, kde-format
 msgid "SVG Text"
 msgstr "Besedilo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2630
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24376,7 +24358,7 @@ msgid "Choose File to Add"
 msgstr "Izberite datoteko za dodajanje"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
-#: libs/widgets/KisTagSelectionWidget.cpp:120
+#: libs/widgets/KisTagSelectionWidget.cpp:123
 #, kde-format
 msgid "Assign to tag"
 msgstr "Dodeli znački"
@@ -25413,7 +25395,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -40213,9 +40195,10 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, kde-format
-msgid "Remove from tag"
-msgstr "Odstrani iz značke"
+#, fuzzy, kde-format
+#| msgid "Remove Page"
+msgid "Remove tag"
+msgstr "Odstrani stran"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -40946,12 +40929,12 @@ msgstr "&Besedilo ikone:"
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "&Skrij besedilo, ko orodna vrstica prikaže besedilo ob ikonah"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:613
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:615
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "Prilagodi orodne vrstice"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -40960,12 +40943,12 @@ msgstr ""
 "Ali res želite ponastaviti vse orodne vrstice tega programa na privzeto? "
 "Spremembe bodo takoj uveljavljene."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "Ponastavi orodne vrstice"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1000
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1002
 #, kde-format
 msgid "&Toolbar:"
 msgstr "&Orodna vrstica:"
@@ -40977,56 +40960,56 @@ msgstr "&Orodna vrstica:"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1015
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1017
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "&Dejanja na voljo:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1039
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1041
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1044
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "Tr&enutna dejanja:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1068
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1070
 #, kde-format
 msgid "Change Icon..."
 msgstr "Spremeni ikono ..."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1075
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1077
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1217
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1219
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1237
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "Ta element bo zamenjan z vsemi elementi vdelane komponente."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
 #, kde-format
 msgid "<Merge>"
 msgstr "<Spoji>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1243
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<Spoji %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1247
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1249
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -41035,24 +41018,24 @@ msgstr ""
 "To je dinamični seznam dejanj. Lahko ga premaknete, če pa ga odstranite, ga "
 "ne boste mogli ponovno dodati."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1248
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1250
 #, kde-format
 msgid "ActionList: %1"
 msgstr "Seznam dejanj: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1347
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1369
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1349
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1371
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1545
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, kde-format
 msgid "Choose Icon"
 msgstr "Izberite ikono"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1552
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1574
 #, kde-format
 msgid "Filter icons..."
 msgstr "Filtriraj ikone ..."
@@ -45656,11 +45639,7 @@ msgid "Alignment Baseline"
 msgstr "Osnovnica poravnave"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controlling how this range of text is aligned "
-#| "to the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
@@ -45809,9 +45788,7 @@ msgid "Align to the descender."
 msgstr "Poravnajte z repkom."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt "Type setting mode line name"
-#| msgid "Baseline Shift"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
 msgstr "Zamik osnovnice"
@@ -46054,11 +46031,7 @@ msgid "Dominant Baseline"
 msgstr "Prevladujoča osnovnica"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Dominant Baseline specifies how stretches of text of different sizes are "
-#| "aligned, it is also the default for Alignment Baseline."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -46145,18 +46118,15 @@ msgid "Font Kerning"
 msgstr "Spodsekavanje pisave"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
 "Vklopite ali izklopite spodsekavanje pisav. Spodsekavanje pisave omogoča "
-"prilagajanje razmika med posameznimi glifi."
+"prilagajanje razmika med posameznimi glifi, kot jih določa pisava oz. "
+"tipografija."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46436,11 +46406,7 @@ msgid "Line Break"
 msgstr "Prelom vrstice"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Line Break allows choosing a strictness for the line breaking algorithm. "
-#| "Mostly used for CJK scripts, requires language being set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
@@ -46519,9 +46485,7 @@ msgid "Line Height"
 msgstr "Višina vrstice"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Line Height controls the line height used for the range of text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr ""
@@ -46548,12 +46512,10 @@ msgid "OpenType Features"
 msgstr "Funkcije OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
-msgstr "Prilagodite funkcije Open Type."
+msgstr "Prilagodite funkcije OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -46588,12 +46550,10 @@ msgid "Glyphs: Capitals"
 msgstr "Glifi: velike začetnice"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Enable opentype features related to capitals"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr "Omogočite funkcionalnosti Open Type, povezane z velikimi črkami"
+msgstr "Omogočite funkcionalnosti OpenType, povezane z velikimi črkami"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -46917,9 +46877,7 @@ msgid "Tab Size"
 msgstr "Velikost zamika tabulatorja"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Tab Size allows defining the size of tabulation characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
 msgstr "Velikost tabulatorja omogoča določanje velikosti tabulatorskih znakov."
@@ -46939,24 +46897,18 @@ msgid "Text Align"
 msgstr "Poravnava besedila"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr "Poravnava besedila nastavi poravnavo za dani blok znakov."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the text-anchor property, matching is "
-#| "case-insensitive"
-#| msgid "text-align, justification, text-anchor"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
-msgstr "poravnava besedila, poravnava, obojestransko, sidro besedila"
+msgstr "poravnava-besedila, obojestransko, sidro-besedila"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
@@ -47058,11 +47010,7 @@ msgid "Text Decoration"
 msgstr "Okrasitev besedila"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Decoration allows drawing underlines, overlines and striking through "
-#| "text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
@@ -47147,11 +47095,7 @@ msgid "Text Indent"
 msgstr "Zamik besedila"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Indent allows setting indentation at the line start. Only works when "
-#| "the text is wrapping."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
@@ -47286,10 +47230,7 @@ msgid "Text Rendering"
 msgstr "Izrisovanje besedila"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Rendering controls the hinting and rendering style for the property"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
@@ -47359,12 +47300,7 @@ msgid "Text Transform"
 msgstr "Preoblikovanje besedila"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Transform allows transforming the given range of characters, for "
-#| "example, by setting them uppercase, or switching out half-width forms for "
-#| "full-width forms."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
@@ -47599,12 +47535,7 @@ msgid "Writing Mode"
 msgstr "Način pisanja"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Writing Mode sets whether the text flows horizontally or vertically, and "
-#| "in the latter case, whether the block flows right to left or left to "
-#| "right."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
@@ -69310,22 +69241,5 @@ msgstr ""
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
 
-#~ msgctxt "action"
-#~ msgid "Make the first selected text flow in shape."
-#~ msgstr "Naj prvo izbrano besedilo teče v liku."
-
-#~ msgctxt "action"
-#~ msgid "Decrease Flow Shape Index"
-#~ msgstr "Zmanjšaj indeks lika poteka"
-
-#~ msgctxt "action"
-#~ msgid "Make this flow shape be evaluated later."
-#~ msgstr "Ta lik poteka naj se ovrednoti kasneje."
-
-#~ msgctxt "action"
-#~ msgid "Increase Flow Shape Index"
-#~ msgstr "Povečaj indeks lika poteka"
-
-#~ msgctxt "@label"
-#~ msgid "Baseline-Shift"
-#~ msgstr "Zamik osnovnice"
+#~ msgid "Remove from tag"
+#~ msgstr "Odstrani iz značke"

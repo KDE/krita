@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-23 02:05+0000\n"
+"POT-Creation-Date: 2025-12-24 02:13+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -20457,30 +20457,30 @@ msgid "Character Variant %1"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2598
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
-#: libs/flake/text/KoSvgTextShape.cpp:2608
+#: libs/flake/text/KoSvgTextShape.cpp:2601
+#: libs/flake/text/KoSvgTextShape.cpp:2609
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2606
+#: libs/flake/text/KoSvgTextShape.cpp:2607
 #, kde-format
 msgid "SVG Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2630
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24526,7 +24526,7 @@ msgid "Choose File to Add"
 msgstr ""
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
-#: libs/widgets/KisTagSelectionWidget.cpp:120
+#: libs/widgets/KisTagSelectionWidget.cpp:123
 #, kde-format
 msgid "Assign to tag"
 msgstr ""
@@ -25530,7 +25530,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -39867,9 +39867,11 @@ msgid "Luma:"
 msgstr ""
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, kde-format
-msgid "Remove from tag"
-msgstr ""
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "&Color"
+msgid "Remove tag"
+msgstr "&Ранг"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -40555,25 +40557,25 @@ msgstr ""
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:613
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:615
 #, kde-format
 msgid "Configure Toolbars"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, fuzzy, kde-format
 #| msgid "Education"
 msgid "Reset Toolbars"
 msgstr "Илму маърифат"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1000
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1002
 #, kde-format
 msgid "&Toolbar:"
 msgstr ""
@@ -40585,12 +40587,12 @@ msgstr ""
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1015
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1017
 #, kde-format
 msgid "A&vailable actions:"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1039
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1041
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Color"
@@ -40598,18 +40600,18 @@ msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "&Ранг"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1044
 #, fuzzy, kde-format
 #| msgid "Education"
 msgid "Curr&ent actions:"
 msgstr "Илму маърифат"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1068
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1070
 #, kde-format
 msgid "Change Icon..."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1075
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1077
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -40617,53 +40619,53 @@ msgstr ""
 msgid "Filter"
 msgstr "&Ранг"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1217
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1219
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1237
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
 #, kde-format
 msgid "<Merge>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1243
 #, kde-format
 msgid "<Merge %1>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1247
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1249
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1248
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1250
 #, kde-format
 msgid "ActionList: %1"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1347
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1369
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1349
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1371
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1545
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, kde-format
 msgid "Choose Icon"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1552
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1574
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Color"

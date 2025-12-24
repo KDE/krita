@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-23 02:05+0000\n"
-"PO-Revision-Date: 2025-12-20 14:18+0300\n"
+"POT-Creation-Date: 2025-12-24 02:13+0000\n"
+"PO-Revision-Date: 2025-12-23 14:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.11.80\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20471,30 +20471,30 @@ msgid "Character Variant %1"
 msgstr "Karakter Varyantı %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Yer Tutucu Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2598
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
-#: libs/flake/text/KoSvgTextShape.cpp:2608
+#: libs/flake/text/KoSvgTextShape.cpp:2601
+#: libs/flake/text/KoSvgTextShape.cpp:2609
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2606
+#: libs/flake/text/KoSvgTextShape.cpp:2607
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2630
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23876,8 +23876,8 @@ msgid ""
 "The resource database scheme has changed. Krita will backup your database "
 "and create a new database."
 msgstr ""
-"Özkaynak veritabanı şeması değişti. Krita veritabanınızı yedekleyip yeni bir "
-"veritabanı oluşturacak."
+"Özkaynak veri tabanı şeması değişti. Krita veri tabanınızı yedekleyip yeni "
+"bir veri tabanı oluşturacak."
 
 #: libs/resources/KisResourceLocator.cpp:90
 #, kde-format
@@ -23892,18 +23892,18 @@ msgstr "2. %1 konumundaki özkaynak konumu yazılabilir değil."
 #: libs/resources/KisResourceLocator.cpp:816
 #, kde-format
 msgid "Could not add %1 to the database"
-msgstr "%1, veritabanına eklenemedi"
+msgstr "%1, veri tabanına eklenemedi"
 
 #: libs/resources/KisResourceLocator.cpp:860
 #: libs/resources/KisResourceLocator.cpp:1221
 #, kde-format
 msgid "Could not remove storage %1 from the database"
-msgstr "%1 depolaması veritabanından kaldırılamadı"
+msgstr "%1 depolaması veri tabanından kaldırılamadı"
 
 #: libs/resources/KisResourceLocator.cpp:973
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
-msgstr "Güncellenmiş yazıtipi kayıt defteri, veritabanıyla eşzamanlanamadı"
+msgstr "Güncellenmiş yazıtipi kayıt defteri, veri tabanıyla eşzamanlanamadı"
 
 #: libs/resources/KisResourceLocator.cpp:981
 #, kde-format
@@ -23947,7 +23947,7 @@ msgstr "Özkaynaklar eşzamanlanıyor."
 #: libs/resources/KisResourceLocator.cpp:1191
 #, kde-format
 msgid "Could not synchronize %1 with the database"
-msgstr "%1, veritabanıyla eşzamanlanamadı"
+msgstr "%1, veri tabanıyla eşzamanlanamadı"
 
 #: libs/resources/KisResourceModel.cpp:98
 #: libs/resources/KisStorageModel.cpp:463
@@ -24374,7 +24374,7 @@ msgid "Choose File to Add"
 msgstr "Eklenecek Dosyayı Seç"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
-#: libs/widgets/KisTagSelectionWidget.cpp:120
+#: libs/widgets/KisTagSelectionWidget.cpp:123
 #, kde-format
 msgid "Assign to tag"
 msgstr "Künyeye Ata"
@@ -25417,7 +25417,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -31205,7 +31205,7 @@ msgstr ""
 #: libs/ui/forms/wdgnewimage.ui:554
 #, kde-format
 msgid "As &raster layer"
-msgstr "&Raster katmanı olarak"
+msgstr "&Raster katman olarak"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:567
@@ -40181,9 +40181,10 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, kde-format
-msgid "Remove from tag"
-msgstr "Künyeden çıkar"
+#, fuzzy, kde-format
+#| msgid "Remove Page"
+msgid "Remove tag"
+msgstr "Sayfa Kaldır"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -40912,12 +40913,12 @@ msgstr "&Simge metni:"
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "Araç çubuğu simgelerin yanında metin gösteriyorsa metinleri &gizle"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:613
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:615
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "Araç Çubuklarını Yapılandır"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -40926,12 +40927,12 @@ msgstr ""
 "Bu uygulamanın tüm araç çubuklarını öntanımlı ayarlarına döndürmek "
 "istediğinizden emin misiniz? Değişiklikler hemen uygulanacaktır."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "Araç Çubuklarını Sıfırla"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1000
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1002
 #, kde-format
 msgid "&Toolbar:"
 msgstr "&Araç çubuğu:"
@@ -40943,56 +40944,56 @@ msgstr "&Araç çubuğu:"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1015
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1017
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "&Kullanılabilir eylemler:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1039
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1041
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Süzgeç"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1044
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "Geçerli &eylemler:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1068
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1070
 #, kde-format
 msgid "Change Icon..."
 msgstr "Simgeyi Değiştir…"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1075
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1077
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "Süz"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1217
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1219
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1237
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "Bu öge gömülü bileşen içindeki tüm ögelerle yer değiştirecek."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
 #, kde-format
 msgid "<Merge>"
 msgstr "<Birleştir>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1243
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<Birleştir: %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1247
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1249
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -41001,24 +41002,24 @@ msgstr ""
 "Bu bir devingen eylem listesidir. Onu taşıyabilirsiniz; ancak onu "
 "kaldırırsanız yeniden ekleyemezsiniz."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1248
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1250
 #, kde-format
 msgid "ActionList: %1"
 msgstr "Eylem listesi: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1347
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1369
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1349
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1371
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1545
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, kde-format
 msgid "Choose Icon"
 msgstr "Simge Seç"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1552
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1574
 #, kde-format
 msgid "Filter icons..."
 msgstr "Simgeleri Süz…"
@@ -48261,7 +48262,7 @@ msgstr "Geçerli Katmanı %1 Biçiminden Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr "Ö&zkaynaklar Önbelleği Veritabanında Gez…"
+msgstr "Ö&zkaynaklar Önbelleği Veri Tabanında Gez…"
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -48275,12 +48276,12 @@ msgstr "Ö&zkaynaklar Önbelleği Veritabanında Gez…"
 #, kde-format
 msgctxt "action"
 msgid "Resources Cache Database"
-msgstr "Özkaynaklar Önbelleği Veritabanı"
+msgstr "Özkaynaklar Önbelleği Veri Tabanı"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:35
 #, kde-format
 msgid "Resources Cache Database Explorer"
-msgstr "Özkaynaklar Önbelleği Veritabanı Gezgini"
+msgstr "Özkaynaklar Önbelleği Veri Tabanı Gezgini"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #, kde-format
@@ -48308,7 +48309,7 @@ msgstr "Görüntü Adı"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
 #, kde-format
 msgid "Database version"
-msgstr "Veritabanı sürümü"
+msgstr "Veri tabanı sürümü"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
 #, kde-format
@@ -48348,7 +48349,7 @@ msgstr "İlklendirme"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
 #, kde-format
 msgid "Database version:"
-msgstr "Veritabanı sürümü:"
+msgstr "Veri tabanı sürümü:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
@@ -62105,7 +62106,7 @@ msgid ""
 msgstr ""
 "Öntanımlı olarak bu, oluşturulan evrensel eşsiz bir tanımlayıcı ile "
 "doldurulacaktır. Kimlik tek başına yalnızca çizgi roman kitaplık yönetim "
-"programlarının bu özel çizgi romanın kendi veritabanında olup olmadığını ve "
+"programlarının bu özel çizgi romanın kendi veri tabanında olup olmadığını ve "
 "derecelendirilip derecelendirilmediğini anlayabilmesi içindir. Elbette, UUID "
 "JSON’un elle değiştirilmesiyle başka bir şeyle değiştirilebilir; ancak bu "
 "ileri bir kullanımdır."
@@ -62704,7 +62705,7 @@ msgstr "UUID:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
 msgid "Database:"
-msgstr "Veritabanı:"
+msgstr "Veri tabanı:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
@@ -69171,6 +69172,9 @@ msgstr ""
 "Tam erim ve alt erim arasında geçiş yapın.\n"
 "Tam erim: [%1, %2]\n"
 "Alt erim: [%3, %4]"
+
+#~ msgid "Remove from tag"
+#~ msgstr "Künyeden çıkar"
 
 #~ msgctxt "action"
 #~ msgid "Make the first selected text flow in shape."

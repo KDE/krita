@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-23 02:05+0000\n"
+"POT-Creation-Date: 2025-12-24 02:13+0000\n"
 "PO-Revision-Date: 2025-02-16 11:21+0100\n"
 "Last-Translator: oneway <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -21523,7 +21523,7 @@ msgid "Character Variant %1"
 msgstr "Variante (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -21531,25 +21531,25 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>Platzhaltertext</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2598
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
-#: libs/flake/text/KoSvgTextShape.cpp:2608
+#: libs/flake/text/KoSvgTextShape.cpp:2601
+#: libs/flake/text/KoSvgTextShape.cpp:2609
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-Textobjekt"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2606
+#: libs/flake/text/KoSvgTextShape.cpp:2607
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2630
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -25566,7 +25566,7 @@ msgid "Choose File to Add"
 msgstr "Hinzuzufügende Datei auswählen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
-#: libs/widgets/KisTagSelectionWidget.cpp:120
+#: libs/widgets/KisTagSelectionWidget.cpp:123
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Assign to tag"
@@ -26622,7 +26622,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -41442,9 +41442,9 @@ msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
 #, fuzzy, kde-format
-#| msgid "Remove from this tag"
-msgid "Remove from tag"
-msgstr "Von diesem Stichwort entfernen"
+#| msgid "Remove Page"
+msgid "Remove tag"
+msgstr "Seite entfernen"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -42186,12 +42186,12 @@ msgstr ""
 "&Text ausblenden, wenn sich dieser neben den Symbolen der Werkzeugleiste "
 "befindet"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:613
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:615
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "Werkzeugleisten einrichten"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -42200,12 +42200,12 @@ msgstr ""
 "Möchten Sie wirklich alle Werkzeugleisten dieser Anwendung auf ihre "
 "Voreinstellungen zurücksetzen? Die Änderung wird sofort wirksam."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "Werkzeugleisten zurücksetzen"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1000
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1002
 #, kde-format
 msgid "&Toolbar:"
 msgstr "&Werkzeugleiste:"
@@ -42217,31 +42217,31 @@ msgstr "&Werkzeugleiste:"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1015
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1017
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "Ver&fügbare Aktionen:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1039
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1041
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1044
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "&Angezeigte Aktionen:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1068
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1070
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change font"
 msgid "Change Icon..."
 msgstr "Schriftart ändern"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1075
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1077
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -42249,13 +42249,13 @@ msgstr "Schriftart ändern"
 msgid "Filter"
 msgstr "Filtern"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1217
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1219
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1237
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
@@ -42263,19 +42263,19 @@ msgstr ""
 "Dieses Element wird durch alle Elemente einer eingebetteten Komponente "
 "ersetzt."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
 #, fuzzy, kde-format
 #| msgid "Merge"
 msgid "<Merge>"
 msgstr "Zusammenführen"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1243
 #, fuzzy, kde-format
 #| msgid "Merge"
 msgid "<Merge %1>"
 msgstr "Zusammenführen"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1247
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1249
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -42284,25 +42284,25 @@ msgstr ""
 "Dies ist eine dynamische Liste von Aktionen. Sie können sie verschieben, "
 "aber wenn Sie sie entfernen, können Sie sie nicht mehr zurückholen."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1248
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1250
 #, kde-format
 msgid "ActionList: %1"
 msgstr "Aktionenliste: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1347
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1369
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1349
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1371
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1545
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, fuzzy, kde-format
 #| msgid "Choose a color"
 msgid "Choose Icon"
 msgstr "Wählen Sie eine Farbe"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1552
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1574
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Filter icons..."
@@ -71418,6 +71418,11 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Remove from this tag"
+#~ msgid "Remove from tag"
+#~ msgstr "Von diesem Stichwort entfernen"
 
 #, fuzzy
 #~| msgid "Click to select text shape."

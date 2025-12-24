@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-12-19 13:35+0300\n"
+"PO-Revision-Date: 2025-12-23 12:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.11.80\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -41633,7 +41633,7 @@ msgstr "Geçerli Katmanı %1 Biçiminden Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr "Ö&zkaynaklar Önbelleği Veritabanında Gez…"
+msgstr "Ö&zkaynaklar Önbelleği Veri Tabanında Gez…"
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -41647,12 +41647,12 @@ msgstr "Ö&zkaynaklar Önbelleği Veritabanında Gez…"
 #, kde-format
 msgctxt "action"
 msgid "Resources Cache Database"
-msgstr "Özkaynaklar Önbelleği Veritabanı"
+msgstr "Özkaynaklar Önbelleği Veri Tabanı"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:34
 #, kde-format
 msgid "Resources Cache Database Explorer"
-msgstr "Özkaynaklar Önbelleği Veritabanı Gezgini"
+msgstr "Özkaynaklar Önbelleği Veri Tabanı Gezgini"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
 #, kde-format

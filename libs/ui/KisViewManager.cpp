@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
+#include <QDeadlineTimer>
 #include <QStandardPaths>
 #include <QScreen>
 #include <QDesktopServices>
@@ -167,6 +168,7 @@ public:
         , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
+        , zoomRotationMessageTimer(Qt::CoarseTimer)
     {
         KisViewManager::initializeResourceManager(&canvasResourceManager);
     }
@@ -236,6 +238,10 @@ public:
     KisSignalAutoConnectionsStore viewConnections;
     KSelectAction *actionAuthor {nullptr}; // Select action for author profile.
     KisAction *showPixelGrid {nullptr};
+
+    QDeadlineTimer zoomRotationMessageTimer;
+    QString zoomMessage;
+    QString rotationMessage;
 
     QByteArray canvasStateInNormalMode;
     QByteArray canvasStateInCanvasOnlyMode;
@@ -1567,6 +1573,45 @@ void KisViewManager::showFloatingMessage(const QString &message, const QIcon& ic
     d->currentImageView->showFloatingMessage(message, icon, timeout, priority, alignment);
 
     Q_EMIT floatingMessageRequested(message, icon.name());
+}
+
+void KisViewManager::showFloatingZoomMessage(const QString &message)
+{
+    d->zoomMessage = message;
+    handleFloatingZoomRotationMessage(d->rotationMessage);
+}
+
+void KisViewManager::showFloatingRotationMessage(const QString &message)
+{
+    d->rotationMessage = message;
+    handleFloatingZoomRotationMessage(d->zoomMessage);
+}
+
+void KisViewManager::handleFloatingZoomRotationMessage(QString &messageToClear)
+{
+    int timeoutMsec = 500;
+
+    if (d->zoomRotationMessageTimer.hasExpired()) {
+        messageToClear.clear();
+    }
+    d->zoomRotationMessageTimer.setRemainingTime(timeoutMsec);
+
+    QString message;
+    bool haveZoomMessage = !d->zoomMessage.isEmpty();
+    bool haveRotationMessage = !d->rotationMessage.isEmpty();
+    if (haveZoomMessage) {
+        if (haveRotationMessage) {
+            message = QStringLiteral("%1\n%2").arg(d->zoomMessage, d->rotationMessage);
+        }  else {
+            message = d->zoomMessage;
+        }
+    } else if (haveRotationMessage) {
+        message = d->rotationMessage;
+    } else {
+        return;
+    }
+
+    showFloatingMessage(message, QIcon(), timeoutMsec, KisFloatingMessage::Low, Qt::AlignCenter);
 }
 
 KisMainWindow *KisViewManager::mainWindow() const

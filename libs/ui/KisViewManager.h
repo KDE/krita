@@ -178,6 +178,9 @@ public:
                              KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
                              int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
+    void showFloatingZoomMessage(const QString &message);
+    void showFloatingRotationMessage(const QString &message);
+
     /// @return the KisMainWindow this view is in, or 0
     KisMainWindow *mainWindow() const;
 
@@ -264,6 +267,8 @@ private:
 
     /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();
+
+    void handleFloatingZoomRotationMessage(QString &messageToClear);
 
 private:
     class KisViewManagerPrivate;

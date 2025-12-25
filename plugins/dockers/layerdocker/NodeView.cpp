@@ -148,61 +148,6 @@ void NodeView::toggleSolo(const QModelIndex &index) {
     d->delegate.toggleSolo(index);
 }
 
-QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex &index,
-                                                                  const QEvent *event) const
-{
-    /**
-     * Qt has a bug: when we Ctrl+click on an item, the item's
-     * selections gets toggled on mouse *press*, whereas usually it is
-     * done on mouse *release*.  Therefore the user cannot do a
-     * Ctrl+D&D with the default configuration. This code fixes the
-     * problem by manually returning QItemSelectionModel::NoUpdate
-     * flag when the user clicks on an item and returning
-     * QItemSelectionModel::Toggle on release.
-     */
-
-    if (event &&
-        (event->type() == QEvent::MouseButtonPress ||
-         event->type() == QEvent::MouseButtonRelease) &&
-        index.isValid()) {
-
-        const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
-
-        if (mevent->button() == Qt::RightButton &&
-            selectionModel()->selectedIndexes().contains(index)) {
-
-            // Allow calling context menu for multiple layers
-            return QItemSelectionModel::NoUpdate;
-        }
-
-        if (event->type() == QEvent::MouseButtonPress &&
-            (mevent->modifiers() & Qt::ControlModifier)) {
-
-            return QItemSelectionModel::NoUpdate;
-        }
-
-        if (event->type() == QEvent::MouseButtonRelease &&
-            (mevent->modifiers() & Qt::ControlModifier)) {
-
-            // Select the entire row, otherwise we only get updates for DEFAULT_COL and then we have to
-            // manually sync its state with SELECTED_COL.
-            return QItemSelectionModel::Toggle | QItemSelectionModel::Rows;
-        }
-    }
-
-    /**
-     * Qt 5.6 has a bug: it reads global modifiers, not the ones
-     * passed from event.  So if you paste an item using Ctrl+V it'll
-     * select multiple layers for you
-     */
-    Qt::KeyboardModifiers globalModifiers = QApplication::keyboardModifiers();
-    if (!event && globalModifiers != Qt::NoModifier) {
-        return QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
-    }
-
-    return QAbstractItemView::selectionCommand(index, event);
-}
-
 QModelIndex NodeView::indexAt(const QPoint &point) const
 {
     KisNodeViewColorScheme scm;

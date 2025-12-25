@@ -718,6 +718,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (startTouch(retval)) {
             QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
             KisAbstractInputAction::setInputManager(this);
+            d->lastPointCount = touchEvent->touchPoints().size();
             d->startingPos = touchEvent->touchPoints().at(0).pos();
             d->previousPos = d->startingPos;
             // we don't want to lose this event
@@ -759,6 +760,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         d->debugEvent<QTouchEvent, false>(event);
 
+        int eventPointCount = touchEvent->touchPoints().size();
+        d->lastPointCount = eventPointCount;
+
 #ifdef Q_OS_MAC
         int count = 0;
         Q_FOREACH (const QTouchEvent::TouchPoint &point, touchEvent->touchPoints()) {
@@ -767,7 +771,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             }
         }
 
-        if (count < 2 && touchEvent->touchPoints().length() > count) {
+        if (count < 2 && eventPointCount > count) {
             d->touchHasBlockedPressEvents = false;
             d->cancelTouchHoldTimer();
             retval = d->matcher.touchEndEvent(touchEvent);
@@ -830,8 +834,24 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchCancel:
     {
+        // On some Android devices, such as Xiaomi Pads, the system always eats
+        // multitouch inputs with more than two fingers, even if the user
+        // disables all gestures related to them in their system settings or
+        // uses the game boost mode that is supposed to disable gestures. So we
+        // handle those inputs even when they are cancelled, if the user wants
+        // to use it for a system gesture, they can disable the Krita shortcut.
+#ifdef Q_OS_ANDROID
+        bool ignoreCancel = d->lastPointCount > 2;
+#else
+        bool ignoreCancel = false;
+#endif
+
         d->cancelTouchHoldTimer();
-        d->clearBufferedTouchEvents();
+        if (ignoreCancel) {
+            d->flushBufferedTouchEvents();
+        } else {
+            d->clearBufferedTouchEvents();
+        }
 
         if (d->popupWasActive) {
             event->setAccepted(true);
@@ -841,8 +861,13 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         endTouch();
         d->allowMouseEvents();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-        d->matcher.touchCancelEvent(touchEvent, d->previousPos);
+        if (ignoreCancel) {
+            d->matcher.touchEndEvent(touchEvent);
+        } else {
+            d->matcher.touchCancelEvent(touchEvent, d->previousPos);
+        }
         // reset state
+        d->lastPointCount = 0;
         d->startingPos = {0, 0};
         d->previousPos = {0, 0};
         d->touchStrokeStarted = false;

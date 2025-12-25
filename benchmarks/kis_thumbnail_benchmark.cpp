@@ -73,7 +73,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnail()
     QImage image;
 
     QBENCHMARK{
-        image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect() );
+        image = m_dev->createThumbnailUncached(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect() );
         //m_dev->setDirty();
     }
 
@@ -85,7 +85,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailCached()
     QImage image;
 
     QBENCHMARK{
-        image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, 2. );
+        image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, KisThumbnailBoundsMode::Coarse, 2. );
     }
 }
 
@@ -95,7 +95,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailHiQ()
     QImage image;
 
     QBENCHMARK{
-        image = m_dev->createThumbnail(OVERSAMPLE * THUMBNAIL_WIDTH, OVERSAMPLE * THUMBNAIL_HEIGHT);
+        image = m_dev->createThumbnailUncached(OVERSAMPLE * THUMBNAIL_WIDTH, OVERSAMPLE * THUMBNAIL_HEIGHT, QRect());
         image = image.scaled(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         m_dev->setDirty();
     }
@@ -108,7 +108,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailHiQcreateThumbOversample2x()
     QImage image;
 
     QBENCHMARK{
-        image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect(), 2,
+        image = m_dev->createThumbnailUncached(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect(), 2,
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags());
         m_dev->setDirty();
@@ -122,7 +122,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailHiQcreateThumbOversample3x()
     QImage image;
 
     QBENCHMARK{
-        image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect(), 3,
+        image = m_dev->createThumbnailUncached(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect(), 3,
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags());
         m_dev->setDirty();
@@ -136,7 +136,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailHiQcreateThumbOversample4x()
     QImage image;
 
     QBENCHMARK{
-        image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect(), 4,
+        image = m_dev->createThumbnailUncached(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, QRect(), 4,
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags());
         m_dev->setDirty();

@@ -320,7 +320,34 @@ public:
      * type cannot generate a thumbnail. If the requested size is too
      * big, return a null QImage.
      */
-    virtual QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+    virtual QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio, KisThumbnailBoundsMode boundsMode = KisThumbnailBoundsMode::Precise);
+
+    /**
+     * Create a thumbnail in the currently preferred bounds mode
+     *
+     * @see preferredThumbnailBoundsMode()
+     */
+    QImage createPreferredThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+
+    /**
+     * @return the currently preferred bounds mode for the thumbnails
+     *         (whether to use exactBounds() or extent())
+     *
+     * Some layers with huge areas of empty pixels may take too much time
+     * to generate a thumbnail (because of slow exactBounds() calculation).
+     *
+     * If thumbnail generator notices a slowdown it switches the layer's
+     * thumbnail generation into `Coarse` mode, which will force thumbnails
+     * to be genrated from extent() of the device instead.
+     */
+    KisThumbnailBoundsMode preferredThumbnailBoundsMode() const;
+
+    /**
+     * Set preferred bounds mode for the layer thumbnails
+     *
+     * @see preferredThumbnailBoundsMode()
+     */
+    void setPreferredThumbnailBoundsMode(KisThumbnailBoundsMode value) const;
 
     /**
      * @return a sequence number of the thumbnail of the node. Every time the layer changes,
@@ -335,7 +362,8 @@ public:
      * current node type cannot generate a thumbnail. If the requested
      * size is too big, return a null QImage.
      */
-    virtual QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+    virtual QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio, KisThumbnailBoundsMode boundsMode = KisThumbnailBoundsMode::Precise);
+    QImage createPreferredThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     /**
      * Ask this node to re-read the pertinent settings from the krita

@@ -134,7 +134,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
                 if (imageSize.width() > iconSize.width() || imageSize.height() > iconSize.height()) {
                     imageSize.scale(iconSize, Qt::KeepAspectRatio);
                 }
-                const QImage &thumbnail = projection->createThumbnail(imageSize.width(), imageSize.height(), bounds);
+                const QImage &thumbnail = projection->createThumbnailUncached(imageSize.width(), imageSize.height(), bounds);
                 icon = createIcon(thumbnail, iconSize);
                 return true;
             } else {

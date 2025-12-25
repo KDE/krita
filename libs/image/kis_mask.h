@@ -176,7 +176,7 @@ public:
 
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
-    QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
+    QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode, KisThumbnailBoundsMode boundsMode) override;
     int thumbnailSeqNo() const override;
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);

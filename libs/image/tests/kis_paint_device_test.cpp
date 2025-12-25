@@ -409,7 +409,7 @@ void KisPaintDeviceTest::testThumbnailDeviceWithOffset()
     dev->setX(10);
     dev->setY(10);
 
-    QImage thumb = dev->createThumbnail(640,441,QRect(10,10,640,441));
+    QImage thumb = dev->createThumbnailUncached(640,441,QRect(10,10,640,441));
 
     image.save("oring.png");
     thumb.save("thumb.png");

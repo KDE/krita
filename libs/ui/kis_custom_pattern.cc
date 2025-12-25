@@ -211,7 +211,7 @@ void KisCustomPattern::createPattern()
     }
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
+    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnailUncached(size.width(), size.height(), rc, /*oversample*/ 1,
                                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                                  KoColorConversionTransformation::internalConversionFlags()), name, dir));
 }

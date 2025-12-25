@@ -427,7 +427,7 @@ QVariant KisAnimTimelineFramesModel::data(const QModelIndex &index, int role) co
             }
             const int maxSize = 200;
 
-            QImage image(dummy->node()->createThumbnailForFrame(maxSize, maxSize, index.column(), Qt::KeepAspectRatio));
+            QImage image(dummy->node()->createPreferredThumbnailForFrame(maxSize, maxSize, index.column(), Qt::KeepAspectRatio));
             return image;
         }
     }

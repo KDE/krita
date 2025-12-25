@@ -805,6 +805,15 @@ public:
     bool longPressEnabled(bool defaultValue = false) const;
     void setLongPressEnabled(bool value);
 
+    /**
+     * The timeout for the layer thumbnail generation after which
+     * the thumbnail algorithm will be switched to an imprecise one.
+     *
+     * Measured in milliseconds.
+     */
+    int layerThumbnailGenerationTimeout(bool defaultValue = false) const;
+    void setLayerThumbnailGenerationTimeout(int value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

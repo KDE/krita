@@ -329,6 +329,14 @@ typedef QVector<StoryboardComment> StoryboardCommentList;
 class KisImageResolutionProxy;
 using KisImageResolutionProxySP = QSharedPointer<KisImageResolutionProxy>;
 
+/**
+ * Thumbnail generation mode, 'Precise' means to use exactBounds() and
+ * 'Coarse' means to use extent() for the thumbnail generation.
+ */
+enum class KisThumbnailBoundsMode {
+    Coarse,
+    Precise
+};
 
 #include <QSharedPointer>
 #include <QWeakPointer>

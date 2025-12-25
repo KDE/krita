@@ -36,6 +36,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     bool animated {false};
     bool pinnedToTimeline {false};
     KisImageWSP image;
+    KisThumbnailBoundsMode thumbnailBoundsMode { KisThumbnailBoundsMode::Precise };
 
     Private(KisImageWSP p_image)
         : id(QUuid::createUuid())
@@ -194,9 +195,10 @@ bool KisBaseNode::check(const KoProperties & properties) const
 }
 
 
-QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
+QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode, KisThumbnailBoundsMode boundsMode)
 {
     Q_UNUSED(aspectRatioMode);
+    Q_UNUSED(boundsMode);
 
     try {
         QImage image(w, h, QImage::Format_ARGB32);
@@ -208,16 +210,35 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspe
 
 }
 
+QImage KisBaseNode::createPreferredThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
+{
+    return createThumbnail(w, h, aspectRatioMode, m_d->thumbnailBoundsMode);
+}
+
+KisThumbnailBoundsMode KisBaseNode::preferredThumbnailBoundsMode() const
+{
+    return m_d->thumbnailBoundsMode;
+}
+
+void KisBaseNode::setPreferredThumbnailBoundsMode(KisThumbnailBoundsMode value) const
+{
+    m_d->thumbnailBoundsMode = value;
+}
+
 int KisBaseNode::thumbnailSeqNo() const
 {
     return -1;
 }
 
-QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
+QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode, KisThumbnailBoundsMode boundsMode)
 {
     Q_UNUSED(time);
-    Q_UNUSED(aspectRatioMode);
-    return createThumbnail(w, h);
+    return createThumbnail(w, h, aspectRatioMode, boundsMode);
+}
+
+QImage KisBaseNode::createPreferredThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
+{
+    return createThumbnailForFrame(w, h, time, aspectRatioMode, m_d->thumbnailBoundsMode);
 }
 
 bool KisBaseNode::visible(bool recursive) const

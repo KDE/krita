@@ -143,7 +143,7 @@ WGCommonColorsCalculationRunner::WGCommonColorsCalculationRunner(KisImageSP imag
 {
     // TODO: can this be done in the worker thread too?
     KisPaintDeviceSP device = image->projection();
-    m_imageData = device->createThumbnail(1024, 1024, image->bounds(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    m_imageData = device->createThumbnailUncached(1024, 1024, image->bounds(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
 }
 

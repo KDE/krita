@@ -1796,7 +1796,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
     return thumbnail;
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisPaintDevice::createThumbnailUncached(qint32 w, qint32 h, QRect rect, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     QSize size = fixThumbnailSize(QSize(w, h));
 
@@ -1805,22 +1805,27 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, qreal ove
     return thumbnail;
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KisThumbnailBoundsMode boundsMode, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     QSize size = fixThumbnailSize(QSize(w, h));
 
-    return m_d->cache()->createThumbnail(size.width(), size.height(), oversample, renderingIntent, conversionFlags);
+    return m_d->cache()->createThumbnail(size.width(), size.height(), boundsMode, oversample, renderingIntent, conversionFlags);
 }
 
 QImage KisPaintDevice::createThumbnail(qint32 maxw, qint32 maxh,
                                        Qt::AspectRatioMode aspectRatioMode,
+                                       KisThumbnailBoundsMode boundsMode,
                                        qreal oversample, KoColorConversionTransformation::Intent renderingIntent,
                                        KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    const QRect deviceExtent = exactBounds();
+    const QRect deviceExtent = boundsMode == KisThumbnailBoundsMode::Precise ? exactBounds() : extent();
     const QSize thumbnailSize = deviceExtent.size().scaled(maxw, maxh, aspectRatioMode);
-    return createThumbnail(thumbnailSize.width(), thumbnailSize.height(),
-                           oversample, renderingIntent, conversionFlags);
+    return createThumbnail(thumbnailSize.width(),
+                           thumbnailSize.height(),
+                           boundsMode,
+                           oversample,
+                           renderingIntent,
+                           conversionFlags);
 }
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)

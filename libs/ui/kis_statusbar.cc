@@ -28,6 +28,7 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
+#include <kis_layer_utils.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_selection_manager.h>
@@ -250,6 +251,23 @@ void KisStatusBar::updateSelectionIcon()
     m_selectionStatus->setIcon(icon);
 }
 
+namespace {
+QVector<KisNodeSP> fetchLayersWithSlowThumbnailGeneration(KisImageSP image)
+{
+    QVector<KisNodeSP> result;
+
+    KisLayerUtils::recursiveApplyNodes(image->root(),
+    [&result] (KisNodeSP node) {
+        if (node->preferredThumbnailBoundsMode() == KisThumbnailBoundsMode::Coarse) {
+            result.append(node);
+        }
+    });
+
+    return result;
+}
+}
+
+
 void KisStatusBar::updateMemoryStatus()
 {
     KisMemoryStatisticsServer::Statistics stats =
@@ -291,7 +309,7 @@ void KisStatusBar::updateMemoryStatus()
     QString longStats = imageStatsMsg + "\n" + memoryStatsMsg;
 
     QString shortStats = format.formatByteSize(stats.imageSize);
-    QIcon icon;
+    bool shouldUseWarningIcon = false;
     const qint64 warnLevel = stats.tilesHardLimit - stats.tilesHardLimit / 8;
 
     if (stats.imageSize > warnLevel ||
@@ -302,7 +320,7 @@ void KisStatusBar::updateMemoryStatus()
             KisUsageLogger::log(QString("WARNING: %1 is running out of memory:%2\n").arg(m_imageView->document()->path()).arg(longStats));
         }
 
-        icon = KisIconUtils::loadIcon("warning");
+        shouldUseWarningIcon = true;
         QString suffix =
                 i18nc("tooltip on statusbar memory reporting button",
                       "\n\nWARNING:\tOut of memory! Swapping has been started.\n"
@@ -312,8 +330,37 @@ void KisStatusBar::updateMemoryStatus()
 
     }
 
+    if (m_imageView) {
+        const QVector<KisNodeSP> slowThumbnailNodes = fetchLayersWithSlowThumbnailGeneration(m_imageView->image());
+        if (!slowThumbnailNodes.isEmpty()) {
+            QString suffix =
+                i18nc("tooltip on statusbar memory reporting button",
+                      "\n\nWARNING:\tSome layers took too much time to calculate\n"
+                      "\t\ttheir thumbnails. They were switched into low-quality\n"
+                      "\t\tthumbnails mode.\n"
+                    "Slow layers: ");
+
+            bool needsSeparator = false;
+            Q_FOREACH(KisNodeSP node, slowThumbnailNodes) {
+                if (needsSeparator) {
+                    suffix += ", ";
+                }
+                suffix.append(QString("\"%1\"").arg(node->name()));
+                needsSeparator = true;
+            }
+            longStats += suffix;
+            shouldUseWarningIcon = true;
+        }
+    }
+
     m_shortMemoryTag = shortStats;
     m_longMemoryTag = longStats;
+
+    QIcon icon;
+    if (shouldUseWarningIcon) {
+        icon = KisIconUtils::loadIcon("warning");
+    }
+
     m_memoryStatusIcon = icon;
 
     m_memoryReportBox->setMaximumMemory(stats.totalMemoryLimit);

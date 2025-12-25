@@ -778,7 +778,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
             QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
 
             origImg = m_selectedPortionCache->
-                    createThumbnail(thumbRect.width(),
+                    createThumbnailUncached(thumbRect.width(),
                                     thumbRect.height(),
                                     srcRect, 1,
                                     KoColorConversionTransformation::internalRenderingIntent(),

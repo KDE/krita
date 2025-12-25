@@ -2910,6 +2910,16 @@ void KisConfig::setLongPressEnabled(bool value)
     KisConfigNotifier::instance()->notifyLongPressChanged(value);
 }
 
+int KisConfig::layerThumbnailGenerationTimeout(bool defaultValue) const
+{
+    return defaultValue ? 40 : m_cfg.readEntry("layerThumbnailGenerationTimeout", 40);
+}
+
+void KisConfig::setLayerThumbnailGenerationTimeout(int value)
+{
+    m_cfg.writeEntry("layerThumbnailGenerationTimeout", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

@@ -647,7 +647,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
             if (maxSize == m_d->thumbnalCache.maxSize()) {
                 return m_d->thumbnalCache.thumbnail(node);
             } else {
-                return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
+                return node->createPreferredThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
             }
         } else {
             return QVariant();

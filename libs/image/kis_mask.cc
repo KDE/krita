@@ -469,15 +469,13 @@ QRect KisMask::nonDependentExtent() const
     return QRect();
 }
 
-QImage KisMask::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
+QImage KisMask::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode, KisThumbnailBoundsMode boundsMode)
 {
     KisPaintDeviceSP originalDevice =
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
-                                           KoColorConversionTransformation::internalRenderingIntent(),
-                                           KoColorConversionTransformation::internalConversionFlags()) : QImage();
+           originalDevice->createThumbnail(w, h, aspectRatioMode, boundsMode) : QImage();
 }
 
 int KisMask::thumbnailSeqNo() const

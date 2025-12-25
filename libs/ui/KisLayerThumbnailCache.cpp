@@ -5,6 +5,7 @@
  */
 #include "KisLayerThumbnailCache.h"
 
+#include "kis_config.h"
 #include "kis_image.h"
 #include "KisIdleTasksManager.h"
 #include "kis_layer_utils.h"
@@ -67,8 +68,21 @@ public:
             }
 
             if (shouldRegenerateThumbnail) {
-                addJobConcurrent(jobs, [node, this] () mutable {
-                    QImage image = node->createThumbnail(m_maxSize, m_maxSize, Qt::KeepAspectRatio);
+                const int timeout = KisConfig(true).layerThumbnailGenerationTimeout();
+
+                addJobConcurrent(jobs, [node, timeout, this] () mutable {
+                    QElapsedTimer timer;
+                    timer.start();
+                    QImage image = node->createPreferredThumbnail(m_maxSize, m_maxSize, Qt::KeepAspectRatio);
+                    const int measuredTime = timer.elapsed();
+
+                    if (node->preferredThumbnailBoundsMode() == KisThumbnailBoundsMode::Precise &&
+                        measuredTime > timeout) {
+                        warnUI << "WARNING: thumbnail generation for" << node->name() << "took longer than expected:" << measuredTime << "(timeout:" << timeout << ")";
+                        warnUI << "         This layer's thumbnail will be rendered in imprecise mode from now on";
+                        node->setPreferredThumbnailBoundsMode(KisThumbnailBoundsMode::Coarse);
+                    }
+
                     this->sigThumbnailGenerated(node, node->thumbnailSeqNo(), m_maxSize, image);
                 });
             }

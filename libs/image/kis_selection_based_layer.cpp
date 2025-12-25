@@ -367,15 +367,13 @@ QRect KisSelectionBasedLayer::exactBounds() const
     return resultRect;
 }
 
-QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
+QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode, KisThumbnailBoundsMode boundsMode)
 {
     KisSelectionSP originalSelection = internalSelection();
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
-                                           KoColorConversionTransformation::internalRenderingIntent(),
-                                           KoColorConversionTransformation::internalConversionFlags()) :
+           originalDevice->createThumbnail(w, h, aspectRatioMode, boundsMode) :
            QImage();
 }
 

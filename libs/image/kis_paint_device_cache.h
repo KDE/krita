@@ -11,6 +11,22 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QImage>
+
+#include <kis_paint_device.h>
+
+using ThumbnailCacheKey = std::tuple<QSize, qreal, KisThumbnailBoundsMode>;
+
+size_t qHash(const ThumbnailCacheKey &key) {
+    const auto &[size, oversample, mode] = key;
+
+    size_t result = size.width() * size.height() * qRound(oversample * 1024);
+    if (mode == KisThumbnailBoundsMode::Coarse) {
+        result = ~result;
+    }
+    return result;
+}
+
 
 class KisPaintDeviceCache
 {
@@ -74,18 +90,20 @@ public:
         return m_regionCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
-    QImage createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
+    QImage createThumbnail(qint32 w, qint32 h, KisThumbnailBoundsMode boundsMode, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
         QImage thumbnail;
 
         if (h == 0 || w == 0) {
             return thumbnail;
         }
 
+        auto key = std::make_tuple(QSize(w, h), oversample, boundsMode);
+
         {
             QReadLocker readLocker(&m_thumbnailsLock);
             if (m_thumbnailsValid) {
-                if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h) && m_thumbnails[w][h].contains(oversample)) {
-                    thumbnail = m_thumbnails[w][h][oversample];
+                if (m_thumbnails.contains(key)) {
+                    thumbnail = m_thumbnails[key];
                 }
             }
             else {
@@ -97,11 +115,11 @@ public:
         }
 
         if (thumbnail.isNull()) {
-            // the thumbnails in the cache are always generated from exact bounds
-            thumbnail = m_paintDevice->createThumbnail(w, h, m_paintDevice->exactBounds(), oversample, renderingIntent, conversionFlags);
+            const QRect bounds = boundsMode == KisThumbnailBoundsMode::Precise ? m_paintDevice->exactBounds() : m_paintDevice->extent();
+            thumbnail = m_paintDevice->createThumbnailUncached(w, h, bounds, oversample, renderingIntent, conversionFlags);
 
             QWriteLocker writeLocker(&m_thumbnailsLock);
-            m_thumbnails[w][h][oversample] = thumbnail;
+            m_thumbnails[key] = thumbnail;
             m_thumbnailsValid = true;
         }
 
@@ -151,7 +169,8 @@ private:
 
     QReadWriteLock m_thumbnailsLock;
     bool m_thumbnailsValid {false};
-    QMap<int, QMap<int, QMap<qreal,QImage> > > m_thumbnails;
+
+    QHash<ThumbnailCacheKey, QImage> m_thumbnails;
 
     QAtomicInt m_sequenceNumber;
 };

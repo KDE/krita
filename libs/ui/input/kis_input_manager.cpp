@@ -943,13 +943,9 @@ bool KisInputManager::handleTouchUpdate(QTouchEvent *touchEvent)
         }
     } else {
         KisAbstractInputAction::setInputManager(this);
-        if (d->touchHasBlockedPressEvents) {
-            return compressMoveEventCommon(touchEvent);
-        } else {
-            bool retval = d->matcher.touchUpdateEvent(touchEvent);
-            d->touchHasBlockedPressEvents = retval;
-            return retval;
-        }
+        bool retval = d->matcher.touchUpdateEvent(touchEvent);
+        d->touchHasBlockedPressEvents = retval;
+        return retval;
     }
 }
 

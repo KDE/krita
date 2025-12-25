@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-24 02:13+0000\n"
-"PO-Revision-Date: 2025-12-20 10:21+0200\n"
+"PO-Revision-Date: 2025-12-24 16:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -40725,10 +40725,9 @@ msgid "Luma:"
 msgstr "Яскравість:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Вилучити сторінку"
+msgstr "Вилучити мітку"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format

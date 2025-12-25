@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-24 02:13+0000\n"
-"PO-Revision-Date: 2025-12-21 20:24+0100\n"
+"PO-Revision-Date: 2025-12-24 09:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -40395,10 +40395,9 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Elimina la pàgina"
+msgstr "Elimina l'etiqueta"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -69587,6 +69586,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid "Remove from tag"
-#~ msgstr "Elimina de l'etiqueta"

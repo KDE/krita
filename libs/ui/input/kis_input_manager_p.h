@@ -72,6 +72,7 @@ public:
 
     bool touchStrokeStarted = false;
     bool popupWasActive = false;
+    int lastPointCount = 0;
 
     QPointF startingPos;
     QPointF previousPos;

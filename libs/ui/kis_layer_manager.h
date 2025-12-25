@@ -62,6 +62,7 @@ private Q_SLOTS:
 
     void imageResizeToActiveLayer();
     void trimToImage();
+    void purgeUnusedImageData();
 
     void layerProperties();
     void layerPropertiesDialogClosed();

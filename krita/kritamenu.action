@@ -1192,6 +1192,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="purge_unused_image_data">
+      <icon></icon>
+      <text>Purge Unused Image Data</text>
+      <whatsThis></whatsThis>
+      <toolTip>Removes all fully transparent pixels from the image storage</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="resizeimagetolayer">
       <icon></icon>
       <text>Trim to Current &amp;Layer</text>

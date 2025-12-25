@@ -169,6 +169,9 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     KisAction *action = actionManager->createAction("trim_to_image");
     connect(action, SIGNAL(triggered()), this, SLOT(trimToImage()));
 
+    action = actionManager->createAction("purge_unused_image_data");
+    connect(action, SIGNAL(triggered()), this, SLOT(purgeUnusedImageData()));
+
     m_layerStyle  = actionManager->createAction("layer_style");
     connect(m_layerStyle, SIGNAL(triggered()), this, SLOT(layerStyle()));
 
@@ -225,6 +228,14 @@ void KisLayerManager::trimToImage()
     KisImageWSP image = m_view->image();
     if (image) {
         image->cropImage(image->bounds());
+    }
+}
+
+void KisLayerManager::purgeUnusedImageData()
+{
+    KisImageWSP image = m_view->image();
+    if (image) {
+        image->purgeUnusedData(false);
     }
 }
 

@@ -41,6 +41,20 @@ public:
     {
     }
 
+    KisTransaction(KisTransaction &&rhs)
+        : m_transactionData(rhs.m_transactionData)
+    {
+        rhs.m_transactionData = nullptr;
+    }
+
+    KisTransaction& operator=(KisTransaction &&rhs)
+    {
+        delete m_transactionData;
+        m_transactionData = rhs.m_transactionData;
+        rhs.m_transactionData = nullptr;
+        return *this;
+    }
+
     virtual ~KisTransaction() {
         delete m_transactionData;
     }

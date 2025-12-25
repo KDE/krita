@@ -337,7 +337,8 @@ void KisStatusBar::updateMemoryStatus()
                 i18nc("tooltip on statusbar memory reporting button",
                       "\n\nWARNING:\tSome layers took too much time to calculate\n"
                       "\t\ttheir thumbnails. They were switched into low-quality\n"
-                      "\t\tthumbnails mode.\n"
+                      "\t\tthumbnails mode. Try purging unused image data with\n"
+                      "\t\tImage->Purge Unused Image Data action.\n"
                     "Slow layers: ");
 
             bool needsSeparator = false;

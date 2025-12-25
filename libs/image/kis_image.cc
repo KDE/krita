@@ -875,42 +875,69 @@ void KisImage::cropImage(const QRect& newRect)
 void KisImage::purgeUnusedData(bool isCancellable)
 {
     /**
-     * WARNING: don't use this function unless you know what you are doing!
-     *
-     * It breaks undo on layers! Therefore, after calling it, KisImage is not
-     * undo-capable anymore!
+     * In cancellable mode, the action does **not** touch the paint
+     * devices of the image, only projections, because it can break
+     * undo/redo.
      */
 
     struct PurgeUnusedDataStroke : public KisRunnableBasedStrokeStrategy {
         PurgeUnusedDataStroke(KisImageSP image, bool isCancellable)
             : KisRunnableBasedStrokeStrategy(QLatin1String("purge-unused-data"),
-                                             kundo2_noi18n("purge-unused-data")),
-              m_image(image)
+                                             kundo2_i18n("Purge Unused Data")),
+              m_image(image),
+              m_finalCommand(new KUndo2Command(this->name()))
+
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
             this->enableJob(JOB_DOSTROKE, true);
-            setClearsRedoOnStart(false);
+            this->enableJob(JOB_FINISH, true, KisStrokeJobData::SEQUENTIAL);
+
+            setClearsRedoOnStart(!isCancellable);
             setRequestsOtherStrokesToEnd(!isCancellable);
             setCanForgetAboutMe(isCancellable);
         }
 
         void initStrokeCallback() override
         {
-            KisPaintDeviceList deviceList;
+            KisPaintDeviceList paintDevicesList;
+            KisPaintDeviceList projectionsList;
             QVector<KisStrokeJobData*> jobsData;
 
             KisLayerUtils::recursiveApplyNodes(m_image->root(),
-                [&deviceList](KisNodeSP node) {
-                   deviceList << node->getLodCapableDevices();
+                [&paintDevicesList, &projectionsList, this](KisNodeSP node) {
+                    KisPaintDeviceList deviceList = node->getLodCapableDevices();
+
+                    Q_FOREACH (KisPaintDeviceSP dev, deviceList) {
+                        if (!dev) continue;
+
+                        // we do **not** strip paint devices in the forgettable
+                        // mode, since we should handle transactions for them
+                        if (dev == node->paintDevice() && !canForgetAboutMe()) {
+                            paintDevicesList << dev;
+                        } else {
+                            projectionsList << dev;
+                        }
+                    }
                  });
 
             /// make sure we deduplicate the list to avoid
             /// concurrent write access to the devices
-            KritaUtils::makeContainerUnique(deviceList);
+            KritaUtils::makeContainerUnique(paintDevicesList);
+            KritaUtils::makeContainerUnique(projectionsList);
 
-            Q_FOREACH (KisPaintDeviceSP device, deviceList) {
-                if (!device) continue;
+            Q_FOREACH(KisPaintDeviceSP dev, paintDevicesList) {
+                projectionsList.removeAll(dev);
 
+                // all transactions will be linked to the final command via the
+                // parent-child relationship
+                m_transactions.emplace_back(dev, m_finalCommand.data(), -1, nullptr, KisTransaction::None);
+            }
+
+            // now, when the transactions are started, we can merge the two lists
+            paintDevicesList << projectionsList;
+            projectionsList.clear();
+
+            Q_FOREACH (KisPaintDeviceSP device, paintDevicesList) {
                 KritaUtils::addJobConcurrent(jobsData,
                     [device] () {
                         const_cast<KisPaintDevice*>(device.data())->purgeDefaultPixels();
@@ -920,8 +947,36 @@ void KisImage::purgeUnusedData(bool isCancellable)
             addMutatedJobs(jobsData);
         }
 
+        void finishStrokeCallback() override {
+            for (auto it = m_transactions.begin(); it != m_transactions.end(); ++it) {
+                QScopedPointer<KUndo2Command> cmd(it->endAndTake());
+
+                // verify the transaction command is linked to m_finalCommand,
+                // if not, just delete on return
+                KIS_SAFE_ASSERT_RECOVER(cmd->hasParent()) { continue; }
+
+                // if has a parent, release...
+                (void)cmd.take();
+            }
+
+            m_transactions.clear();
+
+            m_finalCommand->redo();
+            m_image->postExecutionUndoAdapter()->addCommand(toQShared(m_finalCommand.take()));
+
+            // now reset the thumbnail generation limitation
+            KisLayerUtils::recursiveApplyNodes(m_image->root(),
+                [](KisNodeSP node) {
+                    if (node->preferredThumbnailBoundsMode() != KisThumbnailBoundsMode::Precise) {
+                        node->setPreferredThumbnailBoundsMode(KisThumbnailBoundsMode::Precise);
+                    }
+                });
+        }
+
     private:
         KisImageSP m_image;
+        QScopedPointer<KUndo2Command> m_finalCommand;
+        std::vector<KisTransaction> m_transactions;
     };
 
     KisStrokeId id = startStroke(new PurgeUnusedDataStroke(this, isCancellable));

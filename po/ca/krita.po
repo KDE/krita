@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-24 02:13+0000\n"
+"POT-Creation-Date: 2025-12-26 02:00+0000\n"
 "PO-Revision-Date: 2025-12-24 09:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21386,7 +21386,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26529,24 +26529,24 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Emmirallat horitzontal: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "OFF"
 msgstr "Inactiu"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "ON"
 msgstr "Actiu"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:274
+#: libs/ui/canvas/kis_canvas_controller.cpp:278
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Gir: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:338
+#: libs/ui/canvas/kis_canvas_controller.cpp:341
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26555,24 +26555,24 @@ msgstr ""
 "Esteu activant el mode d'ajust cíclic, però no heu activat l'OpenGL.\n"
 "Per a visualitzar el mode d'ajust cíclic, activeu l'OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:404
+#: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Mode de vista prèvia instantània: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:411
+#: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "La vista prèvia instantània només funciona amb l'OpenGL activat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Proximitat"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:418
+#: libs/ui/canvas/kis_canvas_controller.cpp:421
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26583,7 +26583,7 @@ msgstr ""
 "en els modes de filtratge trilineal i alta qualitat.\n"
 "El mode actual és %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:422
+#: libs/ui/canvas/kis_canvas_controller.cpp:425
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -36580,36 +36580,36 @@ msgstr "Però la provatura suau encara està desactivada."
 msgid "Gamut Warnings turned off."
 msgstr "S'han desactivat els avisos de gamma."
 
-#: libs/ui/KisViewManager.cpp:803
+#: libs/ui/KisViewManager.cpp:809
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Perfil actiu d'autor"
 
-#: libs/ui/KisViewManager.cpp:933
+#: libs/ui/KisViewManager.cpp:939
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (còpia)"
 
-#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Els noms alternatius s'han exhaurit. Intenteu desar-ho manualment amb un "
 "número més gran"
 
-#: libs/ui/KisViewManager.cpp:1089
+#: libs/ui/KisViewManager.cpp:1095
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "No s'ha pogut desar la versió incremental"
 
-#: libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "No s'ha pogut desar la còpia de seguretat incremental"
 
-#: libs/ui/KisViewManager.cpp:1430
+#: libs/ui/KisViewManager.cpp:1436
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36618,13 +36618,13 @@ msgstr ""
 "S'ha entrat en el mode només el llenç.\n"
 "Premeu «%1» per a tornar enrere."
 
-#: libs/ui/KisViewManager.cpp:1491
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Obertura de carpeta del recurs"
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36649,19 +36649,19 @@ msgstr ""
 "<p><b>Ubicació privada d'aplicació</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1510
+#: libs/ui/KisViewManager.cpp:1516
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Obre en l'AppData de l'&usuari"
 
-#: libs/ui/KisViewManager.cpp:1511
+#: libs/ui/KisViewManager.cpp:1517
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Obre en la ubicació &privada de l'aplicació"
 
-#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
+#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -67008,74 +67008,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Ajusta la transformació de caràcters al text."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Text superior"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Mida de la lletra"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Text inferior"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabètic"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideogràfic"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Hanging"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Mig"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matemàtic"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Alçada de la línia"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Línia base actual"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

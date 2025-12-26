@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-24 02:13+0000\n"
+"POT-Creation-Date: 2025-12-26 02:00+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -21339,7 +21339,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26454,24 +26454,24 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Horisontellt spegling: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "OFF"
 msgstr "AV"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "ON"
 msgstr "PÅ"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:274
+#: libs/ui/canvas/kis_canvas_controller.cpp:278
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Rotation: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:338
+#: libs/ui/canvas/kis_canvas_controller.cpp:341
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26480,24 +26480,24 @@ msgstr ""
 "Du försöker aktivera rundgångsläge, men har inte aktiverat OpenGL.\n"
 "För att synliggöra rundgångsläge, aktivera OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:404
+#: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Direkt förhandsgranskningsläge: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:411
+#: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Direkt förhandsgranskning stöds bara med OpenGL aktiverat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Närmaste granne"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:418
+#: libs/ui/canvas/kis_canvas_controller.cpp:421
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26508,7 +26508,7 @@ msgstr ""
 "trilinjära eller högkvalitativa filtreringsläget.\n"
 "Nuvarande läge är %1."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:422
+#: libs/ui/canvas/kis_canvas_controller.cpp:425
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -36443,35 +36443,35 @@ msgstr "Men bildskärmskorrektur är fortfarande av."
 msgid "Gamut Warnings turned off."
 msgstr "Färgomfångsvarningar av."
 
-#: libs/ui/KisViewManager.cpp:803
+#: libs/ui/KisViewManager.cpp:809
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiv upphovsmannaprofil"
 
-#: libs/ui/KisViewManager.cpp:933
+#: libs/ui/KisViewManager.cpp:939
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopia)"
 
-#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternativa namn förbrukade. Försök att spara manuellt med ett större nummer"
 
-#: libs/ui/KisViewManager.cpp:1089
+#: libs/ui/KisViewManager.cpp:1095
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Kunde inte spara inkrementell version"
 
-#: libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Kunde inte spara inkrementell säkerhetskopia"
 
-#: libs/ui/KisViewManager.cpp:1430
+#: libs/ui/KisViewManager.cpp:1436
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36480,13 +36480,13 @@ msgstr ""
 "Visar enbart duk.\n"
 "Tryck på %1 för att gå tillbaka."
 
-#: libs/ui/KisViewManager.cpp:1491
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Öppna resurskatalog"
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36510,19 +36510,19 @@ msgstr ""
 "<p><b>Privata programmets plats</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1510
+#: libs/ui/KisViewManager.cpp:1516
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Öppna i an&vändarens programdata"
 
-#: libs/ui/KisViewManager.cpp:1511
+#: libs/ui/KisViewManager.cpp:1517
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Öppna i &privat programplats"
 
-#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
+#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -66618,15 +66618,15 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Textverktyg"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, fuzzy, kde-format
 #| msgctxt "@label:spinbox"
 #| msgid "Font Size"
@@ -66634,7 +66634,7 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Teckenstorlek"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "toolbar position string"
 #| msgid "Bottom"
@@ -66642,7 +66642,7 @@ msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Längst ner"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Alphabetic"
@@ -66650,7 +66650,7 @@ msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabetisk"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Ideographic"
@@ -66658,7 +66658,7 @@ msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografisk"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Hanging"
@@ -66666,7 +66666,7 @@ msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Hängande"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -66674,7 +66674,7 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Mitten"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Mathematical"
@@ -66682,7 +66682,7 @@ msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematisk"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Central"
@@ -66690,7 +66690,7 @@ msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Line Height"
@@ -66698,14 +66698,14 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Radhöjd"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Aktuell markering"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Baseline"

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-24 02:13+0000\n"
+"POT-Creation-Date: 2025-12-26 02:00+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -21452,7 +21452,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, fuzzy, kde-format
 msgid "Bilinear"
@@ -26645,48 +26645,48 @@ msgid "Horizontal mirroring: %1 "
 msgstr "افقی:"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "OFF"
 msgstr ""
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "ON"
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:274
+#: libs/ui/canvas/kis_canvas_controller.cpp:278
 #, fuzzy, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "چرخش"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:338
+#: libs/ui/canvas/kis_canvas_controller.cpp:341
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:404
+#: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, fuzzy, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "پیش‌نمایش: "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:411
+#: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:418
+#: libs/ui/canvas/kis_canvas_controller.cpp:421
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26694,7 +26694,7 @@ msgid ""
 "Current mode is %1"
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:422
+#: libs/ui/canvas/kis_canvas_controller.cpp:425
 #, fuzzy, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -36386,47 +36386,47 @@ msgstr "گزینه‌ها"
 msgid "Gamut Warnings turned off."
 msgstr "اخطار"
 
-#: libs/ui/KisViewManager.cpp:803
+#: libs/ui/KisViewManager.cpp:809
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "اعمال Profile"
 
-#: libs/ui/KisViewManager.cpp:933
+#: libs/ui/KisViewManager.cpp:939
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "شرکت"
 
-#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1089
+#: libs/ui/KisViewManager.cpp:1095
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "نموی"
 
-#: libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1179
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "نموی"
 
-#: libs/ui/KisViewManager.cpp:1430
+#: libs/ui/KisViewManager.cpp:1436
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1491
+#: libs/ui/KisViewManager.cpp:1497
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "پرونده‌های متن:"
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36441,19 +36441,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1510
+#: libs/ui/KisViewManager.cpp:1516
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1511
+#: libs/ui/KisViewManager.cpp:1517
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
+#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -66338,77 +66338,77 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "خط"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "چاپ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, fuzzy, kde-format
 #| msgid "To Bottom"
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "به پایین"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "&کروی‌"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "درج شکست"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "زاویه‌ای"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "متوسط"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "تکرار:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "مرکز:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ارتفاع تصویردانه"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
 #, fuzzy, kde-format
 #| msgid "&Add to current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "&افزودن به گزینش جاری‌"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

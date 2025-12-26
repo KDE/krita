@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-24 02:13+0000\n"
+"POT-Creation-Date: 2025-12-26 02:00+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -21606,7 +21606,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26782,48 +26782,48 @@ msgid "Horizontal mirroring: %1 "
 msgstr "आड़ा प्रतिबिंबिकरण : %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "OFF"
 msgstr "बंद"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "ON"
 msgstr "ओन"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:274
+#: libs/ui/canvas/kis_canvas_controller.cpp:278
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "परिक्रमण: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:338
+#: libs/ui/canvas/kis_canvas_controller.cpp:341
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:404
+#: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "त्वरित पूर्वावलोकन मोड: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:411
+#: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "निकटस्थ पड़ोसी"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:418
+#: libs/ui/canvas/kis_canvas_controller.cpp:421
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26831,7 +26831,7 @@ msgid ""
 "Current mode is %1"
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:422
+#: libs/ui/canvas/kis_canvas_controller.cpp:425
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -36596,47 +36596,47 @@ msgstr "लेकिन सॉफ्ट प्रूफिंग अभी भ�
 msgid "Gamut Warnings turned off."
 msgstr "रंग-स्थान की चेतावनी बंद की है।"
 
-#: libs/ui/KisViewManager.cpp:803
+#: libs/ui/KisViewManager.cpp:809
 #, kde-format
 msgid "Active Author Profile"
 msgstr "सक्रिय लेखक प्रोफ़ाइल"
 
-#: libs/ui/KisViewManager.cpp:933
+#: libs/ui/KisViewManager.cpp:939
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (नक़ल)"
 
-#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1089
+#: libs/ui/KisViewManager.cpp:1095
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "वृद्धिशील संस्करण सहेजा नहीं जा सका"
 
-#: libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "वृद्धिशील बैकअप सहेजा नही जा सका"
 
-#: libs/ui/KisViewManager.cpp:1430
+#: libs/ui/KisViewManager.cpp:1436
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1491
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "संसाधन फोल्डर खोलें"
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36651,19 +36651,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1510
+#: libs/ui/KisViewManager.cpp:1516
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1511
+#: libs/ui/KisViewManager.cpp:1517
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
+#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -66777,15 +66777,15 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "पाठ औज़ार"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Font Size"
@@ -66793,35 +66793,35 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "फ़ॉन्ट आकार"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, fuzzy, kde-format
 #| msgid "To Bottom"
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "तल में"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, fuzzy, kde-format
 #| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "वर्णानुक्रम"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, fuzzy, kde-format
 #| msgid "Biography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "जीवनी"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "कोणीय"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -66829,21 +66829,21 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "मध्य"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
 #, fuzzy, kde-format
 #| msgid "Logical Operations"
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "तार्किक संचालन"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, fuzzy, kde-format
 #| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "मध्य"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Line Height"
@@ -66851,7 +66851,7 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "लकीर की ऊँचाई"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert current selection"
@@ -66859,7 +66859,7 @@ msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "वर्तमान चयन को उलट दें (&A)"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"

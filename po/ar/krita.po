@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-24 02:13+0000\n"
-"PO-Revision-Date: 2025-12-20 11:14+0400\n"
+"POT-Creation-Date: 2025-12-26 02:00+0000\n"
+"PO-Revision-Date: 2025-12-25 09:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7757,26 +7757,23 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"اجعل النص المحدد الأول يتدفق في الشكل. إذا كانت هناك أشكال أخرى يتدفق فيها "
+"من قبل، سيُضيف الشكل إلى السلسلة."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subtract Shape from Text Flow Area"
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "اطرح شكلًا من منطقة انسياب النص"
+msgstr "اطرح شكلًا من سلسلة النص"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make shapes part of the subtracted shapes of the first selected text."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
-msgstr "اجعل الأشكال جزءًا من الأشكال المطروحة من النص المختار أولًا."
+msgstr "اجعل الأشكال جزءًا من مساحات الأشكال المطروحة من النص الأول المحدد."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7794,21 +7791,17 @@ msgstr "اجعل النص المختار أولًا ينساب على المسا
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Shapes from Text Flow"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "أزل الأشكال من انسياب النص"
+msgstr "أزل الأشكال من سلسلة النص"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove shapes from text flow and add them to the layer."
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "أزل الأشكال من انسياب النص وأضفها إلى الطبقة."
+msgstr "أزل الأشكال من سلسلة النص وأضفها إلى الطبقة."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7841,87 +7834,76 @@ msgstr "اجعل شكل الانسياب أخيرًا"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the last in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
-"اجعل شكل الانسياب هذا الأخير في تسلسل أشكال الانسياب المستخدَم لتخطيط النص."
+"اجعل هذا الشكل المتدفق هو الأخير في سلسلة النص كما هو مستخدم في تخطيط النص."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "سابقًا في السلسلة."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "حرّك هذا الشكل إلى موضع أسبق في سلسلة النص."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "حرّك الشكل إلى موضع أسبق في السلسلة."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "لاحقًا في السلسلة."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "حرّك هذا الشكل لاحقًا في سلسلة النص."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "حرّك الشكل لاحقًا في السلسلة."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "المسافة البادئة للسطر الأول"
+msgstr "الأول في السلسلة."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the first in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
-"اجعل شكل الانسياب هذا الأول في تسلسل أشكال الانسياب المستخدَم لتخطيط النص."
+"اجعل هذا الشكل المتدفق هو الأول في سلسلة النص كما هو مستخدم في تخطيط النص."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set Flow Shape as First"
+#, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr "اجعل شكل الانسياب أولًا"
+msgstr "اجعل الشكل أولًا في السلسلة"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -21186,7 +21168,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26301,24 +26283,24 @@ msgid "Horizontal mirroring: %1 "
 msgstr "الانعكاس الأفقي: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "OFF"
 msgstr "معطل"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
-#: libs/ui/canvas/kis_canvas_controller.cpp:405
+#: libs/ui/canvas/kis_canvas_controller.cpp:408
 #, kde-format
 msgid "ON"
 msgstr "مفعل"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:274
+#: libs/ui/canvas/kis_canvas_controller.cpp:278
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "التّدوير: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:338
+#: libs/ui/canvas/kis_canvas_controller.cpp:341
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26327,24 +26309,24 @@ msgstr ""
 "أنت تُفعِّل نمط الالتفاف، ولكن لم تُفعِّل OpenGL.\n"
 "لإظهار نمط الالتفاف، فعّل OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:404
+#: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "وضع المعاينة اللحظية: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:411
+#: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "لا تعمل المعاينة اللحظية إلا و«أوبن‌جي‌إل» مفعل"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "أقرب جار"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:418
+#: libs/ui/canvas/kis_canvas_controller.cpp:421
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26355,7 +26337,7 @@ msgstr ""
 " في أنماط تصفية الثلاثية أو الجودة العالية.\n"
 "النمط الحالي هو %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:422
+#: libs/ui/canvas/kis_canvas_controller.cpp:425
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -36233,34 +36215,34 @@ msgstr "لكن التجربة المبدئية للألوان لا تزال مع
 msgid "Gamut Warnings turned off."
 msgstr "عُطِّلَت تحذيرات نطاق الألوان."
 
-#: libs/ui/KisViewManager.cpp:803
+#: libs/ui/KisViewManager.cpp:809
 #, kde-format
 msgid "Active Author Profile"
 msgstr "تشكيلة المؤلّف النّشطة"
 
-#: libs/ui/KisViewManager.cpp:933
+#: libs/ui/KisViewManager.cpp:939
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (نسخة)"
 
-#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "استنفدت الأسماء البديلة، حاول الحفظ يدويًا برقم أعلى"
 
-#: libs/ui/KisViewManager.cpp:1089
+#: libs/ui/KisViewManager.cpp:1095
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "لا يمكن حفظ النسخة التزايدية"
 
-#: libs/ui/KisViewManager.cpp:1173
+#: libs/ui/KisViewManager.cpp:1179
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "لا يمكن حفظ النسخة الاحتياطية التزايدية"
 
-#: libs/ui/KisViewManager.cpp:1430
+#: libs/ui/KisViewManager.cpp:1436
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36269,13 +36251,13 @@ msgstr ""
 "يذهب إلى وضع اللوحة فقط.\n"
 "اضغط %1 للعودة."
 
-#: libs/ui/KisViewManager.cpp:1491
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "افتح مجلّد الموارد"
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36298,19 +36280,19 @@ msgstr ""
 "<p><b>موقع التطبيق الخاص</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1510
+#: libs/ui/KisViewManager.cpp:1516
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "افتح في AppData &للمستخدِم"
 
-#: libs/ui/KisViewManager.cpp:1511
+#: libs/ui/KisViewManager.cpp:1517
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "افتح في &موقع التطبيق الخاص"
 
-#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
+#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -39989,10 +39971,9 @@ msgid "Luma:"
 msgstr "لوما:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "أزل الصفحة"
+msgstr "أزل الوسم"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -45402,11 +45383,7 @@ msgid "Alignment Baseline"
 msgstr "خط الأساس للمحاذاة"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controlling how this range of text is aligned "
-#| "to the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
@@ -45553,9 +45530,7 @@ msgid "Align to the descender."
 msgstr "حاذِ إلى النازل."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt "Type setting mode line name"
-#| msgid "Baseline Shift"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
 msgstr "إزاحة الخط القاعدي"
@@ -45794,11 +45769,7 @@ msgid "Dominant Baseline"
 msgstr "خط الأساس المسيطر"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Dominant Baseline specifies how stretches of text of different sizes are "
-#| "aligned, it is also the default for Alignment Baseline."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -45883,18 +45854,14 @@ msgid "Font Kerning"
 msgstr "تباعد محارف الخط"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
 "شغّل أو أوقف تباعد محارف الخط. تباعد محارف الخط يُمكّن تعديلات التباعد لكل محرف "
-"على حدة."
+"على حدة كما هو محدد في الخط."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46168,11 +46135,7 @@ msgid "Line Break"
 msgstr "كاسر أسطر"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Line Break allows choosing a strictness for the line breaking algorithm. "
-#| "Mostly used for CJK scripts, requires language being set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
@@ -46248,9 +46211,7 @@ msgid "Line Height"
 msgstr "ارتفاع السّطر"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Line Height controls the line height used for the range of text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr "ارتفاع السطر يتحكم في ارتفاع السطر المستخدم لنطاق النص."
@@ -46276,9 +46237,7 @@ msgid "OpenType Features"
 msgstr "ميزات OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "اضبط ميزات OpenType."
@@ -46316,12 +46275,10 @@ msgid "Glyphs: Capitals"
 msgstr "المحارف: الكبيرة"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Enable opentype features related to capitals"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr "فعّل ميزات opentype المتعلقة بالأحرف الكبيرة"
+msgstr "فعّل ميزات opentype المتعلقة بالأحرف الكبيرة."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -46638,9 +46595,7 @@ msgid "Tab Size"
 msgstr "حجم الجدولة"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Tab Size allows defining the size of tabulation characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
 msgstr "حجم الجدولة يسمح بتعريف حجم محارف الجدولة."
@@ -46660,19 +46615,13 @@ msgid "Text Align"
 msgstr "محاذاة النص"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr "محاذاة النص تضبط المحاذاة لكتلة المحارف المعطاة."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the text-anchor property, matching is "
-#| "case-insensitive"
-#| msgid "text-align, justification, text-anchor"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
@@ -46779,11 +46728,7 @@ msgid "Text Decoration"
 msgstr "زخرفة النص"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Decoration allows drawing underlines, overlines and striking through "
-#| "text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
@@ -46865,11 +46810,7 @@ msgid "Text Indent"
 msgstr "إزاحة النص"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Indent allows setting indentation at the line start. Only works when "
-#| "the text is wrapping."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
@@ -47004,10 +46945,7 @@ msgid "Text Rendering"
 msgstr "عرض النص"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Rendering controls the hinting and rendering style for the property"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
@@ -47073,12 +47011,7 @@ msgid "Text Transform"
 msgstr "تحويل النص"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Transform allows transforming the given range of characters, for "
-#| "example, by setting them uppercase, or switching out half-width forms for "
-#| "full-width forms."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
@@ -47305,12 +47238,7 @@ msgid "Writing Mode"
 msgstr "وضع الكتابة"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Writing Mode sets whether the text flows horizontally or vertically, and "
-#| "in the latter case, whether the block flows right to left or left to "
-#| "right."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
@@ -66261,74 +66189,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "اضبط تحويلات الأحرف في النص."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "أعلى النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "حجم الخطّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "أسفل النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "أبجديّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "تصوري"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "مُعلَّق"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "منتصف"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "رياضي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "وسط"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ارتفاع السّطر"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "السطر الأساسي الحالي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

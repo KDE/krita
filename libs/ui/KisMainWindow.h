@@ -294,6 +294,7 @@ public Q_SLOTS:
     bool checkActiveBundlesAvailable();
     bool checkPaintOpAvailable();
 
+    void synchronizeDynamicActions();
 
 private Q_SLOTS:
     void slotLoadCompleted();

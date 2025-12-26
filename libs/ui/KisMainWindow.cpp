@@ -3244,4 +3244,52 @@ void KisMainWindow::applyActionIconOverridesFromLocalXML()
     }
 }
 
+void KisMainWindow::synchronizeDynamicActions()
+{
+    // Add all actions with a menu property to the main window
+    Q_FOREACH(QAction *action, this->actionCollection()->actions()) {
+        QString menuLocation = action->property("menulocation").toString();
+        if (!menuLocation.isEmpty()) {
+            QAction *found = 0;
+            QList<QAction *> candidates = this->menuBar()->actions();
+            Q_FOREACH(const QString &name, menuLocation.split("/")) {
+                Q_FOREACH(QAction *candidate, candidates) {
+                    if (candidate->objectName().toLower() == name.toLower()) {
+                        found = candidate;
+                        candidates = candidate->menu()->actions();
+                        break;
+                    }
+                }
+                if (candidates.isEmpty()) {
+                    break;
+                }
+            }
+
+            if (found && found->menu()) {
+                QList<QAction *> existingActions = found->menu()->actions();
+
+                if (std::find_if(existingActions.begin(),
+                                 existingActions.end(),
+                                 kismpl::mem_equal_to(&QAction::objectName, action->objectName()))
+                    == existingActions.end()) {
+
+                    if (std::is_sorted(existingActions.begin(),
+                                       existingActions.end(),
+                                       kismpl::mem_less(&QAction::objectName))) {
+
+                        auto it = std::upper_bound(existingActions.begin(),
+                                                   existingActions.end(),
+                                                   action->objectName(),
+                                                   kismpl::mem_less(&QAction::objectName));
+                        found->menu()->insertAction(it != existingActions.end() ? *it : nullptr, action);
+
+                    } else {
+                        found->menu()->addAction(action);
+                    }
+                }
+            }
+        }
+    }
+}
+
 #include <moc_KisMainWindow.cpp>

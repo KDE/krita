@@ -357,6 +357,12 @@ Window* Krita::openWindow()
 
 void Krita::addExtension(Extension* extension)
 {
+    Q_FOREACH(KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
+        Window window(mainWindow);
+        extension->createActions(&window);
+        mainWindow->synchronizeDynamicActions();
+    }
+
     d->extensions.append(extension);
 }
 

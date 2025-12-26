@@ -17,9 +17,10 @@ except:
                                  QSplitter, QSizePolicy)
 from .ui_scripter.syntax import syntax, syntaxstyles
 from .ui_scripter.editor import pythoneditor
-from . import scripterdialog, utils
+from . import scripterdialog
 import importlib
 from builtins import i18n
+from krita import utils
 
 from scripter import resources_rc # Loads the icons qrc
 

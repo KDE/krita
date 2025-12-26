@@ -7,7 +7,7 @@ try:
     from PyQt6.QtGui import QAction
 except:
     from PyQt5.QtWidgets import QAction
-from .... import utils
+from krita import utils
 from builtins import i18n
 
 class StepAction(QAction):

@@ -19,8 +19,8 @@ except:
                                 QVBoxLayout, QFrame, QMessageBox, QPushButton,
                                 QAbstractScrollArea)
 from krita import Krita
+from krita import utils
 from builtins import i18n
-from scripter import utils
 
 from . import resources_rc # Loads the icon qrc
 

@@ -10,7 +10,7 @@ except:
     from PyQt5.QtWidgets import QAction
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
-from .... import utils
+from krita import utils
 from builtins import i18n
 
 class DebugAction(QAction):

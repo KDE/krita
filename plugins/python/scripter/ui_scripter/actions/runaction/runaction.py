@@ -14,7 +14,7 @@ import sys
 import traceback
 import inspect
 from . import docwrapper
-from .... import utils
+from krita import utils
 from builtins import i18n
 
 import importlib

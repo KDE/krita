@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-26 02:00+0000\n"
+"POT-Creation-Date: 2025-12-27 01:58+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -13319,7 +13319,7 @@ msgid "&Help"
 msgstr "說明(&H)"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:104
+#: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
@@ -24053,7 +24053,7 @@ msgstr "本機資源"
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36306,7 +36306,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "建立群組 %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36315,7 +36315,7 @@ msgstr ""
 "無法用範本%1\n"
 "建立檔案"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -63879,7 +63879,7 @@ msgid "Debugger"
 msgstr "除錯器"
 
 #: plugins/python/scripter/scripter.py:24
-#: plugins/python/scripter/uicontroller.py:96
+#: plugins/python/scripter/uicontroller.py:97
 msgid "Scripter"
 msgstr "指令稿執行器"
 
@@ -63987,7 +63987,7 @@ msgstr "數值"
 msgid "Step Over"
 msgstr "單步執行"
 
-#: plugins/python/scripter/uicontroller.py:175
+#: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr "執行指令稿時出錯"
 

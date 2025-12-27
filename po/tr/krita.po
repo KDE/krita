@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-26 02:00+0000\n"
+"POT-Creation-Date: 2025-12-27 01:58+0000\n"
 "PO-Revision-Date: 2025-12-24 11:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -13307,7 +13307,7 @@ msgid "&Help"
 msgstr "&Yardım"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:104
+#: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
@@ -23822,7 +23822,7 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36129,7 +36129,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Yeni Grup %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36138,7 +36138,7 @@ msgstr ""
 "Şablondan belge oluşturulamadı\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -63980,7 +63980,7 @@ msgid "Debugger"
 msgstr "Hata Ayıklayıcı"
 
 #: plugins/python/scripter/scripter.py:24
-#: plugins/python/scripter/uicontroller.py:96
+#: plugins/python/scripter/uicontroller.py:97
 msgid "Scripter"
 msgstr "Betikleyici"
 
@@ -64086,7 +64086,7 @@ msgstr "Değer"
 msgid "Step Over"
 msgstr "İlerle"
 
-#: plugins/python/scripter/uicontroller.py:175
+#: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr "Betik Çalıştırmada Hata"
 

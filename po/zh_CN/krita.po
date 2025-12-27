@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-26 02:00+0000\n"
+"POT-Creation-Date: 2025-12-27 01:58+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -13272,7 +13272,7 @@ msgid "&Help"
 msgstr "帮助(&H)"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:104
+#: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
@@ -23629,7 +23629,7 @@ msgstr "本地资源"
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -35740,7 +35740,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "新色块组 %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -35749,7 +35749,7 @@ msgstr ""
 "无法用模板新建图像\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -39680,10 +39680,9 @@ msgid "Luma:"
 msgstr "明度："
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "移除页面"
+msgstr ""
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -63121,7 +63120,7 @@ msgid "Debugger"
 msgstr "调试器"
 
 #: plugins/python/scripter/scripter.py:24
-#: plugins/python/scripter/uicontroller.py:96
+#: plugins/python/scripter/uicontroller.py:97
 msgid "Scripter"
 msgstr "脚本调试工具"
 
@@ -63227,7 +63226,7 @@ msgstr "值"
 msgid "Step Over"
 msgstr "单步执行"
 
-#: plugins/python/scripter/uicontroller.py:175
+#: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr "执行脚本时出错"
 
@@ -68232,6 +68231,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgid "Remove from tag"
-#~ msgstr "移除出此标签"

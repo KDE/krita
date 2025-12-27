@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-26 02:00+0000\n"
+"POT-Creation-Date: 2025-12-27 01:58+0000\n"
 "PO-Revision-Date: 2025-12-24 09:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -13342,7 +13342,7 @@ msgid "&Help"
 msgstr "A&juda"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:104
+#: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
@@ -23936,7 +23936,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36321,7 +36321,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Grup %1 nou"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36330,7 +36330,7 @@ msgstr ""
 "No s'ha pogut crear el document des de la plantilla\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -64365,7 +64365,7 @@ msgid "Debugger"
 msgstr "Depurador"
 
 #: plugins/python/scripter/scripter.py:24
-#: plugins/python/scripter/uicontroller.py:96
+#: plugins/python/scripter/uicontroller.py:97
 msgid "Scripter"
 msgstr "Scripter"
 
@@ -64471,7 +64471,7 @@ msgstr "Valor"
 msgid "Step Over"
 msgstr "Avança per sobre"
 
-#: plugins/python/scripter/uicontroller.py:175
+#: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr "Error en executar un script"
 

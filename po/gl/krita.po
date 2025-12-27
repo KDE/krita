@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-26 02:00+0000\n"
+"POT-Creation-Date: 2025-12-27 01:58+0000\n"
 "PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -13418,7 +13418,7 @@ msgid "&Help"
 msgstr "&Axuda"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:104
+#: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
@@ -24025,7 +24025,7 @@ msgstr "Recursos locais"
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36405,7 +36405,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Novo grupo %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36414,7 +36414,7 @@ msgstr ""
 "Non foi posíbel crear o documento a partir do modelo\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -64525,7 +64525,7 @@ msgid "Debugger"
 msgstr "Depurador"
 
 #: plugins/python/scripter/scripter.py:24
-#: plugins/python/scripter/uicontroller.py:96
+#: plugins/python/scripter/uicontroller.py:97
 msgid "Scripter"
 msgstr "Executor de guións"
 
@@ -64633,7 +64633,7 @@ msgstr "Valor"
 msgid "Step Over"
 msgstr "Pasar por riba"
 
-#: plugins/python/scripter/uicontroller.py:175
+#: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr "Erro ao executar o guión"
 

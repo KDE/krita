@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-11-20 13:40+0100\n"
+"PO-Revision-Date: 2025-12-27 10:54+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -713,7 +713,7 @@ msgstr "20 textuur-vegetatie"
 #, kde-format
 msgctxt "./krita/data/patterns/21_texture-chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 textuur-kettingbrief"
+msgstr "21 textuur-ketenbrief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1147,7 +1147,7 @@ msgstr "A_Vlechten_b"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Chain.gbr"
 msgid "A_Chain"
-msgstr "A_ketting"
+msgstr "A_keten"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1724,7 +1724,7 @@ msgstr "U Cirkelvormig 5c"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Chain_1.gbr"
 msgid "Z_Chain_1"
-msgstr "Z_Chain_1"
+msgstr "Z_keten_1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3109,7 +3109,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 textuur-kettingbrief"
+msgstr "21 textuur-ketenbrief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5117,7 +5117,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 textuur-kettingbrief"
+msgstr "21 textuur-ketenbrief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format

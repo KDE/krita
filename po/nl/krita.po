@@ -63,14 +63,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-27 01:58+0000\n"
-"PO-Revision-Date: 2025-11-23 16:56+0100\n"
+"PO-Revision-Date: 2025-12-27 10:54+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -714,7 +714,7 @@ msgstr "20 textuur-vegetatie"
 #, kde-format
 msgctxt "./krita/data/patterns/21_texture-chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 textuur-kettingbrief"
+msgstr "21 textuur-ketenbrief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1159,7 +1159,7 @@ msgstr "A_Vlechten_b"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Chain.gbr"
 msgid "A_Chain"
-msgstr "A_ketting"
+msgstr "A_keten"
 
 # penseel uit GIMP
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -1738,7 +1738,7 @@ msgstr "U Cirkelvormig 5c"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Chain_1.gbr"
 msgid "Z_Chain_1"
-msgstr "Z_Chain_1"
+msgstr "Z_keten_1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3123,7 +3123,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 textuur-kettingbrief"
+msgstr "21 textuur-ketenbrief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5134,7 +5134,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 textuur-kettingbrief"
+msgstr "21 textuur-ketenbrief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7840,28 +7840,25 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"Laat de eerst geselecteerde tekst in vorm vloeien. Als er al vormen zijn "
+"waarin het vloeide, zal het de vorm aan de keten toevoegen."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subtract Shape from Text Flow Area"
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "Trek de vorm af van het gebied waarin de tekst vloeide"
+msgstr "Trek de vorm af van de keten waarin de tekst vloeide"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make shapes part of the subtracted shapes of the first selected text."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
-"Maak vormen onderdeel van de afgetrokken vormen van de eerst geselecteerde "
-"tekst."
+"Maak vormen onderdeel van de afgetrokken vormgebieden van de eerst "
+"geselecteerde tekst."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7872,32 +7869,26 @@ msgstr "Zet tekst op pad"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
 msgstr ""
-"Dwing de kleurenkiezer om alleen kleuren te selecteren in het nu "
-"geselecteerde palet."
+"Zorg ervoor dat de eerst geselecteerde tekst doorloopt naar het eerst "
+"geselecteerde pad."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove Shape Collection"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Verwijder de vormenverzameling"
+msgstr "Verwijder vormen uit de tekstketen"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
-#| msgid "Remove Shape Collection"
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "Verwijder de vormenverzameling"
+msgstr "Verwijder de vormen uit de tekstketen en voeg ze toe aan de laag."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7905,19 +7896,17 @@ msgstr "Verwijder de vormenverzameling"
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Alfalaag omschakelen"
+msgstr "Stroomvormtype in-/uitschakelen"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Schakel de huidige stroomvorm tussen de binnen- of aftrekmodus"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7928,7 +7917,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Stel de stroomvorm in als laatste"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7936,56 +7925,57 @@ msgstr ""
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
+"Plaats deze stroomvorm als laatste in de tekstketen zoals gebruikt door de "
+"tekstindeling."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "Eerder in de keten."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "Verplaats deze vorm eerder in de tekstketen."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Verplaats vorm eerder in keten."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "Later in de keten"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "Verplaats deze vorm later in de tekstketen."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Verplaats vorm later in keten."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Eerste-regel-insprong"
+msgstr "Eerste in keten"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7994,13 +7984,15 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
+"Plaats deze stroomvorm als eerste in de tekstketen zoals gebruikt door de "
+"tekstindeling."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
 #, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr ""
+msgstr "Zet vorm als eerste in keten"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -27368,8 +27360,7 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Geen"
@@ -30193,6 +30184,9 @@ msgid ""
 "Dynamically adjust outline to match the effective size of the brush. (For "
 "example, as brush size changes due to pen pressure.)"
 msgstr ""
+"De contourlijn dynamisch aanpassen aan de effectieve grootte van het "
+"penseel. (Bijvoorbeeld, wanneer de penseelgrootte verandert door de druk van "
+"de pen)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -40409,10 +40403,9 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Pagina verwijderen"
+msgstr "Tag verwijderen"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -45846,17 +45839,13 @@ msgid "Alignment Baseline"
 msgstr "Uitlijning van basisregel"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controlling how this range of text is aligned "
-#| "to the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
-"Uitlijning van basisregel biedt besturing over hoe de reeks van tekst "
+"Uitlijning van basislijn biedt besturing over hoe de reeks van tekst "
 "uitgelijnd wordt met de oudertekst."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:18
@@ -46000,12 +45989,10 @@ msgid "Align to the descender."
 msgstr "Uitlijnen met de afgaande."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt "Type setting mode line name"
-#| msgid "Baseline Shift"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
-msgstr "basislijnverschuiving"
+msgstr "Basislijnverschuiving"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
 #, kde-format
@@ -46140,8 +46127,7 @@ msgid "... After"
 msgstr "... Na"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Breedte:"
@@ -46246,11 +46232,7 @@ msgid "Dominant Baseline"
 msgstr "Dominante basislijn"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Dominant Baseline specifies how stretches of text of different sizes are "
-#| "aligned, it is also the default for Alignment Baseline."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -46336,18 +46318,14 @@ msgid "Font Kerning"
 msgstr "Kerning van lettertype"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
 "Zet kerning van lettertype aan of uit. Kerning van lettertype schakelt per-"
-"glyph aanpassen van spatiëring aan."
+"glyph aanpassen van spatiëring aan zoals bepaald door het lettertype."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46628,11 +46606,7 @@ msgid "Line Break"
 msgstr "Regelafbreking"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Line Break allows choosing a strictness for the line breaking algorithm. "
-#| "Mostly used for CJK scripts, requires language being set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
@@ -46713,9 +46687,7 @@ msgid "Line Height"
 msgstr "Lijnhoogte"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Line Height controls the line height used for the range of text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr "Regelhoogte bestuurt de regelhoogte gebruikt voor de reeks tekst."
@@ -46741,12 +46713,10 @@ msgid "OpenType Features"
 msgstr "Mogelijkheden van Opentype"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
-msgstr "Mogelijkheden van Open Type configureren"
+msgstr "Mogelijkheden van OpenType configureren"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -46781,12 +46751,10 @@ msgid "Glyphs: Capitals"
 msgstr "Glyphs: hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Enable opentype features related to capitals"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr "Mogelijkheden van Opentype inschakelen gerelateerd aan hoofdletters"
+msgstr "Mogelijkheden van OpenType inschakelen gerelateerd aan hoofdletters."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -47082,7 +47050,7 @@ msgstr "font-variant-positie, superscript, subscript"
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "Overloopafbreking:"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
 #, kde-format
@@ -47107,12 +47075,10 @@ msgid "Tab Size"
 msgstr "Tab-grootte"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Tab Size allows defining the size of tabulation characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
-msgstr "Met de tab-grootte stelt men het aantal  tab-karakters in."
+msgstr "Tab-grootte biedt het definiëren van het aantal tabulatie-tekens."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -47129,20 +47095,14 @@ msgid "Text Align"
 msgstr "Uitlijnen van tekst"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr ""
 "Tekst-uitlijning regelt de uitlijning van het geselecteerde blok tekst."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the text-anchor property, matching is "
-#| "case-insensitive"
-#| msgid "text-align, justification, text-anchor"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
@@ -47221,6 +47181,7 @@ msgstr "Tekstgebied"
 msgctxt "@info:tooltip"
 msgid "Options for modifying the text area padding and margins."
 msgstr ""
+"Opties voor het aanpassen van de opvulling en marges van het tekstgebied."
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
 #, kde-format
@@ -47228,21 +47189,19 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "tekst-in-vorm, opvulling, marge"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "Vorm aanmaken:"
+msgstr "Vormopvulling: "
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "Vorm aanmaken:"
+msgstr "Vormmarge: "
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -47251,11 +47210,7 @@ msgid "Text Decoration"
 msgstr "Tekstdecoratie"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Decoration allows drawing underlines, overlines and striking through "
-#| "text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
@@ -47339,18 +47294,14 @@ msgid "Text Indent"
 msgstr "Inspringen van tekst"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Indent allows setting indentation at the line start. Only works when "
-#| "the text is wrapping."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
-"Met tekst-inspringing kan bij het beging van de regel de tekst wat verder "
-"begingen. Werkt alleen als de tekst op de volgende regel doorloopt."
+"Met tekst-inspringing kan bij het begin van de regel de tekst wat verder "
+"inspringen. Werkt alleen als de tekst op de volgende regel doorloopt."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -47478,15 +47429,13 @@ msgid "Text Rendering"
 msgstr "Tekstweergave"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Rendering controls the hinting and rendering style for the property"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
 msgstr ""
-"Tekstweergave bestuurt de 'hinting' en stijl van weergeven voor de eigenschap"
+"Tekstweergave bestuurt de aanwijzing en stijl van weergeven voor de "
+"eigenschap"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -47560,12 +47509,7 @@ msgid "Text Transform"
 msgstr "Teksttransformatie"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Transform allows transforming the given range of characters, for "
-#| "example, by setting them uppercase, or switching out half-width forms for "
-#| "full-width forms."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
@@ -47573,8 +47517,8 @@ msgid ""
 "full-width forms."
 msgstr ""
 "Teksttransformatie biedt het transformeren van de gegeven reeks tekens, "
-"bijvoorbeeld, door ze hoofdletters te maken of halve-breedte karakters "
-"vervangen door volle breedte karakters."
+"bijvoorbeeld, door ze hoofdletters te maken of halve-breedtevormen vervangen "
+"door volledige-breedtevormen."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -47803,19 +47747,14 @@ msgid "Writing Mode"
 msgstr "Schrijfmodus"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Writing Mode sets whether the text flows horizontally or vertically, and "
-#| "in the latter case, whether the block flows right to left or left to "
-#| "right."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
 "De schrijfmodus bepaalt of de tekst horizontaal of verticaal loopt, en in "
-"het eerste geval of het blok  van rechts naar links rechts dan wel  links "
+"het eerste geval of het blok  van rechts naar links rechts dan wel van links "
 "naar rechts loopt."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
@@ -51660,8 +51599,7 @@ msgid "Color Adjustment"
 msgstr "Kleurbijstelling"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "Lichtheid"
@@ -65930,67 +65868,49 @@ msgid "Interval Y:"
 msgstr "Interval Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Vormen aan groep toevoegen"
+msgstr "Vormen aan tekststroom toevoegen."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
-#, fuzzy
-#| msgid "Text On Path"
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr "Tekst op een pad zetten"
+msgstr "Zet tekst op pad"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "Vormen aftrekken"
+msgstr "Vormen aftrekken van de tekststroom."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
-#, fuzzy
-#| msgid "Remove Shape Collection"
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Verwijder de vormenverzameling"
+msgstr "Vormen verwijderen uit de tekststroom."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
-#, fuzzy
-#| msgid "Toggle Rotate Mode"
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr "Schakel roteermodus om"
+msgstr "Stroomvormtype in-/uitschakelen"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Stel de stroomvorm in als eerste"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Flow verlagen"
+msgstr "Verminder de stroomvormindex"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Flow verhogen"
+msgstr "Verhoog de stroomvormindex"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Stel de stroomvorm in als laatste"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
@@ -67020,11 +66940,10 @@ msgstr ""
 "+0045 zal naar 'E')"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Geen afbeelding beschikbaar."
+msgstr "Geen afwisselende glyphs beschikbaar."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -67039,12 +66958,9 @@ msgid "All glyphs"
 msgstr "Alle glyphs"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Change text direction"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "Tekstrichting wijzigen"
+msgstr "Tekst wijzigen op de padpositie"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -67192,12 +67108,9 @@ msgid "Change Text Properties"
 msgstr "Eigenschappen van tekst wijzigen"
 
 #: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Eigenschappen van tekst wijzigen"
+msgstr "Tekst wijzigen op padeigenschappen"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -67643,20 +67556,17 @@ msgstr "Verwijdert karaktertransformatie van de selectie."
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Formattering &wissen"
+msgstr "Opmaak wissen"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Verwijdert karaktertransformatie van de selectie."
+msgstr "Verwijder alle ingestelde teksteigenschappen uit de selectie."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
@@ -68338,24 +68248,21 @@ msgstr "Hulpmiddel voor omvatten en vullen"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"
-msgstr ""
+msgstr "Meshulpmiddel: snijd door vormen heen"
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "This tool only works on vector layers. You probably want the move tool."
+#, kde-format
 msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
 msgstr ""
-"Dit hulpmiddel werkt alleen op vectorlagen. U wilt waarschijnlijk het "
-"Verplaatsingshulpmiddel."
+"Dit hulpmiddel werkt alleen op vectorlagen. U wilt waarschijnlijk een "
+"vectorlaag aanmaken en eerste een startvorm."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Bewerkingshulpmiddel voor inkleurmasker"
+msgstr "Bewerkingshulpmiddel voor strippaneel"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -68391,45 +68298,38 @@ msgstr "Speciaal"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The display brightness in nits. By default this is "
-#| "set to 1000 for converting to display linear.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>De helderheid van het scherm in nits. Standaard is dit "
-"ingesteld op 1000 voor converteren naar \"display linear\".</p></body></html>"
+"<html><head/><body><p>Dit hulpmiddel werkt alleen op een vectorlaag.<br/"
+">Maak het eerste paneel met een willekeurig vormhulpmiddel op een vectorlaag."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "Initiële breedte:"
+msgstr "Eenheid van breedte:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap:"
-msgstr "Dikte:"
+msgstr "Dik gat:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thin gap:"
-msgstr "Verdunnen:"
+msgstr "Dun gat:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgid "Special gap:"
-msgstr "Specials"
+msgstr "Speciaal gat:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
@@ -68439,16 +68339,14 @@ msgstr "Automatisch"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Diagonal"
+#, kde-format
 msgid "Diagonal:"
-msgstr "Diagonaal"
+msgstr "Diagonaal:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
-msgstr ""
+msgstr "Meshulpmiddel: een goot verwijderen"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
 msgctxt "(qtundo-format)"
@@ -69586,11 +69484,10 @@ msgstr "Referentie-afbeeldingen"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Bewerkingshulpmiddel voor inkleurmasker"
+msgstr "Bewerkingshulpmiddel voor strippaneel"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format

@@ -1400,7 +1400,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = quicklook/Info.plist;
-				INSTALL_PATH = /Library/QuickLook;
 				MARKETING_VERSION = 4.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.krita.quicklook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1414,7 +1413,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = quicklook/Info.plist;
-				INSTALL_PATH = /Library/QuickLook;
 				MARKETING_VERSION = 4.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.krita.quicklook;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -42,14 +42,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-27 01:58+0000\n"
-"PO-Revision-Date: 2025-12-01 22:15+0200\n"
+"PO-Revision-Date: 2025-12-30 10:29+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -489,73 +489,73 @@ msgstr "ריבועים10"
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes02.pat"
 msgid "Stripes02"
-msgstr ""
+msgstr "פסים02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes03.pat"
 msgid "Stripes03"
-msgstr ""
+msgstr "פסים03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes04.pat"
 msgid "Stripes04"
-msgstr ""
+msgstr "פסים04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes05.pat"
 msgid "Stripes05"
-msgstr ""
+msgstr "פסים05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes06.pat"
 msgid "Stripes06"
-msgstr ""
+msgstr "פסים06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes07.pat"
 msgid "Stripes07"
-msgstr ""
+msgstr "פסים07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes08.pat"
 msgid "Stripes08"
-msgstr ""
+msgstr "פסים08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes09.pat"
 msgid "Stripes09"
-msgstr ""
+msgstr "פסים09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag01.pat"
 msgid "Zigzag01"
-msgstr ""
+msgstr "זיגזג01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag02.pat"
 msgid "Zigzag02"
-msgstr ""
+msgstr "זיגזג02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag03.pat"
 msgid "Zigzag03"
-msgstr ""
+msgstr "זיגזג03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag04.pat"
 msgid "Zigzag04"
-msgstr ""
+msgstr "זיגזג04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -50462,13 +50462,13 @@ msgstr "מקושר"
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
 #, kde-format
 msgid "         Input:"
-msgstr ""
+msgstr "         קלט:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOut)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:97
 #, kde-format
 msgid "         Output:"
-msgstr ""
+msgstr "         פלט:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLogarithmic)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:330
@@ -51505,7 +51505,7 @@ msgstr "מלבן"
 #, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Diamond"
-msgstr ""
+msgstr "יהלום"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
 #, fuzzy, kde-format
@@ -51537,7 +51537,7 @@ msgstr "מברשות"
 #, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Expand"
-msgstr ""
+msgstr "הרחבה"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
 #, fuzzy, kde-format
@@ -51579,12 +51579,12 @@ msgstr ""
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
 msgid "Expand the alpha channel as well as the color"
-msgstr ""
+msgstr "הרחבת ערוץ השקיפות יחד עם הצבע"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
 #, kde-format
 msgid "Expand only the color, leaving the alpha channel untouched"
-msgstr ""
+msgstr "הרחבת הצבע בלבד, ערוץ השקיפות יישאר כמו שהוא"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
 #, fuzzy, kde-format
@@ -51668,7 +51668,7 @@ msgstr "סובב &90"
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
 #, kde-format
 msgid "Size of the window:"
-msgstr ""
+msgstr "גודל החלון:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
@@ -65001,16 +65001,16 @@ msgid "Anchor Gap: "
 msgstr "אלפא"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Complete the selection"
 msgid "Complete"
-msgstr "מאפייני שכבה..."
+msgstr ""
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:767
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Discard the selection"
 msgid "Discard"
-msgstr "הוסף ערוץ"
+msgstr "התעלמות"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:773
 #, kde-format
@@ -65136,10 +65136,10 @@ msgid "Glyph Alternates"
 msgstr "חלופה"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Character Map"
-msgstr "שרטרז"
+msgstr "מפת תווים"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:134
 #, kde-format
@@ -65170,10 +65170,9 @@ msgid "All glyphs"
 msgstr "כל הגליפים"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "שינוי רישיות"
+msgstr "החלפת מקום טקסט על "
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -65206,9 +65205,7 @@ msgstr "כלי טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "גודל גופן"
@@ -65244,54 +65241,49 @@ msgid "Middle"
 msgstr "מצב:"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
-msgstr "פעולה בוליאנית"
+msgstr "מתמטי"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
-msgstr "מרכז"
+msgstr "מרכזי"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "גובה שורה"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "&מברשת"
+msgstr "קו בסיס נוכחי"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "הזחת קו בסיס"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Tool"
 msgstr "כלי טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
-#, fuzzy, kde-format
+#, kde-format
 msgid "Conversion failed"
-msgstr "בחירה &רציפה"
+msgstr "ההמרה נכשלה"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
-#, fuzzy, kde-format
+#, kde-format
 msgid "Find Text"
-msgstr "הוספת טקסט"
+msgstr "איתור טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:269

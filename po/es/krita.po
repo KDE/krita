@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-12-20 12:34+0100\n"
+"PO-Revision-Date: 2025-12-30 11:48+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17521,7 +17521,7 @@ msgstr "Invertir selección"
 #: libs/image/kis_selection_filters.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
-msgstr "Selección de antialias"
+msgstr "Selección de suavizado de bordes"
 
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
@@ -52358,7 +52358,7 @@ msgstr "Ajustes gráficos"
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:36
 #, kde-format
 msgid "Antialiased lines"
-msgstr "Líneas suavizadas"
+msgstr "Líneas con bordes suavizados"
 
 #. i18n: ectx: property (text), widget (QCheckBox, subpixelPrecisionCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:46

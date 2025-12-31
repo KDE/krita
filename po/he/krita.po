@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-12-18 12:50+0200\n"
+"PO-Revision-Date: 2025-12-30 10:29+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -489,73 +489,73 @@ msgstr "ריבועים10"
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes02.pat"
 msgid "Stripes02"
-msgstr ""
+msgstr "פסים02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes03.pat"
 msgid "Stripes03"
-msgstr ""
+msgstr "פסים03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes04.pat"
 msgid "Stripes04"
-msgstr ""
+msgstr "פסים04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes05.pat"
 msgid "Stripes05"
-msgstr ""
+msgstr "פסים05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes06.pat"
 msgid "Stripes06"
-msgstr ""
+msgstr "פסים06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes07.pat"
 msgid "Stripes07"
-msgstr ""
+msgstr "פסים07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes08.pat"
 msgid "Stripes08"
-msgstr ""
+msgstr "פסים08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stripes09.pat"
 msgid "Stripes09"
-msgstr ""
+msgstr "פסים09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag01.pat"
 msgid "Zigzag01"
-msgstr ""
+msgstr "זיגזג01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag02.pat"
 msgid "Zigzag02"
-msgstr ""
+msgstr "זיגזג02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag03.pat"
 msgid "Zigzag03"
-msgstr ""
+msgstr "זיגזג03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag04.pat"
 msgid "Zigzag04"
-msgstr ""
+msgstr "זיגזג04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -43872,13 +43872,13 @@ msgstr "מקושר"
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
 #, kde-format
 msgid "         Input:"
-msgstr ""
+msgstr "         קלט:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOut)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:97
 #, kde-format
 msgid "         Output:"
-msgstr ""
+msgstr "         פלט:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLogarithmic)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:330
@@ -44938,7 +44938,7 @@ msgstr "סובב &90"
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
 #, kde-format
 msgid "Size of the window:"
-msgstr ""
+msgstr "גודל החלון:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
@@ -57421,16 +57421,16 @@ msgid "Anchor Gap: "
 msgstr "אלפא"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Complete the selection"
 msgid "Complete"
-msgstr "מאפייני שכבה..."
+msgstr ""
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:767
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Discard the selection"
 msgid "Discard"
-msgstr "הוסף ערוץ"
+msgstr "התעלמות"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:773
 #, kde-format
@@ -57560,9 +57560,9 @@ msgid "Text Tool"
 msgstr "כלי טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
-#, fuzzy, kde-format
+#, kde-format
 msgid "Conversion failed"
-msgstr "בחירה &רציפה"
+msgstr "ההמרה נכשלה"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format

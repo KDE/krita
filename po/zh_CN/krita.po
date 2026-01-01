@@ -39682,7 +39682,7 @@ msgstr "明度："
 #: libs/widgets/KisTagSelectionWidget.cpp:58
 #, kde-format
 msgid "Remove tag"
-msgstr ""
+msgstr "移除标签"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format

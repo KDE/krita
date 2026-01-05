@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-27 01:58+0000\n"
-"PO-Revision-Date: 2025-12-20 17:41+0100\n"
+"PO-Revision-Date: 2025-12-26 12:37+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -40410,10 +40410,9 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Rimuovi pagina"
+msgstr "Rimuovi tag"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format

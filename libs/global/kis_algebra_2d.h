@@ -691,8 +691,8 @@ private:
 
 };
 
-QDebug operator<<(QDebug debug, const VectorPath &path);
-QDebug operator<<(QDebug debug, const VectorPath::VectorPathPoint &point);
+QDebug KRITAGLOBAL_EXPORT operator<<(QDebug debug, const VectorPath &path);
+QDebug KRITAGLOBAL_EXPORT operator<<(QDebug debug, const VectorPath::VectorPathPoint &point);
 
 
 QVector<QPoint> KRITAGLOBAL_EXPORT sampleRectWithPoints(const QRect &rect);

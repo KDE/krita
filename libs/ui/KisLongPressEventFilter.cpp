@@ -181,11 +181,7 @@ void KisLongPressEventFilter::triggerLongPress()
 
 int KisLongPressEventFilter::getKineticScrollDelay(QWidget *target) const
 {
-    switch (KisKineticScroller::getConfiguredGestureType()) {
-    case QScroller::TouchGesture:
-    case QScroller::LeftMouseButtonGesture:
-        break;
-    default:
+    if (KisKineticScroller::getConfiguredGestureType() != QScroller::LeftMouseButtonGesture) {
         return 0;
     }
 

@@ -32,6 +32,9 @@ OverviewWidget::OverviewWidget(QWidget * parent)
     , m_dragging(false)
 {
     setMouseTracking(true);
+    // No context menu here. Setting this avoids long-presses from delaying
+    // inputs or dismissing the palette, see KisLongPressEventFilter.cpp.
+    setContextMenuPolicy(Qt::PreventContextMenu);
     KisConfig cfg(true);
     slotThemeChanged();
     recalculatePreviewDimensions();

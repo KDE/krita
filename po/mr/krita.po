@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-27 01:58+0000\n"
+"POT-Creation-Date: 2026-01-07 02:05+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -69221,7 +69221,7 @@ msgstr "स्वयंचलित"
 msgid "Diagonal:"
 msgstr "व्यासानुसार ठसवा"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

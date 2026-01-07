@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-27 01:58+0000\n"
+"POT-Creation-Date: 2026-01-07 02:05+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -66723,7 +66723,7 @@ msgstr "தானியங்கி தூரிகை"
 msgid "Diagonal:"
 msgstr "மூலைவிட்டக்கோட்டை மேல் எழும்பும்படிச் செய்"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

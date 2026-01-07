@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-27 01:58+0000\n"
+"POT-Creation-Date: 2026-01-07 02:05+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -67047,7 +67047,7 @@ msgstr "Autoberus"
 msgid "Diagonal:"
 msgstr "Cetak Timbul Menyerong"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

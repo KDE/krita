@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-27 01:58+0000\n"
+"POT-Creation-Date: 2026-01-07 02:05+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -68372,7 +68372,7 @@ msgstr "Uathoibríoch"
 msgid "Diagonal:"
 msgstr "Go Cothrománach"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

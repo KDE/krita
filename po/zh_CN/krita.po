@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-27 01:58+0000\n"
+"POT-Creation-Date: 2026-01-07 02:05+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -67040,7 +67040,7 @@ msgstr "自动"
 msgid "Diagonal:"
 msgstr "斜线："
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "矢量裁刀工具：移除间隙"

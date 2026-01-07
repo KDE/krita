@@ -65,6 +65,7 @@ linux-build-qt6-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
+    KDECI_ONLY_BUILD: True
 
 linux-build-qt6-manual:
   extends:

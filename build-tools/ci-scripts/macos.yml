@@ -99,6 +99,8 @@ macos-build-qt6-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
+    # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
+    KDECI_ONLY_BUILD: True
 
 macos-build-qt6-manual:
   extends:

@@ -98,6 +98,7 @@ public:
     void toggleSolo(const QModelIndex &index);
 
 protected:
+    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const override;
     QModelIndex indexAt(const QPoint &point) const override;
     bool viewportEvent(QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;

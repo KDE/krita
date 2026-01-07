@@ -148,6 +148,20 @@ void NodeView::toggleSolo(const QModelIndex &index) {
     d->delegate.toggleSolo(index);
 }
 
+QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex &index, const QEvent *event) const
+{
+    //Block selection on press if ctrl is held
+    //This is to allow for a more consistent behaviour with ctrl+dnd
+    if (event &&
+        event->type() == QEvent::MouseButtonPress ) {
+        const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
+        if (mevent->modifiers() & Qt::ControlModifier)
+            return QItemSelectionModel::NoUpdate;
+    }
+
+    return QTreeView::selectionCommand(index, event);
+}
+
 QModelIndex NodeView::indexAt(const QPoint &point) const
 {
     KisNodeViewColorScheme scm;

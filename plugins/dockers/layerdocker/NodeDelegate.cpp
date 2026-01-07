@@ -1127,11 +1127,6 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                         model->setData(index, true, KisNodeModel::AlternateActiveRole);
 
                         return true;
-                    } else if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                        // the control modifier shifts the current index as well (even when deselected), so we
-                        // handle it manually.
-                        changeSelectionAndCurrentIndex(index);
-                        return true;
                     }
                     return false;
                 }

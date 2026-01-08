@@ -261,6 +261,8 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT KisNodeSP findNodeByName(KisNodeSP root, const QString &name);
 
+    KRITAIMAGE_EXPORT KisNodeSP findIsolationRoot(KisNodeSP node);
+
     KRITAIMAGE_EXPORT KisImageSP findImageByHierarchy(KisNodeSP node);
 
     template <class T>

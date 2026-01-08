@@ -269,7 +269,6 @@ void MoveStrokeStrategy::initStrokeCallback()
             const bool isEmptyFilterMask = node->inherits("KisFilterMask") && node->paintDevice()
                 && node->paintDevice()->nonDefaultPixelArea().isEmpty();
 
-            // TODO: check isolation
             return !isEmptyFilterMask &&
                 !KisLayerUtils::checkIsCloneOf(node, m_nodes) &&
                 node->isEditable(true);

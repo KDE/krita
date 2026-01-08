@@ -2225,6 +2225,14 @@ namespace Private {
         });
     }
 
+    KisNodeSP findIsolationRoot(KisNodeSP node)
+    {
+        KisImageSP image = node->image();
+        if (image)
+            return image->isolationRootNode();
+        return nullptr;
+    }
+
     void forceAllDelayedNodesUpdate(KisNodeSP root)
     {
         KisLayerUtils::recursiveApplyNodes(root,

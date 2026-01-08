@@ -37,10 +37,16 @@ KisNodeList KisNodeSelectionRecipe::selectNodesToProcess() const
         return selectedNodes;
     }
 
+    KisNodeSP activeRoot = KisLayerUtils::findIsolationRoot(selectedNodes.first());
+    const bool wholeGroup = mode == Group;
+
     KisNodeList result;
 
-    const bool wholeGroup = mode == Group;
-    KisNodeSP node = KisToolUtils::findNode(KisLayerUtils::findRoot(selectedNodes.first()), pickPoint, wholeGroup);
+    if (!activeRoot) {
+        activeRoot = KisLayerUtils::findRoot(selectedNodes.first());
+    }
+
+    KisNodeSP node = KisToolUtils::findNode(activeRoot, pickPoint, wholeGroup);
     if (node) {
         result = {node};
     }

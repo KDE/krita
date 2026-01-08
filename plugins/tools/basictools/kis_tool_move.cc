@@ -282,7 +282,6 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
     KisSignalsBlocker b(m_optionsWidget);
     Q_EMIT moveInNewPosition(currentTopLeft);
 
-    // TODO: fetch this info not from options widget, but from config
     const bool showCoordinates = m_optionsWidget->showCoordinates();
 
     if (showCoordinates && showFloatingMessage) {

@@ -578,7 +578,8 @@ QOpenGLContext::OpenGLModuleType determineOpenGLImplementation(const RendererInf
 
 KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer renderer,
                                                 std::pair<KisSurfaceColorSpaceWrapper, int> rootSurfaceFormat,
-                                                bool debugContext)
+                                                bool debugContext,
+                                                bool inhibitCompatibilityProfile)
 {
     RendererInfo info = getRendererInfo(renderer);
 
@@ -604,7 +605,10 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
         format.setVersion(3, 3);
         // Make sure to request a Compatibility profile to have NVIDIA
         // return the maximum supported GL version.
-        format.setProfile(QSurfaceFormat::CompatibilityProfile);
+
+        if (!inhibitCompatibilityProfile) {
+            format.setProfile(QSurfaceFormat::CompatibilityProfile);
+        }
 #ifdef Q_OS_WIN
         // Some parts of Qt seems to require deprecated functions. On Windows
         // with the Intel Graphics driver, things like canvas decorations and
@@ -922,15 +926,61 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         });
 #endif
 
+    bool shouldInhibitCompatibilityProfile = false;
     KisOpenGL::RendererConfig defaultConfig = generateSurfaceConfig(KisOpenGL::RendererAuto,
-                                                                    makeDefaultSurfaceFormatPair(), false);
+                                                                    makeDefaultSurfaceFormatPair(),
+                                                                    false,
+                                                                    shouldInhibitCompatibilityProfile);
     Info info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
+
+#ifndef Q_OS_MACOS
+    // When RendererAuto is active, Qt may perform insane things internally,
+    // e.g. switch from OpenGL to OpenGLES automatically. And the presence of
+    // the compatibility profile flag will cause the context creation process
+    // to fail.
+    //
+    // So, here we request an explicit API again to avoid Qt making decisions
+    // for us.
+
+    if (!info) {
+        dbgOpenGL << "Failed to probe default Qt's openGL format.. Trying DesktopGL with compatibility enabled...";
+        shouldInhibitCompatibilityProfile = false;
+        defaultConfig = generateSurfaceConfig(KisOpenGL::RendererDesktopGL,
+                                              makeDefaultSurfaceFormatPair(),
+                                              false,
+                                              shouldInhibitCompatibilityProfile);
+        info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
+    }
+
+    if (!info) {
+        dbgOpenGL << "Failed again.. Trying DesktopGL with compatibility disabled...";
+        shouldInhibitCompatibilityProfile = true;
+        defaultConfig = generateSurfaceConfig(KisOpenGL::RendererDesktopGL,
+                                              makeDefaultSurfaceFormatPair(),
+                                              false,
+                                              shouldInhibitCompatibilityProfile);
+        info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
+    }
+
+    if (!info) {
+        dbgOpenGL << "Failed again.. Trying OpenGLES...";
+        shouldInhibitCompatibilityProfile = false;
+        defaultConfig = generateSurfaceConfig(KisOpenGL::RendererOpenGLES,
+                                              makeDefaultSurfaceFormatPair(),
+                                              false,
+                                              true);
+        info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
+    }
+
+#endif /* Q_OS_MACOS */
 
 #ifdef Q_OS_WIN
     if (!info) {
         // try software rasterizer (WARP)
         defaultConfig = generateSurfaceConfig(KisOpenGL::RendererSoftware,
-                                              makeDefaultSurfaceFormatPair(), false);
+                                              makeDefaultSurfaceFormatPair(),
+                                              false,
+                                              shouldInhibitCompatibilityProfile);
         info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
 
         if (!info) {
@@ -939,7 +989,10 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     }
 #endif
 
-    if (!info) return KisOpenGL::RendererConfig();
+    if (!info) {
+        dbgOpenGL << "Failed to probe default openGL format! No openGL support will be available in Krita";
+        return KisOpenGL::RendererConfig();
+    }
 
     const OpenGLRenderer defaultRenderer = getRendererFromProbeResult(*info);
 
@@ -986,7 +1039,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         Info info = it.value();
 
         if (!info) {
-            const RendererConfig config = generateSurfaceConfig(it.key(), makeDefaultSurfaceFormatPair(), false);
+            const RendererConfig config = generateSurfaceConfig(it.key(), makeDefaultSurfaceFormatPair(), false, shouldInhibitCompatibilityProfile);
             dbgOpenGL << "Probing" << it.key() << "from default:" << config.format << config.angleRenderer
                       << config.rendererId();
             info = KisOpenGLModeProber::instance()->probeFormat(config);
@@ -1038,7 +1091,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         if (!it.value()) continue;
 
         Q_FOREACH (const auto &formatPair, formatSymbolPairs) {
-            preferredConfigs << generateSurfaceConfig(it.key(), formatPair, enableDebug);
+            preferredConfigs << generateSurfaceConfig(it.key(), formatPair, enableDebug, shouldInhibitCompatibilityProfile);
         }
     }
 

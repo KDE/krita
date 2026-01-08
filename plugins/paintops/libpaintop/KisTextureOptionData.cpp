@@ -29,6 +29,11 @@ bool KisTextureOptionData::read(const KisPropertiesConfiguration *setting)
     invert = setting->getBool("Texture/Pattern/Invert");
     autoInvertOnErase = setting->getBool("Texture/Pattern/AutoInvertOnErase");
 
+    // TODO: we use a hack here and explicitly do not load MaximumOffsetX/Y
+    // here, since they are updated by the model when a pattern is loaded.
+    // This is a bad design, we should convert these members into a lager's
+    // reader in the model and let the values to be calculated on the fly.
+
     return true;
 }
 

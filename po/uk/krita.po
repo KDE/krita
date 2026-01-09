@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-07 02:05+0000\n"
+"POT-Creation-Date: 2026-01-09 02:03+0000\n"
 "PO-Revision-Date: 2025-12-24 16:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -21907,14 +21907,14 @@ msgstr ""
 "Звести зображення\n"
 "зведення зображення"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2389
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Відділити прозорість як маску\n"
 "відділення прозорості як маски"
 
-#: libs/image/kis_layer_utils.cpp:2407
+#: libs/image/kis_layer_utils.cpp:2415
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -37997,14 +37997,14 @@ msgstr ""
 "Буфери текстур явним чином вимкнено для обробника ANGLE через проблеми із "
 "швидкодією."
 
-#: libs/ui/opengl/kis_opengl.cpp:660
+#: libs/ui/opengl/kis_opengl.cpp:664
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Відомо, що використаний системою графічний драйвер Intel має проблеми із "
 "OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:662
+#: libs/ui/opengl/kis_opengl.cpp:666
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -38015,7 +38015,7 @@ msgstr ""
 "буде використано ANGLE. Ви можете вручну перемкнутися на OpenGL, але при "
 "цьому належну роботу програми не гарантовано."
 
-#: libs/ui/opengl/kis_opengl.cpp:1096
+#: libs/ui/opengl/kis_opengl.cpp:1149
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -38024,7 +38024,7 @@ msgstr ""
 "Для бажаного засобу обробки не передбачено потрібного вам формату поверхні. "
 "Вибрано інший засіб обробки."
 
-#: libs/ui/opengl/kis_opengl.cpp:1098
+#: libs/ui/opengl/kis_opengl.cpp:1151
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -44429,7 +44429,7 @@ msgstr "Пе&ремкнути блокування і видимість"
 msgid "&Add"
 msgstr "&Додати"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1352
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -61648,7 +61648,7 @@ msgstr "Потужність"
 msgid "Lightness Strength"
 msgstr "Потужність освітленості"
 
-#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:66
+#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:67
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
@@ -65932,13 +65932,13 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "Інструмент «Вимірювання»"
 
-#: plugins/tools/basictools/kis_tool_move.cc:293
+#: plugins/tools/basictools/kis_tool_move.cc:292
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr "X: %1 пк, Y: %2 пк"
 
-#: plugins/tools/basictools/kis_tool_move.cc:341
+#: plugins/tools/basictools/kis_tool_move.cc:340
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"

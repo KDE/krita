@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-07 02:05+0000\n"
+"POT-Creation-Date: 2026-01-09 02:03+0000\n"
 "PO-Revision-Date: 2025-12-24 09:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21781,12 +21781,12 @@ msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Aplana la imatge"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2389
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dividix l'alfa en una màscara"
 
-#: libs/image/kis_layer_utils.cpp:2407
+#: libs/image/kis_layer_utils.cpp:2415
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Convertix a una capa de pintura"
@@ -37685,12 +37685,12 @@ msgstr ""
 "Les memòries intermèdies de textures estan desactivades explícitament en el "
 "renderitzador ANGLE per problemes de rendiment."
 
-#: libs/ui/opengl/kis_opengl.cpp:660
+#: libs/ui/opengl/kis_opengl.cpp:664
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "El controlador gràfic d'Intel emprat té problemes coneguts amb OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:662
+#: libs/ui/opengl/kis_opengl.cpp:666
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37701,7 +37701,7 @@ msgstr ""
 "que s'utilitzarà ANGLE de manera predeterminada. Manualment podreu canviar a "
 "OpenGL, però no es garantix que funcione adequadament."
 
-#: libs/ui/opengl/kis_opengl.cpp:1096
+#: libs/ui/opengl/kis_opengl.cpp:1149
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -37710,7 +37710,7 @@ msgstr ""
 "El renderitzador preferit no permet el format de superfície requerit. S'ha "
 "seleccionat un altre renderitzador."
 
-#: libs/ui/opengl/kis_opengl.cpp:1098
+#: libs/ui/opengl/kis_opengl.cpp:1151
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -43983,7 +43983,7 @@ msgstr "Can&via els bloquejos i la visibilitat"
 msgid "&Add"
 msgstr "Afi&g"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1352
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -61156,7 +61156,7 @@ msgstr "Intensitat"
 msgid "Lightness Strength"
 msgstr "Intensitat de la claredat"
 
-#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:66
+#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:67
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
@@ -65435,13 +65435,13 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "Eina de mesura"
 
-#: plugins/tools/basictools/kis_tool_move.cc:293
+#: plugins/tools/basictools/kis_tool_move.cc:292
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr "X: %1 px, Y: %2 px"
 
-#: plugins/tools/basictools/kis_tool_move.cc:341
+#: plugins/tools/basictools/kis_tool_move.cc:340
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"

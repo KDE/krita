@@ -131,7 +131,7 @@ struct KoFontGlyphModel::Private {
 
         QVector<hb_language_t> localeTags;
         Q_FOREACH(const QString locale, locales) {
-            QLatin1String l(locale.split("_").join("-").toLatin1());
+            QByteArray l(locale.split("_").join("-").toLatin1());
             localeTags.append(hb_language_from_string(l.data(), l.size()));
         }
 

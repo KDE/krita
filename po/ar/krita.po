@@ -6,14 +6,14 @@
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2018.
-# SPDX-FileCopyrightText: 2021, 2022, 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2021, 2022, 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-11-20 18:39+0400\n"
+"PO-Revision-Date: 2026-01-08 13:33+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -57063,7 +57063,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_line.h:115
 #, kde-format
 msgid "Line Tool"
-msgstr "أداة رسم الخطوط"
+msgstr "أداة رسم سطور"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, kde-format

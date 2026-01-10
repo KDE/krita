@@ -1604,7 +1604,7 @@ void ColorSettingsTab::updateProofingDisplayInfo() {
 void TabletSettingsTab::setDefault()
 {
     KisConfig cfg(true);
-    const KisCubicCurve curve(DEFAULT_CURVE_STRING);
+    const KisCubicCurve curve(cfg.pressureTabletCurve(true));
     m_page->pressureCurve->setCurve(curve);
 
     m_page->chkUseRightMiddleClickWorkaround->setChecked(

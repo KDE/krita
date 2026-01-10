@@ -1617,6 +1617,15 @@ void TabletSettingsTab::setDefault()
         m_page->grpTabletApi->setVisible(false);
 #endif
 
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN
+    m_page->chkUsePageUpDownMouseButtonEmulationWorkaround->setChecked(
+        cfg.usePageUpDownMouseButtonEmulationWorkaround(true));
+#endif
+
+#if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
+    m_page->chkUseIgnoreHistoricTabletEventsWorkaround->setChecked(cfg.useIgnoreHistoricTabletEventsWorkaround(true));
+#endif
+
     m_page->chkUseTimestampsForBrushSpeed->setChecked(false);
     m_page->intMaxAllowedBrushSpeed->setValue(30);
     m_page->intBrushSpeedSmoothing->setValue(3);
@@ -1666,6 +1675,19 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->chkUseTimestampsForBrushSpeed->setText(i18n("Use tablet driver timestamps for brush speed"));
 #endif
     m_page->chkUseTimestampsForBrushSpeed->setChecked(cfg.readEntry("useTimestampsForBrushSpeed", false));
+
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN
+    m_page->chkUsePageUpDownMouseButtonEmulationWorkaround->setChecked(
+        cfg.usePageUpDownMouseButtonEmulationWorkaround());
+#else
+    m_page->chkUsePageUpDownMouseButtonEmulationWorkaround->hide();
+#endif
+
+#if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
+    m_page->chkUseIgnoreHistoricTabletEventsWorkaround->setChecked(cfg.useIgnoreHistoricTabletEventsWorkaround());
+#else
+    m_page->chkUseIgnoreHistoricTabletEventsWorkaround->hide();
+#endif
 
     m_page->intMaxAllowedBrushSpeed->setRange(1, 100);
     m_page->intMaxAllowedBrushSpeed->setValue(cfg.readEntry("maxAllowedSpeedValue", 30));
@@ -2845,6 +2867,17 @@ bool KisDlgPreferences::editPreferences()
 #  endif
 #endif
         cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_tabletSettings->m_page->chkUseTimestampsForBrushSpeed->isChecked());
+
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN
+        cfg.setUsePageUpDownMouseButtonEmulationWorkaround(
+            m_tabletSettings->m_page->chkUsePageUpDownMouseButtonEmulationWorkaround->isChecked());
+#endif
+
+#if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
+        cfg.setUseIgnoreHistoricTabletEventsWorkaround(
+            m_tabletSettings->m_page->chkUseIgnoreHistoricTabletEventsWorkaround->isChecked());
+#endif
+
         cfg.writeEntry<int>("maxAllowedSpeedValue", m_tabletSettings->m_page->intMaxAllowedBrushSpeed->value());
         cfg.writeEntry<int>("speedValueSmoothing", m_tabletSettings->m_page->intBrushSpeedSmoothing->value());
         // the angle is saved in clockwise direction to be consistent with Drawing Angle, so negate

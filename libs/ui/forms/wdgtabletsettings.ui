@@ -189,6 +189,20 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkUsePageUpDownMouseButtonEmulationWorkaround">
+     <property name="text">
+      <string>Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi styluses)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkUseIgnoreHistoricTabletEventsWorkaround">
+     <property name="text">
+      <string>Disregard tablet position history (workaround for jagged lines with Xiaomi styluses)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="KisSliderSpinBox" name="intMaxAllowedBrushSpeed" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">

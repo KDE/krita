@@ -49,6 +49,10 @@
 #  include <QtGui/qpa/qplatformintegration.h>
 #endif
 
+#ifdef Q_OS_ANDROID
+#include <KisAndroidUtils.h>
+#endif
+
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
     , m_readOnly(readOnly)
@@ -1636,6 +1640,40 @@ void KisConfig::setUseRightMiddleTabletButtonWorkaround(bool value)
 {
     m_cfg.writeEntry("useRightMiddleTabletButtonWorkaround", value);
 }
+
+#ifdef Q_OS_ANDROID
+bool KisConfig::usePageUpDownMouseButtonEmulationWorkaround(bool defaultValue) const
+{
+    bool fallback = KisAndroidUtils::looksLikeXiaomiDevice();
+    if (defaultValue) {
+        return fallback;
+    } else {
+        return m_cfg.readEntry("usePageUpDownMouseButtonEmulationWorkaround", fallback);
+    }
+}
+
+void KisConfig::setUsePageUpDownMouseButtonEmulationWorkaround(bool value)
+{
+    m_cfg.writeEntry("usePageUpDownMouseButtonEmulationWorkaround", value);
+    KisConfigNotifier::instance()->notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged(value);
+}
+
+bool KisConfig::useIgnoreHistoricTabletEventsWorkaround(bool defaultValue) const
+{
+    bool fallback = KisAndroidUtils::looksLikeXiaomiDevice();
+    if (defaultValue) {
+        return fallback;
+    } else {
+        return m_cfg.readEntry("useIgnoreHistoricTabletEventsWorkaround", fallback);
+    }
+}
+
+void KisConfig::setUseIgnoreHistoricTabletEventsWorkaround(bool value)
+{
+    m_cfg.writeEntry("useIgnoreHistoricTabletEventsWorkaround", value);
+    KisConfigNotifier::instance()->notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(value);
+}
+#endif
 
 qreal KisConfig::vastScrolling(bool defaultValue) const
 {

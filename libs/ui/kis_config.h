@@ -416,6 +416,14 @@ public:
     bool useRightMiddleTabletButtonWorkaround(bool defaultValue = false) const;
     void setUseRightMiddleTabletButtonWorkaround(bool value);
 
+#ifdef Q_OS_ANDROID
+    bool usePageUpDownMouseButtonEmulationWorkaround(bool defaultValue = false) const;
+    void setUsePageUpDownMouseButtonEmulationWorkaround(bool value);
+
+    bool useIgnoreHistoricTabletEventsWorkaround(bool defaultValue = false) const;
+    void setUseIgnoreHistoricTabletEventsWorkaround(bool value);
+#endif
+
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
 

@@ -1401,7 +1401,19 @@ void KisConfig::setPaintopPopupDetached(bool detached) const
 
 QString KisConfig::pressureTabletCurve(bool defaultValue) const
 {
-    return (defaultValue ? "0,0;1,1" : m_cfg.readEntry("tabletPressureCurve","0,0;1,1;"));
+    QString fallback = DEFAULT_CURVE_STRING;
+#ifdef Q_OS_ANDROID
+    // Xiaomi styluses need superhuman strength to reach full input pressure.
+    // We use a much steeper default pressure curve for them by default that
+    // effectively caps out at 70% pressure to make it at least bearable. A
+    // note for a possible future: Apple styluses have an even greater range,
+    // so if we somehow end up on iPads, we'll probably need to make those cap
+    // out at 50% pressure at most something like: "0,0;0.5,1.0;"
+    if (KisAndroidUtils::looksLikeXiaomiDevice()) {
+        fallback = QStringLiteral("0,0;0.7,1;");
+    }
+#endif
+    return (defaultValue ? fallback : m_cfg.readEntry("tabletPressureCurve", fallback));
 }
 
 void KisConfig::setPressureTabletCurve(const QString& curveString) const

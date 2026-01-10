@@ -120,6 +120,7 @@
 #include <kis_psd_layer_style.h>
 
 #include <config-seexpr.h>
+#include <config-qt-patches-present.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -562,8 +563,38 @@ bool KisApplication::start(const KisApplicationArguments &args)
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
     // Long-press emulation.
-    connect(KisConfigNotifier::instance(), &KisConfigNotifier::sigLongPressChanged, this, &KisApplication::slotSetLongPress);
+    KisConfigNotifier *cfgNotifier = KisConfigNotifier::instance();
+    connect(cfgNotifier, &KisConfigNotifier::sigLongPressChanged, this, &KisApplication::slotSetLongPress);
     slotSetLongPress(cfg.longPressEnabled());
+
+    // Xiaomi workaround: their stylus inexplicably inputs page up and down keys
+    // when pressing stylus buttons. This flag causes the Android platform
+    // integration to turn those into right and middle clicks instead.
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN
+    auto setPageUpDownMouseButtonEmulationWorkaround = [](bool enabled) {
+        QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN, enabled);
+    };
+    connect(cfgNotifier,
+            &KisConfigNotifier::sigUsePageUpDownMouseButtonEmulationWorkaroundChanged,
+            this,
+            setPageUpDownMouseButtonEmulationWorkaround);
+    setPageUpDownMouseButtonEmulationWorkaround(cfg.usePageUpDownMouseButtonEmulationWorkaround());
+#endif
+
+    // Xiaomi workaround: historic tablet motion events are garbage, they just
+    // connect the actual points that the tablet sampled with a straight line
+    // and no pressure emulation, leading to jagged curves that don't get
+    // smoothed out. This flag disables reading those historic events.
+#if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
+    auto setIgnoreHistoricTabletEventsWorkaround = [](bool enabled) {
+        QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS, enabled);
+    };
+    connect(cfgNotifier,
+            &KisConfigNotifier::sigUseIgnoreHistoricTabletEventsWorkaroundChanged,
+            this,
+            setIgnoreHistoricTabletEventsWorkaround);
+    setIgnoreHistoricTabletEventsWorkaround(cfg.usePageUpDownMouseButtonEmulationWorkaround());
+#endif
 
     // Create a new image, if needed
     if (doNewImage) {

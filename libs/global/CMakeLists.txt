@@ -53,7 +53,10 @@ if(WIN32)
 endif(WIN32)
 
 if (ANDROID)
-    set (kritaglobal_LIB_SRCS ${kritaglobal_LIB_SRCS} KisAndroidCrashHandler.cpp)
+    list(APPEND kritaglobal_LIB_SRCS
+        KisAndroidCrashHandler.cpp
+        KisAndroidUtils.cpp
+    )
     include_directories(${unwindstack_INCLUDE_DIR})
     include_directories(${Qt5AndroidExtras_INCLUDE_DIRS})
 endif()

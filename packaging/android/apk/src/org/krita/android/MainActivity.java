@@ -193,4 +193,12 @@ public class MainActivity extends QtActivity {
             return 500;
         }
     }
+
+    public static boolean looksLikeXiaomiDevice() {
+        return containsXiaomi(Build.BRAND) || containsXiaomi(Build.MANUFACTURER);
+    }
+
+    private static boolean containsXiaomi(String s) {
+        return s != null && s.toLowerCase().contains("xiaomi");
+    }
 }

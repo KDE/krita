@@ -64,3 +64,15 @@ void KisConfigNotifier::notifyLongPressChanged(bool enabled)
 {
     Q_EMIT sigLongPressChanged(enabled);
 }
+
+#ifdef Q_OS_ANDROID
+void KisConfigNotifier::notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled)
+{
+    Q_EMIT sigUsePageUpDownMouseButtonEmulationWorkaroundChanged(enabled);
+}
+
+void KisConfigNotifier::notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled)
+{
+    Q_EMIT sigUseIgnoreHistoricTabletEventsWorkaroundChanged(enabled);
+}
+#endif

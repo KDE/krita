@@ -39192,10 +39192,9 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Odstranit stranu"
+msgstr "Odstranit značku"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format

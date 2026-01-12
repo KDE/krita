@@ -187,6 +187,8 @@ void KisLiquifyTransformWorker::translate(const QPointF &offset)
         m_d->originalPoints[i] += offset;
         m_d->transformedPoints[i] += offset;
     }
+
+    m_d->accumulatedBrushStrokes.translate(offset);
 }
 
 void KisLiquifyTransformWorker::translateDstSpace(const QPointF &offset)
@@ -466,6 +468,10 @@ void KisLiquifyTransformWorker::transformSrcAndDst(const QTransform &t)
 
         m_d->originalPoints[i] = t.map(m_d->originalPoints[i]);
         m_d->transformedPoints[i] = t.map(m_d->transformedPoints[i]);
+    }
+    m_d->accumulatedBrushStrokes = t.map(m_d->accumulatedBrushStrokes).boundingRect();
+    if (t == QTransform::fromScale(t.m11(), t.m22()) && t.m11() == t.m22()) {
+        m_d->pixelPrecision *= t.m11();
     }
 }
 

@@ -291,6 +291,69 @@ Class template argument deduction (CTAD) (since C++17)
         The code **will** compile with GCC on Linux even with `--std=c++17`, but
         will fail to compile with Clang on Windows, Android and MacOS.
 
+The usage of custom patches in Qt
+
+    In Krita we use a lot of custom patches on Qt. An important part of this works
+    is to make sure Krita still works with unpatches Qt, so that Linux distributions
+    could package it.
+
+    To make Qt patches optional and maintainable, please use the follwoing guideline:
+
+    1) Detect Qt patches in main CMakeLists.txt file using `check_cxx_source_compiles`
+       or `check_cxx_symbol_exists`:
+
+       # modify includes and libraries if necessary
+       set(CMAKE_REQUIRED_INCLUDES ${Qt6Gui_INCLUDE_DIRS} ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
+       set(CMAKE_REQUIRED_LIBRARIES ${Qt6Gui_LIBRARIES})
+
+       CHECK_CXX_SOURCE_COMPILES("
+            #include <QtGui/rhi/qrhi.h>
+            int main(int, char *[]) {
+            bool (QRhi::*x)() const;
+            x = &QRhi::isLastFrameCompletedOnGPU;
+            Q_UNUSED(x);
+            return 0;
+            }
+            "
+        KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+        )
+
+        # reset modified environment
+        unset(CMAKE_REQUIRED_INCLUDES)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+
+    2) [optional] If the patch is important enough, or if the developer might want
+       to disable it for some reason, add it to the list of features:
+
+       option(KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+              "Qt has a custom patch for limiting FPS to the screen framerate"
+              ON)
+       add_feature_info("Qt: Compressed updates patch"
+                        KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+                        "Krita will compress the screen updates to the maximum FPS of available displays")
+
+    3) Add the definition for the detection variable into `config-qt-patches-present.h.cmake`
+
+       #cmakedefine01 KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+
+    4) At the point of usage just include the auto-generated include and check for the
+       feature to exist
+
+       #include <config-qt-patches-present.h>
+
+       #if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+       // do your work
+       #endif /* KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH */
+
+    Notes:
+
+    1) Try to avoid inclusion of `config-qt-patches-present.h` into header files. Include
+       that into .cpp only (just to avid too much compile dependencies).
+
+    2) If you don't add your patch into the list of features, its status can still
+       be tracked on CI via `CMakeConfigureLog.yaml` file, which is available as an
+       artifact of the build.
+
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.
 

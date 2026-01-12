@@ -643,8 +643,6 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes, bool containedMode)
 {
-    QMutexLocker l(&d->shapesMutex);
-
     d->updateTree();
     QList<KoShape*> shapes;
 

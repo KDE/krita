@@ -529,6 +529,7 @@ QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
 
 endif (WIN32)
 
+
 CHECK_CXX_SOURCE_COMPILES("
 #include <QCoreApplication>
 int main(int argc, char *argv[]) {
@@ -545,6 +546,16 @@ QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_IGNORE_HISTORIC_TAB
 }
 "
 KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
+)
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QScroller>
+#ifndef KRITA_QSCROLLER_PATCH
+#error \"QScroller filter patch not present\"
+#endif
+int main(int argc, char *argv[]) {}
+"
+KRITA_QT_HAS_QSCROLLER_FILTER
 )
 
 unset(CMAKE_REQUIRED_INCLUDES)

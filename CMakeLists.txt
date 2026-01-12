@@ -766,6 +766,24 @@ QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
 
 endif (WIN32)
 
+CHECK_CXX_SOURCE_COMPILES("
+#include <QCoreApplication>
+int main(int argc, char *argv[]) {
+QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN);
+}
+"
+KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN
+)
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QCoreApplication>
+int main(int argc, char *argv[]) {
+QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS);
+}
+"
+KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
+)
+
 unset(CMAKE_REQUIRED_INCLUDES)
 unset(CMAKE_REQUIRED_LIBRARIES)
 

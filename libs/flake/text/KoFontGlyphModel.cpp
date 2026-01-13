@@ -477,8 +477,8 @@ QModelIndex KoFontGlyphModel::index(int row, int column, const QModelIndex &pare
     if (parent.isValid() && parent.row() >= 0 && parent.row() < d->codePoints.size()) {
         Private::CodePointInfo info = d->codePoints.at(parent.row());
         if (row >= 0 && row < info.glyphs.size()) {
-            Private::GlyphInfo glyphInfo = info.glyphs.at(row);
-            return createIndex(row, column, &glyphInfo);
+            const Private::GlyphInfo &glyphInfo = info.glyphs.at(row);
+            return createIndex(row, column, const_cast<void*>(reinterpret_cast<const void*>(&glyphInfo)));
         }
 
     } else if (row >= 0 && row < d->codePoints.size()) {

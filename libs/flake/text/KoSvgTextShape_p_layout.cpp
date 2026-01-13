@@ -672,7 +672,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgTextProperties::defaultProperties().metrics(false, false), KoSvgText::BaselineAuto, QPointF(), QPointF(), result, globalIndex, resHandler, isHorizontal, disableFontMatching);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgTextProperties::defaultProperties().metrics(false, false), KoSvgText::BaselineAuto, result, globalIndex, resHandler, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
@@ -1095,8 +1095,6 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     const KoSvgTextProperties &parentProps,
     const KoSvgText::FontMetrics &parentBaselineTable,
     const KoSvgText::Baseline parentBaseline,
-    const QPointF superScript,
-    const QPointF subScript,
     QVector<CharacterResult> &result,
     int &currentIndex,
     const KoSvgText::ResolutionHandler resHandler,
@@ -1108,14 +1106,17 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
 
     KoSvgTextProperties properties = parent->properties;
     properties.inheritFrom(parentProps, true);
+    const QTransform ftTf = resHandler.freeTypeToPointTransform();
 
     const KoSvgText::CssLengthPercentage baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>();
     QPointF baselineShiftTotal;
     KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
     if (baselineShiftMode == KoSvgText::ShiftSuper) {
+        QPointF superScript = ftTf.map(QPointF(parentBaselineTable.superScriptOffset.first, parentBaselineTable.superScriptOffset.second));
         baselineShiftTotal = isHorizontal ? superScript : QPointF(-superScript.y(), superScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftSub) {
+        QPointF subScript = ftTf.map(QPointF(parentBaselineTable.subScriptOffset.first, parentBaselineTable.subScriptOffset.second));
         baselineShiftTotal = isHorizontal ? subScript : QPointF(-subScript.y(), subScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftLengthPercentage) {
         // Positive baseline-shift goes up in the inline-direction, which is up in horizontal and right in vertical.
@@ -1123,11 +1124,17 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     }
     baselineShiftTotal = resHandler.adjust(baselineShiftTotal);
 
+    /**
+     * Metrics are supossed to be generated from the first available font in a span,
+     * hence we're loading the font here... (CSS-Inline-3 section 3.3)
+     * CSS-Fonts specifies that such a first-available-font needs to resolve against
+     * the space character.
+     */
     QVector<int> lengths;
     const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
         lengths,
         properties.cssFontInfo(),
-        QString(),
+        QString(" "),
         static_cast<quint32>(resHandler.xRes),
         static_cast<quint32>(resHandler.yRes),
         disableFontMatching);
@@ -1148,13 +1155,8 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
         dominantBaseline = defaultBaseline;
     }
 
-    // Get underline and super/subscripts.
-    const QTransform ftTf = resHandler.freeTypeToPointTransform();
-    const QPointF newSuperScript = ftTf.map(QPointF(metrics.superScriptOffset.first, metrics.superScriptOffset.second));
-    const QPointF newSubScript = ftTf.map(QPointF(metrics.subScriptOffset.first, -metrics.subScriptOffset.second));
-
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, properties, metrics, dominantBaseline, newSuperScript, newSubScript, result, currentIndex, resHandler, isHorizontal, disableFontMatching);
+        computeFontMetrics(child, properties, metrics, dominantBaseline, result, currentIndex, resHandler, isHorizontal, disableFontMatching);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::AlignmentBaselineId).toInt());

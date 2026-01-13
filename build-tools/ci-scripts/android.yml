@@ -60,6 +60,7 @@
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform android-$KDECI_ANDROID_ABI --folder $KDECI_WORKDIR_PATH/krita/_packaging 2>&1 | tee apk-publish.log
       # move the artifacts from the workdir to the ci-root, so that artifacts could be fetched
     - if [[ "$(realpath $KDECI_WORKDIR_PATH/krita/_packaging)" != "$(realpath $CI_PROJECT_DIR/_packaging)" ]]; then mv $KDECI_WORKDIR_PATH/krita/_packaging $CI_PROJECT_DIR/; fi
+    - if [[ "$(realpath $KDECI_WORKDIR_PATH/krita/_build)" != "$(realpath $CI_PROJECT_DIR/_packaging)" ]]; then mv $KDECI_WORKDIR_PATH/krita/_build $CI_PROJECT_DIR/; fi
 
 .android-nightly-base:
   extends:

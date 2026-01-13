@@ -315,7 +315,6 @@ void SvgTextTool::showEditor()
         m_editor->setAttribute( Qt::WA_QuitOnClose, false );
 
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString)), SLOT(textUpdated(KoSvgTextShape*,QString,QString)));
-        connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
 
         m_editor->activateWindow(); // raise on creation only
     }
@@ -380,13 +379,6 @@ void SvgTextTool::insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph
         m_textCursor.moveCursor(m_textCursor.getPos() == 0? SvgTextCursor::MoveNextChar : SvgTextCursor::MovePreviousChar, false);
     }
     m_textCursor.insertRichText(richText, true);
-}
-
-void SvgTextTool::slotTextEditorClosed()
-{
-    // change tools to the shape selection tool when we close the text editor to allow moving and further editing of the object.
-    // most of the time when we edit text, the shape selection tool is where we left off anyway
-    KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
 QString SvgTextTool::generateDefs(const KoSvgTextProperties &properties)

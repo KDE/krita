@@ -974,8 +974,16 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
         if (childBegin(it) == childEnd(it)) {
             // For the lowest nodes, we only want to test the full name.
             QStringList local = it->localizedFullName.values();
+
+            // For some fonts, the full name is the exact same as the typographic family name,
+            // in which case, we want to ignore the full name.
+            QStringList localFamily = it->localizedFontFamilies.values();
+            bool inLocalFamilyToo = (localFamily.contains(familySimplified, Qt::CaseInsensitive)
+                                  || localFamily.contains(familyLower, Qt::CaseInsensitive));
+
             if (local.contains(familySimplified, Qt::CaseInsensitive)
                     || local.contains(familyLower, Qt::CaseInsensitive)) {
+                if (inLocalFamilyToo) continue;
                 break;
             } else {
                 continue;

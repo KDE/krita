@@ -67,6 +67,7 @@ variables:
       - "**/appium_artifact_*"
       - "*.log"
       - "_build/CMakeFiles/CMakeConfigureLog.yaml"
+      - "_build/CMakeCache.txt"
       # Windows packages
       - "krita-*.zip"
       - "krita-*-setup.exe"

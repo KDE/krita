@@ -131,7 +131,7 @@ QVector<QPointF>& KisLiquifyTransformWorker::transformedPoints()
 
 struct AllPointsFetcherOp
 {
-    AllPointsFetcherOp(QRectF srcRect) : m_srcRect(srcRect) {}
+    AllPointsFetcherOp(QRectF srcRect, QSize gridSize) : m_srcRect(srcRect), m_gridSize(gridSize) {}
 
     inline void processPoint(int col, int row,
                              int prevCol, int prevRow,
@@ -139,8 +139,15 @@ struct AllPointsFetcherOp
 
         Q_UNUSED(prevCol);
         Q_UNUSED(prevRow);
-        Q_UNUSED(colIndex);
-        Q_UNUSED(rowIndex);
+
+        // it would give us an integer point that signifies a start of the pixel
+        // but we want a decimal value at the end
+        if (colIndex == m_gridSize.width() - 1) {
+            col++;
+        }
+        if (rowIndex == m_gridSize.height() - 1) {
+            row++;
+        }
 
         QPointF pt(col, row);
         m_points << pt;
@@ -151,6 +158,7 @@ struct AllPointsFetcherOp
 
     QVector<QPointF> m_points;
     QRectF m_srcRect;
+    QSize m_gridSize;
 };
 
 void KisLiquifyTransformWorker::Private::preparePoints()
@@ -158,7 +166,7 @@ void KisLiquifyTransformWorker::Private::preparePoints()
     gridSize =
         GridIterationTools::calcGridSize(srcBounds, pixelPrecision);
 
-    AllPointsFetcherOp pointsOp(srcBounds);
+    AllPointsFetcherOp pointsOp(srcBounds, gridSize);
     GridIterationTools::processGrid(pointsOp, srcBounds, pixelPrecision);
 
     const int numPoints = pointsOp.m_points.size();
@@ -418,7 +426,8 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP
     dstDevice->clear();
 
     using namespace GridIterationTools;
-    QRect correctSubGrid = calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, m_d->accumulatedBrushStrokes, m_d->gridSize);
+    QRectF accumulatedBrushStrokesWithMargin = kisGrowRect(m_d->accumulatedBrushStrokes, 2*m_d->pixelPrecision);
+    QRect correctSubGrid = calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, accumulatedBrushStrokesWithMargin, m_d->gridSize);
 
     PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);
     RegularGridIndexesOp indexesOp(m_d->gridSize);
@@ -536,7 +545,8 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
     GridIterationTools::RegularGridIndexesOp indexesOp(m_d->gridSize);
 
 
-    QRect correctSubGrid = GridIterationTools::calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, m_d->accumulatedBrushStrokes, m_d->gridSize);
+    QRectF accumulatedBrushStrokesWithMargin = kisGrowRect(m_d->accumulatedBrushStrokes, 3*m_d->pixelPrecision);
+    QRect correctSubGrid = GridIterationTools::calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, accumulatedBrushStrokesWithMargin, m_d->gridSize);
     bool canMergeRects = GridIterationTools::canProcessRectsInRandomOrder(indexesOp, m_d->transformedPoints, correctSubGrid);
     polygonOp.setCanMergeRects(canMergeRects);
 

@@ -166,6 +166,18 @@ void processGrid(ProcessPolygon &polygonOp, ForwardTransform &transformOp,
     processGrid(cellOp, srcBounds, pixelPrecision);
 }
 
+inline QPointF middlePoint(int x, int y) {
+    return QPointF(x + 0.5, y + 0.5);
+}
+
+inline QPointF middlePoint(QPoint p) {
+    return QPointF(p.x() + 0.5, p.y() + 0.5);
+}
+
+inline QPointF middlePoint(QPointF p) {
+    return QPointF(p.x() + 0.5, p.y() + 0.5);
+}
+
 struct PaintDevicePolygonOp
 {
     PaintDevicePolygonOp(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev)
@@ -191,7 +203,7 @@ struct PaintDevicePolygonOp
         // it should go straight to the rect area copying
 
         while (dstIt.nextPixel()  && srcIt.nextPixel()) {
-            if (areaToCopy.containsPoint(QPoint(dstIt.x(), dstIt.y()), Qt::OddEvenFill)) {
+            if (areaToCopy.containsPoint(middlePoint(dstIt.x(), dstIt.y()), Qt::OddEvenFill)) {
                 memcpy(dstIt.rawData(), srcIt.oldRawData(), m_dstDev->pixelSize());
             }
         }
@@ -251,7 +263,7 @@ struct PaintDevicePolygonOp
 
                 QPointF srcPoint(dstIt.x(), y);
 
-                if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+                if (clipDstPolygon.containsPoint(middlePoint(srcPoint), Qt::OddEvenFill)) {
 
                     interp.setX(srcPoint.x());
                     QPointF dstPoint = interp.getValue();
@@ -275,7 +287,7 @@ struct PaintDevicePolygonOp
             while (dstIt.nextPixel()) {
                 QPointF srcPoint(dstIt.x(), dstIt.y());
 
-                if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+                if (clipDstPolygon.containsPoint(middlePoint(srcPoint), Qt::OddEvenFill)) {
                     srcAcc->sampledOldRawData(dstIt.rawData());
                 }
             }
@@ -342,7 +354,7 @@ struct QImagePolygonOp
                 QPointF dstPoint = QPointF(x, y);
                 QPointF srcPoint = dstPoint;
 
-                if (areaToCopy.containsPoint(srcPoint, Qt::OddEvenFill)) {
+                if (areaToCopy.containsPoint(middlePoint(srcPoint), Qt::OddEvenFill)) {
 
                     // about srcPoint/dstPoint hell please see a
                     // comment in PaintDevicePolygonOp::operator() ()
@@ -429,7 +441,7 @@ struct QImagePolygonOp
             for (int x = boundRect.left(); x <= boundRect.right(); x++) {
 
                 QPointF srcPoint(x, y);
-                if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+                if (clipDstPolygon.containsPoint(middlePoint(srcPoint), Qt::OddEvenFill)) {
 
                     interp.setX(srcPoint.x());
                     QPointF dstPoint = interp.getValue();

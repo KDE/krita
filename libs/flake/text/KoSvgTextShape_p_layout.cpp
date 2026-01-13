@@ -672,7 +672,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), KoSvgText::BaselineAuto, QPointF(), QPointF(), result, globalIndex, resHandler, isHorizontal, disableFontMatching);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgTextProperties::defaultProperties().metrics(false, false), KoSvgText::BaselineAuto, QPointF(), QPointF(), result, globalIndex, resHandler, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;

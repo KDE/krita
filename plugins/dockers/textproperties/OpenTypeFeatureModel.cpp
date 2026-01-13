@@ -266,7 +266,7 @@ struct AllOpenTypeFeaturesModel::Private {
 
     KoOpenTypeFeatureInfo featureByTag(QLatin1String tag) const {
         Q_FOREACH(KoOpenTypeFeatureInfo feature, availableFeatures) {
-            if (feature.tag == tag) {
+            if (QLatin1String(feature.tag) == tag) {
                 return feature;
                 break;
             }

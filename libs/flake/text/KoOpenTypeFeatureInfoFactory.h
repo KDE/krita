@@ -35,7 +35,7 @@ struct KoOpenTypeFeatureInfo
         GPOS9, ///< Extension positioning.
     };
     KoOpenTypeFeatureInfo() {}
-    KoOpenTypeFeatureInfo(const QLatin1String &tag,
+    KoOpenTypeFeatureInfo(const QByteArray &tag,
                           const QString &name,
                           const QString &description,
                           const QVector<OpenTypeTable> &tables,
@@ -50,7 +50,7 @@ struct KoOpenTypeFeatureInfo
     {
     }
     
-    QLatin1String tag; ///< 4 char tag.
+    QByteArray tag; ///< 4 char tag.
     
     QString name; ///< User-friendly name.
     

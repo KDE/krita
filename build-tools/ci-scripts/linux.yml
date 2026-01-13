@@ -107,6 +107,8 @@ linux-asan-weekly:
   - .ci-artifacts-with-packages-mixin
   interruptible: false
   variables:
+    # TODO: Currently building gmic does not respect job count limitations, which causes it to be oomkilled
+    KRITACI_SKIP_BUILD_3RDPARTY_PLUGINS: True
     KDECI_ONLY_BUILD: "True"
     KDECI_BUILD_TYPE: RelWithDebInfo
     KDECI_EXTRA_CMAKE_ARGS: >
@@ -118,6 +120,9 @@ linux-asan-weekly:
     ASAN_OPTIONS: 'new_delete_type_mismatch=0:detect_leaks=0:halt_on_error=0'
     KRITACI_ALLOW_NO_PYQT: True
     LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/13/libasan.so
+    # Krita's build process gets killed by OOM killer when building with ASAN,
+    # so let's try just to reduce the number of threads to 1
+    KRITACI_PARALLEL_JOBS: 1
 
 linux-asan-manual:
   extends:

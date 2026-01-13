@@ -26,6 +26,9 @@ if os.path.isdir(buildPath):
 os.makedirs(buildPath)
 
 cpuCount = int(multiprocessing.cpu_count())
+if 'KRITACI_PARALLEL_JOBS' in os.environ:
+    cpuCount = max(1, int(os.environ['KRITACI_PARALLEL_JOBS']))
+
 useCcacheForBuilds = os.environ.pop('KDECI_INTERNAL_USE_CCACHE') == 'True'
 
 cmakeCommand = [

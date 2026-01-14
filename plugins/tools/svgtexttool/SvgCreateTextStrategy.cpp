@@ -140,6 +140,14 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape *>(factory->createShape( params, tool->canvas()->shapeController()->resourceManager()));
 
+    /// Properties don't write their fills/strokes to svg, so we need to set those manually.
+    if (properties.hasProperty(KoSvgTextProperties::FillId)) {
+        textShape->setBackground(properties.background());
+    }
+    if (properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+        textShape->setStroke(properties.stroke());
+    }
+
     KUndo2Command *parentCommand = new KUndo2Command();
 
     new KoKeepShapesSelectedCommand(tool->koSelection()->selectedShapes(), {}, tool->canvas()->selectedShapesProxy(), false, parentCommand);

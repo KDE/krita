@@ -189,6 +189,10 @@ struct PaintDevicePolygonOp
         if (boundRect.isEmpty()) return;
 
         bool isItRect = KisAlgebra2D::isPolygonRect(areaToCopy, m_epsilon); // no need for lower tolerance
+
+#ifdef DEBUG_PAINTING_POLYGONS
+        isItRect = false; // force to use the code below, to not have to rewrite it for a workaround for copyAreaOptimized
+#endif
         if (isItRect) {
             fastCopyArea(boundRect);
             return;
@@ -205,6 +209,9 @@ struct PaintDevicePolygonOp
         while (dstIt.nextPixel()  && srcIt.nextPixel()) {
             if (areaToCopy.containsPoint(middlePoint(dstIt.x(), dstIt.y()), Qt::OddEvenFill)) {
                 memcpy(dstIt.rawData(), srcIt.oldRawData(), m_dstDev->pixelSize());
+#ifdef DEBUG_PAINTING_POLYGONS
+                m_dstDev->colorSpace()->fromQColor(m_debugColor, dstIt.rawData());
+#endif
             }
         }
     }
@@ -214,6 +221,10 @@ struct PaintDevicePolygonOp
     }
 
     void fastCopyArea(QRect areaToCopy, bool lazy) {
+#ifdef DEBUG_PAINTING_POLYGONS
+        fastCopyArea(QPolygon(areaToCopy));
+        return;
+#endif
         if (lazy) {
             m_rectsToCopy.append(areaToCopy.adjusted(0, 0, -1, -1));
         } else {
@@ -243,6 +254,9 @@ struct PaintDevicePolygonOp
         KisRandomSubAccessorSP srcAcc = m_srcDev->createRandomSubAccessor();
 
         KisFourPointInterpolatorBackward interp(srcPolygon, dstPolygon);
+#ifdef DEBUG_PAINTING_POLYGONS
+        int pixelId = 0;
+#endif
 
         /**
          * We need to make sure that the destination polygon is not too small,
@@ -278,6 +292,12 @@ struct PaintDevicePolygonOp
                     srcAcc->moveTo(dstPoint);
                     quint8* rawData = dstIt.rawData();
                     srcAcc->sampledOldRawData(rawData);
+#ifdef DEBUG_PAINTING_POLYGONS
+                    QColor color = m_debugColor;
+                    color.setHsl(m_debugColor.hslHue(), m_debugColor.hslSaturation(), qMin(m_debugColor.lightness() - 50 - pixelId, 100));
+                    pixelId++;
+                    m_dstDev->colorSpace()->fromQColor(color, rawData);
+#endif
                 }
             }
 
@@ -289,6 +309,11 @@ struct PaintDevicePolygonOp
 
                 if (clipDstPolygon.containsPoint(middlePoint(srcPoint), Qt::OddEvenFill)) {
                     srcAcc->sampledOldRawData(dstIt.rawData());
+#ifdef DEBUG_PAINTING_POLYGONS
+                    QColor color = m_debugColor;
+                    color.setHsl(m_debugColor.hslHue(), m_debugColor.hslSaturation(), m_debugColor.lightness() + 50);
+                    m_dstDev->colorSpace()->fromQColor(color, dstIt.rawData());
+#endif
                 }
             }
         }
@@ -313,6 +338,13 @@ struct PaintDevicePolygonOp
     KisPaintDeviceSP m_srcDev;
     KisPaintDeviceSP m_dstDev;
     const qreal m_epsilon {0.1};
+
+#ifdef DEBUG_PAINTING_POLYGONS
+    QColor m_debugColor;
+    inline void setDebugColor(QColor color) {
+        m_debugColor = color;
+    }
+#endif
 
 private:
     bool m_canMergeRects {true};

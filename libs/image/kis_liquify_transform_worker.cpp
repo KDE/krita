@@ -435,13 +435,23 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP
     bool canMergeRects = GridIterationTools::canProcessRectsInRandomOrder(indexesOp, m_d->transformedPoints, correctSubGrid);
     polygonOp.setCanMergeRects(canMergeRects);
 
+#ifdef DEBUG_PAINTING_POLYGONS
+    polygonOp.setDebugColor(Qt::red);
+#endif
+
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
                                                     m_d->originalPoints,
                                                     m_d->transformedPoints,
                                                     correctSubGrid);
     QList<QRectF> areasToCopy = cutOutSubgridFromBounds(correctSubGrid, m_d->srcBounds, m_d->gridSize, m_d->originalPoints);
+#ifdef DEBUG_PAINTING_POLYGONS
+    QList<QColor> colors = {Qt::blue, Qt::green, Qt::yellow, Qt::black};
+#endif
     for (int i = 0; i < areasToCopy.length(); i++) {
+#ifdef DEBUG_PAINTING_POLYGONS
+        polygonOp.setDebugColor(colors[i]);
+#endif
         polygonOp.fastCopyArea(areasToCopy[i].toRect(), false);
     }
 }

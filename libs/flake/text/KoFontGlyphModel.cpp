@@ -43,7 +43,7 @@ struct KoFontGlyphModel::Private {
         QString utfString = QString();
 
         QVector<GlyphInfo> glyphs;
-        int childCount() {
+        int childCount() const {
             return glyphs.size();
         }
 
@@ -388,8 +388,8 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
         if (!index.parent().isValid()) {
             return d->codePoints.value(index.row()).utfString;
         } else {
-            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
-            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.parent().row());
+            const Private::GlyphInfo &glyph = codePoint.glyphs.value(index.row());
             //qDebug () << index.parent().row() << index.row() << codePoint.utfString << codePoint.ucs;
             if (glyph.type == UnicodeVariationSelector) {
                 return QString(codePoint.utfString + glyph.baseString);
@@ -400,7 +400,7 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::ToolTipRole) {
         if (!index.parent().isValid()) {
             QStringList glyphNames;
-            Private::CodePointInfo codePoint = d->codePoints.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.row());
             QString base = codePoint.utfString;
             QVector<Private::GlyphInfo> glyphList = codePoint.glyphs;
             glyphNames.append(QString("%1 (%2)").arg(base).arg(unicodeHexFromUCS(codePoint.ucs)));
@@ -409,8 +409,8 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
             }
             return glyphNames.join(" ");
         } else {
-            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
-            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.parent().row());
+            const Private::GlyphInfo &glyph = codePoint.glyphs.value(index.row());
             if (glyph.type == OpenType) {
                 KoOpenTypeFeatureInfo info = d->featureData.value(glyph.baseString);
                 QString parameterString = info.namedParameters.value(glyph.featureIndex-1);
@@ -426,8 +426,8 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
     } else if (role == OpenTypeFeatures) {
         QVariantMap features;
         if (index.parent().isValid()) {
-            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
-            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.parent().row());
+            const Private::GlyphInfo &glyph = codePoint.glyphs.value(index.row());
             //qDebug () << index.parent().row() << index.row() << codePoint.utfString << codePoint.ucs;
             if (glyph.type == OpenType) {
                 features.insert(glyph.baseString, glyph.featureIndex);
@@ -437,11 +437,11 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
     } else if (role == GlyphLabel) {
         QString glyphId;
         if (!index.parent().isValid()) {
-            Private::CodePointInfo codePoint = d->codePoints.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.row());
             glyphId = unicodeHexFromUCS(codePoint.ucs);
         } else {
-            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
-            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.parent().row());
+            const Private::GlyphInfo &glyph = codePoint.glyphs.value(index.row());
             if (glyph.type == OpenType) {
                 glyphId = QString("'%1' %2").arg(glyph.baseString).arg(glyph.featureIndex);
             } else if (glyph.type == UnicodeVariationSelector)  {
@@ -454,7 +454,7 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
     } else if (role == ChildCount) {
         int childCount = 0;
         if (!index.parent().isValid()) {
-            Private::CodePointInfo codePoint = d->codePoints.value(index.row());
+            const Private::CodePointInfo &codePoint = d->codePoints.value(index.row());
             childCount = codePoint.childCount();
         }
         return childCount;

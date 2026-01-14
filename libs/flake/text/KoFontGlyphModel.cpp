@@ -9,17 +9,10 @@
 #include <hb.h>
 #include <hb-ft.h>
 
+static constexpr uint invalidUnicodeCodePoint = std::numeric_limits<uint>::max();
+
 struct KoFontGlyphModel::Private {
-    struct InfoNode {
-        virtual ~InfoNode() {}
-        uint ucs = 0;
-        uint parentUcs = 0;
-        virtual int childCount() = 0;
-    };
-
-    struct GlyphInfo
-            : public InfoNode {
-
+    struct GlyphInfo {
         GlyphInfo()
         {
         }
@@ -28,13 +21,12 @@ struct KoFontGlyphModel::Private {
             ucs = utf;
             parentUcs = utf;
         }
-        ~GlyphInfo() override {}
+
+        uint ucs = invalidUnicodeCodePoint;
+        uint parentUcs = invalidUnicodeCodePoint;
         GlyphType type = Base;
         QString baseString;
         int featureIndex = -1;
-        int childCount() override {
-            return 0;
-        }
 
         bool compare(const GlyphInfo &other) {
             return type == other.type
@@ -45,15 +37,13 @@ struct KoFontGlyphModel::Private {
         }
     };
 
-    struct CodePointInfo
-            : public InfoNode {
-        ~CodePointInfo() override {}
-
+    struct CodePointInfo {
+        uint ucs = invalidUnicodeCodePoint;
         uint glyphIndex = 0;
         QString utfString = QString();
 
         QVector<GlyphInfo> glyphs;
-        int childCount() override {
+        int childCount() {
             return glyphs.size();
         }
 
@@ -475,31 +465,28 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
 QModelIndex KoFontGlyphModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.row() >= 0 && parent.row() < d->codePoints.size()) {
-        Private::CodePointInfo info = d->codePoints.at(parent.row());
+        const Private::CodePointInfo &info = d->codePoints.at(parent.row());
         if (row >= 0 && row < info.glyphs.size()) {
             const Private::GlyphInfo &glyphInfo = info.glyphs.at(row);
-            return createIndex(row, column, const_cast<void*>(reinterpret_cast<const void*>(&glyphInfo)));
+            return createIndex(row, column, static_cast<quintptr>(glyphInfo.ucs));
         }
 
     } else if (row >= 0 && row < d->codePoints.size()) {
-        return createIndex(row, column);
+        return createIndex(row, column, static_cast<quintptr>(invalidUnicodeCodePoint));
     }
     return QModelIndex();
 }
 
 QModelIndex KoFontGlyphModel::parent(const QModelIndex &child) const
 {
-    if (!child.isValid() || !child.internalPointer()) {
+    if (!child.isValid() || child.internalId() == invalidUnicodeCodePoint) {
         return QModelIndex();
     }
-    Private::InfoNode *node = static_cast<Private::InfoNode*>(child.internalPointer());
-    if (node) {
-        const uint targetUcs = node->ucs;
-        for(int i = 0; i < d->codePoints.size(); i++) {
-            Private::CodePointInfo info = d->codePoints.at(i);
-            if (info.ucs == targetUcs) {
-                return createIndex(i, 0);
-            }
+    const uint targetUcs = static_cast<uint>(child.internalId());
+    for(int i = 0; i < d->codePoints.size(); i++) {
+        const Private::CodePointInfo &info = d->codePoints.at(i);
+        if (info.ucs == targetUcs) {
+            return createIndex(i, 0);
         }
     }
 

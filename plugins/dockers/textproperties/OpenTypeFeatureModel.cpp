@@ -30,7 +30,7 @@ struct OpenTypeFeatureModel::Private {
         return QList<KoOpenTypeFeatureInfo>();
     }
 
-    KoOpenTypeFeatureInfo featureByTag(QLatin1String tag) const {
+    KoOpenTypeFeatureInfo featureByTag(QByteArray tag) const {
         KoOpenTypeFeatureInfo info = factory.infoByTag(tag);
         if (glyphModel) {
             info = glyphModel->featureInfo().value(tag, info);
@@ -87,7 +87,7 @@ QVariant OpenTypeFeatureModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     const QString feature = d->currentFeatures.keys().at(index.row());
-    KoOpenTypeFeatureInfo info = d->featureByTag(QLatin1String(feature.toLatin1()));
+    KoOpenTypeFeatureInfo info = d->featureByTag(feature.toLatin1());
     if (role == Qt::DisplayRole) {
         return info.name;
     } else if (role == Qt::ToolTipRole) {
@@ -264,7 +264,7 @@ struct AllOpenTypeFeaturesModel::Private {
         return availableTags.contains(tag);
     }
 
-    KoOpenTypeFeatureInfo featureByTag(QLatin1String tag) const {
+    KoOpenTypeFeatureInfo featureByTag(QByteArray tag) const {
         Q_FOREACH(KoOpenTypeFeatureInfo feature, availableFeatures) {
             if (QLatin1String(feature.tag) == tag) {
                 return feature;
@@ -316,7 +316,7 @@ QVariant AllOpenTypeFeaturesModel::data(const QModelIndex &index, int role) cons
         return QVariant();
 
     const QString feature = d->allTags.at(index.row());
-    KoOpenTypeFeatureInfo info = d->featureByTag(QLatin1String(feature.toLatin1(), 4));
+    KoOpenTypeFeatureInfo info = d->featureByTag(feature.toLatin1());
     if (role == Qt::DisplayRole) {
         return info.name;
     } else if (role == Qt::ToolTipRole) {

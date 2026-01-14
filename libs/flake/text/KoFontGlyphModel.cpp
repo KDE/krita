@@ -193,7 +193,7 @@ struct KoFontGlyphModel::Private {
             for (auto tagIt = tags.begin(); tagIt != tags.end(); tagIt++) {
                 char c[4];
                 hb_tag_to_string(*tagIt, c);
-                const QLatin1String tagName(c, 4);
+                const QByteArray tagName(c, 4);
                 uint featureIndex;
 
 

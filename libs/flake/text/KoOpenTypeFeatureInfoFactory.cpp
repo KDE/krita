@@ -563,9 +563,9 @@ KoOpenTypeFeatureInfoFactory::~KoOpenTypeFeatureInfoFactory()
 {
 }
 
-KoOpenTypeFeatureInfo KoOpenTypeFeatureInfoFactory::infoByTag(const QLatin1String &tag) const
+KoOpenTypeFeatureInfo KoOpenTypeFeatureInfoFactory::infoByTag(const QByteArray &tag) const
 {
-    KoOpenTypeFeatureInfo def(QString(tag).toLatin1(), QString(), QString(), {});
+    KoOpenTypeFeatureInfo def(tag, QString(), QString(), {});
     return d->infoMap.value(tag, def);
 }
 

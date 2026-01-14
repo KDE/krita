@@ -87,7 +87,7 @@ public:
      * in this case a generic KoOpenTypeFeatureInfo will be returned.
      * @return KoOpenTypeFeatureInfo for a given tag.
      */
-    KoOpenTypeFeatureInfo infoByTag(const QLatin1String &tag) const;
+    KoOpenTypeFeatureInfo infoByTag(const QByteArray &tag) const;
 
     /**
      * @brief tags

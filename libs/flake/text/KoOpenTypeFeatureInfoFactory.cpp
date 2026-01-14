@@ -527,7 +527,7 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
                       {KoOpenTypeFeatureInfo::GSUB2}));
 
     //stylistic sets
-    char *tag{new char[4]{'s', 's', '0', '0'}};
+    char tag[4] = {'s', 's', '0', '0'};
     for (int i = 1; i <= 20; i++) {
         tag[2] = (i/10) + '0';
         tag[3] = (i%10) + '0';
@@ -552,7 +552,6 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
                           {KoOpenTypeFeatureInfo::GSUB1}, true));
 
     }
-    delete[] tag;
 
     Q_FOREACH(KoOpenTypeFeatureInfo feature, initialMap) {
         d->infoMap.insert(feature.tag, feature);

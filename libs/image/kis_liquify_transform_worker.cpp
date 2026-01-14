@@ -491,6 +491,9 @@ void KisLiquifyTransformWorker::transformSrcAndDst(const QTransform &t)
     m_d->accumulatedBrushStrokes = t.map(m_d->accumulatedBrushStrokes).boundingRect();
     if (t == QTransform::fromScale(t.m11(), t.m22()) && t.m11() == t.m22()) {
         m_d->pixelPrecision *= t.m11();
+        KIS_SAFE_ASSERT_RECOVER(m_d->pixelPrecision > 0) { m_d->pixelPrecision = 1; }
+        KIS_SAFE_ASSERT_RECOVER(QList<int>({1, 2, 4, 8, 16}).contains(m_d->pixelPrecision) || m_d->pixelPrecision%16 == 0) { m_d->pixelPrecision = 1; }
+        // should check if pixelPrecision is a power of 2, but that's more complicated
     }
 }
 

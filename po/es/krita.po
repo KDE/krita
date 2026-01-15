@@ -1,5 +1,5 @@
 # Spanish translations for krita.po package.
-# Copyright (C) 2015-2025 This file is copyright:
+# Copyright (C) 2015-2026 This file is copyright:
 # This file is distributed under the same license as the krita package.
 # Automatically generated, 2015.
 #
@@ -10,13 +10,13 @@
 # SPDX-FileCopyrightText: 2008, 2011, 2014, 2015 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018. 2019. 2020, 2021, 2024, 2025 Sofía Priego <spriego@darksylvania.net>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018. 2019. 2020, 2021, 2024, 2025, 2026 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-14 02:03+0000\n"
-"PO-Revision-Date: 2025-12-30 11:48+0100\n"
+"POT-Creation-Date: 2026-01-15 02:24+0000\n"
+"PO-Revision-Date: 2026-01-14 12:01+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18795,7 +18795,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Sin bloque"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:418
+#: libs/flake/text/KoFontGlyphModel.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -20507,13 +20507,13 @@ msgid "Stylistic Set %1"
 msgstr "Conjunto estilístico %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:551
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
 msgstr "Sustituye glifos con alternativos."
 
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
@@ -32723,6 +32723,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Tratar las teclas RePág/AvPág como los botones derecho/central del ratón "
+"(solución para lápices Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -32731,6 +32733,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Ignorar el historial de posición de la tableta (solución para líneas "
+"dentadas con lápices Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

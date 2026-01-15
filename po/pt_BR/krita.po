@@ -2,7 +2,7 @@
 # Copyright (C) 2006-2019 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011, 2025 Marcus Gama <marcus.gama@gmail.com>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011, 2025, 2026 Marcus Gama <marcus.gama@gmail.com>
 # Diniz Bortolotto <diniz.bortolotto@gmail.com>, 2007, 2008.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2019.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2009, 2010, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-14 02:03+0000\n"
-"PO-Revision-Date: 2025-12-24 08:24-0300\n"
+"POT-Creation-Date: 2026-01-15 02:24+0000\n"
+"PO-Revision-Date: 2026-01-14 06:21-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -18794,7 +18794,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Nenhum bloco"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:418
+#: libs/flake/text/KoFontGlyphModel.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -20486,13 +20486,13 @@ msgid "Stylistic Set %1"
 msgstr "Conjunto Estilístico %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:551
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
 msgstr "Substitui glifos por alternativos."
 
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
@@ -32674,6 +32674,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Tratar as teclas Page Up/Page Down como botões direito/do meio do mouse "
+"(solução alternativa para canetas Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -32682,6 +32684,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Ignorar o histórico de posição do tablet (solução alternativa para linhas "
+"serrilhadas com canetas Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

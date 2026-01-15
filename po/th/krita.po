@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-14 02:03+0000\n"
+"POT-Creation-Date: 2026-01-15 02:24+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -18838,7 +18838,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "บันทึกเลเยอร์เป็นรูปภาพ..."
 
-#: libs/flake/text/KoFontGlyphModel.cpp:418
+#: libs/flake/text/KoFontGlyphModel.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -20407,13 +20407,13 @@ msgid "Stylistic Set %1"
 msgstr "เครื่องมือเ&ติมสี"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:551
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
 msgstr ""
 
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, fuzzy, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"

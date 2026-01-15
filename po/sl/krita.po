@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-14 02:03+0000\n"
+"POT-Creation-Date: 2026-01-15 02:24+0000\n"
 "PO-Revision-Date: 2025-12-24 15:06+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -18777,7 +18777,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Brez bloka"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:418
+#: libs/flake/text/KoFontGlyphModel.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -20439,13 +20439,13 @@ msgid "Stylistic Set %1"
 msgstr "Slogovni sklop %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:551
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
 msgstr "Zamenja glife z nadomestki."
 
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"

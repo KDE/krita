@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-14 02:03+0000\n"
+"POT-Creation-Date: 2026-01-15 02:24+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -18906,7 +18906,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Baseina dibens"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:418
+#: libs/flake/text/KoFontGlyphModel.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -20473,13 +20473,13 @@ msgid "Stylistic Set %1"
 msgstr "Māksliniecisks teksts"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:551
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
 msgstr ""
 
-#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, fuzzy, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"

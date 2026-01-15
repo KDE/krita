@@ -125,7 +125,6 @@ private:
     bool m_useDynamicSlotCount {true};
     int m_hoveredColor {0};
     int m_selectedColor {0};
-    bool m_tabletRightClickPressed {false};
     bool m_touchBeginReceived {false};
     bool m_isOverFgBgColors {false};
     bool m_snapRotation {false};

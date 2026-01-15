@@ -1141,11 +1141,21 @@ void KisPopupPalette::showEvent(QShowEvent *event)
 
 void KisPopupPalette::tabletEvent(QTabletEvent *event)
 {
-    if (event->button() == Qt::RightButton && event->type() == QEvent::TabletPress) {
-        m_tabletRightClickPressed = true;
-    }
-
     event->ignore();
+
+    if (this->windowHandle()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        const QPointF localPos = event->localPos();
+#else
+        const QPointF localPos = event->position();
+#endif
+
+        if (event->type() == QEvent::TabletRelease && !QRectF(rect()).contains(localPos)) {
+            event->accept();
+            Q_EMIT finished();
+            return;
+        }
+    }
 }
 
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)

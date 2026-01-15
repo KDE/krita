@@ -1145,7 +1145,7 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event)
 
     if (this->windowHandle()) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        const QPointF localPos = event->localPos();
+        const QPointF localPos = event->posF();
 #else
         const QPointF localPos = event->position();
 #endif

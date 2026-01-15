@@ -99,6 +99,7 @@
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
+#include <KisAndroidUtils.h>
 #endif
 
 #include <KisUsageLogger.h>
@@ -1133,12 +1134,18 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
     // back or the menu bar is fiddled with. Flickering the window fixes this.
     // Having a docker that uses QML somehow also fixes this, so this hack is
     // gone again in 5.3 with the introduction of the text properties docker.
-    QTimer::singleShot(0, this, [this] {
-        hide();
+    // UNHACK: But not on Xiaomi devices! There flickering the window makes it
+    // sorta exit fullscreen, adding black bars at the top and bottom. Just
+    // opening a document seems to work fine on these devices though, it delays
+    // for a moment then displays fine, so just skip this there I guess.
+    if (!KisAndroidUtils::looksLikeXiaomiDevice()) {
         QTimer::singleShot(0, this, [this] {
-            show();
+            hide();
+            QTimer::singleShot(0, this, [this] {
+                show();
+            });
         });
-    });
+    }
 #endif
 
     return view;

@@ -1101,9 +1101,11 @@ QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
         }
     }
 
-    // NOTE: this is an internal API in Qt. SVG specs specify that we
-    // shouldn't interpolate in pre-multiplied space.
-    resultGradient->setInterpolationMode(QGradient::ComponentInterpolation);
+    // TODO: all gradients in Krita are rendered in a premultiplied-alpha
+    //       mode, which is against SVG standard. We need to fix that. Though
+    //       it requires deepeer changes, than just mere setting of the
+    //       QGradient's interpolation mode on loading.
+    // resultGradient->setInterpolationMode(QGradient::ComponentInterpolation);
 
     return resultGradient;
 }

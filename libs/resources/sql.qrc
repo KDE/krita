@@ -27,6 +27,7 @@
         <file alias="0_0_18_0002_update_metadata_table_constraints.sql">sql/0_0_18_0002_update_metadata_table_constraints.sql</file>
         <file alias="create_index_metadata_key.sql">sql/create_index_metadata_key.sql</file>
         <file>sql/delete_versioned_resources_for_storage_indirect.sql</file>
+        <file>sql/delete_resource_tags_for_storage_indirect.sql</file>
         <file>sql/delete_versioned_resources_for_storage_direct.sql</file>
         <file>sql/delete_resource_metadata_for_storage.sql</file>
         

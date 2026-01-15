@@ -1708,6 +1708,13 @@ bool KisResourceCacheDb::deleteStorage(QString location)
         }
 
         {
+            KisSqlQueryLoader loader(":/sql/delete_resource_tags_for_storage_indirect.sql",
+                                     KisSqlQueryLoader::single_statement_mode);
+            loader.query().bindValue(":location", changeToEmptyIfNull(location));
+            loader.exec();
+        }
+
+        {
             KisSqlQueryLoader loader(":/sql/delete_versioned_resources_for_storage_direct.sql",
                                      KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));

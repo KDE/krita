@@ -31,6 +31,7 @@
 #include <kis_tool.h>
 #include <kis_canvas2.h>
 #include <kis_action.h>
+#include <kis_tool_utils.h>
 
 #include <KisToolPaintFactoryBase.h>
 
@@ -322,6 +323,8 @@ private:
     QPainterPath m_cursorOutline;
 
     KisAsynchronousStrokeUpdateHelper m_asyncUpdateHelper;
+
+    KisToolUtils::MoveShortcutsHelper m_moveShortcutsHelper;
 
 private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);

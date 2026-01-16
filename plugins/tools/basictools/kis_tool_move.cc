@@ -55,6 +55,7 @@ struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<
 KisToolMove::KisToolMove(KoCanvasBase *canvas)
     : KisTool(canvas, KisCursor::moveCursor())
     , m_updateCursorCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+    , m_moveShortcutsHelper(this)
 {
     setObjectName("tool_move");
 
@@ -250,6 +251,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     // correct bounding rect
     m_handlesRect = QRect();
     m_strokeId = image->startStroke(strategy);
+    m_moveShortcutsHelper.startMoveAction();
     m_currentlyProcessingNodes = nodes;
     m_currentlyUsingSelection = isMoveSelection;
     m_currentMode = mode;
@@ -391,6 +393,8 @@ void KisToolMove::activate(const QSet<KoShape*> &shapes)
 {
     KisTool::activate(shapes);
 
+    m_moveShortcutsHelper.activate();
+
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
     m_actionConnections.addConnection(action("movetool-move-down"), SIGNAL(triggered(bool)),
@@ -426,8 +430,6 @@ void KisToolMove::activate(const QSet<KoShape*> &shapes)
     slotNodeChanged(this->selectedNodes());
 }
 
-
-
 void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
@@ -443,6 +445,7 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolMove::deactivate()
 {
+    m_moveShortcutsHelper.deactivate();
     m_actionConnections.clear();
     m_canvasConnections.clear();
 
@@ -625,6 +628,8 @@ void KisToolMove::endStroke()
 
     KisImageSP image = currentImage();
     image->endStroke(m_strokeId);
+    m_moveShortcutsHelper.endMoveAction();
+
     m_strokeId.clear();
     m_changesTracker.reset();
     m_currentlyProcessingNodes.clear();
@@ -697,6 +702,7 @@ void KisToolMove::cancelStroke()
 
     KisImageSP image = currentImage();
     image->cancelStroke(m_strokeId);
+    m_moveShortcutsHelper.cancelMoveAction();
     m_strokeId.clear();
     m_changesTracker.reset();
     m_currentlyProcessingNodes.clear();
@@ -822,14 +828,7 @@ QList<QAction *> KisToolMoveFactory::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("movetool-move-up", this);
-    actions << actionRegistry->makeQAction("movetool-move-down", this);
-    actions << actionRegistry->makeQAction("movetool-move-left", this);
-    actions << actionRegistry->makeQAction("movetool-move-right", this);
-    actions << actionRegistry->makeQAction("movetool-move-up-more", this);
-    actions << actionRegistry->makeQAction("movetool-move-down-more", this);
-    actions << actionRegistry->makeQAction("movetool-move-left-more", this);
-    actions << actionRegistry->makeQAction("movetool-move-right-more", this);
+    actions << KisToolUtils::MoveShortcutsHelper::createActions();
     actions << actionRegistry->makeQAction("movetool-show-coordinates", this);
 
     return actions;

@@ -18,6 +18,9 @@
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 
+#include <kis_action_registry.h>
+#include <KoToolBase.h>
+
 #include "KisAnimAutoKey.h"
 
 #include <QApplication>
@@ -299,5 +302,40 @@ namespace KisToolUtils {
             screen = qApp->primaryScreen();
         }
         QCursor::setPos(screen, point);
+    }
+
+    MoveShortcutsHelper::MoveShortcutsHelper(KoToolBase *tool)
+        : m_tool(tool)
+    {
+    }
+
+    QList<QAction*> MoveShortcutsHelper::createActions()
+    {
+        KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+        QList<QAction *> actions;
+
+        actions << actionRegistry->makeQAction("movetool-move-up", actionRegistry);
+        actions << actionRegistry->makeQAction("movetool-move-down", actionRegistry);
+        actions << actionRegistry->makeQAction("movetool-move-left", actionRegistry);
+        actions << actionRegistry->makeQAction("movetool-move-right", actionRegistry);
+
+        actions << actionRegistry->makeQAction("movetool-move-up-more", actionRegistry);
+        actions << actionRegistry->makeQAction("movetool-move-down-more", actionRegistry);
+        actions << actionRegistry->makeQAction("movetool-move-left-more", actionRegistry);
+        actions << actionRegistry->makeQAction("movetool-move-right-more", actionRegistry);
+
+        return actions;
+    }
+
+    void MoveShortcutsHelper::setInternalMoveShortcutsEnabled(bool value)
+    {
+        m_tool->action("movetool-move-up")->setEnabled(value);
+        m_tool->action("movetool-move-down")->setEnabled(value);
+        m_tool->action("movetool-move-left")->setEnabled(value);
+        m_tool->action("movetool-move-right")->setEnabled(value);
+        m_tool->action("movetool-move-up-more")->setEnabled(value);
+        m_tool->action("movetool-move-down-more")->setEnabled(value);
+        m_tool->action("movetool-move-left-more")->setEnabled(value);
+        m_tool->action("movetool-move-right-more")->setEnabled(value);
     }
 }

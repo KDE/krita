@@ -22,6 +22,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_signal_auto_connection.h"
 #include "KisAsynchronousStrokeUpdateHelper.h"
+#include <kis_tool_utils.h>
 
 #include "kis_canvas2.h"
 
@@ -130,7 +131,6 @@ private:
     bool tryEndPreviousStroke(const KisNodeList &nodes);
     void requestHandlesRectUpdate();
 
-
 private Q_SLOTS:
     void endStroke();
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP state);
@@ -171,6 +171,8 @@ private:
     KisSignalAutoConnectionsStore m_canvasConnections;
 
     KisAsynchronousStrokeUpdateHelper m_asyncUpdateHelper;
+
+    KisToolUtils::MoveShortcutsHelper m_moveShortcutsHelper;
 };
 
 

@@ -91,6 +91,7 @@ namespace Private {
         QVector<KisSelectionMaskSP> selectionMasks;
 
         KisNodeSP dstNode;
+        KisPaintLayerSP rasterizedDstLayer; // is non-null when merging takes a rasterization path
 
         SwitchFrameCommand::SharedStorageSP storage;
         QSet<int> frames;
@@ -634,15 +635,6 @@ namespace Private {
                 mergedLayerName = m_name;
             }
 
-            KisPaintLayer *dstPaintLayer = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
-            m_info->dstNode = dstPaintLayer;
-
-            if (m_info->frames.size() > 0) {
-                m_info->dstNode->enableAnimation();
-                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-            }
-
-
             auto channelFlagsLazy = [](KisNodeSP node) {
                 KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
                 return layer ? layer->channelFlags() : QBitArray();
@@ -671,21 +663,58 @@ namespace Private {
                 }
             }
 
-            if (!compositionVaries) {
-                if (!compositeOpId.isEmpty()) {
-                    m_info->dstNode->setCompositeOpId(compositeOpId);
+            /**
+             * First try to use fast-patch merge of layers of the same type
+             * (given that composition method is uniform)
+             */
+            if (!compositionVaries && m_info->frames.isEmpty()) {
+                QList<KisLayerSP> layers;
+                Q_FOREACH(KisNodeSP node, m_info->allSrcNodes()) {
+                    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+                    if (!layer) {
+                        layers.clear();
+                        break;
+                    }
+                    layers << layer;
                 }
-                if (m_info->dstLayer() && !channelFlags.isEmpty()) {
-                    m_info->dstLayer()->setChannelFlags(channelFlags);
+
+                if (!layers.isEmpty()) {
+                    /**
+                     * Blendmode and other properties are expected to be filled in by
+                     * the called function
+                     */
+                    m_info->dstNode = layers.first()->tryCreateInternallyMergedLayerFromMutipleLayers(layers);
                 }
             }
 
+            /**
+             * If fast-path has failed, rasterize all nodes into a paint layer
+             */
+            if (!m_info->dstNode) {
+                m_info->rasterizedDstLayer = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
+                m_info->dstNode = m_info->rasterizedDstLayer;
+
+                if (m_info->frames.size() > 0) {
+                    m_info->dstNode->enableAnimation();
+                    m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+                }
+
+                if (!compositionVaries) {
+                    if (!compositeOpId.isEmpty()) {
+                        m_info->dstNode->setCompositeOpId(compositeOpId);
+                    }
+                    if (m_info->dstLayer() && !channelFlags.isEmpty()) {
+                        m_info->dstLayer()->setChannelFlags(channelFlags);
+                    }
+                }
+
+                m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
+                m_info->dstNode->setColorLabelIndex(m_info->allSrcNodes().first()->colorLabelIndex());
+
+                m_info->rasterizedDstLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
+            }
+
             m_info->nodesCompositingVaries = compositionVaries;
-
-            m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
-            m_info->dstNode->setColorLabelIndex(m_info->allSrcNodes().first()->colorLabelIndex());
-
-            dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 
     private:
@@ -711,7 +740,9 @@ namespace Private {
         MergeLayersMultiple(MergeMultipleInfoSP info) : m_info(info) {}
 
         void populateChildCommands() override {
-            KisPainter gc(m_info->dstNode->paintDevice());
+            if (!m_info->rasterizedDstLayer) return;
+
+            KisPainter gc(m_info->rasterizedDstLayer->paintDevice());
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
                 QRect rc = node->exactBounds() | m_info->image->bounds();

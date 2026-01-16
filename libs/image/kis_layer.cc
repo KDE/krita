@@ -398,6 +398,12 @@ bool KisLayer::canMergeAndKeepBlendOptions(KisLayerSP otherLayer)
          *this->colorSpace() == *otherLayer->colorSpace());
 }
 
+KisLayerSP KisLayer::tryCreateInternallyMergedLayerFromMutipleLayers(QList<KisLayerSP> layers)
+{
+    Q_UNUSED(layers);
+    return nullptr;
+}
+
 KisLayerSP KisLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
     const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);

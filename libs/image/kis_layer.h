@@ -166,6 +166,18 @@ public:
     void setImage(KisImageWSP image) override;
 
     /**
+     * Try create a layer of this type from multiple layers (of the same type).
+     *
+     * The implementation will check if all the layers passed as \p layer have
+     * the same type, verify if they could be merged in a non-rasterizing fasion,
+     * merge them and return the layer of the proper type.
+     *
+     * Currently only used for merging a set of shape layers into a single shape
+     * layer.
+     */
+    virtual KisLayerSP tryCreateInternallyMergedLayerFromMutipleLayers(QList<KisLayerSP> layers);
+
+    /**
      * Create and return a layer that is the result of merging
      * this with layer.
      *

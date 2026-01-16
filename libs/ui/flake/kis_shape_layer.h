@@ -54,14 +54,18 @@ public:
     KisShapeLayer(const KisShapeLayer& _rhs);
     KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller);
     KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, std::function<KisShapeLayerCanvasBase*()> canvasFactory);
+
     /**
-     * Merge constructor.
+     * Merge constructor
      *
-     * Creates a new layer as a merge of two existing layers.
+     * Creates a new layer as a merge of two existing layers. The shapes of \p baseTemplate
+     * are **not** used. You need to add them into \p newShapes to be used in the final layer.
      *
-     * This is used by createMergedLayer()
+     * \p newShapes are the shapes used in the new shape layer, they should be z-order sorted
+     * homogenized externally before calling this constructor
      */
-    KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
+    KisShapeLayer(const KisShapeLayer& baseTemplate, const QList<KoShape*> &newShapes);
+
     ~KisShapeLayer() override;
 
     KisBaseNode::PropertyList sectionModelProperties() const override;
@@ -79,6 +83,8 @@ public:
 
 
     void setImage(KisImageWSP image) override;
+
+    KisLayerSP tryCreateInternallyMergedLayerFromMutipleLayers(QList<KisLayerSP> layers) override;
 
     KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
     void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer) override;

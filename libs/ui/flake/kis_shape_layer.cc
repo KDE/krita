@@ -192,19 +192,19 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
     m_d->canvas->shapeManager()->setUpdatesBlocked(false);
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
-        : KisExternalLayer(_rhs)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& baseTemplate, const QList<KoShape*> &newShapes)
+        : KisExternalLayer(baseTemplate)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _merge here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    m_d->isAntialiased = _rhs.m_d->isAntialiased;
+    m_d->isAntialiased = baseTemplate.m_d->isAntialiased;
 
-    const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(_rhs.canvas());
+    const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(baseTemplate.canvas());
     KIS_ASSERT(shapeLayerCanvas);
-    initShapeLayerImpl(_rhs.m_d->controller, new KisShapeLayerCanvas(*shapeLayerCanvas, this));
+    initShapeLayerImpl(baseTemplate.m_d->controller, new KisShapeLayerCanvas(*shapeLayerCanvas, this));
 
     /**
      * With current implementation this matrix will always be an identity, because
@@ -213,31 +213,21 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();
 
-    QList<KoShape *> shapesAbove;
-    QList<KoShape *> shapesBelow;
+    QList<KoShape *> clonedShapes;
 
-    // copy in _rhs's shapes
-    Q_FOREACH (KoShape *shape, _rhs.shapes()) {
+    // copy all the new shapes; we expect them to be sorted and homogenized
+
+    const bool isSorted = std::is_sorted(newShapes.begin(), newShapes.end(), KoShape::compareShapeZIndex);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(isSorted);
+
+    Q_FOREACH (KoShape *shape, newShapes) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
         clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
-        shapesBelow.append(clonedShape);
+        clonedShapes.append(clonedShape);
     }
 
-    // copy in _addShapes's shapes
-    Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
-        KoShape *clonedShape = shape->cloneShape();
-        KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
-        shapesAbove.append(clonedShape);
-    }
-
-    QList<KoShapeReorderCommand::IndexedShape> shapes =
-        KoShapeReorderCommand::mergeDownShapes(shapesBelow, shapesAbove);
-    KoShapeReorderCommand cmd(shapes);
-    cmd.redo();
-
-    Q_FOREACH (KoShape *shape, shapesBelow + shapesAbove) {
+    Q_FOREACH (KoShape *shape, clonedShapes) {
         addShape(shape);
     }
 }
@@ -342,14 +332,60 @@ void KisShapeLayer::setSectionModelProperties(const KisBaseNode::PropertyList &p
     KisLayer::setSectionModelProperties(properties);
 }
 
+KisLayerSP KisShapeLayer::tryCreateInternallyMergedLayerFromMutipleLayers(QList<KisLayerSP> layers)
+{
+    // NOTE: layers.first() may possibly point to `this`!
+
+    QList<KisShapeLayer*> shapeLayers;
+    Q_FOREACH(KisLayerSP layer, layers) {
+        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer.data());
+        if (!shapeLayer) return nullptr;
+
+        shapeLayers << shapeLayer;
+    }
+
+    QList<KoShape*> allShapes;
+    QList<KoShapeReorderCommand::IndexedShape> allIndexedShapes;
+    Q_FOREACH(KisShapeLayer *layer, shapeLayers) {
+        QList<KoShape*> shapes = layer->shapes();
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+        Q_FOREACH(KoShape *shape, shapes) {
+            allShapes << shape;
+            allIndexedShapes << shape;
+        }
+    }
+
+    allIndexedShapes = KoShapeReorderCommand::homogenizeZIndexesLazy(allIndexedShapes);
+
+    KoShapeReorderCommand cmd(allIndexedShapes);
+    cmd.redo();
+
+    KisLayerSP newLayer = new KisShapeLayer(*this, allShapes);
+
+    newLayer->setCompositeOpId(this->compositeOpId());
+    if (!this->channelFlags().isEmpty()) {
+        newLayer->setChannelFlags(this->channelFlags());
+    }
+
+    newLayer->setCompositeOpId(this->compositeOpId());
+    newLayer->setPinnedToTimeline(this->isPinnedToTimeline());
+    newLayer->setColorLabelIndex(this->colorLabelIndex());
+
+    return newLayer;
+}
+
 KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
-    KisShapeLayer *prevShape = dynamic_cast<KisShapeLayer*>(prevLayer.data());
+    KisLayerSP newLayer;
 
-    if (prevShape)
-        return new KisShapeLayer(*prevShape, *this);
-    else
-        return KisExternalLayer::createMergedLayerTemplate(prevLayer);
+    KisShapeLayer *prevShape = dynamic_cast<KisShapeLayer*>(prevLayer.data());
+    if (prevShape) {
+        newLayer = tryCreateInternallyMergedLayerFromMutipleLayers({prevLayer, this});
+        KIS_SAFE_ASSERT_RECOVER_NOOP(newLayer);
+    }
+
+    return newLayer ? newLayer : KisExternalLayer::createMergedLayerTemplate(prevLayer);
 }
 
 void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)

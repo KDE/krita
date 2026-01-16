@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-15 02:24+0000\n"
+"POT-Creation-Date: 2026-01-16 02:25+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17184,7 +17184,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "शैली"
 
-#: libs/flake/svg/SvgParser.cpp:1760
+#: libs/flake/svg/SvgParser.cpp:1762
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""

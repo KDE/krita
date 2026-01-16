@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-15 02:24+0000\n"
+"POT-Creation-Date: 2026-01-16 02:25+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -17234,7 +17234,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Στιλ"
 
-#: libs/flake/svg/SvgParser.cpp:1760
+#: libs/flake/svg/SvgParser.cpp:1762
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""

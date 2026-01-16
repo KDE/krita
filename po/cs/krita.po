@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-15 02:24+0000\n"
+"POT-Creation-Date: 2026-01-16 02:25+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -7819,10 +7819,10 @@ msgstr ""
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, fuzzy, kde-format
-#| msgid "Remove from tag"
+#| msgid "Remove from this tag"
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Odstranit ze značky"
+msgstr "Odstranit z této značky"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
@@ -16713,7 +16713,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr ""
 
-#: libs/flake/svg/SvgParser.cpp:1760
+#: libs/flake/svg/SvgParser.cpp:1762
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -67193,6 +67193,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid "Remove from tag"
-#~ msgstr "Odstranit ze značky"

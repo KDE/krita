@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-15 02:24+0000\n"
-"PO-Revision-Date: 2026-01-08 13:33+0400\n"
+"POT-Creation-Date: 2026-01-16 02:25+0000\n"
+"PO-Revision-Date: 2026-01-15 08:53+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16709,7 +16709,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "عينة الطراز"
 
-#: libs/flake/svg/SvgParser.cpp:1760
+#: libs/flake/svg/SvgParser.cpp:1762
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -32445,6 +32445,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"تعامل مع مفاتيح الصفحة لأعلى/لأسفل كأزرار الفأرة اليمنى/الوسطى (حل بديل "
+"لأقلام Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -32452,7 +32454,7 @@ msgstr ""
 msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
-msgstr ""
+msgstr "تجاهل سجل موضع اللوحة (حل بديل للخطوط المتعرجة باستخدام أقلام Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

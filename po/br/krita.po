@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 03:24+0000\n"
+"POT-Creation-Date: 2026-01-16 04:05+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -16462,7 +16462,7 @@ msgstr "Dibarzhoù %1"
 msgid "Active tool: %1"
 msgstr "Ostilh fiñval"
 
-#: libs/flake/svg/SvgParser.cpp:1793
+#: libs/flake/svg/SvgParser.cpp:1795
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""

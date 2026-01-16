@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 03:24+0000\n"
+"POT-Creation-Date: 2026-01-16 04:05+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17579,7 +17579,7 @@ msgstr "%1 ਚੋਣਾਂ"
 msgid "Active tool: %1"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1793
+#: libs/flake/svg/SvgParser.cpp:1795
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""

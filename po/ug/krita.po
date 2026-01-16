@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 03:24+0000\n"
+"POT-Creation-Date: 2026-01-16 04:05+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16759,7 +16759,7 @@ msgstr "%1 تاللانما"
 msgid "Active tool: %1"
 msgstr "ئاكتىپ قورال: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1793
+#: libs/flake/svg/SvgParser.cpp:1795
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""

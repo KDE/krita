@@ -14,3 +14,38 @@ ExternalProject_Add( ext_gmic
 
     UPDATE_COMMAND ""
 )
+
+if (APPLE)
+    ExternalProject_Add( ext_openmp
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.0/openmp-21.1.0.src.tar.xz
+        URL_HASH SHA256=60d6c4d2019d546aefc029c9b2c4006dc78419dba4cfd0a376ae025be8ff9778
+
+        INSTALL_DIR ${PREFIX_ext_gmic}
+
+        # aligned_alloc not available in macOS<=10.15, remove after support for those versions dropped
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-force-turn-off-aligned_alloc.patch
+
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gmic} -DOPENMP_STANDALONE_BUILD=ON
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
+        UPDATE_COMMAND ""
+    )
+
+    ExternalProject_Add_Step(ext_openmp download-cmake-modules
+        COMMENT "Downloading llvm-cmake modules"
+        WORKING_DIRECTORY <SOURCE_DIR>/cmake
+
+        # we use external cmake exec to check hash and do some retries before hard failing
+        COMMAND ${CMAKE_COMMAND}
+            -DEXT_TMP_DIR=<TMP_DIR>
+            -D URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.0/cmake-21.1.0.src.tar.xz
+            -D URL_SHA=528347c84c3571d9d387b825ef8b07c7ad93e9437243c32173838439c3b6028f
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/download_llvm-cmake_modules.cmake"
+
+        DEPENDERS configure
+        DEPENDEES patch 
+    )
+
+    ExternalProject_Add_StepDependencies(ext_gmic install ext_openmp)
+endif()

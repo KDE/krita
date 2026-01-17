@@ -1,0 +1,25 @@
+From 48e70c9899e2b4280d2060393453f9c7f90e8be7 Mon Sep 17 00:00:00 2001
+From: Ivan Yossi <ghevan@gmail.com>
+Date: Mon, 19 Jan 2026 18:36:00 -0600
+Subject: [PATCH] force turn off aligned_alloc
+
+---
+ runtime/src/kmp_config.h.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/runtime/src/kmp_config.h.cmake b/runtime/src/kmp_config.h.cmake
+index d64c9a4..417f336 100644
+--- a/runtime/src/kmp_config.h.cmake
++++ b/runtime/src/kmp_config.h.cmake
+@@ -90,7 +90,7 @@
+ #define KMP_HAVE_XMMINTRIN_H LIBOMP_HAVE_XMMINTRIN_H
+ #cmakedefine01 LIBOMP_HAVE__MM_MALLOC
+ #define KMP_HAVE__MM_MALLOC LIBOMP_HAVE__MM_MALLOC
+-#cmakedefine01 LIBOMP_HAVE_ALIGNED_ALLOC
++#define LIBOMP_HAVE_ALIGNED_ALLOC 0
+ #define KMP_HAVE_ALIGNED_ALLOC LIBOMP_HAVE_ALIGNED_ALLOC
+ #cmakedefine01 LIBOMP_HAVE_POSIX_MEMALIGN
+ #define KMP_HAVE_POSIX_MEMALIGN LIBOMP_HAVE_POSIX_MEMALIGN
+-- 
+2.50.1 (Apple Git-155)
+

@@ -21,6 +21,7 @@ class KisRecentFileIconCache : public QObject
 
     QMap<QUrl, CacheItem> m_iconCacheMap;
     QThreadPool m_iconFetchThreadPool;
+    float m_devicePixelRatioF {1.0};
 
 public:
     /**

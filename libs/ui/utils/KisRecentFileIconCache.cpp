@@ -72,6 +72,9 @@ KisRecentFileIconCache::KisRecentFileIconCache()
     if (QThread::idealThreadCount() > 2) {
         m_iconFetchThreadPool.setMaxThreadCount(2);
     }
+    if (qApp) {
+        m_devicePixelRatioF = qMax(qApp->devicePixelRatio(), 1.0);
+    }
     connect(qApp, SIGNAL(aboutToQuit()), SLOT(cleanupOnQuit()));
 }
 
@@ -103,7 +106,7 @@ QIcon KisRecentFileIconCache::getOrQueueFileIcon(const QUrl &url)
         const GetFileIconParameters param = {
             url, // m_documentUrl
             iconSize, // m_iconSize
-            1.0, // m_devicePixelRatioF
+            m_devicePixelRatioF, // m_devicePixelRatioF
         };
         QFuture<IconFetchResult> future = QtConcurrent::run(&m_iconFetchThreadPool, getFileIcon, param);
         auto *watcher = new QFutureWatcher<IconFetchResult>(this);

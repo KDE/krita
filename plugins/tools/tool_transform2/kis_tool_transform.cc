@@ -923,15 +923,37 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     m_currentArgs = ToolTransformArgs();
 
     Q_FOREACH (KisNodeSP currentNode, resources->selectedNodes()) {
-        if (!currentNode || !currentNode->isEditable()) return;
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_ASSERT(kisCanvas);
+
+        if (!currentNode || !currentNode->isEditable()) {
+            if (currentNode && currentNode->userLocked()) {
+                kisCanvas->viewManager()->
+                    showFloatingMessage(
+                        i18nc("floating message in transformation tool",
+                              "Cannot transform locked layers"),
+                        koIcon("object-locked"), 4000, KisFloatingMessage::High);
+            } else if (currentNode && !currentNode->visible()) {
+                kisCanvas->viewManager()->
+                    showFloatingMessage(
+                        i18nc("floating message in transformation tool",
+                              "Cannot transform hidden layers"),
+                        koIcon("object-locked"), 4000, KisFloatingMessage::High);
+            } else {
+                kisCanvas->viewManager()->
+                    showFloatingMessage(
+                        i18nc("floating message in transformation tool",
+                              "Cannot use transform tool on this set of layers"),
+                        koIcon("object-locked"), 4000, KisFloatingMessage::High);
+            }
+
+            return;
+        }
 
         // some layer types cannot be transformed. Give a message and return if a user tries it
         if (currentNode->inherits("KisColorizeMask") ||
             currentNode->inherits("KisFileLayer") ||
             currentNode->inherits("KisCloneLayer")) {
-
-            KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-            KIS_ASSERT(kisCanvas);
 
             if(currentNode->inherits("KisColorizeMask")){
                 kisCanvas->viewManager()->
@@ -960,7 +982,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             });
 
         if (impossibleMask) {
-            KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
             kisCanvas->viewManager()->
                 showFloatingMessage(
                     i18nc("floating message in transformation tool",
@@ -974,7 +995,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
          * taken into account.
          */
         if (selection && dynamic_cast<KisTransformMask*>(currentNode.data())) {
-            KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
             kisCanvas->viewManager()->
                 showFloatingMessage(
                     i18nc("floating message in transformation tool",

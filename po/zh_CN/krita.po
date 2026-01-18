@@ -32262,7 +32262,7 @@ msgstr "使用鼠标事件读取右键/中键 (需要重启)"
 msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
-msgstr ""
+msgstr "将上下翻页键用作鼠标右键/中键 (用于兼容小米压感笔按钮)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -32270,7 +32270,7 @@ msgstr ""
 msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
-msgstr ""
+msgstr "无视数位板位置历史记录 (用于应对小米压感笔线条起角问题)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 03:31+0000\n"
-"PO-Revision-Date: 2025-11-20 14:56+0100\n"
+"PO-Revision-Date: 2026-01-17 14:01+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -27974,6 +27974,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Behandla tangenterna Page Up och Page Down som musens höger- och mittenknapp "
+"(provisorisk lösning för Xiaomi-pennor)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -27982,6 +27984,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Bortse från ritplattans positionshistorik (provisorisk lösning för ojämna "
+"linjer med Xiaomi-pennor)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita stable\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 03:31+0000\n"
-"PO-Revision-Date: 2025-11-20 09:04+0100\n"
+"PO-Revision-Date: 2026-01-17 13:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -27952,6 +27952,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Tipki za naslednjo/prejšnjo stran obravnavaj kot desni/srednji gumb miške "
+"(rešitev za pisala Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -27960,6 +27962,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Prezri zgodovino položaja grafične tablice (rešitev za nazobčane črte s "
+"pisali Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

@@ -36,20 +36,20 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2005, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 02:04+0000\n"
-"PO-Revision-Date: 2025-12-30 10:29+0200\n"
+"PO-Revision-Date: 2026-01-18 22:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -64999,22 +64999,22 @@ msgid "Filter Radius: "
 msgstr "&בוחר צבעים"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
-msgstr "סף ציור:"
+msgstr "סף: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Search Radius in Magnetic Selection's Tool options"
 msgid "Search Radius: "
-msgstr "גל משולש"
+msgstr "רדיוס חיפוש: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:758
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr "אלפא"
+msgstr "מרווח עוגן: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -65055,16 +65055,16 @@ msgid "Gap between 2 anchors in interactive mode"
 msgstr ""
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Complete Selection"
-msgstr "הזז בחירה"
+msgstr "השלמת בחירה"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:785
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard Selection"
-msgstr "בחירת מילוי"
+msgstr "התעלמות מהבחירה"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
 #, kde-format
@@ -65145,11 +65145,10 @@ msgid "Similar Color Selection Tool"
 msgstr "כלי בחירת צבע דומה"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:44
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
-msgstr "חלופה"
+msgstr "חלופות גליף"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
 #, kde-format
@@ -65167,11 +65166,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "אין תמונה זמינה."
+msgstr "אין חלופות גליף זמינות."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -65245,10 +65243,10 @@ msgid "Ideographic"
 msgstr "הוסף מעבר שורה"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "מלבן"
+msgstr "תלוי"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format

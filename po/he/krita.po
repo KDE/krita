@@ -36,20 +36,20 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2005, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 03:31+0000\n"
-"PO-Revision-Date: 2025-12-30 10:29+0200\n"
+"PO-Revision-Date: 2026-01-18 22:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -57419,22 +57419,22 @@ msgid "Filter Radius: "
 msgstr "&בוחר צבעים"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
-msgstr "סף ציור:"
+msgstr "סף: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Search Radius in Magnetic Selection's Tool options"
 msgid "Search Radius: "
-msgstr "גל משולש"
+msgstr "רדיוס חיפוש: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:758
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr "אלפא"
+msgstr "מרווח עוגן: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -57475,16 +57475,16 @@ msgid "Gap between 2 anchors in interactive mode"
 msgstr ""
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Complete Selection"
-msgstr "הזז בחירה"
+msgstr "השלמת בחירה"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:785
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard Selection"
-msgstr "בחירת מילוי"
+msgstr "התעלמות מהבחירה"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
 #, kde-format

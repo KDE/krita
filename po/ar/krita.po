@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 03:31+0000\n"
-"PO-Revision-Date: 2026-01-08 13:33+0400\n"
+"PO-Revision-Date: 2026-01-15 08:53+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -27871,6 +27871,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"تعامل مع مفاتيح الصفحة لأعلى/لأسفل كأزرار الفأرة اليمنى/الوسطى (حل بديل "
+"لأقلام Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -27878,7 +27880,7 @@ msgstr ""
 msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
-msgstr ""
+msgstr "تجاهل سجل موضع اللوحة (حل بديل للخطوط المتعرجة باستخدام أقلام Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214

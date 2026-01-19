@@ -61,7 +61,7 @@ macos-build:
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing 2>&1 | tee build-krita.log
 
     # firstly, build .app bundle and sign it
-    - env BUILDROOT=$CI_PROJECT_DIR ONLY_APP=1 packaging/macos/osxdeploy.sh | tee build-app.log
+    - python3 -u packaging/macos/macos-deploy.py --install-dir ./_install --output-dir $CI_PROJECT_DIR/_dmg --krita-source ./ | tee build-app.log
 
     - python3 -u ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-sign.log
     - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix app-sign_ --directory _dmg
@@ -69,7 +69,7 @@ macos-build:
     - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix app-notarize_ --directory _dmg
 
     # secondly, build .dmg image and sign it as well
-    - env BUILDROOT=$CI_PROJECT_DIR ONLY_DMG=1 packaging/macos/osxdeploy.sh | tee build-dmg.log
+    - python3 -u packaging/macos/macos-apptodmg.py $CI_PROJECT_DIR/_dmg/*.app --media-path ./packaging/macos/ 2>&1 | tee build-dmg.log
 
     - python3 -u ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-sign.log
     - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix dmg-sign_ --directory _packaging

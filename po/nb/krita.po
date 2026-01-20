@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-15 02:24+0000\n"
+"POT-Creation-Date: 2026-01-17 02:04+0000\n"
 "PO-Revision-Date: 2024-03-09 12:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -16679,7 +16679,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr ""
 
-#: libs/flake/svg/SvgParser.cpp:1760
+#: libs/flake/svg/SvgParser.cpp:1762
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -25143,7 +25143,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:141
 #, kde-format
 msgid "Reset"
 msgstr "Tilbakestill"
@@ -36826,7 +36826,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:212 libs/ui/tool/kis_tool_utils.cpp:224
+#: libs/ui/tool/kis_tool_utils.cpp:214 libs/ui/tool/kis_tool_utils.cpp:226
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -63049,19 +63049,19 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "Måleverktøy"
 
-#: plugins/tools/basictools/kis_tool_move.cc:292
+#: plugins/tools/basictools/kis_tool_move.cc:294
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.cc:340
+#: plugins/tools/basictools/kis_tool_move.cc:342
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.h:183
+#: plugins/tools/basictools/kis_tool_move.h:185
 #, kde-format
 msgid "Move Tool"
 msgstr "Flytt verktøy"
@@ -66096,90 +66096,90 @@ msgid ""
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
 #, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
 #, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:128
 #, kde-format
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
 #, kde-format
 msgid "Mirror Horizontal"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, kde-format
 msgid "Mirror Vertical"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, kde-format
 msgid "Rotate 90 degrees Clockwise"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, kde-format
 msgid "Rotate 90 degrees CounterClockwise"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:136
 #, kde-format
 msgid "Keep Aspect Ratio"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
 #, kde-format
 msgid "Apply"
 msgstr "Bruk"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:425
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:426
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:936
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:940
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:943
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:947
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:967
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -66187,20 +66187,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:977
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:981
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Utvalg brukes ikke når omformingsmasker redigeres "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1062
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1101
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1068
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1107
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan ikke omforme et tomt lag "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1094
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -66210,7 +66210,7 @@ msgstr ""
 "Usynlige under-lag vil også bli transformert. Lås lagene hvis du ikke vil at "
 "de skal transformeres "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:367
+#: plugins/tools/tool_transform2/kis_tool_transform.h:370
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Omform et lag eller et utvalg"

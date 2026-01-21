@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-17 02:04+0000\n"
+"POT-Creation-Date: 2026-01-21 02:11+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -68740,19 +68740,39 @@ msgstr "Прилагане"
 msgid "Transform Tool Actions"
 msgstr ""
 
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:934
+#, fuzzy, kde-format
+#| msgid "Cannot apply filter to locked layer."
+msgctxt "floating message in transformation tool"
+msgid "Cannot transform locked layers"
+msgstr "Не може да се приложи филтър към заключен слой"
+
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
+#, kde-format
+msgctxt "floating message in transformation tool"
+msgid "Cannot transform hidden layers"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#, fuzzy, kde-format
+#| msgid "You cannot use this tool with the selected layer type"
+msgctxt "floating message in transformation tool"
+msgid "Cannot use transform tool on this set of layers"
+msgstr "Не можете да използвате този инструмент с избрания тип слой."
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:947
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:969
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:967
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -68760,20 +68780,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:981
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1001
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1068
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1107
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1127
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1094
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1114
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

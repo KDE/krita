@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-17 02:04+0000\n"
+"POT-Creation-Date: 2026-01-21 02:11+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -68924,20 +68924,44 @@ msgstr "適用"
 msgid "Transform Tool Actions"
 msgstr "変形ツール操作"
 
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:934
+#, fuzzy, kde-format
+#| msgctxt "floating message in transformation tool"
+#| msgid "Cannot transform empty layer "
+msgctxt "floating message in transformation tool"
+msgid "Cannot transform locked layers"
+msgstr "空のレイヤーを変形することはできません"
+
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
+#, fuzzy, kde-format
+#| msgctxt "floating message in transformation tool"
+#| msgid "Cannot transform empty layer "
+msgctxt "floating message in transformation tool"
+msgid "Cannot transform hidden layers"
+msgstr "空のレイヤーを変形することはできません"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#, fuzzy, kde-format
+#| msgctxt "floating message in transformation tool"
+#| msgid "Cannot transform empty layer "
+msgctxt "floating message in transformation tool"
+msgid "Cannot use transform tool on this set of layers"
+msgstr "空のレイヤーを変形することはできません"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "普通のレイヤーは変形ツールを使用できません"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:947
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:969
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 "レイヤー形式は変形ツールを使用できません。代わりに変形マスクを使用します。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:967
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -68947,20 +68971,20 @@ msgstr ""
 "レイヤー形式は位置マスクを子として持っている場合があります。変換を行う前には"
 "削除してください。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:981
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1001
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "変形マスクの編集中は選択は使用しません"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1068
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1107
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1127
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "空のレイヤーを変形することはできません"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1094
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1114
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

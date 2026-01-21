@@ -437,6 +437,7 @@ KoShapeStrokeSP KoPencilTool::createStroke()
     KoShapeStrokeSP stroke;
     if (m_strokeWidget) {
         stroke = m_strokeWidget->createShapeStroke();
+        stroke->setColor(m_strokeColor);
     }
     return stroke;
 }
@@ -571,6 +572,11 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
 qreal KoPencilTool::getFittingError()
 {
     return this->m_fittingError;
+}
+
+void KoPencilTool::setStrokeColor(QColor color)
+{
+  m_strokeColor = color;
 }
 
 void KoPencilTool::setFittingError(qreal fittingError)

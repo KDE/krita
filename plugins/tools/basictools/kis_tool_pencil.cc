@@ -137,4 +137,14 @@ void __KisToolPencilLocalTool::slotUpdatePencilCursor()
 {
     KoShapeStrokeSP stroke = this->createStroke();
     m_parentTool->updatePencilCursor(stroke && stroke->isVisible());
+
+    auto style = m_parentTool->strokeStyle();
+    if (style ==  KisToolShapeUtils::StrokeStyleForeground )
+    {
+        KoPencilTool::setStrokeColor(canvas()->resourceManager()->foregroundColor().toQColor());
+    }
+    else if ( style == KisToolShapeUtils::StrokeStyleBackground)
+    {
+        KoPencilTool::setStrokeColor(canvas()->resourceManager()->backgroundColor().toQColor());
+    }
 }

@@ -10,6 +10,7 @@
 #include "KoFlakeTypes.h"
 #include "KoToolBase.h"
 #include <kconfiggroup.h>
+#include <qcolor.h>
 
 class KoPathShape;
 class KoShapeStroke;
@@ -49,6 +50,7 @@ protected:
     KoPathShape * path();
     void setFittingError(qreal fittingError);
     qreal getFittingError();
+    void setStrokeColor(QColor color);
 
 private Q_SLOTS:
     void selectMode(int mode);
@@ -78,6 +80,7 @@ private:
     qreal m_combineAngle {15.0};
     qreal m_fittingError {5.0};
     bool m_close {false};
+    QColor m_strokeColor;
 
     QList<QPointF> m_points; // the raw points
 

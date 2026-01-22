@@ -1374,7 +1374,8 @@ KisPopupPalette *KisCanvas2::popupPalette()
 
 void KisCanvas2::slotTrySwitchShapeManager()
 {
-    // noop, the shape manager is recalculated lazily on the fly
+    // Still needs to be recalculated in some cases, like when deleting vector layers
+    localShapeManager();
 }
 
 void KisCanvas2::notifyLevelOfDetailChange()

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2026-01-14 06:21-0300\n"
+"PO-Revision-Date: 2026-01-21 06:31-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -68489,28 +68489,23 @@ msgid "Transform Tool Actions"
 msgstr "Ações da ferramenta de transformação"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "Não é possível transformar uma camada vazia "
+msgstr "Não é possível transformar camadas bloqueadas"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "Não é possível transformar uma camada vazia "
+msgstr "Não é possível transformar camadas ocultas"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "Não é possível transformar uma camada vazia "
+msgstr ""
+"Não é possível usar a ferramenta de transformação neste conjunto de camadas"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format

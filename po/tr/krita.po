@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2026-01-14 19:11+0300\n"
+"PO-Revision-Date: 2026-01-21 11:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -68261,28 +68261,22 @@ msgid "Transform Tool Actions"
 msgstr "Dönüşüm Aracı Eylemleri"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "Boş kayman dönüştürülemez "
+msgstr "Kilitli katmanlar dönüştürülemez"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "Boş kayman dönüştürülemez "
+msgstr "Gizli katmanlar dönüştürülemez"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "Boş kayman dönüştürülemez "
+msgstr "Bu katman kümesinde dönüşüm aracı kullanılamaz"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format
@@ -68319,7 +68313,7 @@ msgstr "Dönüşüm maskeleri düzenlenirken seçimler kullanılmaz "
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
-msgstr "Boş kayman dönüştürülemez "
+msgstr "Boş katman dönüştürülemez"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:1114
 #, kde-format

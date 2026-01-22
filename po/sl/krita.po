@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2026-01-16 11:18+0100\n"
+"PO-Revision-Date: 2026-01-21 22:25+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -68328,28 +68328,22 @@ msgid "Transform Tool Actions"
 msgstr "Dejanja orodja Preoblikovanje"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "Prazne plasti ni mogoče preoblikovati"
+msgstr "Zaklenjenih plasti ni možno preoblikovati"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "Prazne plasti ni mogoče preoblikovati"
+msgstr "Skritih plasti ni možno preoblikovati"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "Prazne plasti ni mogoče preoblikovati"
+msgstr "Orodja za preoblikovanje ni možno uporabiti na tem naboru plasti"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format

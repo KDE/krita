@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2026-01-14 12:01+0100\n"
+"PO-Revision-Date: 2026-01-22 01:14+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -68634,28 +68634,23 @@ msgid "Transform Tool Actions"
 msgstr "Acciones de la herramienta de transformación"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "No se puede transformar una capa vacía"
+msgstr "No se pueden transformar capas bloqueadas"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "No se puede transformar una capa vacía"
+msgstr "No se pueden transformar capas ocultas"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "No se puede transformar una capa vacía"
+msgstr ""
+"No se puede usar la herramienta de transformación en este conjunto de capas"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format

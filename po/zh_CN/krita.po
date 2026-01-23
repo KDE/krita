@@ -67327,28 +67327,22 @@ msgid "Transform Tool Actions"
 msgstr "变形工具操作"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "无法对空图层进行变形操作"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "无法对空图层进行变形操作"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "无法对空图层进行变形操作"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format

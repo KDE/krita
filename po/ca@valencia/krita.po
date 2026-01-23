@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2026-01-14 09:27+0100\n"
+"PO-Revision-Date: 2026-01-21 11:43+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -68671,28 +68671,22 @@ msgid "Transform Tool Actions"
 msgstr "Accions de l'eina de transformació"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "No es pot transformar una capa buida "
+msgstr "No es poden transformar les capes bloquejades"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "No es pot transformar una capa buida "
+msgstr "No es poden transformar les capes ocultes"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "No es pot transformar una capa buida "
+msgstr "No es pot utilitzar l'eina de transformació en este conjunt de capes"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format

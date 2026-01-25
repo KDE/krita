@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2026-01-15 08:53+0400\n"
+"PO-Revision-Date: 2026-01-24 11:40+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -67825,28 +67825,22 @@ msgid "Transform Tool Actions"
 msgstr "إجراءات أداة التّحويل"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "لا أُستطِيع تحويل الطّبقة الفارغة"
+msgstr "تعذر تحويل الطّبقات المقفلة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "لا أُستطِيع تحويل الطّبقة الفارغة"
+msgstr "تعذر تحويل الطّبقات المقفلة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "لا أُستطِيع تحويل الطّبقة الفارغة"
+msgstr "تعذر استخدام أداة التحويل على هذه المجموعة من الطّبقات"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format
@@ -67880,7 +67874,7 @@ msgstr "لم تستخدم التّحديدات عند تحرير أقنعة ال
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
-msgstr "لا أُستطِيع تحويل الطّبقة الفارغة"
+msgstr "تعذر تحويل الطّبقة الفارغة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:1114
 #, kde-format

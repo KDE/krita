@@ -35,6 +35,14 @@
 #include <QTimer>
 #include <QRegularExpression>
 
+#ifdef Q_OS_ANDROID
+#include <QAtomicInt>
+#include <QDir>
+#include <QFile>
+#include <QRunnable>
+#include <QThreadPool>
+#endif
+
 namespace
 {
 const QString keyActionRecordToggle = "recorder_record_toggle";
@@ -110,6 +118,9 @@ public:
     {
         RecorderConfig config(true);
         snapshotDirectory = config.snapshotDirectory();
+#ifdef Q_OS_ANDROID
+        fixInternalSnapshotDirectory();
+#endif
         captureInterval = config.captureInterval();
         format = config.format();
         quality = config.quality();
@@ -356,6 +367,104 @@ public:
         ui->spinThreads->setToolTip(toolTipText);
         ui->sliderThreads->setToolTip(toolTipText);
     }
+
+#ifdef Q_OS_ANDROID
+    // We want at most one file mover to run at a time. This starts at 0, gets
+    // compared-and-set from 0 to 1 when a move starts and then set to 0 again
+    // when the move finishes. Basically a non-waitable lock.
+    static inline QAtomicInt internalMoveInProgress;
+
+    void fixInternalSnapshotDirectory()
+    {
+        // Older versions of Krita used an internal directory as the snapshots
+        // directory by default, which is a bogus place to save stuff to because
+        // the user can't access it. That means the files stored there are stuck
+        // inaccessible and once the user picks a "real" directory, they can no
+        // longer even delete the files. So here we're rectifying the situation.
+        const QString &internalPath = RecorderConfig::defaultInternalSnapshotDirectory();
+
+        if (snapshotDirectory == internalPath) {
+            // Internal path got persisted to settings. Clear that out, replace
+            // it with the default of nothing.
+            snapshotDirectory = QString();
+
+        } else if (!snapshotDirectory.isEmpty() && QFileInfo::exists(internalPath)
+                   && internalMoveInProgress.testAndSetOrdered(0, 1)) {
+            // The user has picked a directory to record to, but the nonsense
+            // internal directory is present and may have stuff inside that
+            // would become effectively inaccessible. To fix that, we move the
+            // files over to the selected directory. Of course moving files on
+            // Android is gobsmackingly slow, so we'll have to do it in the
+            // background to not lock the UI for ages. The moving should be
+            // re-entrant, so getting interrupted and continuing later is fine.
+            qWarning().nospace() << "Moving recordings stuck in internal directory '" << internalPath
+                                 << "' to selected directory '" << snapshotDirectory << "'";
+            QThreadPool::globalInstance()->start(new InternalSnapshotsMover(internalPath, snapshotDirectory));
+        }
+    }
+
+    class InternalSnapshotsMover final : public QRunnable
+    {
+    public:
+        InternalSnapshotsMover(const QString &srcRoot, const QString &dstRoot)
+            : m_srcRoot(srcRoot)
+            , m_dstRoot(dstRoot)
+        {
+        }
+
+        void run() override
+        {
+            moveFromInternalSnapshotDirectory(QDir(m_srcRoot), QDir(m_dstRoot));
+            if (!QDir().rmdir(m_srcRoot)) {
+                qWarning().nospace() << "Failed to remove root directory '" << m_srcRoot << "'";
+            }
+            internalMoveInProgress.storeRelease(0);
+        }
+
+    private:
+        static constexpr QDir::Filters FILTERS = QDir::Dirs | QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot;
+
+        static void moveFromInternalSnapshotDirectory(const QDir &src, const QDir &dst)
+        {
+            for (const QFileInfo &srcInfo : src.entryInfoList(FILTERS)) {
+                QString srcName = srcInfo.fileName();
+                QString dstPath = dst.filePath(srcName);
+
+                if (srcInfo.isDir()) {
+                    // Move the directory over recursively.
+                    if (dst.mkpath(dstPath)) {
+                        moveFromInternalSnapshotDirectory(QDir(srcInfo.filePath()), QDir(dstPath));
+                    } else {
+                        qWarning().nospace()
+                            << "Failed to create directory '" << dstPath << "' in '" << dst.path() << "'";
+                    }
+
+                    // Removal will fail if the directory is non-empty, so we
+                    // can just attempt it unconditionally.
+                    if (!src.rmdir(srcName)) {
+                        qWarning().nospace()
+                            << "Failed to remove directory '" << srcName << "' in '" << src.path() << "'";
+                    }
+
+                } else {
+                    QFile srcFile(srcInfo.filePath());
+                    // Rename refuses to replace files in the destination, so
+                    // try to remove that first. The only reason it should
+                    // already exist is if a previous attempt to move the file
+                    // partially copied it and then got interrupted.
+                    QFile::remove(dstPath);
+                    if (!srcFile.rename(dstPath)) {
+                        qWarning().nospace() << "Error " << srcFile.error() << " moving '" << srcFile.fileName()
+                                             << "' to '" << dstPath << "': " << srcFile.errorString();
+                    }
+                }
+            }
+        }
+
+        const QString m_srcRoot;
+        const QString m_dstRoot;
+    };
+#endif
 };
 
 RecorderDockerDock::RecorderDockerDock()
@@ -406,7 +515,7 @@ RecorderDockerDock::RecorderDockerDock()
             this, SLOT(onMainWindowIsBeingCreated(KisMainWindow *)));
 
     connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
-    connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
+    connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(slotSelectSnapshotDirectory()));
     connect(d->ui->comboFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(onFormatChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->spinThreads, SIGNAL(valueChanged(int)), this, SLOT(onThreadsChanged(int)));
@@ -468,7 +577,8 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 
     d->prefix = d->getPrefix();
     bool wasToggled = false;
-    if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId())) {
+    if (d->recordAutomatically && !d->snapshotDirectory.isEmpty()
+        && !d->enabledIds.contains(document->linkedResourcesStorageId())) {
         wasToggled = onRecordButtonToggled(true);
     }
     if (!wasToggled) { // onRecordButtonToggled(true) may call these, don't call them twice.
@@ -503,6 +613,19 @@ void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
 bool RecorderDockerDock::onRecordButtonToggled(bool checked)
 {
     QSignalBlocker blocker(d->ui->buttonRecordToggle);
+
+    // Ask the user to pick a directory if we don't have one. This should only
+    // happen on Android, other operating systems have a non-empty default that
+    // the user is not able to clear out via the user interface.
+    if (checked && d->snapshotDirectory.isEmpty()) {
+        slotSelectSnapshotDirectory();
+        if (d->snapshotDirectory.isEmpty()) {
+            d->ui->buttonRecordToggle->setChecked(false);
+            d->recordToggleAction->setChecked(false);
+            return false;
+        }
+    }
+
     d->recordToggleAction->setChecked(checked);
 
     if (!d->canvas)
@@ -577,8 +700,7 @@ void RecorderDockerDock::onManageRecordingsButtonClicked()
     snapshotsManager.execFor(d->snapshotDirectory);
 }
 
-
-void RecorderDockerDock::onSelectRecordFolderButtonClicked()
+void RecorderDockerDock::slotSelectSnapshotDirectory()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenDirectory, "SelectRecordingsDirectory");
     dialog.setCaption(i18n("Select a Directory for Recordings"));

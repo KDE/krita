@@ -39,7 +39,14 @@ RecorderConfig::~RecorderConfig()
 
 QString RecorderConfig::snapshotDirectory() const
 {
-    return config->readEntry(keySnapshotDirectory, defaultSnapshotDirectory);
+    // On Android, there's no user-visible directory we can write to, so we
+    // default to nothing here.
+#ifdef Q_OS_ANDROID
+    const QString defaultValue;
+#else
+    const QString &defaultValue = defaultSnapshotDirectory;
+#endif
+    return config->readEntry(keySnapshotDirectory, defaultValue);
 }
 
 void RecorderConfig::setSnapshotDirectory(const QString &value)
@@ -140,3 +147,10 @@ void RecorderConfig::setRecordAutomatically(bool value)
 {
     config->writeEntry(keyRecordAutomatically, value);
 }
+
+#ifdef Q_OS_ANDROID
+const QString &RecorderConfig::defaultInternalSnapshotDirectory()
+{
+    return defaultSnapshotDirectory;
+}
+#endif

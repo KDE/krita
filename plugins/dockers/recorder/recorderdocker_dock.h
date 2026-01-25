@@ -42,7 +42,7 @@ private Q_SLOTS:
     void onResolutionChanged(int resolution);
     void onThreadsChanged(int threads);
     void onManageRecordingsButtonClicked();
-    void onSelectRecordFolderButtonClicked();
+    void slotSelectSnapshotDirectory();
     bool onRecordButtonToggled(bool checked);
     void onExportButtonClicked();
 

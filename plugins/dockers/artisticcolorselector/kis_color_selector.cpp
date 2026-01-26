@@ -765,8 +765,19 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
         QFont font = painter.font();
         QFontMetrics fm = painter.fontMetrics();
         int retries = 10; // limit number of font size searches to prevent endless cycles
+        // Font size can be specified in points or pixels. If the font uses
+        // pixel sizes, the point size will be -1 and vice-versa.
+        bool inPointSize = font.pointSize() != -1;
         while ((retries > 0) && (fm.boundingRect("100%").width() > rect.width()*rectColorLeftX)) {
-            font.setPointSize(font.pointSize() - 1);
+            // Scale down with a proportional step size, otherwise large font
+            // sizes on scaled displays don't get small enough in 10 tries.
+            if (inPointSize) {
+                int pointSize = font.pointSize();
+                font.setPointSize(pointSize - (pointSize / 11 + 1));
+            } else {
+                int pixelSize = font.pixelSize();
+                font.setPixelSize(pixelSize - (pixelSize / 11 + 1));
+            }
             painter.setFont(font);
             fm = painter.fontMetrics();
             retries--;

@@ -7,6 +7,7 @@
 #define KORESOURCELOADRESULT_H
 
 #include <QSharedPointer>
+#include <QDebug>
 #include <KoResourceSignature.h>
 #include <KoEmbeddedResource.h>
 
@@ -85,5 +86,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+KRITARESOURCES_EXPORT QDebug operator<<(QDebug debug, const KoResourceLoadResult &result);
 
 #endif // KORESOURCELOADRESULT_H

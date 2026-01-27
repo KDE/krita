@@ -211,7 +211,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
                 KoResourceSP existingResource = resourcesInterface
                         ->source(resourceType)
-                        .bestMatch(md5sum, filename, name);
+                        .exactMatch(md5sum, filename, name);
 
                 if (existingResource) {
                     continue;
@@ -592,7 +592,7 @@ QList<KoResourceLoadResult> KisPaintOpPreset::sideLoadedResources(KisResourcesIn
          * Do not load the existing resources. There is no use for it.
          */
         if (!globalResourcesInterface->source(sig.type)
-                .bestMatch(sig.md5sum, sig.filename, sig.name)) {
+                .exactMatch(sig.md5sum, sig.filename, sig.name)) {
 
             resources << resource;
         }

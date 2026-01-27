@@ -66,6 +66,19 @@ public:
         KoResourceSP bestMatch(const QString md5, const QString filename, const QString name);
 
         /**
+         * @brief exactMatch retrieves a resource, preferably by md5, but with filename and name
+         * as fallback for older files that do not store the md5sum. If the resource is
+         * not found by md5 and the md5 isn't empty, then nullptr is returned (that is the
+         * difference to bestMatch).
+         *
+         * If multiple resources with the same md5 exist, then it prefers the one
+         * with the same filename and name.
+         *
+         * @return a resource, or 0 of the resource doesn't exist.
+         */
+        KoResourceSP exactMatch(const QString md5, const QString filename, const QString name);
+
+        /**
          * Same as bestMatch(), but returns KoResourceLoadResult. In case the
          * resource is not found in the backend storage, the load-result
          * will be set in FailedLink state
@@ -75,6 +88,8 @@ public:
 
         virtual KoResourceSP fallbackResource() const = 0;
 
+    private:
+        KoResourceSP findResource(const QString md5, const QString filename, const QString name, bool exactMatch);
     private:
         Q_DISABLE_COPY(ResourceSourceAdapter);
         const QString m_type;
@@ -117,9 +132,10 @@ private:
         }
 public:
         /**
-         * @brief resource retrieves a resource, preferably by md5, but with filename and name
-         * as fallback for older files that do not store the md5sum. Note that if the resource is
-         * not found by md5 if the md5 isn't empty, we do NOT then look by filename.
+         * @brief bestMatch retrieves a resource, preferably by md5, but with filename and name
+         * as fallback for older files that do not store the md5sum. If the resource is
+         * not found by md5 and the md5 isn't empty, then it will try to fallback to searching
+         * by filename, but will show a warning in case sanity checks are enabled.
          *
          * If multiple resources with the same md5 exist, then it prefers the one
          * with the same filename and name.
@@ -129,6 +145,21 @@ public:
 
         QSharedPointer<T>  bestMatch(const QString md5, const QString filename, const QString name) {
             return m_source->bestMatch(md5, filename, name).dynamicCast<T>();
+        }
+
+        /**
+         * @brief exactMatch retrieves a resource, preferably by md5, but with filename and name
+         * as fallback for older files that do not store the md5sum. If the resource is
+         * not found by md5 and the md5 isn't empty, then nullptr is returned (that is the
+         * difference to bestMatch).
+         *
+         * If multiple resources with the same md5 exist, then it prefers the one
+         * with the same filename and name.
+         *
+         * @return a resource, or 0 of the resource doesn't exist.
+         */
+        QSharedPointer<T>  exactMatch(const QString md5, const QString filename, const QString name) {
+            return m_source->exactMatch(md5, filename, name).dynamicCast<T>();
         }
 
         /**

@@ -13,6 +13,7 @@
 #include "kis_debug.h"
 
 //#define SANITY_CHECKS
+#define CRASH_ON_SANITY_CHECK_FAILURE
 
 
 KisResourcesInterface::KisResourcesInterface()
@@ -70,6 +71,16 @@ KisResourcesInterface::ResourceSourceAdapter::~ResourceSourceAdapter()
 
 KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QString md5, const QString filename, const QString name)
 {
+    return findResource(md5, filename, name, false);
+}
+
+KoResourceSP KisResourcesInterface::ResourceSourceAdapter::exactMatch(const QString md5, const QString filename, const QString name)
+{
+    return findResource(md5, filename, name, true);
+}
+
+KoResourceSP KisResourcesInterface::ResourceSourceAdapter::findResource(const QString md5, const QString filename, const QString name, bool exactMatch)
+{
     QVector<QPair<KoResourceSP, int>> foundResources;
 
     if (!md5.isEmpty()) {
@@ -91,6 +102,12 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
             }
 
             foundResources.append(qMakePair(res, penalty));
+        }
+
+        /// In case of exact match we **must** find the resource
+        /// via its md5 if provided
+        if (exactMatch && foundResources.isEmpty()) {
+            return {};
         }
     }
 
@@ -144,8 +161,13 @@ KoResourceSP KisResourcesInterface::ResourceSourceAdapter::bestMatch(const QStri
         qWarning() << "KisResourcesInterface::ResourceSourceAdapter::bestMatch: failed to fetch a resource using md5; falling back for filename...";
         qWarning() << "    requested:" << ppVar(md5) << ppVar(filename) << ppVar(name);
         qWarning() << "    found:" << result;
+        qWarning() << "    candidates:" << foundResources;
+
+#ifdef CRASH_ON_SANITY_CHECK_FAILURE
+        qFatal("Exiting...");
+#endif /* CRASH_ON_SANITY_CHECK_FAILURE */
     }
-#endif
+#endif /* SANITY_CHECKS */
 
     return result;
 }

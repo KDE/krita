@@ -79,3 +79,23 @@ KoResourceLoadResult::Type KoResourceLoadResult::type() const
             [](const KoEmbeddedResource &) { return EmbeddedResource; }
         }, m_d->value);
 }
+
+QDebug operator<<(QDebug debug, const KoResourceLoadResult &result)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace();
+
+    switch (result.type()) {
+    case KoResourceLoadResult::ExistingResource:
+        debug << "KoResourceLoadResult(ExistingResource:" << result.signature() << ")";
+        break;
+    case KoResourceLoadResult::EmbeddedResource:
+        debug << "KoResourceLoadResult(EmbeddedResource:" << result.signature() << ")";
+        break;
+    case KoResourceLoadResult::FailedLink:
+        debug << "KoResourceLoadResult(FailedLink:" << result.signature() << ")";
+        break;
+    }
+
+    return debug;
+}

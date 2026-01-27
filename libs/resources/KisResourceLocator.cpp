@@ -153,7 +153,7 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
 void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 {
     auto loadResourcesGroup =
-            [this] (QList<KoResourceLoadResult> resources,
+            [this, parentResource = resource] (QList<KoResourceLoadResult> resources,
             const QString &resourceGroup) {
 
         Q_FOREACH (KoResourceLoadResult res, resources) {
@@ -167,8 +167,7 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
                 QByteArray data = res.embeddedResource().data();
                 QBuffer buffer(&data);
                 buffer.open(QBuffer::ReadOnly);
-
-                importResource(sig.type, sig.filename, &buffer, false, "memory");
+                importResourceDeduplicateFileName(sig.type, sig.filename, &buffer, "memory");
                 break;
             }
             case KoResourceLoadResult::FailedLink:
@@ -598,6 +597,35 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
 
     return nullptr;
 }
+
+namespace {
+QString findDeduplicatedFileName(const QString &resourceType, const QString &proposedFileName, KisResourceStorageSP storage)
+{
+    const QFileInfo fileInfo(proposedFileName);
+    QString fileName = fileInfo.fileName();
+    int counter = 0;
+
+    Q_FOREVER {
+        QString resourceUrl = resourceType + "/" + fileName;
+
+        if (storage->resource(resourceUrl)) {
+            fileName =
+                QString("%1_embedded_%2.%3").arg(fileInfo.baseName()).arg(counter++).arg(fileInfo.completeSuffix());
+        } else {
+            break;
+        }
+    }
+    return fileName;
+}
+}
+
+KoResourceSP KisResourceLocator::importResourceDeduplicateFileName(const QString &resourceType, const QString &proposedFileName, QIODevice *device, const QString &storageLocation)
+{
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
+    const QString fileName = findDeduplicatedFileName(resourceType, proposedFileName, storage);
+    return importResource(resourceType, fileName, device, false, storageLocation);
+}
+
 
 bool KisResourceLocator::importWillOverwriteResource(const QString &resourceType, const QString &fileName, const QString &storageLocation) const
 {

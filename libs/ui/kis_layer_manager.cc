@@ -1063,7 +1063,6 @@ void KisLayerManager::layerStyle()
     KisPSDLayerStyleSP newStyle = oldStyle->clone().dynamicCast<KisPSDLayerStyle>();
     // We want to also change the UUID, else it might be considered the same style after save and won't load correctly
     newStyle->setUuid(QUuid::createUuid());
-    newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
 
     KisDlgLayerStyle dlg(newStyle, m_view->canvasResourceProvider());
 

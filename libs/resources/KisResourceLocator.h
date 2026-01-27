@@ -245,6 +245,21 @@ private:
     KoResourceSP importResourceDeduplicateFileName(const QString &resourceType, const QString &proposedFileName, QIODevice *device, const QString &storageLocation = QString());
 
     /**
+     * @brief addResourceDeduplicateFileName imports the resource fith file name deduplication
+     *
+     * When loading embedded resources from another resources, we should make sure they
+     * do not overwrite anything and land in the database unconditionally. That is why we might
+     * need to rename them on loading. The parent resource will (hopefully) still be able to
+     * address them using md5sum.
+     *
+     * @param resourceType
+     * @param device: QIODevice where the resource should be loaded from
+     * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
+     * @return the imported resource, which has been added to the database and the cache
+     */
+    bool addResourceDeduplicateFileName(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation);
+
+    /**
      * @brief return whether importing will overwrite some existing resource
      * @param resourceType
      * @param fileName: filename that should be assigned to the resource

@@ -112,9 +112,19 @@ public:
      */
     KisPSDLayerStyleSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
 
-    QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+
+    QList<KoResourceLoadResult> sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    void clearSideLoadedResources() override;
+
+
 
     QList<int> requiredCanvasResources() const override;
+
+private:
+    friend class KisDlgLayerStyle;
+    friend class KisAslLayerStyleSerializer;
+    void setSideLoadedResources(const QList<KoEmbeddedResource> &value);
 
 private:
     struct Private;

@@ -56,6 +56,7 @@ set(kritaresources_LIB_SRCS
     KisResourceMetaDataModel.cpp
     KisSqlQueryLoader.cpp
     KisDatabaseTransactionLock.cpp
+    KisTemporaryResourceStorageLock.cpp
 )
 
 qt_add_resources(kritaresources_LIB_SRCS sql.qrc)

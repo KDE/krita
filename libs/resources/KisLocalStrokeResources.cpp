@@ -123,3 +123,9 @@ KisResourcesInterface::ResourceSourceAdapter *KisLocalStrokeResources::createSou
     Q_D(const KisLocalStrokeResources);
     return new LocalResourcesSource(type, d->localResources);
 }
+
+QList<KoResourceSP> KisLocalStrokeResources::resources() const
+{
+    Q_D(const KisLocalStrokeResources);
+    return d->localResources;
+}

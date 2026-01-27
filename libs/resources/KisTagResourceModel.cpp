@@ -940,6 +940,15 @@ bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &stor
     return resourceModel.addResource(resource, storageId);
 }
 
+bool KisTagResourceModel::addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId)
+{
+    // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
+    // because the resource is untagged.
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.addResourceDeduplicateFileName(resource, storageId);
+}
+
+
 bool KisTagResourceModel::updateResource(KoResourceSP resource)
 {
     KisResourceModel resourceModel(d->resourceType);

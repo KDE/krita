@@ -30,11 +30,13 @@
 #include <QSortFilterProxyModel>
 
 #include <kis_psd_layer_style.h>
+#include <KisTemporaryResourceStorageLock.h>
+
 
 class QListWidgetItem;
 class KisSignalCompressor;
 class KisCanvasResourceProvider;
-
+class KisLocalStrokeResources;
 
 class Contour : public QWidget {
     Q_OBJECT
@@ -123,15 +125,14 @@ class GradientOverlay : public QWidget {
     Q_OBJECT
 public:
     GradientOverlay(KisCanvasResourceProvider *resourceProvider, QWidget *parent);
-    void setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient);
-    void fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const;
+    void setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient, KisResourcesInterfaceSP resourcesInterface);
+    void fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const;
 
 Q_SIGNALS:
     void configChanged();
 
 private:
     Ui::WdgGradientOverlay ui;
-    KisCanvasResourceProvider *m_resourceProvider;
 };
 
 class InnerGlow : public QWidget {
@@ -144,8 +145,8 @@ public:
 
 public:
     InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWidget *parent);
-    void setConfig(const psd_layer_effects_glow_common *innerGlow);
-    void fetchConfig(psd_layer_effects_glow_common *innerGlow) const;
+    void setConfig(const psd_layer_effects_glow_common *innerGlow, KisResourcesInterfaceSP resourcesInterface);
+    void fetchConfig(psd_layer_effects_glow_common *innerGlow, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const;
 
 Q_SIGNALS:
     void configChanged();
@@ -160,8 +161,8 @@ class PatternOverlay : public QWidget {
     Q_OBJECT
 public:
     PatternOverlay(QWidget *parent);
-    void setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern);
-    void fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern) const;
+    void setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern, KisResourcesInterfaceSP resourcesInterface);
+    void fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const;
 
 Q_SIGNALS:
     void configChanged();
@@ -188,8 +189,8 @@ class Stroke : public QWidget {
     Q_OBJECT
 public:
     Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent);
-    void setStroke(const psd_layer_effects_stroke *stroke);
-    void fetchStroke(psd_layer_effects_stroke *stroke) const;
+    void setStroke(const psd_layer_effects_stroke *stroke, KisResourcesInterfaceSP resourcesInterface);
+    void fetchStroke(psd_layer_effects_stroke *stroke, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const;
 
 Q_SIGNALS:
     void configChanged();
@@ -316,6 +317,8 @@ private:
      * sync with what is stored in the GUI
      */
     mutable bool m_sanityLayerStyleDirty;
+
+    KisTemporaryResourceStorageLock m_temporaryStorageLock;
 };
 
 #endif // KIS_DLG_LAYER_STYLE_H

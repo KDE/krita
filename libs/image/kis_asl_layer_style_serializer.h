@@ -53,7 +53,8 @@ public:
         return isInitialized() && m_isValid;
     }
 
-    static QVector<KoResourceSP> fetchEmbeddedResources(const KisPSDLayerStyle *style);
+    static void sideLoadLinkedResources(KisPSDLayerStyle *style, KisResourcesInterfaceSP resourcesInterface);
+    static QVector<KoResourceSignature> fetchLinkedResourceSignatures(const KisPSDLayerStyle *style);
 
 private:
     void registerPatternObject(const KoPatternSP pattern, const  QString& patternUuid);
@@ -61,7 +62,8 @@ private:
     void assignPatternObject(const QString &patternUuid, const QString &patternName, std::function<void(KoPatternSP)> setPattern);
     void assignGradientObject(KoAbstractGradientSP gradient, std::function<void(KoAbstractGradientSP)> setGradient);
 
-    static QVector<KoPatternSP> fetchAllPatterns(const KisPSDLayerStyle *style);
+    static QVector<KoResourceSignature> fetchAllPatternLinks(const KisPSDLayerStyle *style);
+    static QVector<KoPatternSP> fetchAllPatterns(const KisPSDLayerStyle *style, KisResourcesInterfaceSP resourcesInterface);
 
     void newStyleStarted(bool isPsdStructure);
     void connectCatcherToStyle(KisPSDLayerStyle *style, const QString &prefix);

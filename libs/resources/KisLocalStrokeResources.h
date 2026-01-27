@@ -26,10 +26,22 @@ public:
     KisLocalStrokeResources();
     KisLocalStrokeResources(const QList<KoResourceSP> &localResources);
 
+    /**
+     * Add a resource to this local resources storage
+     */
     void addResource(KoResourceSP resource);
+
+    /**
+     * Remove a resource from this local resources storage
+     */
     void removeResource(KoResourceSP resource);
 
     KisLocalStrokeResources* clone() const;
+
+    /**
+     * Return all the resources that are present in this local resources storage
+     */
+    QList<KoResourceSP> resources() const;
 
 protected:
     ResourceSourceAdapter* createSourceImpl(const QString &type) const override;

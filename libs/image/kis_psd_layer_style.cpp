@@ -95,6 +95,8 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
     psd_layer_effects_stroke stroke;
 
     KisResourcesInterfaceSP resourcesInterface;
+
+    QList<KoEmbeddedResource> sideLoadedResources;
 };
 
 KisPSDLayerStyle::KisPSDLayerStyle(const QString &filename, KisResourcesInterfaceSP resourcesInterface)
@@ -371,29 +373,65 @@ KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInte
         };
 
         if (style->gradientOverlay()->effectEnabled()) {
-            bakeGradient(style->gradientOverlay()->gradient(style->resourcesInterface()));
+            bakeGradient(style->gradientOverlay()->gradient(localResourcesSnapshot));
         }
 
         if (style->innerGlow()->effectEnabled() && style->innerGlow()->fillType() == psd_fill_gradient) {
-            bakeGradient(style->innerGlow()->gradient(style->resourcesInterface()));
+            bakeGradient(style->innerGlow()->gradient(localResourcesSnapshot));
         }
 
         if (style->outerGlow()->effectEnabled() && style->outerGlow()->fillType() == psd_fill_gradient) {
-            bakeGradient(style->outerGlow()->gradient(style->resourcesInterface()));
+            bakeGradient(style->outerGlow()->gradient(localResourcesSnapshot));
         }
 
         if (style->stroke()->effectEnabled() && style->stroke()->fillType() == psd_fill_gradient) {
-            bakeGradient(style->stroke()->gradient(style->resourcesInterface()));
+            bakeGradient(style->stroke()->gradient(localResourcesSnapshot));
         }
     }
 
     return style;
 }
 
-QList<KoResourceLoadResult> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceLoadResult> KisPSDLayerStyle::sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    Q_UNUSED(globalResourcesInterface);
-    return implicitCastList<KoResourceLoadResult>(QList<KoResourceSP>::fromVector(KisAslLayerStyleSerializer::fetchEmbeddedResources(this)));
+    QList<KoResourceLoadResult> resources;
+
+    Q_FOREACH(const KoEmbeddedResource &resource, d->sideLoadedResources) {
+        KoResourceSignature sig = resource.signature();
+
+        /**
+         * Do not load the existing resources. There is no use for it.
+         */
+        if (!globalResourcesInterface->source(sig.type)
+                .exactMatch(sig.md5sum, sig.filename, sig.name)) {
+
+            resources << resource;
+        }
+    }
+
+    return resources;
+}
+
+void KisPSDLayerStyle::clearSideLoadedResources()
+{
+    d->sideLoadedResources.clear();
+}
+
+void KisPSDLayerStyle::setSideLoadedResources(const QList<KoEmbeddedResource> &value)
+{
+    d->sideLoadedResources = value;
+}
+
+QList<KoResourceLoadResult> KisPSDLayerStyle::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceLoadResult> result;
+    const auto linkedResourceSignatures = KisAslLayerStyleSerializer::fetchLinkedResourceSignatures(this);
+
+    Q_FOREACH(const KoResourceSignature &sig, linkedResourceSignatures) {
+        result << globalResourcesInterface->source(sig.type).bestMatchLoadResult(sig.md5sum, sig.filename, sig.name);
+    }
+
+    return result;
 }
 
 QList<int> KisPSDLayerStyle::requiredCanvasResources() const

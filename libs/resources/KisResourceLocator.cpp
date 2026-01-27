@@ -626,6 +626,21 @@ KoResourceSP KisResourceLocator::importResourceDeduplicateFileName(const QString
     return importResource(resourceType, fileName, device, false, storageLocation);
 }
 
+bool KisResourceLocator::addResourceDeduplicateFileName(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation)
+{
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
+
+    // fix filename is missing
+    if (resource->filename().isEmpty()) {
+        resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!resource->filename().isEmpty(), false);
+
+    const QString fileName = findDeduplicatedFileName(resourceType, resource->filename(), storage);
+    resource->setFilename(fileName);
+    return addResource(resourceType, resource, storageLocation);
+}
 
 bool KisResourceLocator::importWillOverwriteResource(const QString &resourceType, const QString &fileName, const QString &storageLocation) const
 {

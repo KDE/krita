@@ -11,8 +11,10 @@
 #include <QDomDocument>
 #include <QMultiHash>
 
+#include <QBuffer>
+#include <KoMD5Generator.h>
+
 #include <KisResourceModel.h>
-#include <KisEmbeddedResourceStorageProxy.h>
 
 #include <KoResourceServerProvider.h>
 #include <resources/KoAbstractGradient.h>
@@ -260,30 +262,40 @@ QString strokeFillTypeToString(psd_fill_type position)
     return result;
 }
 
-QVector<KoPatternSP> KisAslLayerStyleSerializer::fetchAllPatterns(const KisPSDLayerStyle *style)
+QVector<KoResourceSignature> KisAslLayerStyleSerializer::fetchAllPatternLinks(const KisPSDLayerStyle *style)
 {
-    QVector <KoPatternSP> allPatterns;
+    QVector<KoResourceSignature> allPatternLinks;
 
     if (style->patternOverlay()->effectEnabled()) {
-        allPatterns << style->patternOverlay()->pattern(style->resourcesInterface());
+        allPatternLinks << style->patternOverlay()->patternLink();
     }
 
     if (style->stroke()->effectEnabled() &&
         style->stroke()->fillType() == psd_fill_pattern) {
 
-        allPatterns << style->stroke()->pattern(style->resourcesInterface());
+        allPatternLinks << style->stroke()->patternLink();
     }
 
     if(style->bevelAndEmboss()->effectEnabled() &&
        style->bevelAndEmboss()->textureEnabled()) {
 
-        allPatterns << style->bevelAndEmboss()->texturePattern(style->resourcesInterface());
+        allPatternLinks << style->bevelAndEmboss()->texturePatternLink();
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!allPatterns.contains(KoPatternSP()))
-    {
-        warnKrita << "WARNING: one or more patterns from the style is null";
-        allPatterns.removeAll(KoPatternSP());
+    return allPatternLinks;
+}
+QVector<KoPatternSP> KisAslLayerStyleSerializer::fetchAllPatterns(const KisPSDLayerStyle *style, KisResourcesInterfaceSP resourcesInterface)
+{
+    const auto allPatternLinks = fetchAllPatternLinks(style);
+    QVector <KoPatternSP> allPatterns;
+
+    Q_FOREACH(const KoResourceSignature &sig, allPatternLinks) {
+        KoPatternSP pattern = resourcesInterface->source<KoPattern>(sig.type).bestMatch(sig.md5sum, sig.filename, sig.name);
+        if (pattern) {
+            allPatterns << pattern;
+        } else {
+            warnKrita << "WARNING: failed to fetch a pattern for a layer style" << sig;
+        }
     }
 
     return allPatterns;
@@ -305,8 +317,10 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 
     QVector<KoPatternSP> allPatterns;
 
+    /// the duplicated patterns will be resolved later at the
+    /// uuid generation stage
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
-        allPatterns += fetchAllPatterns(style.data());
+        allPatterns += fetchAllPatterns(style.data(), style->resourcesInterface());
     }
 
     QHash<KoPatternSP, QString> patternToUuidMap;
@@ -747,36 +761,27 @@ QDomDocument KisAslLayerStyleSerializer::formPsdXmlDocument() const
     return doc;
 }
 
-QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const KisPSDLayerStyle *style)
+QVector<KoResourceSignature> KisAslLayerStyleSerializer::fetchLinkedResourceSignatures(const KisPSDLayerStyle *style)
 {
-    QVector<KoResourceSP> embeddedResources = implicitCastList<KoResourceSP>(fetchAllPatterns(style));
+    QVector<KoResourceSignature> embeddedResourceLinks = fetchAllPatternLinks(style);
 
     if (style->gradientOverlay()->effectEnabled()) {
-        embeddedResources << style->gradientOverlay()->gradient(style->resourcesInterface());
-        KIS_ASSERT(embeddedResources.last().data());
+        embeddedResourceLinks << style->gradientOverlay()->gradientLink();
     }
 
     if (style->innerGlow()->effectEnabled() && style->innerGlow()->fillType() == psd_fill_gradient) {
-        embeddedResources << style->innerGlow()->gradient(style->resourcesInterface());
-        KIS_ASSERT(embeddedResources.last().data());
+        embeddedResourceLinks << style->innerGlow()->gradientLink();
     }
 
     if (style->outerGlow()->effectEnabled() && style->outerGlow()->fillType() == psd_fill_gradient) {
-        embeddedResources << style->outerGlow()->gradient(style->resourcesInterface());
-        KIS_ASSERT(embeddedResources.last().data());
+        embeddedResourceLinks << style->outerGlow()->gradientLink();
     }
 
     if (style->stroke()->effectEnabled() && style->stroke()->fillType() == psd_fill_gradient) {
-        embeddedResources << style->stroke()->gradient(style->resourcesInterface());
-        KIS_ASSERT(embeddedResources.last().data());
+        embeddedResourceLinks << style->stroke()->gradientLink();
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!embeddedResources.contains(KoResourceSP()))
-    {
-        embeddedResources.removeAll(KoResourceSP());
-    }
-
-    return embeddedResources;
+    return embeddedResourceLinks;
 }
 
 void KisAslLayerStyleSerializer::saveToDevice(QIODevice &device)
@@ -1293,34 +1298,46 @@ QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::collectAllLayerStyles(Ki
     return layerStyles;
 }
 
+void KisAslLayerStyleSerializer::sideLoadLinkedResources(KisPSDLayerStyle *style,
+                                                         KisResourcesInterfaceSP resourcesInterface)
+{
+    const QList<KoResourceLoadResult> linkedResources = style->linkedResources(resourcesInterface);
+    QList<KoEmbeddedResource> sideLoadedResourcesStorage;
+    Q_FOREACH (const KoResourceLoadResult &res, linkedResources) {
+        if (res.type() != KoResourceLoadResult::ExistingResource) {
+            qWarning() << "WARNING: failed to load layer style's embedded resource into the database"
+                       << res.signature();
+            continue;
+        }
+
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        bool result = res.resource()->saveToDevice(&buffer);
+        buffer.close();
+        KIS_SAFE_ASSERT_RECOVER(result) { continue; }
+        KIS_SAFE_ASSERT_RECOVER(res.resource()->md5Sum() == KoMD5Generator::generateHash(buffer.data())) { continue; }
+
+        sideLoadedResourcesStorage.append(KoEmbeddedResource(res.signature(), buffer.data()));
+    }
+    style->setSideLoadedResources(sideLoadedResourcesStorage);
+}
+
 void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, const QString &storageLocation)
 {
-    QVector<KisPSDLayerStyleSP> styles;
-
-    KisEmbeddedResourceStorageProxy resourcesProxy(storageLocation);
-
     if (!storageLocation.isEmpty()) {
-        Q_FOREACH(KoPatternSP pattern, patterns().values()) {
-            resourcesProxy.addResource(pattern);
-        }
-        Q_FOREACH(KoAbstractGradientSP gradient, gradients()) {
-            resourcesProxy.addResource(gradient);
+        KisResourceModel stylesModel(ResourceType::LayerStyles);
+        Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
+            KisPSDLayerStyleSP newStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
+            sideLoadLinkedResources(newStyle.data(), m_localResourcesInterface);
+            style->setResourcesInterface(KisGlobalResourcesInterface::instance());
+
+            stylesModel.addResourceDeduplicateFileName(newStyle, storageLocation);
         }
     }
 
-    Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
-        KisPSDLayerStyleSP newStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
-        newStyle->setResourcesInterface(resourcesProxy.detachedResourcesInterface());
-        newStyle->setValid(true);
-
-        if (!storageLocation.isEmpty()) {
-            resourcesProxy.addResource(newStyle);
-        }
-
-        styles << newStyle;
-    }
-
-    KisLayerUtils::recursiveApplyNodes(root, [styles] (KisNodeSP node) {
+    // we iterate over non-uploaded styles which store all the dependent resources
+    // internally
+    KisLayerUtils::recursiveApplyNodes(root, [styles = m_stylesVector] (KisNodeSP node) {
         KisLayer* layer = qobject_cast<KisLayer*>(node.data());
 
         if (layer && layer->layerStyle()) {

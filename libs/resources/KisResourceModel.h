@@ -163,6 +163,18 @@ public:
     virtual bool addResource(KoResourceSP resource, const QString &storageId = QString("")) = 0;
 
     /**
+     * @brief addResource adds the given resource to the database and storage. If the resource
+     * already exists in the given storage with the same filename, the resource will be renamed.
+     *
+     * @param resource the resource itself
+     * @param storageId the id of the storage (could be "memory" for temporary
+     * resources, the document's storage id for document storages or empty to save
+     * to the default resources folder
+     * @return true if adding the resource succeeded.
+     */
+    virtual bool addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId) = 0;
+
+    /**
      * @brief updateResource creates a new version of the resource in the storage and
      * in the database. This will also set the resource to active if it was inactive.
      *
@@ -268,6 +280,7 @@ public:
     bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString("")) override;
+    bool addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId = QString("")) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
@@ -391,6 +404,7 @@ public:
     bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString("")) override;
+    bool addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId = QString("")) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;

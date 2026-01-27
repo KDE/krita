@@ -42,17 +42,59 @@
 #include "kis_signal_compressor.h"
 #include "kis_canvas_resource_provider.h"
 #include <KisGlobalResourcesInterface.h>
+#include <KisLocalStrokeResources.h>
+#include <KisRequiredResourcesOperators.h>
+#include <KisResourceModelProvider.h>
 
 #include <KoFileDialog.h>
 #include <QMessageBox>
 
-KoAbstractGradientSP fetchGradientLazy(KoAbstractGradientSP gradient,
-                                      KisCanvasResourceProvider *resourceProvider)
+
+template <typename Type, typename TypeSP = QSharedPointer<Type>>
+TypeSP fetchResourceLazy(KoResourceSignature signature,
+                         KisResourcesInterfaceSP resourcesInterface)
 {
-    if (!gradient) {
-        gradient = resourceProvider->currentGradient();
+    if (signature.type.isEmpty()) return nullptr;
+
+    auto source = resourcesInterface->source<Type>(signature.type);
+
+    auto resource = source.bestMatch(signature.md5sum, signature.filename, signature.name);
+    if (!resource) {
+        qWarning() << "WARNING: failed to find a resource for layer sytle" << signature;
+        resource = source.fallbackResource();
     }
-    return gradient;
+
+    return resource ? resource->clone().template dynamicCast<Type>() : nullptr;
+}
+
+KoAbstractGradientSP fetchGradientLazy(KoResourceSignature signature, KisResourcesInterfaceSP resourcesInterface)
+{
+    return fetchResourceLazy<KoAbstractGradient>(signature, resourcesInterface);
+}
+
+KoPatternSP fetchPatternLazy(KoResourceSignature signature, KisResourcesInterfaceSP resourcesInterface)
+{
+    return fetchResourceLazy<KoPattern>(signature, resourcesInterface);
+}
+
+KoAbstractGradientSP cloneAndPrepareGradientFromGUI(KoAbstractGradientSP gradient)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gradient, nullptr);
+
+    auto clonedGradient = gradient->clone().dynamicCast<KoAbstractGradient>();
+
+    {
+        QBuffer buf;
+        buf.open(QFile::WriteOnly);
+        clonedGradient->saveToDevice(&buf);
+        buf.close();
+        clonedGradient->setMD5Sum(KoMD5Generator::generateHash(buf.data()));
+    }
+
+    // TODO: pass canvasReousrcesInterface to generate proper dynamic gradients
+    clonedGradient->updatePreview();
+
+    return clonedGradient;
 }
 
 KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
@@ -61,6 +103,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     , m_initialLayerStyle(layerStyle->clone().dynamicCast<KisPSDLayerStyle>())
     , m_isSwitchingPredefinedStyle(false)
     , m_sanityLayerStyleDirty(false)
+    , m_temporaryStorageLock("temporary layer style dependencies storage", std::defer_lock)
 {
     setCaption(i18n("Layer Styles"));
     setButtons(Ok | Cancel);
@@ -295,6 +338,11 @@ void KisDlgLayerStyle::slotNewStyle()
     bool resourceAdded = false;
 
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
+        // we should side-load dependent resources to make sure they are loaded to the server as well
+        KIS_SAFE_ASSERT_RECOVER_NOOP(KisRequiredResourcesOperators::hasLocalResourcesSnapshot(clone.data()));
+        KisAslLayerStyleSerializer::sideLoadLinkedResources(clone.data(), clone->resourcesInterface());
+        clone->setResourcesInterface(KisGlobalResourcesInterface::instance());
+
         // storage is named by the folder + filename, NOT the full filepath
         resourceAdded = KisResourceUserOperations::addResourceWithUserInput(this, clone, customStylesStorageLocation);
     } else {
@@ -425,6 +473,35 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     m_sanityLayerStyleDirty = false;
 
     {
+        m_temporaryStorageLock = KisTemporaryResourceStorageLock(m_layerStyle->name());
+
+        auto localResourcesInterface = m_layerStyle->resourcesInterface().dynamicCast<KisLocalStrokeResources>();
+        if (localResourcesInterface) {
+            /// Upload all the unknown resources into the temporary storage
+            /// so that immutable resource selectors could see them
+            Q_FOREACH (KoResourceSP resource, localResourcesInterface->resources()) {
+                auto &globalSource = KisGlobalResourcesInterface::instance()->source(resource->resourceType().first);
+                const KoResourceSignature sig = resource->signature();
+
+                if (!globalSource.exactMatch(sig.md5sum, sig.filename, sig.name)) {
+                    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(resource->resourceType().first);
+                    model->addResourceDeduplicateFileName(resource, m_temporaryStorageLock.storageLocation());
+                }
+            }
+        } else {
+            /// Copy all the public resources into the internal storage
+            ///
+            /// We only copy the KoResource-resources into the local storage, while
+            /// keeping KoCanvasResource-resources still detached, hence we cannot
+            /// use cloneWithResourcesSnapshot() here, which bakes canvas resources
+            /// as well
+            KisRequiredResourcesOperators::createLocalResourcesSnapshot(m_layerStyle.data(), KisGlobalResourcesInterface::instance());
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(KisRequiredResourcesOperators::hasLocalResourcesSnapshot(m_layerStyle.data()));
+    }
+
+    {
         KisSignalsBlocker b(m_stylesSelector);
         m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
     }
@@ -468,14 +545,14 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 
     m_dropShadow->setShadow(m_layerStyle->dropShadow());
     m_innerShadow->setShadow(m_layerStyle->innerShadow());
-    m_outerGlow->setConfig(m_layerStyle->outerGlow());
-    m_innerGlow->setConfig(m_layerStyle->innerGlow());
+    m_outerGlow->setConfig(m_layerStyle->outerGlow(), m_layerStyle->resourcesInterface());
+    m_innerGlow->setConfig(m_layerStyle->innerGlow(), m_layerStyle->resourcesInterface());
     m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss());
     m_satin->setSatin(m_layerStyle->satin());
     m_colorOverlay->setColorOverlay(m_layerStyle->colorOverlay());
-    m_gradientOverlay->setGradientOverlay(m_layerStyle->gradientOverlay());
-    m_patternOverlay->setPatternOverlay(m_layerStyle->patternOverlay());
-    m_stroke->setStroke(m_layerStyle->stroke());
+    m_gradientOverlay->setGradientOverlay(m_layerStyle->gradientOverlay(), m_layerStyle->resourcesInterface());
+    m_patternOverlay->setPatternOverlay(m_layerStyle->patternOverlay(), m_layerStyle->resourcesInterface());
+    m_stroke->setStroke(m_layerStyle->stroke(), m_layerStyle->resourcesInterface());
 
     wdgLayerStyles.chkMasterFxSwitch->setChecked(m_layerStyle->isEnabled());
     slotMasterFxSwitchChanged(m_layerStyle->isEnabled());
@@ -483,6 +560,11 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
+    // create a new local resource storage for the newly created resources,
+    // they are not uploaded to the database until the style itself is
+    // saved in the database
+    QSharedPointer<KisLocalStrokeResources> newLocalStyleResources(new KisLocalStrokeResources());
+
     m_layerStyle->setEnabled(wdgLayerStyles.chkMasterFxSwitch->isChecked());
 
     m_layerStyle->dropShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
@@ -501,14 +583,17 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 
     m_dropShadow->fetchShadow(m_layerStyle->dropShadow());
     m_innerShadow->fetchShadow(m_layerStyle->innerShadow());
-    m_outerGlow->fetchConfig(m_layerStyle->outerGlow());
-    m_innerGlow->fetchConfig(m_layerStyle->innerGlow());
+    m_outerGlow->fetchConfig(m_layerStyle->outerGlow(), newLocalStyleResources);
+    m_innerGlow->fetchConfig(m_layerStyle->innerGlow(), newLocalStyleResources);
     m_bevelAndEmboss->fetchBevelAndEmboss(m_layerStyle->bevelAndEmboss());
     m_satin->fetchSatin(m_layerStyle->satin());
     m_colorOverlay->fetchColorOverlay(m_layerStyle->colorOverlay());
-    m_gradientOverlay->fetchGradientOverlay(m_layerStyle->gradientOverlay());
-    m_patternOverlay->fetchPatternOverlay(m_layerStyle->patternOverlay());
-    m_stroke->fetchStroke(m_layerStyle->stroke());
+    m_gradientOverlay->fetchGradientOverlay(m_layerStyle->gradientOverlay(), newLocalStyleResources);
+    m_patternOverlay->fetchPatternOverlay(m_layerStyle->patternOverlay(), newLocalStyleResources);
+    m_stroke->fetchStroke(m_layerStyle->stroke(), newLocalStyleResources);
+
+    // reset the resources interface to the one with new resources
+    m_layerStyle->setResourcesInterface(newLocalStyleResources);
 
     m_sanityLayerStyleDirty = false;
     m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
@@ -518,19 +603,18 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 
 void KisDlgLayerStyle::syncGlobalAngle(int angle)
 {
-    KisPSDLayerStyleSP style = this->style();
-
-    if (style->dropShadow()->useGlobalLight()) {
-        style->dropShadow()->setAngle(angle);
+    if (m_layerStyle->dropShadow()->useGlobalLight()) {
+        m_layerStyle->dropShadow()->setAngle(angle);
+        m_dropShadow->setShadow(m_layerStyle->dropShadow());
     }
-    if (style->innerShadow()->useGlobalLight()) {
-        style->innerShadow()->setAngle(angle);
+    if (m_layerStyle->innerShadow()->useGlobalLight()) {
+        m_layerStyle->innerShadow()->setAngle(angle);
+        m_innerShadow->setShadow(m_layerStyle->innerShadow());
     }
-    if (style->bevelAndEmboss()->useGlobalLight()) {
-        style->bevelAndEmboss()->setAngle(angle);
+    if (m_layerStyle->bevelAndEmboss()->useGlobalLight()) {
+        m_layerStyle->bevelAndEmboss()->setAngle(angle);
+        m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss());
     }
-
-    setStyle(style);
 }
 
 /********************************************************************/
@@ -1050,50 +1134,12 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
     }
 }
 
-class GradientPointerConverter
-{
-public:
-    static KoAbstractGradientSP resourceToStyle(KoAbstractGradientSP gradient) {
-        return gradient ? KoAbstractGradientSP(gradient->clone().dynamicCast<KoAbstractGradient>()) : KoAbstractGradientSP();
-    }
-
-    static KoAbstractGradientSP styleToResource(KoAbstractGradientSP gradient) {
-        if (!gradient) return 0;
-
-        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        KoAbstractGradientSP resource = server->resource(gradient->md5Sum(), "", "");
-
-        if (!resource) {
-            KoAbstractGradientSP clone = gradient->clone().dynamicCast<KoAbstractGradient>();
-            clone->setName(findAvailableName(gradient->name()));
-            server->addResource(clone, false);
-            resource = clone;
-        }
-
-        return resource;
-    }
-
-private:
-    static QString findAvailableName(const QString &name) {
-        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        QString newName = name;
-        int i = 0;
-
-        while (server->resource("", "", newName)) {
-            newName = QString("%1%2").arg(name).arg(i++);
-        }
-
-        return newName;
-    }
-};
-
 /********************************************************************/
 /***** Gradient Overlay *********************************************/
 /********************************************************************/
 
 GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
-    : QWidget(parent),
-      m_resourceProvider(resourceProvider)
+    : QWidget(parent)
 {
     ui.setupUi(this);
 
@@ -1118,13 +1164,12 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     connect(ui.chkDither, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 }
 
-void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *config)
+void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *config, KisResourcesInterfaceSP resourcesInterface)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
 
-    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
-
+    KoAbstractGradientSP gradient = fetchGradientLazy(config->gradientLink(), resourcesInterface);
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -1138,14 +1183,18 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.chkDither->setChecked(config->dither());
 }
 
-void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *config) const
+void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *config, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const
 {
     config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     config->setOpacity(ui.intOpacity->value());
-    KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
+
+    auto gradient = ui.cmbGradient->gradient();
     if (gradient) {
-        config->setGradient(GradientPointerConverter::resourceToStyle(gradient));
+        auto clonedGradient = cloneAndPrepareGradientFromGUI(gradient);
+        uploadResourcesInterface->addResource(clonedGradient);
+        config->setGradient(clonedGradient);
     }
+
     config->setReverse(ui.chkReverse->isChecked());
     config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
@@ -1153,7 +1202,6 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
     config->setScale(ui.intScale->value());
     config->setDither(ui.chkDither->isChecked());
 }
-
 
 /********************************************************************/
 /***** Inner Glow      **********************************************/
@@ -1218,7 +1266,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
 
 }
 
-void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
+void InnerGlow::setConfig(const psd_layer_effects_glow_common *config, KisResourcesInterfaceSP resourcesInterface)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
@@ -1228,8 +1276,7 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.bnColor->setColor(config->color());
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
-    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
-
+    KoAbstractGradientSP gradient = fetchGradientLazy(config->gradientLink(), resourcesInterface);
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -1254,7 +1301,7 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.intJitter->setValue(config->jitter());
 }
 
-void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
+void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const
 {
     config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     config->setOpacity(ui.intOpacity->value());
@@ -1268,9 +1315,11 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
     }
 
     config->setColor(ui.bnColor->color());
-    KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
+    KoAbstractGradientSP gradient = ui.cmbGradient->gradient();
     if (gradient) {
-        config->setGradient(GradientPointerConverter::resourceToStyle(gradient));
+        auto clonedGradient = cloneAndPrepareGradientFromGUI(gradient);
+        uploadResourcesInterface->addResource(clonedGradient);
+        config->setGradient(clonedGradient);
     }
     config->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     config->setSpread(ui.intChoke->value());
@@ -1316,21 +1365,30 @@ PatternOverlay::PatternOverlay(QWidget *parent)
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
 
-void PatternOverlay::setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern)
+void PatternOverlay::setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern, KisResourcesInterfaceSP resourcesInterface)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(pattern->blendMode()));
     ui.intOpacity->setValue(pattern->opacity());
-    KoPatternSP patternResource = pattern->pattern(KisGlobalResourcesInterface::instance());
-    ui.patternChooser->setCurrentPattern(patternResource);
+    KoPatternSP patternResource = fetchPatternLazy(pattern->patternLink(), resourcesInterface);
+    if (patternResource) {
+        ui.patternChooser->setCurrentPattern(patternResource);
+    }
     ui.chkLinkWithLayer->setChecked(pattern->alignWithLayer());
     ui.intScale->setValue(pattern->scale());
 }
 
-void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern) const
+void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const
 {
     pattern->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     pattern->setOpacity(ui.intOpacity->value());
-    pattern->setPattern(ui.patternChooser->currentResource(true).staticCast<KoPattern>());
+
+    auto patternResource = ui.patternChooser->currentResource(true).staticCast<KoPattern>();
+    if (patternResource) {
+        auto clonedPatternResource = patternResource->clone().dynamicCast<KoPattern>();
+        pattern->setPattern(clonedPatternResource);
+        uploadResourcesInterface->addResource(clonedPatternResource);
+    }
+
     pattern->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     pattern->setScale(ui.intScale->value());
 }
@@ -1457,7 +1515,7 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.fillStack->setCurrentIndex(ui.cmbFillType->currentIndex());
 }
 
-void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
+void Stroke::setStroke(const psd_layer_effects_stroke *stroke, KisResourcesInterfaceSP resourcesInterface)
 {
     ui.intSize->setValue(stroke->size());
     ui.cmbPosition->setCurrentIndex((int)stroke->position());
@@ -1467,8 +1525,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.cmbFillType->setCurrentIndex((int)stroke->fillType());
     ui.bnColor->setColor(stroke->color());
 
-    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
-
+    KoAbstractGradientSP gradient = fetchGradientLazy(stroke->gradientLink(), resourcesInterface);
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
     }
@@ -1480,12 +1537,16 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.angleSelector->setValue(stroke->angle());
     ui.intScale->setValue(stroke->scale());
 
-    ui.patternChooser->setCurrentPattern(stroke->pattern(KisGlobalResourcesInterface::instance()));
+    KoPatternSP pattern = fetchPatternLazy(stroke->patternLink(), resourcesInterface);
+    if (pattern) {
+        ui.patternChooser->setCurrentPattern(pattern);
+    }
+
     ui.chkLinkWithLayer->setChecked(stroke->alignWithLayer());
     ui.intScale_2->setValue(stroke->scale());
 }
 
-void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
+void Stroke::fetchStroke(psd_layer_effects_stroke *stroke, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const
 {
     stroke->setSize(ui.intSize->value());
     stroke->setPosition((psd_stroke_position)ui.cmbPosition->currentIndex());
@@ -1497,9 +1558,11 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setColor(ui.bnColor->color());
 
-    KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
+    auto gradient = ui.cmbGradient->gradient();
     if (gradient) {
-        stroke->setGradient(GradientPointerConverter::resourceToStyle(gradient));
+        auto clonedGradient = cloneAndPrepareGradientFromGUI(gradient);
+        uploadResourcesInterface->addResource(clonedGradient);
+        stroke->setGradient(clonedGradient);
     }
 
     stroke->setReverse(ui.chkReverse->isChecked());
@@ -1511,7 +1574,13 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setAngle(ui.angleSelector->value());
     stroke->setScale(ui.intScale->value());
 
-    stroke->setPattern(ui.patternChooser->currentResource(true).staticCast<KoPattern>());
+    auto pattern = ui.patternChooser->currentResource(true).staticCast<KoPattern>();
+    if (pattern) {
+        auto clonedPattern = pattern->clone().dynamicCast<KoPattern>();
+        uploadResourcesInterface->addResource(clonedPattern);
+        stroke->setPattern(clonedPattern);
+    }
+
     if (fillType == psd_fill_pattern) {
         // there is only one boolean value, and it's shared with gradient's "align with layer"
         stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());

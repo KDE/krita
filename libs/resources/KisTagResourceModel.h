@@ -149,6 +149,7 @@ public:
     bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId) override;
+    bool addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;

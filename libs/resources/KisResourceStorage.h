@@ -155,6 +155,7 @@ public:
     }
 
 
+    KisResourceStorage(const QString &location, KisResourceStorage::StorageType storageType);
     KisResourceStorage(const QString &location);
     ~KisResourceStorage();
     KisResourceStorage(const KisResourceStorage &rhs);

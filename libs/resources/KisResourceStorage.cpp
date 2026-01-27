@@ -27,6 +27,27 @@
 #include "KisMemoryStorage.h"
 
 
+namespace {
+KisResourceStorage::StorageType autoDetectStorageType(const QString &location) {
+    QFileInfo fi(location);
+    if (fi.isDir()) {
+        return KisResourceStorage::StorageType::Folder;
+    } else if (location.endsWith(".bundle", Qt::CaseInsensitive)) {
+        return KisResourceStorage::StorageType::Bundle;
+    } else if (location.endsWith(".abr", Qt::CaseInsensitive)) {
+        return KisResourceStorage::StorageType::AdobeBrushLibrary;
+    } else if (location.endsWith(".asl", Qt::CaseInsensitive)) {
+        return KisResourceStorage::StorageType::AdobeStyleLibrary;
+    } else if (location == "fontregistry") {
+        return KisResourceStorage::StorageType::FontStorage;
+    } else if (location == "memory" || !QUuid::fromString(location).isNull() || (!location.isEmpty() && !fi.exists())) {
+        return KisResourceStorage::StorageType::Memory;
+    }
+
+    return KisResourceStorage::StorageType::Unknown;
+}
+} // namespace
+
 const QString KisResourceStorage::s_xmlns_meta("urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
 const QString KisResourceStorage::s_xmlns_dc("http://purl.org/dc/elements/1.1");
 
@@ -85,58 +106,80 @@ public:
     int storageId {-1};
 };
 
-KisResourceStorage::KisResourceStorage(const QString &location)
+KisResourceStorage::KisResourceStorage(const QString &location, KisResourceStorage::StorageType storageType)
     : d(new Private())
 {
     d->location = location;
-    d->name = QFileInfo(d->location).fileName();
 
-    QFileInfo fi(d->location);
-    if (fi.isDir()) {
-        d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Folder]->create(location));
-        d->storageType = StorageType::Folder;
-        d->valid = fi.isWritable();
-    }
-    else if (d->name.endsWith(".bundle", Qt::CaseInsensitive)) {
-            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Bundle]->create(location));
-            d->storageType = StorageType::Bundle;
-            // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
-            d->valid = (fi.isReadable() && QuaZip(d->location).open(QuaZip::mdUnzip));
-    }
-    else if (d->name.endsWith(".abr", Qt::CaseInsensitive)) {
-            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeBrushLibrary]->create(location));
-            d->storageType = StorageType::AdobeBrushLibrary;
-            d->valid = fi.isReadable();
-    }
-    else if (d->name.endsWith(".asl", Qt::CaseInsensitive)) {
-            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
-            d->storageType = StorageType::AdobeStyleLibrary;
-            d->valid = d->storagePlugin->isValid();
-    }
-    else if (d->location == "fontregistry") {
-        auto factory = KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::FontStorage];
-        if (factory) {
-            auto storage = factory->create(location);
-            d->storagePlugin.reset(storage);
-            d->valid = true;
-        }
-        else {
-            d->valid = false;
-        }
-        d->name = location;
-        d->storageType = StorageType::FontStorage;
-
-    }
-    else if (d->location == "memory" || !QUuid::fromString(d->location).isNull() || (!d->location.isEmpty() && !fi.exists())) {
-        d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
+    auto createMemoryStorage = [this] (const QString &location, bool isValid) {
         d->name = location;
         d->storageType = StorageType::Memory;
-        d->valid = true;
-    } else {
-        // we create a fake memory storage to make sure methods like `timestamp()` still work
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
-        d->valid = false;
+        d->valid = isValid;
+    };
+
+    switch (storageType) {
+        case StorageType::Folder: {
+            QFileInfo fi(d->location);
+            if (fi.isDir()) {
+                d->name = fi.fileName();
+                d->storageType = StorageType::Folder;
+                d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Folder]->create(location));
+                d->valid = fi.isWritable();
+            } else {
+                createMemoryStorage(location, false);
+            }
+            break;
+        }
+        case StorageType::Bundle: {
+            QFileInfo fi(d->location);
+            d->name = fi.fileName();
+            d->storageType = StorageType::Bundle;
+            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Bundle]->create(location));
+            // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
+            d->valid = (fi.isReadable() && QuaZip(d->location).open(QuaZip::mdUnzip));
+            break;
+        }
+        case StorageType::AdobeBrushLibrary: {
+            QFileInfo fi(d->location);
+            d->name = fi.fileName();
+            d->storageType = StorageType::AdobeBrushLibrary;
+            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeBrushLibrary]->create(location));
+            d->valid = fi.isReadable();
+            break;
+        }
+        case StorageType::AdobeStyleLibrary: {
+            QFileInfo fi(d->location);
+            d->name = fi.fileName();
+            d->storageType = StorageType::AdobeStyleLibrary;
+            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
+            d->valid = d->storagePlugin->isValid();
+            break;
+        }
+        case StorageType::Unknown:
+            createMemoryStorage(location, false);
+            break;
+        case StorageType::Memory:
+            createMemoryStorage(location, true);
+            break;
+        case StorageType::FontStorage: {
+            auto factory = KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::FontStorage];
+            if (factory) {
+                d->name = location;
+                d->storageType = StorageType::FontStorage;
+                d->storagePlugin.reset(factory->create(location));
+                d->valid = true;
+            } else {
+                createMemoryStorage(location, false);
+            }
+            break;
+        }
     }
+}
+
+KisResourceStorage::KisResourceStorage(const QString &location)
+    : KisResourceStorage(location, autoDetectStorageType(location))
+{
 }
 
 KisResourceStorage::~KisResourceStorage()

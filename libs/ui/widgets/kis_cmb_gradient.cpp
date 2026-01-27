@@ -10,56 +10,70 @@
 #include <QStyleOptionComboBox>
 #include <QApplication>
 
-#include <KoCheckerBoardPainter.h>
 #include <KoResource.h>
 #include <resources/KoAbstractGradient.h>
-#include <KisGradientChooser.h>
+
+#include <kis_signals_blocker.h>
+#include <KisGenericGradientEditor.h>
 
 KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)
-    , m_gradientChooser(new KisGradientChooser(this))
     , m_checkersPainter(4)
+    , m_gradientEditor(new KisGenericGradientEditor())
 {
-    m_gradientChooser->setContentsMargins(10, 10, 10, 10);
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )), SLOT(gradientSelected(KoResourceSP )));
-    connect(m_gradientChooser, &KisGradientChooser::gradientEdited,
-            [this](KoAbstractGradientSP resource) { gradientSelected(resource); });
-    setPopupWidget(m_gradientChooser);
+    m_gradientEditor->setContentsMargins(10, 10, 10, 10);
+    m_gradientEditor->loadUISettings();
+    connect(m_gradientEditor, &KisGenericGradientEditor::sigGradientChanged,
+            this, &KisCmbGradient::gradientSelected);
+    setPopupWidget(m_gradientEditor);
+}
+
+KisCmbGradient::~KisCmbGradient()
+{
+    m_gradientEditor->saveUISettings();
 }
 
 void KisCmbGradient::setGradient(KoAbstractGradientSP gradient)
 {
-    m_gradientChooser->setCurrentResource(gradient);
+    KisSignalsBlocker b(m_gradientEditor);
+    m_gradientEditor->setGradient(gradient);
+    updateGradientPreview();
 }
 
-KoAbstractGradientSP KisCmbGradient::gradient(bool includeHidden) const
+KoAbstractGradientSP KisCmbGradient::gradient() const
 {
-    return m_gradientChooser->currentResource(includeHidden).dynamicCast<KoAbstractGradient>();
+    return m_gradientEditor->gradient();
 }
 
 void KisCmbGradient::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
-    m_gradientChooser->setCanvasResourcesInterface(canvasResourcesInterface);
+    m_gradientEditor->setCanvasResourcesInterface(canvasResourcesInterface);
 }
 
-void KisCmbGradient::gradientSelected(KoResourceSP resource)
+void KisCmbGradient::gradientSelected()
 {
-    KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
-    if (!gradient) return;
+    updateGradientPreview();
 
-    QImage preview = gradient->generatePreview(iconSize().width(), iconSize().height(), m_gradientChooser->canvasResourcesInterface());
+    Q_EMIT gradientChanged(this->gradient());
+}
 
-    QImage thumbnail(preview.size(), QImage::Format_ARGB32);
+void KisCmbGradient::updateGradientPreview()
+{
+    const QSize previewSize = iconSize();
+    QImage thumbnail(previewSize, QImage::Format_ARGB32);
 
     {
         QPainter gc(&thumbnail);
-        m_checkersPainter.paint(gc, preview.rect());
-        gc.drawImage(QPoint(), preview);
+        m_checkersPainter.paint(gc, QRect(QPoint(), previewSize));
+
+        KoAbstractGradientSP gradient = this->gradient();
+        if (gradient) {
+            QImage preview = gradient->generatePreview(previewSize.width(), previewSize.height(), m_gradientEditor->canvasResourcesInterface());
+            gc.drawImage(QPoint(), preview);
+        }
     }
 
     setIcon(QIcon(QPixmap::fromImage(thumbnail)));
-
-    Q_EMIT gradientChanged(gradient);
 }
 
 QSize KisCmbGradient::sizeHint() const
@@ -78,5 +92,6 @@ QSize KisCmbGradient::sizeHint() const
 void KisCmbGradient::resizeEvent(QResizeEvent *event)
 {
     setIconSize(QSize(event->size().width() - 30, event->size().height() - 4));
+    updateGradientPreview();
     KisPopupButton::resizeEvent(event);
 }

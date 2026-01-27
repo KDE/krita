@@ -484,6 +484,25 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
     return r;
 }
 
+bool KisAllResourcesModel::addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId)
+{
+    if (!resource || !resource->valid()) {
+        qWarning() << "Cannot add resource. Resource is null or not valid";
+        return false;
+    }
+
+    bool r = true;
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    if (!KisResourceLocator::instance()->addResourceDeduplicateFileName(d->resourceType, resource, storageId)) {
+        qWarning() << "Failed to add resource with name deduplication" << resource->name();
+        r = false;
+    }
+    resetQuery();
+    endInsertRows();
+
+    return r;
+}
+
 bool KisAllResourcesModel::updateResource(KoResourceSP resource)
 {
     if (!resource || !resource->valid()) {
@@ -967,6 +986,19 @@ bool KisResourceModel::addResource(KoResourceSP resource, const QString &storage
     if (!updateInsteadOfAdd) {
         result = source->addResource(resource, storageId);
     }
+
+    if (result) {
+        invalidate();
+    }
+
+    return result;
+}
+
+bool KisResourceModel::addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId)
+{
+    KisAllResourcesModel *source = qobject_cast<KisAllResourcesModel*>(sourceModel());
+
+    const bool result = source->addResourceDeduplicateFileName(resource, storageId);
 
     if (result) {
         invalidate();

@@ -10,6 +10,8 @@
 
 #include <QFileInfo>
 #include <KisStaticInitializer.h>
+#include <KisGlobalResourcesInterface.h>
+
 
 KIS_DECLARE_STATIC_INITIALIZER {
     KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeStyleLibrary, new KisStoragePluginFactory<KisAslStorage>());
@@ -179,9 +181,11 @@ KoResourceSP KisAslStorage::resource(const QString &url)
         }
     }
     else {
+        KisPSDLayerStyleSP resultingStyle;
+
         QHash<QString, KisPSDLayerStyleSP> styles = m_aslSerializer->stylesHash();
         if (styles.contains(realUuid)) {
-            return styles[realUuid];
+            resultingStyle = styles[realUuid];
         } else {
             // can be {realUuid} or {realUuid}
             if (realUuid.startsWith("{")) {
@@ -192,12 +196,20 @@ KoResourceSP KisAslStorage::resource(const QString &url)
             }
 
             if (styles.contains(realUuid)) {
-                return styles[realUuid];
-            } else {
-                Q_FOREACH(QString ke, styles.keys()) {
-                }
+                resultingStyle = styles[realUuid];
             }
+        }
 
+        if (resultingStyle) {
+            KisPSDLayerStyleSP newStyle = resultingStyle->clone().dynamicCast<KisPSDLayerStyle>();
+
+            // newStyle->resourcesInterface() is guaranteed to point to a local copy of the resouces
+            // stored inside the serializer, so we need to side-load them and then reset the resources
+            // interface to the global one
+            KisAslLayerStyleSerializer::sideLoadLinkedResources(newStyle.data(), newStyle->resourcesInterface());
+            newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+
+            return newStyle;
         }
     }
     return 0;

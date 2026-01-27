@@ -12,7 +12,7 @@
 #include <KoCheckerBoardPainter.h>
 
 class KoResource;
-class KisGradientChooser;
+class KisGenericGradientEditor;
 
 /**
  * @brief The KisCmbGradient class allows the user to select a gradient.
@@ -22,9 +22,10 @@ class KisCmbGradient : public KisPopupButton
     Q_OBJECT
 public:
     explicit KisCmbGradient(QWidget *parent = 0);
+    ~KisCmbGradient();
 
     void setGradient(KoAbstractGradientSP gradient);
-    KoAbstractGradientSP gradient(bool includeHidden = false) const;
+    KoAbstractGradientSP gradient() const;
 
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
@@ -39,11 +40,14 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void gradientSelected(KoResourceSP resource);
+    void gradientSelected();
 
 private:
-    KisGradientChooser *m_gradientChooser;
+    void updateGradientPreview();
+
+private:
     KoCheckerBoardPainter m_checkersPainter;
+    KisGenericGradientEditor *m_gradientEditor;
 };
 
 #endif // KIS_CMB_GRADIENT_H

@@ -168,6 +168,15 @@ bool KisTagFilterResourceProxyModel::addResource(KoResourceSP resource, const QS
     return false;
 }
 
+bool KisTagFilterResourceProxyModel::addResourceDeduplicateFileName(KoResourceSP resource, const QString &storageId)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->addResourceDeduplicateFileName(resource, storageId);
+    }
+    return false;
+}
+
 bool KisTagFilterResourceProxyModel::updateResource(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());

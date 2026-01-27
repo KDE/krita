@@ -233,6 +233,9 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
     QHash<QString, StoredResource> &typedResources = d->resourcesNew[resourceType];
 
     if (typedResources.contains(resource->filename())) {
+        /// here we silently overwrite the resource if the filename
+        /// is the same; it is the job of higher-level code to actually
+        /// resolve file name clashes
         return true;
     };
 

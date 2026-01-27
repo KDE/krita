@@ -58,8 +58,8 @@ class BevelAndEmboss : public QWidget {
     Q_OBJECT
 public:
     BevelAndEmboss(Contour *contour, Texture *texture, QWidget *parent);
-    void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss);
-    void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss) const;
+    void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss, KisResourcesInterfaceSP resourcesInterface);
+    void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const;
 
 Q_SIGNALS:
     void configChanged();

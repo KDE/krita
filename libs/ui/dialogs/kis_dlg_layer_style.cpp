@@ -547,7 +547,7 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     m_innerShadow->setShadow(m_layerStyle->innerShadow());
     m_outerGlow->setConfig(m_layerStyle->outerGlow(), m_layerStyle->resourcesInterface());
     m_innerGlow->setConfig(m_layerStyle->innerGlow(), m_layerStyle->resourcesInterface());
-    m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss());
+    m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss(), m_layerStyle->resourcesInterface());
     m_satin->setSatin(m_layerStyle->satin());
     m_colorOverlay->setColorOverlay(m_layerStyle->colorOverlay());
     m_gradientOverlay->setGradientOverlay(m_layerStyle->gradientOverlay(), m_layerStyle->resourcesInterface());
@@ -585,7 +585,7 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     m_innerShadow->fetchShadow(m_layerStyle->innerShadow());
     m_outerGlow->fetchConfig(m_layerStyle->outerGlow(), newLocalStyleResources);
     m_innerGlow->fetchConfig(m_layerStyle->innerGlow(), newLocalStyleResources);
-    m_bevelAndEmboss->fetchBevelAndEmboss(m_layerStyle->bevelAndEmboss());
+    m_bevelAndEmboss->fetchBevelAndEmboss(m_layerStyle->bevelAndEmboss(), newLocalStyleResources);
     m_satin->fetchSatin(m_layerStyle->satin());
     m_colorOverlay->fetchColorOverlay(m_layerStyle->colorOverlay());
     m_gradientOverlay->fetchGradientOverlay(m_layerStyle->gradientOverlay(), newLocalStyleResources);
@@ -613,7 +613,7 @@ void KisDlgLayerStyle::syncGlobalAngle(int angle)
     }
     if (m_layerStyle->bevelAndEmboss()->useGlobalLight()) {
         m_layerStyle->bevelAndEmboss()->setAngle(angle);
-        m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss());
+        m_bevelAndEmboss->setBevelAndEmboss(m_layerStyle->bevelAndEmboss(), m_layerStyle->resourcesInterface());
     }
 }
 
@@ -891,7 +891,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     connect(m_texture->ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 }
 
-void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss)
+void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss, KisResourcesInterfaceSP resourcesInterface)
 {
     ui.cmbStyle->setCurrentIndex((int)bevelAndEmboss->style());
     ui.cmbTechnique->setCurrentIndex((int)bevelAndEmboss->technique());
@@ -919,14 +919,17 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
     m_contour->ui.chkAntiAliased->setChecked(bevelAndEmboss->antiAliased());
     m_contour->ui.intRange->setValue(bevelAndEmboss->contourRange());
 
-    m_texture->ui.patternChooser->setCurrentPattern(bevelAndEmboss->texturePattern(KisGlobalResourcesInterface::instance()));
+    KoPatternSP patternResource = fetchPatternLazy(bevelAndEmboss->texturePatternLink(), resourcesInterface);
+    if (patternResource) {
+        m_texture->ui.patternChooser->setCurrentPattern(patternResource);
+    }
     m_texture->ui.intScale->setValue(bevelAndEmboss->textureScale());
     m_texture->ui.intDepth->setValue(bevelAndEmboss->textureDepth());
     m_texture->ui.chkInvert->setChecked(bevelAndEmboss->textureInvert());
     m_texture->ui.chkLinkWithLayer->setChecked(bevelAndEmboss->textureAlignWithLayer());
 }
 
-void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss) const
+void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss, QSharedPointer<KisLocalStrokeResources> uploadResourcesInterface) const
 {
     bevelAndEmboss->setStyle((psd_bevel_style)ui.cmbStyle->currentIndex());
     bevelAndEmboss->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
@@ -950,7 +953,13 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setAntiAliased(m_contour->ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setContourRange(m_contour->ui.intRange->value());
 
-    bevelAndEmboss->setTexturePattern(m_texture->ui.patternChooser->currentResource(true).staticCast<KoPattern>());
+    auto patternResource = m_texture->ui.patternChooser->currentResource(true).staticCast<KoPattern>();
+    if (patternResource) {
+        auto clonedPatternResource = patternResource->clone().dynamicCast<KoPattern>();
+        bevelAndEmboss->setTexturePattern(clonedPatternResource);
+        uploadResourcesInterface->addResource(clonedPatternResource);
+    }
+
     bevelAndEmboss->setTextureScale(m_texture->ui.intScale->value());
     bevelAndEmboss->setTextureDepth(m_texture->ui.intDepth->value());
     bevelAndEmboss->setTextureInvert(m_texture->ui.chkInvert->isChecked());

@@ -63,10 +63,10 @@ public:
 
     KisAdaptedLock& operator=(KisAdaptedLock &&rhs)
     {
-        static_cast<Adapter&>(*this) = rhs;
         static_cast<std::unique_lock<Adapter>&>(*this) =
             std::unique_lock<Adapter>(static_cast<Adapter&>(*this),
                                       std::adopt_lock);
+        static_cast<Adapter&>(*this) = rhs;
         rhs.release();
         return *this;
     }

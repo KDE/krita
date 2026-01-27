@@ -11,6 +11,10 @@
 #include <QScroller>
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#ifdef Q_OS_ANDROID
+#include <QDir>
+#include <QRunnable>
+#endif
 
 
 class KisMainWindow;
@@ -58,11 +62,38 @@ private Q_SLOTS:
 
     void slotScrollerStateChanged(QScroller::State state);
 
+#ifdef Q_OS_ANDROID
+    void moveFilesFromInternalSnapshotDirectory();
+    void slotInternalSnapshotMoveFinished(const QString &srcRoot);
+#endif
+
 private:
     Q_DISABLE_COPY(RecorderDockerDock)
     class Private;
     RecorderExportSettings *const exportSettings;
     Private *const d;
 };
+
+#ifdef Q_OS_ANDROID
+class RecorderDockerInternalSnapshotsMover final : public QObject, public QRunnable
+{
+    Q_OBJECT
+public:
+    RecorderDockerInternalSnapshotsMover(const QString &srcRoot, const QString &dstRoot);
+
+    void run() override;
+
+Q_SIGNALS:
+    void sigMoveFinished(const QString &srcRoot);
+
+private:
+    static constexpr QDir::Filters FILTERS = QDir::Dirs | QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot;
+
+    static void moveFromInternalSnapshotDirectory(const QDir &src, const QDir &dst);
+
+    const QString m_srcRoot;
+    const QString m_dstRoot;
+};
+#endif
 
 #endif

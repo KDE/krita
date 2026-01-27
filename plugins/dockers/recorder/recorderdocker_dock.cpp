@@ -36,10 +36,8 @@
 #include <QRegularExpression>
 
 #ifdef Q_OS_ANDROID
-#include <QAtomicInt>
 #include <QDir>
 #include <QFile>
-#include <QRunnable>
 #include <QThreadPool>
 #endif
 
@@ -89,6 +87,9 @@ public:
     bool recordIsolateLayerMode = false;
     bool recordAutomatically = false;
     bool paused = true;
+#ifdef Q_OS_ANDROID
+    bool internalMoveInProgress{false};
+#endif
     QTimer pausedTimer;
     QTimer warningTimer;
 
@@ -369,11 +370,6 @@ public:
     }
 
 #ifdef Q_OS_ANDROID
-    // We want at most one file mover to run at a time. This starts at 0, gets
-    // compared-and-set from 0 to 1 when a move starts and then set to 0 again
-    // when the move finishes. Basically a non-waitable lock.
-    static inline QAtomicInt internalMoveInProgress;
-
     void fixInternalSnapshotDirectory()
     {
         // Older versions of Krita used an internal directory as the snapshots
@@ -381,89 +377,14 @@ public:
         // the user can't access it. That means the files stored there are stuck
         // inaccessible and once the user picks a "real" directory, they can no
         // longer even delete the files. So here we're rectifying the situation.
-        const QString &internalPath = RecorderConfig::defaultInternalSnapshotDirectory();
-
-        if (snapshotDirectory == internalPath) {
+        if (snapshotDirectory == RecorderConfig::defaultInternalSnapshotDirectory()) {
             // Internal path got persisted to settings. Clear that out, replace
             // it with the default of nothing.
             snapshotDirectory = QString();
-
-        } else if (!snapshotDirectory.isEmpty() && QFileInfo::exists(internalPath)
-                   && internalMoveInProgress.testAndSetOrdered(0, 1)) {
-            // The user has picked a directory to record to, but the nonsense
-            // internal directory is present and may have stuff inside that
-            // would become effectively inaccessible. To fix that, we move the
-            // files over to the selected directory. Of course moving files on
-            // Android is gobsmackingly slow, so we'll have to do it in the
-            // background to not lock the UI for ages. The moving should be
-            // re-entrant, so getting interrupted and continuing later is fine.
-            qWarning().nospace() << "Moving recordings stuck in internal directory '" << internalPath
-                                 << "' to selected directory '" << snapshotDirectory << "'";
-            QThreadPool::globalInstance()->start(new InternalSnapshotsMover(internalPath, snapshotDirectory));
+        } else {
+            q->moveFilesFromInternalSnapshotDirectory();
         }
     }
-
-    class InternalSnapshotsMover final : public QRunnable
-    {
-    public:
-        InternalSnapshotsMover(const QString &srcRoot, const QString &dstRoot)
-            : m_srcRoot(srcRoot)
-            , m_dstRoot(dstRoot)
-        {
-        }
-
-        void run() override
-        {
-            moveFromInternalSnapshotDirectory(QDir(m_srcRoot), QDir(m_dstRoot));
-            if (!QDir().rmdir(m_srcRoot)) {
-                qWarning().nospace() << "Failed to remove root directory '" << m_srcRoot << "'";
-            }
-            internalMoveInProgress.storeRelease(0);
-        }
-
-    private:
-        static constexpr QDir::Filters FILTERS = QDir::Dirs | QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot;
-
-        static void moveFromInternalSnapshotDirectory(const QDir &src, const QDir &dst)
-        {
-            for (const QFileInfo &srcInfo : src.entryInfoList(FILTERS)) {
-                QString srcName = srcInfo.fileName();
-                QString dstPath = dst.filePath(srcName);
-
-                if (srcInfo.isDir()) {
-                    // Move the directory over recursively.
-                    if (dst.mkpath(dstPath)) {
-                        moveFromInternalSnapshotDirectory(QDir(srcInfo.filePath()), QDir(dstPath));
-                    } else {
-                        qWarning().nospace()
-                            << "Failed to create directory '" << dstPath << "' in '" << dst.path() << "'";
-                    }
-
-                    // Removal will fail if the directory is non-empty, so we
-                    // can just attempt it unconditionally.
-                    if (!src.rmdir(srcName)) {
-                        qWarning().nospace()
-                            << "Failed to remove directory '" << srcName << "' in '" << src.path() << "'";
-                    }
-
-                } else {
-                    QFile srcFile(srcInfo.filePath());
-                    // Rename refuses to replace files in the destination, so
-                    // try to remove that first. The only reason it should
-                    // already exist is if a previous attempt to move the file
-                    // partially copied it and then got interrupted.
-                    QFile::remove(dstPath);
-                    if (!srcFile.rename(dstPath)) {
-                        qWarning().nospace() << "Error " << srcFile.error() << " moving '" << srcFile.fileName()
-                                             << "' to '" << dstPath << "': " << srcFile.errorString();
-                    }
-                }
-            }
-        }
-
-        const QString m_srcRoot;
-        const QString m_dstRoot;
-    };
 #endif
 };
 
@@ -851,3 +772,92 @@ void RecorderDockerDock::slotScrollerStateChanged(QScroller::State state)
 {
     KisKineticScroller::updateCursor(this, state);
 }
+
+#ifdef Q_OS_ANDROID
+void RecorderDockerDock::moveFilesFromInternalSnapshotDirectory()
+{
+    if (!d->internalMoveInProgress) {
+        const QString &internalPath = RecorderConfig::defaultInternalSnapshotDirectory();
+        if (!d->snapshotDirectory.isEmpty() && QFileInfo::exists(internalPath)) {
+            // The user has picked a directory to record to, but the nonsense
+            // internal directory is present and may have stuff inside that
+            // would become effectively inaccessible. To fix that, we move the
+            // files over to the selected directory. Of course moving files on
+            // Android is gobsmackingly slow, so we'll have to do it in the
+            // background to not lock the UI for ages. The moving should be
+            // re-entrant, so getting interrupted and continuing later is fine.
+            qWarning().nospace() << "Moving recordings stuck in internal directory '" << internalPath
+                                 << "' to selected directory '" << d->snapshotDirectory << "'";
+            RecorderDockerInternalSnapshotsMover *mover =
+                new RecorderDockerInternalSnapshotsMover(internalPath, d->snapshotDirectory);
+            connect(mover,
+                    &RecorderDockerInternalSnapshotsMover::sigMoveFinished,
+                    this,
+                    &RecorderDockerDock::slotInternalSnapshotMoveFinished,
+                    Qt::QueuedConnection);
+            d->internalMoveInProgress = true;
+            QThreadPool::globalInstance()->start(mover);
+        }
+    }
+}
+
+void RecorderDockerDock::slotInternalSnapshotMoveFinished(const QString &srcRoot)
+{
+    d->internalMoveInProgress = false;
+    if (srcRoot != d->snapshotDirectory) {
+        // Directory changed meanwhile, trigger another move.
+        moveFilesFromInternalSnapshotDirectory();
+    }
+}
+
+RecorderDockerInternalSnapshotsMover::RecorderDockerInternalSnapshotsMover(const QString &srcRoot,
+                                                                           const QString &dstRoot)
+    : m_srcRoot(srcRoot)
+    , m_dstRoot(dstRoot)
+{
+}
+
+void RecorderDockerInternalSnapshotsMover::run()
+{
+    moveFromInternalSnapshotDirectory(QDir(m_srcRoot), QDir(m_dstRoot));
+    if (!QDir().rmdir(m_srcRoot)) {
+        qWarning().nospace() << "Failed to remove root directory '" << m_srcRoot << "'";
+    }
+    Q_EMIT sigMoveFinished(m_srcRoot);
+}
+
+void RecorderDockerInternalSnapshotsMover::moveFromInternalSnapshotDirectory(const QDir &src, const QDir &dst)
+{
+    for (const QFileInfo &srcInfo : src.entryInfoList(FILTERS)) {
+        QString srcName = srcInfo.fileName();
+        QString dstPath = dst.filePath(srcName);
+
+        if (srcInfo.isDir()) {
+            // Move the directory over recursively.
+            if (dst.mkpath(dstPath)) {
+                moveFromInternalSnapshotDirectory(QDir(srcInfo.filePath()), QDir(dstPath));
+            } else {
+                qWarning().nospace() << "Failed to create directory '" << dstPath << "' in '" << dst.path() << "'";
+            }
+
+            // Removal will fail if the directory is non-empty, so we
+            // can just attempt it unconditionally.
+            if (!src.rmdir(srcName)) {
+                qWarning().nospace() << "Failed to remove directory '" << srcName << "' in '" << src.path() << "'";
+            }
+
+        } else {
+            QFile srcFile(srcInfo.filePath());
+            // Rename refuses to replace files in the destination, so
+            // try to remove that first. The only reason it should
+            // already exist is if a previous attempt to move the file
+            // partially copied it and then got interrupted.
+            QFile::remove(dstPath);
+            if (!srcFile.rename(dstPath)) {
+                qWarning().nospace() << "Error " << srcFile.error() << " moving '" << srcFile.fileName() << "' to '"
+                                     << dstPath << "': " << srcFile.errorString();
+            }
+        }
+    }
+}
+#endif

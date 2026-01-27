@@ -19,7 +19,7 @@ For branch: `master`
 | Freeze type    | Status                                                               |
 |----------------|----------------------------------------------------------------------|
 | Feature Freeze | freeze, features are not allowed                                     |
-| String Freeze  | soft-freeze, strings are still allowed but are not welcome anymore   |
+| String Freeze  | freeze, strings are not allowed                                      |
 
 
 ### User Manual

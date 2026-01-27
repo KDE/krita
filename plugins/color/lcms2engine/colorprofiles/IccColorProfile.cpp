@@ -107,7 +107,9 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
                                  const TransferCharacteristics transferFunction)
 : KoColorProfile(QString()), d(new Private)
 {
-    KIS_ASSERT(
+    d->shared = QSharedPointer<Private::Shared>::create();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(
         (!colorants.isEmpty() || colorPrimariesType != PRIMARIES_UNSPECIFIED)
         && transferFunction != TRC_UNSPECIFIED);
 
@@ -144,7 +146,7 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
         iccProfile = cmsCreateRGBProfile(&whitePoint, &primaries, curve);
     }
 
-    KIS_ASSERT(iccProfile);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(iccProfile);
 
     QStringList name;
     name.append("Krita");
@@ -166,8 +168,6 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
     cmsMLUfree (mlu);
 
     setCharacteristics(colorPrimariesType, transferFunction);
-
-    d->shared = QSharedPointer<Private::Shared>::create();
 
     setRawData(LcmsColorProfileContainer::lcmsProfileToByteArray(iccProfile));
     cmsCloseProfile(iccProfile);

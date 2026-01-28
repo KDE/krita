@@ -34,6 +34,12 @@ public:
     QString colorManagementReport() const;
     QString osPreferredColorSpaceReport() const;
 
+    /**
+     * Non-empty string means there was an error with setting up the
+     * surface format
+     */
+    QString lastErrorString() const;
+
 Q_SIGNALS:
     void sigDisplayConfigChanged(const KisDisplayConfig &config);
 

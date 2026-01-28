@@ -146,7 +146,14 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
         iccProfile = cmsCreateRGBProfile(&whitePoint, &primaries, curve);
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(iccProfile);
+    if (!iccProfile) {
+        qWarning() << "WARNING: LCMS failed to create a profile for the requested parameters";
+        qWarning().nospace() << "    transfer function: " << getTransferCharacteristicName(transferFunction) << " (" << transferFunction << ")";
+        qWarning().nospace() << "    named primaries:" << getColorPrimariesName(colorPrimariesType) << " (" << colorPrimariesType << ")";
+        qWarning() << "    requested colorants:" << colorants;
+        // leave the profile in invalid state and return
+        return;
+    }
 
     QStringList name;
     name.append("Krita");

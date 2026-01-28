@@ -355,7 +355,20 @@ selectSurfaceDescription(KisConfig::CanvasSurfaceMode requestedSurfaceMode, cons
     }
 
     if (!profile) {
-        // keep primaries, but change the transfer function to srgb
+        // try resetting primaries to srgb
+        requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_srgb;
+        if (this->interface->supportsSurfaceDescription(*requestedDescription)) {
+            auto request = colorSpaceToRequest(requestedDescription->colorSpace);
+            if (request.isValid()) {
+                profile = KoColorSpaceRegistry::instance()->profileFor(request.colorants,
+                                                                       request.colorPrimariesType,
+                                                                       request.transferFunction);
+            }
+        }
+    }
+
+    if (!profile) {
+        // now change the transfer function to srgb
         requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_srgb;
         if (this->interface->supportsSurfaceDescription(*requestedDescription)) {
             auto request = colorSpaceToRequest(requestedDescription->colorSpace);

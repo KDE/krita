@@ -49,20 +49,21 @@
 # SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2016 Maik Wagner <linuxandlanguages@t-online.de>
 # SPDX-FileCopyrightText: 2021, 2024 tobi <onewayme001@posteo.de>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 03:31+0000\n"
-"PO-Revision-Date: 2025-02-16 11:21+0100\n"
-"Last-Translator: oneway <onewayme001@posteo.de>\n"
+"PO-Revision-Date: 2026-01-24 02:21+0100\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -37338,14 +37339,14 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>Sie brauchen kein Programmierer zu sein, um ein Mitglied des KDE-Teams "
-"zu werden. Sie können den nationalen Gruppen beitreten, die "
-"Programmoberflächen übersetzen. Sie können Grafik, Design, Klänge oder "
-"verbesserte Dokumentation beitragen. Entscheiden Sie selbst.<br /><br /"
-">Besuchen Sie bitte <a href=\"%1\">%1</a>, um Information über Projekte zu "
-"erhalten, an denen Sie sich beteiligen können.<br /><br />Wenn Sie mehr "
-"Information oder Dokumentation benötigen, besuchen Sie <a href=\"%2\">%2</"
-"a>. Dort finden Sie, was Sie brauchen.</html>"
+"<html>Sie müssen kein Programmierer sein, um Mitglied des KDE-Teams zu "
+"werden. Sie können den Sprachgruppen beitreten, die Programmoberflächen "
+"übersetzen. Sie können Grafiken, Designs, Klänge oder verbesserte "
+"Dokumentation beitragen. Entscheiden Sie selbst!<br /><br />Besuchen Sie <a "
+"href=\"%1\">%1</a>, um Information über Projekte zu erhalten, an denen Sie "
+"sich beteiligen können.<br /><br />Wenn Sie weitere Informationen oder "
+"Dokumentation benötigen, besuchen Sie <a href=\"%2\">%2</a>. Dort finden "
+"Sie, was Sie brauchen.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:116
 #, kde-format

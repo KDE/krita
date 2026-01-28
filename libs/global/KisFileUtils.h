@@ -8,6 +8,7 @@
 #define KISFILEUTILS_H
 
 #include "kritaglobal_export.h"
+#include <functional>
 
 
 class QString;
@@ -23,7 +24,9 @@ namespace KritaUtils {
  */
 QString KRITAGLOBAL_EXPORT resolveAbsoluteFilePath(const QString &baseDir, const QString &filePath);
 
-
+QString KRITAGLOBAL_EXPORT deduplicateFileName(const QString &fileName,
+                                               const QString &separator,
+                                               std::function<bool(QString)> fileAllowedCallback);
 }
 
 #endif // KISFILEUTILS_H

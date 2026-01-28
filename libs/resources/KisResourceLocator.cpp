@@ -28,6 +28,7 @@
 #include <kis_assert.h>
 #include <kis_debug.h>
 #include <KisUsageLogger.h>
+#include <KisFileUtils.h>
 
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
@@ -601,21 +602,13 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
 namespace {
 QString findDeduplicatedFileName(const QString &resourceType, const QString &proposedFileName, KisResourceStorageSP storage)
 {
-    const QFileInfo fileInfo(proposedFileName);
-    QString fileName = fileInfo.fileName();
-    int counter = 0;
 
-    Q_FOREVER {
+    auto fileAllowedCallback = [resourceType, storage] (const QString &fileName) {
         QString resourceUrl = resourceType + "/" + fileName;
+        return !storage->resource(resourceUrl);
+    };
 
-        if (storage->resource(resourceUrl)) {
-            fileName =
-                QString("%1_embedded_%2.%3").arg(fileInfo.baseName()).arg(counter++).arg(fileInfo.completeSuffix());
-        } else {
-            break;
-        }
-    }
-    return fileName;
+    return KritaUtils::deduplicateFileName(proposedFileName, "_embedded_", fileAllowedCallback);
 }
 }
 

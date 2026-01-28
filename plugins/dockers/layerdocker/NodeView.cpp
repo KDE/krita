@@ -33,6 +33,9 @@
 
 #include "kis_node_view_color_scheme.h"
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#define QT6_SHIFT_SELECTION_WORKAROUND
+#endif
 
 #ifdef HAVE_X11
 #define DRAG_WHILE_DRAG_WORKAROUND
@@ -55,6 +58,9 @@ public:
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
         , isDragging(false)
 #endif
+#ifdef QT6_SHIFT_SELECTION_WORKAROUND
+        , shiftClickFix(false)
+#endif
     {
     }
     NodeDelegate delegate;
@@ -63,6 +69,9 @@ public:
 
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
     bool isDragging;
+#endif
+#ifdef QT6_SHIFT_SELECTION_WORKAROUND
+    bool shiftClickFix;
 #endif
 };
 
@@ -148,16 +157,36 @@ void NodeView::toggleSolo(const QModelIndex &index) {
     d->delegate.toggleSolo(index);
 }
 
-QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex &index, const QEvent *event) const
-{
-    //Block selection on press if ctrl is held
-    //This is to allow for a more consistent behaviour with ctrl+dnd
-    if (event &&
-        event->type() == QEvent::MouseButtonPress ) {
-        const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
-        if (mevent->modifiers() & Qt::ControlModifier)
-            return QItemSelectionModel::NoUpdate;
+QItemSelectionModel::SelectionFlags  NodeView::selectionCommand(const QModelIndex &index, const QEvent *event) const {
+    //When adding a layer with Shift or Ctrl is held, the selection will expand to add that new layer,
+    //So to avoid that we explicitly select the new layer.
+    if (!event && QApplication::keyboardModifiers() != Qt::NoModifier
+#ifdef QT6_SHIFT_SELECTION_WORKAROUND
+        && !d->shiftClickFix
+#endif
+    ) {
+#ifdef QT6_SHIFT_SELECTION_WORKAROUND
+        d->shiftClickFix = false;
+#endif
+        return QItemSelectionModel::ClearAndSelect;
     }
+
+#ifdef QT6_SHIFT_SELECTION_WORKAROUND
+    //Clear this just in case
+    d->shiftClickFix = false;
+
+    //Qt6 has a bug/feature? where after you do a shift selection it sends a second selection event with the event argument being null
+    //This triggers the logic above, so we explicitly avoid the next null event
+    if (event &&
+        (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::KeyPress) &&
+        QApplication::keyboardModifiers() & Qt::ShiftModifier)
+      d->shiftClickFix = true;
+#endif
+
+    //We still get ctrl click events so we need to ignore those
+    if (event &&
+        event->type() == QEvent::MouseButtonPress && (static_cast<const QMouseEvent*>(event)->modifiers() & Qt::ControlModifier))
+        return QItemSelectionModel::NoUpdate;
 
     return QTreeView::selectionCommand(index, event);
 }
@@ -192,6 +221,16 @@ bool NodeView::viewportEvent(QEvent *e)
             QModelIndex index = model()->buddy(indexAt(pos));
             if (d->delegate.editorEvent(e, model(), optionForIndex(index), index)) {
                 return true;
+            }
+        } break;
+        case QEvent::MouseButtonRelease: {
+            const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
+            QModelIndex index = model()->buddy(indexAt(pos));
+            if (!indexAt(pos).isValid()) {
+                return QTreeView::viewportEvent(e);
+            }
+            if (d->delegate.editorEvent(e, model(), optionForIndex(index), index)) {
+               return true;
             }
         } break;
         case QEvent::Leave: {

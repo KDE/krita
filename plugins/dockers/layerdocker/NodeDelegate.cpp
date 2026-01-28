@@ -1037,6 +1037,20 @@ NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &m
 
 bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
+    //Explicitly handle mouse release events
+    if (event->type() == QEvent::MouseButtonRelease &&index.flags() & Qt::ItemIsEnabled)  {
+        //For some reason qt5 doesn't give us which button was released, From my testing i couldn't get a release event on rmb, so we assume that it's lmb
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), option);
+        if (!clickedProperty && mouseEvent->modifiers() == Qt::ControlModifier) {
+            changeSelectionAndCurrentIndex(index);
+            return true;
+        }
+
+        //We only need this event for ctrl clicks, so we just return here
+        return false;
+    }
+
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
         && (index.flags() & Qt::ItemIsEnabled))
     {
@@ -1127,6 +1141,10 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                         model->setData(index, true, KisNodeModel::AlternateActiveRole);
 
                         return true;
+                    } else if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                        //Don't do anything here when ctrl is pressed but still pass through the event
+                        //If we don't, the internal state of QTreeView WILL break
+                        return false;
                     }
                     return false;
                 }

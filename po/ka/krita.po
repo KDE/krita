@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 02:11+0000\n"
+"POT-Creation-Date: 2026-01-28 02:07+0000\n"
 "PO-Revision-Date: 2025-04-26 07:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -20803,14 +20803,14 @@ msgstr "ზომა"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:751
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:755
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:961
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:968
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:835
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:839
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1054
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1061
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1240
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1486
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -21138,7 +21138,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "ფილტრი"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1283
+#: libs/image/kis_asl_layer_style_serializer.cpp:1288
 #, kde-format
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
@@ -21634,7 +21634,7 @@ msgstr "ფაილის ფენად გარდაქმნა"
 msgid "Processing"
 msgstr "დამუშავება"
 
-#: libs/image/kis_psd_layer_style.cpp:104
+#: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
 #: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
@@ -23799,7 +23799,7 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
@@ -23882,67 +23882,67 @@ msgstr "შესანახად ფაილის შენახვის 
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:816
+#: libs/resources/KisResourceLocator.cpp:859
 #, fuzzy, kde-format
 #| msgctxt "Error message when saving a .kra file"
 #| msgid "Could not save audio meta data."
 msgid "Could not add %1 to the database"
 msgstr "აუდიოს მეტამონაცემების შენახვა შეუძლებელია."
 
-#: libs/resources/KisResourceLocator.cpp:860
-#: libs/resources/KisResourceLocator.cpp:1221
+#: libs/resources/KisResourceLocator.cpp:903
+#: libs/resources/KisResourceLocator.cpp:1264
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:973
+#: libs/resources/KisResourceLocator.cpp:1016
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:981
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:988
+#: libs/resources/KisResourceLocator.cpp:1031
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "შესანახად ფაილის შენახვის შეცდომა"
 
-#: libs/resources/KisResourceLocator.cpp:1001
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1060
 #, fuzzy, kde-format
 #| msgid "Could not open %1."
 msgid "Could not copy resource %1 to %2"
 msgstr "%1-ის გახნის შეცდომა."
 
-#: libs/resources/KisResourceLocator.cpp:1013
+#: libs/resources/KisResourceLocator.cpp:1056
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1041
+#: libs/resources/KisResourceLocator.cpp:1084
 #, kde-format
 msgid "Temporary Resources"
 msgstr "დროებითი რესურსები"
 
-#: libs/resources/KisResourceLocator.cpp:1047
+#: libs/resources/KisResourceLocator.cpp:1090
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "ფონტის საცავი"
 
-#: libs/resources/KisResourceLocator.cpp:1170
+#: libs/resources/KisResourceLocator.cpp:1213
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "რესურსების ინიციალიზაცია."
 
-#: libs/resources/KisResourceLocator.cpp:1183
-#: libs/resources/KisResourceLocator.cpp:1191
+#: libs/resources/KisResourceLocator.cpp:1226
+#: libs/resources/KisResourceLocator.cpp:1234
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr ""
@@ -26363,7 +26363,7 @@ msgstr "FFMpeg-ის ვერსია:"
 msgid "None"
 msgstr "არაფერი"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1534
+#: libs/ui/canvas/kis_canvas2.cpp:1535
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -26791,29 +26791,29 @@ msgid "Layer Properties"
 msgstr "ფენის თვისებები"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:748
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:766
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:769
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:788
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:797
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:801
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:925
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:958
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:965
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:972
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1101
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1104
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1177
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1180
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1187
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1190
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1307
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1310
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1349
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:832
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:850
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:853
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:872
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:881
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:885
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1018
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1051
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1058
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1065
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1156
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1159
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1231
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1234
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1237
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1244
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1247
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1365
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1368
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1416
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1496
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1758
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
@@ -26881,50 +26881,50 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "ფენის თვისებების შეცვლა"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:108
 #, kde-format
 msgid "Layer Styles"
 msgstr "ფენის სტილები"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:276
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "შეიყვანეთ ახალი სტილის სახელი"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:320 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "სახელი:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:279
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:322
 #, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "ახალი სტილი"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:333
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:397
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:381
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:445
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgid "Select ASL file"
 msgstr "ყველაფრის მონიშვნა"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:403
 #, fuzzy, kde-format
 #| msgid "Could not load %1."
 msgid "Could not load layer style library %1."
 msgstr "შეცდომა %1-ის ჩატვირთვისას."
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "გაფრთხილება"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:370
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:418
 #, fuzzy, kde-format
 #| msgid ""
 #| "A profile with that name already exists.\n"
@@ -26936,32 +26936,32 @@ msgstr ""
 "პროფილი ამ სახლით უკვე არსებობს.\n"
 "გნებავთ, თავზე გადააწეროთ მას?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:908
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1001
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
 msgstr "ჯერ განხორციელებული არაა"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:995
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, kde-format
 msgid "Inner Shadow"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:996
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1089
 #, kde-format
 msgid "Choke:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1227
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1273
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "The 'spread' spinbox in fill tool options; {n} is the number value, % is "

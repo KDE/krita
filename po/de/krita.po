@@ -49,20 +49,21 @@
 # SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2016 Maik Wagner <linuxandlanguages@t-online.de>
 # SPDX-FileCopyrightText: 2021, 2024 tobi <onewayme001@posteo.de>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 02:11+0000\n"
-"PO-Revision-Date: 2025-02-16 11:21+0100\n"
-"Last-Translator: oneway <onewayme001@posteo.de>\n"
+"POT-Creation-Date: 2026-01-28 02:07+0000\n"
+"PO-Revision-Date: 2026-01-24 02:21+0100\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -21947,14 +21948,14 @@ msgstr "Größe"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:751
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:755
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:961
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:968
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:835
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:839
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1054
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1061
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1240
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1486
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -22289,7 +22290,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1283
+#: libs/image/kis_asl_layer_style_serializer.cpp:1288
 #, kde-format
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
@@ -22796,7 +22797,7 @@ msgstr "In Malebene umwandeln"
 msgid "Processing"
 msgstr "In Bearbeitung"
 
-#: libs/image/kis_psd_layer_style.cpp:104
+#: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
 #: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
@@ -24967,7 +24968,7 @@ msgstr "Lokale Ressourcen"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
@@ -25049,67 +25050,67 @@ msgstr "1. Der Speicherort der Ressource kann nicht in %1 erstellt werden."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Der Speicherort %1 der Ressource ist nicht beschreibbar."
 
-#: libs/resources/KisResourceLocator.cpp:816
+#: libs/resources/KisResourceLocator.cpp:859
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1 kann nicht zur Datenbank hinzugefügt werden"
 
-#: libs/resources/KisResourceLocator.cpp:860
-#: libs/resources/KisResourceLocator.cpp:1221
+#: libs/resources/KisResourceLocator.cpp:903
+#: libs/resources/KisResourceLocator.cpp:1264
 #, fuzzy, kde-format
 #| msgid "Couldn't remove bundle \"%1\" from blacklist"
 msgid "Could not remove storage %1 from the database"
 msgstr "Das Paket „%1“ kann nicht aus der Negativliste entfernt werden."
 
-#: libs/resources/KisResourceLocator.cpp:973
+#: libs/resources/KisResourceLocator.cpp:1016
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "%1 kann nicht mit der Datenbank abgeglichen werden"
 
-#: libs/resources/KisResourceLocator.cpp:981
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita wurde zum ersten Mal gestartet, die Initialisierung dauert einige Zeit."
 
-#: libs/resources/KisResourceLocator.cpp:988
+#: libs/resources/KisResourceLocator.cpp:1031
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Der Speicherort der Ressource kann nicht in %1 erstellt werden."
 
-#: libs/resources/KisResourceLocator.cpp:1001
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1060
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Kopieren der Ressource %1 nach %2 nicht möglich"
 
-#: libs/resources/KisResourceLocator.cpp:1013
+#: libs/resources/KisResourceLocator.cpp:1056
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Die Ressource aus dem Paket %1 wird installiert."
 
-#: libs/resources/KisResourceLocator.cpp:1041
+#: libs/resources/KisResourceLocator.cpp:1084
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Temporäre Ressourcen"
 
-#: libs/resources/KisResourceLocator.cpp:1047
+#: libs/resources/KisResourceLocator.cpp:1090
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "Schriftstil"
 
-#: libs/resources/KisResourceLocator.cpp:1170
+#: libs/resources/KisResourceLocator.cpp:1213
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "Ressourcen werden initialisiert."
 
-#: libs/resources/KisResourceLocator.cpp:1183
-#: libs/resources/KisResourceLocator.cpp:1191
+#: libs/resources/KisResourceLocator.cpp:1226
+#: libs/resources/KisResourceLocator.cpp:1234
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1 kann nicht mit der Datenbank abgeglichen werden"
@@ -27663,7 +27664,7 @@ msgstr "FFMpeg-Version: Keine"
 msgid "None"
 msgstr "Keine"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1534
+#: libs/ui/canvas/kis_canvas2.cpp:1535
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -28094,29 +28095,29 @@ msgid "Layer Properties"
 msgstr "Ebenen-Eigenschaften"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:748
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:766
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:769
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:788
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:797
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:801
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:925
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:958
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:965
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:972
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1101
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1104
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1177
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1180
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1187
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1190
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1307
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1310
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1349
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:832
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:850
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:853
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:872
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:881
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:885
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1018
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1051
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1058
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1065
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1156
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1159
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1231
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1234
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1237
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1244
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1247
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1365
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1368
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1416
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1496
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1758
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
@@ -28184,42 +28185,42 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Ebenen-Eigenschaften ändern"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:108
 #, kde-format
 msgid "Layer Styles"
 msgstr "Ebenenstile"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:276
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Neuen Stilnamen eingeben"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:320 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Name:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:279
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:322
 #, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "Neuer Stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:333
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:397
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:381
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:445
 #, kde-format
 msgid "Select ASL file"
 msgstr "ASL-Datei auswählen"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:403
 #, fuzzy, kde-format
 #| msgid "Could not load raster selection %1."
 msgid "Could not load layer style library %1."
 msgstr "Die Rasterauswahl %1 kann nicht geladen werden."
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
 #, fuzzy, kde-format
 #| msgctxt "@ttile:window"
@@ -28228,7 +28229,7 @@ msgctxt "@title:window"
 msgid "Warning"
 msgstr "Warnung"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:370
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:418
 #, fuzzy, kde-format
 #| msgid ""
 #| "A profile with that name already exists.\n"
@@ -28240,32 +28241,32 @@ msgstr ""
 "Ein Profil mit diesem Namen existiert bereits.\n"
 "Möchten Sie es überschreiben?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:908
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1001
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
 msgstr "Noch nicht verfügbar"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:995
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, fuzzy, kde-format
 msgid "Inner Shadow"
 msgstr "Schattenwurf"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:996
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1089
 #, kde-format
 msgid "Choke:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1227
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1273
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -42014,14 +42015,14 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>Sie brauchen kein Programmierer zu sein, um ein Mitglied des KDE-Teams "
-"zu werden. Sie können den nationalen Gruppen beitreten, die "
-"Programmoberflächen übersetzen. Sie können Grafik, Design, Klänge oder "
-"verbesserte Dokumentation beitragen. Entscheiden Sie selbst.<br /><br /"
-">Besuchen Sie bitte <a href=\"%1\">%1</a>, um Information über Projekte zu "
-"erhalten, an denen Sie sich beteiligen können.<br /><br />Wenn Sie mehr "
-"Information oder Dokumentation benötigen, besuchen Sie <a href=\"%2\">%2</"
-"a>. Dort finden Sie, was Sie brauchen.</html>"
+"<html>Sie müssen kein Programmierer sein, um Mitglied des KDE-Teams zu "
+"werden. Sie können den Sprachgruppen beitreten, die Programmoberflächen "
+"übersetzen. Sie können Grafiken, Designs, Klänge oder verbesserte "
+"Dokumentation beitragen. Entscheiden Sie selbst!<br /><br />Besuchen Sie <a "
+"href=\"%1\">%1</a>, um Information über Projekte zu erhalten, an denen Sie "
+"sich beteiligen können.<br /><br />Wenn Sie weitere Informationen oder "
+"Dokumentation benötigen, besuchen Sie <a href=\"%2\">%2</a>. Dort finden "
+"Sie, was Sie brauchen.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:115
 #, kde-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 02:11+0000\n"
+"POT-Creation-Date: 2026-01-28 02:07+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -21690,14 +21690,14 @@ msgstr "Ўлчами:"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:751
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:755
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:961
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:968
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:835
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:839
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1054
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1061
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1240
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1486
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -22048,7 +22048,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Филтерни танлаш"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1283
+#: libs/image/kis_asl_layer_style_serializer.cpp:1288
 #, kde-format
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
@@ -22572,7 +22572,7 @@ msgstr "Юнончага айлантириш"
 msgid "Processing"
 msgstr "Жойлашиши:"
 
-#: libs/image/kis_psd_layer_style.cpp:104
+#: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
 #: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
@@ -24776,7 +24776,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
@@ -24861,39 +24861,39 @@ msgstr "Сақлаш учун файлни яратиб бўлмади"
 msgid "2. The resource location at %1 is not writable."
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: libs/resources/KisResourceLocator.cpp:816
+#: libs/resources/KisResourceLocator.cpp:859
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not add %1 to the database"
 msgstr "Расмни юклаб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:860
-#: libs/resources/KisResourceLocator.cpp:1221
+#: libs/resources/KisResourceLocator.cpp:903
+#: libs/resources/KisResourceLocator.cpp:1264
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "Could not remove storage %1 from the database"
 msgstr "Файлнинг бошини ўқиб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:973
+#: libs/resources/KisResourceLocator.cpp:1016
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Расмни юклаб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:981
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:988
+#: libs/resources/KisResourceLocator.cpp:1031
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: libs/resources/KisResourceLocator.cpp:1001
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1060
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -24903,32 +24903,32 @@ msgstr ""
 "%1 файлини очиб бўлмади.\n"
 "Сабаб: %2"
 
-#: libs/resources/KisResourceLocator.cpp:1013
+#: libs/resources/KisResourceLocator.cpp:1056
 #, fuzzy, kde-format
 #| msgid "Could not export file."
 msgid "Installing the resources from bundle %1."
 msgstr "Файлни экспорт қилиб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:1041
+#: libs/resources/KisResourceLocator.cpp:1084
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Temporary Resources"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: libs/resources/KisResourceLocator.cpp:1047
+#: libs/resources/KisResourceLocator.cpp:1090
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Font Storage"
 msgstr "Шрифтни танлаш"
 
-#: libs/resources/KisResourceLocator.cpp:1170
+#: libs/resources/KisResourceLocator.cpp:1213
 #, fuzzy, kde-format
 msgid "Synchronizing the resources."
 msgstr "Матнни ўчириш"
 
-#: libs/resources/KisResourceLocator.cpp:1183
-#: libs/resources/KisResourceLocator.cpp:1191
+#: libs/resources/KisResourceLocator.cpp:1226
+#: libs/resources/KisResourceLocator.cpp:1234
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not synchronize %1 with the database"
@@ -27453,7 +27453,7 @@ msgstr "Версия"
 msgid "None"
 msgstr "Йўқ"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1534
+#: libs/ui/canvas/kis_canvas2.cpp:1535
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -27906,29 +27906,29 @@ msgid "Layer Properties"
 msgstr "Рўйхатнинг турини ўзгартириш"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:748
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:766
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:769
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:788
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:797
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:801
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:925
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:958
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:965
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:972
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1101
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1104
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1177
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1180
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1187
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1190
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1307
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1310
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1349
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:832
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:850
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:853
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:872
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:881
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:885
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1018
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1051
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1058
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1065
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1156
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1159
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1231
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1234
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1237
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1244
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1247
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1365
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1368
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1416
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1496
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1758
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
@@ -27998,54 +27998,54 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Рўйхатнинг турини ўзгартириш"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:108
 #, fuzzy, kde-format
 #| msgid "St&yle"
 msgid "Layer Styles"
 msgstr "&Услуб"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:276
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Гуруҳнинг номини киритинг:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:320 libs/ui/KisMainWindow.cpp:2663
 #, fuzzy, kde-format
 #| msgid "Name:"
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Номи:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:279
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:322
 #, fuzzy, kde-format
 #| msgid "St&yle"
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "&Услуб"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:333
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:397
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:381
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:445
 #, fuzzy, kde-format
 #| msgid "&Select..."
 msgid "Select ASL file"
 msgstr "&Танлаш"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:403
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load layer style library %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "чизма"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:370
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:418
 #, fuzzy, kde-format
 #| msgid ""
 #| "A document with this name already exists.\n"
@@ -28057,34 +28057,34 @@ msgstr ""
 "Ҳудди шундай номли ҳужжат аллақачон мавжуд.\n"
 "Уни алмаштиришни истайсизми?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:908
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1001
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, fuzzy, kde-format
 msgid "Not Implemented Yet"
 msgstr "Услубларни импорт қилиш"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:995
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, fuzzy, kde-format
 #| msgid "Text Shadow"
 msgid "Inner Shadow"
 msgstr "Матннинг сояси"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:996
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1089
 #, kde-format
 msgid "Choke:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1227
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, fuzzy, kde-format
 #| msgid "Text Shadow"
 msgid "Outer Glow"
 msgstr "Матннинг сояси"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1273
 #, fuzzy, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"

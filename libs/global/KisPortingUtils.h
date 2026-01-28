@@ -36,21 +36,21 @@ inline int getScreenNumberForWidget(const QWidget *w)
     return screens.indexOf(QGuiApplication::primaryScreen());
 }
 
-inline void stringRemoveLast(QString &str)
+inline QString stringRemoveLast(QString str)
 {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    str.remove(str.size() - 1, 1);
+    return !str.isEmpty() ? str.remove(str.size() - 1, 1) : str;
 #else
-    str.removeLast();
+    return str.removeLast();
 #endif
 }
 
-inline void stringRemoveFirst(QString &str)
+inline QString stringRemoveFirst(QString str)
 {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    str.remove(0, 1);
+    return !str.isEmpty() ? str.remove(0, 1) : str;
 #else
-    str.removeFirst();
+    return str.removeFirst();
 #endif
 }
 

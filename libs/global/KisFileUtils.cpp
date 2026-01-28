@@ -10,6 +10,8 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QRegularExpression>
+#include <KisPortingUtils.h>
+
 
 namespace KritaUtils {
 
@@ -51,8 +53,9 @@ QString deduplicateFileName(const QString &fileName,
     auto match = rex.match(proposedFileName);
 
     if (match.hasMatch()) {
+        using KisPortingUtils::stringRemoveFirst;
         baseName = match.captured(1);
-        completeSuffix = match.captured(2).removeFirst();
+        completeSuffix = stringRemoveFirst(match.captured(2));
     }
 
     while (!fileAllowedCallback(proposedFileName)) {

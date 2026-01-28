@@ -83,13 +83,13 @@ void KoZoomAction::slotTextZoomChanged(const QString &value)
 
         QString trimmedValue = value.trimmed();
         if (trimmedValue.endsWith('%')) {
-            stringRemoveLast(trimmedValue);
+            trimmedValue = stringRemoveLast(trimmedValue);
         } else if (trimmedValue.startsWith('%')) {
             /**
              * In Turkish language, the percent sign can go before the
              * number...
              */
-            stringRemoveFirst(trimmedValue);
+            trimmedValue = stringRemoveFirst(trimmedValue);
         }
         zoom = QLocale().toDouble(trimmedValue, &isValid);
     }

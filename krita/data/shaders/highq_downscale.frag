@@ -6,12 +6,6 @@
 
 uniform sampler2D texture0;
 
-#ifdef USE_OCIO
-#ifndef USE_OCIO_V2
-uniform sampler3D texture1;
-#endif
-#endif
-
 in vec4 v_textureCoordinate;
 out vec4 fragColor;
 
@@ -124,11 +118,7 @@ void main() {
     }
 
 #ifdef USE_OCIO
-#ifdef USE_OCIO_V2
     fragColor = OCIODisplay(col);
-#else /* USE_OCIO_V2 */
-    fragColor = OCIODisplay(col, texture1);
-#endif /* USE_OCIO_V2 */
 #else /* USE_OCIO */
     fragColor = col;
 #endif /* USE_OCIO */

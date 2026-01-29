@@ -147,9 +147,6 @@ KisShaderProgram *KisOpenGLShaderLoader::loadDisplayShader(QSharedPointer<KisDis
     bool haveDisplayFilter = displayFilter && !displayFilter->program().isEmpty();
     if (haveDisplayFilter) {
         fragHeader.append("#define USE_OCIO\n");
-#ifdef HAVE_OCIO_V2
-        fragHeader.append("#define USE_OCIO_V2\n");
-#endif
         fragHeader.append(displayFilter->program().toLatin1());
     }
 

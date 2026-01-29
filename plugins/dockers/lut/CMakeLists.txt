@@ -9,17 +9,10 @@ ki18n_wrap_ui(kritalutdocker_static_SRCS
   wdglut.ui
 )
 
-if (HAVE_OCIO_V2)
-  set(kritalutdocker_static_SRCS
-    ${kritalutdocker_static_SRCS}
-    ocio_display_filter_vfx2021.cpp
-  )
-else()
-  set(kritalutdocker_static_SRCS
-    ${kritalutdocker_static_SRCS}
-    ocio_display_filter_vfx2020.cpp
-  )
-endif()
+set(kritalutdocker_static_SRCS
+  ${kritalutdocker_static_SRCS}
+  ocio_display_filter_vfx2021.cpp
+)
 
 kis_add_library(kritalutdocker_static STATIC ${kritalutdocker_static_SRCS})
 

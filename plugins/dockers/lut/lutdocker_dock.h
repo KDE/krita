@@ -24,21 +24,13 @@
 
 #include <config-ocio.h>
 
-#ifndef HAVE_OCIO_V2
-#define OCIO_VERSION_FULL_STR OCIO_VERSION
-#endif
-
 namespace OCIO = OCIO_NAMESPACE;
 
 class BlackWhitePointChooser;
 
 #include <config-ocio.h>
 
-#ifdef HAVE_OCIO_V2
 #include "ocio_display_filter_vfx2021.h"
-#else
-#include "ocio_display_filter_vfx2020.h"
-#endif
 
 #include "kis_exposure_gamma_correction_interface.h"
 

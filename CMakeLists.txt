@@ -1246,16 +1246,13 @@ if (FFTW3_FOUND)
     find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
 endif()
 
-find_package(OpenColorIO 1.1.1)
+find_package(OpenColorIO 2.0.0)
 set_package_properties(OpenColorIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
     URL "https://www.opencolorio.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OpenColorIO_FOUND HAVE_OCIO)
-if (OPENCOLORIO_VERSION VERSION_GREATER_EQUAL "2.0.0")
-    set(HAVE_OCIO_V2 TRUE)
-endif()
 configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h)
 
 set_package_properties(PythonLibrary PROPERTIES

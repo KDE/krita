@@ -409,8 +409,6 @@ bool OcioDisplayFilter::updateShaderImpl(F *f)
         return false;
     }
 
-    f->initializeOpenGLFunctions();
-
     bool shouldRecompileShader = false;
 
     // Step 1: Create a GPU Shader Description

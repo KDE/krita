@@ -301,12 +301,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
     QScopedPointer<KisOpenGLSync> sync;
     int numProcessedTiles = 0;
 
-    QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    KIS_ASSERT_RECOVER_RETURN(ctx);
-    QOpenGLFunctions *f = ctx->functions();
-    KIS_ASSERT_RECOVER_RETURN(f);
-    f->initializeOpenGLFunctions();
-
     KisTextureTileUpdateInfoSP tileInfo;
     Q_FOREACH (tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
@@ -327,7 +321,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
         }
 
 
-        tile->update(*tileInfo, blockMipmapRegeneration, f);
+        tile->update(*tileInfo, blockMipmapRegeneration);
 
         if (m_bufferStorage.isValid()) {
             if (!sync) {

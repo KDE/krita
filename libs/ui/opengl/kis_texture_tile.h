@@ -53,7 +53,7 @@ public:
         m_numMipmapLevels = num;
     }
 
-    void update(const KisTextureTileUpdateInfo &updateInfo, bool blockMipmapRegeneration, QOpenGLFunctions* newF);
+    void update(const KisTextureTileUpdateInfo &updateInfo, bool blockMipmapRegeneration);
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;

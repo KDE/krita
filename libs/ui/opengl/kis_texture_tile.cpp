@@ -151,10 +151,9 @@ void KisTextureTile::regenerateMipmap()
     m_needsMipmapRegeneration = false;
 }
 
-void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blockMipmapRegeneration, QOpenGLFunctions* newF)
+void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blockMipmapRegeneration)
 {
-    this->f = newF;
-    this->f->glBindTexture(GL_TEXTURE_2D, m_textureId);
+    f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     setTextureParameters();
 

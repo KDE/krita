@@ -91,7 +91,6 @@ KoAbstractGradientSP cloneAndPrepareGradientFromGUI(KoAbstractGradientSP gradien
         clonedGradient->setMD5Sum(KoMD5Generator::generateHash(buf.data()));
     }
 
-    // TODO: pass canvasReousrcesInterface to generate proper dynamic gradients
     clonedGradient->updatePreview();
 
     return clonedGradient;
@@ -1218,8 +1217,7 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
 
 InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     : QWidget(parent),
-      m_mode(mode),
-      m_resourceProvider(resourceProvider)
+      m_mode(mode)
 {
     ui.setupUi(this);
 
@@ -1477,8 +1475,7 @@ void Satin::fetchSatin(psd_layer_effects_satin *satin) const
 /********************************************************************/
 
 Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
-    : QWidget(parent),
-      m_resourceProvider(resourceProvider)
+    : QWidget(parent)
 {
     ui.setupUi(this);
 

@@ -154,7 +154,6 @@ Q_SIGNALS:
 private:
     Ui::WdgInnerGlow ui;
     Mode m_mode;
-    KisCanvasResourceProvider *m_resourceProvider;
 };
 
 class PatternOverlay : public QWidget {
@@ -197,7 +196,6 @@ Q_SIGNALS:
 
 private:
     Ui::WdgStroke ui;
-    KisCanvasResourceProvider *m_resourceProvider;
 };
 
 

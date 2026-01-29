@@ -76,13 +76,13 @@
 # Alexander Yavorsky <kekcuha@gmail.com>, 2020, 2023.
 # Мария Шикунова <mariia@basealt.ru>, 2020, 2021.
 # SPDX-FileCopyrightText: 2022, 2023, 2024 Olesya Gerasimenko <translation-team@basealt.ru>
-# SPDX-FileCopyrightText: 2025 Alevtina <alevkarash@altlinux.org>
+# SPDX-FileCopyrightText: 2025, 2026 Alevtina <alevkarash@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 02:07+0000\n"
-"PO-Revision-Date: 2025-09-17 12:11+0300\n"
+"POT-Creation-Date: 2026-01-29 02:29+0000\n"
+"PO-Revision-Date: 2026-01-28 10:51+0300\n"
 "Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -7743,18 +7743,13 @@ msgstr "Разделить объекты из нескольких субкон
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr ""
-"Преобразование типа изображения\n"
-"преобразование типа изображения"
+msgstr "Преобразовать в контур"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
 #, fuzzy, kde-format
-#| msgid "Performance"
 msgctxt "action"
 msgid "Preformatted"
 msgstr "Производительность"
@@ -7771,18 +7766,13 @@ msgstr ""
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr ""
-"Преобразование типа изображения\n"
-"преобразование типа изображения"
+msgstr "Преобразовать в файловый слой"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
 #, fuzzy, kde-format
-#| msgid "Sine Wave"
 msgctxt "action"
 msgid "Inline Wrapped"
 msgstr "Синусоидальная волна"
@@ -7804,18 +7794,13 @@ msgstr ""
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr ""
-"Преобразование типа изображения\n"
-"преобразование типа изображения"
+msgstr "Позиция текста"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
 #, fuzzy, kde-format
-#| msgid "Position"
 msgctxt "action"
 msgid "Pre-positioned"
 msgstr "Позиция"
@@ -7834,7 +7819,7 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Объект текста"
+msgstr "Форма текста"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
@@ -7848,8 +7833,6 @@ msgstr ""
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
 msgstr ""
@@ -7869,7 +7852,6 @@ msgstr ""
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, fuzzy, kde-format
-#| msgid "Text On Path"
 msgctxt "action"
 msgid "Put Text On Path"
 msgstr "Текст по контуру"
@@ -7886,7 +7868,6 @@ msgstr ""
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, fuzzy, kde-format
-#| msgid "Remove Shape Collection"
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
 msgstr "Удалить коллекцию объектов"
@@ -7906,8 +7887,6 @@ msgstr "Удалить коллекцию объектов"
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
 msgstr "Переключить прозрачность слоя"
@@ -7982,7 +7961,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
 #, fuzzy, kde-format
-#| msgid "First line indent"
 msgctxt "action"
 msgid "First In Chain"
 msgstr "Отступ первой строки"
@@ -10083,8 +10061,8 @@ msgstr "&Размывание..."
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1645
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1648
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
+#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
 #, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13308,44 +13286,44 @@ msgstr "&Прилипание"
 msgid "&Image"
 msgstr "И&зображение"
 
-#: krita/krita5.xmlgui:172 krita/krita5.xmlgui:268 krita/krita5.xmlgui:284
+#: krita/krita5.xmlgui:173 krita/krita5.xmlgui:269 krita/krita5.xmlgui:285
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
 msgstr "Вра&щение"
 
-#: krita/krita5.xmlgui:194 plugins/extensions/layersplit/layersplit.xmlgui:4
+#: krita/krita5.xmlgui:195 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
 msgstr "С&лой"
 
-#: krita/krita5.xmlgui:200
+#: krita/krita5.xmlgui:201
 #, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "&Создать"
 
-#: krita/krita5.xmlgui:222
+#: krita/krita5.xmlgui:223
 #, kde-format
 msgid "&Import/Export"
 msgstr "&Импорт/экспорт"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:229
+#: krita/krita5.xmlgui:230
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "Импорт"
 
-#: krita/krita5.xmlgui:237 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
 #, kde-format
 msgid "&Convert"
 msgstr "&Преобразовать"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:248 krita/krita5.xmlgui:319
+#: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13354,86 +13332,86 @@ msgstr "&Преобразовать"
 msgid "&Select"
 msgstr "В&ыделение"
 
-#: krita/krita5.xmlgui:256 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "&Группа"
 
-#: krita/krita5.xmlgui:262
+#: krita/krita5.xmlgui:263
 #, kde-format
 msgid "&Transform"
 msgstr "&Преобразование"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:280
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "Преобразовать &все слои"
 
-#: krita/krita5.xmlgui:294
+#: krita/krita5.xmlgui:295
 #, kde-format
 msgid "S&plit"
 msgstr "Раз&делить"
 
-#: krita/krita5.xmlgui:296 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "О&тделить альфа-канал"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:342
 #, kde-format
 msgid "Select &Opaque"
 msgstr "Выделить &непрозрачную область"
 
-#: krita/krita5.xmlgui:356
+#: krita/krita5.xmlgui:357
 #, kde-format
 msgid "Filte&r"
 msgstr "Ф&ильтр"
 
-#: krita/krita5.xmlgui:377 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "С&ервис"
 
-#: krita/krita5.xmlgui:378
+#: krita/krita5.xmlgui:379
 #, kde-format
 msgid "Scripts"
 msgstr "Сценарии"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "&Настройка"
 
-#: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&Справка"
 
-#: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "Файл"
 
-#: krita/krita5.xmlgui:433
+#: krita/krita5.xmlgui:434
 #, kde-format
 msgid "Edit"
 msgstr "Правка"
 
-#: krita/krita5.xmlgui:438
+#: krita/krita5.xmlgui:439
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Кисти и другие инструменты"
 
-#: krita/krita5.xmlgui:455
+#: krita/krita5.xmlgui:456
 #, fuzzy, kde-format
 msgid "Custom toolbar 1"
 msgstr "Свой цвет"
 
-#: krita/krita5.xmlgui:458
+#: krita/krita5.xmlgui:459
 #, fuzzy, kde-format
 msgid "Custom toolbar 2"
 msgstr "Свой цвет"
@@ -14225,8 +14203,8 @@ msgstr "Удалить ключевой кадр"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1885
-#: krita/kritamenu.action:1886
+#: krita/kritamenu.action:575 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15107,8 +15085,22 @@ msgctxt "action"
 msgid "Trim to Image Size"
 msgstr "Обрезать до размера изображения"
 
-#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#. i18n: context: text @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
+#, kde-format
+msgctxt "action"
+msgid "Purge Unused Image Data"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1199
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Removes all fully transparent pixels from the image storage"
+msgstr "Сглаживает края выделения"
+
+#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1209
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
@@ -15118,14 +15110,14 @@ msgstr "Обрезать к &текущему слою"
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1199 krita/kritamenu.action:1200
+#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
 msgstr "Обрезать к текущему слою"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1209
+#: krita/kritamenu.action:1221
 #, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
@@ -15135,14 +15127,14 @@ msgstr "Обрезать по в&ыделению"
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
+#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
 #, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
 msgstr "Обрезать по выделению"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1221
+#: krita/kritamenu.action:1233
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
@@ -15152,14 +15144,14 @@ msgstr "П&овернуть изображение..."
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
+#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "Повернуть изображение"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1233
+#: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
@@ -15169,14 +15161,14 @@ msgstr "Повернуть &изображение на 90° вправо"
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
+#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
 msgstr "Повернуть изображение на 90° вправо"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1245
+#: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
@@ -15186,14 +15178,14 @@ msgstr "Повернуть изображение на &90° влево"
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
+#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
 msgstr "Повернуть изображение на 90° влево"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1257
+#: krita/kritamenu.action:1269
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
@@ -15203,14 +15195,14 @@ msgstr "Повернуть изображение на &180°"
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
+#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
 msgstr "Повернуть изображение на 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1269
+#: krita/kritamenu.action:1281
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
@@ -15220,14 +15212,14 @@ msgstr "&Сдвинуть изображение..."
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
+#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
 msgstr "Сдвинуть изображение"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1281
+#: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
@@ -15237,14 +15229,14 @@ msgstr "Отразить изображение по &горизонтали"
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
+#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
 msgstr "Отразить изображение по горизонтали"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1293
+#: krita/kritamenu.action:1305
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
@@ -15254,14 +15246,14 @@ msgstr "Отразить изображение по &вертикали"
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
+#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
 msgstr "Отразить изображение по вертикали"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1305
+#: krita/kritamenu.action:1317
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
@@ -15271,14 +15263,14 @@ msgstr "Изменить &размер изображения..."
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
+#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
 msgstr "Изменить размер изображения..."
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1317
+#: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
@@ -15288,14 +15280,14 @@ msgstr "&Сместить изображение..."
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
+#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
 msgstr "Сместить изображение"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1329
+#: krita/kritamenu.action:1341
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
@@ -15305,14 +15297,14 @@ msgstr "Изменить размер &холста..."
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
+#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
 msgstr "Изменить размер холста"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1341
+#: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
@@ -15322,14 +15314,14 @@ msgstr "Отделение изобр&ажений"
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
+#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
 msgstr "Отделение изображений"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1353
+#: krita/kritamenu.action:1365
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
@@ -15339,21 +15331,21 @@ msgstr "Разделить изобр&ажение..."
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
+#: krita/kritamenu.action:1367 krita/kritamenu.action:1368
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
 msgstr "Разделить изображение"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1366
+#: krita/kritamenu.action:1378
 #, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "Выделить"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1369
+#: krita/kritamenu.action:1381
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
@@ -15363,14 +15355,14 @@ msgstr "Выделить &всё"
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1371 krita/kritamenu.action:1372
+#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
 #, kde-format
 msgctxt "action"
 msgid "Select All"
 msgstr "Выделить всё"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1381
+#: krita/kritamenu.action:1393
 #, kde-format
 msgctxt "action"
 msgid "&Deselect"
@@ -15380,14 +15372,14 @@ msgstr "&Снять выделение"
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
+#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
 #, kde-format
 msgctxt "action"
 msgid "Deselect"
 msgstr "Снять выделение"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1393
+#: krita/kritamenu.action:1405
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
@@ -15397,14 +15389,14 @@ msgstr "&Повторное выделение"
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
+#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
 msgstr "Повторное выделение"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1405
+#: krita/kritamenu.action:1417
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
@@ -15414,14 +15406,14 @@ msgstr "&Преобразовать в векторное выделение"
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
+#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
 msgstr "Преобразовать в векторное выделение"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1417
+#: krita/kritamenu.action:1429
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
@@ -15431,7 +15423,7 @@ msgstr "&Преобразовать в растровое выделение"
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
+#: krita/kritamenu.action:1431 krita/kritamenu.action:1432
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
@@ -15443,15 +15435,15 @@ msgstr "Преобразовать в растровое выделение"
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1429 krita/kritamenu.action:1431
-#: krita/kritamenu.action:1432
+#: krita/kritamenu.action:1441 krita/kritamenu.action:1443
+#: krita/kritamenu.action:1444
 #, kde-format
 msgctxt "action"
 msgid "Edit Selection"
 msgstr "Изменить выделение"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1441
+#: krita/kritamenu.action:1453
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
@@ -15461,14 +15453,14 @@ msgstr "Преобразовать формы в &векторное выдел�
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1443 krita/kritamenu.action:1444
+#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
 msgstr "Преобразовать формы в векторное выделение"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1453
+#: krita/kritamenu.action:1465
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
@@ -15478,14 +15470,14 @@ msgstr "&Растушёвка выделения..."
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
+#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
 msgstr "Растушёвка выделения"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1465
+#: krita/kritamenu.action:1477
 #, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
@@ -15495,14 +15487,14 @@ msgstr "Пока&зать выделение"
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
+#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
 #, kde-format
 msgctxt "action"
 msgid "Display Selection"
 msgstr "Показать выделение"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1477
+#: krita/kritamenu.action:1489
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
@@ -15512,14 +15504,14 @@ msgstr "&Изменить размер..."
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
+#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
 #, kde-format
 msgctxt "action"
 msgid "Scale"
 msgstr "Масштаб"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1489
+#: krita/kritamenu.action:1501
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
@@ -15529,14 +15521,14 @@ msgstr "В&ыделить на основе диапазона цветов…"
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
+#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
 msgstr "Выделить на основе диапазона цветов"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1501
+#: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
@@ -15546,14 +15538,14 @@ msgstr "Выделить &непрозрачную область (замени�
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
+#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
 msgstr "Выделить непрозрачную область"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1513
+#: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
@@ -15563,14 +15555,14 @@ msgstr "Выделить непрозрачную область (&Добави�
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
+#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
 msgstr "Выделить непрозрачную область (Добавить)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1525
+#: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
@@ -15580,14 +15572,14 @@ msgstr "Выделить непрозрачную область (&Вычест�
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
+#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
 msgstr "Выделить непрозрачную область (Вычесть)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1537
+#: krita/kritamenu.action:1549
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
@@ -15597,14 +15589,14 @@ msgstr "Выделить непрозрачную область (&Пересе�
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
+#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
 msgstr "Выделить непрозрачную область (Пересечь)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1549
+#: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
@@ -15614,14 +15606,14 @@ msgstr "&Увеличение выделения..."
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
+#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
 msgstr "Увеличение выделения"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1561
+#: krita/kritamenu.action:1573
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
@@ -15631,14 +15623,14 @@ msgstr "У&меньшение выделения..."
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
+#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
 msgstr "Уменьшение выделения"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1573
+#: krita/kritamenu.action:1585
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
@@ -15648,14 +15640,14 @@ msgstr "&Выделение границ"
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
+#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
 msgstr "Выделение границ"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1585
+#: krita/kritamenu.action:1597
 #, kde-format
 msgctxt "action"
 msgid "S&mooth"
@@ -15665,21 +15657,21 @@ msgstr "С&глаживание"
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
+#: krita/kritamenu.action:1599 krita/kritamenu.action:1600
 #, kde-format
 msgctxt "action"
 msgid "Smooth"
 msgstr "Сглаживание"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1598
+#: krita/kritamenu.action:1610
 #, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "Фильтр"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1601
+#: krita/kritamenu.action:1613
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -15689,14 +15681,14 @@ msgstr "Повторно применить &фильтр"
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1603 krita/kritamenu.action:1604
+#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "Повторно применить фильтр"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1625
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -15706,7 +15698,7 @@ msgstr "Повторно применить фильтр"
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -15719,8 +15711,8 @@ msgstr ""
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625 krita/kritamenu.action:1627
-#: krita/kritamenu.action:1628
+#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
+#: krita/kritamenu.action:1640
 #, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -15733,8 +15725,8 @@ msgstr "Коррекция"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1635 krita/kritamenu.action:1637
-#: krita/kritamenu.action:1638
+#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
+#: krita/kritamenu.action:1650
 #, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -15746,8 +15738,8 @@ msgstr "Художественные"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1655 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1658
+#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
+#: krita/kritamenu.action:1670
 #, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -15759,8 +15751,8 @@ msgstr "Цвета"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1665 krita/kritamenu.action:1667
-#: krita/kritamenu.action:1668
+#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
+#: krita/kritamenu.action:1680
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -15772,8 +15764,8 @@ msgstr "Определение края"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1675 krita/kritamenu.action:1677
-#: krita/kritamenu.action:1678
+#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
+#: krita/kritamenu.action:1690
 #, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -15785,8 +15777,8 @@ msgstr "Улучшение"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1685 krita/kritamenu.action:1687
-#: krita/kritamenu.action:1688
+#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
+#: krita/kritamenu.action:1700
 #, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -15798,8 +15790,8 @@ msgstr "Рельеф"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1695 krita/kritamenu.action:1697
-#: krita/kritamenu.action:1698
+#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
+#: krita/kritamenu.action:1710
 #, kde-format
 msgctxt "action"
 msgid "Map"
@@ -15812,15 +15804,15 @@ msgstr "Карта"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1705 krita/kritamenu.action:1707
-#: krita/kritamenu.action:1708
+#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
+#: krita/kritamenu.action:1720
 #, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "Другие"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1715
+#: krita/kritamenu.action:1727
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -15830,14 +15822,14 @@ msgstr "Запустить G'MIC-Qt"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1718
+#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "Запустить G'MIC-Qt"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1725
+#: krita/kritamenu.action:1737
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -15847,7 +15839,7 @@ msgstr "Повторно применить последний фильтр G'MI
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727 krita/kritamenu.action:1728
+#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -15859,7 +15851,7 @@ msgstr "Повторить последнее действие G'Mic-Qt"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1736
+#: krita/kritamenu.action:1748
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
@@ -15868,7 +15860,7 @@ msgid "Settings"
 msgstr "Параметры"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1739
+#: krita/kritamenu.action:1751
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -15878,35 +15870,35 @@ msgstr "&Настроить Krita..."
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1741 krita/kritamenu.action:1742
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "Настройка Krita"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1763
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "&Управление библиотеками ресурсов..."
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753
+#: krita/kritamenu.action:1765
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "Управление библиотеками ресурсов"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1754
+#: krita/kritamenu.action:1766
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
 msgstr "Управление библиотеками ресурсов"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -15916,14 +15908,14 @@ msgstr "Управление ресурсами..."
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765 krita/kritamenu.action:1766
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "Управление ресурсами"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1787
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -15933,14 +15925,14 @@ msgstr "Переключить &язык приложения"
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "Переключить язык приложения"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1785
+#: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -15950,14 +15942,14 @@ msgstr "П&оказать панели"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787 krita/kritamenu.action:1788
+#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "Показать панели"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1809
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -15967,14 +15959,14 @@ msgstr "Показать &заголовки панелей"
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "Показать заголовки панелей"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1821
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -15984,7 +15976,7 @@ msgstr "Настроить панели инстру&ментов..."
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -15996,15 +15988,15 @@ msgstr "Настроить панели инструментов"
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821 krita/kritamenu.action:1823
-#: krita/kritamenu.action:1824
+#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
+#: krita/kritamenu.action:1836
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "Панели"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1831
+#: krita/kritamenu.action:1843
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -16014,14 +16006,14 @@ msgstr "&Темы"
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1834
+#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "Темы"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1841
+#: krita/kritamenu.action:1853
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -16031,7 +16023,7 @@ msgstr "&Стили"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843 krita/kritamenu.action:1844
+#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
 #, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -16043,36 +16035,36 @@ msgstr "Стили"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1851 krita/kritamenu.action:1853
-#: krita/kritamenu.action:1854
+#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
+#: krita/kritamenu.action:1866
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "Активный профиль автора"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1861
+#: krita/kritamenu.action:1873
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "Сбросить все параметры"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863
+#: krita/kritamenu.action:1875
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
 msgstr "Восстановить все параметры по умолчанию"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1864
+#: krita/kritamenu.action:1876
 #, kde-format
 msgctxt "action"
 msgid "Reset Settings"
 msgstr "Сбросить параметры"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1871
+#: krita/kritamenu.action:1883
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -16082,28 +16074,28 @@ msgstr "Настроить &клавиатурные сокращения..."
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873 krita/kritamenu.action:1874
+#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
 #, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "Настроить клавиатурные сокращения"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1895
 #, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "&Окно"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1894
+#: krita/kritamenu.action:1906
 #, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "&Справка"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1897
+#: krita/kritamenu.action:1909
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16113,14 +16105,14 @@ msgstr "&Руководство пользователя Krita"
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1899 krita/kritamenu.action:1900
+#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr "Руководство пользователя Krita"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1907
+#: krita/kritamenu.action:1919
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16130,14 +16122,14 @@ msgstr "&Сообщить об ошибке..."
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
+#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "Сообщить об ошибке"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1917
+#: krita/kritamenu.action:1929
 #, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16147,14 +16139,14 @@ msgstr "&О Krita"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919 krita/kritamenu.action:1920
+#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
 #, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "О Krita"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1927
+#: krita/kritamenu.action:1939
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16164,21 +16156,21 @@ msgstr "О &KDE"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929 krita/kritamenu.action:1930
+#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "О KDE"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1950
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "Кисти и другие инструменты"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1941
+#: krita/kritamenu.action:1953
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16188,14 +16180,14 @@ msgstr "&Градиенты"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1943 krita/kritamenu.action:1944
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "Градиенты"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1951
+#: krita/kritamenu.action:1963
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16205,14 +16197,14 @@ msgstr "&Текстуры"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953 krita/kritamenu.action:1954
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "Текстуры"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1961
+#: krita/kritamenu.action:1973
 #, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16223,14 +16215,14 @@ msgstr "&Цвет"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963 krita/kritamenu.action:1964
+#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
 #, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "Цвет"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1971
+#: krita/kritamenu.action:1983
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
@@ -16240,14 +16232,14 @@ msgstr "&Выбрать цвет переднего плана"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973 krita/kritamenu.action:1974
+#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
 msgstr "Выберите цвет переднего плана"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1981
+#: krita/kritamenu.action:1993
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
@@ -16257,7 +16249,7 @@ msgstr "&Выбрать цвет фона"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983 krita/kritamenu.action:1984
+#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
@@ -16269,8 +16261,8 @@ msgstr "Выбрать цвет фона"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
-#: krita/kritamenu.action:1994
+#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
+#: krita/kritamenu.action:2006
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16282,8 +16274,8 @@ msgstr "Ползунок параметров кисти 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
+#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
+#: krita/kritamenu.action:2016
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16295,8 +16287,8 @@ msgstr "Ползунок параметров кисти 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
+#: krita/kritamenu.action:2026
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16308,8 +16300,8 @@ msgstr "Ползунок параметров кисти 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
+#: krita/kritamenu.action:2036
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16321,8 +16313,8 @@ msgstr "Ползунок параметров кисти 4"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
+#: krita/kritamenu.action:2046
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
@@ -16334,22 +16326,22 @@ msgstr "Ползунок параметров кисти 1"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
+#: krita/kritamenu.action:2056
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Отразить"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051
+#: krita/kritamenu.action:2063
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Шаблоны"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -16361,8 +16353,8 @@ msgstr "Выбрать шаблон"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
+#: krita/kritamenu.action:2075
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -16428,9 +16420,7 @@ msgstr "Прямая"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:307
 #: libs/basicflakes/tools/KoPencilTool.cpp:314
-#, fuzzy, kde-format
-#| msgctxt "Label of Optimize in JPEG Exporting dialogue"
-#| msgid "Optimize"
+#, kde-format
 msgid "Optimize"
 msgstr "Оптимизировать"
 
@@ -16619,14 +16609,11 @@ msgstr ""
 "оборот контуров"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath at points"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr ""
-"Разбивка субконтура по точкам\n"
-"разбивку субконтура по точкам"
+"Разбивка субконтура\n"
+"разбивку субконтура"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
@@ -16868,8 +16855,6 @@ msgstr ""
 
 #: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:15
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
 msgstr ""
@@ -16898,7 +16883,7 @@ msgstr "Не удаётся сохранить %1 в html-файл"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:577
+#: libs/ui/flake/kis_shape_layer.cc:613
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -17403,7 +17388,6 @@ msgstr "OpenEXR (дополненное)"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
 #, fuzzy, kde-format
-#| msgid "General settings"
 msgctxt "@title"
 msgid "General Punctuation"
 msgstr "Основные параметры"
@@ -19267,8 +19251,6 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
 msgctxt "@title"
 msgid "Kerning"
 msgstr "Кернинг"
@@ -20035,7 +20017,6 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
 #, fuzzy, kde-format
-#| msgid "Angular"
 msgctxt "@title"
 msgid "Hangul"
 msgstr "Угловой"
@@ -21180,7 +21161,7 @@ msgstr ""
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
+#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr ""
@@ -21233,7 +21214,7 @@ msgstr ""
 
 # BUGME: please remove ellipsis because no dialogs are opened --aspotashev
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2097
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, kde-format
 msgid "Selection Mask"
@@ -21526,7 +21507,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
 #, kde-format
 msgid "Paint Layer"
 msgstr "Обычный слой"
@@ -21538,35 +21519,40 @@ msgstr ""
 "Кадрирование изображения\n"
 "кадрирование изображения"
 
-#: libs/image/kis_image.cc:935
+#: libs/image/kis_image.cc:886
+msgctxt "(qtundo-format)"
+msgid "Purge Unused Data"
+msgstr ""
+
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 "Кадрирование слоя\n"
 "кадрирование слоя"
 
-#: libs/image/kis_image.cc:936
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 "Кадрирование маски\n"
 "кадрирование маски"
 
-#: libs/image/kis_image.cc:973
+#: libs/image/kis_image.cc:1028
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 "Изменение размера изображения\n"
 "изменение размера изображения"
 
-#: libs/image/kis_image.cc:974
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 "Изменение разрешения изображения\n"
 "изменение разрешения изображения"
 
-#: libs/image/kis_image.cc:1024
+#: libs/image/kis_image.cc:1079
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21584,21 +21570,21 @@ msgstr[3] ""
 "Масштабирование слоя\n"
 "масштабирование слоя"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1218
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 "Поворот изображения\n"
 "поворот изображения"
 
-#: libs/image/kis_image.cc:1173
+#: libs/image/kis_image.cc:1228
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 "Поворот маски\n"
 "поворот маски"
 
-#: libs/image/kis_image.cc:1176
+#: libs/image/kis_image.cc:1231
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21616,14 +21602,14 @@ msgstr[3] ""
 "Поворот слоя\n"
 "поворот слоя"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 "Сдвиг маски\n"
 "сдвиг маски"
 
-#: libs/image/kis_image.cc:1281
+#: libs/image/kis_image.cc:1336
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21641,21 +21627,21 @@ msgstr[3] ""
 "Сдвиг слоя\n"
 "сдвиг слоя"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1343
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Сдвиг изображения\n"
 "сдвиг изображения"
 
-#: libs/image/kis_image.cc:1306
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 "Преобразование цветового пространства слоя\n"
 "преобразование цветового пространства слоя"
 
-#: libs/image/kis_image.cc:1357
+#: libs/image/kis_image.cc:1412
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
@@ -21663,35 +21649,35 @@ msgstr ""
 "преобразование цветового пространства изображения"
 
 # BUGME: is it "color space of projection"? --aspotashev
-#: libs/image/kis_image.cc:1358
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 "Преобразование цветового пространства проекции\n"
 "преобразование цветового пространства проекции"
 
-#: libs/image/kis_image.cc:1410
+#: libs/image/kis_image.cc:1465
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 "Унификация цветового пространства слоёв\n"
 "унификация цветового пространства слоёв"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1495
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 "Назначение профиля слою\n"
 "назначение профиля слою"
 
-#: libs/image/kis_image.cc:1481
+#: libs/image/kis_image.cc:1536
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 "Назначение профиля\n"
 "назначение профиля"
 
-#: libs/image/kis_image.cc:2517
+#: libs/image/kis_image.cc:2572
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -21763,7 +21749,7 @@ msgid "Blending Mode"
 msgstr "Режим наложения"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Locked"
 msgstr "Заблокирован"
 
@@ -21853,7 +21839,7 @@ msgstr "Унифицировать цветовое пространство с�
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:337
+#: libs/ui/flake/kis_shape_layer.cc:327
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21869,79 +21855,79 @@ msgid ""
 "operations may be slow"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:626
+#: libs/image/kis_layer_utils.cpp:627
 #, kde-format
 msgid "Merged"
 msgstr "Сведено"
 
-#: libs/image/kis_layer_utils.cpp:1441
+#: libs/image/kis_layer_utils.cpp:1472
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 "Объединение с нижележащим\n"
 "объединение c нижележащим"
 
-#: libs/image/kis_layer_utils.cpp:1713
+#: libs/image/kis_layer_utils.cpp:1744
 #, kde-format
 msgid "Copy of"
 msgstr "Копия"
 
-#: libs/image/kis_layer_utils.cpp:1791
+#: libs/image/kis_layer_utils.cpp:1822
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Изменение цвета проекции\n"
 "изменение цвета проекции"
 
-#: libs/image/kis_layer_utils.cpp:2017
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Сведение выбранных узлов\n"
 "сведение выбранных узлов"
 
-#: libs/image/kis_layer_utils.cpp:2035
+#: libs/image/kis_layer_utils.cpp:2066
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Создание слоя из видимого\n"
 "создание слоя из видимого"
 
-#: libs/image/kis_layer_utils.cpp:2036
+#: libs/image/kis_layer_utils.cpp:2067
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видимый"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2146
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Объединение выбранных масок\n"
 "объединение выбранных масок"
 
-#: libs/image/kis_layer_utils.cpp:2139
+#: libs/image/kis_layer_utils.cpp:2170
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Сведение слоя\n"
 "сведение слоя"
 
-#: libs/image/kis_layer_utils.cpp:2155
+#: libs/image/kis_layer_utils.cpp:2186
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Сведение изображения\n"
 "сведение изображения"
 
-#: libs/image/kis_layer_utils.cpp:2389
+#: libs/image/kis_layer_utils.cpp:2420
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Отделение альфа-канала в маску\n"
 "отделение альфа-канала в маску"
 
-#: libs/image/kis_layer_utils.cpp:2415
+#: libs/image/kis_layer_utils.cpp:2446
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -22399,30 +22385,30 @@ msgstr ""
 "Это не поддерживается форматом, поэтому длительность кадра будет округлена "
 "до ближайшей миллисекунды."
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:690
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
 #, kde-format
 msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Группа"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
 #, kde-format
 msgid "File Layer"
 msgstr "Файловый слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:703
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Векторный слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "Filter Layer"
 msgstr "Фильтрующий слой"
@@ -22510,10 +22496,6 @@ msgstr "Изображение содержит <b>стили слоёв</b>. С
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
 #, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
@@ -22524,10 +22506,6 @@ msgstr ""
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
 #, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
@@ -23631,9 +23609,6 @@ msgstr "Затемнение альфа-канала"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
-#| msgid "Markers"
 msgctxt "Blending mode - Marker"
 msgid "Marker"
 msgstr "Маркеры"
@@ -24120,8 +24095,8 @@ msgstr "Локальные источники"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
@@ -24190,72 +24165,72 @@ msgstr ""
 "Схема базы данных ресурсов изменилась. Krita создаст резервную копию вашей "
 "базы данных и создаст новую базу данных."
 
-#: libs/resources/KisResourceLocator.cpp:90
+#: libs/resources/KisResourceLocator.cpp:91
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. Не удалось создать расположение источника в %1."
 
-#: libs/resources/KisResourceLocator.cpp:97
+#: libs/resources/KisResourceLocator.cpp:98
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Запись в расположение источника %1 запрещена."
 
-#: libs/resources/KisResourceLocator.cpp:859
+#: libs/resources/KisResourceLocator.cpp:852
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Не удалось добавить %1 в базу данных"
 
-#: libs/resources/KisResourceLocator.cpp:903
-#: libs/resources/KisResourceLocator.cpp:1264
+#: libs/resources/KisResourceLocator.cpp:896
+#: libs/resources/KisResourceLocator.cpp:1257
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Не удалось удалить хранилище %1 из базы данных"
 
-#: libs/resources/KisResourceLocator.cpp:1016
+#: libs/resources/KisResourceLocator.cpp:1009
 #, fuzzy, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Не удалось синхронизировать %1 с базой данных"
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita запущена впервые. Инициализация займёт некоторое время."
 
-#: libs/resources/KisResourceLocator.cpp:1031
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Не удалось создать расположение источника в %1."
 
-#: libs/resources/KisResourceLocator.cpp:1044
-#: libs/resources/KisResourceLocator.cpp:1060
+#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1053
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Не удалось скопировать источник %1 в %2"
 
-#: libs/resources/KisResourceLocator.cpp:1056
+#: libs/resources/KisResourceLocator.cpp:1049
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Установка источников из пакета %1."
 
-#: libs/resources/KisResourceLocator.cpp:1084
+#: libs/resources/KisResourceLocator.cpp:1077
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Временные источники"
 
-#: libs/resources/KisResourceLocator.cpp:1090
+#: libs/resources/KisResourceLocator.cpp:1083
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 msgid "Font Storage"
 msgstr "Начертание"
 
-#: libs/resources/KisResourceLocator.cpp:1213
+#: libs/resources/KisResourceLocator.cpp:1206
 #, fuzzy, kde-format
 msgid "Synchronizing the resources."
 msgstr "Инициализация источников."
 
-#: libs/resources/KisResourceLocator.cpp:1226
-#: libs/resources/KisResourceLocator.cpp:1234
+#: libs/resources/KisResourceLocator.cpp:1219
+#: libs/resources/KisResourceLocator.cpp:1227
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Не удалось синхронизировать %1 с базой данных"
@@ -24586,19 +24561,16 @@ msgstr "Все"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, fuzzy, kde-format
-#| msgid "All Untagged"
 msgid "All untagged"
 msgstr "Все неотмеченные"
 
 #: libs/resources/KisTagModel.cpp:304
 #, fuzzy, kde-format
-#| msgid "All Resources"
 msgid "All resources"
 msgstr "Все источники"
 
 #: libs/resources/KisTagModel.cpp:314
 #, fuzzy, kde-format
-#| msgid "All Untagged Resources"
 msgid "All untagged resources"
 msgstr "Все неотмеченные источники"
 
@@ -24689,19 +24661,17 @@ msgstr "Выбор файла для добавления"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
 #: libs/widgets/KisTagSelectionWidget.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgid "Assign to tag"
 msgstr "Добавить метку"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:93
-#, fuzzy, kde-format
-#| msgid "Remove from this tag"
+#, kde-format
 msgid "Remove from this tag"
 msgstr "Снять эту метку"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:102
-#, fuzzy, kde-format
-#| msgid "Remove from other tag"
+#, kde-format
 msgid "Remove from other tag"
 msgstr "Снять другую метку"
 
@@ -24854,8 +24824,7 @@ msgstr ""
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:51
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgid "Tag"
 msgstr "Метка"
 
@@ -25831,11 +25800,11 @@ msgid "placebo"
 msgstr "плацебо"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
-msgstr "Использовать контур"
+msgstr "baseline"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:57
@@ -25962,9 +25931,7 @@ msgid "none"
 msgstr "нет"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "apng prediction option name"
-#| msgid "sub"
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
 msgstr "нижний"
@@ -27190,7 +27157,7 @@ msgid "Descending"
 msgstr "По убыванию"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alphabetical"
 msgstr "Алфавитный"
 
@@ -27589,39 +27556,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Нет"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1070
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Окружность"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1071
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "Прямоугольник"
+msgstr "Прямоугольник слева"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1072
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "Прямоугольник"
+msgstr "Прямоугольник справа"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1073
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "Прямоугольник"
+msgstr "Прямоугольник сверху"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1105
 #, kde-format
@@ -27694,8 +27656,6 @@ msgstr "Линейный"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1339
 #, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
 msgid "Rec 2020 PQ"
 msgstr "Rec 2100 PQ"
 
@@ -27713,7 +27673,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1350
 #, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
 msgid "Canvas surface bit depth (needs restart):"
 msgstr "Режим наложения CMYK (требуется перезапуск):"
 
@@ -30458,10 +30417,9 @@ msgstr "Цвет контура ластика:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:886
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Цветовой миксер:"
+msgstr "Форма цветового миксера:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -30489,17 +30447,15 @@ msgstr "Толщина:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:961
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Круглый контур"
+msgstr "Включить контур"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "Расширяющийся заполнитель"
+msgstr "Дополнительное пространство для сравнения"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
@@ -30898,7 +30854,7 @@ msgstr "Добавить «(вставлено)» к вставленным сл
 #: libs/ui/forms/wdggeneralsettings.ui:1644
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Длительное нажатие для открытия контекстных меню"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:1651
@@ -32983,6 +32939,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Использовать клавиши Page Up/Down в качестве правой/средней кнопок мыши "
+"(временное решение для стилусов Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -32991,6 +32949,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Игнорировать историю положения планшета (временное решение для неровных "
+"линий при использовании стилусов Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214
@@ -33496,8 +33456,7 @@ msgstr ""
 "инструмента, например размер кисти."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:28
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgid "Normal"
 msgstr "Нормальный"
 
@@ -33697,9 +33656,7 @@ msgid " + "
 msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
+#, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Левая"
@@ -33711,9 +33668,7 @@ msgid "Right"
 msgstr "Правая"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Средняя"
@@ -33910,10 +33865,9 @@ msgid "Five Finger Drag"
 msgstr "Прокрутка пятью пальцами"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:505
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "Касание одним пальцем"
+msgstr "Удержание одним пальцем"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:508
 #, kde-format
@@ -34132,9 +34086,7 @@ msgid "Toggle Eraser"
 msgstr "Переключить ластик"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Переключить профиль ластика"
 
@@ -34400,68 +34352,68 @@ msgstr "Импорт изображения"
 msgid "Select a Color"
 msgstr "Выберите цвет"
 
-#: libs/ui/kis_layer_manager.cc:191
+#: libs/ui/kis_layer_manager.cc:194
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Свести выбранные слои"
 
-#: libs/ui/kis_layer_manager.cc:193
+#: libs/ui/kis_layer_manager.cc:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Объединить группу"
 
-#: libs/ui/kis_layer_manager.cc:195
+#: libs/ui/kis_layer_manager.cc:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Объединить со слоем ниже"
 
-#: libs/ui/kis_layer_manager.cc:217
+#: libs/ui/kis_layer_manager.cc:220
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Слой пустой "
 
-#: libs/ui/kis_layer_manager.cc:256
+#: libs/ui/kis_layer_manager.cc:267
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Свойства фильтрующего слоя"
 
-#: libs/ui/kis_layer_manager.cc:301
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Свойства файлового слоя"
 
 # BUGME: please add full stop. --aspotashev
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
 #, kde-format
 msgid "No file name specified"
 msgstr "Не указано имя файла."
 
-#: libs/ui/kis_layer_manager.cc:339
+#: libs/ui/kis_layer_manager.cc:350
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Свойства заливаемого слоя"
 
-#: libs/ui/kis_layer_manager.cc:396
+#: libs/ui/kis_layer_manager.cc:407
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Изменить клонирующий слой"
 
-#: libs/ui/kis_layer_manager.cc:511
+#: libs/ui/kis_layer_manager.cc:522
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Преобразовать группу в &анимированный слой"
 
-#: libs/ui/kis_layer_manager.cc:531
+#: libs/ui/kis_layer_manager.cc:542
 #, kde-format
 msgid "Save layers to..."
 msgstr "Сохранить слои как..."
 
-#: libs/ui/kis_layer_manager.cc:532
+#: libs/ui/kis_layer_manager.cc:543
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34470,30 +34422,30 @@ msgstr ""
 "Выберите место, где будет храниться слой. Новый слой будет ссылаться на "
 "указанный файл."
 
-#: libs/ui/kis_layer_manager.cc:595
+#: libs/ui/kis_layer_manager.cc:606
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr ""
 "Преобразование в слой из файла\n"
 "преобразование в слой из файла"
 
-#: libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Новый фильтрующий слой"
 
-#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Заливаемый слой"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:813
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Сведение изображения"
 
-#: libs/ui/kis_layer_manager.cc:803
+#: libs/ui/kis_layer_manager.cc:814
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -34502,7 +34454,7 @@ msgstr ""
 "Изображение содержит скрытые слои, которые будут потеряны. Свести "
 "изображение?"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:892
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34512,13 +34464,13 @@ msgstr[1] "Слои заблокированы"
 msgstr[2] "Слои заблокированы"
 msgstr[3] "Слой заблокирован"
 
-#: libs/ui/kis_layer_manager.cc:903
+#: libs/ui/kis_layer_manager.cc:914
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Слой заблокирован"
 
-#: libs/ui/kis_layer_manager.cc:920
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34530,12 +34482,12 @@ msgstr ""
 "Неанимированный слой объединяется с текущим кадром. Чтобы объединить его со "
 "всем клипом, создайте хотя бы один кадр"
 
-#: libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Преобразовать невидимые группы"
 
-#: libs/ui/kis_layer_manager.cc:972
+#: libs/ui/kis_layer_manager.cc:983
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Экспортировать только группы верхнего уровня"
@@ -35237,13 +35189,13 @@ msgstr ""
 "\" text-decoration: underline; color:%1;\">Школа создания сценариев</span></"
 "a></p>"
 
-#: libs/ui/kis_statusbar.cc:230
+#: libs/ui/kis_statusbar.cc:231
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:262
+#: libs/ui/kis_statusbar.cc:280
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -35257,7 +35209,7 @@ msgstr ""
 "  - проекции:\t %3\n"
 "  - мгновенный предпросмотр:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:273
+#: libs/ui/kis_statusbar.cc:291
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -35275,7 +35227,7 @@ msgstr ""
 "\n"
 "Использовано подкачки:\t %8"
 
-#: libs/ui/kis_statusbar.cc:308
+#: libs/ui/kis_statusbar.cc:326
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -35289,7 +35241,20 @@ msgstr ""
 "Внимание!\tЗакончилась оперативная память. Начато использование подкачки.\n"
 "\t\tПопробуйте выделить для Krita больше памяти в диалоге настройки."
 
-#: libs/ui/kis_statusbar.cc:367
+#: libs/ui/kis_statusbar.cc:338
+#, kde-format
+msgctxt "tooltip on statusbar memory reporting button"
+msgid ""
+"\n"
+"\n"
+"WARNING:\tSome layers took too much time to calculate\n"
+"\t\ttheir thumbnails. They were switched into low-quality\n"
+"\t\tthumbnails mode. Try purging unused image data with\n"
+"\t\tImage->Purge Unused Image Data action.\n"
+"Slow layers: "
+msgstr ""
+
+#: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
@@ -35297,18 +35262,18 @@ msgstr "не показывать"
 
 # http://en.wikipedia.org/wiki/Marching_ants --aspotashev
 # "бегущий пунктирный контур" - http://www.multitran.ru/c/m.exe?CL=1&s=marching+ants&l1=1 --aspotashev
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #, kde-format
 msgid "Ants"
 msgstr "бегущий пунктир"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "маска"
 
-#: libs/ui/kis_statusbar.cc:372
+#: libs/ui/kis_statusbar.cc:420
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -35317,17 +35282,17 @@ msgstr ""
 "Выделение: x = %1, y = %2, ширина = %3, высота = %4\n"
 "Режим показа: %5"
 
-#: libs/ui/kis_statusbar.cc:377
+#: libs/ui/kis_statusbar.cc:425
 #, kde-format
 msgid "No Selection"
 msgstr "Ничего не выделено"
 
-#: libs/ui/kis_statusbar.cc:395
+#: libs/ui/kis_statusbar.cc:443
 #, kde-format
 msgid "No profile"
 msgstr "Без профиля"
 
-#: libs/ui/kis_statusbar.cc:397
+#: libs/ui/kis_statusbar.cc:445
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -36295,7 +36260,7 @@ msgstr ""
 "изображения («%1»). Чтобы выполнить редактирование, выберите пространство "
 "для преобразования: \n"
 
-#: libs/ui/KisLayerThumbnailCache.cpp:30
+#: libs/ui/KisLayerThumbnailCache.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr ""
@@ -36793,7 +36758,7 @@ msgid "Do you really want to remove that template?"
 msgstr "Удалить шаблон?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Remove Template"
 msgstr "Удаление шаблона"
@@ -39924,8 +39889,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgid "Overwrite"
 msgstr "Заменить"
 
@@ -40702,7 +40666,6 @@ msgstr "Освещённость:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
 #, fuzzy, kde-format
-#| msgid "Remove Page"
 msgid "Remove tag"
 msgstr "Удалить страницу"
 
@@ -40924,7 +40887,7 @@ msgid "First line indent"
 msgstr "Отступ первой строки"
 
 #: libs/widgets/KoRuler.cpp:1302
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left indent"
 msgstr "Отступ слева"
 
@@ -41113,14 +41076,12 @@ msgid "percent of animation (%)"
 msgstr "процент от анимации (%)"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:216
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Family"
 msgstr "Шрифт"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:217
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Style"
 msgstr "Начертание"
 
@@ -41494,8 +41455,6 @@ msgstr "Теку&щие действия:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1070
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change font"
 msgid "Change Icon..."
 msgstr ""
 "Изменение шрифта\n"
@@ -41503,11 +41462,9 @@ msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1077
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Filter"
+#, kde-format
 msgid "Filter"
-msgstr "Фильтр"
+msgstr "Фильтрование"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1219
 #, kde-format
@@ -41554,15 +41511,13 @@ msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, fuzzy, kde-format
-#| msgid "Choose a color"
 msgid "Choose Icon"
 msgstr "Выберите цвет"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1574
 #, fuzzy, kde-format
-#| msgid "Filter"
 msgid "Filter icons..."
-msgstr "Фильтрование"
+msgstr "М&аска фильтра..."
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
@@ -41860,7 +41815,7 @@ msgstr ""
 "Пожалуйста, выберите язык, который следует использовать для этого приложения:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Fallback Language"
 msgstr "Добавить резервный язык"
 
@@ -41953,9 +41908,7 @@ msgid "Right"
 msgstr "Справа"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:323
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Внизу"
@@ -42027,7 +41980,7 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toolbars Shown"
 msgstr "Отображаемые панели инструментов"
 
@@ -42685,7 +42638,7 @@ msgid "On Mouse Over"
 msgstr "При наведении курсора мыши"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Never"
 msgstr "Никогда"
 
@@ -43981,9 +43934,9 @@ msgid "Rename Composition"
 msgstr "Переименовать композицию"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Name:"
-msgstr "Новое имя:"
+msgstr "Новое название:"
 
 #: plugins/dockers/compositiondocker/compositionmodel.cpp:65
 #, kde-format
@@ -44426,7 +44379,7 @@ msgstr "&Переключить блокировки и видимость"
 msgid "&Add"
 msgstr "&Добавить"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -44777,7 +44730,7 @@ msgstr ""
 "белому цвету в области редактирования"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overview"
 msgstr "Обзор"
 
@@ -45516,13 +45469,13 @@ msgstr "Запись"
 msgid "Export..."
 msgstr "Экспортировать..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Качество:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:148
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45534,13 +45487,13 @@ msgstr ""
 "качества. Не влияет на процессор.\n"
 "Значения ниже 50 не рекомендуются из-за большого количества артефактов."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Сжатие:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:157
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45556,25 +45509,25 @@ msgstr ""
 "Значения выше 3 не рекомендуются из-за высокого влияния на "
 "производительность."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:185
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
 #, fuzzy, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Частота кадров:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:194
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, fuzzy, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Интервал захвата:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Оригинал"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45582,7 +45535,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Половина"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:237
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45590,35 +45543,35 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Четверть"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Остановить"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Запись"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:311
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Запись приостановлена"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:338
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45627,7 +45580,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:349
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45637,37 +45590,37 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:354
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
 #, fuzzy, kde-format
 #| msgid "Set the angle of the light source"
 msgid "Set the number of threads to be used for recording."
 msgstr "Задайте угол источника света"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:362
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Запись"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:441
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
 # BUGME: remove ellispsis --aspotashev
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Выберите каталог для записей"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Запись"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45676,13 +45629,13 @@ msgstr ""
 "Запись была остановлена из-за сбоя во время записи кадра. Проверьте "
 "свободное место на диске и снова запустите запись."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
 #, fuzzy, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45693,7 +45646,7 @@ msgstr ""
 "Предупреждение о низкой производительности. Средству записи не удаётся "
 "вовремя записать все кадры. Попробуйте увеличить интервал захвата."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, fuzzy, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -46271,7 +46224,6 @@ msgstr "Настроить Содержание"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:12
 #, fuzzy, kde-format
-#| msgid "Alignment"
 msgctxt "@label:listbox"
 msgid "Alignment Baseline"
 msgstr "Выравнивание"
@@ -46294,9 +46246,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:82
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 profile name, check simplescreenrecorder for standard translations"
-#| msgid "baseline"
 msgctxt "@label:inlistbox"
 msgid "Baseline"
 msgstr "baseline"
@@ -46310,7 +46259,6 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:84
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:82
 #, fuzzy, kde-format
-#| msgid "Alphabetical"
 msgctxt "@label:inlistbox"
 msgid "Alphabetic"
 msgstr "Алфавитный"
@@ -46326,7 +46274,6 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
 #, fuzzy, kde-format
-#| msgid "Biography"
 msgctxt "@label:inlistbox"
 msgid "Ideographic"
 msgstr "Биография"
@@ -46341,7 +46288,6 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
 #, fuzzy, kde-format
-#| msgid "Center"
 msgctxt "@label:inlistbox"
 msgid "Central"
 msgstr "По центру"
@@ -46349,8 +46295,6 @@ msgstr "По центру"
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:89
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:87
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align to horizontal center"
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box center."
 msgstr "Выравнивание по центру по горизонтали"
@@ -46373,8 +46317,6 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
 #: plugins/dockers/textproperties/qml/TextAlign.qml:368
 #, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
 msgctxt "@label:inlistbox"
 msgid "Middle"
 msgstr "Средняя"
@@ -46393,7 +46335,7 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Mathematical"
-msgstr "Логические операции"
+msgstr "Математика и расчёты"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:95
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:93
@@ -46405,7 +46347,6 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
 #, fuzzy, kde-format
-#| msgid "Text Tool"
 msgctxt "@label:inlistbox"
 msgid "Text Top"
 msgstr "Текст"
@@ -46413,8 +46354,6 @@ msgstr "Текст"
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:97
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:95
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align to top edge"
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
 msgstr "Выравнивание по верхнему краю"
@@ -46422,7 +46361,6 @@ msgstr "Выравнивание по верхнему краю"
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
 #, fuzzy, kde-format
-#| msgid "To Bottom"
 msgctxt "@label:inlistbox"
 msgid "Text Bottom"
 msgstr "В самый низ"
@@ -46430,20 +46368,15 @@ msgstr "В самый низ"
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:99
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:97
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align to top edge"
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
 msgstr "Выравнивание по верхнему краю"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 profile name, check simplescreenrecorder for standard translations"
-#| msgid "baseline"
 msgctxt "@label"
 msgid "Baseline Shift"
-msgstr "baseline"
+msgstr "Линейный сдвиг:"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
 #, kde-format
@@ -46464,14 +46397,12 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
 #, fuzzy, kde-format
-#| msgid "None"
 msgctxt "@label:inlistbox"
 msgid "None"
 msgstr "Нет"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:132
 #, fuzzy, kde-format
-#| msgid "Length"
 msgctxt "@label:inlistbox"
 msgid "Length"
 msgstr "Длина"
@@ -46479,7 +46410,6 @@ msgstr "Длина"
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:133
 #: plugins/dockers/textproperties/qml/OTPosition.qml:79
 #, fuzzy, kde-format
-#| msgid "Superhero"
 msgctxt "@label:inlistbox"
 msgid "Super"
 msgstr "Супергерои"
@@ -46487,15 +46417,12 @@ msgstr "Супергерои"
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:134
 #: plugins/dockers/textproperties/qml/OTPosition.qml:80
 #, fuzzy, kde-format
-#| msgctxt "apng prediction option name"
-#| msgid "sub"
 msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr "нижний"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, fuzzy, kde-format
-#| msgid "Title:"
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "Название:"
@@ -46504,39 +46431,34 @@ msgstr "Название:"
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
-msgstr "Таблица стилей"
+msgstr "Название слоя:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, fuzzy, kde-format
-#| msgid "Description:"
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "Описание:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, fuzzy, kde-format
-#| msgid "Short Description"
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "Краткое описание"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, fuzzy, kde-format
-#| msgid "Style:"
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "Стиль:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, fuzzy, kde-format
-#| msgid "Character"
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "Символ"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, fuzzy, kde-format
-#| msgid "Paragraph"
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "Абзац"
@@ -46559,57 +46481,42 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "This is a label before a combobox with different choices regarding which "
-#| "layers to take into considerationg when calculating the area to fill. "
-#| "Options together with the label are: /Sample current layer/ /Sample all "
-#| "layers/ /Sample color labeled layers/. Sample is a verb here and means "
-#| "something akin to 'take into account'."
-#| msgid "Sample:"
 msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "Образец:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, fuzzy, kde-format
-#| msgid "Before:"
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "Перед:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Sca&le..."
 msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "&Изменить размер..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, fuzzy, kde-format
-#| msgid "After:"
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "После:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
 #, fuzzy, kde-format
-#| msgid "Width:"
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Ширина:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
 #, fuzzy, kde-format
-#| msgid "Height:"
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Высота:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, fuzzy, kde-format
-#| msgctxt "Drawing Angle"
-#| msgid "Direction"
 msgctxt "@label:listbox"
 msgid "Direction"
 msgstr "Направление"
@@ -46630,14 +46537,12 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/Direction.qml:107
 #, fuzzy, kde-format
-#| msgid "Left to Right"
 msgctxt "@label:inlistbox"
 msgid "Left to Right"
 msgstr "Слева направо"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:108
 #, fuzzy, kde-format
-#| msgid "Right to Left"
 msgctxt "@label:inlistbox"
 msgid "Right to Left"
 msgstr "Справа налево"
@@ -46661,22 +46566,18 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:122
 #: plugins/dockers/textproperties/qml/WordBreak.qml:77
 #, fuzzy, kde-format
-#| msgid "Normal"
 msgctxt "@label:inlistbox"
 msgid "Normal"
 msgstr "Нормальный"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:137
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Camera Profile"
-#| msgid "Embedded"
 msgctxt "@label:inlistbox"
 msgid "Embed"
 msgstr "Встроенный"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:138
 #, fuzzy, kde-format
-#| msgid "Overwrite"
 msgctxt "@label:inlistbox"
 msgid "Override"
 msgstr "Заменить"
@@ -46695,7 +46596,6 @@ msgstr "Изолировать слой"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:141
 #, fuzzy, kde-format
-#| msgid "Find Text"
 msgctxt "@label:inlistbox"
 msgid "Plain Text"
 msgstr "Найти текст"
@@ -46728,7 +46628,6 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/TextRendering.qml:81
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:92
 #, fuzzy, kde-format
-#| msgid "Auto"
 msgctxt "@label:inlistbox"
 msgid "Auto"
 msgstr "Автоматическая"
@@ -46743,7 +46642,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, fuzzy, kde-format
-#| msgid "Font Family"
 msgctxt "@label"
 msgid "Font Family"
 msgstr "Шрифт"
@@ -46767,20 +46665,16 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, fuzzy, kde-format
-#| msgid "Remove profile"
 msgid "Remove family"
 msgstr "Удалить профиль"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:155
 #, fuzzy, kde-format
-#| msgctxt "floating message in layer manager"
-#| msgid "Layer is empty "
 msgid "Family list is empty."
 msgstr "Слой пустой "
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:171
 #, fuzzy, kde-format
-#| msgid "Add Fallback Language"
 msgid "Add Fallback Family"
 msgstr "Добавить резервный язык"
 
@@ -46808,8 +46702,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
 msgctxt "@label:spinbox"
 msgid "Font Size"
 msgstr "Размер шрифта"
@@ -46830,8 +46722,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
 msgctxt "@label:spinbox"
 msgid "Font Size Adjust"
 msgstr "Размер шрифта"
@@ -46865,7 +46755,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, fuzzy, kde-format
-#| msgid "Font Style"
 msgctxt "@label"
 msgid "Font Style"
 msgstr "Начертание"
@@ -46890,7 +46779,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, fuzzy, kde-format
-#| msgid "Height: "
 msgctxt "@label:slider"
 msgid "Weight: "
 msgstr "Высота:"
@@ -46903,7 +46791,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, fuzzy, kde-format
-#| msgid "Width: "
 msgctxt "@label:slider"
 msgid "Width: "
 msgstr "Ширина: "
@@ -46916,7 +46803,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
 #, fuzzy, kde-format
-#| msgid "Italic"
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr "Курсив"
@@ -46929,7 +46815,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, fuzzy, kde-format
-#| msgid "°"
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr "°"
@@ -46976,21 +46861,18 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, fuzzy, kde-format
-#| msgid "Saving Format"
 msgctxt "@option:check"
 msgid "Hang First"
 msgstr "Формат для хранения"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, fuzzy, kde-format
-#| msgid "Line:"
 msgctxt "@label:listbox"
 msgid "Line End:"
 msgstr "Линия:"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:132
 #, fuzzy, kde-format
-#| msgid "File Handling"
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
 msgstr "Работа с файлами"
@@ -47015,7 +46897,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, fuzzy, kde-format
-#| msgid "Language"
 msgctxt "@title:group"
 msgid "Language"
 msgstr "Язык"
@@ -47044,14 +46925,12 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
 #, fuzzy, kde-format
-#| msgid "Script"
 msgctxt "@label:listbox"
 msgid "Script:"
 msgstr "Сценарий"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, fuzzy, kde-format
-#| msgid "Letter Spacing"
 msgctxt "@label:spinbox"
 msgid "Letter Spacing"
 msgstr "Межбуквенное расстояние"
@@ -47073,8 +46952,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Break"
 msgctxt "@label:listbox"
 msgid "Line Break"
 msgstr ""
@@ -47125,7 +47002,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, fuzzy, kde-format
-#| msgid "String"
 msgctxt "@label:inlistbox"
 msgid "Strict"
 msgstr "Строка"
@@ -47151,8 +47027,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
 msgctxt "@label"
 msgid "Line Height"
 msgstr "Высота строки"
@@ -47173,7 +47047,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
 #, fuzzy, kde-format
-#| msgid "Normal"
 msgctxt "@option:check"
 msgid "Normal"
 msgstr "Нормальный"
@@ -47186,8 +47059,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure the Table of Contents"
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "Настроить Содержание"
@@ -47207,8 +47078,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgid "Remove feature."
 msgstr "Удаление шаблона"
 
@@ -47216,7 +47085,6 @@ msgstr "Удаление шаблона"
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
 #: qmlmodules/components/qml/ResourceView.qml:297
 #, fuzzy, kde-format
-#| msgid "Search"
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Поиск"
@@ -47255,8 +47123,6 @@ msgstr "маленькие заглавные буквы"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:80
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Unite Shapes"
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
 msgstr ""
@@ -47337,17 +47203,16 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Simplified"
-msgstr "Симплексный шум"
+msgstr "Простое"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:106
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Traditional"
-msgstr "Цвета градиента"
+msgstr "Дополнительный"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
 #, fuzzy, kde-format
-#| msgid "Width:"
 msgctxt "@label:listbox"
 msgid "Width:"
 msgstr "Ширина:"
@@ -47356,12 +47221,11 @@ msgstr "Ширина:"
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Full width"
-msgstr "Ширина"
+msgstr "Заполнение"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
 #, fuzzy, kde-format
-#| msgid "Proportional"
 msgctxt "@label:inlistbox"
 msgid "Proportional"
 msgstr "Пропорционально"
@@ -47402,8 +47266,6 @@ msgstr "Холодные цвета"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:109
 #, fuzzy, kde-format
-#| msgctxt "Drawing Angle"
-#| msgid "Direction"
 msgctxt "@option:check"
 msgid "Discretionary"
 msgstr "Направление"
@@ -47416,7 +47278,6 @@ msgstr "Гистограмма"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:125
 #, fuzzy, kde-format
-#| msgid "Content"
 msgctxt "@option:check"
 msgid "Contextual"
 msgstr "Содержимое"
@@ -47425,7 +47286,7 @@ msgstr "Содержимое"
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr "Алфавитный"
+msgstr "Буквенно-цифровой"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
@@ -47446,14 +47307,12 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
 #, fuzzy, kde-format
-#| msgid "Style:"
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "Стиль:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
 #, fuzzy, kde-format
-#| msgid "Lightning"
 msgctxt "@label:inlistbox"
 msgid "Lining"
 msgstr "Молнии"
@@ -47466,7 +47325,6 @@ msgstr "Стили слоя"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
 #, fuzzy, kde-format
-#| msgid "Spacing:"
 msgctxt "@label:listbox"
 msgid "Spacing:"
 msgstr "Интервал:"
@@ -47481,18 +47339,16 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Fractions:"
-msgstr "Действия"
+msgstr "Действия:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:156
 #, fuzzy, kde-format
-#| msgid "Emboss Diagonal"
 msgctxt "@label:inlistbox"
 msgid "Diagonal"
 msgstr "Рельеф по диагонали"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:157
 #, fuzzy, kde-format
-#| msgid "Locked"
 msgctxt "@label:inlistbox"
 msgid "Stacked"
 msgstr "Заблокирован"
@@ -47511,7 +47367,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
 #, fuzzy, kde-format
-#| msgid "Position"
 msgctxt "@label"
 msgid "Glyphs: Position"
 msgstr "Позиция"
@@ -47546,15 +47401,12 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:23
 #, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure program"
-#| msgid "Aperture priority"
 msgctxt "@info:tooltip"
 msgid "Revert property."
 msgstr "Приоритет диафрагмы"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:14
 #, fuzzy, kde-format
-#| msgid "Target Size"
 msgctxt "@title:group"
 msgid "Tab Size"
 msgstr "Конечный размер"
@@ -47575,7 +47427,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, fuzzy, kde-format
-#| msgid "Align"
 msgctxt "@title:group"
 msgid "Text Align"
 msgstr "Выровнять"
@@ -47596,7 +47447,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, fuzzy, kde-format
-#| msgid "Text color:"
 msgctxt "@label:listbox"
 msgid "Text Align:"
 msgstr "Цвет текста:"
@@ -47604,8 +47454,6 @@ msgstr "Цвет текста:"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:306
 #: plugins/dockers/textproperties/qml/TextAlign.qml:338
 #, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
 msgctxt "@label:inlistbox"
 msgid "Left"
 msgstr "Левая"
@@ -47614,7 +47462,6 @@ msgstr "Левая"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:339
 #: plugins/dockers/textproperties/qml/TextAlign.qml:367
 #, fuzzy, kde-format
-#| msgid "Start"
 msgctxt "@label:inlistbox"
 msgid "Start"
 msgstr "Начало"
@@ -47622,7 +47469,6 @@ msgstr "Начало"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:308
 #: plugins/dockers/textproperties/qml/TextAlign.qml:340
 #, fuzzy, kde-format
-#| msgid "Center"
 msgctxt "@label:inlistbox"
 msgid "Center"
 msgstr "По центру"
@@ -47631,7 +47477,6 @@ msgstr "По центру"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:341
 #: plugins/dockers/textproperties/qml/TextAlign.qml:369
 #, fuzzy, kde-format
-#| msgid "End:"
 msgctxt "@label:inlistbox"
 msgid "End"
 msgstr "Конец:"
@@ -47639,35 +47484,30 @@ msgstr "Конец:"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:310
 #: plugins/dockers/textproperties/qml/TextAlign.qml:342
 #, fuzzy, kde-format
-#| msgid "Right"
 msgctxt "@label:inlistbox"
 msgid "Right"
 msgstr "Справа"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:311
 #, fuzzy, kde-format
-#| msgid "Justify"
 msgctxt "@label:inlistbox"
 msgid "Justified"
 msgstr "По ширине"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:327
 #, fuzzy, kde-format
-#| msgid "Aligned at"
 msgctxt "@label:listbox"
 msgid "Align Last:"
 msgstr "Выравнивание по"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:357
 #, fuzzy, kde-format
-#| msgid "Text color:"
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
 msgstr "Цвет текста:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
 #, fuzzy, kde-format
-#| msgid "Texture"
 msgctxt "@label:title"
 msgid "Text Area"
 msgstr "Текстура"
@@ -47688,21 +47528,18 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
 #, fuzzy, kde-format
-#| msgid "Shape creation:"
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
 msgstr "Создание формы:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
 #, fuzzy, kde-format
-#| msgid "Shape creation:"
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
 msgstr "Создание формы:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, fuzzy, kde-format
-#| msgid "Decoration:"
 msgctxt "@title:group"
 msgid "Text Decoration"
 msgstr "Оформление:"
@@ -47725,44 +47562,36 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, fuzzy, kde-format
-#| msgid "Line:"
 msgctxt "@title:group"
 msgid "Line:"
 msgstr "Линия:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:177
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Underline"
 msgctxt "@option:check"
 msgid "Underline"
 msgstr "Подчёркивание"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:191
 #, fuzzy, kde-format
-#| msgid "Overview"
 msgctxt "@option:check"
 msgid "Overline"
 msgstr "Обзор"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:205
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Strikethrough"
 msgctxt "@option:check"
 msgid "Line-through"
 msgstr "Зачёркнутый"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:222
 #, fuzzy, kde-format
-#| msgid "Color:"
 msgctxt "@label:chooser"
 msgid "Color:"
 msgstr "Цвет:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:255
 #, fuzzy, kde-format
-#| msgid "Solid"
 msgctxt "@label:inlistbox"
 msgid "Solid"
 msgstr "Сплошной"
@@ -47775,15 +47604,12 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:257
 #, fuzzy, kde-format
-#| msgid "Dashed"
 msgctxt "@label:inlistbox"
 msgid "Dashed"
 msgstr "Штриховая"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:258
 #, fuzzy, kde-format
-#| msgctxt "Line spacing value"
-#| msgid "Double"
 msgctxt "@label:inlistbox"
 msgid "Double"
 msgstr "Двойной"
@@ -47796,7 +47622,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:14
 #, fuzzy, kde-format
-#| msgid "Left indent"
 msgctxt "@title:group"
 msgid "Text Indent"
 msgstr "Отступ слева"
@@ -47811,7 +47636,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, fuzzy, kde-format
-#| msgid "Left indent"
 msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
@@ -47820,7 +47644,6 @@ msgstr "Отступ слева"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, fuzzy, kde-format
-#| msgid "Page Orientation:"
 msgctxt "@option:check"
 msgid "Hanging indentation"
 msgstr "Ориентация:"
@@ -47833,21 +47656,18 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:64
 #, fuzzy, kde-format
-#| msgid "Paragraph"
 msgctxt "@title:tab"
 msgid "Paragraph"
 msgstr "Абзац"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
 #, fuzzy, kde-format
-#| msgid "Character"
 msgctxt "@title:tab"
 msgid "Character"
 msgstr "Символ"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
 #, fuzzy, kde-format
-#| msgid "Preset"
 msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Профиль"
@@ -47856,7 +47676,7 @@ msgstr "Профиль"
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr "Изменить профили"
+msgstr "Добавить к профилю фильтров"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:148
 #, fuzzy, kde-format
@@ -47868,39 +47688,36 @@ msgstr "Изменить профили"
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "Новый стиль"
+msgstr ""
+"Изменение стилей\n"
+"изменение стилей"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, fuzzy, kde-format
-#| msgid "Filter"
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Фильтрование"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:334
 #, fuzzy, kde-format
-#| msgid "Add sort key"
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "Добавить программную кнопку"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:352
 #, fuzzy, kde-format
-#| msgid "Properties..."
 msgctxt "@info:placeholder"
 msgid "Add Property..."
 msgstr "Свойства..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
 #, fuzzy, kde-format
-#| msgid "Configure"
 msgctxt "@label:button"
 msgid "Configure"
 msgstr "Настроить"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:39
 #, fuzzy, kde-format
-#| msgid "&Miscibility:"
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
 msgstr "&Смешивание:"
@@ -47908,8 +47725,6 @@ msgstr "&Смешивание:"
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open Recent"
 msgctxt "@label:inlistbox"
 msgid "When Relevant"
 msgstr "Последние файлы"
@@ -47924,29 +47739,24 @@ msgstr "Колесо:"
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
 #, fuzzy, kde-format
-#| msgid "Toolbars Shown"
 msgctxt "@label:inlistbox"
 msgid "Always Show"
 msgstr "Отображаемые панели инструментов"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:106
 #, fuzzy, kde-format
-#| msgid "Default"
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
 msgstr "По умолчанию"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, fuzzy, kde-format
-#| msgid "Never"
 msgctxt "@label:inlistbox"
 msgid "Never Show"
 msgstr "Никогда"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:12
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text editing"
 msgctxt "@title:group"
 msgid "Text Rendering"
 msgstr "Редактирование текста"
@@ -47960,7 +47770,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, fuzzy, kde-format
-#| msgid "Enable selection outline anti-aliasing"
 msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
@@ -47977,14 +47786,12 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
 #, fuzzy, kde-format
-#| msgid "Optimize"
 msgctxt "@label:inlistbox"
 msgid "Optimize Speed"
 msgstr "Оптимизировать"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:84
 #, fuzzy, kde-format
-#| msgid "Enable curve anti-aliasing"
 msgctxt "@info:tooltip"
 msgid "Renders without antialiasing."
 msgstr "Включить сглаживание кривых"
@@ -48003,7 +47810,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, fuzzy, kde-format
-#| msgid "Geometric Mean"
 msgctxt "@label:inlistbox"
 msgid "Geometric Precision"
 msgstr "Cреднее геометрическое"
@@ -48017,7 +47823,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, fuzzy, kde-format
-#| msgid "Free Transform"
 msgctxt "@title:group"
 msgid "Text Transform"
 msgstr "Свободная трансформация"
@@ -48049,21 +47854,18 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
 #, fuzzy, kde-format
-#| msgid "Capitalize"
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
 msgstr "Начинать с прописной буквы"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
 #, fuzzy, kde-format
-#| msgid "Uppercase"
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
 msgstr "ВЕРХНИЙ РЕГИСТР"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:107
 #, fuzzy, kde-format
-#| msgid "Lowercase"
 msgctxt "@label:inlistbox"
 msgid "Lower Case"
 msgstr "нижний регистр"
@@ -48082,7 +47884,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, fuzzy, kde-format
-#| msgid "Vertical Position"
 msgctxt "@label:spinbox"
 msgid "Underline Position"
 msgstr "Вертикальное положение"
@@ -48103,30 +47904,24 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
 msgctxt "@label:inlistbox"
 msgid "Bottom"
 msgstr "Внизу"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:109
 #, fuzzy, kde-format
-#| msgid "Vertical Lines"
 msgctxt "@label:inlistbox"
 msgid "Vertical Left"
 msgstr "Вертикальные линии"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:110
 #, fuzzy, kde-format
-#| msgid "Vertical Radius"
 msgctxt "@label:inlistbox"
 msgid "Vertical Right"
 msgstr "Вертикальный радиус"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
 #, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "White Balance"
 msgctxt "@label:spinbox"
 msgid "White Space"
 msgstr "Баланс белого"
@@ -48149,29 +47944,24 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, fuzzy, kde-format
-#| msgid "Prev"
 msgctxt "@label:inlistbox"
 msgid "Pre"
 msgstr "Пред."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:124
 #, fuzzy, kde-format
-#| msgid "Wrap"
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
 msgstr "Перенос"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, fuzzy, kde-format
-#| msgid "Wrap"
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
 msgstr "Перенос"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath"
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
 msgstr ""
@@ -48180,8 +47970,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Draw Line"
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
 msgstr ""
@@ -48190,8 +47978,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Break"
 msgctxt "@label:listbox"
 msgid "Word Break"
 msgstr ""
@@ -48242,7 +48028,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, fuzzy, kde-format
-#| msgid "Auto Spacing"
 msgctxt "@title:group"
 msgid "Word Spacing"
 msgstr "Автоматические интервалы"
@@ -48265,7 +48050,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, fuzzy, kde-format
-#| msgid "Painting Mode"
 msgctxt "@label:listbox"
 msgid "Writing Mode"
 msgstr "Режим рисования"
@@ -48288,21 +48072,18 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
 #, fuzzy, kde-format
-#| msgid "Horizontal"
 msgctxt "@label:inlistbox"
 msgid "Horizontal"
 msgstr "Горизонтально"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:78
 #, fuzzy, kde-format
-#| msgid "Right to Left"
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
 msgstr "Справа налево"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
 #, fuzzy, kde-format
-#| msgid "Left to Right"
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
 msgstr "Слева направо"
@@ -48311,7 +48092,7 @@ msgstr "Слева направо"
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Таблица стилей"
+msgstr "Новый стиль"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -50231,7 +50012,7 @@ msgid "Number"
 msgstr "Количество"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "String"
 msgstr "Строка"
 
@@ -52159,7 +51940,6 @@ msgstr "коррекцию цвета"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
 #, fuzzy, kde-format
-#| msgid "Lightness"
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "Светлота"
@@ -57480,7 +57260,6 @@ msgstr "Двухтональный режим цветов"
 
 #: plugins/impex/psd/psd_loader.cpp:255
 #, fuzzy, kde-format
-#| msgid "Clone Layer"
 msgctxt "@title:window PSD import question about text."
 msgid "Found Text Layers"
 msgstr "Клонирующий слой"
@@ -58125,7 +57904,7 @@ msgstr ""
 "точки получившемуся изображению.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:623
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Баланс белого"
@@ -58284,7 +58063,7 @@ msgid "None"
 msgstr "Нет"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Встроенный"
@@ -59534,7 +59313,7 @@ msgstr "Сглаживание кисти (временно отключено)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Painting Mode"
 msgstr "Режим рисования"
 
@@ -60667,7 +60446,6 @@ msgstr "Параметры кисти"
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
 #, fuzzy, kde-format
-#| msgid "Preserve Brush Preset Settings"
 msgid "Preserve brush preset settings"
 msgstr "Сохранить параметры профиля кисти"
 
@@ -60725,35 +60503,26 @@ msgstr "Побуквенный режим"
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Contrast: "
 msgid "Contrast: "
 msgstr "Контрастность: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Neutral point: "
 msgid "Neutral point: "
 msgstr "Нейтральная точка: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Brightness: "
 msgid "Brightness: "
 msgstr "Яркость: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#| msgid "Scale: "
 msgid "Scale: "
-msgstr "Масштабирование: "
+msgstr "Масштаб: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -60822,8 +60591,7 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, fuzzy, kde-format
-#| msgid "Auto Spacing"
+#, kde-format
 msgid "Auto Spacing"
 msgstr "Автоматические интервалы"
 
@@ -61134,8 +60902,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
-#, fuzzy, kde-format
-#| msgid "°"
+#, kde-format
 msgid "°"
 msgstr "°"
 
@@ -61343,7 +61110,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, fuzzy, kde-format
-#| msgid "Color Image"
 msgid "Color image"
 msgstr "Цвет изображения"
 
@@ -61355,7 +61121,6 @@ msgstr "Изображение кончика кисти воспроизвод�
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, fuzzy, kde-format
-#| msgid "Lightness Map"
 msgid "Lightness map"
 msgstr "Карта светлоты"
 
@@ -61373,7 +61138,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, fuzzy, kde-format
-#| msgid "Gradient Map"
 msgid "Gradient map"
 msgstr "Карта градиента"
 
@@ -61390,7 +61154,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, fuzzy, kde-format
-#| msgid "Animated Mask"
 msgid "Animated mask"
 msgstr "Анимированная маска"
 
@@ -66179,7 +65942,7 @@ msgstr "Обновить цвет"
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "Стиль всплывающего окна на холсте для сравнения отобранных цветов"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:42
@@ -66387,8 +66150,6 @@ msgstr "Встроенный"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
 msgstr ""
@@ -66397,15 +66158,12 @@ msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
 #, fuzzy
-#| msgid "Text On Path"
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
 msgstr "Текст по контуру"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
 msgstr ""
@@ -66414,14 +66172,12 @@ msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
 #, fuzzy
-#| msgid "Remove Shape Collection"
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
 msgstr "Удалить коллекцию объектов"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 #, fuzzy
-#| msgid "Toggle Rotate Mode"
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
 msgstr "Режим поворота"
@@ -66433,16 +66189,12 @@ msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
 msgstr "Уменьшить нажим"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
 #, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
 msgstr "Увеличить нажим"
@@ -66533,14 +66285,11 @@ msgstr ""
 "сброс преобразования объекта"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Unclip Shapes"
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr ""
-"Снятие фиксации с объектов\n"
-"снятие фиксации с объектов"
+"Объединение форм\n"
+"объединение форм"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
 msgctxt "(qtundo-format)"
@@ -66575,8 +66324,6 @@ msgstr "Логические операции"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
 #, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
 msgid "Text"
 msgstr "Текст"
 
@@ -66899,7 +66646,7 @@ msgid "Save profile as..."
 msgstr "Сохранить профиль как..."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove profile"
 msgstr "Удалить профиль"
 
@@ -67499,14 +67246,12 @@ msgstr "Выделение по схожим цветам"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:44
 #, fuzzy, kde-format
-#| msgid "Alternate"
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
 msgstr "Альтернативное"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
 #, fuzzy, kde-format
-#| msgid "Character"
 msgctxt "@title:tab"
 msgid "Character Map"
 msgstr "Символ"
@@ -67522,7 +67267,6 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgctxt "@info"
 msgid "No glyph alternates available."
 msgstr "Нет доступных рисунков."
@@ -67571,7 +67315,6 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
-#| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Текст"
@@ -67579,22 +67322,18 @@ msgstr "Текст"
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Размер шрифта"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, fuzzy, kde-format
-#| msgid "To Bottom"
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "В самый низ"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, fuzzy, kde-format
-#| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Алфавитный"
@@ -67602,7 +67341,6 @@ msgstr "Алфавитный"
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, fuzzy, kde-format
-#| msgid "Biography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Биография"
@@ -67615,8 +67353,6 @@ msgstr "Угловой"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Средняя"
@@ -67625,43 +67361,34 @@ msgstr "Средняя"
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
-msgstr "Логические операции"
+msgstr "Математика и расчёты"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, fuzzy, kde-format
-#| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "По центру"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Высота строки"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
 #, fuzzy, kde-format
-#| msgid "Current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Текущее выделение"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 profile name, check simplescreenrecorder for standard translations"
-#| msgid "baseline"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "baseline"
+msgstr "Линейный сдвиг:"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Tool"
 msgstr "Текст"
 
@@ -67671,10 +67398,9 @@ msgid "Conversion failed"
 msgstr "Ошибка преобразования"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
-#, fuzzy, kde-format
-#| msgid "Find &Next"
+#, kde-format
 msgid "Find Text"
-msgstr "Найти д&алее"
+msgstr "Найти текст"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
@@ -67733,7 +67459,6 @@ msgstr "Удаление шаблона"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 #, fuzzy
-#| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
 msgstr "Сбросить трансформацию холста"
@@ -67768,7 +67493,7 @@ msgstr "Текст"
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr "Открыть палитру"
+msgstr "Импорт палитр..."
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18
@@ -68016,8 +67741,6 @@ msgstr "Кернинг"
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste As Text"
 msgctxt "action"
 msgid "Paste Rich Text"
 msgstr ""
@@ -68038,18 +67761,15 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
 #, fuzzy, kde-format
-#| msgid "Find Text"
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Найти текст"
+msgstr ""
+"Вставить как текст\n"
+"вставку текста"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
 msgctxt "action"
 msgid "Paste text without styling."
 msgstr "Тонкая пастельная текстура"
@@ -68057,8 +67777,6 @@ msgstr "Тонкая пастельная текстура"
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "action"
 msgid "Move Text Selection Down"
 msgstr ""
@@ -68068,7 +67786,6 @@ msgstr ""
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
 #, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
 msgstr ""
@@ -68087,8 +67804,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "action"
 msgid "Move Text Selection Up"
 msgstr ""
@@ -68114,8 +67829,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "action"
 msgid "Move Text Selection Left"
 msgstr ""
@@ -68125,7 +67838,6 @@ msgstr ""
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
 #, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
 msgstr ""
@@ -68144,8 +67856,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "action"
 msgid "Move Text Selection Right"
 msgstr ""
@@ -68175,7 +67885,6 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
 #, fuzzy, kde-format
-#| msgid "Reset Canvas Transformations"
 msgctxt "action"
 msgid "Remove Character Transforms"
 msgstr "Сбросить трансформацию холста"
@@ -68194,7 +67903,6 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
 #, fuzzy, kde-format
-#| msgid "Formatting"
 msgctxt "action"
 msgid "Clear Formatting"
 msgstr "Форматирование"
@@ -68202,7 +67910,6 @@ msgstr "Форматирование"
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
 #, fuzzy, kde-format
-#| msgid "Smooths the edges of the selection"
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Сглаживает края выделения"
@@ -68220,14 +67927,12 @@ msgstr "Текст SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
 #, fuzzy, kde-format
-#| msgid "Create new texts with..."
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Создать новые тексты с помощью..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, fuzzy, kde-format
-#| msgid "Current properties:"
 msgctxt "@option:check"
 msgid "Current Text Properties"
 msgstr "Текущие свойства:"
@@ -68243,11 +67948,10 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Новый стиль"
+msgstr "Избранные профили"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, fuzzy, kde-format
-#| msgid "Text Properties"
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Свойства текста"
@@ -68261,15 +67965,12 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, fuzzy, kde-format
-#| msgid "Options"
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Параметры"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Вставить под курсором"
@@ -68282,10 +67983,6 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Стандартный кончик по умолчанию"
@@ -68298,21 +67995,18 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
 #, fuzzy, kde-format
-#| msgid "Texturing Mode:"
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Режим текстурирования:"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Активировать параметры пера"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, fuzzy, kde-format
-#| msgid "Dialog"
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Диалог"
@@ -68325,7 +68019,6 @@ msgstr "Источник SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
 #, fuzzy, kde-format
-#| msgid "Duplicate the currently selected layer or mask"
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Создать копию текущего слоя или маски"
@@ -68346,14 +68039,12 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, fuzzy, kde-format
-#| msgid "&Convert Image Type..."
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Преобразовать &тип изображения..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, fuzzy, kde-format
-#| msgid "Performance"
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Производительность"
@@ -68368,7 +68059,6 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, fuzzy, kde-format
-#| msgid "Sine Wave"
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Синусоидальная волна"
@@ -68388,7 +68078,6 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
 #, fuzzy, kde-format
-#| msgid "Position"
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Позиция"
@@ -68403,15 +68092,12 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
 #, fuzzy, kde-format
-#| msgid "Debug"
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Отладка"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Прилипать к ограничительной рамке"
@@ -68905,8 +68591,6 @@ msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
 #, fuzzy, kde-format
-#| msgid ""
-#| "This tool only works on vector layers. You probably want the move tool."
 msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
@@ -68916,13 +68600,11 @@ msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
 msgid "Comic Panel Editing Tool"
 msgstr "Инструмент редактирования тонирующей маски"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, fuzzy, kde-format
-#| msgid "millimeter"
 msgid "Millimeters"
 msgstr "миллиметры"
 
@@ -68930,7 +68612,6 @@ msgstr "миллиметры"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
 #, fuzzy, kde-format
-#| msgid "Thickness"
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
@@ -68940,7 +68621,6 @@ msgstr "Толщина"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
 #, fuzzy, kde-format
-#| msgid "Thinning:"
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
@@ -68958,9 +68638,6 @@ msgstr "Специальная заливка"
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
 #, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The display brightness in nits. By default this is "
-#| "set to 1000 for converting to display linear.</p></body></html>"
 msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
@@ -68971,21 +68648,18 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
 #, fuzzy, kde-format
-#| msgid "Initial width:"
 msgid "Unit of width:"
 msgstr "Начальная толщина:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #, fuzzy, kde-format
-#| msgid "Thickness:"
 msgid "Thick gap:"
 msgstr "Толщина:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
 #, fuzzy, kde-format
-#| msgid "Thinning:"
 msgid "Thin gap:"
 msgstr "Сужение:"
 
@@ -68993,20 +68667,17 @@ msgstr "Сужение:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
 #, fuzzy, kde-format
 msgid "Special gap:"
-msgstr "Специальная заливка"
+msgstr "Специальные динамичные точки"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set while balance automatically"
-#| msgid "Automatic"
 msgid "Automatic"
 msgstr "Автоматически"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
 #, fuzzy, kde-format
-#| msgid "Emboss Diagonal"
 msgid "Diagonal:"
 msgstr "Рельеф по диагонали"
 
@@ -69298,8 +68969,6 @@ msgstr "Действия трансформации"
 # BUGME: why space at the end? --aspotashev
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
 #, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
 msgstr "Нельзя трансформировать пустой слой "
@@ -69307,8 +68976,6 @@ msgstr "Нельзя трансформировать пустой слой "
 # BUGME: why space at the end? --aspotashev
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
 #, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
 msgstr "Нельзя трансформировать пустой слой "
@@ -69316,8 +68983,6 @@ msgstr "Нельзя трансформировать пустой слой "
 # BUGME: why space at the end? --aspotashev
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
 #, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
 msgstr "Нельзя трансформировать пустой слой "
@@ -69523,7 +69188,6 @@ msgstr "Трансформация слоя или выделения"
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
 #, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
 msgstr "Действия трансформации"
@@ -69538,7 +69202,6 @@ msgstr "Преобразование"
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
 #, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
 msgstr "Действия трансформации"
@@ -69546,7 +69209,6 @@ msgstr "Действия трансформации"
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
 #, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
 msgstr "Действия трансформации"
@@ -69563,7 +69225,6 @@ msgstr ""
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
 #, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
 msgstr "Действия трансформации"
@@ -70193,7 +69854,6 @@ msgstr "Эталонные изображения"
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
 #, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Инструмент редактирования тонирующей маски"
@@ -70208,69 +69868,54 @@ msgstr ""
 
 #: qmlmodules/components/qml/ResourceView.qml:141
 #, fuzzy, kde-format
-#| msgid "Tag"
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Метка"
 
 #: qmlmodules/components/qml/ResourceView.qml:184
 #, fuzzy, kde-format
-#| msgid "Assign to tag"
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Добавить метку"
 
 #: qmlmodules/components/qml/ResourceView.qml:209
 #, fuzzy, kde-format
-#| msgid "New Name:"
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Новое название:"
 
 #: qmlmodules/components/qml/ResourceView.qml:227
 #, fuzzy, kde-format
-#| msgid "Remove from this tag"
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Снять эту метку"
 
 #: qmlmodules/components/qml/ResourceView.qml:236
 #, fuzzy, kde-format
-#| msgid "Remove from other tag"
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Снять другую метку"
 
 #: qmlmodules/components/qml/ResourceView.qml:305
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Search Actions"
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Поиск действий"
 
 #: qmlmodules/components/qml/ResourceView.qml:324
 #, fuzzy, kde-format
-#| msgid "Import"
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Импорт"
 
 #: qmlmodules/components/qml/ResourceView.qml:348
 #, fuzzy, kde-format
-#| msgid "Remove"
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
 msgstr "Удалить"
 
 #: qmlmodules/components/qml/sliderspinbox/SliderSpinBoxContentItem.qml:154
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "@info:tooltip toggle between soft and hard range in the slider spin box"
-#| msgid ""
-#| "Toggle between full range and subrange.\n"
-#| "Full range: [%1, %2]\n"
-#| "Subrange: [%3, %4]"
 msgctxt "@info:tooltip"
 msgid ""
 "Toggle between full range and subrange.\n"
@@ -70285,29 +69930,21 @@ msgstr ""
 #~ msgstr "Снять метку"
 
 #, fuzzy
-#~| msgid "Click to select text shape."
 #~ msgctxt "action"
 #~ msgid "Make the first selected text flow in shape."
 #~ msgstr "Щёлкните мышью, чтобы выбрать объект текста."
 
 #, fuzzy
-#~| msgctxt "action"
-#~| msgid "Decrease Flow"
 #~ msgctxt "action"
 #~ msgid "Decrease Flow Shape Index"
 #~ msgstr "Уменьшить нажим"
 
 #, fuzzy
-#~| msgctxt "action"
-#~| msgid "Increase Flow"
 #~ msgctxt "action"
 #~ msgid "Increase Flow Shape Index"
 #~ msgstr "Увеличить нажим"
 
 #, fuzzy
-#~| msgctxt ""
-#~| "h264 profile name, check simplescreenrecorder for standard translations"
-#~| msgid "baseline"
 #~ msgctxt "@label"
 #~ msgid "Baseline-Shift"
 #~ msgstr "baseline"
@@ -70321,19 +69958,14 @@ msgstr ""
 #~ msgstr "Источник SVG"
 
 #, fuzzy
-#~| msgid "Text Shape"
 #~ msgid "Text Type"
 #~ msgstr "Форма текста"
 
 #, fuzzy
-#~| msgid "Performance"
 #~ msgid "Preformatted"
 #~ msgstr "Производительность"
 
 #, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p>Use the tilt of the tablet to determine the "
-#~| "normals.</p></body></html>"
 #~ msgid ""
 #~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
 #~ "lines are preserved. New lines are not removed.</p></body></html>"
@@ -70342,12 +69974,10 @@ msgstr ""
 #~ "нормалей</p></body></html>"
 
 #, fuzzy
-#~| msgid "Sine Wave"
 #~ msgid "Inline Wrapped"
 #~ msgstr "Синусоидальная волна"
 
 #, fuzzy
-#~| msgid "Position"
 #~ msgid "Prepositioned"
 #~ msgstr "Позиция"
 
@@ -70379,7 +70009,6 @@ msgstr ""
 #~ msgstr "Изменить направление текста"
 
 #, fuzzy
-#~| msgid "Line Tool"
 #~ msgid "Knife Tool"
 #~ msgstr "Линия"
 
@@ -111997,3 +111626,117 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tint: "
 #~ msgstr "Насыщенность: "
+
+#~ msgid "Find &Next"
+#~ msgstr "Найти д&алее"
+
+#~ msgctxt ""
+#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
+#~ msgid "Scale: "
+#~ msgstr "Масштабирование: "
+
+#~ msgctxt "action"
+#~ msgid "Text editing"
+#~ msgstr "Редактирование текста"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) action"
+#~ msgid "Change text direction"
+#~ msgstr "Изменить направление текста"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locked"
+#~ msgstr "Заблокирован"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alphabetical"
+#~ msgstr "Алфавитный"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Remove Template"
+#~ msgstr "Удаление шаблона"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Assign to tag"
+#~ msgstr "Добавить метку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left indent"
+#~ msgstr "Отступ слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Fallback Language"
+#~ msgstr "Добавить резервный язык"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toolbars Shown"
+#~ msgstr "Отображаемые панели инструментов"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Never"
+#~ msgstr "Никогда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Name:"
+#~ msgstr "Новое имя:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview"
+#~ msgstr "Обзор"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "String"
+#~ msgstr "Строка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Small Caps"
+#~ msgstr "маленькие заглавные буквы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shape"
+#~ msgstr "Объект текста"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @label"
+#~ msgid "White Balance"
+#~ msgstr "Баланс белого"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @item:inlistbox Camera Profile"
+#~ msgid "Embedded"
+#~ msgstr "Встроенный"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "(qtundo-format) h264 profile name, check simplescreenrecorder for "
+#~ "standard translations"
+#~ msgid "baseline"
+#~ msgstr "Использовать контур"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Painting Mode"
+#~ msgstr "Режим рисования"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove profile"
+#~ msgstr "Удалить профиль"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alphanumeric"
+#~ msgstr "Алфавитный"

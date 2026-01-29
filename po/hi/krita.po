@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 02:07+0000\n"
+"POT-Creation-Date: 2026-01-29 02:29+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -10022,8 +10022,8 @@ msgstr "धुंधला करें... (&B)"
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1645
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1648
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
+#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
 #, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13288,44 +13288,44 @@ msgstr "स्नेप करें (&S)"
 msgid "&Image"
 msgstr "चित्र (&I)"
 
-#: krita/krita5.xmlgui:172 krita/krita5.xmlgui:268 krita/krita5.xmlgui:284
+#: krita/krita5.xmlgui:173 krita/krita5.xmlgui:269 krita/krita5.xmlgui:285
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
 msgstr "घुमाएँ (&R)"
 
-#: krita/krita5.xmlgui:194 plugins/extensions/layersplit/layersplit.xmlgui:4
+#: krita/krita5.xmlgui:195 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
 msgstr "परत (&L)"
 
-#: krita/krita5.xmlgui:200
+#: krita/krita5.xmlgui:201
 #, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "नई परत (&N)"
 
-#: krita/krita5.xmlgui:222
+#: krita/krita5.xmlgui:223
 #, kde-format
 msgid "&Import/Export"
 msgstr "आयात/निर्यात (&I)"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:229
+#: krita/krita5.xmlgui:230
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "आयात करें"
 
-#: krita/krita5.xmlgui:237 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
 #, kde-format
 msgid "&Convert"
 msgstr "परिवर्तित करें (&C)"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:248 krita/krita5.xmlgui:319
+#: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13334,89 +13334,89 @@ msgstr "परिवर्तित करें (&C)"
 msgid "&Select"
 msgstr "चुनें (&S)"
 
-#: krita/krita5.xmlgui:256 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "समूह (&G)"
 
-#: krita/krita5.xmlgui:262
+#: krita/krita5.xmlgui:263
 #, kde-format
 msgid "&Transform"
 msgstr "रूपांतरण (&T)"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:280
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "सभी परतें रूपांतित करें (&A)"
 
-#: krita/krita5.xmlgui:294
+#: krita/krita5.xmlgui:295
 #, kde-format
 msgid "S&plit"
 msgstr "विभाजन (&p)"
 
-#: krita/krita5.xmlgui:296 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "अल्फ़ा विभाजन (&p)"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:342
 #, kde-format
 msgid "Select &Opaque"
 msgstr "पारदर्शिता से चयन (&O)"
 
-#: krita/krita5.xmlgui:356
+#: krita/krita5.xmlgui:357
 #, kde-format
 msgid "Filte&r"
 msgstr "फ़िल्टर (&r)"
 
-#: krita/krita5.xmlgui:377 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "साधन (&T)"
 
-#: krita/krita5.xmlgui:378
+#: krita/krita5.xmlgui:379
 #, kde-format
 msgid "Scripts"
 msgstr "स्क्रिप्टें"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "सेटिंग्स (&n)"
 
-#: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "मदत (&H)"
 
-#: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "फाइल"
 
-#: krita/krita5.xmlgui:433
+#: krita/krita5.xmlgui:434
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Edit"
 msgid "Edit"
 msgstr "संपादन"
 
-#: krita/krita5.xmlgui:438
+#: krita/krita5.xmlgui:439
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "ब्रश व अन्य चिजें"
 
-#: krita/krita5.xmlgui:455
+#: krita/krita5.xmlgui:456
 #, fuzzy, kde-format
 #| msgid "Custom color"
 msgid "Custom toolbar 1"
 msgstr "तदनुकूल रंग"
 
-#: krita/krita5.xmlgui:458
+#: krita/krita5.xmlgui:459
 #, fuzzy, kde-format
 #| msgid "Custom color"
 msgid "Custom toolbar 2"
@@ -14219,8 +14219,8 @@ msgstr "की-फ़्रेम हटाएँ"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1885
-#: krita/kritamenu.action:1886
+#: krita/kritamenu.action:575 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15120,8 +15120,23 @@ msgctxt "action"
 msgid "Trim to Image Size"
 msgstr "चित्र के आकार में काटें"
 
-#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#. i18n: context: text @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
+#, kde-format
+msgctxt "action"
+msgid "Purge Unused Image Data"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1199
+#, fuzzy, kde-format
+#| msgid "Set line width of actual selection"
+msgctxt "action"
+msgid "Removes all fully transparent pixels from the image storage"
+msgstr "वास्तविक चयन की लाइन चौड़ाई सेट करें"
+
+#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1209
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
@@ -15131,14 +15146,14 @@ msgstr "वर्तमान परत के अनुसार काट-छ�
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1199 krita/kritamenu.action:1200
+#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
 msgstr "वर्तमान परत के अनुसार काट-छाँट करें"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1209
+#: krita/kritamenu.action:1221
 #, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
@@ -15148,14 +15163,14 @@ msgstr "चयन के अनुसार काट-छाँट करें 
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
+#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
 #, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
 msgstr "चयन के अनुसार काट-छाँट करें"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1221
+#: krita/kritamenu.action:1233
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
@@ -15165,14 +15180,14 @@ msgstr "चित्र घुमाएँ... (&R)"
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
+#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "चित्र घुमाएँ"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1233
+#: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
@@ -15182,14 +15197,14 @@ msgstr "चित्र को ९०° दाएं घुमाएँ (&I)"
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
+#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
 msgstr "चित्र को ९०° दाएं घुमाएँ"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1245
+#: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
@@ -15199,14 +15214,14 @@ msgstr "चित्र को ९०° बाएं घुमाएँ (&9)"
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
+#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
 msgstr "चित्र को ९०° बाएं घुमाएँ"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1257
+#: krita/kritamenu.action:1269
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
@@ -15216,14 +15231,14 @@ msgstr "चित्र को १८०° घुमाएँ"
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
+#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
 msgstr "चित्र को १८०° घुमाएँ"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1269
+#: krita/kritamenu.action:1281
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
@@ -15233,14 +15248,14 @@ msgstr "चित्र अपरूपण... (&S)"
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
+#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
 msgstr "चित्र अपरूपण"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1281
+#: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
@@ -15250,14 +15265,14 @@ msgstr "चित्र आड़े में प्रतिबिंबित
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
+#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
 msgstr "चित्र आड़े में प्रतिबिंबित करें"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1293
+#: krita/kritamenu.action:1305
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
@@ -15267,14 +15282,14 @@ msgstr "चित्र खडे में प्रतिबिंबित �
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
+#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
 msgstr "चित्र खडे में प्रतिबिंबित करें"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1305
+#: krita/kritamenu.action:1317
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
@@ -15284,14 +15299,14 @@ msgstr "चित्र को नया आकार दें... (&N)"
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
+#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
 msgstr "चित्र को नया आकार दें"
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1317
+#: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
@@ -15301,14 +15316,14 @@ msgstr "चित्र का ओफ़सेट... (&O)"
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
+#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
 msgstr "चित्र ओफ़सेट"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1329
+#: krita/kritamenu.action:1341
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
@@ -15318,14 +15333,14 @@ msgstr "कैनवास का आकार बदलें ... (&e)"
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
+#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
 msgstr "कैनवास का आकार बदलें"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1341
+#: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
@@ -15335,14 +15350,14 @@ msgstr "चित्र विभाजन (&a)"
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
+#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
 msgstr "चित्र विभाजन"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1353
+#: krita/kritamenu.action:1365
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
@@ -15352,21 +15367,21 @@ msgstr "चित्र का रंग विभाजन... (&g)"
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
+#: krita/kritamenu.action:1367 krita/kritamenu.action:1368
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
 msgstr "चित्र का रंग विभाजन"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1366
+#: krita/kritamenu.action:1378
 #, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "चुनें"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1369
+#: krita/kritamenu.action:1381
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
@@ -15376,14 +15391,14 @@ msgstr "सभी का चयन करें (&A)"
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1371 krita/kritamenu.action:1372
+#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
 #, kde-format
 msgctxt "action"
 msgid "Select All"
 msgstr "सभी का चयन करें"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1381
+#: krita/kritamenu.action:1393
 #, kde-format
 msgctxt "action"
 msgid "&Deselect"
@@ -15393,14 +15408,14 @@ msgstr "अचयनित (&D)"
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
+#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
 #, kde-format
 msgctxt "action"
 msgid "Deselect"
 msgstr "अचयनित"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1393
+#: krita/kritamenu.action:1405
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
@@ -15410,14 +15425,14 @@ msgstr "फिर से चुनें (&R)"
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
+#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
 msgstr "फिर से चुनें"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1405
+#: krita/kritamenu.action:1417
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
@@ -15427,14 +15442,14 @@ msgstr "वेक्टर चयन मे परिवर्तित कर�
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
+#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
 msgstr "वेक्टर चयन मे परिवर्तित करें "
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1417
+#: krita/kritamenu.action:1429
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
@@ -15444,7 +15459,7 @@ msgstr "रास्टर चयन मे परिवर्तित कर�
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
+#: krita/kritamenu.action:1431 krita/kritamenu.action:1432
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
@@ -15456,15 +15471,15 @@ msgstr "रास्टर चयन मे परिवर्तित कर�
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1429 krita/kritamenu.action:1431
-#: krita/kritamenu.action:1432
+#: krita/kritamenu.action:1441 krita/kritamenu.action:1443
+#: krita/kritamenu.action:1444
 #, kde-format
 msgctxt "action"
 msgid "Edit Selection"
 msgstr "चयन का ससंपादन करें"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1441
+#: krita/kritamenu.action:1453
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
@@ -15474,14 +15489,14 @@ msgstr "आकारों को वेक्टर चयन मे परि�
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1443 krita/kritamenu.action:1444
+#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
 msgstr "आकारों को वेक्टर चयन मे परिवर्तित करें"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1453
+#: krita/kritamenu.action:1465
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
@@ -15491,14 +15506,14 @@ msgstr "चयन को फेदर दें.. (&F)"
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
+#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
 msgstr "चयन को फेदर दें"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1465
+#: krita/kritamenu.action:1477
 #, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
@@ -15508,14 +15523,14 @@ msgstr "चयन दिखाएँ (&p)"
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
+#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
 #, kde-format
 msgctxt "action"
 msgid "Display Selection"
 msgstr "चयन दिखाएँ "
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1477
+#: krita/kritamenu.action:1489
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
@@ -15525,14 +15540,14 @@ msgstr "आकार बदलें... (&l)"
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
+#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
 #, kde-format
 msgctxt "action"
 msgid "Scale"
 msgstr "आकार बदलें"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1489
+#: krita/kritamenu.action:1501
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
@@ -15542,14 +15557,14 @@ msgstr "रंग सीमा द्वारा चुनें... (&e)"
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
+#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
 msgstr "रंग सीमा द्वारा चुनें"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1501
+#: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
@@ -15559,14 +15574,14 @@ msgstr "पारदर्शिता से चयन (प्रतिस्�
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
+#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
 msgstr "पारदर्शिता से चयन"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1513
+#: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
@@ -15576,14 +15591,14 @@ msgstr "पारदर्शिता से चयन (जोडें (&A))"
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
+#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
 msgstr "पारदर्शिता से चयन (जोडें) (&A)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1525
+#: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
@@ -15593,14 +15608,14 @@ msgstr "पारदर्शिता से चयन (व्यवकलन) 
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
+#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
 msgstr "पारदर्शिता से चयन (व्यवकलन)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1537
+#: krita/kritamenu.action:1549
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
@@ -15610,14 +15625,14 @@ msgstr "पारदर्शिता से चयन (प्रतिच्�
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
+#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
 msgstr "पारदर्शिता से चयन (प्रतिच्छेद) (&I)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1549
+#: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
@@ -15627,14 +15642,14 @@ msgstr "चयन फैलाएं... (&G)"
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
+#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
 msgstr "चयन फैलाएं"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1561
+#: krita/kritamenu.action:1573
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
@@ -15644,14 +15659,14 @@ msgstr "चयन को सिकोड़ें... (&h)"
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
+#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
 msgstr "चयन को सिकोड़ें"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1573
+#: krita/kritamenu.action:1585
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
@@ -15661,14 +15676,14 @@ msgstr "चयन की सीमारेखा बनाएँ... (&B)"
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
+#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
 msgstr "चयन की सीमारेखा बनाएँ"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1585
+#: krita/kritamenu.action:1597
 #, kde-format
 msgctxt "action"
 msgid "S&mooth"
@@ -15678,21 +15693,21 @@ msgstr "चिकना (&m)"
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
+#: krita/kritamenu.action:1599 krita/kritamenu.action:1600
 #, kde-format
 msgctxt "action"
 msgid "Smooth"
 msgstr "चिकना"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1598
+#: krita/kritamenu.action:1610
 #, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "फ़िल्टर"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1601
+#: krita/kritamenu.action:1613
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -15702,14 +15717,14 @@ msgstr "फ़िल्टर पुनः लागू करें (&A)"
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1603 krita/kritamenu.action:1604
+#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "फ़िल्टर पुनः लागू करें"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1625
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -15719,7 +15734,7 @@ msgstr "फ़िल्टर पुनः लागू करें (पुन�
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -15731,8 +15746,8 @@ msgstr "विन्यास पुनः दिखाते हुए पि�
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625 krita/kritamenu.action:1627
-#: krita/kritamenu.action:1628
+#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
+#: krita/kritamenu.action:1640
 #, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -15744,8 +15759,8 @@ msgstr "समायोजन"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1635 krita/kritamenu.action:1637
-#: krita/kritamenu.action:1638
+#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
+#: krita/kritamenu.action:1650
 #, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -15757,8 +15772,8 @@ msgstr "कलात्मक"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1655 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1658
+#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
+#: krita/kritamenu.action:1670
 #, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -15770,8 +15785,8 @@ msgstr "रंग"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1665 krita/kritamenu.action:1667
-#: krita/kritamenu.action:1668
+#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
+#: krita/kritamenu.action:1680
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -15783,8 +15798,8 @@ msgstr "किनारा पता लगाएँ"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1675 krita/kritamenu.action:1677
-#: krita/kritamenu.action:1678
+#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
+#: krita/kritamenu.action:1690
 #, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -15796,8 +15811,8 @@ msgstr "बेहतर बनाएँ"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1685 krita/kritamenu.action:1687
-#: krita/kritamenu.action:1688
+#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
+#: krita/kritamenu.action:1700
 #, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -15809,8 +15824,8 @@ msgstr "एम्बोज़"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1695 krita/kritamenu.action:1697
-#: krita/kritamenu.action:1698
+#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
+#: krita/kritamenu.action:1710
 #, kde-format
 msgctxt "action"
 msgid "Map"
@@ -15822,15 +15837,15 @@ msgstr "नक्शा"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1705 krita/kritamenu.action:1707
-#: krita/kritamenu.action:1708
+#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
+#: krita/kritamenu.action:1720
 #, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "अन्य"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1715
+#: krita/kritamenu.action:1727
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -15840,14 +15855,14 @@ msgstr "जि-मिक-क्यूटी प्रारंभ करें"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1718
+#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "जि-मिक-क्यूटी प्रारंभ करें"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1725
+#: krita/kritamenu.action:1737
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -15857,7 +15872,7 @@ msgstr "पिछला जिमिक फ़िल्टर फिर से �
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727 krita/kritamenu.action:1728
+#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -15869,7 +15884,7 @@ msgstr "पिछली जिमक-क्यूटी क्रिया फ�
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1736
+#: krita/kritamenu.action:1748
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
@@ -15878,7 +15893,7 @@ msgid "Settings"
 msgstr "विन्यास"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1739
+#: krita/kritamenu.action:1751
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -15888,28 +15903,28 @@ msgstr "क्रिता को विन्यस्त करें... (&C)"
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1741 krita/kritamenu.action:1742
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "क्रिता को विन्यस्त करें"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1763
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "संसाधन संग्रह प्रबंधित करें... (&M)"
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753
+#: krita/kritamenu.action:1765
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "संसाधन संग्रह प्रबंधित करें"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1754
+#: krita/kritamenu.action:1766
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Manage Resource Libraries"
@@ -15918,7 +15933,7 @@ msgid "Manage Resources Libraries"
 msgstr "संसाधन संग्रह प्रबंधित करें"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -15928,14 +15943,14 @@ msgstr "संसाधन प्रबंधित करें..."
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765 krita/kritamenu.action:1766
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "संसाधन प्रबंधित करें"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1787
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -15945,14 +15960,14 @@ msgstr "अनुप्रयोग की भाषा बदलें... (&l)"
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "अनुप्रयोग की भाषा बदलें"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1785
+#: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -15962,14 +15977,14 @@ msgstr "डॉकरों को दिखाएँ (&S)"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787 krita/kritamenu.action:1788
+#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "डॉकरों को दिखाएँ"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1809
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -15979,14 +15994,14 @@ msgstr "डॉकर की शीर्षक-पट्टी दिखाए�
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "डॉकर की शीर्षक-पट्टी दिखाएं"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1821
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -15996,7 +16011,7 @@ msgstr "औज़ार पट्टी विन्यस्त करें...
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -16008,15 +16023,15 @@ msgstr "औज़ार पट्टी विन्यस्त करें"
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821 krita/kritamenu.action:1823
-#: krita/kritamenu.action:1824
+#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
+#: krita/kritamenu.action:1836
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "डॉकर"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1831
+#: krita/kritamenu.action:1843
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -16026,14 +16041,14 @@ msgstr "थीम (&T)"
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1834
+#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "थीम"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1841
+#: krita/kritamenu.action:1853
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -16043,7 +16058,7 @@ msgstr "शैलियाँ"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843 krita/kritamenu.action:1844
+#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
 #, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -16055,29 +16070,29 @@ msgstr "शैलियाँ"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1851 krita/kritamenu.action:1853
-#: krita/kritamenu.action:1854
+#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
+#: krita/kritamenu.action:1866
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "सक्रिय लेखक प्रोफ़ाइल"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1861
+#: krita/kritamenu.action:1873
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "सभी सेटिंग्स को रीसेट करें"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863
+#: krita/kritamenu.action:1875
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
 msgstr "सभी सेटिंग्स को पूर्वन्यस्त आवस्था में रीसेट करें"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1864
+#: krita/kritamenu.action:1876
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset All Settings"
@@ -16086,7 +16101,7 @@ msgid "Reset Settings"
 msgstr "सभी सेटिंग्स को रीसेट करें"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1871
+#: krita/kritamenu.action:1883
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -16096,28 +16111,28 @@ msgstr "शार्टकटों को विन्यस्त करें
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873 krita/kritamenu.action:1874
+#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
 #, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "शार्टकटों को विन्यस्त करें"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1895
 #, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "विंडो (&W)"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1894
+#: krita/kritamenu.action:1906
 #, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "मदद"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1897
+#: krita/kritamenu.action:1909
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16127,14 +16142,14 @@ msgstr "क्रिता हस्त पुस्तिका"
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1899 krita/kritamenu.action:1900
+#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr "क्रिता हस्त पुस्तिका"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1907
+#: krita/kritamenu.action:1919
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16144,14 +16159,14 @@ msgstr "त्रुटि दर्ज करें... (&R)"
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
+#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "त्रुटि दर्ज करें"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1917
+#: krita/kritamenu.action:1929
 #, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16161,14 +16176,14 @@ msgstr "क्रिता के बारे में (&A)"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919 krita/kritamenu.action:1920
+#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
 #, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "क्रिता के बारे में"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1927
+#: krita/kritamenu.action:1939
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16178,21 +16193,21 @@ msgstr "केडीई के बारे में (&K)"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929 krita/kritamenu.action:1930
+#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "केडीई के बारे में"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1950
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "ब्रुश तथा वस्तुएं"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1941
+#: krita/kritamenu.action:1953
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16202,14 +16217,14 @@ msgstr "ग्रेडिएंट (&G)"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1943 krita/kritamenu.action:1944
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "ग्रेडिएंट"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1951
+#: krita/kritamenu.action:1963
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16219,14 +16234,14 @@ msgstr "पैटर्न (&P)"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953 krita/kritamenu.action:1954
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "पैटर्न"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1961
+#: krita/kritamenu.action:1973
 #, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16236,14 +16251,14 @@ msgstr "रंग (&C)"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963 krita/kritamenu.action:1964
+#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
 #, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "रंग"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1971
+#: krita/kritamenu.action:1983
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
@@ -16253,14 +16268,14 @@ msgstr "अग्रभूमि का रंग चुने (&C)"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973 krita/kritamenu.action:1974
+#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
 msgstr "अग्रभूमि का रंग चुने"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1981
+#: krita/kritamenu.action:1993
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
@@ -16270,7 +16285,7 @@ msgstr "पृष्ठभूमि का रंग चुने (&C)"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983 krita/kritamenu.action:1984
+#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
@@ -16282,8 +16297,8 @@ msgstr "पृष्ठभूमि का रंग चुने"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
-#: krita/kritamenu.action:1994
+#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
+#: krita/kritamenu.action:2006
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16295,8 +16310,8 @@ msgstr "ब्रश विकल्प स्लाइडर १"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
+#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
+#: krita/kritamenu.action:2016
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16308,8 +16323,8 @@ msgstr "ब्रश विकल्प स्लाइडर २"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
+#: krita/kritamenu.action:2026
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16321,8 +16336,8 @@ msgstr "ब्रश विकल्प स्लाइडर ३"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
+#: krita/kritamenu.action:2036
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16334,8 +16349,8 @@ msgstr "ब्रश विकल्प स्लाइडर ४"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
+#: krita/kritamenu.action:2046
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Brush option slider 1"
@@ -16349,22 +16364,22 @@ msgstr "ब्रश विकल्प स्लाइडर १"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
+#: krita/kritamenu.action:2056
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "प्रतिबिम्ब"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051
+#: krita/kritamenu.action:2063
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "पृष्ठ अभिन्यास"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -16376,8 +16391,8 @@ msgstr "अभिन्यास चुनें"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
+#: krita/kritamenu.action:2075
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -16813,7 +16828,7 @@ msgstr "%1 को एचटीएमएल मे्ं सहेज नही�
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:577
+#: libs/ui/flake/kis_shape_layer.cc:613
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -21357,7 +21372,7 @@ msgstr "अचयनित"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
+#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "परत जोड़ें"
@@ -21395,7 +21410,7 @@ msgid "Reselect"
 msgstr "फिर से चुनें"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2097
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, kde-format
 msgid "Selection Mask"
@@ -21672,7 +21687,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "पृष्ठभूमि"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
 #, kde-format
 msgid "Paint Layer"
 msgstr "चित्रकारी परत"
@@ -21682,27 +21697,32 @@ msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "चित्र काटें"
 
-#: libs/image/kis_image.cc:935
+#: libs/image/kis_image.cc:886
+msgctxt "(qtundo-format)"
+msgid "Purge Unused Data"
+msgstr ""
+
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "परत कतरें"
 
-#: libs/image/kis_image.cc:936
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "काँट-छाँट मास्क"
 
-#: libs/image/kis_image.cc:973
+#: libs/image/kis_image.cc:1028
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "चित्र का आकार बदलें"
 
-#: libs/image/kis_image.cc:974
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "चित्र का रेज़ोल्यूशन बदलें"
 
-#: libs/image/kis_image.cc:1024
+#: libs/image/kis_image.cc:1079
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -21712,17 +21732,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "परत का आकार बदलें"
 msgstr[1] "परत का आकार बदलें"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1218
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "चित्र घुमाएँ"
 
-#: libs/image/kis_image.cc:1173
+#: libs/image/kis_image.cc:1228
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "मास्क घुमाएँ"
 
-#: libs/image/kis_image.cc:1176
+#: libs/image/kis_image.cc:1231
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -21732,12 +21752,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "परत घुमाएं"
 msgstr[1] "परत घुमाएं"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "मास्क का अपरूपण"
 
-#: libs/image/kis_image.cc:1281
+#: libs/image/kis_image.cc:1336
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -21747,27 +21767,27 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "परत अपरूपण"
 msgstr[1] "परत अपरूपण"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1343
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "चित्र अपरूपण"
 
-#: libs/image/kis_image.cc:1306
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "परत का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1357
+#: libs/image/kis_image.cc:1412
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "चित्र का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1358
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "प्रोजेक्शन का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1410
+#: libs/image/kis_image.cc:1465
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -21775,17 +21795,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "परत का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1495
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "परत को प्रोफ़ाइल निर्दिष्ट करें"
 
-#: libs/image/kis_image.cc:1481
+#: libs/image/kis_image.cc:1536
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "प्रोफ़ाइल निर्दिष्ट करें"
 
-#: libs/image/kis_image.cc:2517
+#: libs/image/kis_image.cc:2572
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "चयन को काँट छाँट करें"
@@ -21948,7 +21968,7 @@ msgstr "परत के रंग-स्थान को बदलें"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:337
+#: libs/ui/flake/kis_shape_layer.cc:327
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21964,63 +21984,63 @@ msgid ""
 "operations may be slow"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:626
+#: libs/image/kis_layer_utils.cpp:627
 #, kde-format
 msgid "Merged"
 msgstr "सम्मिलित"
 
-#: libs/image/kis_layer_utils.cpp:1441
+#: libs/image/kis_layer_utils.cpp:1472
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "नीचे सम्मिलित करें"
 
-#: libs/image/kis_layer_utils.cpp:1713
+#: libs/image/kis_layer_utils.cpp:1744
 #, kde-format
 msgid "Copy of"
 msgstr "नकल"
 
-#: libs/image/kis_layer_utils.cpp:1791
+#: libs/image/kis_layer_utils.cpp:1822
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "प्रक्षेपण रंग बदलें"
 
-#: libs/image/kis_layer_utils.cpp:2017
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "चयनित नोड्स का विलय करें"
 
-#: libs/image/kis_layer_utils.cpp:2035
+#: libs/image/kis_layer_utils.cpp:2066
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "दृश्यमान परतों से नई परत"
 
-#: libs/image/kis_layer_utils.cpp:2036
+#: libs/image/kis_layer_utils.cpp:2067
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "दृश्यमान से"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2146
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "चयन मास्क का विलय करें"
 
-#: libs/image/kis_layer_utils.cpp:2139
+#: libs/image/kis_layer_utils.cpp:2170
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "परत समतल करें"
 
-#: libs/image/kis_layer_utils.cpp:2155
+#: libs/image/kis_layer_utils.cpp:2186
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "चित्र समतल करें"
 
-#: libs/image/kis_layer_utils.cpp:2389
+#: libs/image/kis_layer_utils.cpp:2420
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "अल्फा को मास्क में विभाजित करें"
 
-#: libs/image/kis_layer_utils.cpp:2415
+#: libs/image/kis_layer_utils.cpp:2446
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "चित्रकारी परत में बदलें"
@@ -22429,30 +22449,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:690
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
 #, kde-format
 msgid "Clone Layer"
 msgstr "प्रतिरूप परत"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "समूह"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
 #, kde-format
 msgid "File Layer"
 msgstr "फ़ाइल परत"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:703
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "वेक्टर परत"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "Filter Layer"
 msgstr "फ़िल्टर परत"
@@ -24155,8 +24175,8 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
@@ -24224,75 +24244,75 @@ msgid ""
 msgstr ""
 "संसाधन डेटाबेस योजना बदल गई है। क्रिता आपके डेटाबेस का बैकअप लेकर एक नया डेटाबेस बनाएगा।"
 
-#: libs/resources/KisResourceLocator.cpp:90
+#: libs/resources/KisResourceLocator.cpp:91
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "१. %1 पर संसाधन स्थान नहीं बना सका।"
 
-#: libs/resources/KisResourceLocator.cpp:97
+#: libs/resources/KisResourceLocator.cpp:98
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. %1 पर संसाधन स्थान लिखने योग्य नहीं है।"
 
-#: libs/resources/KisResourceLocator.cpp:859
+#: libs/resources/KisResourceLocator.cpp:852
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "डेटाबेस में %1 नहीं जोडा जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:903
-#: libs/resources/KisResourceLocator.cpp:1264
+#: libs/resources/KisResourceLocator.cpp:896
+#: libs/resources/KisResourceLocator.cpp:1257
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "डेटाबेस से %1 संचय नहीं निकाला जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:1016
+#: libs/resources/KisResourceLocator.cpp:1009
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "डेटाबेस से %1 को सिंक्रनाइज़ नहीं किया जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "क्रिता पहली चलाया जा रहा है। प्रारंभ होने में कुछ समय लगेगा।"
 
-#: libs/resources/KisResourceLocator.cpp:1031
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "३. %1 पर संसाधन स्थान नहीं बना सका।"
 
-#: libs/resources/KisResourceLocator.cpp:1044
-#: libs/resources/KisResourceLocator.cpp:1060
+#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1053
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "संसाधन की नकल %1 से %2 में नहीं बन सकी"
 
-#: libs/resources/KisResourceLocator.cpp:1056
+#: libs/resources/KisResourceLocator.cpp:1049
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "बंडल %1 से संसाधनों को स्थापित किया जा रहा है।"
 
-#: libs/resources/KisResourceLocator.cpp:1084
+#: libs/resources/KisResourceLocator.cpp:1077
 #, kde-format
 msgid "Temporary Resources"
 msgstr "अस्थाई संसाधन"
 
-#: libs/resources/KisResourceLocator.cpp:1090
+#: libs/resources/KisResourceLocator.cpp:1083
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "फ़ॉन्ट शैली"
 
-#: libs/resources/KisResourceLocator.cpp:1213
+#: libs/resources/KisResourceLocator.cpp:1206
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "संसाधनों को प्रारंभ किया जा रहा है।"
 
-#: libs/resources/KisResourceLocator.cpp:1226
-#: libs/resources/KisResourceLocator.cpp:1234
+#: libs/resources/KisResourceLocator.cpp:1219
+#: libs/resources/KisResourceLocator.cpp:1227
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "डेटाबेस से %1 को सिंक्रनाइज़ नहीं किया जा सका"
@@ -34208,56 +34228,56 @@ msgstr "चित्र आयात"
 msgid "Select a Color"
 msgstr "एक रंग चुने"
 
-#: libs/ui/kis_layer_manager.cc:191
+#: libs/ui/kis_layer_manager.cc:194
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "परत का आकार बदलें"
 
-#: libs/ui/kis_layer_manager.cc:193
+#: libs/ui/kis_layer_manager.cc:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "समूह मिलाएं"
 
-#: libs/ui/kis_layer_manager.cc:195
+#: libs/ui/kis_layer_manager.cc:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "निचले परत के साथ मिलाएँ"
 
-#: libs/ui/kis_layer_manager.cc:217
+#: libs/ui/kis_layer_manager.cc:220
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "फ़ाइल खाली है "
 
-#: libs/ui/kis_layer_manager.cc:256
+#: libs/ui/kis_layer_manager.cc:267
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "फ़िल्टर परत के गुण"
 
-#: libs/ui/kis_layer_manager.cc:301
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "फ़ाइल परत के गुण"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
 #, kde-format
 msgid "No file name specified"
 msgstr "कोई फ़ाइल उल्लेखित नहीं है"
 
-#: libs/ui/kis_layer_manager.cc:339
+#: libs/ui/kis_layer_manager.cc:350
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "भराव परत गुण"
 
-#: libs/ui/kis_layer_manager.cc:396
+#: libs/ui/kis_layer_manager.cc:407
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "प्रतीरूप परत बदलें"
 
-#: libs/ui/kis_layer_manager.cc:511
+#: libs/ui/kis_layer_manager.cc:522
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Convert group to &animated layer"
@@ -34265,47 +34285,47 @@ msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "परतों के समुह को एनिमेटेड परत में बदलें"
 
-#: libs/ui/kis_layer_manager.cc:531
+#: libs/ui/kis_layer_manager.cc:542
 #, kde-format
 msgid "Save layers to..."
 msgstr "परत को सहेजें..."
 
-#: libs/ui/kis_layer_manager.cc:532
+#: libs/ui/kis_layer_manager.cc:543
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr "वह स्थान चुनें जहां परत सहेजी जाएगी। नई फ़ाइल परत तब इस स्थान को संदर्भित करेगी।"
 
-#: libs/ui/kis_layer_manager.cc:595
+#: libs/ui/kis_layer_manager.cc:606
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "एक फ़ाइल परत में परिवर्तित करें"
 
-#: libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "New Filter Layer"
 msgstr "नया फ़िल्टर परत"
 
-#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "भराव परत"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:813
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "चित्र समतल करें"
 
-#: libs/ui/kis_layer_manager.cc:803
+#: libs/ui/kis_layer_manager.cc:814
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "चित्र में छुपीं परतें हैं, जो मिट सकतीं हैं. क्या आप चित्र को समतल करना चाहतें हैं?"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:892
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34313,13 +34333,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "परत तालाबंद है"
 msgstr[1] "परतें तालाबंद है"
 
-#: libs/ui/kis_layer_manager.cc:903
+#: libs/ui/kis_layer_manager.cc:914
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "परत तालाबंद है"
 
-#: libs/ui/kis_layer_manager.cc:920
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34329,12 +34349,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "अदृश्य समूहों में परिवर्तित करें"
 
-#: libs/ui/kis_layer_manager.cc:972
+#: libs/ui/kis_layer_manager.cc:983
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "केवल शीर्ष स्तरीय समूह निर्यात करें"
@@ -34990,13 +35010,13 @@ msgid ""
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:230
+#: libs/ui/kis_statusbar.cc:231
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:262
+#: libs/ui/kis_statusbar.cc:280
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -35010,7 +35030,7 @@ msgstr ""
 "   - चित्र प्रदर्शन :\t %3\n"
 "   - त्वरित पूर्वावलोकन :\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:273
+#: libs/ui/kis_statusbar.cc:291
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -35028,7 +35048,7 @@ msgstr ""
 "\n"
 "स्वैप उपयोग :\t %8"
 
-#: libs/ui/kis_statusbar.cc:308
+#: libs/ui/kis_statusbar.cc:326
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -35042,24 +35062,37 @@ msgstr ""
 "चेतावनी :\tमेमोरी समाप्त हुई हैं! स्वैपिंग शुरू कर दी गई है।\n"
 "\t\tसेटिंग्स डायलॉग में क्रिता के लिए कृपया अधिक रेम निर्धारित करें"
 
-#: libs/ui/kis_statusbar.cc:367
+#: libs/ui/kis_statusbar.cc:338
+#, kde-format
+msgctxt "tooltip on statusbar memory reporting button"
+msgid ""
+"\n"
+"\n"
+"WARNING:\tSome layers took too much time to calculate\n"
+"\t\ttheir thumbnails. They were switched into low-quality\n"
+"\t\tthumbnails mode. Try purging unused image data with\n"
+"\t\tImage->Purge Unused Image Data action.\n"
+"Slow layers: "
+msgstr ""
+
+#: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "छिपा हुआ"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #, kde-format
 msgid "Ants"
 msgstr "चींटियाँ"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "मास्क"
 
-#: libs/ui/kis_statusbar.cc:372
+#: libs/ui/kis_statusbar.cc:420
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -35068,17 +35101,17 @@ msgstr ""
 "चयन : x = %1 y = %2 चौड़ाई = %3 ऊंचाई = %4\n"
 "प्रदर्शन मोड : %5"
 
-#: libs/ui/kis_statusbar.cc:377
+#: libs/ui/kis_statusbar.cc:425
 #, kde-format
 msgid "No Selection"
 msgstr "कोई चयन नहीं"
 
-#: libs/ui/kis_statusbar.cc:395
+#: libs/ui/kis_statusbar.cc:443
 #, kde-format
 msgid "No profile"
 msgstr "कोई रंग रेखा नहीं"
 
-#: libs/ui/kis_statusbar.cc:397
+#: libs/ui/kis_statusbar.cc:445
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -36027,7 +36060,7 @@ msgid ""
 "please select a space to convert to for editing: \n"
 msgstr ""
 
-#: libs/ui/KisLayerThumbnailCache.cpp:30
+#: libs/ui/KisLayerThumbnailCache.cpp:31
 #, fuzzy
 #| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
@@ -43838,7 +43871,7 @@ msgstr "क्लिपबोर्ड से प्रथम परत"
 msgid "&Add"
 msgstr "जोड़ें (&A)"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -44938,13 +44971,13 @@ msgstr "रिकॉर्ड"
 msgid "Export..."
 msgstr "निर्यात..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "गुणवत्ता :"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:148
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, fuzzy, kde-format
 #| msgctxt "@tooltip"
 #| msgid ""
@@ -44961,13 +44994,13 @@ msgstr ""
 "करता।\n"
 "उच्च विरूपण के कारण ५० से कम मूल्य की अनुशंसा नहीं की जाती है"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "संपीडन:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:157
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -44981,27 +45014,27 @@ msgstr ""
 "भारी डिस्क स्थान खपत के कारण संपीड़न को ० पर सेट करने की अनुशंसा नहीं की जाती है।\n"
 "उच्च प्रदर्शन प्रभाव के कारण ३ से ऊपर के मूल्यों की अनुशंसा नहीं की जाती है। "
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:185
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
 #, fuzzy, kde-format
 #| msgid "Video FPS:"
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "विडियो एफपीएस :"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:194
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, fuzzy, kde-format
 #| msgid "Capture interval:"
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "कैप्चर अंतराल"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "असली"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45009,7 +45042,7 @@ msgctxt ""
 msgid "Half"
 msgstr "आधा"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:237
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45017,35 +45050,35 @@ msgctxt ""
 msgid "Quarter"
 msgstr "चतुर्थांश"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "रोकें"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "रिकॉर्ड"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:311
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "रिकॉर्ड"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Recorder is paused"
 msgstr "रिकॉर्डर रुका हुआ है"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:338
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45054,7 +45087,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:349
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45064,36 +45097,36 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:354
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
 #, fuzzy, kde-format
 #| msgid "Set the angle of the light source"
 msgid "Set the number of threads to be used for recording."
 msgstr "प्रकाश स्रोत के कोण को सेट करें"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:362
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "रिकॉर्डर"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:441
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "रिकॉर्डिंग के लिए एक डिरेक्ट्री का चयन करें"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "रिकॉर्डर"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, fuzzy, kde-format
 #| msgid ""
 #| "The recorder have been stopped due to failure while writing a frame. "
@@ -45105,13 +45138,13 @@ msgstr ""
 "फ्रेम लिखते समय विफलता के कारण रिकॉर्डर को रोक दिया गया है। कृपया खाली जगह के लिए "
 "डिस्क की जांच करें और रिकॉर्डर को फिर से शुरू करें।"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45120,7 +45153,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 02:07+0000\n"
+"POT-Creation-Date: 2026-01-29 02:29+0000\n"
 "PO-Revision-Date: 2026-01-21 21:44+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -9993,8 +9993,8 @@ msgstr "&Розмивання…"
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1645
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1648
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
+#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
 #, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13212,44 +13212,44 @@ msgstr "&Прилипання"
 msgid "&Image"
 msgstr "&Зображення"
 
-#: krita/krita5.xmlgui:172 krita/krita5.xmlgui:268 krita/krita5.xmlgui:284
+#: krita/krita5.xmlgui:173 krita/krita5.xmlgui:269 krita/krita5.xmlgui:285
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
 msgstr "&Обернути"
 
-#: krita/krita5.xmlgui:194 plugins/extensions/layersplit/layersplit.xmlgui:4
+#: krita/krita5.xmlgui:195 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
 msgstr "&Шар"
 
-#: krita/krita5.xmlgui:200
+#: krita/krita5.xmlgui:201
 #, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "С&творити"
 
-#: krita/krita5.xmlgui:222
+#: krita/krita5.xmlgui:223
 #, kde-format
 msgid "&Import/Export"
 msgstr "&Імпортування/Експортування"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:229
+#: krita/krita5.xmlgui:230
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "Імпортувати"
 
-#: krita/krita5.xmlgui:237 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
 #, kde-format
 msgid "&Convert"
 msgstr "П&еретворити"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:248 krita/krita5.xmlgui:319
+#: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13258,86 +13258,86 @@ msgstr "П&еретворити"
 msgid "&Select"
 msgstr "&Вибір"
 
-#: krita/krita5.xmlgui:256 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "З&групувати"
 
-#: krita/krita5.xmlgui:262
+#: krita/krita5.xmlgui:263
 #, kde-format
 msgid "&Transform"
 msgstr "П&еретворення"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:280
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "Перетворити &усі шари"
 
-#: krita/krita5.xmlgui:294
+#: krita/krita5.xmlgui:295
 #, kde-format
 msgid "S&plit"
 msgstr "П&оділ"
 
-#: krita/krita5.xmlgui:296 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Розділити прозорість"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:342
 #, kde-format
 msgid "Select &Opaque"
 msgstr "Вибрати &непрозоре"
 
-#: krita/krita5.xmlgui:356
+#: krita/krita5.xmlgui:357
 #, kde-format
 msgid "Filte&r"
 msgstr "Фільт&ри"
 
-#: krita/krita5.xmlgui:377 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "&Інструменти"
 
-#: krita/krita5.xmlgui:378
+#: krita/krita5.xmlgui:379
 #, kde-format
 msgid "Scripts"
 msgstr "Скрипти"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "П&араметри"
 
-#: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&Довідка"
 
-#: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "Файл"
 
-#: krita/krita5.xmlgui:433
+#: krita/krita5.xmlgui:434
 #, kde-format
 msgid "Edit"
 msgstr "Зміни"
 
-#: krita/krita5.xmlgui:438
+#: krita/krita5.xmlgui:439
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Пензлі та інше"
 
-#: krita/krita5.xmlgui:455
+#: krita/krita5.xmlgui:456
 #, kde-format
 msgid "Custom toolbar 1"
 msgstr "Нетипова панель інструментів 1"
 
-#: krita/krita5.xmlgui:458
+#: krita/krita5.xmlgui:459
 #, kde-format
 msgid "Custom toolbar 2"
 msgstr "Нетипова панель інструментів 2"
@@ -14130,8 +14130,8 @@ msgstr "Вилучити ключовий кадр"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1885
-#: krita/kritamenu.action:1886
+#: krita/kritamenu.action:575 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15010,8 +15010,24 @@ msgctxt "action"
 msgid "Trim to Image Size"
 msgstr "Обрізати за розмірами зображення"
 
-#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#. i18n: context: text @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
+#, kde-format
+msgctxt "action"
+msgid "Purge Unused Image Data"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1199
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Remove all set text properties from the selection."
+msgctxt "action"
+msgid "Removes all fully transparent pixels from the image storage"
+msgstr "Вилучити усі встановлені для позначеного фрагмента властивості тексту."
+
+#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1209
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
@@ -15021,14 +15037,14 @@ msgstr "Обрізати до поточного &шару"
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1199 krita/kritamenu.action:1200
+#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
 msgstr "Обрізати до поточного шару"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1209
+#: krita/kritamenu.action:1221
 #, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
@@ -15038,14 +15054,14 @@ msgstr "Обрізати до позна&ченого"
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
+#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
 #, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
 msgstr "Обрізати до позначеного"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1221
+#: krita/kritamenu.action:1233
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
@@ -15055,14 +15071,14 @@ msgstr "&Обернути зображення…"
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
+#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "Обернути зображення"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1233
+#: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
@@ -15072,14 +15088,14 @@ msgstr "Обернути з&ображення на 90° за год. стріл
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
+#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
 msgstr "Обернути зображення на 90° за год. стрілкою"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1245
+#: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
@@ -15089,14 +15105,14 @@ msgstr "Обернути зображення на &90° проти год. ст
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
+#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
 msgstr "Обернути зображення на 90° проти год. стрілки"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1257
+#: krita/kritamenu.action:1269
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
@@ -15106,14 +15122,14 @@ msgstr "Обернути зображення на &180°"
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
+#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
 msgstr "Обернути зображення на 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1269
+#: krita/kritamenu.action:1281
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
@@ -15123,14 +15139,14 @@ msgstr "&Перекосити зображення…"
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
+#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
 msgstr "Перекосити зображення"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1281
+#: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
@@ -15140,14 +15156,14 @@ msgstr "Ві&ддзеркалити зображення горизонталь�
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
+#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
 msgstr "Віддзеркалити зображення горизонтально"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1293
+#: krita/kritamenu.action:1305
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
@@ -15157,14 +15173,14 @@ msgstr "Віддзеркалити зображення &вертикально"
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
+#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
 msgstr "Віддзеркалити зображення вертикально"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1305
+#: krita/kritamenu.action:1317
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
@@ -15174,14 +15190,14 @@ msgstr "Масштабувати зображення до &нового роз�
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
+#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
 msgstr "Масштабувати зображення до нового розміру"
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1317
+#: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
@@ -15191,14 +15207,14 @@ msgstr "З&містити зображення…"
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
+#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
 msgstr "Змістити зображення"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1329
+#: krita/kritamenu.action:1341
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
@@ -15208,14 +15224,14 @@ msgstr "Змінити роз&міри полотна…"
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
+#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
 msgstr "Змінити розміри полотна"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1341
+#: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
@@ -15225,14 +15241,14 @@ msgstr "По&діл зображень"
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
+#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
 msgstr "Поділ зображень"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1353
+#: krita/kritamenu.action:1365
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
@@ -15242,21 +15258,21 @@ msgstr "Розді&лити зображення…"
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
+#: krita/kritamenu.action:1367 krita/kritamenu.action:1368
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
 msgstr "Розділити зображення"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1366
+#: krita/kritamenu.action:1378
 #, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "Позначення"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1369
+#: krita/kritamenu.action:1381
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
@@ -15266,14 +15282,14 @@ msgstr "Позначити &усе"
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1371 krita/kritamenu.action:1372
+#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
 #, kde-format
 msgctxt "action"
 msgid "Select All"
 msgstr "Позначити усе"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1381
+#: krita/kritamenu.action:1393
 #, kde-format
 msgctxt "action"
 msgid "&Deselect"
@@ -15283,14 +15299,14 @@ msgstr "&Скасувати позначення"
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
+#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
 #, kde-format
 msgctxt "action"
 msgid "Deselect"
 msgstr "Зняти позначення"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1393
+#: krita/kritamenu.action:1405
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
@@ -15300,14 +15316,14 @@ msgstr "&Знову позначити"
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
+#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
 msgstr "Знову позначити"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1405
+#: krita/kritamenu.action:1417
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
@@ -15317,14 +15333,14 @@ msgstr "П&еретворити на векторний вибір"
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
+#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
 msgstr "Перетворити позначене на векторні дані"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1417
+#: krita/kritamenu.action:1429
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
@@ -15334,7 +15350,7 @@ msgstr "П&еретворити позначене на растр"
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
+#: krita/kritamenu.action:1431 krita/kritamenu.action:1432
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
@@ -15346,15 +15362,15 @@ msgstr "Перетворити позначене на растр"
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1429 krita/kritamenu.action:1431
-#: krita/kritamenu.action:1432
+#: krita/kritamenu.action:1441 krita/kritamenu.action:1443
+#: krita/kritamenu.action:1444
 #, kde-format
 msgctxt "action"
 msgid "Edit Selection"
 msgstr "Змінити позначене"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1441
+#: krita/kritamenu.action:1453
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
@@ -15364,14 +15380,14 @@ msgstr "Перетворити форми на &векторне позначе�
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1443 krita/kritamenu.action:1444
+#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
 msgstr "Перетворити позначені форми на векторні дані"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1453
+#: krita/kritamenu.action:1465
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
@@ -15381,14 +15397,14 @@ msgstr "Ви&гладити позначене…"
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
+#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
 msgstr "Вигладити позначене"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1465
+#: krita/kritamenu.action:1477
 #, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
@@ -15398,14 +15414,14 @@ msgstr "Показа&ти позначене"
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
+#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
 #, kde-format
 msgctxt "action"
 msgid "Display Selection"
 msgstr "Показати вибране"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1477
+#: krita/kritamenu.action:1489
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
@@ -15415,14 +15431,14 @@ msgstr "Мас&штабувати…"
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
+#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
 #, kde-format
 msgctxt "action"
 msgid "Scale"
 msgstr "Масштабувати"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1489
+#: krita/kritamenu.action:1501
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
@@ -15432,14 +15448,14 @@ msgstr "По&значити на основі діапазону кольорі�
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
+#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
 msgstr "Позначити на основі діапазону кольорів"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1501
+#: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
@@ -15449,14 +15465,14 @@ msgstr "Вибрати &непрозоре (замінити)"
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
+#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
 msgstr "Вибрати непрозоре"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1513
+#: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
@@ -15466,14 +15482,14 @@ msgstr "Вибрати непрозоре (&додати)"
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
+#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
 msgstr "Вибрати непрозоре (додати)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1525
+#: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
@@ -15483,14 +15499,14 @@ msgstr "Вибрати непрозоре (&відняти)"
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
+#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
 msgstr "Вибрати непрозоре (відняти)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1537
+#: krita/kritamenu.action:1549
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
@@ -15500,14 +15516,14 @@ msgstr "Вибрати непрозоре (&перетнути)"
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
+#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
 msgstr "Вибрати непрозоре (перетнути)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1549
+#: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
@@ -15517,14 +15533,14 @@ msgstr "З&більшити позначене…"
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
+#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
 msgstr "Збільшити позначене"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1561
+#: krita/kritamenu.action:1573
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
@@ -15534,14 +15550,14 @@ msgstr "Змен&шити позначене…"
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
+#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
 msgstr "Зменшити позначене"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1573
+#: krita/kritamenu.action:1585
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
@@ -15551,14 +15567,14 @@ msgstr "Позна&чення меж…"
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
+#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
 msgstr "Позначення меж"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1585
+#: krita/kritamenu.action:1597
 #, kde-format
 msgctxt "action"
 msgid "S&mooth"
@@ -15568,21 +15584,21 @@ msgstr "З&гладити"
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
+#: krita/kritamenu.action:1599 krita/kritamenu.action:1600
 #, kde-format
 msgctxt "action"
 msgid "Smooth"
 msgstr "Згладити"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1598
+#: krita/kritamenu.action:1610
 #, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "Фільтр"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1601
+#: krita/kritamenu.action:1613
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -15592,14 +15608,14 @@ msgstr "Знов застос&увати фільтр"
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1603 krita/kritamenu.action:1604
+#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "Знов застосувати фільтр"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1625
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -15609,7 +15625,7 @@ msgstr "Знов застосувати фільтр (із запитом)"
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -15622,8 +15638,8 @@ msgstr ""
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625 krita/kritamenu.action:1627
-#: krita/kritamenu.action:1628
+#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
+#: krita/kritamenu.action:1640
 #, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -15635,8 +15651,8 @@ msgstr "Скоригувати"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1635 krita/kritamenu.action:1637
-#: krita/kritamenu.action:1638
+#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
+#: krita/kritamenu.action:1650
 #, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -15648,8 +15664,8 @@ msgstr "Художній"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1655 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1658
+#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
+#: krita/kritamenu.action:1670
 #, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -15661,8 +15677,8 @@ msgstr "Кольори"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1665 krita/kritamenu.action:1667
-#: krita/kritamenu.action:1668
+#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
+#: krita/kritamenu.action:1680
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -15674,8 +15690,8 @@ msgstr "Виявлення країв"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1675 krita/kritamenu.action:1677
-#: krita/kritamenu.action:1678
+#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
+#: krita/kritamenu.action:1690
 #, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -15687,8 +15703,8 @@ msgstr "Покращення"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1685 krita/kritamenu.action:1687
-#: krita/kritamenu.action:1688
+#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
+#: krita/kritamenu.action:1700
 #, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -15700,8 +15716,8 @@ msgstr "Барельєф"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1695 krita/kritamenu.action:1697
-#: krita/kritamenu.action:1698
+#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
+#: krita/kritamenu.action:1710
 #, kde-format
 msgctxt "action"
 msgid "Map"
@@ -15713,15 +15729,15 @@ msgstr "Карта"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1705 krita/kritamenu.action:1707
-#: krita/kritamenu.action:1708
+#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
+#: krita/kritamenu.action:1720
 #, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "Інше"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1715
+#: krita/kritamenu.action:1727
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -15731,14 +15747,14 @@ msgstr "Запустити G'MIC-Qt"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1718
+#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "Запустити G'Mic-Qt"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1725
+#: krita/kritamenu.action:1737
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -15748,7 +15764,7 @@ msgstr "Повторно застосувати останній фільтр G'
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727 krita/kritamenu.action:1728
+#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -15760,7 +15776,7 @@ msgstr "Повторно застосувати останню дію G'Mic-Qt"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1736
+#: krita/kritamenu.action:1748
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
@@ -15769,7 +15785,7 @@ msgid "Settings"
 msgstr "Параметри"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1739
+#: krita/kritamenu.action:1751
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -15779,35 +15795,35 @@ msgstr "&Налаштувати Krita…"
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1741 krita/kritamenu.action:1742
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "Налаштувати Krita"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1763
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "&Керування бібліотеками ресурсів…"
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753
+#: krita/kritamenu.action:1765
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "Керування бібліотеками ресурсів"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1754
+#: krita/kritamenu.action:1766
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
 msgstr "Керування бібліотеками ресурсів"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -15817,14 +15833,14 @@ msgstr "Керування ресурсами…"
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765 krita/kritamenu.action:1766
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "Керування ресурсами"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1787
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -15834,14 +15850,14 @@ msgstr "Перемкнути &мову програми..."
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "Перемкнути мову програми"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1785
+#: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -15851,14 +15867,14 @@ msgstr "Пок&азати бічні панелі"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787 krita/kritamenu.action:1788
+#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "Показати панелі"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1809
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -15868,14 +15884,14 @@ msgstr "По&казати смужки заголовків панелей"
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "Показати смужки заголовків панелей"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1821
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -15885,7 +15901,7 @@ msgstr "Налаштувати пенал&и..."
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -15897,15 +15913,15 @@ msgstr "Налаштувати панелі"
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821 krita/kritamenu.action:1823
-#: krita/kritamenu.action:1824
+#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
+#: krita/kritamenu.action:1836
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "Бічні панелі"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1831
+#: krita/kritamenu.action:1843
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -15915,14 +15931,14 @@ msgstr "&Теми"
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1834
+#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "Теми"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1841
+#: krita/kritamenu.action:1853
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -15932,7 +15948,7 @@ msgstr "С&тилі"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843 krita/kritamenu.action:1844
+#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
 #, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -15944,36 +15960,36 @@ msgstr "Стилі"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1851 krita/kritamenu.action:1853
-#: krita/kritamenu.action:1854
+#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
+#: krita/kritamenu.action:1866
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "Активний профіль автора"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1861
+#: krita/kritamenu.action:1873
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "Скинути усі параметри"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863
+#: krita/kritamenu.action:1875
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
 msgstr "Відновити типові значення усіх параметрів"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1864
+#: krita/kritamenu.action:1876
 #, kde-format
 msgctxt "action"
 msgid "Reset Settings"
 msgstr "Скинути параметри"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1871
+#: krita/kritamenu.action:1883
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -15983,28 +15999,28 @@ msgstr "Налаштувати с&корочення…"
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873 krita/kritamenu.action:1874
+#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
 #, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "Налаштувати скорочення"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1895
 #, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "&Вікно"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1894
+#: krita/kritamenu.action:1906
 #, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "Довідка"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1897
+#: krita/kritamenu.action:1909
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16014,14 +16030,14 @@ msgstr "&Підручник з Krita"
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1899 krita/kritamenu.action:1900
+#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr "Підручник з Krita"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1907
+#: krita/kritamenu.action:1919
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16031,14 +16047,14 @@ msgstr "Надіслати &звіт про помилку…"
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
+#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "Повідомити про ваду"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1917
+#: krita/kritamenu.action:1929
 #, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16048,14 +16064,14 @@ msgstr "Пр&о Krita"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919 krita/kritamenu.action:1920
+#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
 #, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "Про Krita"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1927
+#: krita/kritamenu.action:1939
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16065,21 +16081,21 @@ msgstr "П&ро KDE"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929 krita/kritamenu.action:1930
+#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "Про KDE"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1950
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "Пензлі та інше"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1941
+#: krita/kritamenu.action:1953
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16089,14 +16105,14 @@ msgstr "&Градієнти"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1943 krita/kritamenu.action:1944
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "Градієнти"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1951
+#: krita/kritamenu.action:1963
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16106,14 +16122,14 @@ msgstr "В&ізерунки"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953 krita/kritamenu.action:1954
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "Візерунки"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1961
+#: krita/kritamenu.action:1973
 #, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16123,14 +16139,14 @@ msgstr "&Колір"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963 krita/kritamenu.action:1964
+#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
 #, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "Колір"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1971
+#: krita/kritamenu.action:1983
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
@@ -16140,14 +16156,14 @@ msgstr "&Вибрати колір переднього плану"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973 krita/kritamenu.action:1974
+#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
 msgstr "Вибрати колір переднього плану"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1981
+#: krita/kritamenu.action:1993
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
@@ -16157,7 +16173,7 @@ msgstr "&Вибрати колір тла"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983 krita/kritamenu.action:1984
+#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
@@ -16169,8 +16185,8 @@ msgstr "Вибрати колір тла"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
-#: krita/kritamenu.action:1994
+#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
+#: krita/kritamenu.action:2006
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16182,8 +16198,8 @@ msgstr "Повзунок параметрів пензля 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
+#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
+#: krita/kritamenu.action:2016
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16195,8 +16211,8 @@ msgstr "Повзунок параметрів пензля 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
+#: krita/kritamenu.action:2026
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16208,8 +16224,8 @@ msgstr "Повзунок параметрів пензля 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
+#: krita/kritamenu.action:2036
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16221,8 +16237,8 @@ msgstr "Повзунок параметрів пензля 4"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
+#: krita/kritamenu.action:2046
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
@@ -16234,22 +16250,22 @@ msgstr "Повзунок параметрів пензля 5"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
+#: krita/kritamenu.action:2056
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Віддзеркалити"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051
+#: krita/kritamenu.action:2063
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Компонування"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -16261,8 +16277,8 @@ msgstr "Вибрати компонування"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
+#: krita/kritamenu.action:2075
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -16789,7 +16805,7 @@ msgstr "Не вдалося зберегти %1 у форматі HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:577
+#: libs/ui/flake/kis_shape_layer.cc:613
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -21149,7 +21165,7 @@ msgstr ""
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
+#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr ""
@@ -21201,7 +21217,7 @@ msgstr ""
 "повторний вибір"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2097
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, kde-format
 msgid "Selection Mask"
@@ -21497,7 +21513,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Тло"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
 #, kde-format
 msgid "Paint Layer"
 msgstr "Шар малювання"
@@ -21509,35 +21525,40 @@ msgstr ""
 "Обрізати зображення\n"
 "обрізання зображення"
 
-#: libs/image/kis_image.cc:935
+#: libs/image/kis_image.cc:886
+msgctxt "(qtundo-format)"
+msgid "Purge Unused Data"
+msgstr ""
+
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 "Обрізати шар\n"
 "обрізання шару"
 
-#: libs/image/kis_image.cc:936
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 "Обрізати маску\n"
 "обрізання маски"
 
-#: libs/image/kis_image.cc:973
+#: libs/image/kis_image.cc:1028
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 "Масштабувати зображення\n"
 "масштабування зображення"
 
-#: libs/image/kis_image.cc:974
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 "Змінити роздільну здатність зображення\n"
 "зміну роздільної здатності зображення"
 
-#: libs/image/kis_image.cc:1024
+#: libs/image/kis_image.cc:1079
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21555,21 +21576,21 @@ msgstr[3] ""
 "Масштабувати шар\n"
 "масштабування шару"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1218
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 "Обернути зображення\n"
 "обертання зображення"
 
-#: libs/image/kis_image.cc:1173
+#: libs/image/kis_image.cc:1228
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 "Обернути маску\n"
 "обертання маски"
 
-#: libs/image/kis_image.cc:1176
+#: libs/image/kis_image.cc:1231
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21587,14 +21608,14 @@ msgstr[3] ""
 "Обернути шар\n"
 "обертання шару"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 "Перекосити маску\n"
 "перекошення маски"
 
-#: libs/image/kis_image.cc:1281
+#: libs/image/kis_image.cc:1336
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21612,56 +21633,56 @@ msgstr[3] ""
 "Перекосити шар\n"
 "перекошення шару"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1343
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Перекосити зображення\n"
 "перекошування зображення"
 
-#: libs/image/kis_image.cc:1306
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 "Перетворити простір кольорів шару\n"
 "перетворення простору кольорів шару"
 
-#: libs/image/kis_image.cc:1357
+#: libs/image/kis_image.cc:1412
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
 "Перетворити простір кольорів зображення\n"
 "перетворення простору кольорів зображення"
 
-#: libs/image/kis_image.cc:1358
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 "Перетворити простір кольорів проєкції\n"
 "перетворення простору кольорів проєкції"
 
-#: libs/image/kis_image.cc:1410
+#: libs/image/kis_image.cc:1465
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 "Уніфікувати простори кольорів шарів\n"
 "уніфікацію просторів кольорів шарів"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1495
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 "Призначити профіль до шару\n"
 "призначення профілю до шару"
 
-#: libs/image/kis_image.cc:1481
+#: libs/image/kis_image.cc:1536
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 "Призначити профіль\n"
 "призначення профілю"
 
-#: libs/image/kis_image.cc:2517
+#: libs/image/kis_image.cc:2572
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -21823,7 +21844,7 @@ msgstr "Невідповідність простору кольорів шар�
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:337
+#: libs/ui/flake/kis_shape_layer.cc:327
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21842,79 +21863,79 @@ msgstr ""
 "%1 [%2],\n"
 "дії із шаром можуть відбуватися повільно"
 
-#: libs/image/kis_layer_utils.cpp:626
+#: libs/image/kis_layer_utils.cpp:627
 #, kde-format
 msgid "Merged"
 msgstr "Об’єднано"
 
-#: libs/image/kis_layer_utils.cpp:1441
+#: libs/image/kis_layer_utils.cpp:1472
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 "Об’єднати вниз\n"
 "об’єднання вниз"
 
-#: libs/image/kis_layer_utils.cpp:1713
+#: libs/image/kis_layer_utils.cpp:1744
 #, kde-format
 msgid "Copy of"
 msgstr "Копія"
 
-#: libs/image/kis_layer_utils.cpp:1791
+#: libs/image/kis_layer_utils.cpp:1822
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Змінити колір проєкції\n"
 "зміну кольору проєкції"
 
-#: libs/image/kis_layer_utils.cpp:2017
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Об’єднати позначені вузли\n"
 "об’єднання позначених вузлів"
 
-#: libs/image/kis_layer_utils.cpp:2035
+#: libs/image/kis_layer_utils.cpp:2066
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Створити з видимого\n"
 "створення з видимого"
 
-#: libs/image/kis_layer_utils.cpp:2036
+#: libs/image/kis_layer_utils.cpp:2067
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видиме"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2146
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Об’єднати маски позначення\n"
 "об’єднання масок позначення"
 
-#: libs/image/kis_layer_utils.cpp:2139
+#: libs/image/kis_layer_utils.cpp:2170
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Звести шар\n"
 "зведення шару"
 
-#: libs/image/kis_layer_utils.cpp:2155
+#: libs/image/kis_layer_utils.cpp:2186
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Звести зображення\n"
 "зведення зображення"
 
-#: libs/image/kis_layer_utils.cpp:2389
+#: libs/image/kis_layer_utils.cpp:2420
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Відділити прозорість як маску\n"
 "відділення прозорості як маски"
 
-#: libs/image/kis_layer_utils.cpp:2415
+#: libs/image/kis_layer_utils.cpp:2446
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -22374,30 +22395,30 @@ msgstr ""
 "цьому форматі відтворити це неможливо. Тривалість кадру буде округлено до "
 "цілих мілісекунди."
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:690
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
 #, kde-format
 msgid "Clone Layer"
 msgstr "Шар клонування"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Група"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
 #, kde-format
 msgid "File Layer"
 msgstr "Файловий шар"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:703
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Векторний шар"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "Filter Layer"
 msgstr "Шар фільтрування"
@@ -24082,8 +24103,8 @@ msgstr "Локальні ресурси"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
@@ -24152,73 +24173,73 @@ msgstr ""
 "Змінено схему бази даних ресурсів. Krita створить резервну копію вашої бази "
 "даних, а потім створить нову базу даних."
 
-#: libs/resources/KisResourceLocator.cpp:90
+#: libs/resources/KisResourceLocator.cpp:91
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. Не вдалося створити теку ресурсів у %1."
 
-#: libs/resources/KisResourceLocator.cpp:97
+#: libs/resources/KisResourceLocator.cpp:98
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Тека зберігання ресурсів %1 є непридатною до запису."
 
-#: libs/resources/KisResourceLocator.cpp:859
+#: libs/resources/KisResourceLocator.cpp:852
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Не вдалося додати %1 до бази даних"
 
-#: libs/resources/KisResourceLocator.cpp:903
-#: libs/resources/KisResourceLocator.cpp:1264
+#: libs/resources/KisResourceLocator.cpp:896
+#: libs/resources/KisResourceLocator.cpp:1257
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Не вдалося вилучити сховище %1 з бази"
 
-#: libs/resources/KisResourceLocator.cpp:1016
+#: libs/resources/KisResourceLocator.cpp:1009
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Не вдалося синхронізувати оновлений список шрифтів із базою даних"
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita запущено вперше. Для ініціалізації програми знадобиться певний час."
 
-#: libs/resources/KisResourceLocator.cpp:1031
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Не вдалося створити теку ресурсів у %1."
 
-#: libs/resources/KisResourceLocator.cpp:1044
-#: libs/resources/KisResourceLocator.cpp:1060
+#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1053
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Не вдалося скопіювати ресурс %1 до %2"
 
-#: libs/resources/KisResourceLocator.cpp:1056
+#: libs/resources/KisResourceLocator.cpp:1049
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Встановлення ресурсів з комплекту %1."
 
-#: libs/resources/KisResourceLocator.cpp:1084
+#: libs/resources/KisResourceLocator.cpp:1077
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Тимчасові ресурси"
 
-#: libs/resources/KisResourceLocator.cpp:1090
+#: libs/resources/KisResourceLocator.cpp:1083
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "Сховище шрифтів"
 
-#: libs/resources/KisResourceLocator.cpp:1213
+#: libs/resources/KisResourceLocator.cpp:1206
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr "Синхронізація ресурсів."
 
-#: libs/resources/KisResourceLocator.cpp:1226
-#: libs/resources/KisResourceLocator.cpp:1234
+#: libs/resources/KisResourceLocator.cpp:1219
+#: libs/resources/KisResourceLocator.cpp:1227
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Не вдалося синхронізувати %1 із базою даних"
@@ -34393,70 +34414,70 @@ msgstr "Імпортувати зображення"
 msgid "Select a Color"
 msgstr "Виберіть колір"
 
-#: libs/ui/kis_layer_manager.cc:191
+#: libs/ui/kis_layer_manager.cc:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Об’єднати позначені шари"
 
-#: libs/ui/kis_layer_manager.cc:193
+#: libs/ui/kis_layer_manager.cc:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Об’єднати групу"
 
-#: libs/ui/kis_layer_manager.cc:195
+#: libs/ui/kis_layer_manager.cc:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Об'єднати з шаром нижче"
 
-#: libs/ui/kis_layer_manager.cc:217
+#: libs/ui/kis_layer_manager.cc:220
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Шар є порожнім"
 
-#: libs/ui/kis_layer_manager.cc:256
+#: libs/ui/kis_layer_manager.cc:267
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Властивості шару фільтрування"
 
-#: libs/ui/kis_layer_manager.cc:301
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Властивості шару з файла"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
 #, kde-format
 msgid "No file name specified"
 msgstr "Не вказано назви файла"
 
-#: libs/ui/kis_layer_manager.cc:339
+#: libs/ui/kis_layer_manager.cc:350
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Властивості заповнення шару"
 
-#: libs/ui/kis_layer_manager.cc:396
+#: libs/ui/kis_layer_manager.cc:407
 #, kde-format
 msgid "Change Clone Layer"
 msgstr ""
 "Змінити шар клонування\n"
 "зміну шару клонування"
 
-#: libs/ui/kis_layer_manager.cc:511
+#: libs/ui/kis_layer_manager.cc:522
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr ""
 "Перетворити групу на анімований шар\n"
 "перетворення групи на анімований шар"
 
-#: libs/ui/kis_layer_manager.cc:531
+#: libs/ui/kis_layer_manager.cc:542
 #, kde-format
 msgid "Save layers to..."
 msgstr "Зберегти шари до…"
 
-#: libs/ui/kis_layer_manager.cc:532
+#: libs/ui/kis_layer_manager.cc:543
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34465,30 +34486,30 @@ msgstr ""
 "Виберіть місце, де зберігатиметься шар. Новий шар посилатиметься на вказаний "
 "вами файл."
 
-#: libs/ui/kis_layer_manager.cc:595
+#: libs/ui/kis_layer_manager.cc:606
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr ""
 "Перетворити на шар з файла\n"
 "перетворення на шар з файла"
 
-#: libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Новий шар фільтрування"
 
-#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Шар заповнення"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:813
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Зведення зображення"
 
-#: libs/ui/kis_layer_manager.cc:803
+#: libs/ui/kis_layer_manager.cc:814
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -34497,7 +34518,7 @@ msgstr ""
 "Зображення містить приховані шари, які буде втрачено. Хочете звести "
 "зображення?"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:892
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34507,13 +34528,13 @@ msgstr[1] "Шари заблоковано"
 msgstr[2] "Шари заблоковано"
 msgstr[3] "Шар заблоковано"
 
-#: libs/ui/kis_layer_manager.cc:903
+#: libs/ui/kis_layer_manager.cc:914
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Шар заблоковано"
 
-#: libs/ui/kis_layer_manager.cc:920
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34525,12 +34546,12 @@ msgstr ""
 "Неанімований шар об'єднано із поточним кадром. Щоб об'єднати його з усім "
 "кліпом, створіть принаймні один кадр"
 
-#: libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Перетворити невидимі групи"
 
-#: libs/ui/kis_layer_manager.cc:972
+#: libs/ui/kis_layer_manager.cc:983
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Експортувати лише групи верхнього рівня"
@@ -35248,13 +35269,13 @@ msgstr ""
 "\" text-decoration: underline; color:%1;\">Навчання роботи зі скриптами</"
 "span></a></p>"
 
-#: libs/ui/kis_statusbar.cc:230
+#: libs/ui/kis_statusbar.cc:231
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:262
+#: libs/ui/kis_statusbar.cc:280
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -35268,7 +35289,7 @@ msgstr ""
 "  - проєкції:\t %3\n"
 "  - миттєвий перегляд:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:273
+#: libs/ui/kis_statusbar.cc:291
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -35286,7 +35307,7 @@ msgstr ""
 "\n"
 "Використано резерву:\t %8"
 
-#: libs/ui/kis_statusbar.cc:308
+#: libs/ui/kis_statusbar.cc:326
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -35301,24 +35322,37 @@ msgstr ""
 "\t\tБудь ласка, збільште об’єм оперативної пам’яті для Krita за допомогою "
 "вікна «Параметри»."
 
-#: libs/ui/kis_statusbar.cc:367
+#: libs/ui/kis_statusbar.cc:338
+#, kde-format
+msgctxt "tooltip on statusbar memory reporting button"
+msgid ""
+"\n"
+"\n"
+"WARNING:\tSome layers took too much time to calculate\n"
+"\t\ttheir thumbnails. They were switched into low-quality\n"
+"\t\tthumbnails mode. Try purging unused image data with\n"
+"\t\tImage->Purge Unused Image Data action.\n"
+"Slow layers: "
+msgstr ""
+
+#: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "Приховано"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #, kde-format
 msgid "Ants"
 msgstr "Мурахи"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Маска"
 
-#: libs/ui/kis_statusbar.cc:372
+#: libs/ui/kis_statusbar.cc:420
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -35327,17 +35361,17 @@ msgstr ""
 "Позначене: x = %1 y = %2 ширина = %3 висота = %4\n"
 "Режим показу: %5"
 
-#: libs/ui/kis_statusbar.cc:377
+#: libs/ui/kis_statusbar.cc:425
 #, kde-format
 msgid "No Selection"
 msgstr "Нічого не вибрано"
 
-#: libs/ui/kis_statusbar.cc:395
+#: libs/ui/kis_statusbar.cc:443
 #, kde-format
 msgid "No profile"
 msgstr "Без профілю"
 
-#: libs/ui/kis_statusbar.cc:397
+#: libs/ui/kis_statusbar.cc:445
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -36309,7 +36343,7 @@ msgstr ""
 "Для зображення долучено профіль, який Krita не може редагувати, у («%1»). "
 "Будь ласка, виберіть простір для перетворення з метою редагування: \n"
 
-#: libs/ui/KisLayerThumbnailCache.cpp:30
+#: libs/ui/KisLayerThumbnailCache.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Оновити мініатюри шару"
@@ -44449,7 +44483,7 @@ msgstr "Пе&ремкнути блокування і видимість"
 msgid "&Add"
 msgstr "&Додати"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -45541,13 +45575,13 @@ msgstr "Запис"
 msgid "Export..."
 msgstr "Експортувати…"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Якість:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:148
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45560,13 +45594,13 @@ msgstr ""
 "Не рекомендуємо використовувати значення, менші за 50, оскільки такі "
 "значення призводять до викривлення зображення."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Стискання:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:157
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45583,25 +45617,25 @@ msgstr ""
 "Не рекомендуємо використовувати значення, які є більшими за 3, через значне "
 "зниження швидкодії програми."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:185
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Частота кадрів:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:194
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Інтервал захоплення:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Оригінал"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45609,7 +45643,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Половина"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:237
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45617,35 +45651,35 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Чверть"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Зупинити"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Запис"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:311
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "ЗАП"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr "Активне записування за допомогою %1 з %2 доступних потоків обробки"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Роботу записування призупинено"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:338
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45659,7 +45693,7 @@ msgstr ""
 "Будьте обережні, числа, що перевищують %1, ймовірно, не дадуть приросту "
 "швидкості обробки."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:349
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45674,36 +45708,36 @@ msgstr ""
 "Ви можете поекспериментувати із додатковим одним або двома потоками, але "
 "стежте за загальною швидкодією системи."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:354
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr ""
 "Встановити кількість потоків обробки, які буде використано для записування."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:362
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Записувач"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:441
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "Ваша система недостатньо потужна для користування цією можливістю"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Виберіть каталог для записів"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Записувач"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45712,7 +45746,7 @@ msgstr ""
 "Запис зупинено через помилку під час спроби записати кадр. Будь ласка, "
 "перевірте, чи достатньо вільного місця на диску, і запустіть запис знову."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
@@ -45720,7 +45754,7 @@ msgstr ""
 "Здається, Krita не вдалося зупинити записувач. Будь ласка, спробуйте "
 "перезапустити Krita."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45734,7 +45768,7 @@ msgstr ""
 "Спробуйте зменшити частоту кадрів для експортування до ffmpeg або зменшити "
 "фільтрування масштабування у параметрах прискорення обробки полотна."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "

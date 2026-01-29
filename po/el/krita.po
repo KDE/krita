@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 02:07+0000\n"
+"POT-Creation-Date: 2026-01-29 02:29+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -10390,8 +10390,8 @@ msgstr "&Θόλωμα..."
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1645
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1648
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
+#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13650,44 +13650,44 @@ msgstr "Προσαρμογή στον κάνναβο:"
 msgid "&Image"
 msgstr "&Εικόνα"
 
-#: krita/krita5.xmlgui:172 krita/krita5.xmlgui:268 krita/krita5.xmlgui:284
+#: krita/krita5.xmlgui:173 krita/krita5.xmlgui:269 krita/krita5.xmlgui:285
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
 msgstr "Πε&ριστροφή"
 
-#: krita/krita5.xmlgui:194 plugins/extensions/layersplit/layersplit.xmlgui:4
+#: krita/krita5.xmlgui:195 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
 msgstr "&Στρώμα"
 
-#: krita/krita5.xmlgui:200
+#: krita/krita5.xmlgui:201
 #, fuzzy, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "Νέα προ&βολή"
 
-#: krita/krita5.xmlgui:222
+#: krita/krita5.xmlgui:223
 #, fuzzy, kde-format
 msgid "&Import/Export"
 msgstr "Εισαγωγή εικόνας"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:229
+#: krita/krita5.xmlgui:230
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "Εισαγωγή εικόνας"
 
-#: krita/krita5.xmlgui:237 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "Αντ&ιστροφή"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:248 krita/krita5.xmlgui:319
+#: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13696,89 +13696,89 @@ msgstr "Αντ&ιστροφή"
 msgid "&Select"
 msgstr "&Επιλογή"
 
-#: krita/krita5.xmlgui:256 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "Ομάδα:"
 
-#: krita/krita5.xmlgui:262
+#: krita/krita5.xmlgui:263
 #, fuzzy, kde-format
 msgid "&Transform"
 msgstr "Μετασχηματισμός"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:280
 #, fuzzy, kde-format
 msgid "Transform &All Layers"
 msgstr "Κόμβος μετασχηματισμού"
 
-#: krita/krita5.xmlgui:294
+#: krita/krita5.xmlgui:295
 #, fuzzy, kde-format
 msgid "S&plit"
 msgstr "Χρώμα σε άλφα"
 
-#: krita/krita5.xmlgui:296 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Χρώμα σε άλφα"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:342
 #, fuzzy, kde-format
 msgid "Select &Opaque"
 msgstr "Επιλογή αδιαφανούς"
 
-#: krita/krita5.xmlgui:356
+#: krita/krita5.xmlgui:357
 #, kde-format
 msgid "Filte&r"
 msgstr "Φίλτ&ρο"
 
-#: krita/krita5.xmlgui:377 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "Ερ&γαλεία"
 
-#: krita/krita5.xmlgui:378
+#: krita/krita5.xmlgui:379
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "Scripts"
 msgstr "Δείκτης"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, fuzzy, kde-format
 msgid "Setti&ngs"
 msgstr "Ρυθμίσεις"
 
-#: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&Βοήθεια"
 
-#: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, fuzzy, kde-format
 msgid "File"
 msgstr "Αρ&χείο"
 
-#: krita/krita5.xmlgui:433
+#: krita/krita5.xmlgui:434
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "&Επεξεργασία"
 
-#: krita/krita5.xmlgui:438
+#: krita/krita5.xmlgui:439
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Πινέλα και υλικά"
 
-#: krita/krita5.xmlgui:455
+#: krita/krita5.xmlgui:456
 #, fuzzy, kde-format
 #| msgid "Stop color."
 msgid "Custom toolbar 1"
 msgstr "Διακοπή χρωματισμού."
 
-#: krita/krita5.xmlgui:458
+#: krita/krita5.xmlgui:459
 #, fuzzy, kde-format
 #| msgid "Stop color."
 msgid "Custom toolbar 2"
@@ -14588,8 +14588,8 @@ msgstr "Εισαγωγή ονόματος"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1885
-#: krita/kritamenu.action:1886
+#: krita/kritamenu.action:575 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15481,8 +15481,23 @@ msgctxt "action"
 msgid "Trim to Image Size"
 msgstr "Κλιμάκωση εικόνας"
 
-#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#. i18n: context: text @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
+#, kde-format
+msgctxt "action"
+msgid "Purge Unused Image Data"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1199
+#, fuzzy, kde-format
+#| msgid "Set line width of actual selection"
+msgctxt "action"
+msgid "Removes all fully transparent pixels from the image storage"
+msgstr "Ορισμός πλάτους γραμμής πραγματιστικής επιλογής"
+
+#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1209
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
@@ -15492,14 +15507,14 @@ msgstr "Περιορισμός στο τρέχον στρώμα"
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1199 krita/kritamenu.action:1200
+#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
 msgstr "Περιορισμός στο τρέχον στρώμα"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1209
+#: krita/kritamenu.action:1221
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
@@ -15509,14 +15524,14 @@ msgstr "Σε επιλογή"
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
+#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
 msgstr "Σε επιλογή"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1221
+#: krita/kritamenu.action:1233
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
@@ -15526,14 +15541,14 @@ msgstr "Πε&ριστροφή εικόνας..."
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
+#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "Περιστροφή εικόνας"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1233
+#: krita/kritamenu.action:1245
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
@@ -15543,14 +15558,14 @@ msgstr "Περιστροφή εικόνας 90° προς τα δεξιά"
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
+#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
 msgstr "Περιστροφή εικόνας 90° προς τα δεξιά"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1245
+#: krita/kritamenu.action:1257
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
@@ -15560,14 +15575,14 @@ msgstr "Περιστροφή στρώματος 90° προς τα αριστε�
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
+#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
 msgstr "Περιστροφή στρώματος 90° προς τα αριστερά"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1257
+#: krita/kritamenu.action:1269
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
@@ -15577,14 +15592,14 @@ msgstr "Περιστροφή εικόνας 180°"
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
+#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
 msgstr "Περιστροφή εικόνας 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1269
+#: krita/kritamenu.action:1281
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
@@ -15594,14 +15609,14 @@ msgstr "&Διάτμηση εικόνας..."
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
+#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Shear Image"
 msgstr "Διάτμηση εικόνας"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1281
+#: krita/kritamenu.action:1293
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
@@ -15611,14 +15626,14 @@ msgstr "Καθρεπτισμός οριζόντια"
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
+#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
 msgstr "Καθρεπτισμός οριζόντια"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1293
+#: krita/kritamenu.action:1305
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
@@ -15628,14 +15643,14 @@ msgstr "Καθρεπτισμός κατακόρυφα"
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
+#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1305
+#: krita/kritamenu.action:1317
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
@@ -15645,14 +15660,14 @@ msgstr "Κλιμάκωση σε νέο μέγεθος..."
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
+#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
 msgstr "Κλιμάκωση σε νέο μέγεθος..."
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1317
+#: krita/kritamenu.action:1329
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
@@ -15662,14 +15677,14 @@ msgstr "&Διάτμηση εικόνας..."
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
+#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Offset Image"
 msgstr "Κλίμακα μετατόπισης"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1329
+#: krita/kritamenu.action:1341
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
@@ -15679,14 +15694,14 @@ msgstr "Περιστροφή καμβά"
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
+#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
 msgstr "Περιστροφή καμβά"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1341
+#: krita/kritamenu.action:1353
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Im&age Split "
@@ -15696,14 +15711,14 @@ msgstr "Διαίρεση εικόνας "
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
+#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Image Split"
 msgstr "Διαίρεση εικόνας"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1353
+#: krita/kritamenu.action:1365
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
@@ -15713,21 +15728,21 @@ msgstr "Διαχωρισμός εικόνας..."
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
+#: krita/kritamenu.action:1367 krita/kritamenu.action:1368
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Separate Image"
 msgstr "Διαχωρισμός εικόνας"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1366
+#: krita/kritamenu.action:1378
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "Επιλογή"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1369
+#: krita/kritamenu.action:1381
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select &All"
@@ -15737,14 +15752,14 @@ msgstr "Επιλογή όλων"
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1371 krita/kritamenu.action:1372
+#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select All"
 msgstr "Επιλογή όλων"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1381
+#: krita/kritamenu.action:1393
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Deselect"
@@ -15754,14 +15769,14 @@ msgstr "&Αποεπιλογή"
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
+#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Deselect"
 msgstr "Αποεπιλογή"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1393
+#: krita/kritamenu.action:1405
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Reselect"
@@ -15771,14 +15786,14 @@ msgstr "Επιλογή &ξανά"
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
+#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Reselect"
 msgstr "Επανεπιλογή"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1405
+#: krita/kritamenu.action:1417
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
@@ -15788,14 +15803,14 @@ msgstr "Επιλογή διανύσματος"
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
+#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
 msgstr "Επιλογή διανύσματος"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1417
+#: krita/kritamenu.action:1429
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
@@ -15805,7 +15820,7 @@ msgstr "Επιλογή διανύσματος"
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
+#: krita/kritamenu.action:1431 krita/kritamenu.action:1432
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
@@ -15817,15 +15832,15 @@ msgstr "Επιλογή διανύσματος"
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1429 krita/kritamenu.action:1431
-#: krita/kritamenu.action:1432
+#: krita/kritamenu.action:1441 krita/kritamenu.action:1443
+#: krita/kritamenu.action:1444
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Edit Selection"
 msgstr "Επιλογή περιγράμματος"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1441
+#: krita/kritamenu.action:1453
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
@@ -15835,14 +15850,14 @@ msgstr "Επιλογή διανύσματος"
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1443 krita/kritamenu.action:1444
+#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
 msgstr "Επιλογή διανύσματος"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1453
+#: krita/kritamenu.action:1465
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
@@ -15852,14 +15867,14 @@ msgstr "Επιλογή διαδρομής"
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
+#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Feather Selection"
 msgstr "Επιλογή διαδρομής"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1465
+#: krita/kritamenu.action:1477
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
@@ -15869,14 +15884,14 @@ msgstr "Εμφάνιση επιλογής"
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
+#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Display Selection"
 msgstr "Εμφάνιση επιλογής"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1477
+#: krita/kritamenu.action:1489
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Sca&le..."
@@ -15886,14 +15901,14 @@ msgstr "Κλιμάκω&ση..."
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
+#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale"
 msgstr "Κλίμακα"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1489
+#: krita/kritamenu.action:1501
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
@@ -15903,14 +15918,14 @@ msgstr "Επιλογή από εύρος χρωμάτων..."
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
+#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
 msgstr "Επιλογή από εύρος χρωμάτων..."
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1501
+#: krita/kritamenu.action:1513
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
@@ -15920,14 +15935,14 @@ msgstr "Επιλογή αδιαφανούς"
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
+#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque"
 msgstr "Επιλογή αδιαφανούς"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1513
+#: krita/kritamenu.action:1525
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
@@ -15937,14 +15952,14 @@ msgstr "Επιλογή αδιαφανούς"
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
+#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
 msgstr "Επιλογή αδιαφανούς"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1525
+#: krita/kritamenu.action:1537
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
@@ -15954,14 +15969,14 @@ msgstr "Επιλογή αδιαφανούς"
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
+#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
 msgstr "Επιλογή αδιαφανούς"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1537
+#: krita/kritamenu.action:1549
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
@@ -15971,14 +15986,14 @@ msgstr "Επιλογή αδιαφανούς"
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
+#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
 msgstr "Επιλογή αδιαφανούς"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1549
+#: krita/kritamenu.action:1561
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
@@ -15988,14 +16003,14 @@ msgstr "Μεγέθυνση επιλογής..."
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
+#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Grow Selection"
 msgstr "Μεγέθυνση επιλογής"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1561
+#: krita/kritamenu.action:1573
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
@@ -16005,14 +16020,14 @@ msgstr "Σμίκρυνση επιλογής..."
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
+#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
 msgstr "Σμίκρυνση επιλογής"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1573
+#: krita/kritamenu.action:1585
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
@@ -16022,14 +16037,14 @@ msgstr "Επιλογή περιγράμματος..."
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
+#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Border Selection"
 msgstr "Επιλογή περιγράμματος"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1585
+#: krita/kritamenu.action:1597
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "S&mooth"
@@ -16039,21 +16054,21 @@ msgstr "Εξομάλυνση"
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
+#: krita/kritamenu.action:1599 krita/kritamenu.action:1600
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Smooth"
 msgstr "Εξομάλυνση"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1598
+#: krita/kritamenu.action:1610
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "Φίλτρο"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1601
+#: krita/kritamenu.action:1613
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -16063,14 +16078,14 @@ msgstr "Εφαρμογή φίλτρου ξανά"
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1603 krita/kritamenu.action:1604
+#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "Εφαρμογή φίλτρου ξανά"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1625
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -16080,7 +16095,7 @@ msgstr "Εφαρμογή φίλτρου ξανά"
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -16092,8 +16107,8 @@ msgstr ""
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625 krita/kritamenu.action:1627
-#: krita/kritamenu.action:1628
+#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
+#: krita/kritamenu.action:1640
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -16105,8 +16120,8 @@ msgstr "Διευθέτηση"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1635 krita/kritamenu.action:1637
-#: krita/kritamenu.action:1638
+#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
+#: krita/kritamenu.action:1650
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -16118,8 +16133,8 @@ msgstr "Καλλιτεχνικά"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1655 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1658
+#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
+#: krita/kritamenu.action:1670
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -16131,8 +16146,8 @@ msgstr "Χρώματα"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1665 krita/kritamenu.action:1667
-#: krita/kritamenu.action:1668
+#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
+#: krita/kritamenu.action:1680
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -16144,8 +16159,8 @@ msgstr "Εντοπισμός άκρων"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1675 krita/kritamenu.action:1677
-#: krita/kritamenu.action:1678
+#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
+#: krita/kritamenu.action:1690
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -16157,8 +16172,8 @@ msgstr "Βελτίωση"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1685 krita/kritamenu.action:1687
-#: krita/kritamenu.action:1688
+#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
+#: krita/kritamenu.action:1700
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -16170,8 +16185,8 @@ msgstr "Εμβάθυνση"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1695 krita/kritamenu.action:1697
-#: krita/kritamenu.action:1698
+#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
+#: krita/kritamenu.action:1710
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Map"
@@ -16183,15 +16198,15 @@ msgstr "Αντιστοίχηση"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1705 krita/kritamenu.action:1707
-#: krita/kritamenu.action:1708
+#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
+#: krita/kritamenu.action:1720
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "Άλλα"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1715
+#: krita/kritamenu.action:1727
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -16201,14 +16216,14 @@ msgstr "Αστέρι"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1718
+#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "Αστέρι"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1725
+#: krita/kritamenu.action:1737
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -16218,7 +16233,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727 krita/kritamenu.action:1728
+#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -16230,7 +16245,7 @@ msgstr "Εφαρμογή φίλτρου ξανά"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1736
+#: krita/kritamenu.action:1748
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, fuzzy, kde-format
@@ -16239,7 +16254,7 @@ msgid "Settings"
 msgstr "Ρυθμίσεις"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1739
+#: krita/kritamenu.action:1751
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -16249,35 +16264,35 @@ msgstr "Ρύθμιση CImg"
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1741 krita/kritamenu.action:1742
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "Κομφετί"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1763
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "&Πόροι"
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753
+#: krita/kritamenu.action:1765
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "&Πόροι"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1754
+#: krita/kritamenu.action:1766
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
 msgstr "&Πόροι"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1775
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -16287,14 +16302,14 @@ msgstr "&Πόροι"
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765 krita/kritamenu.action:1766
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "&Πόροι"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1787
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -16304,14 +16319,14 @@ msgstr "Αντίγραφο του "
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "Αντίγραφο του "
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1785
+#: krita/kritamenu.action:1797
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -16321,14 +16336,14 @@ msgstr "Βράχοι"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787 krita/kritamenu.action:1788
+#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "Βράχοι"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1809
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -16338,14 +16353,14 @@ msgstr "Βράχοι"
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "Βράχοι"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1821
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -16355,7 +16370,7 @@ msgstr "Κομφετί"
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -16367,15 +16382,15 @@ msgstr "Κομφετί"
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821 krita/kritamenu.action:1823
-#: krita/kritamenu.action:1824
+#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
+#: krita/kritamenu.action:1836
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "Προσαρτήσεις"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1831
+#: krita/kritamenu.action:1843
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -16385,14 +16400,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1834
+#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr ""
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1841
+#: krita/kritamenu.action:1853
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -16402,7 +16417,7 @@ msgstr "Στιλ"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843 krita/kritamenu.action:1844
+#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -16414,22 +16429,22 @@ msgstr "Στιλ"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1851 krita/kritamenu.action:1853
-#: krita/kritamenu.action:1854
+#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
+#: krita/kritamenu.action:1866
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "Άνοιγμα χρωματικού προφίλ"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1861
+#: krita/kritamenu.action:1873
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "Επιλογή όλων"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863
+#: krita/kritamenu.action:1875
 #, fuzzy, kde-format
 #| msgid "Reset to Default"
 msgctxt "action"
@@ -16437,14 +16452,14 @@ msgid "Reset All Settings to Default"
 msgstr "Επαναφορά στο προκαθορισμένο"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1864
+#: krita/kritamenu.action:1876
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Reset Settings"
 msgstr "Επιλογή όλων"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1871
+#: krita/kritamenu.action:1883
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -16454,28 +16469,28 @@ msgstr "Κομφετί"
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873 krita/kritamenu.action:1874
+#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "Κομφετί"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1895
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "Συντηρητής"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1894
+#: krita/kritamenu.action:1906
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "&Βοήθεια"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1897
+#: krita/kritamenu.action:1909
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16485,14 +16500,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1899 krita/kritamenu.action:1900
+#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr ""
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1907
+#: krita/kritamenu.action:1919
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16502,14 +16517,14 @@ msgstr "Εξαγωγή"
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
+#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "Ε&ξαγωγή..."
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1917
+#: krita/kritamenu.action:1929
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16519,14 +16534,14 @@ msgstr "Krita"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919 krita/kritamenu.action:1920
+#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "Krita"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1927
+#: krita/kritamenu.action:1939
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16536,21 +16551,21 @@ msgstr "Krita"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929 krita/kritamenu.action:1930
+#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "Krita"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1950
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "Πινέλα και υλικά"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1941
+#: krita/kritamenu.action:1953
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16560,14 +16575,14 @@ msgstr "&Διαβαθμίσεις"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1943 krita/kritamenu.action:1944
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "Διαβαθμίσεις"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1951
+#: krita/kritamenu.action:1963
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16577,14 +16592,14 @@ msgstr "&Μοτίβα"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953 krita/kritamenu.action:1954
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "Μοτίβα"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1961
+#: krita/kritamenu.action:1973
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16594,14 +16609,14 @@ msgstr "&Χρώμα"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963 krita/kritamenu.action:1964
+#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "Χρώμα"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1971
+#: krita/kritamenu.action:1983
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
 msgctxt "action"
@@ -16612,7 +16627,7 @@ msgstr "Χρώμα προσκηνίου"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973 krita/kritamenu.action:1974
+#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
 msgctxt "action"
@@ -16620,7 +16635,7 @@ msgid "Choose Foreground Color"
 msgstr "Χρώμα προσκηνίου"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1981
+#: krita/kritamenu.action:1993
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
@@ -16632,7 +16647,7 @@ msgstr "Ορισμός χρώματος φόντου"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983 krita/kritamenu.action:1984
+#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
@@ -16646,8 +16661,8 @@ msgstr "Ορισμός χρώματος φόντου"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
-#: krita/kritamenu.action:1994
+#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
+#: krita/kritamenu.action:2006
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16659,8 +16674,8 @@ msgstr "Τρίχες βούρτσας"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
+#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
+#: krita/kritamenu.action:2016
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16672,8 +16687,8 @@ msgstr "Τρίχες βούρτσας"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
+#: krita/kritamenu.action:2026
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16685,8 +16700,8 @@ msgstr "Τρίχες βούρτσας"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
+#: krita/kritamenu.action:2036
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16698,8 +16713,8 @@ msgstr "Τρίχες βούρτσας"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
+#: krita/kritamenu.action:2046
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
@@ -16711,15 +16726,15 @@ msgstr "Τρίχες βούρτσας"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
+#: krita/kritamenu.action:2056
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Κάτοπτρο"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051
+#: krita/kritamenu.action:2063
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgctxt "action"
@@ -16727,7 +16742,7 @@ msgid "Layouts"
 msgstr "Σελιδοποίηση"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2065
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgctxt "action"
@@ -16740,8 +16755,8 @@ msgstr "Επιλογή γραμματοσειράς"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
+#: krita/kritamenu.action:2075
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -17181,7 +17196,7 @@ msgstr "Αδυναμία προσθήκης του στρώματος στην �
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:577
+#: libs/ui/flake/kis_shape_layer.cc:613
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -21590,7 +21605,7 @@ msgstr "Αποεπιλογή"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
+#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Προσθήκη στρώματος"
@@ -21630,7 +21645,7 @@ msgid "Reselect"
 msgstr "Επανεπιλογή"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2097
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -21915,7 +21930,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Φόντο"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Στρώμα &ζωγραφικής"
@@ -21926,31 +21941,36 @@ msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Αποκοπή εικόνας"
 
-#: libs/image/kis_image.cc:935
+#: libs/image/kis_image.cc:886
+msgctxt "(qtundo-format)"
+msgid "Purge Unused Data"
+msgstr ""
+
+#: libs/image/kis_image.cc:990
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Στρώμα &ομάδας"
 
-#: libs/image/kis_image.cc:936
+#: libs/image/kis_image.cc:991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Αναίρεση όξυνσης μάσκας"
 
-#: libs/image/kis_image.cc:973
+#: libs/image/kis_image.cc:1028
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Κλιμάκωση εικόνας"
 
-#: libs/image/kis_image.cc:974
+#: libs/image/kis_image.cc:1029
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Καθορισμός ανάλυσης εικόνας"
 
-#: libs/image/kis_image.cc:1024
+#: libs/image/kis_image.cc:1079
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21958,20 +21978,20 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Κλιμάκωση στρώματος"
 msgstr[1] "Κλιμάκωση στρώματος"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1218
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Περιστροφή εικόνας"
 
-#: libs/image/kis_image.cc:1173
+#: libs/image/kis_image.cc:1228
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Ανύψωση μάσκας"
 
-#: libs/image/kis_image.cc:1176
+#: libs/image/kis_image.cc:1231
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21979,7 +21999,7 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Περιστροφή στρώματος"
 msgstr[1] "Περιστροφή στρώματος"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1332
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -21987,7 +22007,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Στρέβλωση σχημάτων"
 
-#: libs/image/kis_image.cc:1281
+#: libs/image/kis_image.cc:1336
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -21996,49 +22016,49 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Διάτμηση στρώματος"
 msgstr[1] "Διάτμηση στρώματος"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1343
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Διάτμηση εικόνας"
 
-#: libs/image/kis_image.cc:1306
+#: libs/image/kis_image.cc:1361
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 
-#: libs/image/kis_image.cc:1357
+#: libs/image/kis_image.cc:1412
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 
-#: libs/image/kis_image.cc:1358
+#: libs/image/kis_image.cc:1413
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Μετατροπή χρωματικού χώρου προβολής"
 
-#: libs/image/kis_image.cc:1410
+#: libs/image/kis_image.cc:1465
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1495
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Εφαρμογή προφίλ"
 
-#: libs/image/kis_image.cc:1481
+#: libs/image/kis_image.cc:1536
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Εφαρμογή προφίλ"
 
-#: libs/image/kis_image.cc:2517
+#: libs/image/kis_image.cc:2572
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -22212,7 +22232,7 @@ msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:337
+#: libs/ui/flake/kis_shape_layer.cc:327
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -22228,73 +22248,73 @@ msgid ""
 "operations may be slow"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:626
+#: libs/image/kis_layer_utils.cpp:627
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Αποκοπή εικόνας"
 
-#: libs/image/kis_layer_utils.cpp:1441
+#: libs/image/kis_layer_utils.cpp:1472
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Καθαρά σημεία"
 
-#: libs/image/kis_layer_utils.cpp:1713
+#: libs/image/kis_layer_utils.cpp:1744
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Αντιγραφή από"
 
-#: libs/image/kis_layer_utils.cpp:1791
+#: libs/image/kis_layer_utils.cpp:1822
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Τροποποίηση σύνδεσης"
 
-#: libs/image/kis_layer_utils.cpp:2017
+#: libs/image/kis_layer_utils.cpp:2048
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Αφαίρεση επιλεγμένου χρώματος"
 
-#: libs/image/kis_layer_utils.cpp:2035
+#: libs/image/kis_layer_utils.cpp:2066
 #, fuzzy
 #| msgid "Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Προφίλ"
 
-#: libs/image/kis_layer_utils.cpp:2036
+#: libs/image/kis_layer_utils.cpp:2067
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Ορατό"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2146
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Μάσκα επιλογής..."
 
-#: libs/image/kis_layer_utils.cpp:2139
+#: libs/image/kis_layer_utils.cpp:2170
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Ισοπέδωση στρώματος"
 
-#: libs/image/kis_layer_utils.cpp:2155
+#: libs/image/kis_layer_utils.cpp:2186
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Ισοπέδωση εικόνας"
 
-#: libs/image/kis_layer_utils.cpp:2389
+#: libs/image/kis_layer_utils.cpp:2420
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Επιλογές άλφα"
 
-#: libs/image/kis_layer_utils.cpp:2415
+#: libs/image/kis_layer_utils.cpp:2446
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -22735,12 +22755,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:690
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "Στρώμα αντι&γράφου"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
 #: libs/ui/kis_node_manager.cpp:1630
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -22748,18 +22768,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Ομάδα:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "Στρώμα &φίλτρου..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:703
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Διανυσματικό στρώμα"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "Στρώμα &φίλτρου..."
@@ -24564,8 +24584,8 @@ msgstr "Αρχεία πηγής:"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
@@ -24632,79 +24652,79 @@ msgid ""
 "and create a new database."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:90
+#: libs/resources/KisResourceLocator.cpp:91
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "1. Could not create the resource location at %1."
 msgstr "Αδυναμία δημιουργίας του αρχείου για αποθήκευση"
 
-#: libs/resources/KisResourceLocator.cpp:97
+#: libs/resources/KisResourceLocator.cpp:98
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "2. The resource location at %1 is not writable."
 msgstr "Αδυναμία δημιουργίας του αρχείου για αποθήκευση"
 
-#: libs/resources/KisResourceLocator.cpp:859
+#: libs/resources/KisResourceLocator.cpp:852
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/resources/KisResourceLocator.cpp:903
-#: libs/resources/KisResourceLocator.cpp:1264
+#: libs/resources/KisResourceLocator.cpp:896
+#: libs/resources/KisResourceLocator.cpp:1257
 #, fuzzy, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/resources/KisResourceLocator.cpp:1016
+#: libs/resources/KisResourceLocator.cpp:1009
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1031
+#: libs/resources/KisResourceLocator.cpp:1024
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Αδυναμία δημιουργίας του αρχείου για αποθήκευση"
 
-#: libs/resources/KisResourceLocator.cpp:1044
-#: libs/resources/KisResourceLocator.cpp:1060
+#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1053
 #, fuzzy, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/resources/KisResourceLocator.cpp:1056
+#: libs/resources/KisResourceLocator.cpp:1049
 #, fuzzy, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Νέα διαμόρφωση %1"
 
-#: libs/resources/KisResourceLocator.cpp:1084
+#: libs/resources/KisResourceLocator.cpp:1077
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
 msgid "Temporary Resources"
 msgstr "Εισαγωγή πόρου"
 
-#: libs/resources/KisResourceLocator.cpp:1090
+#: libs/resources/KisResourceLocator.cpp:1083
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Size"
 msgid "Font Storage"
 msgstr "Μέγεθος γραμματοσειράς"
 
-#: libs/resources/KisResourceLocator.cpp:1213
+#: libs/resources/KisResourceLocator.cpp:1206
 #, fuzzy, kde-format
 msgid "Synchronizing the resources."
 msgstr "&Πόροι"
 
-#: libs/resources/KisResourceLocator.cpp:1226
-#: libs/resources/KisResourceLocator.cpp:1234
+#: libs/resources/KisResourceLocator.cpp:1219
+#: libs/resources/KisResourceLocator.cpp:1227
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
@@ -34854,106 +34874,106 @@ msgstr "Εισαγωγή εικόνας"
 msgid "Select a Color"
 msgstr "Επιλογή αδιαφανούς"
 
-#: libs/ui/kis_layer_manager.cc:191
+#: libs/ui/kis_layer_manager.cc:194
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Κλιμάκωση στρώματος"
 
-#: libs/ui/kis_layer_manager.cc:193
+#: libs/ui/kis_layer_manager.cc:196
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Αφαίρεση στρώματος"
 
-#: libs/ui/kis_layer_manager.cc:195
+#: libs/ui/kis_layer_manager.cc:198
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Συγχώνευση με κάτω στρώμα"
 
-#: libs/ui/kis_layer_manager.cc:217
+#: libs/ui/kis_layer_manager.cc:220
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Το στρώμα είναι κλειδωμένο."
 
-#: libs/ui/kis_layer_manager.cc:256
+#: libs/ui/kis_layer_manager.cc:267
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Ιδιότητες στρώματος φίλτρου"
 
-#: libs/ui/kis_layer_manager.cc:301
+#: libs/ui/kis_layer_manager.cc:312
 #, fuzzy, kde-format
 #| msgid "Filter Layer Properties"
 msgid "File Layer Properties"
 msgstr "Ιδιότητες στρώματος φίλτρου"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:339
+#: libs/ui/kis_layer_manager.cc:350
 #, fuzzy, kde-format
 msgid "Fill Layer Properties"
 msgstr "Ιδιότητες στρώματος φίλτρου"
 
-#: libs/ui/kis_layer_manager.cc:396
+#: libs/ui/kis_layer_manager.cc:407
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Filter"
 msgid "Change Clone Layer"
 msgstr "Τροποποίηση φίλτρου"
 
-#: libs/ui/kis_layer_manager.cc:511
+#: libs/ui/kis_layer_manager.cc:522
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Μετατροπή τρέχοντος στρώματος από"
 
-#: libs/ui/kis_layer_manager.cc:531
+#: libs/ui/kis_layer_manager.cc:542
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Αποθήκευση στρώματος ως εικόνα..."
 
-#: libs/ui/kis_layer_manager.cc:532
+#: libs/ui/kis_layer_manager.cc:543
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:595
+#: libs/ui/kis_layer_manager.cc:606
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Μετατροπή τρέχοντος στρώματος από"
 
-#: libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Νέο στρώμα φίλτρου"
 
-#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "Στρώμα &φίλτρου..."
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:813
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Ισοπέδωση εικόνας"
 
-#: libs/ui/kis_layer_manager.cc:803
+#: libs/ui/kis_layer_manager.cc:814
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "Η εικόνα περιέχει κρυφά στρώματα τα οποία θα χαθούν."
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:892
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager"
@@ -34962,14 +34982,14 @@ msgid_plural "Layers are locked"
 msgstr[0] "Το στρώμα είναι κλειδωμένο."
 msgstr[1] "Το στρώμα είναι κλειδωμένο."
 
-#: libs/ui/kis_layer_manager.cc:903
+#: libs/ui/kis_layer_manager.cc:914
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Το στρώμα είναι κλειδωμένο."
 
-#: libs/ui/kis_layer_manager.cc:920
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34979,12 +34999,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Μετατροπή αόρατων ομάδων"
 
-#: libs/ui/kis_layer_manager.cc:972
+#: libs/ui/kis_layer_manager.cc:983
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Εξαγωγή μόνο ομάδων κορυφαίου επιπέδου"
@@ -35638,13 +35658,13 @@ msgid ""
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:230
+#: libs/ui/kis_statusbar.cc:231
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:262
+#: libs/ui/kis_statusbar.cc:280
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -35654,7 +35674,7 @@ msgid ""
 "  - instant preview:\t %4\n"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:273
+#: libs/ui/kis_statusbar.cc:291
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -35666,7 +35686,7 @@ msgid ""
 "Swap used:\t %8"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:308
+#: libs/ui/kis_statusbar.cc:326
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -35676,41 +35696,54 @@ msgid ""
 "\t\tPlease configure more RAM for Krita in Settings dialog"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:367
+#: libs/ui/kis_statusbar.cc:338
+#, kde-format
+msgctxt "tooltip on statusbar memory reporting button"
+msgid ""
+"\n"
+"\n"
+"WARNING:\tSome layers took too much time to calculate\n"
+"\t\ttheir thumbnails. They were switched into low-quality\n"
+"\t\tthumbnails mode. Try purging unused image data with\n"
+"\t\tImage->Purge Unused Image Data action.\n"
+"Slow layers: "
+msgstr ""
+
+#: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #, kde-format
 msgid "Ants"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, fuzzy, kde-format
 msgid "Mask"
 msgstr "&Μάσκα"
 
-#: libs/ui/kis_statusbar.cc:372
+#: libs/ui/kis_statusbar.cc:420
 #, fuzzy, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
 "Display Mode: %5"
 msgstr "Ενεργή επιλογή: x = %1 y = %2 πλάτος = %3 ύψος = %4"
 
-#: libs/ui/kis_statusbar.cc:377
+#: libs/ui/kis_statusbar.cc:425
 #, kde-format
 msgid "No Selection"
 msgstr "Καμία επιλογή"
 
-#: libs/ui/kis_statusbar.cc:395
+#: libs/ui/kis_statusbar.cc:443
 #, kde-format
 msgid "No profile"
 msgstr "Χωρίς προφίλ"
 
-#: libs/ui/kis_statusbar.cc:397
+#: libs/ui/kis_statusbar.cc:445
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -36656,7 +36689,7 @@ msgid ""
 "please select a space to convert to for editing: \n"
 msgstr ""
 
-#: libs/ui/KisLayerThumbnailCache.cpp:30
+#: libs/ui/KisLayerThumbnailCache.cpp:31
 #, fuzzy
 #| msgid "Thumbnails"
 msgctxt "(qtundo-format)"
@@ -44546,7 +44579,7 @@ msgstr "Το στρώμα είναι αόρατο."
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -45665,14 +45698,14 @@ msgstr "Εγγραφή"
 msgid "Export..."
 msgstr "Εξαγωγή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
 #, fuzzy, kde-format
 #| msgid "Quality:"
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Ποιότητα:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:148
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45681,13 +45714,13 @@ msgid ""
 "Values lower than 50 are not recommended due to high artifacts."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
 #, fuzzy, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Συμπίεση:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:157
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45697,26 +45730,26 @@ msgid ""
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:185
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
 #, fuzzy, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Πρόγραμμα δράσης"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:194
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, fuzzy, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Διάστημα παλμού"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
 #, fuzzy, kde-format
 #| msgid "Original"
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Αρχικό"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
 #, fuzzy, kde-format
 #| msgid "CD Half"
 msgctxt ""
@@ -45725,7 +45758,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Μισό CD"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:237
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, fuzzy, kde-format
 #| msgid "Print Width:"
 msgctxt ""
@@ -45734,7 +45767,7 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Πλάτος εκτύπωσης:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
 #, fuzzy, kde-format
 #| msgctxt "Tab follows the bullet or number"
 #| msgid "Tab Stop"
@@ -45742,32 +45775,32 @@ msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Τέλος στηλοθέτη"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Εγγραφή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:311
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Reorder shapes"
 msgid "Recorder is paused"
 msgstr "Αναταξινόμηση σχημάτων"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:338
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45776,7 +45809,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:349
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45786,50 +45819,50 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:354
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
 #, fuzzy, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "Επιλογή μιας περιοχής της εικόνας με καμπύλες."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:362
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Εγγραφή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:441
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, fuzzy, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Επιλογή αδιαφανούς"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Εγγραφή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45838,7 +45871,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "

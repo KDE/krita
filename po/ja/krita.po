@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-28 02:07+0000\n"
+"POT-Creation-Date: 2026-01-29 02:29+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -10043,8 +10043,8 @@ msgstr "ぼかし(&B)..."
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1645
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1648
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
+#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
 #, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13268,44 +13268,44 @@ msgstr "スナップ対象(&S):"
 msgid "&Image"
 msgstr "画像(&I)"
 
-#: krita/krita5.xmlgui:172 krita/krita5.xmlgui:268 krita/krita5.xmlgui:284
+#: krita/krita5.xmlgui:173 krita/krita5.xmlgui:269 krita/krita5.xmlgui:285
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
 msgstr "回転(&R)"
 
-#: krita/krita5.xmlgui:194 plugins/extensions/layersplit/layersplit.xmlgui:4
+#: krita/krita5.xmlgui:195 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
 msgstr "レイヤー(&L)"
 
-#: krita/krita5.xmlgui:200
+#: krita/krita5.xmlgui:201
 #, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "新しいレイヤー(&N)"
 
-#: krita/krita5.xmlgui:222
+#: krita/krita5.xmlgui:223
 #, kde-format
 msgid "&Import/Export"
 msgstr "インポート/エクスポート(&I)"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:229
+#: krita/krita5.xmlgui:230
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "インポート"
 
-#: krita/krita5.xmlgui:237 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
 #, kde-format
 msgid "&Convert"
 msgstr "変換(&C)"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:248 krita/krita5.xmlgui:319
+#: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13314,87 +13314,87 @@ msgstr "変換(&C)"
 msgid "&Select"
 msgstr "選択(&S)"
 
-#: krita/krita5.xmlgui:256 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "グループ化(&G)"
 
-#: krita/krita5.xmlgui:262
+#: krita/krita5.xmlgui:263
 #, kde-format
 msgid "&Transform"
 msgstr "変形(&T)"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:280
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "すべてのレイヤーを変形(&A)"
 
-#: krita/krita5.xmlgui:294
+#: krita/krita5.xmlgui:295
 #, kde-format
 msgid "S&plit"
 msgstr "アルファを分離(&P)"
 
-#: krita/krita5.xmlgui:296 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "アルファを分離(&P)"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:342
 #, kde-format
 msgid "Select &Opaque"
 msgstr "不透明領域を選択(&O)"
 
-#: krita/krita5.xmlgui:356
+#: krita/krita5.xmlgui:357
 #, kde-format
 msgid "Filte&r"
 msgstr "フィルタ(&R)"
 
-#: krita/krita5.xmlgui:377 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "ツール(&T)"
 
-#: krita/krita5.xmlgui:378
+#: krita/krita5.xmlgui:379
 #, kde-format
 msgid "Scripts"
 msgstr "スクリプト"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "設定(&N)"
 
-#: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
-#: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "ファイル"
 
-#: krita/krita5.xmlgui:433
+#: krita/krita5.xmlgui:434
 #, kde-format
 msgid "Edit"
 msgstr "編集"
 
-#: krita/krita5.xmlgui:438
+#: krita/krita5.xmlgui:439
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "ブラシなど"
 
-#: krita/krita5.xmlgui:455
+#: krita/krita5.xmlgui:456
 #, fuzzy, kde-format
 #| msgid "Custom color"
 msgid "Custom toolbar 1"
 msgstr "カスタム色"
 
-#: krita/krita5.xmlgui:458
+#: krita/krita5.xmlgui:459
 #, fuzzy, kde-format
 #| msgid "Custom color"
 msgid "Custom toolbar 2"
@@ -14186,8 +14186,8 @@ msgstr "キーフレームを削除"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1885
-#: krita/kritamenu.action:1886
+#: krita/kritamenu.action:575 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15066,8 +15066,23 @@ msgctxt "action"
 msgid "Trim to Image Size"
 msgstr "画像のサイズにトリミング"
 
-#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#. i18n: context: text @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
+#, kde-format
+msgctxt "action"
+msgid "Purge Unused Image Data"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1199
+#, fuzzy, kde-format
+#| msgid "Smooths the edges of the selection"
+msgctxt "action"
+msgid "Removes all fully transparent pixels from the image storage"
+msgstr "選択範囲の沿面を平滑化"
+
+#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1209
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
@@ -15077,14 +15092,14 @@ msgstr "現在のレイヤーに合わせてトリミング(&L)"
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1199 krita/kritamenu.action:1200
+#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
 msgstr "現在のレイヤーに合わせてトリミング"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1209
+#: krita/kritamenu.action:1221
 #, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
@@ -15094,14 +15109,14 @@ msgstr "選択範囲にトリミング(&E)"
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
+#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
 #, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
 msgstr "選択範囲にトリミング"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1221
+#: krita/kritamenu.action:1233
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
@@ -15111,14 +15126,14 @@ msgstr "画像を回転(&R)..."
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
+#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "画像を回転"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1233
+#: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
@@ -15128,14 +15143,14 @@ msgstr "画像を90°右に回転(&I)"
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
+#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
 msgstr "画像を90°左に回転"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1245
+#: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
@@ -15145,14 +15160,14 @@ msgstr "画像を90°左に回転"
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
+#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
 msgstr "画像を90°左に回転"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1257
+#: krita/kritamenu.action:1269
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
@@ -15162,14 +15177,14 @@ msgstr "画像を180°回転(&1)"
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
+#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
 msgstr "画像を180°回転"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1269
+#: krita/kritamenu.action:1281
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
@@ -15179,14 +15194,14 @@ msgstr "画像を剪断変形(&S)..."
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
+#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
 msgstr "画像を剪断変形"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1281
+#: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
@@ -15196,14 +15211,14 @@ msgstr "画像を左右反転(&M)"
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
+#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
 msgstr "画像を左右反転"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1293
+#: krita/kritamenu.action:1305
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
@@ -15213,14 +15228,14 @@ msgstr "画像を上下反転(&V)"
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
+#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
 msgstr "画像を上下反転"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1305
+#: krita/kritamenu.action:1317
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
@@ -15230,14 +15245,14 @@ msgstr "画像を新しいサイズにスケール(&N)..."
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
+#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
 msgstr "画像を新しいサイズにスケール"
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1317
+#: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
@@ -15247,14 +15262,14 @@ msgstr "画像をオフセット(&O)..."
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
+#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
 msgstr "画像をオフセット"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1329
+#: krita/kritamenu.action:1341
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
@@ -15264,14 +15279,14 @@ msgstr "キャンバスの大きさを変える(&E)..."
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
+#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
 msgstr "キャンバスの大きさを変える"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1341
+#: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
@@ -15281,14 +15296,14 @@ msgstr "画像分割(&A)"
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
+#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
 msgstr "画像分割"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1353
+#: krita/kritamenu.action:1365
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
@@ -15298,21 +15313,21 @@ msgstr "画像をチャンネルごとに分離(&G)..."
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
+#: krita/kritamenu.action:1367 krita/kritamenu.action:1368
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
 msgstr "画像をチャンネルごとに分離"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1366
+#: krita/kritamenu.action:1378
 #, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "選択"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1369
+#: krita/kritamenu.action:1381
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
@@ -15322,14 +15337,14 @@ msgstr "すべて選択(&A)"
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1371 krita/kritamenu.action:1372
+#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
 #, kde-format
 msgctxt "action"
 msgid "Select All"
 msgstr "すべて選択"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1381
+#: krita/kritamenu.action:1393
 #, kde-format
 msgctxt "action"
 msgid "&Deselect"
@@ -15339,14 +15354,14 @@ msgstr "選択解除(&D)"
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
+#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
 #, kde-format
 msgctxt "action"
 msgid "Deselect"
 msgstr "選択解除"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1393
+#: krita/kritamenu.action:1405
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
@@ -15356,14 +15371,14 @@ msgstr "再選択(&R)"
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
+#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
 msgstr "再選択"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1405
+#: krita/kritamenu.action:1417
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
@@ -15373,14 +15388,14 @@ msgstr "ベクター選択に変換(&C)"
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
+#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
 msgstr "ベクター選択に変換"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1417
+#: krita/kritamenu.action:1429
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
@@ -15390,7 +15405,7 @@ msgstr "ラスター選択に変換(&C)"
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
+#: krita/kritamenu.action:1431 krita/kritamenu.action:1432
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
@@ -15402,15 +15417,15 @@ msgstr "ラスター選択に変換"
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1429 krita/kritamenu.action:1431
-#: krita/kritamenu.action:1432
+#: krita/kritamenu.action:1441 krita/kritamenu.action:1443
+#: krita/kritamenu.action:1444
 #, kde-format
 msgctxt "action"
 msgid "Edit Selection"
 msgstr "選択範囲を編集"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1441
+#: krita/kritamenu.action:1453
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
@@ -15420,14 +15435,14 @@ msgstr "シェイプをベクター選択に変換(&V)"
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1443 krita/kritamenu.action:1444
+#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
 msgstr "シェイプをベクター選択に変換"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1453
+#: krita/kritamenu.action:1465
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
@@ -15437,14 +15452,14 @@ msgstr "選択範囲を塗り広げ(&F)..."
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
+#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
 msgstr "選択範囲を塗り広げ"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1465
+#: krita/kritamenu.action:1477
 #, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
@@ -15454,14 +15469,14 @@ msgstr "選択範囲を表示(&P)"
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
+#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
 #, kde-format
 msgctxt "action"
 msgid "Display Selection"
 msgstr "選択範囲を表示"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1477
+#: krita/kritamenu.action:1489
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
@@ -15471,14 +15486,14 @@ msgstr "拡大縮小(&L)..."
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
+#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
 #, kde-format
 msgctxt "action"
 msgid "Scale"
 msgstr "拡大縮小"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1489
+#: krita/kritamenu.action:1501
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
@@ -15488,14 +15503,14 @@ msgstr "色範囲より選択(&E)..."
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
+#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
 msgstr "色範囲より選択"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1501
+#: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
@@ -15505,14 +15520,14 @@ msgstr "現在の選択を置換して不透明領域を選択(&O)"
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
+#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
 msgstr "不透明領域を選択"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1513
+#: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
@@ -15522,14 +15537,14 @@ msgstr "不透明領域を現在の選択に追加(&A)"
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
+#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
 msgstr "不透明領域を選択 (追加)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1525
+#: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
@@ -15539,14 +15554,14 @@ msgstr "現在の選択から不透明領域を減算(&S)"
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
+#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
 msgstr "不透明度を選択 (減算)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1537
+#: krita/kritamenu.action:1549
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
@@ -15556,14 +15571,14 @@ msgstr "現在の選択と不透明領域との積集合を選択(&I)"
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
+#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
 msgstr "不透明領域を選択 (積集合)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1549
+#: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
@@ -15573,14 +15588,14 @@ msgstr "選択範囲を広げる(&G)..."
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
+#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
 msgstr "選択範囲を広げる"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1561
+#: krita/kritamenu.action:1573
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
@@ -15590,14 +15605,14 @@ msgstr "選択範囲を狭める(&H)..."
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
+#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
 msgstr "選択範囲を狭める"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1573
+#: krita/kritamenu.action:1585
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
@@ -15607,14 +15622,14 @@ msgstr "選択範囲を縁取る(&B)..."
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
+#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
 msgstr "選択範囲を縁取る"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1585
+#: krita/kritamenu.action:1597
 #, kde-format
 msgctxt "action"
 msgid "S&mooth"
@@ -15624,21 +15639,21 @@ msgstr "平滑化(&M)"
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
+#: krita/kritamenu.action:1599 krita/kritamenu.action:1600
 #, kde-format
 msgctxt "action"
 msgid "Smooth"
 msgstr "平滑化"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1598
+#: krita/kritamenu.action:1610
 #, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "フィルタ"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1601
+#: krita/kritamenu.action:1613
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -15648,14 +15663,14 @@ msgstr "フィルタをもう一度適用(&A)"
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1603 krita/kritamenu.action:1604
+#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "フィルタをもう一度適用"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1625
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -15665,7 +15680,7 @@ msgstr "フィルタをもう一度適用 (再設定)"
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -15677,8 +15692,8 @@ msgstr "最後に使用したフィルタをもう一度適用 (設定用の画�
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625 krita/kritamenu.action:1627
-#: krita/kritamenu.action:1628
+#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
+#: krita/kritamenu.action:1640
 #, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -15690,8 +15705,8 @@ msgstr "調整"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1635 krita/kritamenu.action:1637
-#: krita/kritamenu.action:1638
+#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
+#: krita/kritamenu.action:1650
 #, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -15703,8 +15718,8 @@ msgstr "芸術的"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1655 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1658
+#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
+#: krita/kritamenu.action:1670
 #, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -15716,8 +15731,8 @@ msgstr "色"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1665 krita/kritamenu.action:1667
-#: krita/kritamenu.action:1668
+#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
+#: krita/kritamenu.action:1680
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -15729,8 +15744,8 @@ msgstr "エッジ検知"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1675 krita/kritamenu.action:1677
-#: krita/kritamenu.action:1678
+#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
+#: krita/kritamenu.action:1690
 #, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -15742,8 +15757,8 @@ msgstr "強調"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1685 krita/kritamenu.action:1687
-#: krita/kritamenu.action:1688
+#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
+#: krita/kritamenu.action:1700
 #, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -15755,8 +15770,8 @@ msgstr "浮き出し"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1695 krita/kritamenu.action:1697
-#: krita/kritamenu.action:1698
+#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
+#: krita/kritamenu.action:1710
 #, kde-format
 msgctxt "action"
 msgid "Map"
@@ -15768,15 +15783,15 @@ msgstr "マッピング"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1705 krita/kritamenu.action:1707
-#: krita/kritamenu.action:1708
+#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
+#: krita/kritamenu.action:1720
 #, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "その他"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1715
+#: krita/kritamenu.action:1727
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -15786,14 +15801,14 @@ msgstr "G'MIC-Qt を開始"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1718
+#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "G'Mic-Qt を開始"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1725
+#: krita/kritamenu.action:1737
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -15803,7 +15818,7 @@ msgstr "最後の G'Mic-Qt 操作をもう一度適用"
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727 krita/kritamenu.action:1728
+#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -15815,7 +15830,7 @@ msgstr "最後の G'Mic-Qt 操作をもう一度適用"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1736
+#: krita/kritamenu.action:1748
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
@@ -15824,7 +15839,7 @@ msgid "Settings"
 msgstr "設定"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1739
+#: krita/kritamenu.action:1751
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -15834,35 +15849,35 @@ msgstr "Krita の設定を変更(&C)..."
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1741 krita/kritamenu.action:1742
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "Krita の設定を変更"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1763
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "リソースライブラリを管理(&M)..."
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753
+#: krita/kritamenu.action:1765
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "リソースライブラリを管理"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1754
+#: krita/kritamenu.action:1766
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
 msgstr "リソースのライブラリを管理"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -15872,14 +15887,14 @@ msgstr "リソースを管理..."
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765 krita/kritamenu.action:1766
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "リソースを管理する"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1787
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -15889,14 +15904,14 @@ msgstr "アプリケーションの言語を切り替え(&L)..."
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "アプリケーションの言語を切り替え"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1785
+#: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -15906,14 +15921,14 @@ msgstr "ドッキングパネルを表示(&S)"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787 krita/kritamenu.action:1788
+#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "ドッキングパネルを表示"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1809
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -15923,14 +15938,14 @@ msgstr "ドッキングパネルのタイトルバーを表示(&W)"
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "ドッキングパネルのタイトルバーを表示"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1821
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -15940,7 +15955,7 @@ msgstr "ツールバーの設定を変更(&B)..."
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -15952,15 +15967,15 @@ msgstr "ツールバーの設定を変更"
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821 krita/kritamenu.action:1823
-#: krita/kritamenu.action:1824
+#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
+#: krita/kritamenu.action:1836
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "ドッキングパネル"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1831
+#: krita/kritamenu.action:1843
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -15970,14 +15985,14 @@ msgstr "テーマ(&T)"
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1834
+#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "テーマ"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1841
+#: krita/kritamenu.action:1853
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -15987,7 +16002,7 @@ msgstr "スタイル(&S)"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843 krita/kritamenu.action:1844
+#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
 #, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -15999,36 +16014,36 @@ msgstr "スタイル"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1851 krita/kritamenu.action:1853
-#: krita/kritamenu.action:1854
+#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
+#: krita/kritamenu.action:1866
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "アクティブな作者プロファイル"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1861
+#: krita/kritamenu.action:1873
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "すべての設定をリセット"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863
+#: krita/kritamenu.action:1875
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
 msgstr "すべての設定をリセット"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1864
+#: krita/kritamenu.action:1876
 #, kde-format
 msgctxt "action"
 msgid "Reset Settings"
 msgstr "設定をリセット"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1871
+#: krita/kritamenu.action:1883
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -16038,28 +16053,28 @@ msgstr "ショートカットの設定を変更(&H)..."
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873 krita/kritamenu.action:1874
+#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
 #, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "ショートカットの設定を変更"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1895
 #, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "ウィンドウ(&W)"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1894
+#: krita/kritamenu.action:1906
 #, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "ヘルプ(&H)"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1897
+#: krita/kritamenu.action:1909
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16069,14 +16084,14 @@ msgstr "Krita ハンドブック(&H)"
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1899 krita/kritamenu.action:1900
+#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr "Krita ハンドブック"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1907
+#: krita/kritamenu.action:1919
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16086,14 +16101,14 @@ msgstr "バグを報告(&R)..."
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
+#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "バグを報告"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1917
+#: krita/kritamenu.action:1929
 #, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16103,14 +16118,14 @@ msgstr "Krita について(&A)"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919 krita/kritamenu.action:1920
+#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
 #, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "Krita について"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1927
+#: krita/kritamenu.action:1939
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16120,21 +16135,21 @@ msgstr "KDE について(&K)"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929 krita/kritamenu.action:1930
+#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "Krita について"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1950
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "ブラシなど"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1941
+#: krita/kritamenu.action:1953
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16144,14 +16159,14 @@ msgstr "グラデーション(&G)"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1943 krita/kritamenu.action:1944
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "グラデーション"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1951
+#: krita/kritamenu.action:1963
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16161,14 +16176,14 @@ msgstr "パターン(&P)"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953 krita/kritamenu.action:1954
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "パターン"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1961
+#: krita/kritamenu.action:1973
 #, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16178,14 +16193,14 @@ msgstr "色(&C)"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963 krita/kritamenu.action:1964
+#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
 #, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "色"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1971
+#: krita/kritamenu.action:1983
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
@@ -16195,14 +16210,14 @@ msgstr "描画色を選択(&C)"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973 krita/kritamenu.action:1974
+#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
 msgstr "描画色を選択"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1981
+#: krita/kritamenu.action:1993
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
@@ -16212,7 +16227,7 @@ msgstr "背景色を選択(&C)"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983 krita/kritamenu.action:1984
+#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
@@ -16224,8 +16239,8 @@ msgstr "背景色を選択(&C)"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
-#: krita/kritamenu.action:1994
+#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
+#: krita/kritamenu.action:2006
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16237,8 +16252,8 @@ msgstr "ブラシオプションのスライダー 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
+#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
+#: krita/kritamenu.action:2016
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16250,8 +16265,8 @@ msgstr "ブラシオプションのスライダー 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
+#: krita/kritamenu.action:2026
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16263,8 +16278,8 @@ msgstr "ブラシオプションのスライダー 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
+#: krita/kritamenu.action:2036
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16276,8 +16291,8 @@ msgstr "ブラシオプションのスライダー 4"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
+#: krita/kritamenu.action:2046
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
@@ -16289,22 +16304,22 @@ msgstr "ブラシオプションのスライダー 5"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
+#: krita/kritamenu.action:2056
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "左右反転"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051
+#: krita/kritamenu.action:2063
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "レイアウト"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -16316,8 +16331,8 @@ msgstr "レイアウトを選択"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
+#: krita/kritamenu.action:2075
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -16747,7 +16762,7 @@ msgstr "%1 を html として保存できません"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:577
+#: libs/ui/flake/kis_shape_layer.cc:613
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -21327,7 +21342,7 @@ msgstr "選択解除"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
+#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "レイヤーを追加"
@@ -21365,7 +21380,7 @@ msgid "Reselect"
 msgstr "再選択"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2097
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, kde-format
 msgid "Selection Mask"
@@ -21642,7 +21657,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
 #, kde-format
 msgid "Paint Layer"
 msgstr "ペイントレイヤー"
@@ -21652,83 +21667,88 @@ msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "画像を切り取り"
 
-#: libs/image/kis_image.cc:935
+#: libs/image/kis_image.cc:886
+msgctxt "(qtundo-format)"
+msgid "Purge Unused Data"
+msgstr ""
+
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "レイヤーを切り取り"
 
-#: libs/image/kis_image.cc:936
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "マスクを切り取り"
 
-#: libs/image/kis_image.cc:973
+#: libs/image/kis_image.cc:1028
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "画像をスケール"
 
-#: libs/image/kis_image.cc:974
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "画像の解像度を変更"
 
-#: libs/image/kis_image.cc:1024
+#: libs/image/kis_image.cc:1079
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "%1 レイヤーをスケール"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1218
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "画像を回転"
 
-#: libs/image/kis_image.cc:1173
+#: libs/image/kis_image.cc:1228
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "マスクを回転"
 
-#: libs/image/kis_image.cc:1176
+#: libs/image/kis_image.cc:1231
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "%1 レイヤーを回転"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "マスクを剪断変形"
 
-#: libs/image/kis_image.cc:1281
+#: libs/image/kis_image.cc:1336
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "%1 レイヤーを剪断変形"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1343
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "画像を剪断変形"
 
-#: libs/image/kis_image.cc:1306
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "レイヤーの色空間を変換"
 
-#: libs/image/kis_image.cc:1357
+#: libs/image/kis_image.cc:1412
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "画像の色空間を変換"
 
-#: libs/image/kis_image.cc:1358
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "投影色空間を変換"
 
-#: libs/image/kis_image.cc:1410
+#: libs/image/kis_image.cc:1465
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -21736,17 +21756,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "レイヤーの色空間を変換"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1495
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "プロファイルをレイヤーに適用"
 
-#: libs/image/kis_image.cc:1481
+#: libs/image/kis_image.cc:1536
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "プロファイルを適用"
 
-#: libs/image/kis_image.cc:2517
+#: libs/image/kis_image.cc:2572
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "選択範囲を切り取り"
@@ -21909,7 +21929,7 @@ msgstr "レイヤーの色空間を変換(&C)"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:337
+#: libs/ui/flake/kis_shape_layer.cc:327
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21925,63 +21945,63 @@ msgid ""
 "operations may be slow"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:626
+#: libs/image/kis_layer_utils.cpp:627
 #, kde-format
 msgid "Merged"
 msgstr "統合済み"
 
-#: libs/image/kis_layer_utils.cpp:1441
+#: libs/image/kis_layer_utils.cpp:1472
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "結合"
 
-#: libs/image/kis_layer_utils.cpp:1713
+#: libs/image/kis_layer_utils.cpp:1744
 #, kde-format
 msgid "Copy of"
 msgstr "コピー"
 
-#: libs/image/kis_layer_utils.cpp:1791
+#: libs/image/kis_layer_utils.cpp:1822
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "投影色を変更"
 
-#: libs/image/kis_layer_utils.cpp:2017
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "選択したレイヤーを統合"
 
-#: libs/image/kis_layer_utils.cpp:2035
+#: libs/image/kis_layer_utils.cpp:2066
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "表示されているレイヤーから新規作成"
 
-#: libs/image/kis_layer_utils.cpp:2036
+#: libs/image/kis_layer_utils.cpp:2067
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "表示レイヤー"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2146
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "選択マスクを統合"
 
-#: libs/image/kis_layer_utils.cpp:2139
+#: libs/image/kis_layer_utils.cpp:2170
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "レイヤーを統合"
 
-#: libs/image/kis_layer_utils.cpp:2155
+#: libs/image/kis_layer_utils.cpp:2186
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "画像を統合"
 
-#: libs/image/kis_layer_utils.cpp:2389
+#: libs/image/kis_layer_utils.cpp:2420
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "アルファをマスクに分離"
 
-#: libs/image/kis_layer_utils.cpp:2415
+#: libs/image/kis_layer_utils.cpp:2446
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "ペイントレイヤーに変換"
@@ -22404,30 +22424,30 @@ msgstr ""
 "この画像は<b>ミリ秒の分数</b>でフレーム間隔が設定されています。この形式では表"
 "現できないため、フレーム間隔は最も近いミリ秒に丸められます。"
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:690
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
 #, kde-format
 msgid "Clone Layer"
 msgstr "クローンレイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "グループ化"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
 #, kde-format
 msgid "File Layer"
 msgstr "ファイル参照レイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:703
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "ベクターレイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "Filter Layer"
 msgstr "フィルタレイヤー"
@@ -24132,8 +24152,8 @@ msgstr "ローカルリソース"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
@@ -24202,75 +24222,75 @@ msgstr ""
 "このデータスキームは変更されています。現在のデータベースをバックアップして新"
 "しいデータベースを作成します。"
 
-#: libs/resources/KisResourceLocator.cpp:90
+#: libs/resources/KisResourceLocator.cpp:91
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. リソースの場所を作成できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:97
+#: libs/resources/KisResourceLocator.cpp:98
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. リソースの場所は書き込みできません。%1"
 
-#: libs/resources/KisResourceLocator.cpp:859
+#: libs/resources/KisResourceLocator.cpp:852
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "データベースに追加できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:903
-#: libs/resources/KisResourceLocator.cpp:1264
+#: libs/resources/KisResourceLocator.cpp:896
+#: libs/resources/KisResourceLocator.cpp:1257
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "データベースからストレージを削除できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1016
+#: libs/resources/KisResourceLocator.cpp:1009
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "データベースと同期できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita の初回起動です。初期化に通常より時間がかかります。"
 
-#: libs/resources/KisResourceLocator.cpp:1031
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. リソースの場所を作成できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1044
-#: libs/resources/KisResourceLocator.cpp:1060
+#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1053
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "リソースのコピーが行えませんでした。%1 → %2"
 
-#: libs/resources/KisResourceLocator.cpp:1056
+#: libs/resources/KisResourceLocator.cpp:1049
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "バンドルからリソースをインストールしています。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1084
+#: libs/resources/KisResourceLocator.cpp:1077
 #, kde-format
 msgid "Temporary Resources"
 msgstr "一時リソース"
 
-#: libs/resources/KisResourceLocator.cpp:1090
+#: libs/resources/KisResourceLocator.cpp:1083
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "フォントスタイル"
 
-#: libs/resources/KisResourceLocator.cpp:1213
+#: libs/resources/KisResourceLocator.cpp:1206
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "リソースを初期化しています。"
 
-#: libs/resources/KisResourceLocator.cpp:1226
-#: libs/resources/KisResourceLocator.cpp:1234
+#: libs/resources/KisResourceLocator.cpp:1219
+#: libs/resources/KisResourceLocator.cpp:1227
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "データベースと同期できませんでした。%1"
@@ -34357,66 +34377,66 @@ msgstr "画像をインポート"
 msgid "Select a Color"
 msgstr "色を選択"
 
-#: libs/ui/kis_layer_manager.cc:191
+#: libs/ui/kis_layer_manager.cc:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "選択したレイヤーを統合"
 
-#: libs/ui/kis_layer_manager.cc:193
+#: libs/ui/kis_layer_manager.cc:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "グループを統合"
 
-#: libs/ui/kis_layer_manager.cc:195
+#: libs/ui/kis_layer_manager.cc:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "下のレイヤーと統合"
 
-#: libs/ui/kis_layer_manager.cc:217
+#: libs/ui/kis_layer_manager.cc:220
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "レイヤーは空です"
 
-#: libs/ui/kis_layer_manager.cc:256
+#: libs/ui/kis_layer_manager.cc:267
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "フィルタレイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:301
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "ファイル参照レイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
 #, kde-format
 msgid "No file name specified"
 msgstr "ファイル名が指定されていません。"
 
-#: libs/ui/kis_layer_manager.cc:339
+#: libs/ui/kis_layer_manager.cc:350
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "塗りつぶしレイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:396
+#: libs/ui/kis_layer_manager.cc:407
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "クローンレイヤーを変更"
 
-#: libs/ui/kis_layer_manager.cc:511
+#: libs/ui/kis_layer_manager.cc:522
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "グループをアニメーションレイヤーに変換"
 
-#: libs/ui/kis_layer_manager.cc:531
+#: libs/ui/kis_layer_manager.cc:542
 #, kde-format
 msgid "Save layers to..."
 msgstr "レイヤーを保存..."
 
-#: libs/ui/kis_layer_manager.cc:532
+#: libs/ui/kis_layer_manager.cc:543
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34425,48 +34445,48 @@ msgstr ""
 "レイヤーを保存する場所を選択します。新しいファイル参照レイヤーはこの場所を参"
 "照します。"
 
-#: libs/ui/kis_layer_manager.cc:595
+#: libs/ui/kis_layer_manager.cc:606
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "ファイル参照レイヤーに変換"
 
-#: libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "New Filter Layer"
 msgstr "新しいフィルタレイヤー"
 
-#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "塗りつぶしレイヤー"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:813
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "画像を統合"
 
-#: libs/ui/kis_layer_manager.cc:803
+#: libs/ui/kis_layer_manager.cc:814
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "画像の非表示レイヤーはこの操作により失われます。画像を統合しますか？"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:892
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "レイヤーはロックされています"
 
-#: libs/ui/kis_layer_manager.cc:903
+#: libs/ui/kis_layer_manager.cc:914
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "レイヤーはロックされています"
 
-#: libs/ui/kis_layer_manager.cc:920
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34478,12 +34498,12 @@ msgstr ""
 "アニメーションレイヤーではないレイヤーが現在のフレームに統合されます。すべて"
 "のクリップに統合するには少なくとも 1 つフレームを作成してください"
 
-#: libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "非表示グループを変換"
 
-#: libs/ui/kis_layer_manager.cc:972
+#: libs/ui/kis_layer_manager.cc:983
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "トップレベルグループのみをエクスポート"
@@ -35131,13 +35151,13 @@ msgstr ""
 "\" text-decoration: underline; color:%1;\">スクリプティング・スクール</"
 "span></a></p>"
 
-#: libs/ui/kis_statusbar.cc:230
+#: libs/ui/kis_statusbar.cc:231
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:262
+#: libs/ui/kis_statusbar.cc:280
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -35151,7 +35171,7 @@ msgstr ""
 "  - projections:\t %3\n"
 "  - インスタントプレビュー:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:273
+#: libs/ui/kis_statusbar.cc:291
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -35169,7 +35189,7 @@ msgstr ""
 "\n"
 "使用されているスワップサイズ:\t %8"
 
-#: libs/ui/kis_statusbar.cc:308
+#: libs/ui/kis_statusbar.cc:326
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -35183,25 +35203,38 @@ msgstr ""
 "警告:\tメモリ不足です!  スワッピングが発生しています。\n"
 "\t\tKrita の設定ダイアログで使用可能メモリを増やしてください"
 
-#: libs/ui/kis_statusbar.cc:367
+#: libs/ui/kis_statusbar.cc:338
+#, kde-format
+msgctxt "tooltip on statusbar memory reporting button"
+msgid ""
+"\n"
+"\n"
+"WARNING:\tSome layers took too much time to calculate\n"
+"\t\ttheir thumbnails. They were switched into low-quality\n"
+"\t\tthumbnails mode. Try purging unused image data with\n"
+"\t\tImage->Purge Unused Image Data action.\n"
+"Slow layers: "
+msgstr ""
+
+#: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "非表示"
 
 # Marching ants (選択領域の境界に表示される点線) の略です
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #, kde-format
 msgid "Ants"
 msgstr "点線"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "マスク"
 
-#: libs/ui/kis_statusbar.cc:372
+#: libs/ui/kis_statusbar.cc:420
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -35210,17 +35243,17 @@ msgstr ""
 "選択範囲: X = %1 Y = %2 幅 = %3 高さ = %4\n"
 "表示モード: %5"
 
-#: libs/ui/kis_statusbar.cc:377
+#: libs/ui/kis_statusbar.cc:425
 #, kde-format
 msgid "No Selection"
 msgstr "選択なし"
 
-#: libs/ui/kis_statusbar.cc:395
+#: libs/ui/kis_statusbar.cc:443
 #, kde-format
 msgid "No profile"
 msgstr "プロファイルなし"
 
-#: libs/ui/kis_statusbar.cc:397
+#: libs/ui/kis_statusbar.cc:445
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -36190,7 +36223,7 @@ msgstr ""
 "Krita で編集できないプロファイルが画像で使用されています (\"%1\")。編集用に変"
 "換する色空間を選択してください: \n"
 
-#: libs/ui/KisLayerThumbnailCache.cpp:30
+#: libs/ui/KisLayerThumbnailCache.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "レイヤーサムネイルを更新"
@@ -44135,7 +44168,7 @@ msgstr "ロックの切り替えと表示(&T)"
 msgid "&Add"
 msgstr "追加(&A)"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
 #, kde-format
 msgid "%1 %"
 msgstr "%1%"
@@ -45219,13 +45252,13 @@ msgstr "録画"
 msgid "Export..."
 msgstr "エクスポート..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "品質:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:148
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45237,13 +45270,13 @@ msgstr ""
 "は影響しません。\n"
 "50 より小さい値は、アーティファクトが多くなるため、推奨されません。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "圧縮:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:157
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45257,25 +45290,25 @@ msgstr ""
 "圧縮を 0 にすることは、ディスク容量の消費が大きくなるため、推奨されません。\n"
 "3 より大きい値は、パフォーマンスに影響が発生するため、推奨されません。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:185
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "動画 FPS:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:194
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "キャプチャの間隔:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "オリジナル"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45283,7 +45316,7 @@ msgctxt ""
 msgid "Half"
 msgstr "1/2"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:237
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45291,35 +45324,35 @@ msgctxt ""
 msgid "Quarter"
 msgstr "1/4"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "停止"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "録画"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:311
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr "録画中: 利用可能な %2 スレッドのうち %1 を使用中"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Recorder is paused"
 msgstr "レコーダー停止中"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:338
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45332,7 +45365,7 @@ msgstr ""
 "%1 より大きな数値は、パフォーマンス向上にはつながらないことに注意してくださ"
 "い。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:349
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, fuzzy, kde-format
 #| msgid ""
 #| "Set the number of recording threads.\n"
@@ -45352,35 +45385,35 @@ msgstr ""
 "もう 1 つまたはもう 2 つスレッドを追加して試してみることもできますが、システ"
 "ム全体のパフォーマンスに注意してください。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:354
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "録画に使用するスレッド数を設定します。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:362
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "レコーダー"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:441
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "システムの性能がこの機能には十分ではありません"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "録画ディレクトリを選択"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "レコーダー"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45389,14 +45422,14 @@ msgstr ""
 "フレームの書き込み中にエラーが発生したため、レコーダーが停止しました。ディス"
 "クの空き容量を確認して、レコーダーを再起動してください。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 "Krita がレコーダーを停止できませんでした。Krita を再起動してみてください。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45409,7 +45442,7 @@ msgstr ""
 "ffmpeg エクスポートのフレームレートを減らすか、キャンバスのアクセラレーション"
 "設定でスケーリングフィルタを減らしてみてください。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "

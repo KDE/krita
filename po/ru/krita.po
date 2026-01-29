@@ -76,13 +76,13 @@
 # Alexander Yavorsky <kekcuha@gmail.com>, 2020, 2023.
 # Мария Шикунова <mariia@basealt.ru>, 2020, 2021.
 # SPDX-FileCopyrightText: 2022, 2023, 2024 Olesya Gerasimenko <translation-team@basealt.ru>
-# SPDX-FileCopyrightText: 2025 Alevtina <alevkarash@altlinux.org>
+# SPDX-FileCopyrightText: 2025, 2026 Alevtina <alevkarash@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-17 03:31+0000\n"
-"PO-Revision-Date: 2025-09-17 12:11+0300\n"
+"PO-Revision-Date: 2026-01-28 10:51+0300\n"
 "Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -23372,39 +23372,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1001
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Нет"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Окружность"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1003
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "Прямоугольник"
+msgstr "Прямоугольник слева"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1004
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "Прямоугольник"
+msgstr "Прямоугольник справа"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1005
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "Прямоугольник"
+msgstr "Прямоугольник сверху"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1032
 #, kde-format
@@ -25716,10 +25711,9 @@ msgstr "Цвет контура ластика:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:310
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Цветовой миксер:"
+msgstr "Форма цветового миксера:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -25747,17 +25741,15 @@ msgstr "Толщина:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:378
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Круглый контур"
+msgstr "Включить контур"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:385
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "Расширяющийся заполнитель"
+msgstr "Дополнительное пространство для сравнения"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:396
@@ -26398,7 +26390,7 @@ msgstr "Дополнительно..."
 #: libs/ui/forms/wdggeneralsettings.ui:1605
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Длительное нажатие для открытия контекстных меню"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -28369,6 +28361,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Использовать клавиши Page Up/Down в качестве правой/средней кнопок мыши "
+"(временное решение для стилусов Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -28377,6 +28371,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Игнорировать историю положения планшета (временное решение для неровных "
+"линий при использовании стилусов Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214
@@ -29290,10 +29286,9 @@ msgid "Five Finger Drag"
 msgstr "Прокрутка пятью пальцами"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:500
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "Касание одним пальцем"
+msgstr "Удержание одним пальцем"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:503
 #, kde-format
@@ -29496,9 +29491,7 @@ msgid "Toggle Eraser"
 msgstr "Переключить ластик"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Переключить профиль ластика"
 
@@ -58484,7 +58477,7 @@ msgstr "Обновить цвет"
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "Стиль всплывающего окна на холсте для сравнения отобранных цветов"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:27

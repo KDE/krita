@@ -199,7 +199,7 @@ void KisOpenGLCanvasRenderer::setDisplayFilterImpl(QSharedPointer<KisDisplayFilt
     bool needsInternalColorManagement =
             !displayFilter || displayFilter->useInternalColorManagement();
 
-    bool needsFullRefresh = d->openGLImageTextures->setInternalColorManagementActive(needsInternalColorManagement);
+    bool needsFullRefresh = d->openGLImageTextures->setInternalColorManagementActive(needsInternalColorManagement, initializing);
 
     d->displayFilter = displayFilter;
 

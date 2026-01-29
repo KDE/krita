@@ -536,13 +536,19 @@ bool KisOpenGLImageTextures::internalColorManagementActive() const
     return m_internalColorManagementActive;
 }
 
-bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
+bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value, bool initializing)
 {
     bool needsFinalRegeneration = m_internalColorManagementActive != value;
 
     if (needsFinalRegeneration) {
         m_internalColorManagementActive = value;
-        recreateImageTextureTiles();
+
+        if (!initializing) {
+            // During initialization process the textures might be not ready yet,
+            // so we shouldn't try to recreate them. They will be created during
+            // the initGL() call later.
+            recreateImageTextureTiles();
+        }
 
         // at this point the value of m_internalColorManagementActive might
         // have been forcefully reverted to 'false' in case of some problems

@@ -89,7 +89,7 @@ public:
     void setProofingConfig(KisProofingConfigurationSP);
 
     bool internalColorManagementActive() const;
-    bool setInternalColorManagementActive(bool value);
+    bool setInternalColorManagementActive(bool value, bool iniializing = false);
 
     /**
      * The background checkers texture.

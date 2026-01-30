@@ -161,8 +161,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
     const QSize patchSize = updateInfo.realPatchSize();
     const QPoint patchOffset = updateInfo.realPatchOffset();
 
-    const GLvoid *fd = updateInfo.data();
-
     /**
      * In some special case, when the Lod0 stroke is cancelled the
      * following situation is possible:
@@ -200,8 +198,134 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
         regenerateMipmap();
     }
 
+    /*
+     * To avoid unsightly seams in wraparound mode, we extend the tile at the
+     * edges by just repeating the top/left/right/bottom row/column until the
+     * end of the texture. For that, we shuffle the data into a buffer, then
+     * pass that to the PBO. Previously, this code used to allocate up to four
+     * additional, single-pixel thick (and sometimes zero-pixel long) PBOs and
+     * hammer out the extensions through multiple calls to glTexSubImage2D, but
+     * that caused very long stalls on Android. If you are in the future and
+     * for some reason need to revert that, also update KisOpenGLImageTextures
+     * to properly account for these extra PBOs being used, since it assumes
+     * each tile only grabs one PBO from the circular buffer storage.
+     */
+    QSize tileSize = updateInfo.realTileSize();
+    int pixelSize = updateInfo.pixelSize();
+    int centerWidth = patchSize.width();
+    int centerHeight = patchSize.height();
 
-    if (updateInfo.isEntireTileUpdated()) {
+    int topHeight;
+    if (updateInfo.isTopmost()) {
+        topHeight = patchOffset.y();
+    } else {
+        topHeight = 0;
+    }
+
+    int leftWidth;
+    if (updateInfo.isLeftmost()) {
+        leftWidth = patchOffset.x();
+    } else {
+        leftWidth = 0;
+    }
+
+    int rightWidth;
+    if (updateInfo.isRightmost()) {
+        rightWidth = tileSize.width() - patchOffset.x() - centerWidth;
+    } else {
+        rightWidth = 0;
+    }
+
+    int bottomHeight;
+    if (updateInfo.isBottommost()) {
+        bottomHeight = tileSize.height() - patchOffset.y() - centerHeight;
+    } else {
+        bottomHeight = 0;
+    }
+
+    if (topHeight > 0 || leftWidth > 0 || rightWidth > 0 || bottomHeight > 0) {
+        int bufWidth = leftWidth + centerWidth + rightWidth;
+        int bufHeight = topHeight + centerHeight + bottomHeight;
+
+        int centerStride = centerWidth * pixelSize;
+        int leftStride = leftWidth * pixelSize;
+        int rightStride = rightWidth * pixelSize;
+        int bufStride = bufWidth * pixelSize;
+
+        QByteArray buf(bufStride * bufHeight, 0);
+        quint8 *bufData = reinterpret_cast<quint8 *>(buf.data());
+        const quint8 *patchData = updateInfo.data();
+
+        if (topHeight > 0) {
+            const quint8 *topSrcPtr = patchData;
+            quint8 *topDstPtr = bufData + leftStride;
+            for (int y = 0; y < topHeight; ++y) {
+                memcpy(topDstPtr, topSrcPtr, centerStride);
+                topDstPtr += bufStride;
+            }
+        }
+
+        if (leftWidth > 0) {
+            int leftDstSkip = centerStride + rightStride;
+            const quint8 *leftSrcPtr = patchData;
+            quint8 *leftDstPtr = bufData + (topHeight * bufStride);
+            for (int y = 0; y < centerHeight; ++y) {
+                for (int x = 0; x < leftWidth; ++x) {
+                    memcpy(leftDstPtr, leftSrcPtr, pixelSize);
+                    leftDstPtr += pixelSize;
+                }
+                leftSrcPtr += centerStride;
+                leftDstPtr += leftDstSkip;
+            }
+        }
+
+        {
+            const quint8 *centerSrcPtr = patchData;
+            quint8 *centerDstPtr = bufData + (topHeight * bufStride) + leftStride;
+            for (int y = 0; y < centerHeight; ++y) {
+                memcpy(centerDstPtr, centerSrcPtr, centerStride);
+                centerSrcPtr += centerStride;
+                centerDstPtr += bufStride;
+            }
+        }
+
+        if (rightWidth > 0) {
+            int rightDstSkip = leftStride + centerStride;
+            const quint8 *rightSrcPtr = patchData + (centerStride - pixelSize);
+            quint8 *rightDstPtr = bufData + (topHeight * bufStride) + rightDstSkip;
+            for (int y = 0; y < centerHeight; ++y) {
+                for (int x = 0; x < rightWidth; ++x) {
+                    memcpy(rightDstPtr, rightSrcPtr, pixelSize);
+                    rightDstPtr += pixelSize;
+                }
+                rightSrcPtr += centerStride;
+                rightDstPtr += rightDstSkip;
+            }
+        }
+
+        if (bottomHeight > 0) {
+            const quint8 *bottomSrcPtr = patchData + ((centerHeight - 1) * centerStride);
+            quint8 *bottomDstPtr = bufData + ((topHeight + centerHeight) * bufStride) + leftStride;
+            for (int y = 0; y < bottomHeight; ++y) {
+                memcpy(bottomDstPtr, bottomSrcPtr, centerStride);
+                bottomDstPtr += bufStride;
+            }
+        }
+
+        const GLvoid *fd = bufData;
+        KisOpenGLBufferCircularStorage::BufferBinder b(m_bufferStorage, &fd, buf.size());
+        f->glTexSubImage2D(GL_TEXTURE_2D,
+                           patchLevelOfDetail,
+                           patchOffset.x() - leftWidth,
+                           patchOffset.y() - topHeight,
+                           bufWidth,
+                           bufHeight,
+                           m_texturesInfo->format,
+                           m_texturesInfo->type,
+                           fd);
+
+    } else if (updateInfo.isEntireTileUpdated()) {
+        const GLvoid *fd = updateInfo.data();
         KisOpenGLBufferCircularStorage::BufferBinder b(
             m_bufferStorage, &fd, updateInfo.patchPixelsLength());
 
@@ -212,9 +336,10 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
                      m_texturesInfo->format,
                      m_texturesInfo->type,
                      fd);
-    }
-    else {
-        const int size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
+
+    } else {
+        const GLvoid *fd = updateInfo.data();
+        const int size = centerWidth * centerHeight * pixelSize;
         KisOpenGLBufferCircularStorage::BufferBinder b(
             m_bufferStorage, &fd, size);
 
@@ -224,124 +349,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
                         m_texturesInfo->format,
                         m_texturesInfo->type,
                         fd);
-
-    }
-
-    /**
-     * On the boundaries of KisImage, there is a border-effect as well.
-     * So we just repeat the bounding pixels of the image to make
-     * bilinear interpolator happy.
-     */
-
-    /**
-     * WARN: The width of the stripes will be equal to the broader
-     *       width of the tiles.
-     */
-
-    const int pixelSize = updateInfo.pixelSize();
-    const QSize tileSize = updateInfo.realTileSize();
-
-    if(updateInfo.isTopmost()) {
-        int start = 0;
-        int end = patchOffset.y() - 1;
-
-        const GLvoid *fd = updateInfo.data();
-        const int size = patchSize.width() * pixelSize;
-        KisOpenGLBufferCircularStorage::BufferBinder g(
-            m_bufferStorage, &fd, size);
-
-        for (int i = start; i <= end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
-                               patchOffset.x(), i,
-                               patchSize.width(), 1,
-                               m_texturesInfo->format,
-                               m_texturesInfo->type,
-                               fd);
-        }
-    }
-
-    if (updateInfo.isBottommost()) {
-        int shift = patchSize.width() * (patchSize.height() - 1) *
-                pixelSize;
-
-        int start = patchOffset.y() + patchSize.height();
-        int end = tileSize.height() - 1;
-
-        const GLvoid *fd = updateInfo.data() + shift;
-        const int size = patchSize.width() * pixelSize;
-        KisOpenGLBufferCircularStorage::BufferBinder g(
-            m_bufferStorage, &fd, size);
-
-        for (int i = start; i < end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
-                            patchOffset.x(), i,
-                            patchSize.width(), 1,
-                            m_texturesInfo->format,
-                            m_texturesInfo->type,
-                            fd);
-        }
-    }
-
-    if (updateInfo.isLeftmost()) {
-
-        QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
-
-        quint8 *srcPtr = updateInfo.data();
-        quint8 *dstPtr = (quint8*) columnBuffer.data();
-        for(int i = 0; i < patchSize.height(); i++) {
-            memcpy(dstPtr, srcPtr, pixelSize);
-
-            srcPtr += patchSize.width() * pixelSize;
-            dstPtr += pixelSize;
-        }
-
-        int start = 0;
-        int end = patchOffset.x() - 1;
-
-        const GLvoid *fd = columnBuffer.constData();
-        const int size = columnBuffer.size();
-        KisOpenGLBufferCircularStorage::BufferBinder g(
-            m_bufferStorage, &fd, size);
-
-        for (int i = start; i <= end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
-                            i, patchOffset.y(),
-                            1, patchSize.height(),
-                            m_texturesInfo->format,
-                            m_texturesInfo->type,
-                            fd);
-        }
-    }
-
-    if (updateInfo.isRightmost()) {
-
-        QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
-
-        quint8 *srcPtr = updateInfo.data() + (patchSize.width() - 1) * pixelSize;
-        quint8 *dstPtr = (quint8*) columnBuffer.data();
-        for(int i = 0; i < patchSize.height(); i++) {
-            memcpy(dstPtr, srcPtr, pixelSize);
-
-            srcPtr += patchSize.width() * pixelSize;
-            dstPtr += pixelSize;
-        }
-
-        int start = patchOffset.x() + patchSize.width();
-        int end = tileSize.width() - 1;
-
-        const GLvoid *fd = columnBuffer.constData();
-        const int size = columnBuffer.size();
-        KisOpenGLBufferCircularStorage::BufferBinder g(
-            m_bufferStorage, &fd, size);
-
-        for (int i = start; i <= end; i++) {
-            f->glTexSubImage2D(GL_TEXTURE_2D, patchLevelOfDetail,
-                            i, patchOffset.y(),
-                            1, patchSize.height(),
-                            m_texturesInfo->format,
-                            m_texturesInfo->type,
-                            fd);
-        }
     }
 
     //// Uncomment this warning if you see any weird flickering when

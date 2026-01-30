@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-29 02:29+0000\n"
+"POT-Creation-Date: 2026-01-30 02:26+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -22109,14 +22109,14 @@ msgstr "크기"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:835
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:839
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1054
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1061
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1240
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1486
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:834
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:838
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1053
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1060
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1238
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -25077,7 +25077,7 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
@@ -28236,29 +28236,29 @@ msgid "Layer Properties"
 msgstr "레이어 속성"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:832
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:850
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:853
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:872
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:881
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:885
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1018
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1051
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1058
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1065
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1156
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1159
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1231
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1234
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1237
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1244
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1247
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1365
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1368
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1416
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:831
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:849
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:852
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:871
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:880
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:884
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1017
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1050
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1057
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1064
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1155
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1158
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1229
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1232
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1235
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1242
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1245
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1363
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1366
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1487
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1496
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1758
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
@@ -28326,49 +28326,49 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "레이어 속성 변경"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:108
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:107
 #, kde-format
 msgid "Layer Styles"
 msgstr "레이어 스타일"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "새 스타일의 이름을 입력하십시오"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:320 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "이름:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:322
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:321
 #, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "새 스타일"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:381
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:445
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:380
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:444
 #, kde-format
 msgid "Select ASL file"
 msgstr "ASL 파일 선택"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:403
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #, fuzzy, kde-format
 #| msgid "Could not load raster selection %1."
 msgid "Could not load layer style library %1."
 msgstr "래스터 선택 %1을(를) 불러올 수 없습니다."
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:416
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "경고"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:418
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
 #, fuzzy, kde-format
 #| msgid ""
 #| "There is already a bundle with this name installed. Do you want to "
@@ -28378,32 +28378,32 @@ msgid ""
 "to overwrite it?"
 msgstr "이름이 같은 번들이 이미 존재합니다. 덮어쓰시겠습니까?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1001
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1000
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
 msgstr "구현되지 않음"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1087
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, kde-format
 msgid "Inner Shadow"
 msgstr "내부 그림자"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1089
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
 #, kde-format
 msgid "Choke:"
 msgstr "초크:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1227
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1225
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr "외부 발광"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1273
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1271
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -39154,7 +39154,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:813
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:819
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO가 비활성화됨: 이미지 색 공간이 지원되지 않습니다"

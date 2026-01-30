@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-29 02:29+0000\n"
+"POT-Creation-Date: 2026-01-30 02:26+0000\n"
 "PO-Revision-Date: 2025-11-14 09:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -21272,14 +21272,14 @@ msgstr "Rozmiar"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:835
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:839
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1054
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1061
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1240
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1486
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:834
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:838
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1053
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1060
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1238
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -24221,7 +24221,7 @@ msgstr "Miejscowe zasoby"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
@@ -27312,29 +27312,29 @@ msgid "Layer Properties"
 msgstr "Właściwości warstwy"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:832
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:850
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:853
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:872
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:881
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:885
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1018
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1051
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1058
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1065
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1156
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1159
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1231
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1234
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1237
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1244
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1247
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1365
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1368
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1416
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:831
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:849
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:852
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:871
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:880
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:884
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1017
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1050
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1057
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1064
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1155
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1158
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1229
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1232
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1235
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1242
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1245
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1363
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1366
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1487
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1496
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1758
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
@@ -27402,48 +27402,48 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Zmień właściwości warstwy"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:108
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:107
 #, kde-format
 msgid "Layer Styles"
 msgstr "Wygląd warstw"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Podaj nową nazwę stylu"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:320 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Nazwa:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:322
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:321
 #, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "Nowy styl"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:381
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:445
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:380
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:444
 #, kde-format
 msgid "Select ASL file"
 msgstr "Wybierz plik ASL"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:403
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #, kde-format
 msgid "Could not load layer style library %1."
 msgstr "Nie można wczytać biblioteki wyglądu warstwy %1."
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:416
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:418
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
 #, kde-format
 msgid ""
 "There is already a layer style library with this name installed. Do you want "
@@ -27452,32 +27452,32 @@ msgstr ""
 "Biblioteka wyglądu warstwy o tej nazwie jest już wgrana. Czy chcesz ją "
 "zastąpić?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1001
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1000
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
 msgstr "Jeszcze niezaimplementowane"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1087
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, kde-format
 msgid "Inner Shadow"
 msgstr "Wewnętrzny cień"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1089
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
 #, kde-format
 msgid "Choke:"
 msgstr "Duszenie:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1227
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1225
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr "Zewnętrzna poświata"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1273
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1271
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -38066,7 +38066,7 @@ msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 "Wybierany format wyjściowy nie jest obsługiwany przez dostępne renderery."
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:813
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:819
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""

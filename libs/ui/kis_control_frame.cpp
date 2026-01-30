@@ -149,8 +149,13 @@ void KisControlFrame::slotSetPattern(KoPatternSP pattern)
     m_patternWidget->setThumbnail(pattern->image());
     m_patternChooser->setCurrentPattern(pattern);
 }
-
 void KisControlFrame::slotSetGradient(KoAbstractGradientSP gradient)
+{
+    m_gradientChooser->setCurrentResource(gradient);
+    updateGradientPreviewOnPopupButton(gradient);
+}
+
+void KisControlFrame::updateGradientPreviewOnPopupButton(KoAbstractGradientSP gradient)
 {
     const QSize iconSize = m_gradientWidget->preferredIconSize();
 
@@ -207,7 +212,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
             &KisCanvasResourceProvider::sigPatternChanged,
             this,
             &KisControlFrame::slotSetPattern);
-
+    
     m_patternChooser->setCurrentItem(0);
     if (m_patternChooser->currentResource() && view->canvasResourceProvider()) {
         view->canvasResourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
@@ -248,21 +253,21 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
     connect(m_gradientChooser, SIGNAL(gradientEdited(KoAbstractGradientSP)),
-            this, SLOT(slotSetGradient(KoAbstractGradientSP)));
+            this, SLOT(updateGradientPreviewOnPopupButton(KoAbstractGradientSP)));
 
 
     // set the Foreground to Transparent gradient as default on startup
     KisResourceModel resModel(ResourceType::Gradients);
     QVector<KoResourceSP> resources = resModel.resourcesForFilename("Foreground to Transparent.svg");
+
     if (resources.size() > 0) {
-        m_gradientChooser->setCurrentResource(resources[0]);
+        m_gradientChooser->setCurrentResource(resources.first());
+        if (view->canvasResourceProvider()) {
+            view->canvasResourceProvider()->slotGradientActivated(resources.first());
+        }
     }
 
-    if (m_gradientChooser->currentResource() && view->canvasResourceProvider()) {
-        view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
-    }
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
-
 }
 
 

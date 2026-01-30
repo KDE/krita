@@ -50,6 +50,7 @@ private Q_SLOTS:
 
     void slotSetPattern(KoPatternSP pattern);
     void slotSetGradient(KoAbstractGradientSP gradient);
+    void updateGradientPreviewOnPopupButton(KoAbstractGradientSP gradient);
     void slotUpdateDisplayRenderer();
 
 private:

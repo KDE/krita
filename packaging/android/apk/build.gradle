@@ -190,7 +190,7 @@ android {
     project.ext.constant = 5
 
     def versionMajor    = 5
-    def versionMinor    = 0
+    def versionMinor    = 4
 
     /**
      * This version does **not** correspond to the patch version
@@ -213,7 +213,7 @@ android {
         targetSdkVersion 35
         minSdkVersion 24
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.3.0-prealpha"
+        versionName "5.4.0-prealpha"
         def unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')
         archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName$unstableSuffix" : "krita-$abi-$versionName$unstableSuffix"
     }

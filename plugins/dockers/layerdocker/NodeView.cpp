@@ -73,6 +73,7 @@ public:
 #ifdef QT6_SHIFT_SELECTION_WORKAROUND
     bool shiftClickFix;
 #endif
+    bool ignoreDataChanged = false;
 };
 
 
@@ -230,7 +231,12 @@ bool NodeView::viewportEvent(QEvent *e)
                 return QTreeView::viewportEvent(e);
             }
             if (d->delegate.editorEvent(e, model(), optionForIndex(index), index)) {
-               return true;
+                //Sometimes 2 items become active, to prevent that we explicitly turn off all but the first active item
+                std::optional<QModelIndex> active_ind = getActiveItem();
+                if (active_ind.has_value()) {
+                    setExclusiveActiveItem(active_ind.value());
+                }
+                return true;
             }
         } break;
         case QEvent::Leave: {
@@ -283,6 +289,7 @@ bool NodeView::viewportEvent(QEvent *e)
         default: break;
         }
     }
+
     return QTreeView::viewportEvent(e);
 }
 
@@ -313,6 +320,11 @@ void NodeView::currentChanged(const QModelIndex &current, const QModelIndex &pre
 void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &/*roles*/)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
+
+    if (d->ignoreDataChanged){
+      d->ignoreDataChanged = false;
+      return;
+    }
 
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
@@ -508,6 +520,20 @@ void NodeView::dragLeaveEvent(QDragLeaveEvent *e)
     DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
+void NodeView::mousePressEvent(QMouseEvent *e) {
+    if (!(e->modifiers() & Qt::ControlModifier)) {
+        QTreeView::mousePressEvent(e);
+        return;
+    }
+
+    std::optional<QModelIndex> ind = getActiveItem();
+    QTreeView::mousePressEvent(e);
+
+    if (ind.has_value()) {
+        setExclusiveActiveItem(ind.value());
+    }
+}
+
 bool NodeView::isDragging() const
 {
     return m_draggingFlag;
@@ -546,4 +572,44 @@ void NodeView::updateSelectedCheckboxColumn()
                             size().width()
                                 + (cfg.useLayerSelectionCheckbox() ? header()->sectionSize(SELECTED_COL)
                                                                    : -header()->sectionSize(SELECTED_COL)));
+}
+
+std::optional<QModelIndex> NodeView::getActiveItem()
+{
+    QAbstractItemModel* mdl = model(); 
+
+    int rows = mdl->rowCount();
+    int clmns = mdl->columnCount();
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < clmns; j++) {
+           auto index = mdl->index(i, j);
+           if (mdl->data(index, KisNodeModel::ActiveRole).toBool()){
+              return index;
+           }
+        }
+    }
+
+    return {};
+}
+
+void NodeView::setExclusiveActiveItem(QModelIndex index)
+{
+    QAbstractItemModel* mdl = model(); 
+
+    int rows = mdl->rowCount();
+    int clmns = mdl->columnCount();
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < clmns; j++) {
+           QModelIndex ind = mdl->index(i, j);
+           
+           //Suppress the data changed event, so that it doesn't mess with the selection
+           d->ignoreDataChanged = true;
+           mdl->setData(ind, false, KisNodeModel::ActiveRole);
+        }
+    }
+
+    d->ignoreDataChanged = true;
+    mdl->setData(index, true, KisNodeModel::ActiveRole);
 }

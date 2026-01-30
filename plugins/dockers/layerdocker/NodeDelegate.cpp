@@ -1141,10 +1141,6 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                         model->setData(index, true, KisNodeModel::AlternateActiveRole);
 
                         return true;
-                    } else if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                        //Don't do anything here when ctrl is pressed but still pass through the event
-                        //If we don't, the internal state of QTreeView WILL break
-                        return false;
                     }
                     return false;
                 }

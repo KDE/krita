@@ -640,72 +640,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <!-- Note: website infrastructure uses the appstream file from the master branch 
-               to determine the last release, so this entry must always reflect the
-               last actual release -->
-    <release date="2023-01-05" version="5.1.5">
-      <artifacts>
-        <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5-x86_64.AppImage</location>
-          <bundle type="appimage">krita-5.1.5</bundle>
-        </artifact>
-        <artifact type="binary" platform="macOS">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5.dmg</location>
-        </artifact>
-        <artifact type="binary" platform="win64">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-x64-5.1.5-setup.exe</location>
-        </artifact>
-        <artifact type="binary" platform="win32">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-x86-5.1.5-setup.exe</location>
-        </artifact>
-        <artifact type="binary" platform="android-arm64_v8a">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-arm64-v8a-5.1.5-release-signed.apk</location>
-        </artifact>
-        <artifact type="binary" platform="android-armeabi_v7a">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-armeabi-v7a-5.1.5-release-signed.apk</location>
-        </artifact>
-        <artifact type="source">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5.tar.xz</location>
-        </artifact>
-      </artifacts>
-    </release>
-    <release date="2022-04-27" version="5.0.6">
-      <url>https://krita.org/en/item/krita-5.0.6-released/</url>
-    </release>
-    <release date="2022-04-12" version="5.0.5">
-      <url>https://krita.org/en/item/krita-5.0.5-released/</url>
-    </release>
-    <release date="2021-03-24" version="4.4.3">
-      <url>https://krita.org/en/item/krita-4-4-3-released/</url>
-    </release>
-    <release date="2021-01-19" version="4.4.2">
-      <url>https://krita.org/en/item/krita-4-4-2-released/</url>
-    </release>
-    <release date="2020-10-29" version="4.4.1">
-      <url>https://krita.org/en/item/krita-4-4-1-released/</url>
-    </release>
-    <release date="2020-10-13" version="4.4.0">
-      <url>https://krita.org/en/item/krita-4-4-0-released/</url>
-      <description>
-        <p>Only a little later than we had planned, this is the next feature release of Krita! With a whole slew of new fill layer types, including the really versatile SeExpr based scriptable fill layer type, exciting new options for Krita’s brushes like the gradient map mode for brushes, lightness and gradient modes for brush textures, support for dynamic use of colors in gradients, webm export for animations, new scripting features — and of course, hundreds of bug fixes that make this version of Krita better than ever. Especially exciting are all the fixes we made for Krita on ChromeOS and Android!</p>
-      </description>
-    </release>
-    <release date="2020-06-18" version="4.3.0">
-      <description>
-        <p>Three months after the release of Krita 4.2.9, we’ve got a major new feature release for you: Krita 4.3.0! We’ve spent the past year not just fixing bugs, even though we fixed over a thousand issues, but have also been busy adding cool new stuff to play with.</p>
-        <p>There’s a whole new set of brush presets that evoke watercolor painting. There’s a color mode in the gradient map filter and a brand new palletize filter and a high pass filter. The scripting API has been extended. It’s now possible to adjust the opacity and lightness on colored brush tips separately. You can now create animated brush tips that select brush along multiple dimensions. We’ve made it possible to put the canvas area in a window of its own, so on a multi monitor setup, you can have all the controls on one monitor, and your images on the other. The color selector has had a big update. There’s a new snapshot docker that stores states of your image, and you can switch between those. There’s a brand new magnetic selection tool. Gradients can now be painting as spirals.</p>
-      </description>
-      <url>https://krita.org/en/item/krita-4-3-0-released/</url>
-    </release>
-    <release date="2020-03-26" version="4.2.9.0">
-      <url>https://krita.org/en/item/krita-4-2-9-released/</url>
-    </release>
-    <release date="2019-11-27" version="4.2.8.0">
-      <url>https://krita.org/en/item/krita-4-2-8-released/</url>
-    </release>
-    <release date="2019-03-10" version="4.2.7.1">
-      <url>https://krita.org/en/item/krita-4-2-7-released/</url>
-    </release>
+    <release date="2099-01-01" version="6.0.0"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

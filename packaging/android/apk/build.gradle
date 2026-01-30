@@ -190,7 +190,7 @@ android {
     project.ext.constant = 5
 
     def versionMajor    = 5
-    def versionMinor    = 0
+    def versionMinor    = 3
 
     /**
      * This version does **not** correspond to the patch version

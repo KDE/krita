@@ -362,6 +362,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setStandardToolBarMenuEnabled(true);
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
     setDockNestingEnabled(true);
+#ifdef Q_OS_ANDROID
+    // On Android, the animations for docks and menus are not only slow, but
+    // also can cause crashes in some circumstances. Turning them off feels
+    // better and avoids those.
+    setAnimated(false);
+#endif
 
     qApp->setStartDragDistance(25);     // 25 px is a distance that works well for Tablet and Mouse events
 

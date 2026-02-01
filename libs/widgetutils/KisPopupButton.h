@@ -52,6 +52,9 @@ public:
 
     bool isPopupWidgetVisible();
 
+Q_SIGNALS:
+    void sigPopupWidgetShown();
+
 public Q_SLOTS:
 
     void showPopupWidget();
@@ -70,6 +73,10 @@ protected:
     void paintEvent(QPaintEvent* event) override;
 
     void paintPopupArrow();
+
+private Q_SLOTS:
+    void slotMenuAboutToHide();
+
 private:
     struct Private;
     Private* const m_d;

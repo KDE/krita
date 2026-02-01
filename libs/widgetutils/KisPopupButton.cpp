@@ -225,19 +225,25 @@ void KisPopupButton::paintPopupArrow()
 
 void KisPopupButton::adjustPosition()
 {
+    QScreen *currentScreen = nullptr;
+    auto getCurrentScreen = [this, &currentScreen] {
+        if (!currentScreen) {
+            QWindow *mainWinHandle = window()->windowHandle();
+            if (mainWinHandle) {
+                currentScreen = mainWinHandle->screen();
+            } else {
+                currentScreen = QApplication::primaryScreen();
+            }
+        }
+        return currentScreen;
+    };
+
     // If popup is not detached, or if its detached geometry hasn't been set,
     // we first move the popup to the "current" screen.
     if (!m_d->isPopupDetached || !m_d->isDetachedGeometrySet) {
-        QScreen *currentScreen = [this]() {
-            QWindow *mainWinHandle = this->window()->windowHandle();
-            if (mainWinHandle) {
-                return mainWinHandle->screen();
-            }
-            return QApplication::primaryScreen();
-        }();
         QWindow *winHandle = m_d->frame->windowHandle();
         if (winHandle) {
-            winHandle->setScreen(currentScreen);
+            winHandle->setScreen(getCurrentScreen());
         }
     }
 
@@ -247,12 +253,12 @@ void KisPopupButton::adjustPosition()
     QRect popupRect(pos, popSize);
 
     // Get the available geometry of the screen which contains the popup.
-    QScreen *screen = [this]() {
+    QScreen *screen = [this, &getCurrentScreen]() {
         QWindow *winHandle = m_d->frame->windowHandle();
         if (winHandle && winHandle->screen()) {
             return winHandle->screen();
         }
-        return QApplication::primaryScreen();
+        return getCurrentScreen();
     }();
     QRect screenRect = screen->availableGeometry();
     if (m_d->isPopupDetached) {

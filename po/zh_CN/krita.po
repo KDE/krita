@@ -14964,12 +14964,10 @@ msgstr ""
 
 #. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1199
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove all set text properties from the selection."
+#, kde-format
 msgctxt "action"
 msgid "Removes all fully transparent pixels from the image storage"
-msgstr "移除选中对象的所有文本属性。"
+msgstr ""
 
 #. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209

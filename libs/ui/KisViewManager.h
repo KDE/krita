@@ -270,6 +270,8 @@ private:
 
     void handleFloatingZoomRotationMessage(QString &messageToClear);
 
+    void updateCanvasOnlyActionState();
+
 private:
     class KisViewManagerPrivate;
     KisViewManagerPrivate * const d;

@@ -273,6 +273,7 @@ public:
     };
     std::optional<CanvasOnlyOptions> canvasOnlyOptions;
     QPoint canvasOnlyOffsetCompensation;
+    bool inCanvasOnlyMode{false};
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
@@ -1268,11 +1269,17 @@ void KisViewManager::notifyWorkspaceLoaded()
 
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
+    if (toggled == d->inCanvasOnlyMode) {
+        updateCanvasOnlyActionState();
+        return;
+    }
+
     KisConfig cfg(false);
     KisMainWindow *main = mainWindow();
 
     if(!main) {
         dbgUI << "Unable to switch to canvas-only mode, main window not found";
+        updateCanvasOnlyActionState();
         return;
     }
 
@@ -1296,11 +1303,14 @@ void KisViewManager::switchCanvasOnly(bool toggled)
     }
 
     if(wasToolBarPopupOpen) {
+        updateCanvasOnlyActionState();
         return;
     }
 #endif
 
     cfg.writeEntry("CanvasOnlyActive", toggled);
+    d->inCanvasOnlyMode = toggled;
+    updateCanvasOnlyActionState();
 
     KisViewManagerPrivate::CanvasOnlyOptions options(cfg);
 
@@ -1489,6 +1499,15 @@ void KisViewManager::switchCanvasOnly(bool toggled)
             // Nothing to restore.
             d->canvasOnlyOffsetCompensation = QPoint();
         }
+    }
+}
+
+void KisViewManager::updateCanvasOnlyActionState()
+{
+    QAction *action = actionManager()->actionByName(QStringLiteral("view_show_canvas_only"));
+    if (action && action->isChecked() != d->inCanvasOnlyMode) {
+        QSignalBlocker blocker(action);
+        action->setChecked(d->inCanvasOnlyMode);
     }
 }
 

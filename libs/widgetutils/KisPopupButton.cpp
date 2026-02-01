@@ -16,6 +16,7 @@
 #include <QStyleOption>
 #include <QStylePainter>
 #include <QWindow>
+#include <QMenu>
 
 #include "kis_global.h"
 #include <kis_debug.h>
@@ -26,7 +27,7 @@ class KisPopupButtonFrame : public QFrame
     QHBoxLayout* frameLayout {0};
 
 public:
-    KisPopupButtonFrame(QWidget *parent, bool detach)
+    KisPopupButtonFrame(QWidget *parent, bool detach, bool popupIsMenu)
         : QFrame(parent)
     {
         setObjectName("KisPopupButtonFrame");
@@ -34,10 +35,10 @@ public:
         frameLayout = new QHBoxLayout(this);
         frameLayout->setContentsMargins(0, 0, 0, 0);
 
-        setDetached(detach);
+        setDetached(detach, popupIsMenu);
     }
 
-    void setDetached(bool detach)
+    void setDetached(bool detach, bool popupIsMenu)
     {
 #if defined Q_OS_ANDROID || defined Q_OS_MACOS
         // for some reason when calling destroy() the platform window isn't
@@ -57,7 +58,12 @@ public:
         }
         else {
             setWindowFlags(Qt::Popup);
-            setFrameStyle(QFrame::Box | QFrame::Plain);
+            // Menus already have a frame, don't need another.
+            if (popupIsMenu) {
+                setFrameStyle(QFrame::NoFrame);
+            } else {
+                setFrameStyle(QFrame::Box | QFrame::Plain);
+            }
         }
 
         updateGeometry();
@@ -116,7 +122,7 @@ void KisPopupButton::setPopupWidgetDetached(bool detach)
     m_d->isPopupDetached = detach;
     if (m_d->frame) {
         bool wasVisible = isPopupWidgetVisible();
-        m_d->frame->setDetached(detach);
+        m_d->frame->setDetached(detach, qobject_cast<QMenu *>(m_d->popupWidget));
         if (wasVisible) {
             // Setting the window flags closes the widget, so make it visible again.
             setPopupWidgetVisible(true);
@@ -132,12 +138,25 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
 {
     if (widget) {
         delete m_d->frame;
-        m_d->frame = new KisPopupButtonFrame(this->window(), m_d->isPopupDetached);
+
+        // Bit wonky to assign a popup menu to a popup widget, so they need
+        // extra coddling to make them work properly.
+        QMenu *menu = qobject_cast<QMenu *>(widget);
+        m_d->frame = new KisPopupButtonFrame(this->window(), m_d->isPopupDetached, menu);
         m_d->frame->setWindowTitle(widget->windowTitle());
 
         m_d->popupWidget = widget;
 
         m_d->frame->layout()->addWidget(m_d->popupWidget);
+
+        if (menu) {
+            // The menu may decide to hide itself in response to user input.
+            // Compensate for that by catching the situation where we'd hide
+            // the menu while the frame is still up and show it again.
+            connect(menu, &QMenu::aboutToHide, this, &KisPopupButton::slotMenuAboutToHide);
+            // If the menu still hides itself somehow, make it show up again.
+            connect(this, &KisPopupButton::sigPopupWidgetShown, menu, &QMenu::show);
+        }
     }
 }
 
@@ -171,6 +190,7 @@ void KisPopupButton::setPopupWidgetVisible(bool visible)
             m_d->frame->raise();
             m_d->frame->show();
             m_d->frame->activateWindow();
+            Q_EMIT sigPopupWidgetShown();
         } else {
             m_d->frame->setVisible(false);
         }
@@ -254,5 +274,15 @@ void KisPopupButton::setArrowVisible (bool v)
         m_d->arrowVisible = true;
     } else {
         m_d->arrowVisible = false;
+    }
+}
+
+void KisPopupButton::slotMenuAboutToHide()
+{
+    // Menus will hide themselves when clicking on one of their separators,
+    // which just ends up with a blank popup frame. Fight back against this by
+    // showing the menu again if the frame is still up when the menu disappears.
+    if (m_d->popupWidget && m_d->frame->isVisible()) {
+        m_d->popupWidget->show();
     }
 }

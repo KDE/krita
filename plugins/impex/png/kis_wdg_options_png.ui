@@ -140,7 +140,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
        </property>
        <property name="text">
-        <string comment="The compression will take a long time; saving the file will be slow.">Small File Size</string>
+        <string comment="The compression will take a long time; saving the file will be slow.">Small file size</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

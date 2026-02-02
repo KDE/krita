@@ -14960,14 +14960,14 @@ msgstr "裁切至图像大小"
 #, kde-format
 msgctxt "action"
 msgid "Purge Unused Image Data"
-msgstr ""
+msgstr "清理未使用的图像数据"
 
 #. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1199
 #, kde-format
 msgctxt "action"
 msgid "Removes all fully transparent pixels from the image storage"
-msgstr ""
+msgstr "移除图像存储空间中所有完全透明的像素"
 
 #. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209
@@ -21199,7 +21199,7 @@ msgstr "裁剪图像"
 #: libs/image/kis_image.cc:886
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
-msgstr ""
+msgstr "清理未使用数据"
 
 #: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
@@ -34488,6 +34488,13 @@ msgid ""
 "\t\tImage->Purge Unused Image Data action.\n"
 "Slow layers: "
 msgstr ""
+"\n"
+"\n"
+"警告：\t某些图层计算缩略图的时间过长。\n"
+"\t\t它们已被切换至低画质缩略图模式。\n"
+"\t\t您可以尝试清理未使用图像数据：\n"
+"\t\t主菜单->图像->清理未使用图像数据\n"
+"缓慢图层："
 
 #: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105

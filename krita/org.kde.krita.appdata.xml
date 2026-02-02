@@ -287,6 +287,7 @@
   <url type="donation">https://krita.org/support-us/donations/</url>
   <url type="help">https://docs.krita.org/</url>
   <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
+  <url type="contribute">https://docs.krita.org/en/contributors_manual.html</url>
   <screenshots>
     <screenshot type="default">
       <caption>Krita is a full-featured digital painting studio</caption>
@@ -749,5 +750,7 @@
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>
     <value key="KDE::google_play">https://play.google.com/store/apps/details?id=org.krita</value>
     <value key="KDE::mastodon">https://mastodon.art/@Krita/106413722232002973</value>
+    <value key="KDE::forum">https://krita-artists.org/</value>
+    <value key="KDE::matrix">#krita:kde.org</value>
   </custom>
 </component>

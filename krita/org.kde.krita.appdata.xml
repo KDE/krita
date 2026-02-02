@@ -640,7 +640,110 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2099-01-01" version="6.1.0"/>
+    <!-- Note: website infrastructure uses the appstream file from the master branch
+               to determine the last release, so this entry must always reflect the
+               last actual release -->
+
+    <release date="2026-01-28" version="5.2.15">
+      <url>https://krita.org/en/posts/2026/krita-5.2.15-released/</url>
+      <artifacts>
+        <artifact type="binary" platform="x86_64-appimage">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-5.2.15-x86_64.AppImage</location>
+          <bundle type="appimage">krita-5.2.15</bundle>
+        </artifact>
+        <artifact type="binary" platform="macOS">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-5.2.15_signed.dmg</location>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-x64-5.2.15-setup.exe</location>
+        </artifact>
+        <artifact type="binary" platform="android-x86_64">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-x86_64-5.2.15-release-signed.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-arm64_v8a">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-arm64-v8a-5.2.15-release-signed.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-armeabi_v7a">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-armeabi-v7a-5.2.15-release-signed.apk</location>
+        </artifact>
+        <artifact type="source">
+          <location>https://download.kde.org/stable/krita/5.2.15/krita-5.2.15.tar.xz</location>
+        </artifact>
+      </artifacts>
+    </release>
+    <release date="2025-12-11" version="5.2.14">
+      <url>https://krita.org/en/posts/2025/krita-5.2.14-released/</url>
+    </release>
+    <release date="2025-09-24" version="5.2.13">
+      <url>https://krita.org/en/posts/2025/krita-5.2.13-released/</url>
+    </release>
+    <release date="2025-07-15" version="5.2.11">
+      <url>https://krita.org/en/posts/2025/krita-5.2.11-released/</url>
+    </release>
+    <release date="2025-07-02" version="5.2.10">
+      <url>https://krita.org/en/posts/2025/krita-5.2.10-released/</url>
+    </release>
+    <release date="2025-01-29" version="5.2.9">
+      <url>https://krita.org/en/posts/2025/krita-5-2-9-released/</url>
+    </release>
+    <release date="2024-01-10" version="5.2.6">
+      <url>https://krita.org/en/posts/2024/krita-5-2-6-released/</url>
+    </release>
+    <release date="2024-09-25" version="5.2.5">
+      <url>https://krita.org/en/posts/2024/krita-5-2-5-released/</url>
+    </release>
+    <release date="2024-06-26" version="5.2.3">
+      <url>https://krita.org/en/posts/2024/krita-5-2-3-released/</url>
+    </release>
+    <release date="2023-12-07" version="5.2.2">
+      <url>https://krita.org/en/posts/2023/krita-5-2-2-released/</url>
+    </release>
+    <release date="2023-11-02" version="5.2.1">
+      <url>https://krita.org/en/posts/2023/krita-5-2-1-released/</url>
+    </release>
+    <release date="2023-10-05" version="5.2.0">
+      <url>https://krita.org/en/posts/2023/krita-5-2-released/</url>
+    </release>
+    <release date="2023-01-05" version="5.1.5">
+      <url>https://krita.org/en/posts/2023/krita-5-1-5-released/</url>
+    </release>
+    <release date="2022-04-27" version="5.0.6">
+      <url>https://krita.org/en/posts/2022/krita-5-0-6-released/</url>
+    </release>
+    <release date="2022-04-12" version="5.0.5">
+      <url>https://krita.org/en/posts/2022/krita-5-0-5-released/</url>
+    </release>
+    <release date="2021-03-24" version="4.4.3">
+      <url>https://krita.org/en/posts/2021/krita-4-4-3-released/</url>
+    </release>
+    <release date="2021-01-19" version="4.4.2">
+      <url>https://krita.org/en/posts/2021/krita-4-4-2-released/</url>
+    </release>
+    <release date="2020-10-29" version="4.4.1">
+      <url>https://krita.org/en/posts/2020/krita-4-4-1-released/</url>
+    </release>
+    <release date="2020-10-13" version="4.4.0">
+      <url>https://krita.org/en/posts/2020/krita-4-4-0-released/</url>
+      <description>
+        <p>Only a little later than we had planned, this is the next feature release of Krita! With a whole slew of new fill layer types, including the really versatile SeExpr based scriptable fill layer type, exciting new options for Krita’s brushes like the gradient map mode for brushes, lightness and gradient modes for brush textures, support for dynamic use of colors in gradients, webm export for animations, new scripting features — and of course, hundreds of bug fixes that make this version of Krita better than ever. Especially exciting are all the fixes we made for Krita on ChromeOS and Android!</p>
+      </description>
+    </release>
+    <release date="2020-06-18" version="4.3.0">
+      <description>
+        <p>Three months after the release of Krita 4.2.9, we’ve got a major new feature release for you: Krita 4.3.0! We’ve spent the past year not just fixing bugs, even though we fixed over a thousand issues, but have also been busy adding cool new stuff to play with.</p>
+        <p>There’s a whole new set of brush presets that evoke watercolor painting. There’s a color mode in the gradient map filter and a brand new palletize filter and a high pass filter. The scripting API has been extended. It’s now possible to adjust the opacity and lightness on colored brush tips separately. You can now create animated brush tips that select brush along multiple dimensions. We’ve made it possible to put the canvas area in a window of its own, so on a multi monitor setup, you can have all the controls on one monitor, and your images on the other. The color selector has had a big update. There’s a new snapshot docker that stores states of your image, and you can switch between those. There’s a brand new magnetic selection tool. Gradients can now be painting as spirals.</p>
+      </description>
+      <url>https://krita.org/en/posts/2020/krita-4-3-0-released/</url>
+    </release>
+    <release date="2020-03-26" version="4.2.9.0">
+      <url>https://krita.org/en/posts/2020/krita-4-2-9-released/</url>
+    </release>
+    <release date="2019-11-27" version="4.2.8.0">
+      <url>https://krita.org/en/posts/2019/krita-4-2-8-released/</url>
+    </release>
+    <release date="2019-03-10" version="4.2.7.1">
+      <url>https://krita.org/en/posts/2019/krita-4-2-7-released/</url>
+    </release>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

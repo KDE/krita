@@ -100,6 +100,7 @@ public:
     // Stores data for drawing tool outlines
     QOpenGLVertexArrayObject outlineVAO;
     QOpenGLBuffer lineVertexBuffer;
+    QVector<QVector3D> lineVerticesStagingBuffer = {};
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
@@ -434,7 +435,6 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
         d->lineVertexBuffer.bind();
     }
 
-    QVector<QVector3D> verticesBuffer;
 
     if (thickness > 1) {
         // Because glLineWidth is not supported on all versions of OpenGL (or rather,
@@ -452,7 +452,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
             }
 
             int triangleCount = 0;
-            verticesBuffer.clear();
+            d->lineVerticesStagingBuffer.clear();
+            d->lineVerticesStagingBuffer.reserve((polygon.count() - 1) * 6);
             const bool closed = polygon.isClosed();
 
             for( int i = 1; i < polygon.count(); i++) {
@@ -505,22 +506,22 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                     }
                 }
 
-                verticesBuffer.append(QVector3D(c1));
-                verticesBuffer.append(QVector3D(c3));
-                verticesBuffer.append(QVector3D(c2));
-                verticesBuffer.append(QVector3D(c4));
-                verticesBuffer.append(QVector3D(c2));
-                verticesBuffer.append(QVector3D(c3));
+                d->lineVerticesStagingBuffer.append(QVector3D(c1));
+                d->lineVerticesStagingBuffer.append(QVector3D(c3));
+                d->lineVerticesStagingBuffer.append(QVector3D(c2));
+                d->lineVerticesStagingBuffer.append(QVector3D(c4));
+                d->lineVerticesStagingBuffer.append(QVector3D(c2));
+                d->lineVerticesStagingBuffer.append(QVector3D(c3));
                 triangleCount += 2;
             }
 
             if (KisOpenGL::supportsVAO()) {
                 d->lineVertexBuffer.bind();
-                d->lineVertexBuffer.allocate(verticesBuffer.constData(), 3 * verticesBuffer.size() * sizeof(float));
+                d->lineVertexBuffer.allocate(d->lineVerticesStagingBuffer.constData(), 3 * d->lineVerticesStagingBuffer.size() * sizeof(float));
             }
             else {
                 d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-                d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
+                d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->lineVerticesStagingBuffer.constData());
             }
 
             glDrawArrays(GL_TRIANGLES, 0, triangleCount * 3);
@@ -536,22 +537,22 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
 
             const int verticesCount = polygon.count();
 
-            if (verticesBuffer.size() < verticesCount) {
-                verticesBuffer.resize(verticesCount);
+            if (d->lineVerticesStagingBuffer.size() < verticesCount) {
+                d->lineVerticesStagingBuffer.resize(verticesCount);
             }
 
             for (int vertIndex = 0; vertIndex < verticesCount; vertIndex++) {
                 QPointF point = polygon.at(vertIndex);
-                verticesBuffer[vertIndex].setX(point.x());
-                verticesBuffer[vertIndex].setY(point.y());
+                d->lineVerticesStagingBuffer[vertIndex].setX(point.x());
+                d->lineVerticesStagingBuffer[vertIndex].setY(point.y());
             }
             if (KisOpenGL::supportsVAO()) {
                 d->lineVertexBuffer.bind();
-                d->lineVertexBuffer.allocate(verticesBuffer.constData(), 3 * verticesCount * sizeof(float));
+                d->lineVertexBuffer.allocate(d->lineVerticesStagingBuffer.constData(), 3 * verticesCount * sizeof(float));
             }
             else {
                 d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-                d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
+                d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->lineVerticesStagingBuffer.constData());
             }
 
 

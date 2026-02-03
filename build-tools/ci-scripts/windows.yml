@@ -116,3 +116,21 @@ windows-release:
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
+
+windows-release-qt6:
+  extends:
+    - windows-build
+    - .ci-release-job-mixin
+  interruptible: false
+  variables:
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_ONLY_BUILD: True
+    KRITACI_SKIP_DEBUG_PACKAGE: False
+    KRITACI_BUILD_INSTALLERS: True
+    KRITACI_RELEASE_PACKAGE_NAMING: True
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=ON
+      -DBUILD_TESTING=OFF
+      -DBUILD_WITH_QT6=ON

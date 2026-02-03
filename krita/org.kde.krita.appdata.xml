@@ -4,44 +4,46 @@
   <launchable type="desktop-id">org.kde.krita.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
-  <developer_name>Krita Foundation</developer_name>
-  <developer_name xml:lang="ar">مؤسسة كريتا</developer_name>
-  <developer_name xml:lang="bg">Фондация Krita</developer_name>
-  <developer_name xml:lang="ca">Fundació Krita</developer_name>
-  <developer_name xml:lang="ca-valencia">Krita Foundation</developer_name>
-  <developer_name xml:lang="cs">Krita Foundation</developer_name>
-  <developer_name xml:lang="de">Krita Foundation</developer_name>
-  <developer_name xml:lang="el">Ίδρυμα Krita</developer_name>
-  <developer_name xml:lang="en-GB">Krita Foundation</developer_name>
-  <developer_name xml:lang="eo">Fondaĵo Krita</developer_name>
-  <developer_name xml:lang="es">Fundación Krita</developer_name>
-  <developer_name xml:lang="et">Krita sihtasutus</developer_name>
-  <developer_name xml:lang="eu">Krita Fundazioa</developer_name>
-  <developer_name xml:lang="fi">Krita Foundation</developer_name>
-  <developer_name xml:lang="fr">La fondation Krita</developer_name>
-  <developer_name xml:lang="gl">Fundación Krita</developer_name>
-  <developer_name xml:lang="hi">क्रिता संस्थान</developer_name>
-  <developer_name xml:lang="hu">Krita Alapítvány</developer_name>
-  <developer_name xml:lang="ia">Krita Foundation (Fundatiomn de Krita)</developer_name>
-  <developer_name xml:lang="id">Yayasan Krita</developer_name>
-  <developer_name xml:lang="it">Fondazione Krita</developer_name>
-  <developer_name xml:lang="ja">Krita 財団</developer_name>
-  <developer_name xml:lang="ka">Krita Foundation</developer_name>
-  <developer_name xml:lang="ko">Krita Foundation</developer_name>
-  <developer_name xml:lang="nl">Krita Foundation</developer_name>
-  <developer_name xml:lang="nn">Krita Foundation</developer_name>
-  <developer_name xml:lang="pl">Fundacja Krity</developer_name>
-  <developer_name xml:lang="pt">Krita Foundation</developer_name>
-  <developer_name xml:lang="pt-BR">Krita Foundation</developer_name>
-  <developer_name xml:lang="ru">Krita Foundation</developer_name>
-  <developer_name xml:lang="sk">Nadácia Krita</developer_name>
-  <developer_name xml:lang="sl">Fundacija Krita</developer_name>
-  <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>
-  <developer_name xml:lang="tok">kulupu Krita</developer_name>
-  <developer_name xml:lang="tr">Krita Vakfı</developer_name>
-  <developer_name xml:lang="uk">Фундація Krita</developer_name>
-  <developer_name xml:lang="zh-CN">Krita 基金会</developer_name>
-  <developer_name xml:lang="zh-TW">Krita 基金會</developer_name>
+  <developer id="org.krita">
+    <name>Krita Foundation</name>
+    <name xml:lang="ar">مؤسسة كريتا</name>
+    <name xml:lang="bg">Фондация Krita</name>
+    <name xml:lang="ca">Fundació Krita</name>
+    <name xml:lang="ca-valencia">Krita Foundation</name>
+    <name xml:lang="cs">Krita Foundation</name>
+    <name xml:lang="de">Krita Foundation</name>
+    <name xml:lang="el">Ίδρυμα Krita</name>
+    <name xml:lang="en-GB">Krita Foundation</name>
+    <name xml:lang="eo">Fondaĵo Krita</name>
+    <name xml:lang="es">Fundación Krita</name>
+    <name xml:lang="et">Krita sihtasutus</name>
+    <name xml:lang="eu">Krita Fundazioa</name>
+    <name xml:lang="fi">Krita Foundation</name>
+    <name xml:lang="fr">La fondation Krita</name>
+    <name xml:lang="gl">Fundación Krita</name>
+    <name xml:lang="hi">क्रिता संस्थान</name>
+    <name xml:lang="hu">Krita Alapítvány</name>
+    <name xml:lang="ia">Krita Foundation (Fundatiomn de Krita)</name>
+    <name xml:lang="id">Yayasan Krita</name>
+    <name xml:lang="it">Fondazione Krita</name>
+    <name xml:lang="ja">Krita 財団</name>
+    <name xml:lang="ka">Krita Foundation</name>
+    <name xml:lang="ko">Krita Foundation</name>
+    <name xml:lang="nl">Krita Foundation</name>
+    <name xml:lang="nn">Krita Foundation</name>
+    <name xml:lang="pl">Fundacja Krity</name>
+    <name xml:lang="pt">Krita Foundation</name>
+    <name xml:lang="pt-BR">Krita Foundation</name>
+    <name xml:lang="ru">Krita Foundation</name>
+    <name xml:lang="sk">Nadácia Krita</name>
+    <name xml:lang="sl">Fundacija Krita</name>
+    <name xml:lang="sv">Krita-stiftelsen</name>
+    <name xml:lang="tok">kulupu Krita</name>
+    <name xml:lang="tr">Krita Vakfı</name>
+    <name xml:lang="uk">Фундація Krita</name>
+    <name xml:lang="zh-CN">Krita 基金会</name>
+    <name xml:lang="zh-TW">Krita 基金會</name>
+  </developer>
   <update_contact>foundation@krita.org</update_contact>
   <name>Krita</name>
   <name xml:lang="ar">كريتا</name>
@@ -280,6 +282,7 @@
   <url type="donation">https://krita.org/support-us/donations/</url>
   <url type="help">https://docs.krita.org/</url>
   <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
+  <url type="contribute">https://docs.krita.org/en/contributors_manual.html</url>
   <screenshots>
     <screenshot type="default">
       <caption>Krita is a full-featured digital painting studio</caption>
@@ -624,11 +627,92 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2099-01-01" version="6.0.0"/>
+    <!-- Note: website infrastructure uses the appstream file from the master branch
+               to determine the last release, so this entry must always reflect the
+               last actual release -->
+    <release date="2026-01-28" version="5.2.15">
+      <url>https://krita.org/en/posts/2026/krita-5.2.15-released/</url>
+      <description>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</description>
+    </release>
+    <release date="2025-12-11" version="5.2.14">
+      <url>https://krita.org/en/posts/2025/krita-5.2.14-released/</url>
+    </release>
+    <release date="2025-09-24" version="5.2.13">
+      <url>https://krita.org/en/posts/2025/krita-5.2.13-released/</url>
+    </release>
+    <release date="2025-07-15" version="5.2.11">
+      <url>https://krita.org/en/posts/2025/krita-5.2.11-released/</url>
+    </release>
+    <release date="2025-07-02" version="5.2.10">
+      <url>https://krita.org/en/posts/2025/krita-5.2.10-released/</url>
+    </release>
+    <release date="2025-01-29" version="5.2.9">
+      <url>https://krita.org/en/posts/2025/krita-5-2-9-released/</url>
+    </release>
+    <release date="2024-01-10" version="5.2.6">
+      <url>https://krita.org/en/posts/2024/krita-5-2-6-released/</url>
+    </release>
+    <release date="2024-09-25" version="5.2.5">
+      <url>https://krita.org/en/posts/2024/krita-5-2-5-released/</url>
+    </release>
+    <release date="2024-06-26" version="5.2.3">
+      <url>https://krita.org/en/posts/2024/krita-5-2-3-released/</url>
+    </release>
+    <release date="2023-12-07" version="5.2.2">
+      <url>https://krita.org/en/posts/2023/krita-5-2-2-released/</url>
+    </release>
+    <release date="2023-11-02" version="5.2.1">
+      <url>https://krita.org/en/posts/2023/krita-5-2-1-released/</url>
+    </release>
+    <release date="2023-10-05" version="5.2.0">
+      <url>https://krita.org/en/posts/2023/krita-5-2-released/</url>
+    </release>
+    <release date="2023-01-05" version="5.1.5">
+      <url>https://krita.org/en/posts/2023/krita-5-1-5-released/</url>
+    </release>
+    <release date="2022-04-27" version="5.0.6">
+      <url>https://krita.org/en/posts/2022/krita-5-0-6-released/</url>
+    </release>
+    <release date="2022-04-12" version="5.0.5">
+      <url>https://krita.org/en/posts/2022/krita-5-0-5-released/</url>
+    </release>
+    <release date="2021-03-24" version="4.4.3">
+      <url>https://krita.org/en/posts/2021/krita-4-4-3-released/</url>
+    </release>
+    <release date="2021-01-19" version="4.4.2">
+      <url>https://krita.org/en/posts/2021/krita-4-4-2-released/</url>
+    </release>
+    <release date="2020-10-29" version="4.4.1">
+      <url>https://krita.org/en/posts/2020/krita-4-4-1-released/</url>
+    </release>
+    <release date="2020-10-13" version="4.4.0">
+      <url>https://krita.org/en/posts/2020/krita-4-4-0-released/</url>
+      <description>
+        <p>Only a little later than we had planned, this is the next feature release of Krita! With a whole slew of new fill layer types, including the really versatile SeExpr based scriptable fill layer type, exciting new options for Krita’s brushes like the gradient map mode for brushes, lightness and gradient modes for brush textures, support for dynamic use of colors in gradients, webm export for animations, new scripting features — and of course, hundreds of bug fixes that make this version of Krita better than ever. Especially exciting are all the fixes we made for Krita on ChromeOS and Android!</p>
+      </description>
+    </release>
+    <release date="2020-06-18" version="4.3.0">
+      <description>
+        <p>Three months after the release of Krita 4.2.9, we’ve got a major new feature release for you: Krita 4.3.0! We’ve spent the past year not just fixing bugs, even though we fixed over a thousand issues, but have also been busy adding cool new stuff to play with.</p>
+        <p>There’s a whole new set of brush presets that evoke watercolor painting. There’s a color mode in the gradient map filter and a brand new palletize filter and a high pass filter. The scripting API has been extended. It’s now possible to adjust the opacity and lightness on colored brush tips separately. You can now create animated brush tips that select brush along multiple dimensions. We’ve made it possible to put the canvas area in a window of its own, so on a multi monitor setup, you can have all the controls on one monitor, and your images on the other. The color selector has had a big update. There’s a new snapshot docker that stores states of your image, and you can switch between those. There’s a brand new magnetic selection tool. Gradients can now be painting as spirals.</p>
+      </description>
+      <url>https://krita.org/en/posts/2020/krita-4-3-0-released/</url>
+    </release>
+    <release date="2020-03-26" version="4.2.9.0">
+      <url>https://krita.org/en/posts/2020/krita-4-2-9-released/</url>
+    </release>
+    <release date="2019-11-27" version="4.2.8.0">
+      <url>https://krita.org/en/posts/2019/krita-4-2-8-released/</url>
+    </release>
+    <release date="2019-03-10" version="4.2.7.1">
+      <url>https://krita.org/en/posts/2019/krita-4-2-7-released/</url>
+    </release>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>
     <value key="KDE::google_play">https://play.google.com/store/apps/details?id=org.krita</value>
+    <value key="KDE::macos_store">https://apps.apple.com/us/app/krita/id1594607976?mt=12</value>
     <value key="KDE::mastodon">https://mastodon.art/@Krita/106413722232002973</value>
+    <value key="KDE::matrix">#krita:kde.org</value>
   </custom>
 </component>

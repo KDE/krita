@@ -51,8 +51,6 @@ windows-build-qt6-nightly:
   - .nightly-job-mixin
   interruptible: false
   variables:
-    KRITACI_SKIP_BUILD_3RDPARTY_PLUGINS: False
-    KRITACI_ALLOW_NO_PYQT: True
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
     KDECI_EXTRA_CMAKE_ARGS: >

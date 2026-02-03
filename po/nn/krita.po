@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-21 02:11+0000\n"
+"POT-Creation-Date: 2026-01-31 02:04+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -1029,16 +1029,16 @@ msgstr "3 Pensel"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_dotted-"
-"flat.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_dotted-flat."
+"png"
 msgid "3 dotted-flat"
 msgstr "3 Prikka, flat"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-"
-"brush.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-brush."
+"png"
 msgid "3 flat-brush"
 msgstr "3 Flat, pensel"
 
@@ -1104,16 +1104,16 @@ msgstr "A, lekkar"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"A_Nice_sketch.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch."
+"gbr"
 msgid "A_Nice Sketch"
 msgstr "A, fin, skisse"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"A_Nice_sketch2.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch2."
+"gbr"
 msgid "A_Nice Sketch2"
 msgstr "A, fin, skisse 2"
 
@@ -1185,8 +1185,8 @@ msgstr "A, fargestift"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-"
-"spot.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-spot."
+"gbr"
 msgid "A_dirty-spot"
 msgstr "A, skiten, flekk"
 
@@ -1201,8 +1201,8 @@ msgstr "A, forvitra, sirkel 2"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"A_lucky_star.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_lucky_star."
+"gbr"
 msgid "A-5 Lucky-star"
 msgstr "A, 5, lukkestjerne"
 
@@ -1232,8 +1232,8 @@ msgstr "R, tilfeldig, planter 3"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_reptile-"
-"skin.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_reptile-skin."
+"gbr"
 msgid "A_reptile-skin"
 msgstr "A, reptil, hud"
 
@@ -1275,8 +1275,8 @@ msgstr "A, sprut 1"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"A_starfield2.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_starfield2."
+"gbr"
 msgid "A_starfield2"
 msgstr "A, stjernehimmel 2"
 
@@ -1290,8 +1290,8 @@ msgstr "C, skyer 1"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"C_Dirty_Spot.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/C_Dirty_Spot."
+"gbr"
 msgid "C_Dirty_Spot"
 msgstr "A, skiten, punkt"
 
@@ -1305,8 +1305,8 @@ msgstr "C, støv 1"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"D_Normal_dust.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/D_Normal_dust."
+"gbr"
 msgid "D_Normal dust"
 msgstr "D, vanleg, støv"
 
@@ -1505,8 +1505,8 @@ msgstr "O, olje 1, GP"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"O_Oils_Softer.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_Softer."
+"gbr"
 msgid "O_Oils Softer"
 msgstr "O, olje, mjukare"
 
@@ -1541,8 +1541,8 @@ msgstr "R, rake 4"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"R_Rake_small.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake_small."
+"gbr"
 msgid "R_Rake_small"
 msgstr "R, rake, lita"
 
@@ -1571,24 +1571,24 @@ msgstr "S, gnidd, ost"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Sc_Scratches.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches."
+"gbr"
 msgid "Sc_Scratches"
 msgstr "Sc, riper"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Sc_Scratches_2.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches_2."
+"gbr"
 msgid "Sc_Scratches2"
 msgstr "Sc, riper 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Sc_Scratches_3.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches_3."
+"gbr"
 msgid "Sc_Scratches3"
 msgstr "SC, riper 3"
 
@@ -1696,8 +1696,8 @@ msgstr "Z, piksel, 4 × 4, avrunda"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Z_Pixel_Cross.gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Pixel_Cross."
+"gbr"
 msgid "Z_Pixel Cross"
 msgstr "Z, piksel, kross"
 
@@ -2493,8 +2493,8 @@ msgstr "Form, jamn"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-"Sketch.kpp"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/Sketch."
+"kpp"
 msgid "Sketch"
 msgstr "Skisse"
 
@@ -2805,40 +2805,40 @@ msgstr "Blekk, presisjon 3"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-"pixel1.kpp"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
+"kpp"
 msgid "pixel1"
 msgstr "Piksel 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-"Animation.kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Animation."
+"kws"
 msgid "Animation"
 msgstr "Animasjon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-"Big_Paint.kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint."
+"kws"
 msgid "Big Paint"
 msgstr "Stor – måling"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-"Big_Paint_2.kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint_2."
+"kws"
 msgid "Big Paint 2"
 msgstr "Stor – måling 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-"Big_Vector.kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
+"kws"
 msgid "Big Vector"
 msgstr "Stor – vektor"
 
@@ -2867,8 +2867,8 @@ msgstr "Liten – vektor"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-"VFX_Paint.kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/VFX_Paint."
+"kws"
 msgid "VFX Paint"
 msgstr "VFX-måling"
 
@@ -2890,8 +2890,8 @@ msgstr "2 Grovt lerret"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"02b_WoofTissue.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
+"patterns/02b_WoofTissue.png"
 msgid "02b WoofTissue"
 msgstr "2b WoofTissue"
 
@@ -2922,16 +2922,16 @@ msgstr "5 Torchon-papir"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-"
-"grain.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-grain."
+"png"
 msgid "06 hard-grain"
 msgstr "6 Hard, korn"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/07_big-"
-"grain.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/07_big-grain."
+"png"
 msgid "07 big-grain"
 msgstr "7 Store korn"
 
@@ -2946,8 +2946,8 @@ msgstr "8 Djupnerelieff"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"09_drawed_crosshatched.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
+"patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
 msgstr "9 Teikna, skravering"
 
@@ -2962,32 +2962,32 @@ msgstr "9b Teikna, tverrlinjer"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"10_drawed_dotted.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
+"patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
 msgstr "10 Teikna, prikkmønster"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"11_drawed_furry.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
+"patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
 msgstr "11 Teikna, pels"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"12_drawed_vertical.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
+"patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
 msgstr "12 Teikna, loddrett"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"13_drawed_swirl.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
+"patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
 msgstr "13 Teikna, kvervlar"
 
@@ -3034,8 +3034,8 @@ msgstr "18 Tekstur, bark"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"18b_WaveFlex.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18b_WaveFlex."
+"png"
 msgid "18b WaveFlex"
 msgstr "18b WaveFlex"
 
@@ -3106,8 +3106,8 @@ msgstr "26 Penselmerke"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"Canvas_Hard.pat"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Canvas_Hard."
+"pat"
 msgid "Canvas 01"
 msgstr "Lerret 1"
 
@@ -3238,8 +3238,8 @@ msgstr "HR pastellpapir 2"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"HR_Wall_Paper.pat"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/HR_Wall_Paper."
+"pat"
 msgid "HR Wall Paper"
 msgstr "HR tapet"
 
@@ -3473,8 +3473,8 @@ msgstr "Granitt 1b"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-"hexacolBW__2.pat"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/hexacolBW__2."
+"pat"
 msgid "Hexacol BW By Tarkan"
 msgstr "Hexacol BW av Tarkan"
 
@@ -3489,8 +3489,8 @@ msgstr "Avskyeleg snømann"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"bokey_circle.gbr"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bokey_circle."
+"gbr"
 msgid "U Circle shape 5"
 msgstr "U, sirkel, form 5"
 
@@ -3567,8 +3567,8 @@ msgstr "Krit, rund, hard"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"chalk_sparse.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_sparse."
+"png"
 msgid "chalk sparse"
 msgstr "Krit, glissen"
 
@@ -3583,16 +3583,16 @@ msgstr "Skrå tupp, tett, utsmørjing"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"chisel_eroded.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_eroded."
+"png"
 msgid "chisel eroded"
 msgstr "Skrå tupp, forvitra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"chisel_knife.gbr"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_knife."
+"gbr"
 msgid "chisel_knife"
 msgstr "Skrå tupp, kniv"
 
@@ -3606,8 +3606,8 @@ msgstr "Skrå tupp, mjuk"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"chisel_streaks.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_streaks."
+"png"
 msgid "chisel streaks"
 msgstr "Skrå tupp, spor"
 
@@ -3714,8 +3714,8 @@ msgstr "Tilfeldig, partiklar"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-"
-"debris.gbr"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-debris."
+"gbr"
 msgid "flat-tip-dirty"
 msgstr "Flat, tupp, skiten"
 
@@ -3771,8 +3771,8 @@ msgstr "Pigg, flekk"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"spike_eroded.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spike_eroded."
+"png"
 msgid "spike eroded"
 msgstr "Pikk, forvitra"
 
@@ -3793,16 +3793,16 @@ msgstr "Sprut, prikkar"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"square_eroded.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_eroded."
+"png"
 msgid "square eroded"
 msgstr "Kvadrat, forvitra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"square_rough.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_rough."
+"png"
 msgid "square rough"
 msgstr "Kvadrat, grov"
 
@@ -4907,8 +4907,8 @@ msgstr "2 Grovt lerret"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"02b_WoofTissue.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
+"patterns/02b_WoofTissue.png"
 msgid "02b WoofTissue"
 msgstr "2b WoofTissue"
 
@@ -4939,8 +4939,8 @@ msgstr "5 Torchon-papir"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/06_hard-"
-"grain.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/06_hard-grain."
+"png"
 msgid "06 hard-grain"
 msgstr "6 Hard, korn"
 
@@ -4955,8 +4955,8 @@ msgstr "8 Djupnerelieff"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"09_drawed_crosshatched.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
+"patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
 msgstr "9 Teikna, skravering"
 
@@ -4971,32 +4971,32 @@ msgstr "9b Teikna, tverrlinjer"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"10_drawed_dotted.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
+"patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
 msgstr "10 Teikna, prikkmønster"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"11_drawed_furry.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
+"patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
 msgstr "11 Teikna, pels"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"12_drawed_vertical.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
+"patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
 msgstr "12 Teikna, loddrett"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"13_drawed_swirl.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
+"patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
 msgstr "13 Teikna, kvervlar"
 
@@ -5043,8 +5043,8 @@ msgstr "18 Tekstur, bark"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"18b_WaveFlex.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18b_WaveFlex."
+"png"
 msgid "18b WaveFlex"
 msgstr "18b WaveFlex"
 
@@ -5239,8 +5239,8 @@ msgstr "Rutenett 5"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"hexacolBW__2.pat"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/hexacolBW__2."
+"pat"
 msgid "Hexacol BW By Tarkan"
 msgstr "Hexacol BW av Tarkan"
 
@@ -5255,8 +5255,8 @@ msgstr "HR pastellpapir 2"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"HR_Wall_Paper.pat"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/HR_Wall_Paper."
+"pat"
 msgid "HR Wall Paper"
 msgstr "HR tapet"
 
@@ -5312,8 +5312,8 @@ msgstr "Mønster 6"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"Rough_Paper.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Rough_Paper."
+"png"
 msgid "Rough Paper"
 msgstr "Grovt papir"
 
@@ -5406,8 +5406,8 @@ msgstr "Kvadrat 10"
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-"Stars_Sized.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Stars_Sized."
+"png"
 msgid "Stars Sized"
 msgstr "Stjerner, storleik"
 
@@ -5812,8 +5812,8 @@ msgstr "RGBA, animasjon 1"
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-"
-"dry.kpp"
+"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-dry."
+"kpp"
 msgid "m) RGBA 01 Thick-dry"
 msgstr "m) RGBA 1, tjukk, tørr"
 
@@ -5838,8 +5838,8 @@ msgstr "m) RGBA 3, rake"
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/"
-"m)_RGBA_04_Impasto.kpp"
+"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_04_Impasto."
+"kpp"
 msgid "m) RGBA 04 Impasto"
 msgstr "m) RGBA 4, impasto"
 
@@ -5901,8 +5901,8 @@ msgstr "A, 4, bambus"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-brush.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-"
-"brush.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-brush."
+"gih"
 msgid "A - 2 Dirty Brush2"
 msgstr "A, 2, skiten pensel 2"
 
@@ -5982,8 +5982,8 @@ msgstr "A, 17, kniv, forvitra, animasjon"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-dust.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-"
-"dust.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-dust."
+"gih"
 msgid "A-4 Fairy Dust"
 msgstr "A, 4, tryllestøv"
 
@@ -6023,8 +6023,8 @@ msgstr "A, 4, pels"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-floor.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-"
-"floor.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-floor."
+"gih"
 msgid "A-4 Grass-Floor"
 msgstr "A, 4, gras, bakke"
 
@@ -6133,8 +6133,8 @@ msgstr "A, 4, stjernehimmel, intens"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-texture.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-"
-"texture.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-texture."
+"gih"
 msgid "A-4 Wall"
 msgstr "A, 4, vegg"
 
@@ -6151,8 +6151,8 @@ msgstr "D, støvpartiklar"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured1.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Flat_textured1.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured1."
+"gih"
 msgid "Flat_textured1"
 msgstr "Flat, tekstur 1"
 
@@ -6160,8 +6160,8 @@ msgstr "Flat, tekstur 1"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured2.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Flat_textured2.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured2."
+"gih"
 msgid "Flat_textured2"
 msgstr "Flat, tekstur 2"
 
@@ -6299,8 +6299,8 @@ msgstr "P, ekte blyant, 16 × 16"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured1.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Rect_textured1.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured1."
+"gih"
 msgid "Rect_textured1"
 msgstr "Rektangel, tekstur 1"
 
@@ -6308,8 +6308,8 @@ msgstr "Rektangel, tekstur 1"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured2.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Rect_textured2.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured2."
+"gih"
 msgid "Rect_textured2"
 msgstr "Rektangel, tekstur 2"
 
@@ -6317,8 +6317,8 @@ msgstr "Rektangel, tekstur 2"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured3.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
-"Rect_textured3.gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured3."
+"gih"
 msgid "Rect_textured3"
 msgstr "Rektangel, tekstur 3"
 
@@ -6496,8 +6496,8 @@ msgstr "GPS Auge (blått)"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-Glare.ggr:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-"
-"Glare.ggr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-Glare."
+"ggr"
 msgid "GPS FG Glare"
 msgstr "GPS Refleks (framgrunnsfarge)"
 
@@ -6667,8 +6667,8 @@ msgstr "Tusjar"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16.gpl:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/"
-"pixelart-16.gpl"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16."
+"gpl"
 msgid "PixelArt 16"
 msgstr "Pikselkunst 16"
 
@@ -6676,8 +6676,8 @@ msgstr "Pikselkunst 16"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32.gpl:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/"
-"pixelart-32.gpl"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32."
+"gpl"
 msgid "PixelArt 32"
 msgstr "Pikselkunst 32"
 
@@ -6692,8 +6692,8 @@ msgstr "Ps"
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk.gpl:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-"
-"cmyk.gpl"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk."
+"gpl"
 msgid "Swatch CMYK"
 msgstr "Fargesamling CMYK"
 
@@ -6760,8 +6760,8 @@ msgstr "Bustpensel, sirkel, tilfeldig"
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"chalk_chisel.gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel."
+"gih"
 msgid "Chalk Chisel"
 msgstr "Krit, skrå tupp"
 
@@ -6821,8 +6821,8 @@ msgstr "A, 4, skog"
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"graphite_grain.gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain."
+"gih"
 msgid "Graphite Grain"
 msgstr "Grafitt, korn"
 
@@ -6880,8 +6880,8 @@ msgstr "P, grafitt, svart, gras"
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/paint_splats.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"paint_splats.gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/paint_splats."
+"gih"
 msgid "Paint Splats"
 msgstr "Målingflekker"
 
@@ -6889,8 +6889,8 @@ msgstr "Målingflekker"
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-vegetal.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-"
-"vegetal.gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-vegetal."
+"gih"
 msgid "A-4 random vegetal2"
 msgstr "A, 4, tilfeldig, planter 2"
 
@@ -6914,8 +6914,8 @@ msgstr "Stein, fordjupingar"
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_scraped.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"rock_scraped.gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_scraped."
+"gih"
 msgid "rock_scraped"
 msgstr "Stein, skrapa"
 
@@ -6967,8 +6967,8 @@ msgstr "Snø"
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-"splats_large.gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large."
+"gih"
 msgid "S_Splats 2"
 msgstr "S, sprut 2"
 
@@ -9996,8 +9996,8 @@ msgstr "&Sløring …"
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1645
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1648
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
+#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
 #, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13217,44 +13217,44 @@ msgstr "&Lås til"
 msgid "&Image"
 msgstr "&Bilete"
 
-#: krita/krita5.xmlgui:172 krita/krita5.xmlgui:268 krita/krita5.xmlgui:284
+#: krita/krita5.xmlgui:173 krita/krita5.xmlgui:269 krita/krita5.xmlgui:285
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
 msgstr "&Drei"
 
-#: krita/krita5.xmlgui:194 plugins/extensions/layersplit/layersplit.xmlgui:4
+#: krita/krita5.xmlgui:195 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
 msgstr "&Lag"
 
-#: krita/krita5.xmlgui:200
+#: krita/krita5.xmlgui:201
 #, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "&Nytt"
 
-#: krita/krita5.xmlgui:222
+#: krita/krita5.xmlgui:223
 #, kde-format
 msgid "&Import/Export"
 msgstr "&Importer/eksporter"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:229
+#: krita/krita5.xmlgui:230
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:237 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
 #, kde-format
 msgid "&Convert"
 msgstr "&Konverter"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:248 krita/krita5.xmlgui:319
+#: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13264,86 +13264,86 @@ msgid "&Select"
 msgstr "&Merk"
 
 # Inneheld kommandoar for gruppering, så det er best med imperativ her (til trass for den offisielle konteksten).
-#: krita/krita5.xmlgui:256 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "&Grupper"
 
-#: krita/krita5.xmlgui:262
+#: krita/krita5.xmlgui:263
 #, kde-format
 msgid "&Transform"
 msgstr "&Transformer"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:280
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "Transformer &alle laga"
 
-#: krita/krita5.xmlgui:294
+#: krita/krita5.xmlgui:295
 #, kde-format
 msgid "S&plit"
 msgstr "&Del opp"
 
-#: krita/krita5.xmlgui:296 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Del opp &alfa"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:342
 #, kde-format
 msgid "Select &Opaque"
 msgstr "Merk alt ugje&nnomsiktige"
 
-#: krita/krita5.xmlgui:356
+#: krita/krita5.xmlgui:357
 #, kde-format
 msgid "Filte&r"
 msgstr "Fil&ter"
 
-#: krita/krita5.xmlgui:377 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "V&erktøy"
 
-#: krita/krita5.xmlgui:378
+#: krita/krita5.xmlgui:379
 #, kde-format
 msgid "Scripts"
 msgstr "Skript"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "&Innstillingar"
 
-#: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&Hjelp"
 
-#: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "Fil"
 
-#: krita/krita5.xmlgui:433
+#: krita/krita5.xmlgui:434
 #, kde-format
 msgid "Edit"
 msgstr ""
 
-#: krita/krita5.xmlgui:438
+#: krita/krita5.xmlgui:439
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Penslar og anna"
 
-#: krita/krita5.xmlgui:455
+#: krita/krita5.xmlgui:456
 #, kde-format
 msgid "Custom toolbar 1"
 msgstr ""
 
-#: krita/krita5.xmlgui:458
+#: krita/krita5.xmlgui:459
 #, kde-format
 msgid "Custom toolbar 2"
 msgstr ""
@@ -14136,8 +14136,8 @@ msgstr "Slett nøkkelbilete"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1885
-#: krita/kritamenu.action:1886
+#: krita/kritamenu.action:575 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15012,8 +15012,22 @@ msgctxt "action"
 msgid "Trim to Image Size"
 msgstr "Skjer av til biletstorleik"
 
-#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#. i18n: context: text @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
+#, kde-format
+msgctxt "action"
+msgid "Purge Unused Image Data"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1199
+#, kde-format
+msgctxt "action"
+msgid "Removes all fully transparent pixels from the image storage"
+msgstr ""
+
+#. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
+#: krita/kritamenu.action:1209
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
@@ -15023,14 +15037,14 @@ msgstr "Skjer av til gjeldande &lag"
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1199 krita/kritamenu.action:1200
+#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
 msgstr "Skjer av til gjeldande lag"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1209
+#: krita/kritamenu.action:1221
 #, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
@@ -15040,14 +15054,14 @@ msgstr "Skjer av til &utval"
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1211 krita/kritamenu.action:1212
+#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
 #, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
 msgstr "Skjer av til utval"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1221
+#: krita/kritamenu.action:1233
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
@@ -15057,14 +15071,14 @@ msgstr "&Drei biletet …"
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1223 krita/kritamenu.action:1224
+#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "Drei biletet"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1233
+#: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
@@ -15074,14 +15088,14 @@ msgstr "Drei biletet 90° til &høgre"
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1235 krita/kritamenu.action:1236
+#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
 msgstr "Drei biletet 90° til høgre"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1245
+#: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
@@ -15091,14 +15105,14 @@ msgstr "Drei biletet 90° til &venstre"
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1247 krita/kritamenu.action:1248
+#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
 msgstr "Drei biletet 90° til venstre"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1257
+#: krita/kritamenu.action:1269
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
@@ -15108,14 +15122,14 @@ msgstr "Drei biletet &180°"
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1259 krita/kritamenu.action:1260
+#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
 msgstr "Drei biletet 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1269
+#: krita/kritamenu.action:1281
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
@@ -15125,14 +15139,14 @@ msgstr "Skr&åstill bilete …"
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1271 krita/kritamenu.action:1272
+#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
 msgstr "Skråstill bilete"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1281
+#: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
@@ -15142,14 +15156,14 @@ msgstr "Spegla biletet &vassrett"
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1283 krita/kritamenu.action:1284
+#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
 msgstr "Spegla biletet vassrett"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1293
+#: krita/kritamenu.action:1305
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
@@ -15159,14 +15173,14 @@ msgstr "Spegla biletet l&oddrett"
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1295 krita/kritamenu.action:1296
+#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
 msgstr "Spegla biletet loddrett"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1305
+#: krita/kritamenu.action:1317
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
@@ -15176,14 +15190,14 @@ msgstr "Skaler bilete til &ny storleik …"
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1307 krita/kritamenu.action:1308
+#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
 msgstr "Skaler bilete til ny storleik"
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1317
+#: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
@@ -15193,14 +15207,14 @@ msgstr "Forsk&yv bilete …"
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1319 krita/kritamenu.action:1320
+#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
 msgstr "Forskyv bilete"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1329
+#: krita/kritamenu.action:1341
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
@@ -15210,7 +15224,7 @@ msgstr "Endra lerret&storleik …"
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1331 krita/kritamenu.action:1332
+#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
@@ -15218,7 +15232,7 @@ msgstr "Endra lerretstorleik"
 
 # Opnar dialogvindauge, så skal vera ellipse her.
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1341
+#: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
@@ -15228,14 +15242,14 @@ msgstr "Del opp i &fliser …"
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1343 krita/kritamenu.action:1344
+#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
 msgstr "Del opp i fliser"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1353
+#: krita/kritamenu.action:1365
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
@@ -15245,21 +15259,21 @@ msgstr "Del opp i farge&kanalar …"
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
-#: krita/kritamenu.action:1355 krita/kritamenu.action:1356
+#: krita/kritamenu.action:1367 krita/kritamenu.action:1368
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
 msgstr "Del opp i fargekanalar"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1366
+#: krita/kritamenu.action:1378
 #, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "Merk"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1369
+#: krita/kritamenu.action:1381
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
@@ -15269,14 +15283,14 @@ msgstr "&Merk alt"
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1371 krita/kritamenu.action:1372
+#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
 #, kde-format
 msgctxt "action"
 msgid "Select All"
 msgstr "Merk alt"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1381
+#: krita/kritamenu.action:1393
 #, kde-format
 msgctxt "action"
 msgid "&Deselect"
@@ -15286,14 +15300,14 @@ msgstr "&Fjern merking"
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1383 krita/kritamenu.action:1384
+#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
 #, kde-format
 msgctxt "action"
 msgid "Deselect"
 msgstr "Fjern merking"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1393
+#: krita/kritamenu.action:1405
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
@@ -15303,14 +15317,14 @@ msgstr "Merk &på nytt"
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1395 krita/kritamenu.action:1396
+#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
 msgstr "Merk på nytt"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1405
+#: krita/kritamenu.action:1417
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
@@ -15320,14 +15334,14 @@ msgstr "Gjer om til &vektorutval"
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1407 krita/kritamenu.action:1408
+#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
 msgstr "Gjer om til vektorutval"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1417
+#: krita/kritamenu.action:1429
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
@@ -15337,7 +15351,7 @@ msgstr "Gjer om til &rasterutval"
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1419 krita/kritamenu.action:1420
+#: krita/kritamenu.action:1431 krita/kritamenu.action:1432
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
@@ -15349,15 +15363,15 @@ msgstr "Gjer om til rasterutval"
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1429 krita/kritamenu.action:1431
-#: krita/kritamenu.action:1432
+#: krita/kritamenu.action:1441 krita/kritamenu.action:1443
+#: krita/kritamenu.action:1444
 #, kde-format
 msgctxt "action"
 msgid "Edit Selection"
 msgstr "Rediger utval"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1441
+#: krita/kritamenu.action:1453
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
@@ -15367,14 +15381,14 @@ msgstr "Gjer om &figurar til vektorutval"
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1443 krita/kritamenu.action:1444
+#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
 msgstr "Gjer om figurar til vektorutval"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1453
+#: krita/kritamenu.action:1465
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
@@ -15384,14 +15398,14 @@ msgstr "F&jørutval …"
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1455 krita/kritamenu.action:1456
+#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
 msgstr "Fjørutval"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1465
+#: krita/kritamenu.action:1477
 #, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
@@ -15401,14 +15415,14 @@ msgstr "V&is utval"
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1467 krita/kritamenu.action:1468
+#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
 #, kde-format
 msgctxt "action"
 msgid "Display Selection"
 msgstr "Vis utval"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1477
+#: krita/kritamenu.action:1489
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
@@ -15418,14 +15432,14 @@ msgstr "S&kaler …"
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1479 krita/kritamenu.action:1480
+#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
 #, kde-format
 msgctxt "action"
 msgid "Scale"
 msgstr "Skaler"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1489
+#: krita/kritamenu.action:1501
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
@@ -15435,14 +15449,14 @@ msgstr "Merk frå fargeinter&vall …"
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1491 krita/kritamenu.action:1492
+#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
 msgstr "Merk frå fargeintervall"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1501
+#: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
@@ -15452,14 +15466,14 @@ msgstr "Merk alt &ugjennomsiktige (byt ut)"
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1503 krita/kritamenu.action:1504
+#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
 msgstr "Merk alt ugjennomsiktige"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1513
+#: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
@@ -15469,14 +15483,14 @@ msgstr "Merk alt ugjennomsiktige (&legg til)"
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1515 krita/kritamenu.action:1516
+#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
 msgstr "Merk alt ugjennomsiktige (legg til)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1525
+#: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
@@ -15486,14 +15500,14 @@ msgstr "Merk alt ugjennomsiktige (&trekk frå)"
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1527 krita/kritamenu.action:1528
+#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
 msgstr "Merk alt ugjennomsiktige (trekk frå)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1537
+#: krita/kritamenu.action:1549
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
@@ -15503,14 +15517,14 @@ msgstr "Merk alt ugjennomsiktige (&skjeringsflate)"
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1539 krita/kritamenu.action:1540
+#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
 msgstr "Merk alt ugjennomsiktige (skjeringsflate)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1549
+#: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
@@ -15520,14 +15534,14 @@ msgstr "&Utvid utval …"
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1551 krita/kritamenu.action:1552
+#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
 msgstr "Utvid utval"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1561
+#: krita/kritamenu.action:1573
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
@@ -15537,14 +15551,14 @@ msgstr "&Trekk saman utval …"
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1563 krita/kritamenu.action:1564
+#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
 msgstr "Trekk saman utval"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1573
+#: krita/kritamenu.action:1585
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
@@ -15554,14 +15568,14 @@ msgstr "&Lag utvalsramme …"
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1575 krita/kritamenu.action:1576
+#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
 msgstr "Lag utvalsramme"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1585
+#: krita/kritamenu.action:1597
 #, kde-format
 msgctxt "action"
 msgid "S&mooth"
@@ -15571,21 +15585,21 @@ msgstr "&Glatt ut"
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
-#: krita/kritamenu.action:1587 krita/kritamenu.action:1588
+#: krita/kritamenu.action:1599 krita/kritamenu.action:1600
 #, kde-format
 msgctxt "action"
 msgid "Smooth"
 msgstr "Glatt ut"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1598
+#: krita/kritamenu.action:1610
 #, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "Filter"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1601
+#: krita/kritamenu.action:1613
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -15595,14 +15609,14 @@ msgstr "&Bruk filter på nytt"
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1603 krita/kritamenu.action:1604
+#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "Bruk siste filter på nytt"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1625
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -15612,7 +15626,7 @@ msgstr "Bruk siste filter på nytt (etter stadfesting)"
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -15626,8 +15640,8 @@ msgstr ""
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625 krita/kritamenu.action:1627
-#: krita/kritamenu.action:1628
+#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
+#: krita/kritamenu.action:1640
 #, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -15639,8 +15653,8 @@ msgstr "Justering"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1635 krita/kritamenu.action:1637
-#: krita/kritamenu.action:1638
+#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
+#: krita/kritamenu.action:1650
 #, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -15652,8 +15666,8 @@ msgstr "Kunstnarisk"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1655 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1658
+#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
+#: krita/kritamenu.action:1670
 #, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -15665,8 +15679,8 @@ msgstr "Fargar"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1665 krita/kritamenu.action:1667
-#: krita/kritamenu.action:1668
+#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
+#: krita/kritamenu.action:1680
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -15678,8 +15692,8 @@ msgstr "Kantoppdaging"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1675 krita/kritamenu.action:1677
-#: krita/kritamenu.action:1678
+#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
+#: krita/kritamenu.action:1690
 #, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -15691,8 +15705,8 @@ msgstr "Forbetringar"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1685 krita/kritamenu.action:1687
-#: krita/kritamenu.action:1688
+#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
+#: krita/kritamenu.action:1700
 #, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -15705,8 +15719,8 @@ msgstr "Relieff"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1695 krita/kritamenu.action:1697
-#: krita/kritamenu.action:1698
+#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
+#: krita/kritamenu.action:1710
 #, kde-format
 msgctxt "action"
 msgid "Map"
@@ -15718,15 +15732,15 @@ msgstr "Avbilding"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1705 krita/kritamenu.action:1707
-#: krita/kritamenu.action:1708
+#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
+#: krita/kritamenu.action:1720
 #, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "Anna"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1715
+#: krita/kritamenu.action:1727
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -15736,14 +15750,14 @@ msgstr "Start G’MIC-Qt"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1718
+#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "Start G’MIC-Qt"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1725
+#: krita/kritamenu.action:1737
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -15753,7 +15767,7 @@ msgstr "Bruk siste G’MIC-filter på nytt"
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727 krita/kritamenu.action:1728
+#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -15765,7 +15779,7 @@ msgstr "Bruk det siste G’MIC-filteret på nytt"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1736
+#: krita/kritamenu.action:1748
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
@@ -15774,7 +15788,7 @@ msgid "Settings"
 msgstr "Innstillingar"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1739
+#: krita/kritamenu.action:1751
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -15784,35 +15798,35 @@ msgstr "&Set opp Krita …"
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1741 krita/kritamenu.action:1742
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "Set opp Krita"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1763
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "&Handsam ressursbibliotek …"
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753
+#: krita/kritamenu.action:1765
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "Handsam ressursbibliotek"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1754
+#: krita/kritamenu.action:1766
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
 msgstr "Handsam ressursbibliotek"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -15822,14 +15836,14 @@ msgstr "Handsam ressursar …"
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765 krita/kritamenu.action:1766
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "Handsam ressursar"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1787
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -15839,14 +15853,14 @@ msgstr "Byt &programspråk …"
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "Byt programspråk"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1785
+#: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -15856,14 +15870,14 @@ msgstr "&Vis dokkpanel"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787 krita/kritamenu.action:1788
+#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "Vis dokkpanel"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1809
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -15873,14 +15887,14 @@ msgstr "Vi&s tittellinjer på dokkpanel"
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "Vis tittellinjer på dokkpanel"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1821
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -15890,7 +15904,7 @@ msgstr "Set opp verktøy&linjer …"
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -15902,15 +15916,15 @@ msgstr "Set opp verktøylinjer"
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821 krita/kritamenu.action:1823
-#: krita/kritamenu.action:1824
+#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
+#: krita/kritamenu.action:1836
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "Dokkpanel"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1831
+#: krita/kritamenu.action:1843
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -15920,14 +15934,14 @@ msgstr "&Tema"
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1834
+#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "Tema"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1841
+#: krita/kritamenu.action:1853
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -15937,7 +15951,7 @@ msgstr "&Stilar"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843 krita/kritamenu.action:1844
+#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
 #, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -15949,36 +15963,36 @@ msgstr "Stilar"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1851 krita/kritamenu.action:1853
-#: krita/kritamenu.action:1854
+#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
+#: krita/kritamenu.action:1866
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "Gjeldande forfattarprofil"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1861
+#: krita/kritamenu.action:1873
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "Tilbakestill alle innstillingar"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863
+#: krita/kritamenu.action:1875
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
 msgstr "Tilbakestill alle innstillingar til standardverdiar"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1864
+#: krita/kritamenu.action:1876
 #, kde-format
 msgctxt "action"
 msgid "Reset Settings"
 msgstr "Tilbakestill innstillingar"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1871
+#: krita/kritamenu.action:1883
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -15988,28 +16002,28 @@ msgstr "Set opp snøgg&tastar …"
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873 krita/kritamenu.action:1874
+#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
 #, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "Set opp snøggtastar"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1895
 #, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "Vi&ndauge"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1894
+#: krita/kritamenu.action:1906
 #, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "Hjelp"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1897
+#: krita/kritamenu.action:1909
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16019,14 +16033,14 @@ msgstr "Krita-&handbok"
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1899 krita/kritamenu.action:1900
+#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr "Krita-handbok"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1907
+#: krita/kritamenu.action:1919
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16036,14 +16050,14 @@ msgstr "&Meld frå om feil …"
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
+#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "Meld frå om feil"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1917
+#: krita/kritamenu.action:1929
 #, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16053,14 +16067,14 @@ msgstr "&Om Krita"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919 krita/kritamenu.action:1920
+#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
 #, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "Om Krita"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1927
+#: krita/kritamenu.action:1939
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16070,21 +16084,21 @@ msgstr "Om &KDE"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929 krita/kritamenu.action:1930
+#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "Om KDE"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1950
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "Penslar og anna"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1941
+#: krita/kritamenu.action:1953
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16094,14 +16108,14 @@ msgstr "&Fargeovergangar"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1943 krita/kritamenu.action:1944
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "Fargeovergangar"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1951
+#: krita/kritamenu.action:1963
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16111,14 +16125,14 @@ msgstr "&Mønster"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953 krita/kritamenu.action:1954
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "Mønster"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1961
+#: krita/kritamenu.action:1973
 #, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16128,14 +16142,14 @@ msgstr "&Farge"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963 krita/kritamenu.action:1964
+#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
 #, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "Farge"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1971
+#: krita/kritamenu.action:1983
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
@@ -16145,14 +16159,14 @@ msgstr "&Vel framgrunnsfarge"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973 krita/kritamenu.action:1974
+#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
 msgstr "Vel framgrunnsfarge"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1981
+#: krita/kritamenu.action:1993
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
@@ -16162,7 +16176,7 @@ msgstr "&Vel bakgrunnsfarge"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983 krita/kritamenu.action:1984
+#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
@@ -16174,8 +16188,8 @@ msgstr "Vel bakgrunnsfarge"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
-#: krita/kritamenu.action:1994
+#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
+#: krita/kritamenu.action:2006
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16187,8 +16201,8 @@ msgstr "Penselval glidebrytar 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
+#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
+#: krita/kritamenu.action:2016
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16200,8 +16214,8 @@ msgstr "Penselval glidebrytar 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
+#: krita/kritamenu.action:2026
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16213,8 +16227,8 @@ msgstr "Penselval glidebrytar 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
+#: krita/kritamenu.action:2036
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16226,8 +16240,8 @@ msgstr "Penselval glidebrytar 4"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
+#: krita/kritamenu.action:2046
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
@@ -16239,22 +16253,22 @@ msgstr ""
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
+#: krita/kritamenu.action:2056
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Spegelvend"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051
+#: krita/kritamenu.action:2063
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Utformingar"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -16267,8 +16281,8 @@ msgstr "Vel utforming"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
+#: krita/kritamenu.action:2075
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -16692,7 +16706,7 @@ msgstr "Klarte ikkje lagra %1 til HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:577
+#: libs/ui/flake/kis_shape_layer.cc:613
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -20775,14 +20789,14 @@ msgstr "Storleik"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:751
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:755
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:961
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:968
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:834
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:838
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1053
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1060
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1238
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -20923,7 +20937,7 @@ msgstr "Fjern merking"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
+#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Legg til lag"
@@ -20961,7 +20975,7 @@ msgid "Reselect"
 msgstr "Merk på nytt"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2097
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, kde-format
 msgid "Selection Mask"
@@ -21103,7 +21117,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1283
+#: libs/image/kis_asl_layer_style_serializer.cpp:1288
 #, kde-format
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
@@ -21239,7 +21253,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr ""
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
 #, kde-format
 msgid "Paint Layer"
 msgstr "Teiknelag"
@@ -21249,27 +21263,32 @@ msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Skjer til bilete"
 
-#: libs/image/kis_image.cc:935
+#: libs/image/kis_image.cc:886
+msgctxt "(qtundo-format)"
+msgid "Purge Unused Data"
+msgstr ""
+
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Skjer til bilete"
 
-#: libs/image/kis_image.cc:936
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Skjer til maske"
 
-#: libs/image/kis_image.cc:973
+#: libs/image/kis_image.cc:1028
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skaler bilete"
 
-#: libs/image/kis_image.cc:974
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Endra biletoppløysing"
 
-#: libs/image/kis_image.cc:1024
+#: libs/image/kis_image.cc:1079
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21277,17 +21296,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Skaler lag"
 msgstr[1] "Skaler lag"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1218
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Drei bilete"
 
-#: libs/image/kis_image.cc:1173
+#: libs/image/kis_image.cc:1228
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Drei maske"
 
-#: libs/image/kis_image.cc:1176
+#: libs/image/kis_image.cc:1231
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21295,12 +21314,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Drei lag"
 msgstr[1] "Drei lag"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Skråstill maske"
 
-#: libs/image/kis_image.cc:1281
+#: libs/image/kis_image.cc:1336
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21308,42 +21327,42 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Skråstill lag"
 msgstr[1] "Skråstill lag"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1343
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Skråstill bilete"
 
-#: libs/image/kis_image.cc:1306
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Gjer om fargerommet til laget"
 
-#: libs/image/kis_image.cc:1357
+#: libs/image/kis_image.cc:1412
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Gjer om biletfargerom"
 
-#: libs/image/kis_image.cc:1358
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Gjer om projeksjonsfargerom"
 
-#: libs/image/kis_image.cc:1410
+#: libs/image/kis_image.cc:1465
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1495
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Tildel profil til bilete"
 
-#: libs/image/kis_image.cc:1481
+#: libs/image/kis_image.cc:1536
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tildel profil"
 
-#: libs/image/kis_image.cc:2517
+#: libs/image/kis_image.cc:2572
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Skjer av til utval"
@@ -21505,7 +21524,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:337
+#: libs/ui/flake/kis_shape_layer.cc:327
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21522,64 +21541,64 @@ msgid ""
 msgstr ""
 
 # Suffiks brukt når ein slår saman gruppelag, og bør derfor starta med liten forbokstav.
-#: libs/image/kis_layer_utils.cpp:626
+#: libs/image/kis_layer_utils.cpp:627
 #, kde-format
 msgid "Merged"
 msgstr "samanslått"
 
-#: libs/image/kis_layer_utils.cpp:1441
+#: libs/image/kis_layer_utils.cpp:1472
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Flett nedover"
 
-#: libs/image/kis_layer_utils.cpp:1713
+#: libs/image/kis_layer_utils.cpp:1744
 #, kde-format
 msgid "Copy of"
 msgstr "Kopi av"
 
-#: libs/image/kis_layer_utils.cpp:1791
+#: libs/image/kis_layer_utils.cpp:1822
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Byt projeksjonsfarge"
 
-#: libs/image/kis_layer_utils.cpp:2017
+#: libs/image/kis_layer_utils.cpp:2048
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Slå saman merkte nodar"
 
-#: libs/image/kis_layer_utils.cpp:2035
+#: libs/image/kis_layer_utils.cpp:2066
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Ny frå synleg"
 
-#: libs/image/kis_layer_utils.cpp:2036
+#: libs/image/kis_layer_utils.cpp:2067
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Synleg"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2146
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Slå saman utvalsmasker"
 
-#: libs/image/kis_layer_utils.cpp:2139
+#: libs/image/kis_layer_utils.cpp:2170
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Flat ut lag"
 
-#: libs/image/kis_layer_utils.cpp:2155
+#: libs/image/kis_layer_utils.cpp:2186
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Flat ut bilete"
 
-#: libs/image/kis_layer_utils.cpp:2389
+#: libs/image/kis_layer_utils.cpp:2420
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Del opp alfakanal til maske"
 
-#: libs/image/kis_layer_utils.cpp:2415
+#: libs/image/kis_layer_utils.cpp:2446
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Gjer om til teiknelag"
@@ -21589,7 +21608,7 @@ msgstr "Gjer om til teiknelag"
 msgid "Processing"
 msgstr "Handsamar"
 
-#: libs/image/kis_psd_layer_style.cpp:104
+#: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
 #: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
@@ -22000,30 +22019,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:690
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
 #, kde-format
 msgid "Clone Layer"
 msgstr "Klonelag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Gruppe"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
 #, kde-format
 msgid "File Layer"
 msgstr "Fil-lag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:703
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektorlag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "Filter Layer"
 msgstr "Filterlag"
@@ -23704,12 +23723,12 @@ msgstr "Lokale ressursar"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
@@ -23778,33 +23797,33 @@ msgstr ""
 "Ressursdatabase-oppsettet er endra. Krita vil ta ein reservekopi av "
 "databasen og laga ein ny database."
 
-#: libs/resources/KisResourceLocator.cpp:90
+#: libs/resources/KisResourceLocator.cpp:91
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. Klarte ikkje oppretta ressursplassering i %1."
 
-#: libs/resources/KisResourceLocator.cpp:97
+#: libs/resources/KisResourceLocator.cpp:98
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Ressursplasseringa i %1 er skriveverna."
 
-#: libs/resources/KisResourceLocator.cpp:816
+#: libs/resources/KisResourceLocator.cpp:852
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Klarte ikkje leggja til %1 i databasen"
 
-#: libs/resources/KisResourceLocator.cpp:860
-#: libs/resources/KisResourceLocator.cpp:1221
+#: libs/resources/KisResourceLocator.cpp:896
+#: libs/resources/KisResourceLocator.cpp:1257
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Klarte ikkje fjerna lageret %1 frå databasen"
 
-#: libs/resources/KisResourceLocator.cpp:973
+#: libs/resources/KisResourceLocator.cpp:1009
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:981
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
@@ -23812,40 +23831,40 @@ msgstr ""
 "Dette er første gong du køyrer Krita. Det kan ta litt tid å klargjera "
 "programmet."
 
-#: libs/resources/KisResourceLocator.cpp:988
+#: libs/resources/KisResourceLocator.cpp:1024
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Klarte ikkje oppretta ressursplassering i %1."
 
-#: libs/resources/KisResourceLocator.cpp:1001
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1053
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Klarte ikkje kopiera ressursen %1 til %2"
 
-#: libs/resources/KisResourceLocator.cpp:1013
+#: libs/resources/KisResourceLocator.cpp:1049
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Installerer ressursar frå ressurssamlinga %1."
 
-#: libs/resources/KisResourceLocator.cpp:1041
+#: libs/resources/KisResourceLocator.cpp:1077
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Mellombelse ressursar"
 
-#: libs/resources/KisResourceLocator.cpp:1047
+#: libs/resources/KisResourceLocator.cpp:1083
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1170
+#: libs/resources/KisResourceLocator.cpp:1206
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1183
-#: libs/resources/KisResourceLocator.cpp:1191
+#: libs/resources/KisResourceLocator.cpp:1219
+#: libs/resources/KisResourceLocator.cpp:1227
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Klarte ikkje synkronisera %1 med databasen"
@@ -26279,7 +26298,7 @@ msgstr ""
 msgid "None"
 msgstr "Ingen"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1534
+#: libs/ui/canvas/kis_canvas2.cpp:1535
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -26484,35 +26503,35 @@ msgstr "<html><head/><body><h1 align=\"center\"><b>Omsetjarar</b></h1><p><ul>"
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
 "translation teams all over the world.</p><p>For more information on KDE "
-"internationalization visit <a href=\"http://l10n.kde.org\">http://"
-"l10n.kde.org</a></p>"
+"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
+"org</a></p>"
 msgstr ""
 "<p>KDE-programma er omsette til mange språk, og dei var nokre av dei første "
 "store programma som fanst på nynorsk.</p><p>Viss du finn skrive­feil, feil­"
 "omsetjingar eller omsetjingar som kan forbetrast, set me pris på om sender "
 "eit tips til <a href=\"mailto:l10n-no@lister.huftis.org\">diskusjons­lista</"
-"a> vår (<a href=\"http://lister.huftis.org/listinfo.cgi/l10n-no-"
-"huftis.org\">informasjon og arkiv</a>), eller direkte til omsetjaren <a "
-"href=\"mailto:karl@huftis.org\">Karl Ove Hufthammer</a> dersom du ikkje "
-"ønskjer at meldinga di skal verta offentleg­gjord på lista.</p><p>Bruk dei "
-"same adressene viss du ønskjer å delta aktivt i nynorsk­omsetjinga av "
-"programma. Me har alltid bruk for nye omsetjarar og korrektur­lesarar!</"
-"p><p>Du finn meir informasjon om internasjonalisering av KDE-programma på <a "
-"href=\"https://l10n.kde.org/\">https://l10n.kde.org/</a>.</p>"
+"a> vår (<a href=\"http://lister.huftis.org/listinfo.cgi/l10n-no-huftis.org"
+"\">informasjon og arkiv</a>), eller direkte til omsetjaren <a href=\"mailto:"
+"karl@huftis.org\">Karl Ove Hufthammer</a> dersom du ikkje ønskjer at "
+"meldinga di skal verta offentleg­gjord på lista.</p><p>Bruk dei same "
+"adressene viss du ønskjer å delta aktivt i nynorsk­omsetjinga av programma. "
+"Me har alltid bruk for nye omsetjarar og korrektur­lesarar!</p><p>Du finn "
+"meir informasjon om internasjonalisering av KDE-programma på <a href="
+"\"https://l10n.kde.org/\">https://l10n.kde.org/</a>.</p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:92
 #, kde-format
 msgid ""
-"<html><head/><body><h1 align=\"center\">Development Fund</h1><p "
-"align=\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></"
-"a> <h2 align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a "
-"href=\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/"
-"epic.png\"></a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img "
-"src=\":/broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-"
-"chuck.com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a "
-"href=\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> "
-"<p align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img "
-"src=\":/asifa.png\"></a> </body></html>"
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
 
 #: libs/ui/dialogs/kis_about_application.cpp:104
@@ -26554,8 +26573,8 @@ msgstr ""
 "Krita vidare til andre</li><li>Du kan granska korleis Krita er bygd opp og "
 "gjera endringar i programmet</li><li>Du kan gje endra versjonar av Krita "
 "vidare til andre</li></ul><p>Både Krita Foundation og prosjekta på krita.org "
-"<b>forpliktar seg</b> til å bevara Krita som fri programvare.</p><h1 "
-"align=\"center\">Det du lagar med Krita</h1><p>Alt som du lagar med Krita, "
+"<b>forpliktar seg</b> til å bevara Krita som fri programvare.</p><h1 align="
+"\"center\">Det du lagar med Krita</h1><p>Alt som du lagar med Krita, "
 "tilhøyrer deg. Du står fritt til å bruka det slik du ønskjer.</p><p>Krita "
 "kan altså brukast i kommersiell samanheng, til kva som helst formål. Det "
 "finst ingen som helst avgrensingar.</p><p>Lisensen GNU GPL, som Krita "
@@ -26754,29 +26773,29 @@ msgid "Layer Properties"
 msgstr "Lageigenskapar"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:748
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:766
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:769
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:788
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:797
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:801
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:925
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:958
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:965
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:972
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1101
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1104
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1177
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1180
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1187
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1190
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1307
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1310
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1349
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:831
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:849
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:852
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:871
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:880
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:884
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1017
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1050
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1057
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1064
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1155
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1158
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1229
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1232
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1235
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1242
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1245
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1363
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1366
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1487
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1758
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
@@ -26844,48 +26863,48 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Endra lageigenskapar"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:107
 #, kde-format
 msgid "Layer Styles"
 msgstr "Lagstil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:276
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skriv inn nytt namn på stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Namn:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:279
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:321
 #, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "Ny stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:333
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:397
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:380
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:444
 #, kde-format
 msgid "Select ASL file"
 msgstr "Vel ASL-fil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #, kde-format
 msgid "Could not load layer style library %1."
 msgstr "Klarte ikkje lasta lagstil-biblioteket %1."
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:416
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "Åtvaring"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:370
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:417
 #, kde-format
 msgid ""
 "There is already a layer style library with this name installed. Do you want "
@@ -26894,34 +26913,34 @@ msgstr ""
 "Eit lagstil-bibliotek med dette namnet er installert frå før. Vil du skriva "
 "over det?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:908
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1000
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
 msgstr "Ikkje implementert enno"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:995
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1087
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, kde-format
 msgid "Inner Shadow"
 msgstr "Indre skugge"
 
 # Sjå https://helpx.adobe.com/no/acrobat/using/trapping-color-acrobat-pro.html og https://helpx.adobe.com/en/acrobat/using/trapping-color-acrobat-pro.html.
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:996
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1088
 #, kde-format
 msgid "Choke:"
 msgstr "Krymping:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1225
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr "Ytre glød"
 
 # Sjå forklaring her https://helpx.adobe.com/no/acrobat/using/trapping-color-acrobat-pro.html.
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1271
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -27200,9 +27219,8 @@ msgid ""
 "p><p>If color management is disabled, Krita will render the canvas into the "
 "surface of the main window, which is considered sRGB. It will cause two "
 "limitations:<ol>    <li>the color gamut will be limited to sRGB</li>    "
-"<li>color proofing mode will be limited to \"use global display "
-"settings\",         i.e. paper white proofing will become impossible</li></"
-"ol></p>"
+"<li>color proofing mode will be limited to \"use global display settings"
+"\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1333
@@ -28192,18 +28210,17 @@ msgstr ""
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-"css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
 "and community-driven tool for digital artists everywhere.<br />Progress is "
-"made possible thanks to ongoing support from our community of <a "
-"href=\"https://docs.krita.org/en/contributors_manual.html\">contributors</"
-"a>, <a href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a "
-"href=\"https://fund.krita.org/\">development fund</a> members.</p></body></"
-"html>"
+"made possible thanks to ongoing support from our community of <a href="
+"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, <a "
+"href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a href=\"https://"
+"fund.krita.org/\">development fund</a> members.</p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
@@ -28772,17 +28789,17 @@ msgstr "Bla gjennom fargerom"
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
 #, kde-format
 msgid ""
-"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/"
-"Color_space\"><span style=\" font-weight:600; text-decoration: underline; "
-"color:#006e28;\">Color Spaces</span></a>  determine how colors are encoded "
-"in your files. Different color spaces have different properties and are used "
-"for different purposes.</p></body></html>"
+"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
+"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
+"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
+"Different color spaces have different properties and are used for different "
+"purposes.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/"
-"Color_space\"><span style=\" font-weight:600; text-decoration: underline; "
-"color:#006e28;\">Fargerom</span></a> avgjer korleis fargar skal kodast i "
-"filene. Ulike fargerom har ulike eigenskapar, og vert brukte til ulike "
-"formål.</p></body></html>"
+"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
+"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
+"\">Fargerom</span></a> avgjer korleis fargar skal kodast i filene. Ulike "
+"fargerom har ulike eigenskapar, og vert brukte til ulike formål.</p></body></"
+"html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
@@ -29641,9 +29658,8 @@ msgid ""
 "weight:600;\">very</span> large files: larger than 4 GiB on disk.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Bruk berre dette for <span style=\" font-"
-"weight:600;\">veldig</span> store filer (større enn 4 GiB på disken).</p></"
-"body></html>"
+"<html><head/><body><p>Bruk berre dette for <span style=\" font-weight:600;"
+"\">veldig</span> store filer (større enn 4 GiB på disken).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:190
@@ -30399,8 +30415,8 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1743
 #, kde-format
 msgid ""
-"Some applications may emulate presses of function keys with high numbers "
-"(e.g. F22) to bring themselves to the foreground. This may break Krita's "
+"Some applications may emulate presses of function keys with high numbers (e."
+"g. F22) to bring themselves to the foreground. This may break Krita's "
 "shortcuts and actions system. If you have a keyboard with F13 or higher "
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
@@ -31451,9 +31467,9 @@ msgstr ""
 "som definert her, og arbeida på desse parallelt. Kvart eksemplar vil krevja "
 "minne (om lag 20 % av storleiken på biletet), så du bør berre auka denne "
 "grensa om du har nok minne (RAM) installert.</p><p><span style=\" font-"
-"weight:600;\">Tilrådd verdi:</span> Set klonegrensa til talet på <span "
-"style=\" text-decoration: underline;\">fysiske</span> (ikkje-hypertråda) "
-"kjernar på prosessoren.</p></body></html>"
+"weight:600;\">Tilrådd verdi:</span> Set klonegrensa til talet på <span style="
+"\" text-decoration: underline;\">fysiske</span> (ikkje-hypertråda) kjernar "
+"på prosessoren.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdgperformancesettings.ui:302
@@ -31588,11 +31604,11 @@ msgid ""
 "4K UltraHD@25fps video you need extra 800 MiB of memory</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Mellomlageret for for animasjonsbilete vert lagra i "
-"minnet (RAM) utan noko avgrensing.</p><p><span style=\" font-"
-"weight:600;\">ÅTVARING:</span> Sjå til at maskina har <span style=\" text-"
-"decoration: underline;\">meir</span> minne enn du har bedt om i «Generelt»-"
-"fana. Elles kan du oppleva systemfrys.</p><p>* for 1 sekund med FullHD-video "
-"med 25 bilete/sekund treng du 200 MiB ekstra minne.</p><p>* for 1 sekund "
+"minnet (RAM) utan noko avgrensing.</p><p><span style=\" font-weight:600;"
+"\">ÅTVARING:</span> Sjå til at maskina har <span style=\" text-decoration: "
+"underline;\">meir</span> minne enn du har bedt om i «Generelt»-fana. Elles "
+"kan du oppleva systemfrys.</p><p>* for 1 sekund med FullHD-video med "
+"25 bilete/sekund treng du 200 MiB ekstra minne.</p><p>* for 1 sekund "
 "4K UltraHD-video med 25 bilete/sekund treng du 800 MiB ekstra minne.</p></"
 "body></html>"
 
@@ -31654,8 +31670,8 @@ msgstr "Avgrens biletstorleik for mellomlageret:"
 #, kde-format
 msgid ""
 "<html><head/><body><p>Size limit after which the frames will be scaled down</"
-"p><p><span style=\" font-weight:600;\">Recommended value:</span> "
-"2500&nbsp;px</p></body></html>"
+"p><p><span style=\" font-weight:600;\">Recommended value:</span> 2500&nbsp;"
+"px</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Skaler ned bilete som er større enn denne grensa.</"
 "p><p><span style=\" font-weight:600;\">Tilrådd verdi:</span> 2500 pikslar</"
@@ -32941,8 +32957,8 @@ msgstr "Endra hovudinnstilling"
 #: libs/ui/input/kis_change_primary_setting_action.cpp:26
 #, kde-format
 msgid ""
-"The <i>Change Primary Setting</i> action changes a tool's \"Primary "
-"Setting\", for example the brush size for the brush tool."
+"The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
+"\", for example the brush size for the brush tool."
 msgstr ""
 "Handlinga <i>Endra hovudinnstilling</i> endrar hovudinnstillinga til eit "
 "verktøy. For eksempel vil ho for penselverktøyet endra penselstorleiken."
@@ -33746,7 +33762,7 @@ msgstr "&Vel bakgrunnsfarge"
 msgid "&Docker Box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33755,12 +33771,12 @@ msgstr ""
 msgid "Patterns"
 msgstr "Mønster"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Sjølvvalt mønster"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
 #: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -33769,12 +33785,12 @@ msgstr "Sjølvvalt mønster"
 msgid "Gradients"
 msgstr "Fargeovergangar"
 
-#: libs/ui/kis_control_frame.cpp:278
+#: libs/ui/kis_control_frame.cpp:283
 #, kde-format
 msgid "Docker box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:284
+#: libs/ui/kis_control_frame.cpp:289
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr ""
@@ -33840,66 +33856,66 @@ msgstr "Importer bilete"
 msgid "Select a Color"
 msgstr "Vel farge"
 
-#: libs/ui/kis_layer_manager.cc:191
+#: libs/ui/kis_layer_manager.cc:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:193
+#: libs/ui/kis_layer_manager.cc:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Slå saman gruppe"
 
-#: libs/ui/kis_layer_manager.cc:195
+#: libs/ui/kis_layer_manager.cc:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Slå saman med laget nedanfor"
 
-#: libs/ui/kis_layer_manager.cc:217
+#: libs/ui/kis_layer_manager.cc:220
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Laget er tomt "
 
-#: libs/ui/kis_layer_manager.cc:256
+#: libs/ui/kis_layer_manager.cc:267
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Eigenskapar for filterlag"
 
-#: libs/ui/kis_layer_manager.cc:301
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Eigenskapar for fil-lag"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
 #, kde-format
 msgid "No file name specified"
 msgstr "Det er ikkje oppgjeve noko filnamn"
 
-#: libs/ui/kis_layer_manager.cc:339
+#: libs/ui/kis_layer_manager.cc:350
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Eigenskapar for fyll-lag"
 
-#: libs/ui/kis_layer_manager.cc:396
+#: libs/ui/kis_layer_manager.cc:407
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Endra klonelag"
 
-#: libs/ui/kis_layer_manager.cc:511
+#: libs/ui/kis_layer_manager.cc:522
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:531
+#: libs/ui/kis_layer_manager.cc:542
 #, kde-format
 msgid "Save layers to..."
 msgstr "Lagra lag til …"
 
-#: libs/ui/kis_layer_manager.cc:532
+#: libs/ui/kis_layer_manager.cc:543
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -33908,29 +33924,29 @@ msgstr ""
 "Vel kor laget skal lagrast. Det nye filterlaget vil då referera til denne "
 "plasseringa."
 
-#: libs/ui/kis_layer_manager.cc:595
+#: libs/ui/kis_layer_manager.cc:606
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Gjer om til fil-lag"
 
-#: libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:738
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nytt filterlag"
 
-#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Fyll-lag"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:813
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Flat ut bilete"
 
 # skip-rule: verta
-#: libs/ui/kis_layer_manager.cc:803
+#: libs/ui/kis_layer_manager.cc:814
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -33939,7 +33955,7 @@ msgstr ""
 "Biletet inneheld gøymde lag som vil gå tapt. Ønskjer du likevel å flata ut "
 "biletet?"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:892
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -33947,13 +33963,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Laget er låst"
 msgstr[1] "Laga er låste"
 
-#: libs/ui/kis_layer_manager.cc:903
+#: libs/ui/kis_layer_manager.cc:914
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Laget er låst"
 
-#: libs/ui/kis_layer_manager.cc:920
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -33963,12 +33979,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Gjer om usynlege grupper"
 
-#: libs/ui/kis_layer_manager.cc:972
+#: libs/ui/kis_layer_manager.cc:983
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Eksporter berre grupper på øvste nivå"
@@ -34545,9 +34561,9 @@ msgstr ""
 #: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
-"<p><a href=\"https://docs.krita.org/en/user_manual/"
-"getting_started.html\"><span style=\" text-decoration: underline; color:"
-"%1;\">Getting Started</span></a></p>"
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
+"span></a></p>"
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:238
@@ -34586,19 +34602,18 @@ msgstr ""
 #: libs/ui/kis_splash_screen.cpp:244
 #, kde-format
 msgid ""
-"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-"a></p>"
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
 
 # Fjerna &-teiknet, sidan «posieve check_tp_kde» protesterer uansett kor eg set han. :(
-#: libs/ui/kis_statusbar.cc:230
+#: libs/ui/kis_statusbar.cc:231
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 × %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:262
+#: libs/ui/kis_statusbar.cc:280
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -34612,7 +34627,7 @@ msgstr ""
 "  – Projeksjonar:\t %3\n"
 "  – Kjapp førehandsvising:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:273
+#: libs/ui/kis_statusbar.cc:291
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -34630,7 +34645,7 @@ msgstr ""
 "\n"
 "Veksleminne bruk:\t %8"
 
-#: libs/ui/kis_statusbar.cc:308
+#: libs/ui/kis_statusbar.cc:326
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -34644,24 +34659,37 @@ msgstr ""
 "ÅTVARING:\tIkkje nok minne. Brukar no veksleminne.\n"
 "\t\tDu bør reservera meir minne for Krita i innstillingane."
 
-#: libs/ui/kis_statusbar.cc:367
+#: libs/ui/kis_statusbar.cc:338
+#, kde-format
+msgctxt "tooltip on statusbar memory reporting button"
+msgid ""
+"\n"
+"\n"
+"WARNING:\tSome layers took too much time to calculate\n"
+"\t\ttheir thumbnails. They were switched into low-quality\n"
+"\t\tthumbnails mode. Try purging unused image data with\n"
+"\t\tImage->Purge Unused Image Data action.\n"
+"Slow layers: "
+msgstr ""
+
+#: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "Gøymd"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #, kde-format
 msgid "Ants"
 msgstr "Maur"
 
-#: libs/ui/kis_statusbar.cc:369
+#: libs/ui/kis_statusbar.cc:417
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maske"
 
-#: libs/ui/kis_statusbar.cc:372
+#: libs/ui/kis_statusbar.cc:420
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34670,18 +34698,18 @@ msgstr ""
 "Utval: x = %1, y = %2, breidd = %3, høgd = %4\n"
 "Visingsmodus: %5"
 
-#: libs/ui/kis_statusbar.cc:377
+#: libs/ui/kis_statusbar.cc:425
 #, kde-format
 msgid "No Selection"
 msgstr "Inkje utval"
 
-#: libs/ui/kis_statusbar.cc:395
+#: libs/ui/kis_statusbar.cc:443
 #, kde-format
 msgid "No profile"
 msgstr "Ingen profil"
 
 # Ser mykje betre ut med eit skiljemerke (tankestrek) her.
-#: libs/ui/kis_statusbar.cc:397
+#: libs/ui/kis_statusbar.cc:445
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -35625,7 +35653,7 @@ msgid ""
 "please select a space to convert to for editing: \n"
 msgstr ""
 
-#: libs/ui/KisLayerThumbnailCache.cpp:30
+#: libs/ui/KisLayerThumbnailCache.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr ""
@@ -37353,7 +37381,7 @@ msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 "Det føretrekte utformatet er ikkje støtta av alle tilgjengelege oppteiknarar."
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:813
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:819
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO er slått av: Biletfargerom er ikkje støtta"
@@ -37584,18 +37612,18 @@ msgstr ""
 #: libs/ui/wdgsplash.ui:439
 #, kde-format
 msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-"
-"weight:600;\">Links</span></p></body></html>"
+"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+"\">Links</span></p></body></html>"
 msgstr ""
-"<html><head/><body><p align=\"left\"><span style=\" font-"
-"weight:600;\">Lenkjer</span></p></body></html>"
+"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+"\">Lenkjer</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRecent)
 #: libs/ui/wdgsplash.ui:493
 #, kde-format
 msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-"
-"weight:600;\">Recent files</span></p></body></html>"
+"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+"\">Recent files</span></p></body></html>"
 msgstr ""
 "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">Nyleg "
 "opna bilete</span></p></body></html>"
@@ -38344,14 +38372,14 @@ msgid ""
 "<p><b>Extra notes on profiles by Elle Stone:</b></p><p><i>Krita comes with a "
 "number of high quality profiles created by <a href=\"https://"
 "ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check <a "
-"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-"
-"profiles.html\">the full documentation</a> as well.</i></p>"
+"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html"
+"\">the full documentation</a> as well.</i></p>"
 msgstr ""
 "<p><b>Tilleggsmerknadar om profilar frå Elle Stone:</b></p><p><i>Krita vert "
 "levert med fleire høgkvalitetsprofilar utvikla av <a href=\"https://"
-"ninedegreesbelow.com\">Elle Stone</a>. Her er eit samandrag. Sjå òg <a "
-"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-"
-"profiles.html\">den fullstendige dokumentasjon</a>.</i></p>"
+"ninedegreesbelow.com\">Elle Stone</a>. Her er eit samandrag. Sjå òg <a href="
+"\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">den "
+"fullstendige dokumentasjon</a>.</i></p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
 #, kde-format
@@ -38387,17 +38415,17 @@ msgstr ""
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
-"<p>To avoid possible copyright infringement issues, I used 'ClayRGB' "
-"(following ArgyllCMS) as the base name for these profiles. As used below, "
-"'Compatible with Adobe RGB 1998' is terminology suggested in the preamble to "
-"the AdobeRGB 1998 color space specifications.</p><p>The Adobe RGB 1998 color "
-"gamut covers a higher percentage of real-world cyans, greens, and yellow-"
-"greens than sRGB, but still doesn't include all printable cyans, greens, "
-"yellow-greens, especially when printing using today's high-end, wider gamut, "
-"ink jet printers. BetaRGB (not included in the profile pack) and Rec.2020 "
-"are better matches for the color gamuts of today's wide gamut printers.</"
-"p><p>The Adobe RGB 1998 color gamut is a reasonable approximation to some of "
-"today's high-end wide gamut monitors.</p>"
+"<p>To avoid possible copyright infringement issues, I used "
+"'ClayRGB' (following ArgyllCMS) as the base name for these profiles. As used "
+"below, 'Compatible with Adobe RGB 1998' is terminology suggested in the "
+"preamble to the AdobeRGB 1998 color space specifications.</p><p>The Adobe "
+"RGB 1998 color gamut covers a higher percentage of real-world cyans, greens, "
+"and yellow-greens than sRGB, but still doesn't include all printable cyans, "
+"greens, yellow-greens, especially when printing using today's high-end, "
+"wider gamut, ink jet printers. BetaRGB (not included in the profile pack) "
+"and Rec.2020 are better matches for the color gamuts of today's wide gamut "
+"printers.</p><p>The Adobe RGB 1998 color gamut is a reasonable approximation "
+"to some of today's high-end wide gamut monitors.</p>"
 msgstr ""
 "<p>For å unngå moglege brot på opphavsretten, har eg brukt «ClayRGB» (etter "
 "mønster frå ArgyllCMS) som grunnamn for desse profilane. Teksten «Kompatibel "
@@ -38484,12 +38512,12 @@ msgstr ""
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
-"<p>To avoid possible copyright infringement issues, I used 'LargeRGB' "
-"(following RawTherapee) as the base name for these profiles.<p>Kodak "
-"designed the RIMM/ROMM (ProPhotoRGB) color gamut to include all printable "
-"and most real world colors. It includes some imaginary colors and excludes "
-"some of the real world blues and violet blues that can be captured by "
-"digital cameras. It also excludes some very saturated 'camera-captured' "
+"<p>To avoid possible copyright infringement issues, I used "
+"'LargeRGB' (following RawTherapee) as the base name for these profiles."
+"<p>Kodak designed the RIMM/ROMM (ProPhotoRGB) color gamut to include all "
+"printable and most real world colors. It includes some imaginary colors and "
+"excludes some of the real world blues and violet blues that can be captured "
+"by digital cameras. It also excludes some very saturated 'camera-captured' "
 "yellows as interpreted by some (and probably many) camera matrix input "
 "profiles.</p><p>The ProPhotoRGB primaries are hard-coded into Adobe products "
 "such as Lightroom and the Dng-DCP camera 'profiles'. However, other than "
@@ -38874,8 +38902,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr ""
-"<p>Kjapp førehandsvising er slått av på grunn av desse innstillingane:"
-"<ul>%1</ul></p>"
+"<p>Kjapp førehandsvising er slått av på grunn av desse innstillingane:<ul>"
+"%1</ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:140
 #, kde-format
@@ -39500,15 +39528,15 @@ msgid ""
 "<html><body><p><b>WARNING:</b> the image will look different after changing "
 "the color profile because it contains either:<ul><li>more than one layer</"
 "li><li>one or more layers with transparent pixels</li><li>layers with "
-"blending modes other than \"Normal\"</li></ul></p><p><a href=\"https://"
-"docs.krita.org/en/general_concepts/colors/color_managed_workflow.html\">More "
+"blending modes other than \"Normal\"</li></ul></p><p><a href=\"https://docs."
+"krita.org/en/general_concepts/colors/color_managed_workflow.html\">More "
 "information</a></p></body></html>"
 msgstr ""
 "<html><body><p><b>ÅTVARING:</b> Biletet vil sjå annleis ut etter at du har "
 "endra fargeprofil, sidan det inneheld anten:<ul><li>meir enn eitt lag</"
 "li><li>eitt eller fleire lag med gjennomsiktige pikslar</li><li>lag med "
-"andre overgangsmodusar enn «normal»</li></ul></p><p><a href=\"https://"
-"docs.krita.org/en/general_concepts/colors/color_managed_workflow.html\">Meir "
+"andre overgangsmodusar enn «normal»</li></ul></p><p><a href=\"https://docs."
+"krita.org/en/general_concepts/colors/color_managed_workflow.html\">Meir "
 "informasjon</a></p></body></html>"
 
 #: libs/ui/widgets/KoDualColorButton.cpp:426
@@ -40046,16 +40074,16 @@ msgctxt ""
 "This is a list of suggestions for positions an artist can take, comma-"
 "separated"
 msgid ""
-"Adapter,Animator,Artist,Art "
-"Director,Author,Assistant,Editor,Background,Cartoonist,Colorist,Concept "
-"Artist,Corrector,Cover Artist,Creator,Designer,Inker,Letterer,Matte "
-"Painter,Painter,Penciller,Proofreader,Pixel Artist,Redliner,Sprite "
-"Artist,Typographer,Texture Artist,Translator,Writer,Other"
+"Adapter,Animator,Artist,Art Director,Author,Assistant,Editor,Background,"
+"Cartoonist,Colorist,Concept Artist,Corrector,Cover Artist,Creator,Designer,"
+"Inker,Letterer,Matte Painter,Painter,Penciller,Proofreader,Pixel Artist,"
+"Redliner,Sprite Artist,Typographer,Texture Artist,Translator,Writer,Other"
 msgstr ""
-"Tilarbeidar,Animatør,Illustratør,Kunstnarisk "
-"leiar,Forfattar,Assistent,Redaktør,Bakgrunnsteiknar,Serieteiknar,Kolorist,Konseptkunstnar,Korrektør,Omslagsteiknar,Opphavsperson,Designar,Fargeleggjar,Tekstteiknar,Matte-"
-"målar,Målar,Strekteiknar,Korrekturlesar,Pikselkunstnar,Redliner,Sprite-"
-"teiknar,Typograf,Teksturteiknar,Omsetjar,Skribent,Anna"
+"Tilarbeidar,Animatør,Illustratør,Kunstnarisk leiar,Forfattar,Assistent,"
+"Redaktør,Bakgrunnsteiknar,Serieteiknar,Kolorist,Konseptkunstnar,Korrektør,"
+"Omslagsteiknar,Opphavsperson,Designar,Fargeleggjar,Tekstteiknar,Matte-målar,"
+"Målar,Strekteiknar,Korrekturlesar,Pikselkunstnar,Redliner,Sprite-teiknar,"
+"Typograf,Teksturteiknar,Omsetjar,Skribent,Anna"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
@@ -40510,14 +40538,14 @@ msgstr "<html><font size=\"5\">KDE – ver fri!</font></html>"
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
-"writers, translators and facilitators who are committed to <a "
-"href=\"%1\">Free Software</a> development. This community has created "
-"hundreds of Free Software applications as part of the KDE frameworks, "
-"workspaces and applications.<br /><br />KDE is a cooperative enterprise in "
-"which no single entity controls the efforts or products of KDE to the "
-"exclusion of others. Everyone is welcome to join and contribute to KDE, "
-"including you.<br /><br />Visit <a href=\"%2\">%2</a> for more information "
-"about the KDE community and the software we produce.</html>"
+"writers, translators and facilitators who are committed to <a href="
+"\"%1\">Free Software</a> development. This community has created hundreds of "
+"Free Software applications as part of the KDE frameworks, workspaces and "
+"applications.<br /><br />KDE is a cooperative enterprise in which no single "
+"entity controls the efforts or products of KDE to the exclusion of others. "
+"Everyone is welcome to join and contribute to KDE, including you.<br /><br /"
+">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
+"and the software we produce.</html>"
 msgstr ""
 "<html><b>KDE</b> er eit verdsfemnande nettverk av folk som programmerer, "
 "teiknar, komponerer, dokumenterer, set om eller hjelper til på andre måtar "
@@ -40526,8 +40554,8 @@ msgstr ""
 "utviklingsplattforma og KDE-programdistribusjonen.<br/><br/>KDE er eit "
 "fellesskap der inga enkel gruppe, firma eller organisasjon kontrollerer "
 "kjeldekoden til produkta, og alle er velkomne til å bidra – du òg.<br/><br/"
-">Du finn meir informasjon om KDE og programma me utviklar på <a "
-"href=\"%2\">%2</a>.</html>"
+">Du finn meir informasjon om KDE og programma me utviklar på <a href=\"%2\">"
+"%2</a>.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:72
 #, kde-format
@@ -43573,7 +43601,7 @@ msgstr "&Låsar og synlegheit på/av"
 msgid "&Add"
 msgstr "&Legg til"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1347
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -44659,13 +44687,13 @@ msgstr "Ta opp"
 msgid "Export..."
 msgstr "Eksporter …"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Biletkvalitet:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:148
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -44678,13 +44706,13 @@ msgstr ""
 "Det er ikkje tilrådd å bruka verdiar lågare enn 50, då dette gjev svært "
 "synlege artefaktar."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Komprimering:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:157
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -44699,25 +44727,25 @@ msgstr ""
 "Det er ikkje tilrådd å bruka verdiar over 3, då dette krev svært mykje "
 "maskinkraft."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:185
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:194
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Opphavleg"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -44725,7 +44753,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Halv"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:237
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -44733,35 +44761,35 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Ein firedel"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Stopp"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Ta opp"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:311
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:314
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Opptak er sett på pause"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:338
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -44770,7 +44798,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:349
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -44780,35 +44808,35 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:354
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:362
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Opptakar"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:441
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Vel mappe for opptak"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Opptakar"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -44818,13 +44846,13 @@ msgstr ""
 "animasjonsbilete. Sjå til at du har nok ledig diskplass, og start opptakaren "
 "på nytt."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -44833,7 +44861,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -54888,8 +54916,8 @@ msgstr "Tregare/betre"
 #, kde-format
 msgid ""
 "Sets encoder effort/speed level without affecting decoding speed.\n"
-"Valid values are, from faster to slower speed: 1:lightning 2:thunder "
-"3:falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.\n"
+"Valid values are, from faster to slower speed: 1:lightning 2:thunder 3:"
+"falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.\n"
 "Default: squirrel (7)."
 msgstr ""
 "Vel kodingsinnsats/-fart utan å påverka dekodingsfarten.\n"
@@ -58445,9 +58473,9 @@ msgstr "Klon frå alle synlege lag"
 #, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Clone Brush:</span></"
-"p><p>Select the source point from the current layer with Ctrl-click. Use "
-"Ctrl+Alt-click to select a source from the previously picked layer.</p></"
-"body></html>"
+"p><p>Select the source point from the current layer with Ctrl-click. Use Ctrl"
+"+Alt-click to select a source from the previously picked layer.</p></body></"
+"html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Klonepensel:</span></"
 "p><p>Bruk «Ctrl» + klikk for å velja kjeldeområde frå gjeldande lag. Bruk "
@@ -64634,8 +64662,8 @@ msgstr "Lengd: %1 pikslar"
 #: plugins/tools/basictools/kis_tool_line.cc:464
 #, kde-format
 msgid ""
-"Alt+Drag will move the origin of the currently displayed line around, "
-"Shift+Drag will force you to draw straight lines"
+"Alt+Drag will move the origin of the currently displayed line around, Shift"
+"+Drag will force you to draw straight lines"
 msgstr ""
 "«Alt» + dra vil flytta startpunktet til den viste linja, mens «Shift» + dra "
 "vil tvinga gjennom rette linjer."

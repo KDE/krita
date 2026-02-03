@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-31 02:04+0000\n"
-"PO-Revision-Date: 2026-01-31 13:44+0300\n"
+"PO-Revision-Date: 2026-02-02 14:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -58690,7 +58690,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
 msgid "Smudge Radius"
-msgstr "Dağılma Yarıçapı"
+msgstr "Leke Yarıçapı"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:72
 #, kde-format
@@ -60947,7 +60947,7 @@ msgstr "Özel"
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
 #, kde-format
 msgid "Fine Speed"
-msgstr "İnce Hız"
+msgstr "Hassas Hız"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:19
 #, kde-format
@@ -60978,7 +60978,7 @@ msgstr "Eğim"
 #, kde-format
 msgctxt "Pen tilt ascension"
 msgid "Ascension"
-msgstr "Artan"
+msgstr "Yükseliş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
 #, kde-format
@@ -61034,17 +61034,17 @@ msgstr "Basınç Kazancı"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
 #, kde-format
 msgid "Change Color H"
-msgstr "Renk H Değiştir"
+msgstr "Renk H’sini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:115
 #, kde-format
 msgid "Change Color L"
-msgstr "Renk L Değiştir"
+msgstr "Renk L’sini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:124
 #, kde-format
 msgid "Change Color V"
-msgstr "Renk V Değiştir"
+msgstr "Renk V’sini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, kde-format
@@ -61069,7 +61069,7 @@ msgstr "Posterleştirme Düzeyleri"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
-msgstr "İnce Hızlı Gama"
+msgstr "Hassas Hız Gaması"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
@@ -61079,7 +61079,7 @@ msgstr "Brüt Hızlı Gama"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
-msgstr "İnce Hızlı Yavaşlık"
+msgstr "Hassas Hız Yavaşlığı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
@@ -61089,7 +61089,7 @@ msgstr "Brüt Hızlı Yavaşlık"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
 #, kde-format
 msgid "Offset By Speed"
-msgstr "Hız ile Ofset"
+msgstr "Hıza Göre Ofset"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
 #, kde-format
@@ -61130,12 +61130,12 @@ msgstr "Mat Doğrusallaştır"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
 #, kde-format
 msgid "Opaque Multiply"
-msgstr "Matlık Çarpma"
+msgstr "Matlık Çarp"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
-msgstr "Dokunuş başına yavaş izleme"
+msgstr "Dokunuş Başına Yavaş İzleme"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
@@ -61155,7 +61155,7 @@ msgstr "Leke"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, kde-format
 msgid "Smudge Radius Log"
-msgstr "Leke Yarıçap Günlüğü"
+msgstr "Logaritmik Leke Yarıçapı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
 #, kde-format
@@ -61175,7 +61175,7 @@ msgstr "Leke Saydamlığı"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
 msgid "Stroke Duration log"
-msgstr "Vuruş Süresi (Logaritmik)"
+msgstr "Logaritmik Vuruş Süresi"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
 #, kde-format
@@ -61190,12 +61190,12 @@ msgstr "Vuruş Eşiği"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:404
 #, kde-format
 msgid "Custom Input"
-msgstr "Özel Girdi"
+msgstr "Özel Giriş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:413
 #, kde-format
 msgid "Custom Input Slowness"
-msgstr "Özel Girdi Yavaşlığı"
+msgstr "Özel Giriş Yavaşlığı"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
@@ -61736,7 +61736,7 @@ msgstr "Tanjant Kodlama"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:153
 #, kde-format
 msgid "+ X"
-msgstr "+ X"
+msgstr "+X"
 
 #. i18n: Negative horizontal axis
 #. i18n: Negative horizontal axis
@@ -61752,7 +61752,7 @@ msgstr "+ X"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:158
 #, kde-format
 msgid "- X"
-msgstr "- X"
+msgstr "-X"
 
 #. i18n: Positive vertical axis
 #. i18n: Positive vertical axis
@@ -61768,7 +61768,7 @@ msgstr "- X"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:163
 #, kde-format
 msgid "+ Y"
-msgstr "+ Y"
+msgstr "+Y"
 
 #. i18n: Negative vertical axis
 #. i18n: Negative vertical axis
@@ -61784,7 +61784,7 @@ msgstr "+ Y"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:168
 #, kde-format
 msgid "- Y"
-msgstr "- Y"
+msgstr "-Y"
 
 #. i18n: Positive height axis
 #. i18n: Positive height axis
@@ -61800,7 +61800,7 @@ msgstr "- Y"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:173
 #, kde-format
 msgid "+ Z"
-msgstr "+ Z"
+msgstr "+Z"
 
 #. i18n: negative height axis
 #. i18n: negative height axis
@@ -61816,7 +61816,7 @@ msgstr "+ Z"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:178
 #, kde-format
 msgid "- Z"
-msgstr "- Z"
+msgstr "-Z"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TiltOptions)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:219
@@ -62357,7 +62357,7 @@ msgstr "Dışa Aktarmak Olanaklı Değil"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
-msgstr "Dışa aktaracak bir şey yok, URL ayarlanmadı."
+msgstr "Dışa aktaracak bir şey yok, URL ayarlanmamış."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""

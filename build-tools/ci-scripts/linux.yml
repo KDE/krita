@@ -136,3 +136,17 @@ linux-release:
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
+
+linux-release-qt6:
+  extends:
+  - linux-build
+  - .ci-release-job-mixin
+  interruptible: false
+  variables:
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    KDECI_ONLY_BUILD: True
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=ON
+      -DBUILD_TESTING=OFF
+      -DBUILD_WITH_QT6=ON

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 02:26+0000\n"
-"PO-Revision-Date: 2026-01-29 12:18+0300\n"
+"POT-Creation-Date: 2026-01-31 02:04+0000\n"
+"PO-Revision-Date: 2026-02-02 14:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2216,7 +2216,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_moire.kpp"
 msgid "Hatch moire"
-msgstr "Tarama hareli"
+msgstr "Tarama Moiré"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4634,7 +4634,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "y)_Screentone_Moire.kpp"
 msgid "y) Screentone Moire"
-msgstr "y) Hare Ekran Tonu"
+msgstr "y) Moiré Ekran Tonu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5675,7 +5675,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Moiré_Pattern.kse"
 msgid "Wolthera's Moiré Pattern"
-msgstr "Wolthera’nın Hare Deseni"
+msgstr "Wolthera’nın Moiré Deseni"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -33937,7 +33937,7 @@ msgstr "&Arka plan renk seçicisini aç"
 msgid "&Docker Box"
 msgstr "&Panel Kutusu"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33946,12 +33946,12 @@ msgstr "&Panel Kutusu"
 msgid "Patterns"
 msgstr "Desenler"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Özel Desen"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
 #: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -33960,12 +33960,12 @@ msgstr "Özel Desen"
 msgid "Gradients"
 msgstr "Gradyanlar"
 
-#: libs/ui/kis_control_frame.cpp:278
+#: libs/ui/kis_control_frame.cpp:283
 #, kde-format
 msgid "Docker box"
 msgstr "Panel kutusu"
 
-#: libs/ui/kis_control_frame.cpp:284
+#: libs/ui/kis_control_frame.cpp:289
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Araç Çubuğu Paneli Kutusu"
@@ -58690,7 +58690,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
 msgid "Smudge Radius"
-msgstr "Dağılma Yarıçapı"
+msgstr "Leke Yarıçapı"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:72
 #, kde-format
@@ -58827,7 +58827,7 @@ msgid ""
 "Move the clone origin with the brush. Uncheck to keep cloning from the "
 "selected point."
 msgstr ""
-"Klon kökenini fırçayla taşı. Seçili noktadan klonlamayı sürdürmek için "
+"Klon orijinini fırçayla taşıyın. Seçili noktadan klonlamayı sürdürmek için "
 "işaretini kaldırın."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSourcePoint)
@@ -58840,7 +58840,7 @@ msgstr "Kaynak noktası hareketi"
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:58
 #, kde-format
 msgid "Reset the origin every time you make a new stroke."
-msgstr "Her yeni vuruşta kaynağı sıfırla."
+msgstr "Her yeni vuruşta orijini sıfırla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbResetSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:61
@@ -59156,7 +59156,7 @@ msgstr "Bölme düzeyi:"
 #: plugins/paintops/gridbrush/wdggridoptions.ui:131
 #, kde-format
 msgid "Jitter borders"
-msgstr "Kenarlardan sapma"
+msgstr "Titrek kenarlar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
@@ -59424,7 +59424,7 @@ msgstr "Tarama Açısı"
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
 #, kde-format
 msgid "Separation"
-msgstr "Ayırma"
+msgstr "Ayrılma"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:157
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:42
@@ -59441,12 +59441,12 @@ msgstr "Tarama Fırçası (önizleme kipinde yoğun örtüşme)"
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
 #, kde-format
 msgid "Hatching options"
-msgstr "Tarama seçenekleri"
+msgstr "Tarama Seçenekleri"
 
 #: plugins/paintops/hatching/KisHatchingPreferencesWidget.cpp:43
 #, kde-format
 msgid "Hatching preferences"
-msgstr "Tarama tercihleri"
+msgstr "Tarama Tercihleri"
 
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
@@ -59457,19 +59457,19 @@ msgstr "Çapraz Tarama"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
 #, kde-format
 msgid "Separation:"
-msgstr "Ayırma:"
+msgstr "Ayrılma:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:148
 #, kde-format
 msgid "Origin X:"
-msgstr "Orijin X:"
+msgstr "X orijini:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:186
 #, kde-format
 msgid "Origin Y:"
-msgstr "Orijin Y:"
+msgstr "Y orijini:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
@@ -59511,7 +59511,7 @@ msgstr "&Moiré deseni"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384
 #, kde-format
 msgid "Separation Style"
-msgstr "Ayırma Biçemi"
+msgstr "Ayrılma Biçemi"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:396
@@ -59633,7 +59633,7 @@ msgstr "Sivriltiler:"
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:53
 #, kde-format
 msgid "Jitter Movement"
-msgstr "Değişim Hareketi"
+msgstr "Titreme hareketi"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLbl)
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:185
@@ -59665,7 +59665,7 @@ msgstr "Rastgele matlık"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:122
 #, kde-format
 msgid "Color per particle"
-msgstr "Her parçacığı renklendir"
+msgstr "Parçacık başına renk"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, fillBackgroundCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:151
@@ -59689,7 +59689,7 @@ msgstr "Arka planı doldur"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:167
 #, kde-format
 msgid "Sample Input layer"
-msgstr "Örnek Girdi Katmanı"
+msgstr "Örnek girdi katmanı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mixBgColorCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:180
@@ -59873,7 +59873,7 @@ msgstr "Boyama kipi"
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:36
 #, kde-format
 msgid "Build up"
-msgstr "Yap"
+msgstr "Doluluk artır"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
@@ -59907,9 +59907,9 @@ msgid ""
 msgstr ""
 "<html>\n"
 "<p><b>Boyama kipi</b>: Krita iki boyama kipi arasında bir seçenek sunar:"
-"<i>yap</i> ve <i>yıka</i>. İlk tercih, bir vuruşta boyama sırasında rengi "
-"oluşturur, ikinci seçenek eğer aynı alan üzerinde sürekli gidip gelirseniz "
-"bir vuruşta eşit renk verir.</p></html>"
+"<i>doluluk artır</i> ve <i>yıka</i>. İlk tercih, bir vuruşta boyama "
+"sırasında rengi oluşturur, ikinci seçenek eğer aynı alan üzerinde sürekli "
+"gidip gelirseniz bir vuruşta eşit renk verir.</p></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, stampButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
@@ -60674,7 +60674,7 @@ msgstr "Kenar yumuşat:"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
-msgstr "Boyut → Belirsiz (algılayıcı)"
+msgstr "Boyut → Bulanık (Algılayıcı)"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
@@ -60947,7 +60947,7 @@ msgstr "Özel"
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
 #, kde-format
 msgid "Fine Speed"
-msgstr "İnce Hız"
+msgstr "Hassas Hız"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:19
 #, kde-format
@@ -60978,7 +60978,7 @@ msgstr "Eğim"
 #, kde-format
 msgctxt "Pen tilt ascension"
 msgid "Ascension"
-msgstr "Artan"
+msgstr "Yükseliş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
 #, kde-format
@@ -61034,17 +61034,17 @@ msgstr "Basınç Kazancı"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
 #, kde-format
 msgid "Change Color H"
-msgstr "Renk H Değiştir"
+msgstr "Renk H’sini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:115
 #, kde-format
 msgid "Change Color L"
-msgstr "Renk L Değiştir"
+msgstr "Renk L’sini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:124
 #, kde-format
 msgid "Change Color V"
-msgstr "Renk V Değiştir"
+msgstr "Renk V’sini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, kde-format
@@ -61069,7 +61069,7 @@ msgstr "Posterleştirme Düzeyleri"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
-msgstr "İnce Hızlı Gama"
+msgstr "Hassas Hız Gaması"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
@@ -61079,7 +61079,7 @@ msgstr "Brüt Hızlı Gama"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
-msgstr "İnce Hızlı Yavaşlık"
+msgstr "Hassas Hız Yavaşlığı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
@@ -61089,7 +61089,7 @@ msgstr "Brüt Hızlı Yavaşlık"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
 #, kde-format
 msgid "Offset By Speed"
-msgstr "Hız ile Ofset"
+msgstr "Hıza Göre Ofset"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
 #, kde-format
@@ -61130,12 +61130,12 @@ msgstr "Mat Doğrusallaştır"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
 #, kde-format
 msgid "Opaque Multiply"
-msgstr "Matlık Çarpma"
+msgstr "Matlık Çarp"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
-msgstr "Dokunuş başına yavaş izleme"
+msgstr "Dokunuş Başına Yavaş İzleme"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
@@ -61155,7 +61155,7 @@ msgstr "Leke"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, kde-format
 msgid "Smudge Radius Log"
-msgstr "Leke Yarıçap Günlüğü"
+msgstr "Logaritmik Leke Yarıçapı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
 #, kde-format
@@ -61175,7 +61175,7 @@ msgstr "Leke Saydamlığı"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
 msgid "Stroke Duration log"
-msgstr "Vuruş Süresi (Logaritmik)"
+msgstr "Logaritmik Vuruş Süresi"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
 #, kde-format
@@ -61190,12 +61190,12 @@ msgstr "Vuruş Eşiği"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:404
 #, kde-format
 msgid "Custom Input"
-msgstr "Özel Girdi"
+msgstr "Özel Giriş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:413
 #, kde-format
 msgid "Custom Input Slowness"
-msgstr "Özel Girdi Yavaşlığı"
+msgstr "Özel Giriş Yavaşlığı"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
@@ -61584,7 +61584,7 @@ msgstr "Aralık:"
 #, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr "Değişim hareketi:"
+msgstr "Titreme hareketi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
@@ -61736,7 +61736,7 @@ msgstr "Tanjant Kodlama"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:153
 #, kde-format
 msgid "+ X"
-msgstr "+ X"
+msgstr "+X"
 
 #. i18n: Negative horizontal axis
 #. i18n: Negative horizontal axis
@@ -61752,7 +61752,7 @@ msgstr "+ X"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:158
 #, kde-format
 msgid "- X"
-msgstr "- X"
+msgstr "-X"
 
 #. i18n: Positive vertical axis
 #. i18n: Positive vertical axis
@@ -61768,7 +61768,7 @@ msgstr "- X"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:163
 #, kde-format
 msgid "+ Y"
-msgstr "+ Y"
+msgstr "+Y"
 
 #. i18n: Negative vertical axis
 #. i18n: Negative vertical axis
@@ -61784,7 +61784,7 @@ msgstr "+ Y"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:168
 #, kde-format
 msgid "- Y"
-msgstr "- Y"
+msgstr "-Y"
 
 #. i18n: Positive height axis
 #. i18n: Positive height axis
@@ -61800,7 +61800,7 @@ msgstr "- Y"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:173
 #, kde-format
 msgid "+ Z"
-msgstr "+ Z"
+msgstr "+Z"
 
 #. i18n: negative height axis
 #. i18n: negative height axis
@@ -61816,7 +61816,7 @@ msgstr "+ Z"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:178
 #, kde-format
 msgid "- Z"
-msgstr "- Z"
+msgstr "-Z"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TiltOptions)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:219
@@ -62357,7 +62357,7 @@ msgstr "Dışa Aktarmak Olanaklı Değil"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
-msgstr "Dışa aktaracak bir şey yok, URL ayarlanmadı."
+msgstr "Dışa aktaracak bir şey yok, URL ayarlanmamış."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""
@@ -65067,8 +65067,8 @@ msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
 "+Drag will force you to draw straight lines"
 msgstr ""
-"Seçenek+Sürükleme şu anda gösterilen çizginin merkezini etrafta hareket "
-"ettirir, Üst Karakter+Sürükleme sizi düz çizgiler çizmeye zorlar"
+"Seçenek+Sürükle, şu anda gösterilen çizginin orijinini etrafta hareket "
+"ettirir, Üst Karakter+Sürükle, sizi düz çizgiler çizmeye zorlar"
 
 #: plugins/tools/basictools/kis_tool_line.h:115
 #, kde-format
@@ -65536,7 +65536,7 @@ msgstr "Dikey"
 #, kde-format
 msgctxt "Origin in Multihand Tool"
 msgid "Origin:"
-msgstr "Köken:"
+msgstr "Orijin:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addSubbrushButton)
 #: plugins/tools/basictools/wdgmultihandtool.ui:228
@@ -68402,8 +68402,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "When in non-buildup mode, shows how fast the deformation limit is reached."
 msgstr ""
-"Yapma kipinde değilken, deformasyon sınırına ne kadar hızlı ulaşıldığını "
-"gösterir."
+"Doluluk artırma kipinde değilken, deformasyon sınırına ne kadar hızlı "
+"ulaşıldığını gösterir."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:237
 #, kde-format
@@ -68413,9 +68413,10 @@ msgid ""
 "deformations one on top of the other without any limits. Wash mode gradually "
 "deforms the piece to the selected deformation level."
 msgstr ""
-"Boyamanın Yap ve Yıka kipleri arasında geçiş yap. Yapma kipi herhangi bir "
-"sınırlama olmaksızın deformasyonlarını üst üste ekler. Yıkama kipi, parçayı "
-"seçilen deformasyon düzeyine kademeli olarak deforme eder."
+"Boyamanın Doluluk Artır ve Yıka kipleri arasında geçiş yapın. Doluluk "
+"artırma kipi, herhangi bir sınırlama olmaksızın deformasyonlarını üst üste "
+"ekler. Yıkama kipi, parçayı seçilen deformasyon düzeyine kademeli olarak "
+"deforme eder."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:245
 #, kde-format
@@ -68874,7 +68875,7 @@ msgstr "Miktar:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2106
 #, kde-format
 msgid "Build Up"
-msgstr "Yap"
+msgstr "Doluluk artır"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178

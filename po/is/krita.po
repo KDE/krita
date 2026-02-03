@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 02:26+0000\n"
+"POT-Creation-Date: 2026-01-31 02:04+0000\n"
 "PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -33927,7 +33927,7 @@ msgstr "Bakgrunnslitur"
 msgid "&Docker Box"
 msgstr "Sérsniðið skjal"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33936,12 +33936,12 @@ msgstr "Sérsniðið skjal"
 msgid "Patterns"
 msgstr "Mynstur"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Skjár"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
 #: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -33950,12 +33950,12 @@ msgstr "Skjár"
 msgid "Gradients"
 msgstr "Litstiglar"
 
-#: libs/ui/kis_control_frame.cpp:278
+#: libs/ui/kis_control_frame.cpp:283
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "Sérsniðið skjal"
 
-#: libs/ui/kis_control_frame.cpp:284
+#: libs/ui/kis_control_frame.cpp:289
 #, fuzzy, kde-format
 #| msgid "Toolbox and palettes"
 msgid "Toolbar Docker Box"

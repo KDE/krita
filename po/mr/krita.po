@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 02:26+0000\n"
+"POT-Creation-Date: 2026-01-31 02:04+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -34604,7 +34604,7 @@ msgstr "पार्श्वभागाचा रंग"
 msgid "&Docker Box"
 msgstr "कुलूपबंद"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34613,12 +34613,12 @@ msgstr "कुलूपबंद"
 msgid "Patterns"
 msgstr "रचना"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
 #, kde-format
 msgid "Custom Pattern"
 msgstr "ऐच्छिक पॅटर्न"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
 #: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34627,12 +34627,12 @@ msgstr "ऐच्छिक पॅटर्न"
 msgid "Gradients"
 msgstr "ग्रेडियंटस्"
 
-#: libs/ui/kis_control_frame.cpp:278
+#: libs/ui/kis_control_frame.cpp:283
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "कुलूपबंद"
 
-#: libs/ui/kis_control_frame.cpp:284
+#: libs/ui/kis_control_frame.cpp:289
 #, fuzzy, kde-format
 #| msgid "Toolbox and palettes"
 msgid "Toolbar Docker Box"

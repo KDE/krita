@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 02:26+0000\n"
+"POT-Creation-Date: 2026-01-31 02:04+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -34789,7 +34789,7 @@ msgstr "Háttérszín"
 msgid "&Docker Box"
 msgstr "&Dokkoló"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34798,12 +34798,12 @@ msgstr "&Dokkoló"
 msgid "Patterns"
 msgstr "Minták"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Egyéni minta"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
 #: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34812,12 +34812,12 @@ msgstr "Egyéni minta"
 msgid "Gradients"
 msgstr "Színátmenetek"
 
-#: libs/ui/kis_control_frame.cpp:278
+#: libs/ui/kis_control_frame.cpp:283
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "Dokkolók"
 
-#: libs/ui/kis_control_frame.cpp:284
+#: libs/ui/kis_control_frame.cpp:289
 #, fuzzy, kde-format
 #| msgid "Toolbox and palettes"
 msgid "Toolbar Docker Box"

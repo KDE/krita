@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-30 02:26+0000\n"
+"POT-Creation-Date: 2026-01-31 02:04+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -34283,7 +34283,7 @@ msgstr "背景色セレクターを開く(&O)"
 msgid "&Docker Box"
 msgstr "ドッキングボックス(&D)"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34292,12 +34292,12 @@ msgstr "ドッキングボックス(&D)"
 msgid "Patterns"
 msgstr "パターン"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
 #, kde-format
 msgid "Custom Pattern"
 msgstr "カスタムパターン"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
 #: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34306,12 +34306,12 @@ msgstr "カスタムパターン"
 msgid "Gradients"
 msgstr "グラデーション"
 
-#: libs/ui/kis_control_frame.cpp:278
+#: libs/ui/kis_control_frame.cpp:283
 #, kde-format
 msgid "Docker box"
 msgstr "ドッキングボックス"
 
-#: libs/ui/kis_control_frame.cpp:284
+#: libs/ui/kis_control_frame.cpp:289
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "ツールバーとドッキングボックス"

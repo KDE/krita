@@ -1256,6 +1256,82 @@ public:
     }
 
     /**
+     * @brief cleanUpImpl
+     * implementation of recursive function for cleanup.
+     * This goes over a child and decides whether it should be removed.
+     * If the child has more than one child of its own, it'll call this function
+     * over the children, and then handle the removal of children marked as deletable.
+     * @return whether the given child should be removed from the tree.
+     */
+    static bool cleanUpImpl(KisForest<KoSvgTextContentElement> &tree, KisForest<KoSvgTextContentElement>::child_iterator current) {
+        const int children = childCount(current);
+        if (children == 0) {
+            const int length = current->numChars(false);
+            if (length == 0 && current != tree.childBegin() && current->textPathId.isEmpty()) {
+                return true;
+            } else {
+                // check if siblings are similar.
+                auto siblingPrev = current;
+                KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(current->properties.property(KoSvgTextProperties::UnicodeBidiId,
+                                                                                             QVariant(KoSvgText::BidiNormal)).toInt());
+                siblingPrev--;
+                while (!isEnd(siblingPrev) && siblingPrev->text.isEmpty()) {
+                    // By checking whether the text is empty, we can skip previous
+                    // siblings that are already marked for deletion.
+                    siblingPrev--;
+                }
+                if (!isEnd(siblingPrev)
+                        && siblingPrev != current
+                        && (siblingPrev->localTransformations.isEmpty() && current->localTransformations.isEmpty())
+                        && (siblingPrev->textPathId.isEmpty() && current->textPathId.isEmpty())
+                        && (siblingPrev->textLength.isAuto && current->textLength.isAuto)
+                        && (siblingPrev->properties == current->properties)
+                        && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)
+                        && childCount(siblingPrev) == 0) {
+                    // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
+                    siblingPrev->text += current->text;
+                    current->text = QString();
+                    return true;
+                }
+            }
+        } else if (children == 1) {
+            // merge single children into parents if possible.
+            auto child = childBegin(current);
+            if ((child->localTransformations.isEmpty() && current->localTransformations.isEmpty())
+                    && (child->textPathId.isEmpty() && current->textPathId.isEmpty())
+                    && (child->textLength.isAuto && current->textLength.isAuto)
+                    && (!child->properties.hasNonInheritableProperties() || !current->properties.hasNonInheritableProperties())) {
+                if (current->properties.hasNonInheritableProperties()) {
+                    KoSvgTextProperties props = current->properties;
+                    props.setAllButNonInheritableProperties(child->properties);
+                    child->properties = props;
+                } else {
+                    child->properties.inheritFrom(current->properties);
+                }
+                *current = *child;
+                tree.erase(child);
+            }
+        } else {
+            QVector<KisForest<KoSvgTextContentElement>::child_iterator> deleteList;
+            for (auto child = childBegin(current); child != childEnd(current); child++) {
+                if (cleanUpImpl(tree, child)) {
+                    deleteList.append(child);
+                }
+            }
+            while (!deleteList.isEmpty()) {
+                auto child = deleteList.takeFirst();
+                KIS_ASSERT_RECOVER_NOOP(childBegin(child) == childEnd(child));
+                tree.erase(child);
+            }
+            if (childCount(current) <= 1) {
+                // This checks if, when there's only 0 or 1 children, this node can be cleaned up as well.
+                return cleanUpImpl(tree, current);
+            }
+        }
+        return false;
+    }
+
+    /**
      * @brief cleanUp
      * This cleans up the tree by...
      * - Removing empty text elements that are not the root or text paths.
@@ -1264,51 +1340,8 @@ public:
      * @param tree -- tree to clean up
      */
     static void cleanUp(KisForest<KoSvgTextContentElement> &tree) {
-        for (auto it = tree.depthFirstTailBegin(); it != tree.depthFirstTailEnd(); it++) {
-            const int children = childCount(siblingCurrent(it));
-            if (children == 0) {
-
-                // Remove empty leafs that are not the root or text paths.
-                const int length = it->numChars(false);
-                if (length == 0 && siblingCurrent(it) != tree.childBegin() && it->textPathId.isEmpty()) {
-                    tree.erase(siblingCurrent(it));
-                } else {
-                    // check if siblings are similar.
-                    auto siblingPrev = siblingCurrent(it);
-                    KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(it->properties.property(KoSvgTextProperties::UnicodeBidiId,
-                                                                                                 QVariant(KoSvgText::BidiNormal)).toInt());
-                    siblingPrev--;
-                    if (!isEnd(siblingPrev)
-                            && siblingPrev != siblingCurrent(it)
-                            && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                            && (siblingPrev->textPathId.isEmpty() && it->textPathId.isEmpty())
-                            && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
-                            && (siblingPrev->properties == it->properties)
-                            && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)
-                            && childCount(siblingPrev) == 0) {
-                        // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
-                        siblingPrev->text += it->text;
-                        tree.erase(siblingCurrent(it));
-                    }
-                }
-            } else if (children == 1) {
-                // merge single children into parents if possible.
-                auto child = childBegin(siblingCurrent(it));
-                if ((child->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                        && (child->textPathId.isEmpty() && it->textPathId.isEmpty())
-                        && (child->textLength.isAuto && it->textLength.isAuto)
-                        && (!child->properties.hasNonInheritableProperties() || !it->properties.hasNonInheritableProperties())) {
-                    if (it->properties.hasNonInheritableProperties()) {
-                        KoSvgTextProperties props = it->properties;
-                        props.setAllButNonInheritableProperties(child->properties);
-                        child->properties = props;
-                    } else {
-                        child->properties.inheritFrom(it->properties);
-                    }
-                    tree.move(child, siblingCurrent(it));
-                    tree.erase(siblingCurrent(it));
-                }
-            }
+        if (tree.childBegin() != tree.childEnd()) {
+            cleanUpImpl(tree, tree.childBegin());
         }
     }
 

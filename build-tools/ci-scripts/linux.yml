@@ -54,7 +54,7 @@ linux-build-qt6-nightly:
   extends:
   - linux-build
   - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
+  #- .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
@@ -76,7 +76,7 @@ linux-nightly:
   extends:
   - linux-build
   - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
+  #- .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: True

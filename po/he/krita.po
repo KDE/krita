@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 02:04+0000\n"
+"POT-Creation-Date: 2026-02-04 03:00+0000\n"
 "PO-Revision-Date: 2026-01-18 22:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -50,7 +50,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 25.12.1\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16547,6 +16548,8 @@ msgid "Create shape"
 msgid_plural "Create %1 shapes"
 msgstr[0] "יצירת תבנית"
 msgstr[1] "יצירת תבנית"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 #, fuzzy
@@ -16561,6 +16564,8 @@ msgid "Delete shape"
 msgid_plural "Delete shapes"
 msgstr[0] "מחיקת טקסט"
 msgstr[1] "מחיקת טקסט"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
 #, fuzzy
@@ -21346,6 +21351,8 @@ msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "שינוי קנה מידה של שכבה..."
 msgstr[1] "שינוי קנה מידה של שכבה..."
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/image/kis_image.cc:1218
 #, fuzzy
@@ -21366,6 +21373,8 @@ msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "ה&סר שכבה"
 msgstr[1] "ה&סר שכבה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/image/kis_image.cc:1332
 #, fuzzy
@@ -21380,6 +21389,8 @@ msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "שינוי קנה מידה של שכבה..."
 msgstr[1] "שינוי קנה מידה של שכבה..."
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/image/kis_image.cc:1343
 #, fuzzy
@@ -21676,8 +21687,8 @@ msgid "Processing"
 msgstr "מימדים"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
-#: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1772 libs/ui/KisMainWindow.cpp:1785
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -22433,8 +22444,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "שינוי שם התמונה"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2143
+#: libs/ui/KisMainWindow.cpp:2222
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "ייצוא תמונה"
@@ -23787,11 +23798,11 @@ msgstr "ה&סר שכבה"
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
-#: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
-#: libs/ui/KisMainWindow.cpp:1174 libs/ui/KisMainWindow.cpp:1271
-#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
+#: libs/ui/KisMainWindow.cpp:1180 libs/ui/KisMainWindow.cpp:1277
+#: libs/ui/KisMainWindow.cpp:2003 libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2210
+#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2861
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24342,7 +24353,7 @@ msgid "Delete resource"
 msgstr "מחיקת טקסט"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2652
+#: libs/ui/KisMainWindow.cpp:2658
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -24816,7 +24827,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "יצירת שכבה חדשה"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2251
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "עירוב:"
@@ -26722,7 +26733,7 @@ msgid "Numerical"
 msgstr "גל משולש"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "ייצוא תמונה"
@@ -26840,7 +26851,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "הזן שם לקבוצה:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2669
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27299,6 +27310,8 @@ msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
 msgstr[0] "מברשות"
 msgstr[1] "מברשות"
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -27309,6 +27322,8 @@ msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "הגדרות"
 msgstr[1] "הגדרות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1714
 #, fuzzy, kde-format
@@ -30959,7 +30974,7 @@ msgstr "מאפייני שכבה..."
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1026
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -32239,6 +32254,8 @@ msgid "Resize Layer"
 msgid_plural "Resize %1 Layers"
 msgstr[0] "ה&סר שכבה"
 msgstr[1] "ה&סר שכבה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, fuzzy, kde-format
@@ -32938,6 +32955,8 @@ msgid "%1 Button"
 msgid_plural "%1 Buttons"
 msgstr[0] "בחירה"
 msgstr[1] "בחירה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:375
 #, kde-format
@@ -33668,6 +33687,8 @@ msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "&תמונה"
 msgstr[1] "&תמונה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/kis_layer_manager.cc:914
 #, fuzzy, kde-format
@@ -33854,6 +33875,8 @@ msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "גל משולש"
 msgstr[1] "גל משולש"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/kis_node_manager.cpp:1141
 #, fuzzy
@@ -33868,6 +33891,8 @@ msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "גל משולש"
 msgstr[1] "גל משולש"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/kis_node_manager.cpp:1152
 #, fuzzy
@@ -35352,32 +35377,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:595
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "שינוי קנה מידה של שכבה..."
 
-#: libs/ui/KisMainWindow.cpp:591
+#: libs/ui/KisMainWindow.cpp:597
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "כלי &עט"
 
-#: libs/ui/KisMainWindow.cpp:1017
+#: libs/ui/KisMainWindow.cpp:1023
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "שינוי קנה מידה של שכבה..."
 
-#: libs/ui/KisMainWindow.cpp:1045
+#: libs/ui/KisMainWindow.cpp:1051
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "הקובץ %1 לא קיים."
 
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "&תמונה"
 
-#: libs/ui/KisMainWindow.cpp:1272
+#: libs/ui/KisMainWindow.cpp:1278
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35386,44 +35411,44 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "ייצוא השכבה"
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "תבנית שעה"
 
-#: libs/ui/KisMainWindow.cpp:1745
+#: libs/ui/KisMainWindow.cpp:1751
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "יצירת מסמך ריק"
 
-#: libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1775
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "עירובים"
 
-#: libs/ui/KisMainWindow.cpp:1781
+#: libs/ui/KisMainWindow.cpp:1787
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "זוויות:"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1972
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "שמירת שכבה בתור תמונה..."
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1998
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "אין אפשרות ליצור את הקובץ לשמירה"
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2002
 #, kde-format
 msgid ""
 "\n"
@@ -35431,7 +35456,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2012
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35440,7 +35465,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2229
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35449,59 +35474,59 @@ msgstr ""
 "אין אפשרות לפתוח את\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2210
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "יצירת שכבה חדשה"
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2649
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2664
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2668
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:2706
+#: libs/ui/KisMainWindow.cpp:2712
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2715
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2884
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2900
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "שגיאת שכבה"
 
-#: libs/ui/KisMainWindow.cpp:3004
+#: libs/ui/KisMainWindow.cpp:3010
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3063
+#: libs/ui/KisMainWindow.cpp:3069
 #, fuzzy, kde-format
 msgid "Expanding Spacer"
 msgstr "תבניות"
@@ -35891,47 +35916,47 @@ msgstr "אלפא"
 msgid "Gamut Warnings turned off."
 msgstr "הדפסה אחרונה"
 
-#: libs/ui/KisViewManager.cpp:809
+#: libs/ui/KisViewManager.cpp:810
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "מאפייני שכבה..."
 
-#: libs/ui/KisViewManager.cpp:939
+#: libs/ui/KisViewManager.cpp:940
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "ירוק"
 
-#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1096 libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1095
+#: libs/ui/KisViewManager.cpp:1096
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "ציור"
 
-#: libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1180
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "ציור"
 
-#: libs/ui/KisViewManager.cpp:1436
+#: libs/ui/KisViewManager.cpp:1473
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1497
+#: libs/ui/KisViewManager.cpp:1543
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "ה&סר שכבה"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1547
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -35946,19 +35971,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1516
+#: libs/ui/KisViewManager.cpp:1562
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1517
+#: libs/ui/KisViewManager.cpp:1563
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
+#: libs/ui/KisViewManager.cpp:1711 libs/ui/KisViewManager.cpp:1729
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -36034,6 +36059,8 @@ msgid "%1 week"
 msgid_plural "%1 weeks"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:297 libs/ui/KoDocumentInfoDlg.cpp:299
 #, kde-format
@@ -36041,6 +36068,8 @@ msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:300 libs/ui/KoDocumentInfoDlg.cpp:302
 #, kde-format
@@ -36048,6 +36077,8 @@ msgid "%1 hour"
 msgid_plural "%1 hours"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:303 libs/ui/KoDocumentInfoDlg.cpp:305
 #, kde-format
@@ -36055,6 +36086,8 @@ msgid "%1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:306 libs/ui/KoDocumentInfoDlg.cpp:308
 #, fuzzy, kde-format
@@ -36062,6 +36095,8 @@ msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] "שנייה"
 msgstr[1] "שנייה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:314
 #, kde-format
@@ -40290,6 +40325,8 @@ msgid "Shortcut Conflict"
 msgid_plural "Shortcut Conflicts"
 msgstr[0] "רוחב:"
 msgstr[1] "רוחב:"
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:172
 #, fuzzy, kde-format
@@ -40309,6 +40346,8 @@ msgid_plural ""
 "%3"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
@@ -41885,6 +41924,8 @@ msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
@@ -41964,6 +42005,8 @@ msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
@@ -41973,6 +42016,8 @@ msgid "Insert frame"
 msgid_plural "Insert %1 frames"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, fuzzy, kde-format
@@ -42086,6 +42131,8 @@ msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, fuzzy, kde-format
@@ -42094,6 +42141,8 @@ msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
@@ -42102,6 +42151,8 @@ msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
@@ -42110,6 +42161,8 @@ msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
 msgstr[0] "הבא שכבה מעלה"
 msgstr[1] "הבא שכבה מעלה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
@@ -42173,6 +42226,8 @@ msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "הסר שכבה"
 msgstr[1] "הסר שכבה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
 #, fuzzy
@@ -42897,7 +42952,7 @@ msgstr "זוויות:"
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
 #, fuzzy, kde-format
 msgid "%1 %"
 msgstr "%1%"
@@ -48598,6 +48653,8 @@ msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
 msgstr[0] "היסט:"
 msgstr[1] "היסט:"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
 #, fuzzy, kde-format
@@ -48606,6 +48663,8 @@ msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
 msgstr[0] "היסט:"
 msgstr[1] "היסט:"
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -49550,6 +49609,8 @@ msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "ה&סר שכבה"
 msgstr[1] "ה&סר שכבה"
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -49694,6 +49755,8 @@ msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "שינוי קנה מידה של שכבה..."
 msgstr[1] "שינוי קנה מידה של שכבה..."
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -51029,6 +51092,8 @@ msgid " color"
 msgid_plural " colors"
 msgstr[0] "&צבע"
 msgstr[1] "&צבע"
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -52428,6 +52493,8 @@ msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
 msgstr[0] "גל משולש"
 msgstr[1] "גל משולש"
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -52441,6 +52508,8 @@ msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
 msgstr[0] "בחירה"
 msgstr[1] "בחירה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, fuzzy, kde-format
@@ -52499,6 +52568,8 @@ msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
 msgstr[0] "גל משולש"
 msgstr[1] "גל משולש"
+msgstr[2] ""
+msgstr[3] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -52512,6 +52583,8 @@ msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
 msgstr[0] "בחירה"
 msgstr[1] "בחירה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, fuzzy, kde-format

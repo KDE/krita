@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 02:04+0000\n"
-"PO-Revision-Date: 2026-01-29 15:07+0100\n"
+"POT-Creation-Date: 2026-02-04 03:00+0000\n"
+"PO-Revision-Date: 2026-02-03 12:09+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19266,10 +19266,10 @@ msgid ""
 "with numerators before the slash and denominators after the slash."
 msgstr ""
 "Substituïx els nombres separats per una barra per una forma de fracció "
-"diagonal adequada. Si un tipus de lletra té les característiques de "
-"numerador i denominador, i els números estan separats per una «barra de "
-"fracció» (U+2044), llavors açò reemplaçarà els nombres per numeradors abans "
-"de la barra i denominadors després de la barra."
+"diagonal adequada. Si una lletra té les característiques de numerador i "
+"denominador, i els números estan separats per una «barra de fracció» (U"
+"+2044), llavors açò reemplaçarà els nombres per numeradors abans de la barra "
+"i denominadors després de la barra."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
 #, kde-format
@@ -20272,7 +20272,7 @@ msgstr "Alternatives verticals"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
-"Substituïx els glifs en els tipus de lletra CJK per aquells adequats per a "
+"Substituïx els glifs en les fonts CJK per aquells adequats per a "
 "l'escriptura vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
@@ -20529,7 +20529,7 @@ msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
 msgstr ""
-"Posiciona marques de combinació àrabs en tipus de lletra per a Windows 95 "
+"Posiciona marques de combinació àrabs a les fonts per a Windows 95 "
 "utilitzant substitució de glifs."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
@@ -21818,8 +21818,8 @@ msgid "Processing"
 msgstr "En procés"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
-#: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1772 libs/ui/KisMainWindow.cpp:1785
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22591,8 +22591,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Imatge RGBE de Radiance"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2143
+#: libs/ui/KisMainWindow.cpp:2222
 #, kde-format
 msgid "Import frames"
 msgstr "Importa fotogrames"
@@ -23947,11 +23947,11 @@ msgstr "Recursos locals"
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
-#: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
-#: libs/ui/KisMainWindow.cpp:1174 libs/ui/KisMainWindow.cpp:1271
-#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
+#: libs/ui/KisMainWindow.cpp:1180 libs/ui/KisMainWindow.cpp:1277
+#: libs/ui/KisMainWindow.cpp:2003 libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2210
+#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2861
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24034,8 +24034,7 @@ msgstr "No s'ha pogut eliminar l'emmagatzematge %1 de la base de dades"
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
-"No s'ha pogut sincronitzar el registre dels tipus de lletra amb la base de "
-"dades"
+"No s'ha pogut sincronitzar el registre de les fonts amb la base de dades"
 
 #: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
@@ -24070,7 +24069,7 @@ msgstr "Recursos temporals"
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
-msgstr "Emmagatzematge dels tipus de lletra"
+msgstr "Emmagatzematge de les lletres"
 
 #: libs/resources/KisResourceLocator.cpp:1206
 #, kde-format
@@ -24351,13 +24350,13 @@ msgstr "Estils de capa"
 #, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Famílies dels tipus de lletres"
+msgstr "Famílies de fonts"
 
 #: libs/resources/KisResourceTypes.cpp:58
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Predefinits d'estil"
+msgstr "Preajustos d'estil"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -24499,7 +24498,7 @@ msgid "Delete resource"
 msgstr "Suprimix el recurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2652
+#: libs/ui/KisMainWindow.cpp:2658
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24981,7 +24980,7 @@ msgstr ""
 "d'eixida estan incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2251
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderització de l'animació"
@@ -26999,7 +26998,7 @@ msgid "Numerical"
 msgstr "Numèric"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, kde-format
 msgid "Import Images"
 msgstr "Importa imatges"
@@ -27116,7 +27115,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduïu el nom de l'estil nou"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30137,7 +30136,7 @@ msgstr "No mostra el contingut en moure les subfinestres"
 #: libs/ui/forms/wdggeneralsettings.ui:501
 #, kde-format
 msgid "Use custom interface font"
-msgstr "Utilitza un tipus de lletra personalitzat en la interfície"
+msgstr "Utilitza una lletra personalitzada a la interfície"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -30145,7 +30144,7 @@ msgstr "Utilitza un tipus de lletra personalitzat en la interfície"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:29
 #, kde-format
 msgid "Font:"
-msgstr "Tipus de lletra:"
+msgstr "Lletra:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:551
@@ -30629,7 +30628,7 @@ msgstr "(cal reiniciar)"
 #: libs/ui/forms/wdggeneralsettings.ui:1574
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr "Solució alternativa als PPP del tipus de lletra"
+msgstr "Solució alternativa als PPP de la lletra"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1589
@@ -30653,8 +30652,8 @@ msgstr ""
 "En Krita 5.0, este error s'ha esmenat, el qual pot fer que els fitxers "
 "creats en versions anteriors es vegen diferent.\n"
 "\n"
-"En carregar fitxers antics, Krita intentarà ajustar la mida del tipus de "
-"lletra a la DPI de la pantalla actual.\n"
+"En carregar fitxers antics, Krita intentarà ajustar la mida de la lletra a "
+"la DPI de la pantalla actual.\n"
 "Si el fitxer s'ha creat en una pantalla diferent, intenteu ajustar este "
 "valor manualment.\n"
 "\n"
@@ -30685,7 +30684,7 @@ msgstr ""
 "En Krita 4.4.3, este error s'ha esmenat, el qual pot fer que els fitxers "
 "creats en versions anteriors es vegen diferent.\n"
 "Per a restaurar el comportament anterior, podeu obligar Krita a utilitzar "
-"DPI de la pantalla per als tipus de lletra introduint-lo en este camp."
+"DPI de la pantalla per a les lletres introduint-lo en este camp."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1614
@@ -31482,7 +31481,7 @@ msgstr "Pinzell predefinit actual"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1026
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -32760,7 +32759,7 @@ msgstr "Avançat…"
 #: libs/ui/forms/wdgtabletsettings.ui:167
 #, kde-format
 msgid "Windows 8+ Pointer Input (Windows Ink)"
-msgstr "Entrada de l'apuntador de Windows 8+ (Windows Ink)"
+msgstr "Entrada del punter de Windows 8+ (Windows Ink)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:177
@@ -35154,12 +35153,12 @@ msgstr "Estils de capa"
 #: libs/ui/KisApplication.cpp:460
 #, kde-format
 msgid "Font Families"
-msgstr "Famílies dels tipus de lletres"
+msgstr "Famílies de fonts"
 
 #: libs/ui/KisApplication.cpp:461
 #, kde-format
 msgid "Style Presets"
-msgstr "Predefinits d'estil"
+msgstr "Preajustos d'estil"
 
 #: libs/ui/KisApplication.cpp:473
 #, kde-format
@@ -36084,32 +36083,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&Espai de treball"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:595
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostra la barra d'eines %1"
 
-#: libs/ui/KisMainWindow.cpp:591
+#: libs/ui/KisMainWindow.cpp:597
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Oculta la barra d'eines %1"
 
-#: libs/ui/KisMainWindow.cpp:1017
+#: libs/ui/KisMainWindow.cpp:1023
 #, kde-format
 msgid "Save as %1"
 msgstr "Anomena i guarda %1"
 
-#: libs/ui/KisMainWindow.cpp:1045
+#: libs/ui/KisMainWindow.cpp:1051
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "El fitxer %1 no existix."
 
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, kde-format
 msgid "Open Images"
 msgstr "Obri imatges"
 
-#: libs/ui/KisMainWindow.cpp:1272
+#: libs/ui/KisMainWindow.cpp:1278
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36122,44 +36121,44 @@ msgstr ""
 "\n"
 "Trieu una ubicació a on se sobreescriga el fitxer original!"
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, kde-format
 msgid "Exporting"
 msgstr "Exportant"
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, kde-format
 msgid "Saving As"
 msgstr "Guardant com"
 
-#: libs/ui/KisMainWindow.cpp:1745
+#: libs/ui/KisMainWindow.cpp:1751
 #, kde-format
 msgid "Create new document"
 msgstr "Crea un document nou"
 
-#: libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1775
 #, kde-format
 msgid "Custom Document"
 msgstr "Document personalitzat"
 
-#: libs/ui/KisMainWindow.cpp:1781
+#: libs/ui/KisMainWindow.cpp:1787
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Crea des del porta-retalls"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1972
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Capes i màscares"
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1998
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "No teniu cap paquet de recursos habilitat."
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2002
 #, kde-format
 msgid ""
 "\n"
@@ -36170,7 +36169,7 @@ msgstr ""
 "No hi ha disponible cap pinzell predefinit. Abans de continuar, habiliteu un "
 "paquet que proporcione pinzells predefinits.\n"
 
-#: libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2012
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36181,7 +36180,7 @@ msgstr ""
 "\n"
 "Només hi ha disponibles els vostres recursos locals."
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2229
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36190,42 +36189,42 @@ msgstr ""
 "No s'ha pogut finalitzar la importació de l'animació:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Ha fallat mentre es creava un document nou. S'ha interromput la importació "
 "de l'animació."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importa espais de treball…"
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2664
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Espai de treball &nou…"
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Espai de treball nou…"
 
-#: libs/ui/KisMainWindow.cpp:2706
+#: libs/ui/KisMainWindow.cpp:2712
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2715
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2884
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36234,19 +36233,19 @@ msgstr ""
 "El connector de gestió del color LittleCMS de Krita no està instal·lat. "
 "Krita es tancarà ara."
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2900
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "S'ha produït un error durant la instal·lació"
 
-#: libs/ui/KisMainWindow.cpp:3004
+#: libs/ui/KisMainWindow.cpp:3010
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temes"
 
-#: libs/ui/KisMainWindow.cpp:3063
+#: libs/ui/KisMainWindow.cpp:3069
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Espaiador expansible"
@@ -36639,36 +36638,36 @@ msgstr "Però la provatura suau encara està desactivada."
 msgid "Gamut Warnings turned off."
 msgstr "S'han desactivat els avisos de gamma."
 
-#: libs/ui/KisViewManager.cpp:809
+#: libs/ui/KisViewManager.cpp:810
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Perfil actiu d'autor"
 
-#: libs/ui/KisViewManager.cpp:939
+#: libs/ui/KisViewManager.cpp:940
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (còpia)"
 
-#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1096 libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Els noms alternatius s'han exhaurit. Intenteu guardar-ho manualment amb un "
 "número més gran"
 
-#: libs/ui/KisViewManager.cpp:1095
+#: libs/ui/KisViewManager.cpp:1096
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "No s'ha pogut guardar la versió incremental"
 
-#: libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "No s'ha pogut guardar la còpia de seguretat incremental"
 
-#: libs/ui/KisViewManager.cpp:1436
+#: libs/ui/KisViewManager.cpp:1473
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36677,13 +36676,13 @@ msgstr ""
 "S'ha entrat en el mode només el llenç.\n"
 "Premeu «%1» per a tornar arrere."
 
-#: libs/ui/KisViewManager.cpp:1497
+#: libs/ui/KisViewManager.cpp:1543
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Obriu una carpeta del recurs"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1547
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36708,19 +36707,19 @@ msgstr ""
 "<p><b>Ubicació privada d'aplicació</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1516
+#: libs/ui/KisViewManager.cpp:1562
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Obri en AppData de l'&usuari"
 
-#: libs/ui/KisViewManager.cpp:1517
+#: libs/ui/KisViewManager.cpp:1563
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Obri en la ubicació &privada de l'aplicació"
 
-#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
+#: libs/ui/KisViewManager.cpp:1711 libs/ui/KisViewManager.cpp:1729
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -44045,7 +44044,7 @@ msgstr "Can&via els bloquejos i la visibilitat"
 msgid "&Add"
 msgstr "Afi&g"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -45727,7 +45726,7 @@ msgstr "Camí de les plantilles SVG:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
 #, kde-format
 msgid "Font Size:"
-msgstr "Mida del tipus de lletra:"
+msgstr "Mida de la lletra:"
 
 # skip-rule: barb-uns
 #. i18n: ectx: property (text), widget (QLabel, exportPathLabel)
@@ -45857,7 +45856,7 @@ msgstr "Percentatge (%)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Edita els predefinits d'estil"
+msgstr "Edita els preajustos d'estil"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -47419,19 +47418,19 @@ msgstr "Predefinit"
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr "Afig un predefinit d'estil"
+msgstr "Afig un preajust d'estil"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:148
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
-msgstr "Edita el predefinit d'estil"
+msgstr "Edita el preajust d'estil"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:167
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "Clona el predefinit d'estil"
+msgstr "Clona el preajust d'estil"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, kde-format
@@ -47852,7 +47851,7 @@ msgstr "Vertical, d'esquerra a dreta"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Predefinit d'estil nou"
+msgstr "Preajust d'estil nou"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -62621,7 +62620,7 @@ msgstr "Elimina l'autor"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
-msgstr "Utilitza un tipus de lletra"
+msgstr "Utilitza una lletra"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -64525,7 +64524,7 @@ msgstr "Ressaltador de sintaxi:"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
 msgid "Fonts:"
-msgstr "Tipus de lletra:"
+msgstr "Lletres:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"
@@ -67303,7 +67302,7 @@ msgstr "Alinea al centre"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Font Size"
-msgstr "Disminuïx la mida del tipus de lletra"
+msgstr "Disminuïx la mida de la lletra"
 
 #. i18n: context: iconText @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67317,7 +67316,7 @@ msgstr "Disminuïx la mida del tipus de lletra"
 #, kde-format
 msgctxt "action"
 msgid "Increase Font Size"
-msgstr "Augmenta la mida del tipus de lletra"
+msgstr "Incrementa la mida de la lletra"
 
 #. i18n: context: iconText @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67545,7 +67544,7 @@ msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
 msgstr ""
-"Quan el mode de composició del text estiga actiu, mou l'inici de la selecció "
+"Quan el mode «Composició del tipus» estiga actiu, mou l'inici de la selecció "
 "un píxel cap avall."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67570,7 +67569,7 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
-"Quan el mode de composició del text estiga actiu, mou l'inici de la selecció "
+"Quan el mode «Composició del tipus» estiga actiu, mou l'inici de la selecció "
 "un píxel cap amunt."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67595,7 +67594,7 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
-"Quan el mode de composició del text estiga actiu, mou l'inici de la selecció "
+"Quan el mode «Composició del tipus» estiga actiu, mou l'inici de la selecció "
 "un píxel cap a l'esquerra."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67620,7 +67619,7 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
-"Quan el mode de composició del text estiga actiu, mou l'inici de la selecció "
+"Quan el mode «Composició del tipus» estiga actiu, mou l'inici de la selecció "
 "un píxel cap a la dreta."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67695,7 +67694,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Tria el predefinit d'estil"
+msgstr "Tria el preajust d'estil"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, kde-format
@@ -67746,13 +67745,13 @@ msgstr "Apega sempre text enriquit en utilitzar l'acció d'apegades."
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Mode de composició del text"
+msgstr "Mode «Composició del tipus»"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Activa el mode de composició del text."
+msgstr "Activa el mode de composició del tipus."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
@@ -69604,7 +69603,7 @@ msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
 msgstr ""
-"Falta la família de lletres «%1» en esta màquina. Este estil predefinit "
+"Falta la família de lletres «%1» en esta màquina. Este preajust d'estil "
 "podria no funcionar correctament."
 
 #: qmlmodules/components/qml/ResourceView.qml:141

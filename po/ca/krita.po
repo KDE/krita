@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 02:04+0000\n"
-"PO-Revision-Date: 2026-01-29 15:07+0100\n"
+"POT-Creation-Date: 2026-02-04 03:00+0000\n"
+"PO-Revision-Date: 2026-02-03 12:09+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19271,10 +19271,10 @@ msgid ""
 "with numerators before the slash and denominators after the slash."
 msgstr ""
 "Substitueix els nombres separats per una barra per una forma de fracció "
-"diagonal adequada. Si un tipus de lletra té les característiques de "
-"numerador i denominador, i els números estan separats per una «barra de "
-"fracció» (U+2044), llavors això reemplaçarà els nombres per numeradors abans "
-"de la barra i denominadors després de la barra."
+"diagonal adequada. Si una lletra té les característiques de numerador i "
+"denominador, i els números estan separats per una «barra de fracció» (U"
+"+2044), llavors això reemplaçarà els nombres per numeradors abans de la "
+"barra i denominadors després de la barra."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
 #, kde-format
@@ -20278,7 +20278,7 @@ msgstr "Alternatives verticals"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
-"Substitueix els glifs en els tipus de lletra CJK per aquells adequats per a "
+"Substitueix els glifs en les fonts CJK per aquells adequats per a "
 "l'escriptura vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
@@ -20535,7 +20535,7 @@ msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
 msgstr ""
-"Posiciona marques de combinació àrabs en tipus de lletra per al Windows 95 "
+"Posiciona marques de combinació àrabs a les fonts per al Windows 95 "
 "utilitzant substitució de glifs."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
@@ -21823,8 +21823,8 @@ msgid "Processing"
 msgstr "En procés"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
-#: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1772 libs/ui/KisMainWindow.cpp:1785
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22596,8 +22596,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Imatge RGBE de Radiance"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2143
+#: libs/ui/KisMainWindow.cpp:2222
 #, kde-format
 msgid "Import frames"
 msgstr "Importa fotogrames"
@@ -23952,11 +23952,11 @@ msgstr "Recursos locals"
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
-#: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
-#: libs/ui/KisMainWindow.cpp:1174 libs/ui/KisMainWindow.cpp:1271
-#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
+#: libs/ui/KisMainWindow.cpp:1180 libs/ui/KisMainWindow.cpp:1277
+#: libs/ui/KisMainWindow.cpp:2003 libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2210
+#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2861
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24039,8 +24039,7 @@ msgstr "No s'ha pogut eliminar l'emmagatzematge %1 de la base de dades"
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
-"No s'ha pogut sincronitzar el registre dels tipus de lletra amb la base de "
-"dades"
+"No s'ha pogut sincronitzar el registre de les fonts amb la base de dades"
 
 #: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
@@ -24075,7 +24074,7 @@ msgstr "Recursos temporals"
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
-msgstr "Emmagatzematge dels tipus de lletra"
+msgstr "Emmagatzematge de les lletres"
 
 #: libs/resources/KisResourceLocator.cpp:1206
 #, kde-format
@@ -24356,7 +24355,7 @@ msgstr "Estils de capa"
 #, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Famílies dels tipus de lletres"
+msgstr "Famílies de fonts"
 
 #: libs/resources/KisResourceTypes.cpp:58
 #, kde-format
@@ -24504,7 +24503,7 @@ msgid "Delete resource"
 msgstr "Suprimeix el recurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2652
+#: libs/ui/KisMainWindow.cpp:2658
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24985,7 +24984,7 @@ msgstr ""
 "sortida estan incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2251
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderització de l'animació"
@@ -27002,7 +27001,7 @@ msgid "Numerical"
 msgstr "Numèric"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, kde-format
 msgid "Import Images"
 msgstr "Importa imatges"
@@ -27119,7 +27118,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduïu el nom de l'estil nou"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30139,7 +30138,7 @@ msgstr "No mostra el contingut en moure les subfinestres"
 #: libs/ui/forms/wdggeneralsettings.ui:501
 #, kde-format
 msgid "Use custom interface font"
-msgstr "Usa un tipus de lletra personalitzat a la interfície"
+msgstr "Usa una lletra personalitzada a la interfície"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -30147,7 +30146,7 @@ msgstr "Usa un tipus de lletra personalitzat a la interfície"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:29
 #, kde-format
 msgid "Font:"
-msgstr "Tipus de lletra:"
+msgstr "Lletra:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:551
@@ -30631,7 +30630,7 @@ msgstr "(cal reiniciar)"
 #: libs/ui/forms/wdggeneralsettings.ui:1574
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr "Solució alternativa als PPP del tipus de lletra"
+msgstr "Solució alternativa als PPP de la lletra"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1589
@@ -30655,8 +30654,8 @@ msgstr ""
 "En el Krita 5.0, aquest error s'ha esmenat, el qual pot fer que els fitxers "
 "creats en versions anteriors es vegin diferent.\n"
 "\n"
-"En carregar fitxers antics, el Krita intentarà ajustar la mida del tipus de "
-"lletra a la DPI de la pantalla actual.\n"
+"En carregar fitxers antics, el Krita intentarà ajustar la mida de la lletra "
+"a la DPI de la pantalla actual.\n"
 "Si el fitxer s'ha creat en una pantalla diferent, intenteu ajustar aquest "
 "valor manualment.\n"
 "\n"
@@ -30687,7 +30686,7 @@ msgstr ""
 "En el Krita 4.4.3, aquest error s'ha esmenat, el qual pot fer que els "
 "fitxers creats en versions anteriors es vegin diferent.\n"
 "Per a restaurar el comportament anterior, podeu obligar el Krita a utilitzar "
-"DPI de la pantalla per als tipus de lletra introduint-lo en aquest camp."
+"DPI de la pantalla per a les lletres introduint-lo en aquest camp."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1614
@@ -31483,7 +31482,7 @@ msgstr "Pinzell predefinit actual"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1026
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -32764,7 +32763,7 @@ msgstr "Avançat..."
 #: libs/ui/forms/wdgtabletsettings.ui:167
 #, kde-format
 msgid "Windows 8+ Pointer Input (Windows Ink)"
-msgstr "Entrada de l'apuntador de Windows 8+ (Windows Ink)"
+msgstr "Entrada del punter del Windows 8+ (Windows Ink)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:177
@@ -35157,7 +35156,7 @@ msgstr "Estils de capa"
 #: libs/ui/KisApplication.cpp:460
 #, kde-format
 msgid "Font Families"
-msgstr "Famílies dels tipus de lletres"
+msgstr "Famílies de fonts"
 
 #: libs/ui/KisApplication.cpp:461
 #, kde-format
@@ -36088,32 +36087,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&Espai de treball"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:595
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostra la barra d'eines %1"
 
-#: libs/ui/KisMainWindow.cpp:591
+#: libs/ui/KisMainWindow.cpp:597
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Oculta la barra d'eines %1"
 
-#: libs/ui/KisMainWindow.cpp:1017
+#: libs/ui/KisMainWindow.cpp:1023
 #, kde-format
 msgid "Save as %1"
 msgstr "Desa com a %1"
 
-#: libs/ui/KisMainWindow.cpp:1045
+#: libs/ui/KisMainWindow.cpp:1051
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "El fitxer %1 no existeix."
 
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, kde-format
 msgid "Open Images"
 msgstr "Obre imatges"
 
-#: libs/ui/KisMainWindow.cpp:1272
+#: libs/ui/KisMainWindow.cpp:1278
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36126,44 +36125,44 @@ msgstr ""
 "\n"
 "Seleccioneu una ubicació a on se sobreescrigui el fitxer original!"
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, kde-format
 msgid "Exporting"
 msgstr "Exportant"
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, kde-format
 msgid "Saving As"
 msgstr "Desant com"
 
-#: libs/ui/KisMainWindow.cpp:1745
+#: libs/ui/KisMainWindow.cpp:1751
 #, kde-format
 msgid "Create new document"
 msgstr "Crea un document nou"
 
-#: libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1775
 #, kde-format
 msgid "Custom Document"
 msgstr "Document personalitzat"
 
-#: libs/ui/KisMainWindow.cpp:1781
+#: libs/ui/KisMainWindow.cpp:1787
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Crea des del porta-retalls"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1972
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Capes i màscares"
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1998
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "No teniu cap paquet de recursos habilitat."
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2002
 #, kde-format
 msgid ""
 "\n"
@@ -36174,7 +36173,7 @@ msgstr ""
 "No hi ha disponible cap pinzell predefinit. Abans de continuar, habiliteu un "
 "paquet que proporcioni pinzells predefinits.\n"
 
-#: libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2012
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36185,7 +36184,7 @@ msgstr ""
 "\n"
 "Només hi ha disponibles els vostres recursos locals."
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2229
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36194,42 +36193,42 @@ msgstr ""
 "No s'ha pogut finalitzar la importació de l'animació:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Ha fallat en crear un document nou. S'ha interromput la importació de "
 "l'animació."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importa espais de treball..."
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2664
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Espai de treball &nou..."
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Espai de treball nou..."
 
-#: libs/ui/KisMainWindow.cpp:2706
+#: libs/ui/KisMainWindow.cpp:2712
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2715
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2884
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36238,19 +36237,19 @@ msgstr ""
 "El connector de gestió del color LittleCMS del Krita no està instal·lat. El "
 "Krita es tancarà ara."
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2900
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Error en la instal·lació"
 
-#: libs/ui/KisMainWindow.cpp:3004
+#: libs/ui/KisMainWindow.cpp:3010
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temes"
 
-#: libs/ui/KisMainWindow.cpp:3063
+#: libs/ui/KisMainWindow.cpp:3069
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Espaiador expansible"
@@ -36642,36 +36641,36 @@ msgstr "Però la provatura suau encara està desactivada."
 msgid "Gamut Warnings turned off."
 msgstr "S'han desactivat els avisos de gamma."
 
-#: libs/ui/KisViewManager.cpp:809
+#: libs/ui/KisViewManager.cpp:810
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Perfil actiu d'autor"
 
-#: libs/ui/KisViewManager.cpp:939
+#: libs/ui/KisViewManager.cpp:940
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (còpia)"
 
-#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1096 libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Els noms alternatius s'han exhaurit. Intenteu desar-ho manualment amb un "
 "número més gran"
 
-#: libs/ui/KisViewManager.cpp:1095
+#: libs/ui/KisViewManager.cpp:1096
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "No s'ha pogut desar la versió incremental"
 
-#: libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "No s'ha pogut desar la còpia de seguretat incremental"
 
-#: libs/ui/KisViewManager.cpp:1436
+#: libs/ui/KisViewManager.cpp:1473
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36680,13 +36679,13 @@ msgstr ""
 "S'ha entrat en el mode només el llenç.\n"
 "Premeu «%1» per a tornar enrere."
 
-#: libs/ui/KisViewManager.cpp:1497
+#: libs/ui/KisViewManager.cpp:1543
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Obertura de carpeta del recurs"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1547
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36711,19 +36710,19 @@ msgstr ""
 "<p><b>Ubicació privada d'aplicació</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1516
+#: libs/ui/KisViewManager.cpp:1562
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Obre en l'AppData de l'&usuari"
 
-#: libs/ui/KisViewManager.cpp:1517
+#: libs/ui/KisViewManager.cpp:1563
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Obre en la ubicació &privada de l'aplicació"
 
-#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
+#: libs/ui/KisViewManager.cpp:1711 libs/ui/KisViewManager.cpp:1729
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -44047,7 +44046,7 @@ msgstr "&Commuta els bloquejos i la visibilitat"
 msgid "&Add"
 msgstr "&Afegeix"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -45730,7 +45729,7 @@ msgstr "Camí de les plantilles SVG:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
 #, kde-format
 msgid "Font Size:"
-msgstr "Mida del tipus de lletra:"
+msgstr "Mida de la lletra:"
 
 # skip-rule: barb-uns
 #. i18n: ectx: property (text), widget (QLabel, exportPathLabel)
@@ -62613,7 +62612,7 @@ msgstr "Elimina l'autor"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
-msgstr "Usa un tipus de lletra"
+msgstr "Usa una lletra"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -64518,7 +64517,7 @@ msgstr "Ressaltador de sintaxi:"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
 msgid "Fonts:"
-msgstr "Tipus de lletra:"
+msgstr "Lletres:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"
@@ -67295,7 +67294,7 @@ msgstr "Alinea al centre"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Font Size"
-msgstr "Disminueix la mida del tipus de lletra"
+msgstr "Disminueix la mida de la lletra"
 
 #. i18n: context: iconText @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67309,7 +67308,7 @@ msgstr "Disminueix la mida del tipus de lletra"
 #, kde-format
 msgctxt "action"
 msgid "Increase Font Size"
-msgstr "Augmenta la mida del tipus de lletra"
+msgstr "Incrementa la mida de la lletra"
 
 #. i18n: context: iconText @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -69660,379 +69659,3 @@ msgstr ""
 "Commuta entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid "Remove from tag"
-#~ msgstr "Elimina de l'etiqueta"
-
-#~ msgctxt "action"
-#~ msgid "Make the first selected text flow in shape."
-#~ msgstr "Fa que el primer text seleccionat flueixi en una forma."
-
-#~ msgctxt "action"
-#~ msgid "Decrease Flow Shape Index"
-#~ msgstr "Disminueix l'índex de forma de flux"
-
-#~ msgctxt "action"
-#~ msgid "Make this flow shape be evaluated later."
-#~ msgstr "Fa que aquest flux de forma s'avaluï més tard."
-
-#~ msgctxt "action"
-#~ msgid "Increase Flow Shape Index"
-#~ msgstr "Augmenta l'índex de forma de flux"
-
-#~ msgctxt "@label"
-#~ msgid "Baseline-Shift"
-#~ msgstr "Línia base desplaçada"
-
-#~ msgctxt "Lightness HSI"
-#~ msgid "Lightness"
-#~ msgstr "Claredat"
-
-#~ msgid "Edit SVG Source"
-#~ msgstr "Edita el codi font de SVG"
-
-#~ msgid "Text Type"
-#~ msgstr "Tipus de text"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#~ "lines. A line break is inserted so the lines from wrapping or positioning "
-#~ "remain separated.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El text no ajustarà i conservarà espais i línies "
-#~ "noves. S'insereix un salt de línia de manera que les línies ajustades o "
-#~ "posicionades es mantenen separades.</p></body></html>"
-
-#~ msgid "Preformatted"
-#~ msgstr "Amb format previ"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#~ "lines are preserved. New lines are not removed.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Es conserven els ajustos de text dins d'una "
-#~ "longitud fixa, espais i línies noves. No s'han eliminat les línies noves."
-#~ "</p></body></html>"
-
-#~ msgid "Inline Wrapped"
-#~ msgstr "Ajustat en línia"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#~ "each line. Spaces and new lines are collapsed. This is for backward "
-#~ "compatibility with SVG 1.1.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El text utilitza transformacions de caràcters SVG "
-#~ "1.1 per a posicionar cada línia. Els espais i les línies noves estan "
-#~ "reduïts. Això és per a la compatibilitat amb SVG 1.1.</p></body></html>"
-
-#~ msgid "Prepositioned"
-#~ msgstr "Amb preposició"
-
-#~ msgid "Glyph Palette"
-#~ msgstr "Paleta de glifs"
-
-#~ msgid "Create new texts with..."
-#~ msgstr "Crea textos nous amb..."
-
-#~ msgid "Anchor text to the left."
-#~ msgstr "Ancora el text a l'esquerra."
-
-#~ msgid "Anchor text to the middle."
-#~ msgstr "Ancora el text al mig."
-
-#~ msgid "Anchor text to the right."
-#~ msgstr "Ancora el text a la dreta."
-
-#~ msgid "Letter Spacing"
-#~ msgstr "Espaiat de les lletres"
-
-#~ msgid "Text flows horizontal, top to bottom."
-#~ msgstr "El text està en horitzontal, de dalt a baix."
-
-#~ msgid "Text flows vertical, right to left."
-#~ msgstr "El text està en vertical, de dreta a esquerra."
-
-#~ msgid "Text flows vertical, left to right."
-#~ msgstr "El text està en vertical, d'esquerra a dreta."
-
-#~ msgid "Left to right text direction."
-#~ msgstr "Direcció del text d'esquerra a dreta."
-
-#~ msgid "Right to left text direction."
-#~ msgstr "Direcció del text de dreta a esquerra."
-
-#~ msgid "Knife Tool"
-#~ msgstr "Eina de ganivet"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Shape RunAround"
-#~ msgstr "Canvia la forma de la volta"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Shadow"
-#~ msgstr "Estableix l'ombra"
-
-#~ msgctxt "resource type"
-#~ msgid "Filter Effects"
-#~ msgstr "Efectes de filtre"
-
-#~ msgid "Change the color of the shadow"
-#~ msgstr "Canvia el color de l'ombra"
-
-#~ msgid "Blur:"
-#~ msgstr "Difuminat:"
-
-#~ msgid "An enhanced path shape"
-#~ msgstr "Una forma de camí millorada"
-
-#~ msgid "An enhanced path"
-#~ msgstr "Un camí millorat"
-
-#~ msgid "Cross"
-#~ msgstr "Creu"
-
-#~ msgid "A cross"
-#~ msgstr "Una creu"
-
-#~ msgid "An arrow"
-#~ msgstr "Una fletxa"
-
-#~ msgid "Callout"
-#~ msgstr "Bafarada"
-
-#~ msgid "A callout"
-#~ msgstr "Una bafarada"
-
-#~ msgid "Smiley"
-#~ msgstr "Emoticona"
-
-#~ msgid "Circular Arrow"
-#~ msgstr "Fletxa circular"
-
-#~ msgid "A circular-arrow"
-#~ msgstr "Una fletxa circular"
-
-#~ msgid "Gearhead"
-#~ msgstr "Engranatge"
-
-#~ msgid "A gearhead"
-#~ msgstr "Un engranatge"
-
-#~ msgid "Proofing transform"
-#~ msgstr "Transformació de provatura"
-
-#~ msgid "Adaptation State:"
-#~ msgstr "Estat de l'adaptació:"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Set how much you wish to correct the adaptation "
-#~ "state. This will affect how <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span> changes the whites of your image. In Layman's terms: "
-#~ "how much do you wish to have the color management correct the paper-color "
-#~ "to screen white while using <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span>?</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Estableix quan es vol corregir l'estat d'adaptació. "
-#~ "Això afectarà la manera com la <span style=\" font-style:italic;"
-#~ "\">Colorimetria absoluta</span> canvia els blancs de la imatge. En "
-#~ "paraules de Layman: quant voleu corregir la gestió del color del paper al "
-#~ "blanc de la pantalla en usar la <span style=\" font-style:italic;"
-#~ "\">Colorimetria absoluta</span>?</p></body></html>"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Commuta a pantalla completa"
-
-#~ msgctxt "language, region"
-#~ msgid "%1, %2"
-#~ msgstr "%1, %2"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "Filter:"
-#~ msgstr "Filtre:"
-
-#~ msgid "Neutral Point:"
-#~ msgstr "Punt neutre:"
-
-#~ msgid "Alpha Mask"
-#~ msgstr "Màscara alfa"
-
-#~ msgid "Animated Image"
-#~ msgstr "Imatge animada"
-
-#~ msgid "Rich text"
-#~ msgstr "Text enriquit"
-
-#~ msgid "SVG Source"
-#~ msgstr "Codi font de SVG"
-
-#~ msgid "Font"
-#~ msgstr "Tipus de lletra"
-
-#~ msgid "Text Color"
-#~ msgstr "Color del text"
-
-#~ msgid "Sample a Color"
-#~ msgstr "Mostra un color"
-
-#~ msgid "Line height"
-#~ msgstr "Alçada de la línia"
-
-#~ msgctxt "Default line height for text"
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgctxt "line height for text"
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#~ msgctxt "action"
-#~ msgid "Text Color"
-#~ msgstr "Color de text"
-
-#~ msgctxt "action"
-#~ msgid "Text Color..."
-#~ msgstr "Color del text..."
-
-#~ msgctxt "action"
-#~ msgid "Background"
-#~ msgstr "Fons"
-
-#~ msgctxt "action"
-#~ msgid "Background Color..."
-#~ msgstr "Color de fons..."
-
-#~ msgctxt "action"
-#~ msgid "Font..."
-#~ msgstr "Tipus de lletra..."
-
-#~ msgctxt "action"
-#~ msgid "Change character size, font, boldface, italics etc."
-#~ msgstr ""
-#~ "Canvia la mida, tipus de lletra, negreta, cursiva, etc., del caràcter."
-
-#~ msgctxt "action"
-#~ msgid "Change the attributes of the currently selected characters."
-#~ msgstr "Canvia els atributs dels caràcters seleccionats."
-
-#~ msgctxt "action"
-#~ msgid "Special Character..."
-#~ msgstr "Caràcter especial..."
-
-#~ msgctxt "action"
-#~ msgid "Line Height in em"
-#~ msgstr "Alçada de la línia en «em»"
-
-#~ msgctxt "action"
-#~ msgid "Legacy Hard Wrap"
-#~ msgstr "Ajust intens antic"
-
-#~ msgctxt "action"
-#~ msgid ""
-#~ "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
-#~ "are explicitly positioned, but the line height may be slightly inaccurate."
-#~ msgstr ""
-#~ "Fa servir el mode d'ajust intens antic (el mateix que el Krita 5.1 i "
-#~ "anteriors). Cada línia es posiciona explícitament, però l'alçada de la "
-#~ "línia pot ser lleugerament imprecisa."
-
-#~ msgctxt "action"
-#~ msgid "SVG Hard Wrap"
-#~ msgstr "Ajust intens de SVG"
-
-# skip-rule: t-acc_obe
-#~ msgctxt "action"
-#~ msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-#~ msgstr "Usa el mode d'ajust intens CSS `white-space: pre` de SVG."
-
-#~ msgctxt "action"
-#~ msgid "SVG Auto Wrap with Fixed Width"
-#~ msgstr "Ajust automàtic de SVG amb amplada fixa"
-
-# skip-rule: t-acc_obe
-#~ msgctxt "action"
-#~ msgid ""
-#~ "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
-#~ "defining the text width."
-#~ msgstr ""
-#~ "Usa el mode d'ajust CSS `white-space: pre-wrap` de SVG, amb `inline-size` "
-#~ "definint l'amplada del text."
-
-#~ msgid "&Insert"
-#~ msgstr "&Insereix"
-
-#~ msgid "&Format"
-#~ msgstr "&Format"
-
-#~ msgid "&Weight"
-#~ msgstr "&Gruix"
-
-#~ msgid "Text W&rapping"
-#~ msgstr "A&just del text"
-
-#~ msgid "Font Settings"
-#~ msgstr "Configuració del tipus de lletra"
-
-#~ msgid "SVG source"
-#~ msgstr "Codi font de SVG"
-
-#~ msgid "Edit Text"
-#~ msgstr "Edita el text"
-
-#~ msgid "Fonts"
-#~ msgstr "Tipus de lletra"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Which writing system should the fonts chooser show "
-#~ "the fonts of? No writing system selected will have all fonts shown.</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Quin sistema d'escriptura de tipus de lletra cal "
-#~ "que mostri el selector de tipus de lletra? Si no se selecciona cap "
-#~ "sistema d'escriptura es mostraran tots els tipus de lletra.</p></body></"
-#~ "html>"
-
-#~ msgctxt "tooltip"
-#~ msgid "Select All"
-#~ msgstr "Selecciona-ho tot"
-
-#~ msgctxt "tooltip"
-#~ msgid "Invert Selection"
-#~ msgstr "Inverteix la selecció"
-
-#~ msgctxt "tooltip"
-#~ msgid "Deselect"
-#~ msgstr "Desselecciona"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "Detected multi layer JPEG-XL image with unsupported blending mode, "
-#~ "importing flattened image."
-#~ msgstr ""
-#~ "S'ha detectat una imatge JPEG-XL multicapa amb un mode de barreja no "
-#~ "implementat. S'importarà una imatge aplanada."
-
-#~ msgid "If this is not enabled, only the first frame will be saved."
-#~ msgstr "Si això no està activat, només es desarà el primer fotograma."
-
-#~ msgid "Save as animated JPEG-XL"
-#~ msgstr "Desa com a JPEG-XL animat"
-
-#~ msgid ""
-#~ "<html><head/><body><p>If this is not enabled, the layers will be "
-#~ "rasterized and saved. However, animated exports are always flattened "
-#~ "regardless of this setting.</p><p>It is advised to leave this option "
-#~ "checked for web delivery and general compatibility with other "
-#~ "applications.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Si no està activat, les capes es rasteritzaran i "
-#~ "desaran. No obstant això, les exportacions d'animacions sempre s'aplanen "
-#~ "independentment d'aquest paràmetre.</p><p>Es recomana deixar aquesta "
-#~ "opció marcada per al lliurament per web i per compatibilitat general amb "
-#~ "altres aplicacions.</p></body></html>"
-
-#~ msgid "Flatten the image"
-#~ msgstr "Aplana la imatge"
-
-#~ msgid "Limit frames per second while painting:"
-#~ msgstr "Límit de fotogrames per segon en pintar:"

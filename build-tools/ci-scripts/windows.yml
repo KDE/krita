@@ -24,6 +24,7 @@ windows-build:
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_WINDOWS
     EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_WINDOWS
+    EFFECTIVE_PUBLISH_PLATFORM_NAME: windows-qt5
     PYTHONUTF8: 1
   interruptible: true
   before_script:
@@ -42,7 +43,7 @@ windows-build:
     - python -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared --skip-publishing 2>&1 | Tee-Object -FilePath "build-krita.log"
     - python -u build-tools/ci-scripts/build-windows-package.py 2>&1 | Tee-Object -FilePath "build-installers.log"
-    - python -u build-tools/ci-scripts/upload-nightly-packages.py --platform windows --folder $CI_PROJECT_DIR 2>&1 | Tee-Object -FilePath "installers-publish.log"
+    - python -u build-tools/ci-scripts/upload-nightly-packages.py --platform $EFFECTIVE_PUBLISH_PLATFORM_NAME --folder $CI_PROJECT_DIR 2>&1 | Tee-Object -FilePath "installers-publish.log"
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 windows-build-qt6-nightly:
@@ -53,6 +54,7 @@ windows-build-qt6-nightly:
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_PUBLISH_PLATFORM_NAME: windows
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON

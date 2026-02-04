@@ -18,9 +18,9 @@ linux-build:
     KDECI_EXTRA_CMAKE_ARGS: -DHIDE_SAFE_ASSERTS=OFF
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_PUBLISH_BUILD_CONFIG: "upstream-ci-utilities/signing/publishbuild.ini"
-    KRITACI_LINUX_PUBLISH_PLATFORM: linux
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_LINUX
     EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_LINUX
+    EFFECTIVE_PUBLISH_PLATFORM_NAME: linux-qt5
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $EFFECTIVE_DEPS_REPO_BRANCH_NAME --depth=1
@@ -47,7 +47,7 @@ linux-build:
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
     - python3 -u build-tools/ci-scripts/build-appimage.py
-    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $KRITACI_LINUX_PUBLISH_PLATFORM --folder $CI_PROJECT_DIR/_packaging
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $EFFECTIVE_PUBLISH_PLATFORM_NAME --folder $CI_PROJECT_DIR/_packaging
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 linux-build-qt6-nightly:
@@ -58,6 +58,7 @@ linux-build-qt6-nightly:
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_PUBLISH_PLATFORM_NAME: linux
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON

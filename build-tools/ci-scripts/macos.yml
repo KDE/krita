@@ -87,10 +87,12 @@ macos-build-qt6-nightly:
   extends:
   - macos-build
   - .nightly-job-mixin
+  - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
     EFFECTIVE_PUBLISH_PLATFORM_NAME: macos-universal
     MACOSX_DEPLOYMENT_TARGET: "12"
     QMAKE_MACOSX_DEPLOYMENT_TARGET: "12"

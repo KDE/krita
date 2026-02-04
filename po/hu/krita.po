@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-31 02:04+0000\n"
+"POT-Creation-Date: 2026-02-04 00:42+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -22374,8 +22374,8 @@ msgid "Processing"
 msgstr "Feldolgozás"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1393
-#: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1772 libs/ui/KisMainWindow.cpp:1785
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -23173,8 +23173,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "A kép átnevezése"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2143
+#: libs/ui/KisMainWindow.cpp:2222
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Kép importálása"
@@ -24656,11 +24656,11 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
-#: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
-#: libs/ui/KisMainWindow.cpp:1174 libs/ui/KisMainWindow.cpp:1271
-#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
+#: libs/ui/KisMainWindow.cpp:1180 libs/ui/KisMainWindow.cpp:1277
+#: libs/ui/KisMainWindow.cpp:2003 libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2210
+#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2861
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -25229,7 +25229,7 @@ msgid "Delete resource"
 msgstr "Erőforrás törlése"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2652
+#: libs/ui/KisMainWindow.cpp:2658
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25717,7 +25717,7 @@ msgstr ""
 "Az animációs képkocka renderelése sikertelen. A kimeneti fájlok hiányosak."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2251
 #, kde-format
 msgid "Render Animation"
 msgstr "Animáció renderelése"
@@ -27701,7 +27701,7 @@ msgid "Numerical"
 msgstr "Függőleges"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, kde-format
 msgid "Import Images"
 msgstr "Képek importálása"
@@ -27819,7 +27819,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Adja meg az új stílus nevét"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32154,7 +32154,7 @@ msgstr "Jelenlegi előre beállított"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1026
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -36751,32 +36751,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Mun&katerület"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:595
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Alapréteg megjelenítése"
 
-#: libs/ui/KisMainWindow.cpp:591
+#: libs/ui/KisMainWindow.cpp:597
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gördítősávok elrejtése"
 
-#: libs/ui/KisMainWindow.cpp:1017
+#: libs/ui/KisMainWindow.cpp:1023
 #, kde-format
 msgid "Save as %1"
 msgstr "Mentés mint %1"
 
-#: libs/ui/KisMainWindow.cpp:1045
+#: libs/ui/KisMainWindow.cpp:1051
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Nem létezik %1 nevű fájl."
 
-#: libs/ui/KisMainWindow.cpp:1139
+#: libs/ui/KisMainWindow.cpp:1145
 #, kde-format
 msgid "Open Images"
 msgstr "Képek megnyitása"
 
-#: libs/ui/KisMainWindow.cpp:1272
+#: libs/ui/KisMainWindow.cpp:1278
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36785,45 +36785,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, kde-format
 msgid "Exporting"
 msgstr "Exportálás"
 
-#: libs/ui/KisMainWindow.cpp:1328
+#: libs/ui/KisMainWindow.cpp:1334
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Mentés formátuma"
 
-#: libs/ui/KisMainWindow.cpp:1745
+#: libs/ui/KisMainWindow.cpp:1751
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Nemrég használt dokumentumok"
 
-#: libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1775
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Egyéni színátmenet"
 
-#: libs/ui/KisMainWindow.cpp:1781
+#: libs/ui/KisMainWindow.cpp:1787
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Létrehozás a vágólapról"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1972
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Réteg/maszk mentése…"
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1998
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2002
 #, fuzzy, kde-format
 #| msgid ""
 #| "\n"
@@ -36837,7 +36837,7 @@ msgstr ""
 "\n"
 "Nincsenek %1 típusú erőforrások. Engedélyezzen legalább egy csomagot."
 
-#: libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2012
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36846,7 +36846,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2229
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36855,43 +36855,43 @@ msgstr ""
 "Nem sikerült befejezni az animáció importálását:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2210
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Munkaterület &importálása…"
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2664
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Ú&j munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Új munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2706
+#: libs/ui/KisMainWindow.cpp:2712
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2715
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2884
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36900,13 +36900,13 @@ msgstr ""
 "A Krita LittleCMS színkezelő bővítmény nincs telepítve. A Krita most ki fog "
 "lépni."
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2900
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Telepítési hiba"
 
-#: libs/ui/KisMainWindow.cpp:3004
+#: libs/ui/KisMainWindow.cpp:3010
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Themes"
@@ -36914,7 +36914,7 @@ msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Témák"
 
-#: libs/ui/KisMainWindow.cpp:3063
+#: libs/ui/KisMainWindow.cpp:3069
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"
@@ -37327,34 +37327,34 @@ msgstr "Az egyszerű ellenőrzés még mindig ki van kapcsolva."
 msgid "Gamut Warnings turned off."
 msgstr "Figyelem"
 
-#: libs/ui/KisViewManager.cpp:809
+#: libs/ui/KisViewManager.cpp:810
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Színprofil megnyitása"
 
-#: libs/ui/KisViewManager.cpp:939
+#: libs/ui/KisViewManager.cpp:940
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "Másolás"
 
-#: libs/ui/KisViewManager.cpp:1095 libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1096 libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1095
+#: libs/ui/KisViewManager.cpp:1096
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Nem sikerült menteni növekményes verziót"
 
-#: libs/ui/KisViewManager.cpp:1179
+#: libs/ui/KisViewManager.cpp:1180
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nem sikerült menteni növekményes biztonsági másolatot"
 
-#: libs/ui/KisViewManager.cpp:1436
+#: libs/ui/KisViewManager.cpp:1473
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -37363,13 +37363,13 @@ msgstr ""
 "Átlépés csak vászon módba.\n"
 "A visszatéréshez nyomja meg: %1."
 
-#: libs/ui/KisViewManager.cpp:1497
+#: libs/ui/KisViewManager.cpp:1543
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Erőforrásmappa megnyitása"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1547
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -37384,19 +37384,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1516
+#: libs/ui/KisViewManager.cpp:1562
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1517
+#: libs/ui/KisViewManager.cpp:1563
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1665 libs/ui/KisViewManager.cpp:1683
+#: libs/ui/KisViewManager.cpp:1711 libs/ui/KisViewManager.cpp:1729
 #, fuzzy, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -44693,7 +44693,7 @@ msgstr "Kever&hetőség:"
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1365
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"

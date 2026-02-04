@@ -56,8 +56,8 @@ linux-build-qt6-nightly:
   - .nightly-job-mixin
   interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
@@ -143,8 +143,8 @@ linux-release-qt6:
   - .ci-release-job-mixin
   interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON

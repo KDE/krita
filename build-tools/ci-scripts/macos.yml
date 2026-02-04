@@ -88,8 +88,8 @@ macos-build-qt6-nightly:
   - .nightly-job-mixin
   interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     MACOSX_DEPLOYMENT_TARGET: "12"
     QMAKE_MACOSX_DEPLOYMENT_TARGET: "12"
     KDECI_EXTRA_CMAKE_ARGS: >
@@ -137,8 +137,8 @@ macos-release-qt6:
   - .ci-release-job-mixin
   interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KRITACI_RELEASE_PACKAGE_NAMING: True
     KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >

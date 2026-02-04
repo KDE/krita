@@ -51,8 +51,8 @@ windows-build-qt6-nightly:
   - .nightly-job-mixin
   interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
@@ -123,8 +123,8 @@ windows-release-qt6:
     - .ci-release-job-mixin
   interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_BUILD_TYPE: RelWithDebInfo
     KDECI_ONLY_BUILD: True
     KRITACI_SKIP_DEBUG_PACKAGE: False

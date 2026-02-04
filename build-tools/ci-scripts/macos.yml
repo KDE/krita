@@ -33,6 +33,7 @@ macos-build:
 
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_MACOS
     EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_MACOS
+    EFFECTIVE_PUBLISH_PLATFORM_NAME: macos-universal-qt5
 
   interruptible: true
   before_script:
@@ -75,7 +76,7 @@ macos-build:
     - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix dmg-sign_ --directory _packaging
     - python3 -u ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-notarize.log
     - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix dmg-notarize_ --directory _packaging
-    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos-universal --folder _packaging 2>&1 | tee dmg-publish.log
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $EFFECTIVE_PUBLISH_PLATFORM_NAME --folder _packaging 2>&1 | tee dmg-publish.log
 
   after_script:
     # try to fetch signing errors from the task log
@@ -90,6 +91,7 @@ macos-build-qt6-nightly:
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_PUBLISH_PLATFORM_NAME: macos-universal
     MACOSX_DEPLOYMENT_TARGET: "12"
     QMAKE_MACOSX_DEPLOYMENT_TARGET: "12"
     KDECI_EXTRA_CMAKE_ARGS: >

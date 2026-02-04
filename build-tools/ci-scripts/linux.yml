@@ -54,11 +54,13 @@ linux-build-qt6-nightly:
   extends:
   - linux-build
   - .nightly-job-mixin
+  - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_PUBLISH_PLATFORM_NAME: linux
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON

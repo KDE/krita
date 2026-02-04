@@ -119,11 +119,17 @@ def kritaCreateDMG(krita_app: pathlib.Path, krita_dmg_media: list[DmgFile], dmg_
 
     # Create dmg_root location must only contain krita.app
     krita_dmg_root = pathlib.Path('_dmg_wd').resolve()
-    krita_dmg_kritadst = krita_dmg_root.joinpath(krita_app.name)
     krita_dmg_root.mkdir()
 
-    print(f'Copying source krita.app to working dir {krita_dmg_root}')
-    shutil.copytree(krita_app, krita_dmg_kritadst, symlinks=True)
+    # since qt6, codesign embbed Plugins/permissions/obj-Release/* special attributes for a valid signature
+    # we use rsync to ensure a real clone with Extended attributes
+    print(f'Cloning source krita.app to working dir {krita_dmg_root}')
+    cmd = ['rsync', '-aE', krita_app, krita_dmg_root]
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as err:
+        print(f"## ERROR: Cloning krita.app failed!\n{err.stderr}")
+        exit(1);
 
     kritadmg_title = dmg_name + '.dmg'
     kritadmg_output = pathlib.Path(kritadmg_title).resolve()

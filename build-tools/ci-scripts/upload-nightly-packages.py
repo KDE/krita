@@ -35,12 +35,12 @@ sourcePath = os.path.abspath(arguments.folder)
 
 patterns = []
 
-if arguments.platform == 'windows':
+if arguments.platform.startswith('windows'):
     patterns = ['*.zip', '*.exe', '*.msix']
-elif arguments.platform == 'linux':
+elif arguments.platform.startswith('linux'):
     patterns = ['*.AppImage', '*.zsync']
     pass
-elif arguments.platform == 'macos-universal':
+elif arguments.platform.startswith('macos-universal'):
     print('## WARNING: check the pattern for artifacts on macOS!')
     patterns = ['*.dmg']
     pass

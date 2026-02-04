@@ -86,7 +86,7 @@ def main():
 
     kis_version_full = subprocess.run(['krita_version', '-v'],
                                       capture_output=True, text=True, env=kisenv).stdout
-    kis_version = kis_version_full.replace("-", " ").split()
+    kis_version = kis_version_full.split()
     # os.environ['KRITACI_RELEASE_PACKAGE_NAMING'] = "ON"
     if 'KRITACI_RELEASE_PACKAGE_NAMING' in os.environ:
         kis_version_str = kis_version[0]

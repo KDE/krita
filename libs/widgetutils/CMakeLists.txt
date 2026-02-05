@@ -166,7 +166,6 @@ target_link_libraries(kritawidgetutils
         KF${KF_MAJOR}::ConfigGui
         KF${KF_MAJOR}::GuiAddons
         KF${KF_MAJOR}::WidgetsAddons
-        KF${KF_MAJOR}::WindowSystem
         kritaplugin
         
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}

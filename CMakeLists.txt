@@ -520,9 +520,7 @@ find_package(KF${KF_MAJOR} ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         CoreAddons
         GuiAddons
         I18n
-        ItemModels
         ItemViews
-        WindowSystem
 )
 
 find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}

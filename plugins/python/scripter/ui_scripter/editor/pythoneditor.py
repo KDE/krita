@@ -251,7 +251,7 @@ class CodeEditor(QPlainTextEdit):
 
         for _ in range(self.indent_width):
             cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
-            cursor.movePosition(QTextCursor.MoveOperation.Right, QTextCursor.ModeMode.KeepAnchor)
+            cursor.movePosition(QTextCursor.MoveOperation.Right, QTextCursor.MoveMode.KeepAnchor)
             if cursor.selectedText() == " ":  # need to test each char
                 cursor.removeSelectedText()
             else:

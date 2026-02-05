@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-04 00:42+0000\n"
-"PO-Revision-Date: 2026-02-03 13:10+0300\n"
+"PO-Revision-Date: 2026-02-04 13:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2720,7 +2720,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Spray_splat.kpp"
 msgid "Spray splat"
-msgstr "Sprey sıçratması"
+msgstr "Püskürtme sıçratması"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2728,7 +2728,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_basic.kpp"
 msgid "Tangent normal basic"
-msgstr "Temel normal Tanjant"
+msgstr "Temel normal teğet"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2736,7 +2736,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_drawing_angle.kpp"
 msgid "Tangent normal drawing angle"
-msgstr "Tanjant-normal çizim açısı"
+msgstr "Teğet-normal çizim açısı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2744,7 +2744,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_hairy.kpp"
 msgid "Tangent normal hairy"
-msgstr "Tanjant-normal kıllı"
+msgstr "Teğet-normal kıllı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2752,7 +2752,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_pixel.kpp"
 msgid "Tangent normal pixel"
-msgstr "Tanjant-normal piksel"
+msgstr "Teğet-normal piksel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2760,7 +2760,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_y_inverted.kpp"
 msgid "Tangent normal y inverted"
-msgstr "Tanjant-normal y tersine çevrilmiş"
+msgstr "Teğet-normal y tersine çevrilmiş"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4751,7 +4751,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "y)_Texture_Spray.kpp"
 msgid "y) Texture Spray"
-msgstr "y) Sprey Dokusu"
+msgstr "y) Püskürtme Dokusu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5699,7 +5699,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Radial_Lines.kse"
 msgid "Wolthera's Radial Lines"
-msgstr "Wolthera’nın Yarıçap Çizgileri"
+msgstr "Wolthera’nın Radyal Çizgileri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -23507,7 +23507,7 @@ msgstr "Kopyala"
 #, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
-msgstr "Tanjant Normal Eşlemi"
+msgstr "Teğet Normal Harita"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:148
 #, kde-format
@@ -37246,7 +37246,7 @@ msgstr "T&ersine çevir"
 #: libs/ui/widgets/KoFillConfigWidget.ui:247
 #, kde-format
 msgid "Radial"
-msgstr "Dairesel"
+msgstr "Radyal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:148
@@ -42741,12 +42741,12 @@ msgstr "Bézier eğrisi aradeğerlemesi."
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:513
 #, kde-format
 msgid "Sharp interpolation tangents."
-msgstr "Keskin aradeğerleme tanjantları."
+msgstr "Keskin aradeğerleme teğetleri."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:520
 #, kde-format
 msgid "Smooth interpolation tangents."
-msgstr "Pürüzsüz aradeğerleme tanjantları."
+msgstr "Pürüzsüz aradeğerleme teğetleri."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:527
 #, kde-format
@@ -42777,7 +42777,7 @@ msgstr "Anahtar Kare Ekle"
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Adjust tangent"
-msgstr "Tanjantı Ayarla"
+msgstr "Teğeti Ayarla"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:258
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:270
@@ -53130,7 +53130,7 @@ msgstr "İki Yönlü"
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
-msgstr "Işınsal"
+msgstr "Radyal"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
 #: plugins/tools/basictools/kis_tool_gradient.cc:247
@@ -53944,7 +53944,7 @@ msgstr "Basınç"
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
 #, kde-format
 msgid "Angular"
-msgstr "Köşeli"
+msgstr "Açılı"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.h:38
 #, kde-format
@@ -59689,7 +59689,7 @@ msgstr "Arka planı doldur"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:167
 #, kde-format
 msgid "Sample Input layer"
-msgstr "Örnek girdi katmanı"
+msgstr "Örnek giriş katmanı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mixBgColorCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:180
@@ -60545,7 +60545,7 @@ msgstr "Perspektif"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tangential pressure"
-msgstr "Tanjantsal basınç"
+msgstr "Teğetsel basınç"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:47
 #, kde-format
@@ -61355,8 +61355,8 @@ msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
-"Parçacıkların, sprey alanının merkezine olan açının bir işlevi olarak nasıl "
-"dağıtıldığını seçin."
+"Parçacıkların, püskürtme alanının merkezine olan açının bir işlevi olarak "
+"nasıl dağıtıldığını seçin."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:67
 #, kde-format
@@ -61401,8 +61401,8 @@ msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
-"Parçacıkların, sprey alanının merkezinden olan uzaklığın bir işlevi olarak "
-"nasıl dağıtıldığını seçin."
+"Parçacıkların, püskürtme alanının merkezinden olan uzaklığın bir işlevi "
+"olarak nasıl dağıtıldığını seçin."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:82
 #, kde-format
@@ -61410,7 +61410,7 @@ msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
-"Parçacıkların, sprey alanının merkezinde toplaşmaları durumunda eski "
+"Parçacıkların, püskürtme alanının merkezinde toplaşmaları durumunda eski "
 "davranışı etkinleştirin."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
@@ -61426,13 +61426,13 @@ msgid ""
 "spray area."
 msgstr ""
 "Gauss dağıtımı için standart sapmayı ayarlayın.\n"
-"Daha düşük değerler, parçacıkları sprey alanının merkezine doğru "
+"Daha düşük değerler, parçacıkları püskürtme alanının merkezine doğru "
 "yoğunlaştırır."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
 #, kde-format
 msgid "Clustering amount: "
-msgstr "Salkımlanma miktarı: "
+msgstr "Kümelenme miktarı: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
@@ -61463,7 +61463,8 @@ msgid ""
 "that distance."
 msgstr ""
 "Parçacıklar için özel bir dağıtım ayarlayın.\n"
-"Yatay eksen, merkezden sprey alanının kenarına olan uzaklığı temsil eder.\n"
+"Yatay eksen, merkezden püskürtme alanının kenarına olan uzaklığı temsil "
+"eder.\n"
 "Dikey eksen, bir parçacığın o uzaklığa varmasının ne kadar olası olduğunu "
 "temsil eder.\n"
 "Verilen bir uzaklıkta eğri ne kadar yüksek olursa o uzaklığa o kadar çok "
@@ -61486,7 +61487,7 @@ msgstr "Püskürtme Alanı"
 #: plugins/paintops/spray/KisSprayShapeDynamicsOptionWidget.cpp:55
 #, kde-format
 msgid "Shape dynamics"
-msgstr "Şekil devinimleri"
+msgstr "Şekil dinamikleri"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
 #, kde-format
@@ -61609,7 +61610,7 @@ msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
 msgid "Count"
-msgstr "Sayım"
+msgstr "Sayı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
@@ -61627,7 +61628,7 @@ msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
 msgid "Angular"
-msgstr "Açısal"
+msgstr "Açılı"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, angularDistCombo)
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
@@ -61654,7 +61655,7 @@ msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
 msgid "Radial"
-msgstr "Dairesel"
+msgstr "Radyal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
@@ -61668,7 +61669,7 @@ msgstr "Gaus"
 #, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "Salkım"
+msgstr "Küme"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -61678,7 +61679,7 @@ msgctxt ""
 "where particles are biased towards the center of the spray area in the spray "
 "engine"
 msgid "Center-biased spread (legacy)"
-msgstr "Merkeze eğilimli dağıtım (eski)"
+msgstr "Merkez ağırlıklı yayılım (eski)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
@@ -61702,25 +61703,25 @@ msgstr "Doku:"
 #: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_plugin.cpp:29
 #, kde-format
 msgid "Tangent Normal"
-msgstr "Tanjant Normal"
+msgstr "Teğet Normal"
 
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:54
 #, kde-format
 msgid "Tangent Tilt"
-msgstr "Tanjant Eğimi"
+msgstr "Teğet Eğimi"
 
 #. i18n: This is a type of normal map used in 3d rendering. Normal in this case refers to the Normal in the law of Reflection by William Snellius
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:33
 #, kde-format
 msgid "A Brush Engine for Drawing 3d Tangent Normal Maps"
-msgstr "3B Tanjant Normal Eşlemleri Çizmek için Bir Fırça İşletkesi"
+msgstr "3B Teğet Normal Eşlemleri Çizmek için Bir Fırça İşletkesi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TangentEncoding)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:43
 #, kde-format
 msgid "Tangent Encoding"
-msgstr "Tanjant Kodlama"
+msgstr "Teğet Kodlama"
 
 #. i18n: Positive horizontal axis
 #. i18n: Positive horizontal axis

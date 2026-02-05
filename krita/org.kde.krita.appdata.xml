@@ -61,6 +61,7 @@
   <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
   <name xml:lang="gl">Krita</name>
+  <name xml:lang="he">Krita</name>
   <name xml:lang="hi">क्रिता</name>
   <name xml:lang="hu">Krita</name>
   <name xml:lang="ia">Krita</name>
@@ -102,6 +103,7 @@
   <summary xml:lang="fi">Digitaalimaalaus, luova vapaus</summary>
   <summary xml:lang="fr">Peinture numérique, liberté créatrice</summary>
   <summary xml:lang="gl">Debuxo dixital, liberdade creativa</summary>
+  <summary xml:lang="he">ציור דיגיטלי, חופש יצירתי</summary>
   <summary xml:lang="hi">डिजिटल चित्रकारी, रचनात्मक स्वतंत्रता</summary>
   <summary xml:lang="hu">Digitális festészet, kreatív szabadság</summary>
   <summary xml:lang="ia">Pictura digital, Libertate creative</summary>
@@ -142,6 +144,7 @@
     <p xml:lang="fi">Krita on täyspiirteinen digitaiteen ateljee.</p>
     <p xml:lang="fr">Krita est le studio d'art numérique complet.</p>
     <p xml:lang="gl">Krita é un estudio completo de arte dixital.</p>
+    <p xml:lang="he">Krita הוא אולפן האומנות הדיגיטלית שלם.</p>
     <p xml:lang="hi">क्रिता विशेषताओं से परिपूर्ण डिजिटल कला स्टूडियो है।</p>
     <p xml:lang="hu">A Krita egy teljes felszereltségű digitális művészeti stúdió.</p>
     <p xml:lang="ia">Krita es le studio de arte digital complete.</p>
@@ -180,6 +183,7 @@
     <p xml:lang="fi">Se on täydellinen luonnosteluun ja maalaukseen ja tarjoaa kokonaisratkaisun digitaalisten kuvatiedostojen luomiseen alusta alkaen.</p>
     <p xml:lang="fr">Il est parfait pour crayonner et peindre, et constitue une solution de bout en bout pour créer des fichier de peinture numérique depuis la feuille blanche jusqu'au épreuves finales.</p>
     <p xml:lang="gl">Resulta perfecto para debuxar e pintar, e presenta unha solución completa que permite aos mestres crear ficheiros de debuxo dixital desde cero.</p>
+    <p xml:lang="he">מושלם לאיור ולציור, ומציע פתרון מקצה לקצה ליצירת קובצי ציור דיגיטליים מאפס מידי מומחים.</p>
     <p xml:lang="hi">यह रेखाचित्र और पेंटिंग बनाने के लिए उत्तम है, और यह निपुण चित्रकारों को नए सिरे से डिजिटल पेंटिंग फाइलों को बनाने के लिए आद्योपान्त समाधान प्रस्तुत करता है।</p>
     <p xml:lang="hu">Tökéletes vázlatoláshoz és festéshez, teljes körű megoldást nyújt digitális festmények készítéséhez a semmiből.</p>
     <p xml:lang="ia">Illo es perfecte pro schizzar e pinger, e presenta un solution ab fin al fin pro crear files de pictura digital ab grattamentos per maestros.</p>
@@ -220,6 +224,7 @@
     <p xml:lang="fi">Krita on hyvä valinta konseptikuvituksen, sarjakuvien, pintakuvioiden ja maalausten luomiseen. Krita tukee useita väriavaruuksia kuten RGB:tä ja CMYK:ta 8 ja 16 bitin kokonaisluku- samoin kuin 16 ja 32 bitin liukulukukanavin.</p>
     <p xml:lang="fr">Krita est un très bon choix pour créer des concepts arts, des bandes-dessinées, des textures de rendu et des peintures. Krita prend en charge plusieurs espaces de couleurs comme « RVB » et « CMJN » avec les canaux de 8 et 16 bits entiers ainsi que les canaux de 16 et 32 bits flottants.</p>
     <p xml:lang="gl">Krita é unha gran opción para crear arte conceptual, texturas para renderización e pinturas mate. Krita permite usar moitos espazos de cores como RGB e CMYK con canles de 8 e 16 bits, así como canles de coma flotante de 16 e 32 bits.</p>
+    <p xml:lang="he">Krita היא בחירה נהדרת ליצירת אומנות קונספטואלית, קומיקס, מרקמים לעיבוד וציורים מחוספסים. Krita תומכת במגוון מרחבי צבע כגון RGB ו־CMYK בערוצי מספרים שלמים של 8 ו־16 סיביות, לרבות 16 ו־32 סיביות לערוצי נקודה צפה.</p>
     <p xml:lang="hi">क्रिता संकल्प कला, कॉमिक्स, रेंडरिंग और मैट पेंटिंग के लिए टेक्सचर बनाने के लिए एक बेहतरीन विकल्प है। क्रिता ८ और १६ बिट्स पूर्णांक चैनलों के साथ-साथ १६ और ३२ बिट्स फ्लोटिंग पॉइंट चैनलों पर RGB और CMYK जैसे कई वर्णव्योमों का समर्थन करता है।</p>
     <p xml:lang="hu">A Krita remek választás koncepciórajzok, képregények, rendereléshez használt textúrák és matt festmények készítéséhez. A Krita számos színteret támogat, például az RGB és CMYK színtereket 8 és 16 bites egészértékű csatornákon, valamint 16 és 32 bites lebegőpontos csatornákon.</p>
     <p xml:lang="ia">Krita es un grande selection pro crear arte de concepto, comics, texturas pro rendering e picturas opac. Krita supporta multe spatios de colores como RGB e CMYK con canales de integer a  8 e 16 bits, como anque canales floating point a 16 e 32 bits.</p>
@@ -256,6 +261,7 @@
     <p xml:lang="fi">Pidä hauskaa maalatessasi edistyneillä sivellinmoottoreilla, hämmästyttävillä suotimilla ja monilla muilla kätevillä ominaisuuksilla, jotka tekevät Kritasta tavattoman tehokkaan.</p>
     <p xml:lang="fr">Amusez-vous à peindre avec les outils de brosse avancés, les filtres incroyables et les nombreuses fonctionnalités pratiques qui rendent Krita extrêmement productif.</p>
     <p xml:lang="gl">Goza debuxando con motores de pincel avanzados, filtros fantásticos e moitas outras funcionalidades útiles que fan de Krita un programa extremadamente produtivo.</p>
+    <p xml:lang="he">ציור בכיף עם מנועי המברשות המתקדמים, מסננים מדנימים ומגוון יכולות שימושיות שהופכות את Kirta למאוד יעילה.</p>
     <p xml:lang="hi">क्रिता को काफी उत्पादक बनाने वाले उन्नत ब्रश इंजन, अद्भुत फिल्टर और कई उपयोगी सुविधाओं के साथ पेंटिंग करने के मजे़ं लें।</p>
     <p xml:lang="hu">Érezze jól magát festés közben a speciális ecsetalrendszerekkel, lenyűgöző szűrőkkel és számos praktikus szolgáltatással, amik mind roppant hatékonnyá teszik a Kritát.</p>
     <p xml:lang="ia">Amusa te a pinger con le motores de pincel avantiate, filtros stupende e multe characteristicas amical que face Krita enormemente productive.</p>
@@ -300,6 +306,7 @@
       <caption xml:lang="fi">Krita on täyspiirteinen digitaiteen ateljee</caption>
       <caption xml:lang="fr">Krita est un studio d'art numérique complet.</caption>
       <caption xml:lang="gl">Krita é un estudio completo de debuxo dixital.</caption>
+      <caption xml:lang="he">Krita הוא אולפן ציור דיגיטלי שלם</caption>
       <caption xml:lang="hi">क्रिता एक विशेषताओं से परिपूर्ण डिजिटल कला स्टूडियो है।</caption>
       <caption xml:lang="hu">A Krita egy teljes felszereltségű digitális festészeti stúdió</caption>
       <caption xml:lang="ia">Krita es un studio de pictura digital complete</caption>
@@ -339,6 +346,7 @@
       <caption xml:lang="fi">Aloitusikkunassa näytetään nyt myös Kritan tuoreimmat uutiset</caption>
       <caption xml:lang="fr">Maintenant, la fenêtre de démarrage vous donne aussi les dernières informations concernant Krita</caption>
       <caption xml:lang="gl">Agora a xanela de inicio tamén fornece as últimas novas sobre Krita.</caption>
+      <caption xml:lang="he">חלון הפתיח מספק לך את החדשות העדכניות ביותר על Krita</caption>
       <caption xml:lang="hi">स्टार्टअप विंडो अब आपको क्रिता के बारे में ताज़ा समाचार भी देती है।</caption>
       <caption xml:lang="hu">Az indulóképernyőn most már megjelennek a Kritával kapcsolatos legfrissebb hírek</caption>
       <caption xml:lang="id">Jendela pemulaian kini juga memberikan kamu kabar terkini tentang Krita</caption>
@@ -376,6 +384,7 @@
       <caption xml:lang="fi">Tehokkaita sivellinmoottoreita on toistakymmentä</caption>
       <caption xml:lang="fr">Il y a plus de 10 moteurs de brosse, tous extrêmement puissants</caption>
       <caption xml:lang="gl">Hai máis de dez motores de pinceis inmensamente potentes.</caption>
+      <caption xml:lang="he">יש למעלה מעשרה מנועי מברשות עוצמתיים מאוד</caption>
       <caption xml:lang="hi">इसमें दस से अधिक शक्तिशाली ब्रश इंजन हैं</caption>
       <caption xml:lang="hu">Több, mint tíz nagy teljesítményű ecsetalrendszer érhető el</caption>
       <caption xml:lang="id">Ada lebih dari sepuluh perkakas kuas yang sangat hebat</caption>
@@ -414,6 +423,7 @@
       <caption xml:lang="fi">Kiinnostaako animointi? Krita tarjoaa kaiken, mitä tarvitaan perinteiseen käsin piirrettyyn animaatioon</caption>
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
       <caption xml:lang="gl">Gusta das animacións? Krita fornece todo o necesario para animacións tradicionais debuxadas a man.</caption>
+      <caption xml:lang="he">מה עם הנפשה? Krita מספקת כל מה שצריך להנפשה מאוירת מסורתית</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
       <caption xml:lang="hu">Animációt készítene? A Krita minden eszközt biztosít a hagyományos, kézzel rajzolt animációkhoz</caption>
       <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional</caption>
@@ -452,6 +462,7 @@
       <caption xml:lang="fi">Jos digitaide on sinulle uutta, käsikirja on kattava ja ajan tasalla</caption>
       <caption xml:lang="fr">Si vous êtes nouveau en art graphique, il y a un manuel à jour et très fourni</caption>
       <caption xml:lang="gl">Se está a empezar co debuxo dixital, existe un manual exhaustivo e actualizado.</caption>
+      <caption xml:lang="he">אם אין לך רק בציור דיגיטלי, יש מדריך נרחב ועדכני</caption>
       <caption xml:lang="hi">यदि आप डिजिटल पेंटिंग में नए हैं, तो एक व्यापक, अद्यतन पु्स्तिका है</caption>
       <caption xml:lang="hu">Ha még kezdő a digitális festészetben, a bőséges, naprakész kézikönyv segítségére lesz</caption>
       <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, di situ ada buku manual panjang-lebar yang ter-update</caption>
@@ -490,6 +501,7 @@
       <caption xml:lang="fi">Krita tarjoaa tehokkaita suodattimia</caption>
       <caption xml:lang="fr">Krita propose des filtres puissants</caption>
       <caption xml:lang="gl">Krita ofrece potentes filtros.</caption>
+      <caption xml:lang="he">Krita מציעה מסננים עוצמתיים</caption>
       <caption xml:lang="hi">क्रिता शक्तिशाली फिल्टरों को प्रदान करता है</caption>
       <caption xml:lang="hu">A Krita hatékony szűrőket tartalmaz</caption>
       <caption xml:lang="id">Krita menawarkan saringan berdaya</caption>
@@ -524,6 +536,7 @@
       <caption xml:lang="fi">Ja G’Mic-eheytyksen myötä vielä satoja suodattimia lisää</caption>
       <caption xml:lang="fr">Et, il existe également une intégration avec « G-Mic », ajoutant des centaines de filtres, de plus.</caption>
       <caption xml:lang="gl">E tamén ten integración con G'Mic, que engade centos de filtros adicionais.</caption>
+      <caption xml:lang="he">לרבות שילוב מול G'Mic, בנוסף, מה שמוסיף עוד מאות מסננים</caption>
       <caption xml:lang="hi">और, जी-मिक के साथ भी एकीकरण है, जो सैकड़ों फ़िल्टर और जोड़ता है</caption>
       <caption xml:lang="hu">A G'Mic integrációjának köszönhetően további több száz szűrő érhető el</caption>
       <caption xml:lang="id">Dan, juga ada integrasi dengan G'Mic, yang menambahkan ratusan saringan lainnya</caption>
@@ -559,6 +572,7 @@
       <caption xml:lang="fi">Liity YouTube-kanavallemme!</caption>
       <caption xml:lang="fr">Rejoignez notre canal sur YouTube !</caption>
       <caption xml:lang="gl">Únase á nosa canle de YouTube!</caption>
+      <caption xml:lang="he">מזמינים אותך לערוץ ה־YouTube שלנו!</caption>
       <caption xml:lang="hi">हमारे यूट्यूब चैनल से जुड़ें!</caption>
       <caption xml:lang="hu">Iratkozzon fel YouTube-csatornánkra!</caption>
       <caption xml:lang="id">Bergabung dengan saluran YouTube kami!</caption>
@@ -594,6 +608,7 @@
       <caption xml:lang="fi">Tai aktiivinen <a href="https://krita-artists.org">Krita-taiteilijayhteisö</a></caption>
       <caption xml:lang="fr">Ou l'active <a href="https://krita-artists.org">La communauté d'artistes de Krita</a></caption>
       <caption xml:lang="gl">Ou á activa <a href="https://krita-artists.org">comunidade de artistas de KDE</a>.</caption>
+      <caption xml:lang="he">או ה־<a href="https://krita-artists.org">קהילת האומנים של Krita</a> הפעיל</caption>
       <caption xml:lang="hi">या सक्रिय <a href="https://krita-artists.org">क्रिता कलाकार समुदाय</a></caption>
       <caption xml:lang="hu">vagy az aktív <a href="https://krita-artists.org">A Krita Művészek közössége</a> oldalunkhoz</caption>
       <caption xml:lang="id">Atau <a href="https://krita-artists.org">Komunitas Pelukis Krita</a> yang aktif</caption>

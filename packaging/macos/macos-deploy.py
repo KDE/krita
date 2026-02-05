@@ -486,6 +486,14 @@ def kritaDeploy(from_install: pathlib.Path, dst: pathlib.Path, source: pathlib.P
     if fileToRemove.exists():
         shutil.rmtree(fileToRemove)
 
+    # remove permissions plugins folder, these persmissions are to
+    # be linked statically into the application and cannot be used on
+    # the runtime
+    # See: https://github.com/qt/qtbase/commit/f0a7d74e1dd2c1d802aa09d7b8c144599f4a54ce
+    fileToRemove = krita_app['plugins'].joinpath('permissions')
+    if fileToRemove.exists():
+        shutil.rmtree(fileToRemove)
+
     # Fix file permissions
     filesToFix = list()
     filesToFix.extend(krita_app['contents'].rglob('*.dylib'))

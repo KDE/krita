@@ -851,7 +851,7 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
     macro_bool_to_01(Qt${QT_MAJOR_VERSION}DBUS_FOUND HAVE_QT_DBUS)
 
     find_package(KF${KF_MAJOR}Crash ${MIN_FRAMEWORKS_VERSION})
-    macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
+    macro_bool_to_01(KF${KF_MAJOR}Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF${KF_MAJOR}Crash PROPERTIES
         DESCRIPTION "KDE's Crash Handler"
         URL "https://api.kde.org/kcrash-index.html"

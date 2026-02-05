@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-04 03:00+0000\n"
-"PO-Revision-Date: 2026-02-03 12:09+0100\n"
+"PO-Revision-Date: 2026-02-03 13:10+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -65280,7 +65280,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Separacions de tancament en les línies fins a la quantitat definida"
+msgstr "Tanca separacions en les línies fins a la quantitat definida"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:659
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568

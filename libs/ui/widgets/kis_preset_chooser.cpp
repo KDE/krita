@@ -336,6 +336,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent)
     m_chooser->showImportExportBtns(false);
     layout->addWidget(m_chooser);
 
+    connect(KisResourceItemChooserSync::instance(), SIGNAL(baseLengthChanged(int)),
+            this, SLOT(slotBaseLengthChanged(int)));
     connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
             this, SIGNAL(resourceSelected(KoResourceSP )));
     connect(m_chooser, SIGNAL(resourceClicked(KoResourceSP )),
@@ -546,4 +548,18 @@ void KisPresetChooser::slotStrokePreviewReady(int presetId)
 void KisPresetChooser::slotGenerateStrokePreviews()
 {
     KisBrushStrokePreviewCache::instance()->generateAllPreviews();
+}
+
+void KisPresetChooser::slotBaseLengthChanged(int length)
+{
+    if (m_mode != ViewMode::STROKE) {
+        return;
+    }
+
+    m_delegate->setIconSize(length);
+    QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(length);
+
+    m_chooser->itemView()->setGridSize(thumbnailSize);
+    m_chooser->itemView()->setIconSize(thumbnailSize);
+    m_chooser->itemView()->doItemsLayout();
 }

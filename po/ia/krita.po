@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-04 03:00+0000\n"
-"PO-Revision-Date: 2026-02-05 18:18+0100\n"
+"PO-Revision-Date: 2026-02-06 17:12+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -13655,9 +13655,7 @@ msgid "File"
 msgstr "File"
 
 #: krita/krita5.xmlgui:434
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Modifica"
 
@@ -13701,8 +13699,7 @@ msgstr "Crea nove documento"
 
 #. i18n: context: iconText @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:10
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "action"
 msgid "New"
 msgstr "Nove "
@@ -13723,8 +13720,7 @@ msgstr "Aperi un documento existente"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "action"
 msgid "Open"
 msgstr "Aperi"
@@ -13783,8 +13779,7 @@ msgstr "Salveguarda un documento con un nove nomine"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgctxt "action"
 msgid "Save As"
 msgstr "Salveguarda como"
@@ -14082,9 +14077,7 @@ msgstr "Quita Application"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Quit"
+#, kde-format
 msgctxt "action"
 msgid "Quit"
 msgstr "Quita"
@@ -14167,8 +14160,7 @@ msgstr "Copia selection a area de transferentia"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
-#, fuzzy, kde-format
-#| msgid "Copy"
+#, kde-format
 msgctxt "action"
 msgid "Copy"
 msgstr "Copia"
@@ -16735,9 +16727,7 @@ msgstr "Recte"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:307
 #: libs/basicflakes/tools/KoPencilTool.cpp:314
-#, fuzzy, kde-format
-#| msgctxt "Label of Optimize in JPEG Exporting dialogue"
-#| msgid "Optimize"
+#, kde-format
 msgid "Optimize"
 msgstr "Optimiza"
 
@@ -17200,8 +17190,7 @@ msgid "Spacing Modifier Letters"
 msgstr "Spatiante Litteras de Modificator"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:27
-#, fuzzy, kde-format
-#| msgid "Combine Normal Maps"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks"
 msgstr "Combinante Marcas Diacritic"
@@ -17225,7 +17214,7 @@ msgid "Cyrillic Supplement"
 msgstr "Cyrillic Supplemento"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Armenian"
 msgstr "Armenio "
@@ -17237,8 +17226,7 @@ msgid "Hebrew"
 msgstr "Hebreo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:33
-#, fuzzy, kde-format
-#| msgid "Arabic"
+#, kde-format
 msgctxt "@title"
 msgid "Arabic"
 msgstr "Arabic"
@@ -17316,8 +17304,7 @@ msgid "Gurmukhi"
 msgstr "Gurmukhi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:46
-#, fuzzy, kde-format
-#| msgid "Gujarati"
+#, kde-format
 msgctxt "@title"
 msgid "Gujarati"
 msgstr "Gujarati"
@@ -17581,8 +17568,7 @@ msgid "Phonetic Extensions Supplement"
 msgstr "Extensiones Phonetic Supplemento"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:90
-#, fuzzy, kde-format
-#| msgid "Combine Normal Maps"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Supplement"
 msgstr "Combinante Marcas Diacritic Supplemento"
@@ -17618,8 +17604,7 @@ msgid "Currency Symbols"
 msgstr "Symbolos de numerario"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
-#, fuzzy, kde-format
-#| msgid "Combine Normal Maps"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks for Symbols"
 msgstr "Combinante Marcas Diacritic pro Symbolos"
@@ -17643,15 +17628,13 @@ msgid "Arrows"
 msgstr "Flechas"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
-#, fuzzy, kde-format
-#| msgid "Operation"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
 msgstr "Operatores Mathematic"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Technical"
 msgstr "Miscellanea Technical"
@@ -17663,7 +17646,7 @@ msgid "Control Pictures"
 msgstr "Figuras de Controlo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Optical Character Recognition"
 msgstr "Recognition de Character Optic"
@@ -17681,8 +17664,7 @@ msgid "Box Drawing"
 msgstr "Designo de Quadrato"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
-#, fuzzy, kde-format
-#| msgid "- Elements"
+#, kde-format
 msgctxt "@title"
 msgid "Block Elements"
 msgstr "Elementos de Block"
@@ -17940,11 +17922,10 @@ msgid "Modifier Tone Letters"
 msgstr "Littera de Modificator de tono"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
-#, fuzzy, kde-format
-#| msgid "Green-Red"
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-D"
-msgstr "Latin Extendite-D"
+msgstr "Latino Extendite-D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:150
 #, kde-format
@@ -19581,8 +19562,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
 msgstr "Grandor optic"
@@ -19801,11 +19781,10 @@ msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
-#, fuzzy, kde-format
-#| msgid "Subscript"
+#, kde-format
 msgctxt "@title"
 msgid "Subscript"
-msgstr "Subscribite"
+msgstr "Subscript"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
 #, kde-format
@@ -19814,11 +19793,10 @@ msgid "Replaces glyphs with ones more suited for subscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
-#, fuzzy, kde-format
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@title"
 msgid "Superscript"
-msgstr "Super-scribite"
+msgstr "Superscript"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
 #, kde-format
@@ -21595,20 +21573,16 @@ msgid "Update Animation Settings"
 msgstr "Face plan strato (Layer)"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr "Plica Nodo"
+msgstr "Plica Nodo %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr "Expande Nodo"
+msgstr "Expande Nodo %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -24895,9 +24869,7 @@ msgid "resource folder"
 msgstr "Aperi  dossier de ressource"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:126
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
 msgstr "Preferentias de monstrator"
 
@@ -25448,10 +25420,7 @@ msgid "spline"
 msgstr "spline"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:105
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "n/d"
@@ -26177,12 +26146,10 @@ msgid "none"
 msgstr "nulle"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "apng prediction option name"
-#| msgid "sub"
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr "Sub"
+msgstr "sub"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -26269,11 +26236,7 @@ msgid "Per Single Frame"
 msgstr "Dele toto"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "nulle"
@@ -26318,19 +26281,13 @@ msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "nulle"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "Rectangulo"
@@ -26343,11 +26300,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Aperi"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
@@ -26567,10 +26523,9 @@ msgstr "General"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video file:"
-msgstr "File Video"
+msgstr "File Video:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -26793,10 +26748,9 @@ msgstr "Filtro:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "ffmpeg"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
@@ -27464,10 +27418,10 @@ msgstr "Proprietates de Mascara de filtro"
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:315
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr "N"
+msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:128
 #, kde-format
@@ -27526,9 +27480,7 @@ msgstr "Il non pote cargar a selection de vector %1."
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:416
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "@ttile:window"
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "Aviso"
@@ -27687,8 +27639,7 @@ msgid "Enabled"
 msgstr "Habilitate"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:368
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Dishabilitate"
@@ -27752,9 +27703,9 @@ msgid "Internal Storage"
 msgstr "Error Interne"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
-#, fuzzy, kde-format
+#, kde-format
 msgid "SD-Card"
-msgstr "Sd Card"
+msgstr "SD-Card"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:621
 #, fuzzy, kde-format
@@ -27778,8 +27729,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Necun"
@@ -27885,11 +27835,9 @@ msgid "Rec 709 Linear"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1339
-#, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rec. 2100 PQ"
+msgstr "Rec 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1340
 #, kde-format
@@ -28245,9 +28193,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to delete"
-msgstr "Falleva a deler <filename>%1 </filename> ."
+msgstr "Falleva a deler   "
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
 #, kde-format
@@ -28569,8 +28517,7 @@ msgid "Simulate paper white and black"
 msgstr ""
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:94
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "Personalisate"
@@ -28772,13 +28719,9 @@ msgstr "Forma de Annotation:"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
 #: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:355
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert Comment"
+#, kde-format
 msgid "User Community"
-msgstr ""
-"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Communitate de Usator</span></a></p>"
+msgstr "Communitate de Usator"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
 #: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:367
@@ -29462,7 +29405,7 @@ msgstr "Proprietates de Mascara de filtro"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colorspace Conversion"
 msgstr "Conversion de spatio de color"
 
@@ -29756,18 +29699,15 @@ msgstr "&Mascara de transparentia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:327
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Color"
+msgstr "Color 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:354
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Color"
+msgstr "Color 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -33732,9 +33672,7 @@ msgid " + "
 msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
+#, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Sinistra"
@@ -33746,9 +33684,7 @@ msgid "Right"
 msgstr "Dextera"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Central"
@@ -34238,9 +34174,7 @@ msgid "Deselect"
 msgstr "De-selectiona"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
 msgstr "Activa proxime strato"
 
@@ -38250,8 +38184,7 @@ msgid "Icon Size"
 msgstr "Dimension de Icone"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:145
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Disposition"
@@ -40340,11 +40273,10 @@ msgid "H:"
 msgstr "H"
 
 #: libs/widgets/kis_color_input.cpp:422
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "s"
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:501
 #, kde-format
@@ -41332,8 +41264,7 @@ msgid "A&vailable actions:"
 msgstr "A&ctiones disponibile:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1041
-#, fuzzy, kde-format
-#| msgid "Filter"
+#, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Filtro"
@@ -41350,9 +41281,7 @@ msgstr "Cambia icone ..."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1077
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Filter"
+#, kde-format
 msgid "Filter"
 msgstr "Filtro"
 
@@ -41666,17 +41595,15 @@ msgid "A scheme with this name already exists."
 msgstr "Un schema con iste nomine ja existe."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
 "Tu realmente vole cancellar le schema %1\n"
-"Tu nota che isto non removera alcun schema de via breve de tote le systema"
+"                                             Tu nota che isto non removera "
+"alcun schemas de via breve de tote le systema"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -42403,19 +42330,19 @@ msgid "ICC Engine"
 msgstr "Motor de color:"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b*/8 Histogram"
-msgstr "L*a*b* Histogramma"
+msgstr "L*a*b*/8 Histogramma"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b*/16 Histogram"
-msgstr "L*a*b* Histogramma"
+msgstr "L*a*b*/16 Histogramma"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b*/32 Histogram"
-msgstr "L*a*b* Histogramma"
+msgstr "L*a*b*/32 Histogramma"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:181
 #, fuzzy, kde-format
@@ -42549,8 +42476,7 @@ msgid "On Mouse Over"
 msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgid "Never"
 msgstr "Jammais"
 
@@ -42981,8 +42907,7 @@ msgid "Bluer/Yellower: "
 msgstr "Blau-Jalne:"
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Reinitialisa"
@@ -43148,9 +43073,6 @@ msgid "Zoom view to fit curve."
 msgstr "Exeque zoom a adaptar"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:663
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
 msgstr "Adde keyframes scalar"
@@ -43216,9 +43138,7 @@ msgid "Remove audio"
 msgstr "Remove Nota"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Silente"
@@ -44191,8 +44111,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Necun"
@@ -44628,8 +44547,7 @@ msgid "Configure black and white points of the view"
 msgstr ""
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
-#, fuzzy, kde-format
-#| msgid "Overview"
+#, kde-format
 msgid "Overview"
 msgstr "Vista de insimul"
 
@@ -46132,15 +46050,13 @@ msgid "%1, variant: %2"
 msgstr "%1, Variante: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
 msgstr "Activate (On)"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
 msgstr "De-Activate (Off)"
@@ -46252,9 +46168,7 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
 #: plugins/dockers/textproperties/qml/TextAlign.qml:368
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Middle"
 msgstr "Central"
@@ -46344,15 +46258,13 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "None"
 msgstr "Necun"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:132
-#, fuzzy, kde-format
-#| msgid "Length"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Length"
 msgstr "Longitude"
@@ -46385,8 +46297,7 @@ msgid "Style Name:"
 msgstr "Folio de stilo"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "Description:"
@@ -46406,11 +46317,10 @@ msgid "Style Type:"
 msgstr "Stilo:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
-msgstr "Character:"
+msgstr "Character"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, kde-format
@@ -46442,37 +46352,31 @@ msgid "Sample Text:"
 msgstr "Simple"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
-#, fuzzy, kde-format
-#| msgid "Before:"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
-msgstr "Ante"
+msgstr "Ante..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Sca&le..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
-msgstr "Exemplo:"
+msgstr "Exemplo..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
-#, fuzzy, kde-format
-#| msgid "After:"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
-msgstr "Postea"
+msgstr "... Postea"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Largessa:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Altessa:"
@@ -46498,15 +46402,13 @@ msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Direction.qml:107
-#, fuzzy, kde-format
-#| msgid "Left to Right"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left to Right"
 msgstr "Sinistra a Dextera"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:108
-#, fuzzy, kde-format
-#| msgid "Right to Left"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right to Left"
 msgstr "Dextera a Sinistra"
@@ -46776,8 +46678,7 @@ msgid "Slant:"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr "Italic"
@@ -46789,8 +46690,7 @@ msgid "Oblique"
 msgstr "Oblique"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:362
-#, fuzzy, kde-format
-#| msgid "°"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr "°"
@@ -46843,11 +46743,10 @@ msgid "Hang First"
 msgstr "Salveguarda documento"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
-#, fuzzy, kde-format
-#| msgid "Line:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Line End:"
-msgstr "Fin de Linea"
+msgstr "Fin de Linea:"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:132
 #, fuzzy, kde-format
@@ -46903,12 +46802,10 @@ msgid "Store this language between sessions."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
-#, fuzzy, kde-format
-#| msgctxt "Script list label"
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script:"
-msgstr "Script"
+msgstr "Script:"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, fuzzy, kde-format
@@ -46933,9 +46830,7 @@ msgid "letter-spacing, tracking, kerning"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Break"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Line Break"
 msgstr "Interruption de linea"
@@ -47071,8 +46966,7 @@ msgstr "Remove patrono"
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
 #: qmlmodules/components/qml/ResourceView.qml:297
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Cerca..."
@@ -47450,9 +47344,7 @@ msgstr "Alinea texto:"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:306
 #: plugins/dockers/textproperties/qml/TextAlign.qml:338
-#, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left"
 msgstr "Sinistra"
@@ -47460,16 +47352,14 @@ msgstr "Sinistra"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:307
 #: plugins/dockers/textproperties/qml/TextAlign.qml:339
 #: plugins/dockers/textproperties/qml/TextAlign.qml:367
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Start"
 msgstr "Initia"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:308
 #: plugins/dockers/textproperties/qml/TextAlign.qml:340
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Center"
 msgstr "Centro"
@@ -47484,8 +47374,7 @@ msgstr "Fin"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:310
 #: plugins/dockers/textproperties/qml/TextAlign.qml:342
-#, fuzzy, kde-format
-#| msgid "Right"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right"
 msgstr "Dextera"
@@ -47570,9 +47459,7 @@ msgid "Line:"
 msgstr "Linea:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:177
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Underline"
+#, kde-format
 msgctxt "@option:check"
 msgid "Underline"
 msgstr "Sublinea"
@@ -47672,11 +47559,10 @@ msgid "Paragraph"
 msgstr "Paragrapho"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Character"
-msgstr "Character:"
+msgstr "Character"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
 #, kde-format
@@ -47706,8 +47592,7 @@ msgid "Clone Style Preset"
 msgstr "Nove Stilo"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
-#, fuzzy, kde-format
-#| msgid "Filter"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filtro..."
@@ -47725,8 +47610,7 @@ msgid "Add Property..."
 msgstr "Adde proprietate..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@label:button"
 msgid "Configure"
 msgstr "Configura"
@@ -48189,8 +48073,7 @@ msgstr "Favoritos"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
 msgstr "Selige..."
 
@@ -48373,10 +48256,9 @@ msgstr "Tonde imagine"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:941
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Actualisation Automatic:"
+msgstr "Actualisation Automatic"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
@@ -55606,8 +55488,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:99
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:140
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
 msgstr "Dishabilitate"
@@ -55698,16 +55579,13 @@ msgid "Zero"
 msgstr "Zero"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
-#, fuzzy, kde-format
-#| msgid "Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "Sinistra"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
 msgstr "Culmine"
@@ -58417,8 +58295,7 @@ msgstr ""
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "TIFF options"
 msgid "None"
 msgstr "Necun"
@@ -59431,8 +59308,7 @@ msgstr ""
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Painting mode"
+#, kde-format
 msgid "Painting Mode"
 msgstr "Modos de pictura"
 
@@ -61027,8 +60903,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
-#, fuzzy, kde-format
-#| msgid "°"
+#, kde-format
 msgid "°"
 msgstr "°"
 
@@ -65157,8 +65032,6 @@ msgid "Custom icon"
 msgstr "Optiones personalisate:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
-#| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "Icone de instrumento"
 
@@ -65226,8 +65099,6 @@ msgid "Enter a Tooltip:"
 msgstr "Error interne"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
-#| msgid "Tooltip"
 msgid "Tooltip text"
 msgstr "Texto de consilio"
 
@@ -65276,10 +65147,8 @@ msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select background color:"
-msgstr "Selige le color de fundo"
+msgstr "Selige le color de fundo:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
@@ -66855,8 +66724,7 @@ msgstr "Altere optiones:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Delete all"
+#, kde-format
 msgid "Delete All"
 msgstr "Dele toto"
 
@@ -67599,9 +67467,7 @@ msgid "Hanging"
 msgstr "Angular"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Central"
@@ -68953,9 +68819,9 @@ msgstr "Automatic"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "Diagonal:"
-msgstr "Diagonal"
+msgstr "Diagonal:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
@@ -69214,11 +69080,9 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Rota 90 grados in senso anti-horari"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:136
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
+#, kde-format
 msgid "Keep Aspect Ratio"
-msgstr "Mantene proportiones"
+msgstr "Mantene rata de aspecto"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:140
 #, kde-format
@@ -70124,8 +69988,7 @@ msgid "Tag"
 msgstr "Etiquetta"
 
 #: qmlmodules/components/qml/ResourceView.qml:184
-#, fuzzy, kde-format
-#| msgid "Assign to tag"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Assigna a etiquetta"
@@ -70162,11 +70025,10 @@ msgid "Import %1"
 msgstr "Importa %1"
 
 #: qmlmodules/components/qml/ResourceView.qml:348
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
-msgstr "Remove"
+msgstr "Remove %1"
 
 #: qmlmodules/components/qml/sliderspinbox/SliderSpinBoxContentItem.qml:154
 #, kde-format

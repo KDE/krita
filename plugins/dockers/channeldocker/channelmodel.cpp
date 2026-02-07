@@ -119,7 +119,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
             rootLayer->setChannelFlags(flags);
 
             Q_EMIT channelFlagsChanged();
-            Q_EMIT dataChanged(this->index(0, 0), this->index(channels.count(), 0));
+            emitAllDataChanged(channels.count() - 1, 0);
             return true;
         }
     }
@@ -154,7 +154,7 @@ void ChannelModel::rowActivated(const QModelIndex &index)
         rootLayer->setChannelFlags(flags);
 
         Q_EMIT channelFlagsChanged();
-        Q_EMIT dataChanged(this->index(0, 0), this->index(channels.count(), 0));
+        emitAllDataChanged(channels.count() - 1, 0);
     }
 }
 
@@ -194,7 +194,7 @@ void ChannelModel::setChannelThumbnails(const QVector<QImage> &channels, const K
                 endResetModel();
             } else {
                 m_thumbnails = channels;
-                Q_EMIT dataChanged(this->index(0, 0), this->index(channels.count(), this->columnCount()));
+                emitAllDataChanged(channels.count() - 1, columnCount() - 1);
             }
         }
     }
@@ -213,6 +213,17 @@ void ChannelModel::setThumbnailSizeLimit(QSize size)
 QSize ChannelModel::thumbnailSizeLimit() const
 {
     return m_thumbnailSizeLimit;
+}
+
+void ChannelModel::emitAllDataChanged(int bottomRow, int rightColumn)
+{
+    if (bottomRow >= 0 && rightColumn >= 0) {
+        int rows = rowCount();
+        int cols = columnCount();
+        if (rows > 0 && cols > 0) {
+            Q_EMIT dataChanged(this->index(0, 0), this->index(qMin(bottomRow, rows - 1), qMin(rightColumn, cols - 1)));
+        }
+    }
 }
 
 #include "moc_channelmodel.cpp"

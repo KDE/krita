@@ -47,6 +47,8 @@ Q_SIGNALS:
     void channelFlagsChanged();
 
 private:
+    void emitAllDataChanged(int bottomRow, int rightColumn);
+
     QPointer<KisCanvas2> m_canvas;
     QVector<QImage> m_thumbnails;
 

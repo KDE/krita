@@ -161,6 +161,8 @@ Q_SIGNALS:
     void sigFullClipRangeChanged();
 
 private:
+    void emitRowDataChanged(int row);
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

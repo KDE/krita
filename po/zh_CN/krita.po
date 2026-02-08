@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/krita/krita.pot\n"
-"X-Crowdin-File-ID: 6485\n"
+"X-Crowdin-File: /kf6-trunk/messages/krita/krita.pot\n"
+"X-Crowdin-File-ID: 59988\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format

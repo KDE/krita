@@ -334,7 +334,7 @@ void KisAnimTimelineFramesModel::processUpdateQueue()
 
         if (row >= 0) {
             Q_EMIT headerDataChanged (Qt::Vertical, row, row);
-            Q_EMIT dataChanged(this->index(row, 0), this->index(row, columnCount() - 1));
+            emitRowDataChanged(row);
         }
     }
     m_d->updateQueue.clear();
@@ -446,8 +446,8 @@ bool KisAnimTimelineFramesModel::setData(const QModelIndex &index, const QVarian
                 int prevLayer = m_d->activeLayerIndex;
                 m_d->activeLayerIndex = index.row();
 
-                Q_EMIT dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
-                Q_EMIT dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
+                emitRowDataChanged(prevLayer);
+                emitRowDataChanged(m_d->activeLayerIndex);
 
                 Q_EMIT headerDataChanged(Qt::Vertical, prevLayer, prevLayer);
                 Q_EMIT headerDataChanged(Qt::Vertical, m_d->activeLayerIndex, m_d->activeLayerIndex);
@@ -1156,4 +1156,13 @@ void KisAnimTimelineFramesModel::setActiveLayerSelectedTimes(const QSet<int> &ti
     if (!m_d->image) return;
 
     m_d->image->animationInterface()->setActiveLayerSelectedTimes(times);
+}
+
+void KisAnimTimelineFramesModel::emitRowDataChanged(int row)
+{
+    int rows = rowCount();
+    int cols = columnCount();
+    if (row >= 0 && row < rows && cols > 0) {
+        Q_EMIT dataChanged(index(row, 0), index(row, cols - 1));
+    }
 }

@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QMutex>
+#include <QRegularExpression>
 #include "kis_debug.h"
 #include "ksharedconfig.h"
 #include "kconfiggroup.h"
@@ -228,6 +229,46 @@ QString KoResourcePaths::getAppDataLocation()
     path = cfg.readEntry(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 
     QFileInfo fi(path);
+
+#if defined Q_OS_UNIX
+    // Check that path is not a Windows path (e.g., "C:/", "D:/", etc.),
+    // that can happen when a config file from Windows installation is
+    // moved to a Linux system.
+    QRegularExpression windowsPathPattern("^[A-Za-z]:/");
+    if (windowsPathPattern.match(path).hasMatch()) {
+        warnResources << "WARNING: KoResourcePaths::getAppDataLocation(): path appears to be a Windows path! Resetting to default..."
+            << path
+            << "->"
+            << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        fi.setFile(path);
+        cfg.writeEntry(KisResourceLocator::resourceLocationKey, path);
+    }
+#elif defined Q_OS_WIN
+    // Check that path is not a Linux path, that can happen when a config
+    // file from Linux installation is moved to a Windows system.
+    QRegularExpression windowsPathPattern("^/[^/]");
+    if (windowsPathPattern.match(path).hasMatch()) {
+        warnResources << "WARNING: KoResourcePaths::getAppDataLocation(): path appears to be a Unix path! Resetting to default..."
+            << path
+            << "->"
+            << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        fi.setFile(path);
+        cfg.writeEntry(KisResourceLocator::resourceLocationKey, path);
+    }
+#endif /* Q_OS_UNIX */
+
+    /**
+     * Our code expects the resources location to be **absolute**. Otherwise functions like
+     * makeStorageLocationRelative() or makeStorageLocationAbsolute() do not work.
+     */
+    if (fi.isRelative()) {
+        warnResources << "WARNING: KoResourcePaths::getAppDataLocation(): resources location is not absolute! Fixing..." << path;
+        path = fi.absoluteFilePath();
+        fi.setFile(path);
+        cfg.writeEntry(KisResourceLocator::resourceLocationKey, path);
+    }
 
     // Check whether an existing location is writable
     if (fi.exists() && !fi.isWritable()) {

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-04 00:42+0000\n"
-"PO-Revision-Date: 2026-02-07 12:32+0100\n"
+"PO-Revision-Date: 2026-02-08 14:37+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7733,6 +7733,8 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
+"ტექსტი თითოეული ხაზის მოსათავსებლად SVG 1.1-ის სიმბოლოს გარდაქმნებს იყენებს. "
+"ეს SVG 1.1-თან უკუთავსებადობისთვის გამოიყენება."
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
@@ -8663,7 +8665,7 @@ msgstr "ეკრანის ფერის სემპლი"
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "ფერის &სინჯი ეკრანიდან (რეალური ტილოს სინჯი)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:323
@@ -8679,7 +8681,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "ფერის სინჯი ეკრანიდან (რეალური ტილოს სინჯი)"
 
 #. i18n: context: text @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
@@ -8995,7 +8997,7 @@ msgstr "საშლელის პრესეტის გადართვ�
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
-msgstr ""
+msgstr "აირჩიეთ საშლელის პრესეტი ხელით სახატავ ფუნჯთან ერთად"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -9012,7 +9014,7 @@ msgstr "აირჩიეთ ფუნჯის პრესეტი"
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr ""
+msgstr "აირჩიეთ ფუნჯის პრესეტი ხელით სახატავ ფუნჯთან ერთად"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -11841,7 +11843,7 @@ msgstr "ფენის ხილვადობის გადართვა"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Layer Soloing"
-msgstr ""
+msgstr "ფენის ცალკეულობის გადართვა"
 
 #. i18n: context: toolTip @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2784
@@ -11851,13 +11853,15 @@ msgid ""
 "Toggle layer soloing, temporarily disabling visibility of all non-child "
 "layers."
 msgstr ""
+"ფენის ცალკეულობის გადართვა და დროებით ყველა არაშვილი ფენის ხილვადობის "
+"გამორთვა."
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2785
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer soloing"
-msgstr ""
+msgstr "ფენის ცალკეულობის გადართვა"
 
 #. i18n: context: text @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2794
@@ -12065,7 +12069,7 @@ msgstr "სწრაფი განჯგუფება"
 #, kde-format
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
-msgstr ""
+msgstr "ფენების დაჯგუფების მოცილება, ან ჯგუფიდან ერთი ფენის მოცილება"
 
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
@@ -12083,6 +12087,7 @@ msgstr "სწრაფი დაჯგუფება მაკეტურ ჯ
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
 msgstr ""
+"მონიშნული ფენების დაჯგუფება და ფენის დამატება ამოჭრილ ალფა არხთან ერთად"
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2950
@@ -12273,6 +12278,8 @@ msgstr "&ფაილის ფენად გარდაქმნა..."
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
 msgstr ""
+"შეინახავს ფენებს ახალ გამოსახულებაში და დააყენებს მიმართვას იმ "
+"გამოსახულებაზე."
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3073
@@ -14527,6 +14534,7 @@ msgstr "ეკრანის საწყის მნიშვნელობ�
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
 msgstr ""
+"ჩამოყრის გადიდებას, ბრუნვას და ანარეკლს მათ ნაგულისხმევ მდგომარეობებზე."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -16700,6 +16708,9 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
+"დოკუმენტს აქვს ვექტორული ტექსტი, რომელიც Krita 4.x-ში შეიქმნა. როცა "
+"დოკუმენტს შეინახავთ, მოხდება ტექსტური ობიექტის გადაყვანა Krita 5-ის "
+"ფორმატში, რომელიც Krita 4.x-თან თავსებადი არაა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
 #, kde-format
@@ -18763,7 +18774,7 @@ msgstr "კონტექსტური ალტერნატივებ�
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr ""
+msgstr "ჩაანაცვლებს ტექსტში გლიფებს მათი კონტექსტიდან გამომდინარე."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, kde-format
@@ -18815,7 +18826,7 @@ msgstr "საბოლოო გლიფი ალტერნატიულ 
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr ""
+msgstr "ჩანაცვლებს გლიფებს მათი ხაზის ბოლოს ფორმით."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
@@ -18828,7 +18839,7 @@ msgstr "ისტორიული ფორმები"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their historical forms."
-msgstr ""
+msgstr "ჩაანაცვლებს გლიფებს მათი ისტორიული ფორმით."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
 #, kde-format
@@ -27841,7 +27852,7 @@ msgstr "ვექტორის ფენა %1"
 #: libs/ui/flake/kis_take_all_shapes_command.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Clear Vector Selection"
-msgstr "ვექტორის არჩევანის გასუფთავება"
+msgstr "ვექტორის არჩევნის გასუფთავება"
 
 #: libs/ui/flake/KisReferenceImagesLayer.cpp:24
 msgctxt "(qtundo-format)"
@@ -34279,6 +34290,10 @@ msgid ""
 "  - projections:\t %3\n"
 "  - instant preview:\t %4\n"
 msgstr ""
+"გამოსახულების ზომა:\t %1\n"
+"  - ფენები:\t\t %2\n"
+"  - პროექციები:\t %3\n"
+"  - მყისი მინიატურა:\t %4\n"
 
 #: libs/ui/kis_statusbar.cc:291
 #, kde-format
@@ -34291,6 +34306,12 @@ msgid ""
 "\n"
 "Swap used:\t %8"
 msgstr ""
+"გამოყენებული მეხსიერება:\t %1 / %2\n"
+"  გამოსახულების მონაცემები:\t %3 / %4\n"
+"  პული:\t\t %5 / %6\n"
+"  გაუქმების მონაცემები:\t %7\n"
+"\n"
+"გამოყენებული სვოპი:\t %8"
 
 #: libs/ui/kis_statusbar.cc:326
 #, kde-format
@@ -44693,7 +44714,7 @@ msgstr "X სიმაღლე (ex)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr ""
+msgstr "დიდი ასოების სიმაღლე (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
 #, kde-format
@@ -44717,7 +44738,7 @@ msgstr "ხაზის სიმაღლე (lh)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Spaces (Sp)"
-msgstr ""
+msgstr "ჰარეები (Sp)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
 #, kde-format
@@ -44793,6 +44814,8 @@ msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
+"სწორების საბაზისო ხასი უშვებს მართვას, როგორ ხდება ამ ტექსტის შუალედის "
+"სწორება მშობელ ტექსტთან."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:18
 #, kde-format
@@ -44800,7 +44823,7 @@ msgctxt ""
 "comma separated search terms for the alignment-baseline property, matching "
 "is case-insensitive"
 msgid "alignment-baseline, mojisoroe"
-msgstr ""
+msgstr "alignment-baseline, mojisoroe"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:82
 #, kde-format
@@ -44812,7 +44835,7 @@ msgstr "საბაზისო ხაზი"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline defined by Dominant Baseline."
-msgstr ""
+msgstr "სწორება დომინანტი საბაზისო ხაზის მიერ აღწერილ საბაზისო ხაზზე."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:84
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:82
@@ -44826,7 +44849,7 @@ msgstr "ანბანით"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline for scripts that align at the bottom."
-msgstr ""
+msgstr "სწორება საბაზისო ხაზზე სკრიპტებისთვის, რომლებიც ქვედა მხარეს სწორდება."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
@@ -44840,7 +44863,7 @@ msgstr "იდიოგრაფიული"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box bottom."
-msgstr ""
+msgstr "სწორება ქვემოთ იდეოგრაფიულ ბლოკზე em."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
@@ -44854,7 +44877,7 @@ msgstr "ცენტრალური"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box center."
-msgstr ""
+msgstr "სწორება ცენტრში იდეოგრაფიულ ბლოკზე em."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
@@ -44913,7 +44936,7 @@ msgstr "ტექსტის-ზემოთ"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
-msgstr ""
+msgstr "სწორება ზედა წიბოზე."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
@@ -44927,7 +44950,7 @@ msgstr "ტექსტის ქვემოთ"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
-msgstr ""
+msgstr "სწორება ქვედა წიბოზე."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
 #, kde-format
@@ -44949,7 +44972,7 @@ msgctxt ""
 "comma separated search terms for the baseline-shift property, matching is "
 "case-insensitive"
 msgid "baseline-shift, superscript, subscript"
-msgstr ""
+msgstr "baseline-shift, superscript, subscript"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
@@ -45024,7 +45047,7 @@ msgstr "აბზაცი"
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr ""
+msgstr "სტილი ფარდობითია პიქსელთან"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
@@ -45058,7 +45081,7 @@ msgstr "სინჯი..."
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
-msgstr ""
+msgstr "... შემდეგ"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
 #, kde-format
@@ -45083,6 +45106,7 @@ msgstr "მიმართულება"
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
 msgstr ""
+"მიმართულება აყენებს, ტექსტი მარცხნიდან-მარჯვნივაა, თუ მარჯვნიდან-მარცხნივ."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -45091,6 +45115,8 @@ msgctxt ""
 "insensitive"
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
+"right to left, rtl, direction, bidirectional, isolate, embed, override, "
+"მარჯვნიდან მარცხნივ, მიმართულება, იზოლაცია, ჩაშენება, გადაფარვა"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:107
 #, kde-format
@@ -45108,7 +45134,7 @@ msgstr "მარჯვნიდან მარცხნივ"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-Bidi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
@@ -45149,7 +45175,7 @@ msgstr "იზოლაცია"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "იზოლაცია-გადაფარვა"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:141
 #, kde-format
@@ -45161,7 +45187,7 @@ msgstr "უბრალო ტექსტი"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Dominant Baseline"
-msgstr ""
+msgstr "დომინანტი საბაზისო ხაზი"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, kde-format
@@ -45177,7 +45203,7 @@ msgctxt ""
 "comma separated search terms for the dominant-baseline property, matching is "
 "case-insensitive"
 msgid "dominant-baseline, mojisoroe"
-msgstr ""
+msgstr "dominant-baseline, mojisoroe, დომინანტი საბაზისო ხაზი"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:80
 #: plugins/dockers/textproperties/qml/LineBreak.qml:77
@@ -45218,7 +45244,7 @@ msgctxt ""
 "comma separated search terms for the font-family property, matching is case-"
 "insensitive"
 msgid "font-family, typeface, font, fallback"
-msgstr ""
+msgstr "font-family, typeface, font, fallback, ფონტის ოჯახი, ფონტი"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
@@ -45255,7 +45281,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr ""
+msgstr "font-kerning, tracking, ფონტის კერნინგი"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -45267,7 +45293,7 @@ msgstr "ფონტის ზომა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr ""
+msgstr "ფონტის ზომა სიმბოლოების ზომის დაყენების საშუალებას გაძლევთ."
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -45275,7 +45301,7 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "size, small, big, medium, ზომა, პატარა, დიდი, საშუალო"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, kde-format
@@ -45297,6 +45323,8 @@ msgctxt ""
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
+"size, small, big, medium, font-size-adjust, ზომა, პატარა, დიდი, საშუალო, "
+"ფონტის ზომის გასწორება"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -45333,6 +45361,9 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"weight, width, style, italics, oblique, font-style, font-stretch, font-"
+"weight, bold, optical-size, variation, წონა, სიგანე, სტილი, კურსივი, ფონტი "
+"სტილი, ფონტის წონა, სქელი, ვარიაცია"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
@@ -45344,7 +45375,7 @@ msgstr "წონა: "
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr ""
+msgstr "სქელის სინთეზი"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, kde-format
@@ -45356,7 +45387,7 @@ msgstr "სიგანე: "
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr ""
+msgstr "დაცერება:"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
 #, kde-format
@@ -45380,7 +45411,7 @@ msgstr "°"
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr ""
+msgstr "დაცერების სინთეზი"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
 #, kde-format
@@ -45391,7 +45422,7 @@ msgstr "ოპტიკური ზომა"
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
 msgid "No extra variable axes in this font"
-msgstr ""
+msgstr "ამ ფონტში დამატებითი ცვლადი ღერძები არაა"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
 #, kde-format
@@ -45414,13 +45445,13 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "hanging-punctuation, burasagari, ჩამოკიდებული პუნქტუაცია, ბურასაგარი"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr ""
+msgstr "ჯერ ჩამოკიდება"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -45438,19 +45469,19 @@ msgstr "ჩამოკიდების გარეშე"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "ჩამოკიდებული მძიმეების დაშვება"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "ჩამოკიდებული მძიმეების ნაძალადევობა"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr ""
+msgstr "ბოლოს ჩამოკიდება"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -45472,13 +45503,13 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "language, locale, bcp47, ენა, ლოკალი"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Store this language between sessions."
-msgstr ""
+msgstr "ამ ენის შენახვა სესიებს შორის."
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
 #, kde-format
@@ -45505,7 +45536,7 @@ msgctxt ""
 "comma separated search terms for the letter-spacing property, matching is "
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
-msgstr ""
+msgstr "letter-spacing, tracking, kerning, დაშორება სიმბოლოებს შორის, კერნინგი"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -45528,6 +45559,7 @@ msgctxt ""
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
 msgstr ""
+"line-break, line breaking, strictness, kinsoku, ხაზის გადატანა, სიმკაცრე"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
@@ -45598,7 +45630,7 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "line-height, line-spacing, ხაზის სიმაღლე, ადგილი ხაზებს შორის"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
 #, kde-format
@@ -45624,12 +45656,12 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "font-feature-settings, OpenType, ფონტის თვისებების მორგება"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "ამჟამად OpenType-ის ფუნქციები დაყენებული არაა."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -45654,7 +45686,7 @@ msgstr "გლიფები: დიდი ასოები"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr ""
+msgstr "დიდ ასოებთან დაკავშირებული OpenType-ის თვისებების ჩართვა."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -45663,6 +45695,8 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals, დიდი "
+"ასოები, პატარად დაწერილი დიდი ასოები, დახრა"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
@@ -45704,13 +45738,15 @@ msgstr "სათაური"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr ""
+msgstr "გლიფები: აღმოსავლეთ აზიური"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
 msgstr ""
+"აღმოსავლეთი აზიური ტექსტის განლაგებასთან დაკავშირებული გლიფის ფორმების "
+"ჩართვა."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -45721,6 +45757,8 @@ msgid ""
 "font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
 "full-width"
 msgstr ""
+"font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
+"full-width, ფონტის ვარიანტი აღმოსავლეთ-აზიიდან, პროპორციული, სრული სიგანით"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
 #, kde-format
@@ -45750,7 +45788,7 @@ msgstr "JIS90"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS04"
-msgstr ""
+msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
 #, kde-format
@@ -45810,6 +45848,9 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"font-variant-ligatures, common-ligatures, discretionary-ligatures, "
+"historical-ligatures, contextual-alts, ფონტის ვარიანტის ლიგატურები, ზოგადი "
+"ლიგატურები, ისტორიული ლიგატურები"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -45839,13 +45880,13 @@ msgstr "კონტექსტური"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr ""
+msgstr "გლიფები: რიცხვითი"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "ტექსტზე რიცხვებთან დაკავშირებული გლიფის ფორმების ჩართვა."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -45856,6 +45897,9 @@ msgid ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
+"zero, fractions, ფონტის რიცხვითი ვარიანტები, ძველი ტიპის ციფრები, გადახაზული "
+"ნული, წილადები"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -45928,7 +45972,7 @@ msgstr "გლიფები: მდებარეობა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "ტექსტზე სუბსკრიპტის ან სუპერსკრიპტის ჩართვა."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -45937,12 +45981,14 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
 msgstr ""
+"font-variant-position, superscript, subscript, ფონტის ვარიანტის პოზიცია, "
+"სუპერსკრიპტი, სუბსკრიპტი"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "გადავსების გადატანა:"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
 #, kde-format
@@ -45976,7 +46022,7 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr ""
+msgstr "tab-size, ტაბულაციის ზომა"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
@@ -45996,7 +46042,7 @@ msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
-msgstr ""
+msgstr "text-align, justification, text-anchor, ტექსტის სწორება"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
@@ -46077,7 +46123,7 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "text-in-shape, padding, margin, ტექსტი ფორმაში, სწორება, მინდორი"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
 #, kde-format
@@ -46112,6 +46158,8 @@ msgctxt ""
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
 msgstr ""
+"underline, overline, strikethrough, line-through, ხაზგასმა, ხაზი ზემოდან, "
+"ხაზის გადასმა"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -46205,7 +46253,7 @@ msgstr "ჩამოკიდებული შეწევა"
 #, kde-format
 msgctxt "@option:check"
 msgid "Indent after hardbreaks"
-msgstr ""
+msgstr "შეწევა ხაზის გაწყვეტის შემდეგ"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:64
 #, kde-format
@@ -46271,7 +46319,7 @@ msgstr "მორგება"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
-msgstr ""
+msgstr "ნაგულისხმევი ხილვადობა:"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
@@ -46285,7 +46333,7 @@ msgstr "როცა რელევანტურია"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr ""
+msgstr "როცა დაყენებულია"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -46326,6 +46374,7 @@ msgctxt ""
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
 msgstr ""
+"text-rendering, hinting, anti-aliasing, ტექსტის რენდერი, ჰინტინგი, მოგლუვება"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -46351,7 +46400,7 @@ msgstr "რენდერი მოგლუვების გარეშე.
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Legibility"
-msgstr ""
+msgstr "მკაფიობის ოპტიმიზაცია"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:86
 #, kde-format
@@ -46396,6 +46445,8 @@ msgid ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana"
 msgstr ""
+"text-transform, uppercase, capitalization, lowercase, full-width, full-size "
+"kana, ტექსტის გარდაქმნა, დიდი ასოები, დიდ ასოებში გადაყვანა, პატარა ასოები"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
@@ -46431,7 +46482,7 @@ msgstr "სრული-სიგანე"
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "სრულზომიანი კანა"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, kde-format
@@ -46452,6 +46503,8 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
 msgstr ""
+"text-decoration-position, underline, left, right, under, ტექსტის დეკორაციის "
+"პოზიცია, ხაზგასმა, მარცხენა, მარჯვენა, ქვეშ"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
@@ -46492,6 +46545,8 @@ msgctxt ""
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
 msgstr ""
+"white-space, collapse, pre-formatted, თეთრი ჰარე, აკეცვა, წინასწარ "
+"დაფორმატებული"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -46503,13 +46558,13 @@ msgstr "პრე"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr ""
+msgstr "გადატანის გარეშე"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
-msgstr ""
+msgstr "წინასწარი გადატანა"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
 #, kde-format
@@ -46544,7 +46599,7 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "word-break, line breaking, სიტყვის გადატანა, ხაზის გადატანა"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
@@ -46556,7 +46611,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "ყველას შენარჩუნება"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
@@ -46569,7 +46624,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "ყველას დაშლა"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
@@ -46592,6 +46647,8 @@ msgctxt ""
 "insensitive"
 msgid "word-spacing, tracking, white space,"
 msgstr ""
+"word-spacing, tracking, white space, დაშორება სიტყვებს შორის, ტრეკინგი, "
+"თეთრი ჰარე,"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -46614,6 +46671,8 @@ msgctxt ""
 "insensitive"
 msgid "writing-mode, horizontal, vertical, top-to-bottom"
 msgstr ""
+"writing-mode, horizontal, vertical, top-to-bottom, წერის რეჟიმი, "
+"ჰორიზონტალური, ვერტიკალური, ზემოდან ქვემოთ"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
 #, kde-format
@@ -46665,7 +46724,7 @@ msgstr "ფერის მოდელი"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
 #, kde-format
 msgid "Hue Ring Appearance:"
-msgstr ""
+msgstr "ტონის რგოლის გარეგნობა:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
@@ -46689,7 +46748,7 @@ msgstr "დინამიკური"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "დინამიკური + სტატიკური წიბო"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
@@ -46725,7 +46784,7 @@ msgstr "ფენა/ნიღაბი"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
 #, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr ""
+msgstr "Proof Colors to Painting Color Space"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
@@ -46825,13 +46884,13 @@ msgstr "პაჩები"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:902
 #, kde-format
 msgid "Max Patches:"
-msgstr ""
+msgstr "მაქს. პაჩები:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
 #, kde-format
 msgid "Update Base Color When:"
-msgstr ""
+msgstr "საბაზისო ფერის განახლება, როცა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
@@ -46843,7 +46902,7 @@ msgstr "ფერი გარედან იცვლება"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
 #, kde-format
 msgid "Right-clicking on shade selector"
-msgstr ""
+msgstr "მარჯვენა წკაპისას ჩრდილის ამრჩევზე"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
@@ -46913,7 +46972,7 @@ msgstr "ჩვენება:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "ჩ&ოჩია"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
@@ -46941,14 +47000,14 @@ msgstr "WG ფერის ამრჩევის ქმედებები"
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr ""
+msgstr "ფერების არჩევნის დიდი დიაპაზონის ჩვენება"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr ""
+msgstr "ჩრდილის არჩევნის დიდი დიაპაზონის ჩვენება"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -46981,7 +47040,7 @@ msgstr "MyPaint ამრჩევის ჩვენება"
 #, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr ""
+msgstr "ფერის გაღიავება"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -46991,6 +47050,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"მონიშნული ფერის მნიშვნელობის, განათებულობის ან ინტენსივობის გაზრდა მონიშნული "
+"ფერის მოდელზე დამოკიდებულებით"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -47001,7 +47062,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr ""
+msgstr "ფერის გამუქება"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -47011,6 +47072,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"მონიშნული ფერის მნიშვნელობის, განათებულობის ან ინტენსივობის შემცირება "
+"მონიშნული ფერის მოდელზე დამოკიდებულებით"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -47028,7 +47091,7 @@ msgstr "ფერის გაჯერებულობის გაზრდ�
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "მონიშნული ფერის გაჯერებულობის გაზრდა"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -47046,7 +47109,7 @@ msgstr "ფერის გაჯერებულობის შემცი�
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "მონიშნული ფერის გაჯერებულობის შემცირება"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -47064,7 +47127,7 @@ msgstr "ტონის საათის ისრის მოძრაობ
 #, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr ""
+msgstr "მონიშნული ფერის ტონის წანაცვლება სმ"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
@@ -47075,19 +47138,19 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr ""
+msgstr "ტონის წანაცვლება სსმ"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
 #, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr ""
+msgstr "მონიშნული ფერის ტონის წანაცვლება სსმ"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
 #, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "ფერების არჩევანის დიდი დიაპაზონი"
+msgstr "ფერების არჩევნის დიდი დიაპაზონი"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
 #, kde-format
@@ -47098,12 +47161,12 @@ msgstr "მორგება..."
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "ფერების არჩევანის დიდი დიაპაზონის მორგება"
+msgstr "ფერების არჩევნის დიდი დიაპაზონის მორგება"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Please paste this information in your bug report"
-msgstr ""
+msgstr "ჩასვით ეს ინფორმაცია თქვენი შეცდომის ანგარიშში"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:41
 #, kde-format
@@ -47131,6 +47194,7 @@ msgstr "ჟურნალის გადართვა"
 msgctxt "Caption of the dialog with Krita's Android system log for bug reports"
 msgid "Krita Logcat Dump: please paste this information to the bug report"
 msgstr ""
+"Krita-ის ჟურნალის ჩანაწერები: ჩასვით ეს ინფორმაცია თქვენი შეცდომის ანგარიშში"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:68
 #, kde-format
@@ -47140,18 +47204,23 @@ msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
+"Krita-ის ფერთა მართვის ინფორმაცია: ჩასვით ეს ინფორმაცია თქვენი შეცდომის "
+"ანგარიშში"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format
 msgctxt "Caption of the dialog with crash log for bug reports"
 msgid "Krita Crash Log: please paste this information to the bug report"
 msgstr ""
+"Krita-ის ავარიული დასრულების ჟურნალი: ჩასვით ეს ინფორმაცია თქვენი შეცდომის "
+"ანგარიშში"
 
 #: plugins/extensions/buginfo/DlgKritaLog.cpp:23
 #, kde-format
 msgctxt "Caption of the dialog with Krita usage log for bug reports"
 msgid "Krita Usage Log: please paste this information to the bug report"
 msgstr ""
+"Krita-ის გამოყენების ჟურნალი: ჩასვით ეს ინფორმაცია თქვენი შეცდომის ანგარიშში"
 
 #: plugins/extensions/buginfo/DlgSysInfo.cpp:23
 #, kde-format
@@ -47159,12 +47228,13 @@ msgctxt "Caption of the dialog with system information for bug reports"
 msgid ""
 "Krita System Information: please paste this information to the bug report"
 msgstr ""
+"Krita-ის ინფორმაცია სისტემაზე: ჩასვით ეს ინფორმაცია თქვენი შეცდომის ანგარიშში"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/buginfo/wdg_buginfo.ui:39
 #, kde-format
 msgid "Please add this information to a bug report:"
-msgstr ""
+msgstr "დაამატეთ ეს ინფორმაცია თქვენი შეცდომის ანგარიშში:"
 
 #: plugins/extensions/clonesarray/clonesarray.xmlgui:5
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:7
@@ -47339,19 +47409,19 @@ msgstr "ინვერსია"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:82
 #, kde-format
 msgid "Fuzziness"
-msgstr ""
+msgstr "გადღაბნილობა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAdd)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:98
 #, kde-format
 msgid "&Add to current selection"
-msgstr ""
+msgstr "დ&ამატება მიმდინარე მონიშნულზე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSubtract)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:108
 #, kde-format
 msgid "Subtract fro&m current selection"
-msgstr ""
+msgstr "გა&მოკლება მიმდინარე მონიშნულიდან"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeselect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:141
@@ -47362,19 +47432,19 @@ msgstr "&მონიშვნის მოხსნა"
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, kde-format
 msgid "Convert All Layers From %1"
-msgstr ""
+msgstr "%1-დან ყველა ფენის გადაყვანა"
 
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, kde-format
 msgid "Convert Current Layer From %1"
-msgstr ""
+msgstr "მიმდინარე ფენის გადაყვანა %1-დან"
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr ""
+msgstr "რ&ესურსების კეშის მონაცემთა ბაზის დათვალიერება..."
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -47388,12 +47458,12 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Resources Cache Database"
-msgstr ""
+msgstr "რესურსების კეშის მონაცემთა ბაზა"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:35
 #, kde-format
 msgid "Resources Cache Database Explorer"
-msgstr ""
+msgstr "რესურსების კეშის მონაცემთა ბაზის დამთვალიერებელი"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #, kde-format
@@ -47473,7 +47543,7 @@ msgstr "Krita-ის ვერსია:"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "სქემის განახლებები"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -47534,7 +47604,7 @@ msgstr "ჰორიზონტალური ხაზები"
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:65
 #, kde-format
 msgid "Use guides"
-msgstr ""
+msgstr "მიმმართველების გამოყენება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalSplitLines)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:50
@@ -47601,49 +47671,49 @@ msgstr "ფენის გაყოფა"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:29
 #, kde-format
 msgid "Put all new layers in a group layer"
-msgstr ""
+msgstr "ყველა ახალი ფენების ფენის ჯგუფში ჩადება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSeparateGroupLayers)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:39
 #, kde-format
 msgid "Put every layer in its own, separate group layer"
-msgstr ""
+msgstr "ყველა ფენის საკუთარ, ცალკე ფენების ჯგუფში ჩადება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAlphaLock)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:46
 #, kde-format
 msgid "Alpha-lock every new layer"
-msgstr ""
+msgstr "ყოველი ახალი ფენის ალფა არხის დაბლოკვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideOriginal)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:56
 #, kde-format
 msgid "Hide the original layer"
-msgstr ""
+msgstr "ორიგინალი ფენის დამალვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSortLayers)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:66
 #, kde-format
 msgid "Sort layers by amount of non-transparent pixels"
-msgstr ""
+msgstr "ფენების დალაგება არაგამჭვირვალე პიქსელების რაოდენობის მიხედვით"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisregardOpacity)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:76
 #, kde-format
 msgid "Disregard opacity"
-msgstr ""
+msgstr "გაუმჭირვალობის არგათვალისწინება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:83
 #, kde-format
 msgid "Fuzziness:"
-msgstr ""
+msgstr "გადღაბნილობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:96
 #, kde-format
 msgid "Palette to use for naming the layers:"
-msgstr ""
+msgstr "პალიტრა ფენის სახელებში გამოსაყენებლად:"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, paletteChooser)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:103
@@ -47661,7 +47731,7 @@ msgstr "ფენებად დაყოფა"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:116
 #, kde-format
 msgid "Split Into Local Selection Masks"
-msgstr ""
+msgstr "დაყოფა ლოკალურ მონიშნულის ნიღბებად"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:129
@@ -47671,6 +47741,9 @@ msgid ""
 "according to color</span></p><p>Creates a new layer for every color in the "
 "active layer.</p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-weight:600;\">ფენის დაყოფა ფერის "
+"მიხედვით</span></p><p>ქმნის ახალ ფენას ყოველი ფერისთვის აქტიურ ფენაში.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:21
@@ -47828,35 +47901,35 @@ msgstr "ლანდშაფტის რეჟიმი"
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure index:"
-msgstr ""
+msgstr "ექსპოზიციის ინდექსი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: plugins/extensions/metadataeditor/editors/exif.ui:187
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure bias:"
-msgstr ""
+msgstr "ექსპოზიციის ოფსეტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/metadataeditor/editors/exif.ui:200
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Ape&rture:"
-msgstr ""
+msgstr "აპე&რტურა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/metadataeditor/editors/exif.ui:213
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Shutter speed:"
-msgstr ""
+msgstr "შატერის სიჩქარე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_25)
 #: plugins/extensions/metadataeditor/editors/exif.ui:226
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "&F Number:"
-msgstr ""
+msgstr "&F რიცხვი:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: plugins/extensions/metadataeditor/editors/exif.ui:240
@@ -47870,21 +47943,21 @@ msgstr "ლინზა"
 #, kde-format
 msgctxt "EXIF: lens"
 msgid "&Focal length:"
-msgstr ""
+msgstr "&ფოკუსური მანძილი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/metadataeditor/editors/exif.ui:269
 #, kde-format
 msgctxt "EXIF: lens"
 msgid "Focal length (&35mm equivalent):"
-msgstr ""
+msgstr "ფოკალური სიგრძე (&35 მმ ლენტის ექვივალენტი):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: plugins/extensions/metadataeditor/editors/exif.ui:292
 #, kde-format
 msgctxt "EXIF: lens"
 msgid "Max aperture:"
-msgstr ""
+msgstr "მაქს დიაფრაგმა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: plugins/extensions/metadataeditor/editors/exif.ui:306
@@ -47898,14 +47971,14 @@ msgstr "ავტოფოკუსი"
 #, kde-format
 msgctxt "EXIF: autofocus"
 msgid "Sub&ject distance:"
-msgstr ""
+msgstr "ობიე&ქტის დაშორება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/extensions/metadataeditor/editors/exif.ui:325
 #, kde-format
 msgctxt "EXIF: autofocus"
 msgid "Meterin&g mode:"
-msgstr ""
+msgstr "&გაზომვის რეჟიმი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:336
@@ -47926,7 +47999,7 @@ msgstr "საშუალო"
 #, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Center weighted average"
-msgstr ""
+msgstr "ცენტრალურად გაზომილი საშუალო"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:351
@@ -47940,7 +48013,7 @@ msgstr "წერტილოვანი"
 #, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Multi spot"
-msgstr ""
+msgstr "მრავალი ადგილი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:361
@@ -47968,7 +48041,7 @@ msgstr "სხვა"
 #, kde-format
 msgctxt "EXIF: autofocus"
 msgid "D&istance range:"
-msgstr ""
+msgstr "მანძ&ილის შუალედი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:390
@@ -48017,14 +48090,14 @@ msgstr "ჩაირთო"
 #, kde-format
 msgctxt "EXIF: flash"
 msgid "Stro&be return:"
-msgstr ""
+msgstr "სტრო&ბოსკოპული სიგნალის დაბრუნება:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:438
 #, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "No strobe return detection"
-msgstr ""
+msgstr "სტრობის დაბრუნების აღმოჩენის ფუნქციის გარეშე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:443
@@ -48038,7 +48111,7 @@ msgstr "გაურკვეველი"
 #, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "No strobe return light detected"
-msgstr ""
+msgstr "სტრობის დაბრუნებული სინათლე აღმოჩენილი არაა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:453
@@ -48066,21 +48139,21 @@ msgstr "უცნობი"
 #, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Compulsory flash fired"
-msgstr ""
+msgstr "ნაძალადევი განათება ჩაირთო"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:482
 #, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Compulsory flash suppression"
-msgstr ""
+msgstr "ნაძალადევი განათების ჩახშობა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:487
 #, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Auto mode"
-msgstr ""
+msgstr "ავტომატური რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashFunction)
 #: plugins/extensions/metadataeditor/editors/exif.ui:495
@@ -48231,21 +48304,21 @@ msgstr "დაჩრდილვა"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Daylight fluorescent (D5700 - 7100K)"
-msgstr ""
+msgstr "დღისით ფლუორესცენცია (D 5700 - 7100K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:650
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Day white fluorescent (N4600 - 5400K)"
-msgstr ""
+msgstr "დღის თეთრი ფლუორესცენცია (N 4600 - 5400K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:655
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cool white fluorescent (W3900 - 4500K)"
-msgstr ""
+msgstr "გრილი თეთრი ფლუორესცენცია (W 3900 - 4500K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:660
@@ -48455,7 +48528,7 @@ msgstr "მოდელი:"
 #, kde-format
 msgctxt "EXIF: misc"
 msgid "Sens&ing method type:"
-msgstr ""
+msgstr "გრძნობ&ის მეთოდის ტიპი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:878
@@ -48505,12 +48578,12 @@ msgstr "სამხაზოვანი სენსორი"
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Color sequential linear sensor"
-msgstr ""
+msgstr "ფერების მიმდევრობის წრფივი სენსორი"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:97
 #, kde-format
 msgid "Dublin Core"
-msgstr ""
+msgstr "ბირთვი Dublin"
 
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
@@ -48631,7 +48704,7 @@ msgstr "დაპატარავების პირობა"
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:127
 #, kde-format
 msgid "Shrink from image border"
-msgstr ""
+msgstr "შემცირება გამოსახულების საზღვრიდან"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:56
 msgctxt "(qtundo-format)"
@@ -48664,31 +48737,31 @@ msgstr[1] "%1 ფენის გადაწევა"
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
 #, kde-format
 msgid "Offset by x/2, y/2"
-msgstr ""
+msgstr "წანაცვლება მნიშვნელობებით x/2, y/2"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
-msgstr ""
+msgstr "Python-ის ბიბლიოთეკის ჩატვირთვა შეუძლებელია"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
-msgstr ""
+msgstr "Python-ის ბილიკების დაყენება შეუძლებელია"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:86
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
-msgstr ""
+msgstr "ჩაშენებული მოდულის pykrita ჩატვირთვა შეუძლებელია"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:89
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
-msgstr ""
+msgstr "მოულოდნელი შეცდომა python-ის დამატების ინიციალიზაციისას."
 
 #. i18n: ectx: property (whatsThis), widget (QIconButton, actionIcon)
 #. i18n: ectx: property (whatsThis), widget (QIconButton, configPageIcon)
@@ -48708,6 +48781,8 @@ msgid ""
 "The shortcut to fire this action, such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
+"მალსახმობი ამ ქმედების გამოსაძახებლად: მაგ: 'Ctrl+1', ან QKeySequence-ის "
+"ტიპი, ან არაფერი."
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/extensions/pykrita/plugin/info.ui:68
@@ -48724,6 +48799,8 @@ msgid ""
 "The text associated with the action (used as the menu item label, etc), or "
 "None."
 msgstr ""
+"ქმედებასთან ასოცირებული ტექსტი (გამოიყენება, როგორც მენიუს პუნქტის წარწერა "
+"და ა.შ.), ან არაფერი."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, menu)
 #: plugins/extensions/pykrita/plugin/info.ui:88
@@ -48732,6 +48809,8 @@ msgid ""
 "The menu under which to place this item, such as 'tools' or 'settings', or "
 "None."
 msgstr ""
+"მენიუ, რომელში ეს პუნქტი მოთავსდება. მაგ: 'ხელსაწყოები', ან 'მორგება', ან "
+"არაფერი."
 
 #. i18n: ectx: property (text), widget (QLabel, labelShortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:95
@@ -48765,7 +48844,7 @@ msgstr "ქმედება:"
 #: plugins/extensions/pykrita/plugin/info.ui:163
 #, kde-format
 msgid "Configuration Pages"
-msgstr ""
+msgstr "მორგების გვერდები"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, fullName)
 #: plugins/extensions/pykrita/plugin/info.ui:171
@@ -48774,6 +48853,8 @@ msgid ""
 "The shortcut to fire this action such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
+"მალსახმობი ამ ქმედების გამოსაძახებლად: მაგ: 'Ctrl+1', ან QKeySequence-ის "
+"ტიპი, ან არაფერი."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/pykrita/plugin/info.ui:240
@@ -48785,19 +48866,19 @@ msgstr "გვერდი:"
 #: plugins/extensions/pykrita/plugin/info.ui:269
 #, kde-format
 msgid "Select a Plugin or Built-in Module"
-msgstr ""
+msgstr "აირჩიეთ დამატება, ან ჩაშენებული მოდული"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ExceptHookDialog)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
 #, kde-format
 msgid "Script error"
-msgstr ""
+msgstr "სკრიპტის შეცდომა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:29
 #, kde-format
 msgid "An exception occurred while running the script."
-msgstr ""
+msgstr "სკრიპტის შესრულებისას აღმოჩენილია გამონაკლისი."
 
 #. i18n: ectx: property (text), widget (QLabel, exceptionLabel)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:42
@@ -48847,7 +48928,7 @@ msgstr "Ctrl+R"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:84
 #, kde-format
 msgid "Run script in &console"
-msgstr ""
+msgstr "სკრიპტის &კონსოლში გაშვება"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:87
@@ -48919,7 +49000,7 @@ msgstr "Ctrl+O"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:138
 #, kde-format
 msgid "Save the current script"
-msgstr ""
+msgstr "მიმდინარე სკრიპტის შენახვა"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, lCurveButton)
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
@@ -48938,12 +49019,15 @@ msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-weight:600;\">შენიშვნა:</span> "
+"დამატებების ჩასართავად, ან გამოსართავად Krita თავიდან უნდა გაუშვათ.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
 #, kde-format
 msgid "Error: The Python engine could not be initialized"
-msgstr ""
+msgstr "შეცდომა: Python-ის ძრავის ინიციალიზაციის შეცდომა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:75
@@ -48954,6 +49038,10 @@ msgid ""
 "style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
 "School</span></a>!</p></body></html>"
 msgstr ""
+"<html><head/><body><p>თუ გნებავთ, ისწავლოთ, როგორ დაწეროთ Krita-ის "
+"სკრიპტები, გადახედეთ <a href=\"https://scripting.krita.org/lessons/"
+"introduction\"><span style=\" text-decoration: underline; color:#2980b9;"
+"\">Krita-ის სკრიპტინგის სკოლას</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:59
 #, kde-format
@@ -48965,6 +49053,7 @@ msgstr "Python-ის დამატების მმართველი"
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
 msgstr ""
+"<application>%1</application>-ის მიერ მითითებული მოდულის აღმოჩენა შეუძლებელია"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
 #, kde-format
@@ -48973,12 +49062,14 @@ msgid ""
 "<p>Specified version has invalid format for dependency <application>%1</"
 "application>: <icode>%2</icode>. Skipped</p>"
 msgstr ""
+"<p>მითითებულ ვერსიას აქვს არასწორი ფორმატი დამოკიდებულებისთვის <application>"
+"%1</application>: <icode>%2</icode>. გამოტოვებულია</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
-msgstr ""
+msgstr "<title>დამოკიდებულებების შემოწმება</title>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
 #, kde-format
@@ -48988,12 +49079,15 @@ msgid ""
 "Module do not have PEP396 <code>__version__</code> attribute. It is not "
 "disabled, but behaviour is unpredictable...</p>"
 msgstr ""
+"<p>შემოწმების შეცდომა დამოკიდებულებისთვის <application>%1</application>: "
+"მოდულს არ აქვს PEP396 <code>__version__</code> ატრიბუტი. ის გათიშული არაა, "
+"მაგრამ მისი ქცევა არაპროგნოზირებადია...</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
-msgstr ""
+msgstr "<p><application>%1</application>: მოულოდნელი მოდულის ვერსიის ფორმატი"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format
@@ -49002,6 +49096,8 @@ msgid ""
 "<p><application>%1</application>: No suitable version found. Required "
 "version %2 %3, but found %4</p>"
 msgstr ""
+"<p><application>%1</application>: შესაბამისი ვერსია აღმოჩენილი არაა. საჭიროა "
+"ვერსია: %2 %3. აღმოჩენილია ვერსია: %4</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
 #, kde-format
@@ -49009,12 +49105,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
+"<p>ჩავარდნა მოდულის ჩატვირთვისას <application>%1</application>:</p><pre>%2</"
+"pre>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
-msgstr ""
+msgstr "შიდა ძრავის ჩავარდნა"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
 #, kde-format
@@ -49037,7 +49135,7 @@ msgstr "კომენტარი"
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
-msgstr ""
+msgstr "ფილტრი G'MIC"
 
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
@@ -49048,6 +49146,8 @@ msgstr "დამატება GMic დაყენებული არა�
 #, kde-format
 msgid "Krita cannot launch the gmic-qt plugin. No bundled library found."
 msgstr ""
+"Krita-ს არ შეუძლია, დამატება gmic-qt plugin გაუშვას. პაკეტში არსებული "
+"ბიბლიოთეკა აღმოჩენილი არაა."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:132
 #, kde-format
@@ -49089,6 +49189,10 @@ msgid ""
 "presets before continuing.\n"
 "If there are no bundles, please import a bundle before continuing."
 msgstr ""
+"\n"
+"ფუნჯის პრესეტები ხელმისაწვდომი არაა. გაგრძელებამდე ჩართეთ პაკეტი, რომელსაც "
+"აქვს პრესეტები.\n"
+"თუ პაკეტები არ გაქვთ, გაგრძელებამდე მოახდინეთ მისი შემოტანა."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:209
 #, kde-format
@@ -49159,7 +49263,7 @@ msgstr "ჭდეების არჩევა"
 #: plugins/extensions/resourcemanager/wdgside.ui:99
 #, kde-format
 msgid "Enter Bundle Details"
-msgstr ""
+msgstr "შეიყვანეთ პაკეტის დეტალები"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #, kde-format
@@ -49198,11 +49302,13 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
+"იგივე ფაილის სახელს '%1' ერთზე მეტი რესურსი იზიარებს. გაიტანეთ ისინი ცალ-"
+"ცალკე პაკეტებში."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
 #, kde-format
 msgid "The resource bundle name cannot be empty."
-msgstr ""
+msgstr "რესურსების პაკეტის სახელი ცარიელი ვერ იქნება."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:326
 #, kde-format
@@ -49252,7 +49358,7 @@ msgctxt ""
 "location, when multiple resources are shown so there is no one specific "
 "filename"
 msgid "(Multiple selected)"
-msgstr ""
+msgstr "(მონიშნულია ერთზე მეტი)"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:135
 #, kde-format
@@ -49283,7 +49389,7 @@ msgstr "ძრავა: "
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:21
 #, kde-format
 msgid "Set the resource type for files"
-msgstr ""
+msgstr "რესურსის ტიპის დაყენება ფაილებისთვის"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:34
 #, kde-format
@@ -49291,7 +49397,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the PNG "
 "files belong to: brush tips or patterns"
 msgid "What resource do you want to import these PNG files as?"
-msgstr ""
+msgstr "რა რესურსად გნებავთ ამ PNG ფაილების შემოტანა?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:37
 #, kde-format
@@ -49299,7 +49405,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the SVG "
 "files belong to: brush tips or patterns or symbols"
 msgid "What resource do you want to import these SVG files as?"
-msgstr ""
+msgstr "რა რესურსად გნებავთ ამ SVG ფაილების შემოტანა?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:40
 #, kde-format
@@ -49307,7 +49413,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the files of "
 "type %1 belongs to; % will be rather untranslatable noun (a mimetype)"
 msgid "What resource do you want to import these %1 files as?"
-msgstr ""
+msgstr "რა რესურსად გნებავთ ამ %1 ფაილების შემოტანა?"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
@@ -49317,7 +49423,7 @@ msgstr "აირჩიეთ საქაღალდე ნაკრები�
 #: plugins/extensions/resourcemanager/page_metadata_info.cpp:107
 #, kde-format
 msgid "Select file to use as bundle icon"
-msgstr ""
+msgstr "აირჩიეთ ფაილი პაკეტის ხატულად გამოსაყენებლად"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -49336,7 +49442,7 @@ msgstr "შეჯამება:"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:46
 #, kde-format
 msgid "Bundle Name:"
-msgstr ""
+msgstr "პაკეტის სახელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -49392,7 +49498,7 @@ msgstr "მონიშნულის წაშლა"
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
 msgid "Import of some files failed"
-msgstr ""
+msgstr "ზოგიერთი ფაილის შემოტანა ჩავარდა"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:54
 #, kde-format
@@ -49408,7 +49514,7 @@ msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The resource type of following files is unknown:"
-msgstr ""
+msgstr "ამ ფაილების რესურსის ტიპი უცნობია:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:60
 #, kde-format
@@ -49427,6 +49533,7 @@ msgid ""
 "A resources bundle, an ASL or an ABR file with the same name already exists "
 "in the resources folder:"
 msgstr ""
+"რესურსის საქაღალდეში რესურსების პაკეტი, ASL, ან ABR ფაილი უკვე არსებობს:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:120
 #, kde-format
@@ -49485,7 +49592,7 @@ msgstr "განახლდა:"
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
 #, kde-format
 msgid "New Bundle..."
-msgstr ""
+msgstr "ახალი პაკეტი..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -49519,7 +49626,7 @@ msgstr "რესურსების საქაღალდის გახ�
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:106
 #, kde-format
 msgid "Create a Bundle"
-msgstr ""
+msgstr "პაკეტის შექმნა"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:116
@@ -49528,12 +49635,14 @@ msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
 "on upgrading Krita"
 msgstr ""
+"შექმენით თქვენი ჭდეების მარქაფი რესურსების საქაღალდეში, რომ Krita-ის "
+"განახლებისას არ დაგეკარგოთ"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
 #, kde-format
 msgid "Save Tags to Folder"
-msgstr ""
+msgstr "ჭდეების საქაღალდეში შენახვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
@@ -49578,12 +49687,12 @@ msgstr "SeExpr-ის სკრიპტები"
 #: plugins/extensions/rotateimage/rotateimage.cc:120
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr ""
+msgstr "გამოსახულების ვერტიკალური ანარეკლი"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr ""
+msgstr "გამოსახულების ჰორიზონტალური ანარეკლი"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
 #, kde-format
@@ -49668,7 +49777,7 @@ msgstr "მიმდინარე ფენა"
 #: plugins/extensions/separate_channels/wdg_separations.ui:78
 #, kde-format
 msgid "Flatten all layers before separation"
-msgstr ""
+msgstr "ყველა ფენის გაბრტყელება გაცალკევებამდე"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:90
@@ -49680,7 +49789,7 @@ msgstr "ალფას მორგება"
 #: plugins/extensions/separate_channels/wdg_separations.ui:96
 #, kde-format
 msgid "Copy alpha channel to each separated channel as an alpha channel"
-msgstr ""
+msgstr "ალფა არხის კოპირება თითოეულ გაცალკევებულ არხზე ალფა არხის სახით"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioDiscardAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:103
@@ -49692,19 +49801,19 @@ msgstr "ალფა არხის მოცილება"
 #: plugins/extensions/separate_channels/wdg_separations.ui:113
 #, kde-format
 msgid "Create separate separation from alpha channel"
-msgstr ""
+msgstr "ცალკე გაცალკევების შექმნა ალფა არხიდან"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownscale)
 #: plugins/extensions/separate_channels/wdg_separations.ui:123
 #, kde-format
 msgid "Downscale to 8-bit before separating"
-msgstr ""
+msgstr "ჩამოყვანა 8-ბიტამდე გაყოფის წინ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkColors)
 #: plugins/extensions/separate_channels/wdg_separations.ui:130
 #, kde-format
 msgid "Output to color, not grayscale"
-msgstr ""
+msgstr "გამოტანა ფერადად და არა ნაცრისფრად"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkActivateCurrentChannel)
 #: plugins/extensions/separate_channels/wdg_separations.ui:137
@@ -49713,12 +49822,14 @@ msgid ""
 "Activate only the current channel for the new node, deactivate all other "
 "channels."
 msgstr ""
+"მხოლოდ, მიმდინარე არხის გააქტიურება ახალი კვანძისთვის და ყველა სხვა არხის "
+"დეაქტივაცია."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkActivateCurrentChannel)
 #: plugins/extensions/separate_channels/wdg_separations.ui:140
 #, kde-format
 msgid "Activate the current channel"
-msgstr ""
+msgstr "მიმდინარე არხის გააქტიურება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgShearImage)
 #: plugins/extensions/shearimage/dlg_shearimage.cc:20
@@ -49739,13 +49850,13 @@ msgstr[1] "%1 ფენის დახრა"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
 #, kde-format
 msgid "Shear angle X:"
-msgstr ""
+msgstr "დახრის კუთხე X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngelY)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:34
 #, kde-format
 msgid "Shear angle Y:"
-msgstr ""
+msgstr "დახრის კუთხე Y:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
@@ -49769,63 +49880,63 @@ msgstr "S-Pen კალმის ქმედებები"
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Button Click"
-msgstr ""
+msgstr "S-Pen-ის ღილაკის წკაპი"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Button Double Click"
-msgstr ""
+msgstr "S-Pen-ის ღილაკის ორმაგი წკაპი"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Swipe Up"
-msgstr ""
+msgstr "S-Pen-ის ჟესტი ასმა"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Swipe Down"
-msgstr ""
+msgstr "S-Pen-ის ჟესტი ჩამოსმა"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Swipe Left"
-msgstr ""
+msgstr "S-Pen-ის ჟესტი მარცხნივ გასმა"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Swipe Right"
-msgstr ""
+msgstr "S-Pen-ის ჟესტი მარჯვნივ გასმა"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Circle Clockwise"
-msgstr ""
+msgstr "S-Pen-ის ჟესტი წრე საათის მიმართულებით"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Circle Counter-Clockwise"
-msgstr ""
+msgstr "S-Pen-ის ჟესტი წრე საათის საწინააღმდეგო იმართულებით"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
 #, kde-format
 msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
-msgstr ""
+msgstr "მხტუნარა პალიტრის გადართვა S-Pen-ით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
@@ -49834,6 +49945,8 @@ msgid ""
 "Make sure the actions are corresponding to the correct gesture on the system "
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
+"დარწმუნდით, რომ ქმედებები სისტემის დონეზე სწორ ჟესტს შეესაბამება. ამების "
+"მორგება შეგიძლიათ მენიუდან S-Pen-ის მორგება -> ქმედებები Air."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -49851,7 +49964,7 @@ msgstr "დააჭირე"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
 #, kde-format
 msgid "Double Press"
-msgstr ""
+msgstr "ორმაგი დაწოლა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:74
@@ -49860,6 +49973,8 @@ msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
 msgstr ""
+"მოწყობილობებზე Note 9, Note 10, Tab S6 და Tab S9 მხარდაჭერილია შემდეგი "
+"ღილაკები."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -49910,11 +50025,12 @@ msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
 msgstr ""
+"მოწყობილობებზე Note 10, Tab S6 და Tab S9 მხარდაჭერილია შემდეგი ჟესტები."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
 msgid "WaveletDecompose"
-msgstr ""
+msgstr "პატარა ტალღის დაშლა"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgWaveletDecompose)
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:64
@@ -49926,18 +50042,18 @@ msgstr "პატარა ტალღის დაშლა"
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Wavelet decompose"
-msgstr ""
+msgstr "პატარა ტალღის დაშლა"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:118
 #, kde-format
 msgid "Wavelet decompose"
-msgstr ""
+msgstr "პატარა ტალღის დაშლა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWaveletScales)
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:24
 #, kde-format
 msgid "Wavelet scales:"
-msgstr ""
+msgstr "პატარა ტალღების მასშტაბი:"
 
 #. i18n: context: text @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
@@ -49951,7 +50067,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Slope, Offset, Power Filter"
-msgstr ""
+msgstr "დახრის, წანაცვლების და ძალის ფილტრი"
 
 #: plugins/filters/asccdl/kis_asccdl_filter.cpp:31
 #, kde-format
@@ -49961,13 +50077,13 @@ msgstr "დახრა, წანაცვლება, &ძალა..."
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
 #, kde-format
 msgid "Slope, Offset, Power(ASC-CDL)"
-msgstr ""
+msgstr "დახრა, წანაცვლება, ძალა (ASC-CDL)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBase)
 #: plugins/filters/asccdl/wdg_asccdl.ui:42
 #, kde-format
 msgid "ASC-CDL  color balance"
-msgstr ""
+msgstr "ASC-CDL  ფერთა ბალანსი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPower)
 #: plugins/filters/asccdl/wdg_asccdl.ui:56
@@ -49979,7 +50095,7 @@ msgstr "სიმძლავრე:"
 #: plugins/filters/asccdl/wdg_asccdl.ui:63
 #, kde-format
 msgid "Slope:"
-msgstr ""
+msgstr "დახრა:"
 
 #: plugins/filters/blur/kis_blur_filter.cpp:27
 #, kde-format
@@ -50037,35 +50153,35 @@ msgstr "სამკუთხედი"
 #: plugins/filters/blur/wdg_lens_blur.ui:49
 #, kde-format
 msgid "Quadrilateral (4)"
-msgstr ""
+msgstr "ოთხკუთხედი (4)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:33
 #: plugins/filters/blur/wdg_lens_blur.ui:54
 #, kde-format
 msgid "Pentagon (5)"
-msgstr ""
+msgstr "ხუთკუთხედი (5)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:34
 #: plugins/filters/blur/wdg_lens_blur.ui:59
 #, kde-format
 msgid "Hexagon (6)"
-msgstr ""
+msgstr "ექვსკუთხედი (6)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:35
 #: plugins/filters/blur/wdg_lens_blur.ui:64
 #, kde-format
 msgid "Heptagon (7)"
-msgstr ""
+msgstr "შვიდკუთხედი (7)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:36
 #: plugins/filters/blur/wdg_lens_blur.ui:69
 #, kde-format
 msgid "Octagon (8)"
-msgstr ""
+msgstr "რვაკუთხედი (8)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -50075,7 +50191,7 @@ msgstr ""
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:39
 #, kde-format
 msgid "Vertical Radius:"
-msgstr ""
+msgstr "ვერტიკალური რადიუსი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
@@ -50085,7 +50201,7 @@ msgstr ""
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:34
 #, kde-format
 msgid "Horizontal Radius:"
-msgstr ""
+msgstr "ჰორიზონტალური რადიუსი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/blur/wdg_lens_blur.ui:27
@@ -50223,7 +50339,7 @@ msgstr "ზღვარი:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr ""
+msgstr "ფერების მიქსერი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -50241,19 +50357,19 @@ msgstr "ნორმალური   (ფენები გამჭვირ�
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
 #, kde-format
 msgid "Tint  (opaque layers)"
-msgstr ""
+msgstr "ტონი  (გაუმჭვირვალე ფენები)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
 #, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr ""
+msgstr "დააყენეთ ძირითადი გაუმჭვირვალობა გადალაგების ფერისთვის"
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:128
 #, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr ""
+msgstr "გადალაგების ფერის გამჭვირვალობის გასწორება"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -50267,7 +50383,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cross-channel adjustment Filter"
-msgstr ""
+msgstr "არხთაშორისი გასწორების ფილტრი"
 
 #: plugins/filters/colorsfilters/colorsfilters.cpp:77
 #, kde-format
@@ -50297,7 +50413,7 @@ msgstr "არ&ხთაშორისი გასწორების მრ
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.h:41
 #, kde-format
 msgid "Cross-channel color adjustment"
-msgstr ""
+msgstr "არხთაშორისი ფერის გასწორება"
 
 #: plugins/filters/colorsfilters/kis_desaturate_filter.cpp:48
 #, kde-format
@@ -50369,7 +50485,7 @@ msgstr "&HSV-ის კორექცია..."
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.h:37
 #, kde-format
 msgid "HSV/HSL Adjustment"
-msgstr ""
+msgstr "HSV/HSL კორექცია"
 
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:487
 #, kde-format
@@ -50377,6 +50493,8 @@ msgid ""
 "The current configuration was created for a different colorspace and cannot "
 "be used. All curves will be reset."
 msgstr ""
+"მიმდინარე კონფიგურაცია შეიქმნა სხვა ფერთა სივრცისთვის და მისი გამოყენება "
+"შეუძლებელია. მოხდება ყველა მრუდის ჩამოყრა."
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
@@ -50386,7 +50504,7 @@ msgstr "&ფერების მორგების მრუდები...
 #: plugins/filters/colorsfilters/kis_perchannel_filter.h:52
 #, kde-format
 msgid "Color Adjustment"
-msgstr ""
+msgstr "ფერის კორექცია"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
 #, kde-format
@@ -50398,7 +50516,7 @@ msgstr "განათებულობა"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:75
 #, kde-format
 msgid "Reset Shadows  "
-msgstr ""
+msgstr "ჩრდილების ჩამოყრა  "
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, label_18)
@@ -50422,13 +50540,13 @@ msgstr "ლურჯი  "
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
 #, kde-format
 msgid "Reset Midtones  "
-msgstr ""
+msgstr "შუატონების ჩამოყრა  "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
 #, kde-format
 msgid "Reset Highlights"
-msgstr ""
+msgstr "გამოკვეთების ჩამოყრა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreserveLuminosity)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:362
@@ -50440,25 +50558,25 @@ msgstr "სიკაშკაშის შენარჩუნება"
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:39
 #, kde-format
 msgid "Desaturation method:"
-msgstr ""
+msgstr "გაუჯერებლობის მეთოდი:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLightness)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:51
 #, kde-format
 msgid "&Lightness"
-msgstr ""
+msgstr "განათებუ&ლობა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLuminosityBT709)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:61
 #, kde-format
 msgid "Luminosity (ITU-R BT.&709)"
-msgstr ""
+msgstr "ნათობა (ITU-R BT.&709)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLuminosityBT601)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:68
 #, kde-format
 msgid "Luminosity (ITU-R BT.&601)"
-msgstr ""
+msgstr "ნათობა (ITU-R BT.&601)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAverage)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
@@ -50488,25 +50606,25 @@ msgstr "&ტიპი:"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64
 #, kde-format
 msgid "Hue/Saturation/Lightness"
-msgstr ""
+msgstr "ტონი/გაჯერებულობა/განათებულობა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:69
 #, kde-format
 msgid "Hue/Saturation/Intensity"
-msgstr ""
+msgstr "ტონი/გაჯერებულობა/ინტენსივობა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:74
 #, kde-format
 msgid "Hue/Saturation/Luma"
-msgstr ""
+msgstr "ტონი/გაჯერებულობა/განათებულობა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:79
 #, kde-format
 msgid "Blue Chroma/Red Chroma/Luma"
-msgstr ""
+msgstr "ლურჯის ინტენსივობა/წითლის ინტენსივობა/განათებულობა"
 
 #. i18n: ectx: property (text), widget (QLabel, hLabel)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:93
@@ -50536,13 +50654,13 @@ msgstr "&გაფერადება"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:305
 #, kde-format
 msgid "Legacy mode (before Krita 4.3)"
-msgstr ""
+msgstr "მოძველებულის რეჟიმი (Krita 4.3-მდე)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPerChannel)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:24
 #, kde-format
 msgid "BrightnessCon"
-msgstr ""
+msgstr "სიკაშკაშე და კონტრასტი"
 
 #. i18n: ectx: property (text), widget (QLabel, labelIn)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
@@ -50588,22 +50706,22 @@ msgstr "დრაივერის არხი"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr ""
+msgstr "სიმაღლეების ნორმალების რუკაში გადაყვანის ფილტრი"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr ""
+msgstr "სიმაღლეების ნორმალების რუკაში გადა&ყვანის ფილტრი..."
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
 msgid "Height to Normal Map"
-msgstr ""
+msgstr "სიმაღლეების ნორმალების რუკაში გადაყვანის ფილტრი"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:20
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr ""
+msgstr "სიმაღლეების ნორმალების რუკაში გადაყვანა ამ ფერთა სივრცეზე არ მუშაობს."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
@@ -50654,7 +50772,7 @@ msgstr "ამოტვიფვრა ყველა მიმართულ�
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:106
 #, kde-format
 msgid "Emboss Horizontal && Vertical"
-msgstr ""
+msgstr "ჰორიზონტალური და ვერტიკალური ამოტვიფვრა"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:121
 #: plugins/filters/convolutionfilters/convolutionfilters.h:73
@@ -50691,7 +50809,7 @@ msgstr "ჰორიზონტალური და ვერტიკალ�
 #: plugins/filters/convolutionfilters/convolutionfilters.h:93
 #, kde-format
 msgid "Emboss Diagonal"
-msgstr ""
+msgstr "დიაგონალური ამოტვიფვრა"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
 #, kde-format
@@ -50747,7 +50865,7 @@ msgstr "მიმართულება რადიანებში"
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:21
 #, kde-format
 msgid "Output decides what type of information you want from the lines."
-msgstr ""
+msgstr "გამოტანა წყვეტს, რა ტიპის ინფორმაცია გნებავთ ხაზებიდან."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbType)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:28
@@ -50756,6 +50874,9 @@ msgid ""
 "The formula decides how the kernel is created, so different formulas choose "
 "different values in the kernel, and thus give subtly different results."
 msgstr ""
+"ფორმულა წყვეტს, როგორ ხდება ბირთვის შექმნა, რომ სხვადასხვა ფორმულებმა "
+"ბირთვში სხვადასხვა მნიშვნელობები აირჩიონ და, შესაბამისად, ოდნავ სხვადასხვა "
+"შედეგები გამოიღონ."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransparent)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:54
@@ -50764,12 +50885,14 @@ msgid ""
 "This will take a desaturated result and use it to determine what is "
 "transparent. This is useful for creating edge and fringe effects."
 msgstr ""
+"ეს აიღებს გაუჯერებელ შედეგს და გამოიყენებს დასადგენად, რა არის გამჭვირვალე. "
+"სასარგებლოა წიბოს და ფოჩის ეფექტების შესაქმნელად."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransparent)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:57
 #, kde-format
 msgid "Apply result to alpha channel"
-msgstr ""
+msgstr "შედეგის გადატარება ალფა არხზე"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:64
@@ -50818,7 +50941,7 @@ msgstr "ფერის გადაცემა"
 #: plugins/filters/fastcolortransfer/wdgfastcolortransfer.ui:36
 #, kde-format
 msgid "Reference image:"
-msgstr ""
+msgstr "მიმართული გამოსახულება:"
 
 #. i18n: context: text @ Action (krita_filter_gaussianhighpass), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussianhighpass), Actions (Filters), ActionCollection (Krita)
@@ -50832,24 +50955,24 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Gaussian High Pass Filter"
-msgstr ""
+msgstr "გაუსის მაღალსიხშირული ფილტრი"
 
 #: plugins/filters/gaussianhighpass/gaussianhighpass_filter.cpp:37
 #, kde-format
 msgid "&Gaussian High Pass..."
-msgstr ""
+msgstr "&გაუსის მაღალსიხშირული ფილტრი..."
 
 #: plugins/filters/gaussianhighpass/gaussianhighpass_filter.h:29
 #, kde-format
 msgid "Gaussian High Pass"
-msgstr ""
+msgstr "გაუსის მაღალსიხშირული ფილტრი"
 
 #. i18n: context: text @ Action (krita_filter_gradientmap), Actions (Filters), ActionCollection (Krita)
 #: plugins/filters/gradientmap/gradientmap.action:7
 #, kde-format
 msgctxt "action"
 msgid "gradientmap Filter"
-msgstr ""
+msgstr "გრადიენტის რუკის ფილტრი"
 
 #. i18n: context: toolTip @ Action (krita_filter_gradientmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gradientmap), Actions (Filters), ActionCollection (Krita)
@@ -50860,7 +50983,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Gradient Map Filter"
-msgstr ""
+msgstr "გრადიენტის რუკის ფილტრი"
 
 #: plugins/filters/gradientmap/KisGradientMapFilter.cpp:32
 #, kde-format
@@ -50930,13 +51053,13 @@ msgstr "დიზერი"
 #, kde-format
 msgctxt "action"
 msgid "Halftone Filter"
-msgstr ""
+msgstr "ნახევარტონის ფილტრი"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
 #, kde-format
 msgid "Screen Generator"
-msgstr ""
+msgstr "ეკრანის გენერატორი"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostprocessing)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostProcessing)
@@ -50970,7 +51093,7 @@ msgstr "წინა პლანი:"
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
 msgid "Independent Channels"
-msgstr ""
+msgstr "დამოუკიდებელი არხები"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
@@ -51011,7 +51134,7 @@ msgstr "ფანჯრის ზომა"
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.h:30
 #, kde-format
 msgid "Gaussian Noise Reducer"
-msgstr ""
+msgstr "გაუსის ხმაურის შემამცირებელი"
 
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:26
 #, kde-format
@@ -51069,19 +51192,19 @@ msgstr[1] " ფერი"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
 #, kde-format
 msgid "Ramps"
-msgstr ""
+msgstr "რამპები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, diagCheck)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:72
 #, kde-format
 msgid "Diagonal Gradients"
-msgstr ""
+msgstr "დიაგონალური გრადიენტები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gradientStepsBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:82
 #, kde-format
 msgid "Gradient Steps"
-msgstr ""
+msgstr "გრადიენტის საფეხურები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, colorLimitCheck)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:91
@@ -51093,7 +51216,7 @@ msgstr "ზღვარი"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:127
 #, kde-format
 msgid "In-between ramps"
-msgstr ""
+msgstr "რამპებს შორის"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:153
@@ -51105,7 +51228,7 @@ msgstr "ფერების რიცხვი:"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:170
 #, kde-format
 msgid "Indexing Factors"
-msgstr ""
+msgstr "დაინდექსების კოეფიციენტები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
@@ -51120,7 +51243,7 @@ msgstr "სხვა"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:306
 #, kde-format
 msgid "Alpha Steps"
-msgstr ""
+msgstr "ალფას ბიჯები"
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #, kde-format
@@ -51129,6 +51252,9 @@ msgid ""
 "be used.\n"
 "The channels will be reset."
 msgstr ""
+"მიმდინარე კონფიგურაცია შეიქმნა სხვა ფერთა სივრცისთვის და მისი გამოყენება "
+"შეუძლებელია.\n"
+"მოხდება ყველა არხის ჩამოყრა."
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:621
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:672
@@ -51150,91 +51276,91 @@ msgstr "დონეები"
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
 #, kde-format
 msgid "Modify lightness only"
-msgstr ""
+msgstr "მხოლოდ განათებულობის შეცვლა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
 #, kde-format
 msgid "Modify all channels independently"
-msgstr ""
+msgstr "ყველა არხის ცალ-ცალკე შეცვლა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAll)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
 #, kde-format
 msgid "Reset channel"
-msgstr ""
+msgstr "არხის ჩამოყრა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:130
 #, kde-format
 msgid "<b>Input Levels</b>"
-msgstr ""
+msgstr "<b>შეყვანის დონეები</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLinearHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:158
 #, kde-format
 msgid "Show linear histogram"
-msgstr ""
+msgstr "წრფივი ჰისტოგრამის ჩვენება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLogarithmicHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:180
 #, kde-format
 msgid "Show logarithmic histogram"
-msgstr ""
+msgstr "ლოგარითმული ჰისტოგრამის ჩვენება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToFit)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:201
 #, kde-format
 msgid "Scale the histogram to fit"
-msgstr ""
+msgstr "ჰისტოგრამის გადიდება ჩასატევად"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToCutLongPeaks)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:214
 #, kde-format
 msgid "Scale the histogram to cut long peaks "
-msgstr ""
+msgstr "ჰისტოგრამის გადიდება გრძელი პიკების წასაჭრელად "
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:240
 #, kde-format
 msgid "Apply auto levels to this channel"
-msgstr ""
+msgstr "ავტომატური დონეების გამოყენება ამ არხზე"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetInputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:250
 #, kde-format
 msgid "Reset input levels"
-msgstr ""
+msgstr "შეყვანის დონეების ჩამოყრა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:404
 #, kde-format
 msgid "<b>Output Levels</b>"
-msgstr ""
+msgstr "<b>გამოტანის დონეები</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetOutputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:427
 #, kde-format
 msgid "Reset output levels"
-msgstr ""
+msgstr "გამოტანის დონეების ჩამოყრა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3_2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:524
 #, kde-format
 msgid "<b>All Channels</b>"
-msgstr ""
+msgstr "<b>ყველა არხი</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevelsAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:575
 #, kde-format
 msgid "Apply auto levels to all the channels"
-msgstr ""
+msgstr "ავტომატური დონეების გამოყენება ყველა არხზე"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
 #, kde-format
 msgid "Reset all channels"
-msgstr ""
+msgstr "ყველა არხის ჩამოყრა"
 
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
 #, kde-format
@@ -51286,7 +51412,7 @@ msgstr "ნორმალიზ&აცია"
 #, kde-format
 msgctxt "action"
 msgid "Normalize Filter"
-msgstr ""
+msgstr "ნორმალიზაციის ფილტრი"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:44
 #, kde-format
@@ -51325,7 +51451,7 @@ msgstr "ზეთის საღებავები"
 #, kde-format
 msgctxt "action"
 msgid "Palettize Filter"
-msgstr ""
+msgstr "პალიტრიზაციის ფილტრი"
 
 #: plugins/filters/palettize/palettize.cpp:110
 #, kde-format
@@ -51351,7 +51477,7 @@ msgstr "&პალიტრიზაცია..."
 #: plugins/filters/palettize/palettize.h:68
 #, kde-format
 msgid "Palettize"
-msgstr ""
+msgstr "პალიტრიზაცია"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorspaceComboBox)
 #: plugins/filters/palettize/palettize.ui:67
@@ -51363,13 +51489,13 @@ msgstr "Lab"
 #: plugins/filters/palettize/palettize.ui:90
 #, kde-format
 msgid "Per Channel Offset"
-msgstr ""
+msgstr "წანაცვლება თითოეული არხისთვის"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:95
 #, kde-format
 msgid "Nearest Colors"
-msgstr ""
+msgstr "უახლოესი ფერები"
 
 #. i18n: ectx: property (text), widget (QLabel, alphaModeLabel)
 #: plugins/filters/palettize/palettize.ui:170
@@ -51409,13 +51535,13 @@ msgstr "ზოგადი პარამეტრები"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:76
 #, kde-format
 msgid "Material properties"
-msgstr ""
+msgstr "მასალის თვისებები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, specularReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:85
 #, kde-format
 msgid "Specula&r"
-msgstr ""
+msgstr "ამ&რეკლი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpecularReflectivity)
 #. i18n: ectx: property (text), widget (QLabel, lblDiffuseReflectivity)
@@ -51425,19 +51551,19 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:286
 #, kde-format
 msgid "Reflectivity:"
-msgstr ""
+msgstr "არეკვლადობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpecularShinyExp)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:138
 #, kde-format
 msgid "Shinyness exponent:"
-msgstr ""
+msgstr "სიკაშკაშის დონე:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, diffuseReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:186
 #, kde-format
 msgid "Di&ffuse"
-msgstr ""
+msgstr "დი&ფუზია"
 
 #. i18n: ectx: property (title), widget (QGroupBox, AmbientGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:259
@@ -51449,26 +51575,26 @@ msgstr "ემბიენთი"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:334
 #, kde-format
 msgid "Heightmap channel:"
-msgstr ""
+msgstr "სიმაღლეების რუკის არხი:"
 
 #. i18n: Whether or not this filter should only use a given channel or use all channels and treat them as a normal map
 #. i18n: ectx: property (text), widget (QCheckBox, useNormalMap)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:386
 #, kde-format
 msgid "Use Normal map"
-msgstr ""
+msgstr "ნორმალების რუკის გამოყენება"
 
 #. i18n: ectx: attribute (title), widget (QWidget, lightSources)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:397
 #, kde-format
 msgid "Light Sources"
-msgstr ""
+msgstr "სინათლის წყაროები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox4)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:424
 #, kde-format
 msgid "Light Source &4"
-msgstr ""
+msgstr "სინათლის წყარო &4"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, azimuthLabel4)
 #. i18n: ectx: property (toolTip), widget (QLabel, azimuthLabel2)
@@ -51481,7 +51607,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Direction of the light, the dial tip represents where the light comes from."
-msgstr ""
+msgstr "სინათლის მიმართულება. ისარი მიუთითებს, საიდან მოდის სინათლე."
 
 #. i18n: ectx: property (text), widget (QLabel, azimuthLabel4)
 #. i18n: ectx: property (text), widget (QLabel, azimuthLabel2)
@@ -51508,6 +51634,7 @@ msgid ""
 "Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is "
 "parallel."
 msgstr ""
+"სინათლის ვერტიკალური დახრა. 90° ტილოს პერპენდიკულარულია, 0° კი - პარალელური."
 
 #. i18n: ectx: property (text), widget (QLabel, inclinationLabel4)
 #. i18n: ectx: property (text), widget (QLabel, inclinationLabel2)
@@ -51519,25 +51646,25 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:796
 #, kde-format
 msgid "Inclination:"
-msgstr ""
+msgstr "დახრა:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox2)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:526
 #, kde-format
 msgid "Light Source &2"
-msgstr ""
+msgstr "სინათლის წყარო &2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox1)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:622
 #, kde-format
 msgid "Light Source &1"
-msgstr ""
+msgstr "სინათლის წყარო &1"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox3)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:724
 #, kde-format
 msgid "Light Source &3"
-msgstr ""
+msgstr "სინათლის წყარო &3"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:45
 #, kde-format
@@ -51628,43 +51755,45 @@ msgstr "შენარჩუნება"
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
 msgid "Expand the colors in a rectangular-like way"
-msgstr ""
+msgstr "ფერების გაშლა მართკუთხედის მსგავსად"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
 #, kde-format
 msgid "Expand the colors in a diamond-like way"
-msgstr ""
+msgstr "ფერების გაშლა ალმასის მსგავსად"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
 #, kde-format
 msgid "Expand the colors in a octagonal-like way"
-msgstr ""
+msgstr "ფერების გაშლა რვაკუთხედის მსგსავსად"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
 #, kde-format
 msgid "Expand the colors all the way until all transparent regions are filled"
 msgstr ""
+"ფერების გაშლა ყველა მიმართულებით, სანამ ყველა გამჭვირვალე რეგიონი არ შეივსება"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
 #, kde-format
 msgid "Expand the colors only until a specific distance"
-msgstr ""
+msgstr "ფერების გაშლა, მხოლოდ, მითითებულ მანძილამდე"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
 #, kde-format
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
 msgstr ""
+"მიუთითეთ მაქსიმალური მანძილი გასაშლელად, როცა აქტიურია შეზღუდული რეჟიმი"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
 msgid "Expand the alpha channel as well as the color"
-msgstr ""
+msgstr "ალფა არხის გაშლა ფერთან ერთად"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
 #, kde-format
 msgid "Expand only the color, leaving the alpha channel untouched"
-msgstr ""
+msgstr "მხოლოდ ფერის გაშლა. ალფა არხი ხელუხლებელი დარჩება"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
 #, kde-format
@@ -51707,7 +51836,7 @@ msgstr "&ფერების გავრცელება..."
 #, kde-format
 msgctxt "action"
 msgid "Propagate Colors Filter"
-msgstr ""
+msgstr "ფერების გავრცელების ფილტრი"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
@@ -51748,7 +51877,7 @@ msgstr "შემთხვევითი არჩევა"
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
 #, kde-format
 msgid "Size of the window:"
-msgstr ""
+msgstr "ფანჯრის ზომა:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
@@ -51798,7 +51927,7 @@ msgstr "პატარა ფილები"
 #, kde-format
 msgctxt "action"
 msgid "Threshold Filter"
-msgstr ""
+msgstr "ზღვრის ფილტრი"
 
 #: plugins/filters/threshold/threshold.cpp:55
 #, kde-format
@@ -51809,7 +51938,7 @@ msgstr "&ზღვარი..."
 #: plugins/filters/threshold/wdg_threshold.ui:127
 #, kde-format
 msgid "Threshold &level:"
-msgstr ""
+msgstr "ზღვრუ&ლი დონე:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
@@ -51833,7 +51962,7 @@ msgstr "რაოდენობა:"
 #: plugins/filters/unsharp/wdgunsharp.ui:88
 #, kde-format
 msgid "Lightness Only:"
-msgstr ""
+msgstr "მხოლოდ განათებულობა:"
 
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
@@ -51849,7 +51978,7 @@ msgstr "ტალღა"
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:52
 #, kde-format
 msgid "Horizontal Wave"
-msgstr ""
+msgstr "ჰორიზონტალური ტალღა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
@@ -51865,7 +51994,7 @@ msgstr "ტალღის სიგრზე:"
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:212
 #, kde-format
 msgid "Shift:"
-msgstr ""
+msgstr "წანაცვლება:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2_2)
@@ -51887,7 +52016,7 @@ msgstr "სინუსოიდალური"
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:181
 #, kde-format
 msgid "Vertical Wave"
-msgstr ""
+msgstr "ვერტიკალური ტალღა"
 
 #: plugins/flake/imageshape/ImageShapeFactory.cpp:26
 #, kde-format
@@ -51897,7 +52026,7 @@ msgstr "გამოსახულების ფორმა"
 #: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
-msgstr ""
+msgstr "მოხაზულობა, რომელიც გამოსახულებას აჩვენებს (PNG/JPG/TIFF)"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -52117,7 +52246,7 @@ msgstr "ხაზოვანი"
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
-msgstr ""
+msgstr "ორხაზოვანი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_gradient.cc:246
@@ -52159,7 +52288,7 @@ msgstr "სპირალური"
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
-msgstr ""
+msgstr "შებრუნებული სპირალი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
 #: plugins/tools/basictools/kis_tool_gradient.cc:252
@@ -52187,7 +52316,7 @@ msgstr "წინ"
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
-msgstr ""
+msgstr "მონაცვლებადი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
 #, kde-format
@@ -52199,7 +52328,7 @@ msgstr "პიქსელი"
 #, kde-format
 msgctxt "The position will be a percentage of the width"
 msgid "Percent of the Width"
-msgstr ""
+msgstr "სიგანის პროცენტი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
 #, kde-format
@@ -52211,13 +52340,13 @@ msgstr "სიმაღლის პროცენტი"
 #, kde-format
 msgctxt "The position will be a percentage of the longest image side"
 msgid "Percent of the Longest Side"
-msgstr ""
+msgstr "უგრძესი მხრის პროცენტი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
 #, kde-format
 msgctxt "The position will be a percentage of the shortest image side"
 msgid "Percent of the Shortest Side"
-msgstr ""
+msgstr "უმოკლესი მხრის პროცენტი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
 #, kde-format
@@ -52236,7 +52365,7 @@ msgstr "ფარდობითი"
 #: plugins/tools/basictools/kis_tool_gradient.cc:266
 #, kde-format
 msgid "Anti-alias threshold:"
-msgstr ""
+msgstr "მოგლუვების ზღვარი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
@@ -52244,7 +52373,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2070
 #, kde-format
 msgid "Reverse:"
-msgstr ""
+msgstr "რევერსი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
@@ -52273,7 +52402,7 @@ msgstr "დასასრული:"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:285
 #, kde-format
 msgid "Cartesian Coordinates"
-msgstr ""
+msgstr "დეკარტის კოორდინატები"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionPolarCoordinates)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:298
@@ -52321,7 +52450,7 @@ msgstr "გადაკვეთა:"
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:53
 #, kde-format
 msgid "No Connectors"
-msgstr ""
+msgstr "დამაკავშირებლების გარეშე"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:54
 #, kde-format
@@ -52331,7 +52460,7 @@ msgstr "ბასრი კუთხეები"
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:55
 #, kde-format
 msgid "Obtuse Angles"
-msgstr ""
+msgstr "ბლაგვი კუთხეები"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:56
 #, kde-format
@@ -52356,7 +52485,7 @@ msgstr "&მრავალბადიანი ნიმუში..."
 #: plugins/generators/multigridpattern/multigridpatterngenerator.h:69
 #, kde-format
 msgid "Multigrid"
-msgstr ""
+msgstr "მრავალბადიანობა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShapes)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:25
@@ -52383,7 +52512,7 @@ msgstr "ხაზის სიგანე:"
 #, kde-format
 msgctxt "Connector Lines in Multigridpattern"
 msgid "Connector Lines"
-msgstr ""
+msgstr "დამაკავშირებელი ხაზები"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:100
@@ -52403,13 +52532,13 @@ msgstr "ხაზები: "
 #, kde-format
 msgctxt "Connector line color"
 msgid "Connector:"
-msgstr ""
+msgstr "დამაკავშირებელი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbColors)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:146
 #, kde-format
 msgid "Color Factors"
-msgstr ""
+msgstr "ფერის პარამეტრები"
 
 #. i18n: ectx: property (prefix), widget (KisDoubleSliderSpinBox, spbScaleWidth)
 #. i18n: ectx: property (prefix), widget (KisSliderSpinBox, spbOffsetX)
@@ -52451,8 +52580,8 @@ msgctxt ""
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ყოველ {n}-ე გამეორებაზე ჰორიზონტალურად"
+msgstr[1] "ყოველ {n}-ე გამეორებაზე ჰორიზონტალურად"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -52464,8 +52593,8 @@ msgctxt ""
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ყოველ {n}-ე გამეორებაზე ვერტიკალურად"
+msgstr[1] "ყოველ {n}-ე გამეორებაზე ვერტიკალურად"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -52509,7 +52638,7 @@ msgstr "შემობრუნება"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
 #, kde-format
 msgid "Align to Pixel Grid:"
-msgstr ""
+msgstr "სწორება პიქსელების ბადეზე:"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -52521,8 +52650,8 @@ msgctxt ""
 "generator"
 msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ყოველი {n}-ე უჯრედი ჰორიზონტალურად"
+msgstr[1] "ყოველი {n}-ე უჯრედი ჰორიზონტალურად"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -52534,8 +52663,8 @@ msgctxt ""
 "generator"
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ყოველი {n}-ე უჯრედი ვერტიკალურად"
+msgstr[1] "ყოველი {n}-ე უჯრედი ვერტიკალურად"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, kde-format
@@ -52553,7 +52682,7 @@ msgstr " პიქსელი/სმ"
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
-msgstr ""
+msgstr " ხაზი/დუიმზე"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:483
 #, kde-format
@@ -52565,7 +52694,7 @@ msgstr " ხაზი/სმ"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:49
 #, kde-format
 msgid "Screentone Type"
-msgstr ""
+msgstr "სკრინტონის ტიპი"
 
 #. i18n: ectx: property (text), widget (QLabel, labelInterpolation)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:112
@@ -52577,7 +52706,7 @@ msgstr "ინტერპოლაცია:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:129
 #, kde-format
 msgid "Equalization:"
-msgstr ""
+msgstr "გათანაბრება:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationNone)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:144
@@ -52591,14 +52720,14 @@ msgstr "არცერთი"
 #, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Function Based"
-msgstr ""
+msgstr "ფუნქციაზე დაფუძნებული"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationTemplateBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:173
 #, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Template Based"
-msgstr ""
+msgstr "ნიმუშზე დაფუძნებული"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransformation)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:204
@@ -52610,19 +52739,19 @@ msgstr "გარდაქმნა"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:245
 #, kde-format
 msgid "Size Mode:"
-msgstr ""
+msgstr "ზომის რეჟიმი:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModeResolutionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:257
 #, kde-format
 msgid "Resolution based"
-msgstr ""
+msgstr "გარჩევადობაზე დაფუძნებული"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModePixelBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:273
 #, kde-format
 msgid "Pixel based"
-msgstr ""
+msgstr "პიქსელზე დაფუძნებული"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
@@ -52641,7 +52770,7 @@ msgstr "სანტიმეტრი"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:353
 #, kde-format
 msgid "Get From Image"
-msgstr ""
+msgstr "გამოსახულებიდან მიღება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_frequency)
 #. i18n: ectx: property (text), widget (QLabel, labelFrequency)
@@ -52679,7 +52808,7 @@ msgstr "&სკრინტონი..."
 #: plugins/generators/screentone/KisScreentoneGenerator.h:52
 #, kde-format
 msgid "Screentone"
-msgstr ""
+msgstr "სკრინტონი"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:21
 #, kde-format
@@ -52745,7 +52874,7 @@ msgstr "სამკუთხა ტალღა"
 #, kde-format
 msgctxt "Screentone Pattern - Sawtooth Wave Lines"
 msgid "Sawtooth Wave"
-msgstr ""
+msgstr "კბილოვანი ტალღა"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:40
 #, kde-format
@@ -52770,12 +52899,12 @@ msgstr "სინუსოიდალური"
 #: plugins/generators/seexpr/generator.cpp:72
 #, kde-format
 msgid "&SeExpr..."
-msgstr ""
+msgstr "&SeExpr..."
 
 #: plugins/generators/seexpr/generator.h:52
 #, kde-format
 msgid "SeExpr"
-msgstr ""
+msgstr "SeExpr"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:45
 #, kde-format
@@ -52787,12 +52916,14 @@ msgstr "პრესეტის თავიდან ჩატვირთვ�
 msgctxt "SeExpr variable"
 msgid "Normalized X axis coordinate of the image from its top-left corner"
 msgstr ""
+"გამოსახულების ნორმალიზებული X ღერძის კოორდინატი მისი ზედა მარცხენა კუთხიდან"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:54
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Normalized Y axis coordinate of the image from its top-left corner"
 msgstr ""
+"გამოსახულების ნორმალიზებული Y ღერძის კოორდინატი მისი ზედა მარცხენა კუთხიდან"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:55
 #, kde-format
@@ -52809,7 +52940,7 @@ msgstr "გამოსახულების სიმაღლე"
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:359
 #, kde-format
 msgid "Expected this script to output color, got '%1'"
-msgstr ""
+msgstr "მოველოდი, რომ სკრიპტი ფერს გამოიტანდა. მივიღე '%1'"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:69
 #, kde-format
@@ -52821,7 +52952,7 @@ msgstr "ახალი SeExpr-ის პრესეტის შენახ�
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:24
 #, kde-format
 msgid "Save SeExpr Preset"
-msgstr ""
+msgstr "SeExpr-ის პრესეტის შენახვა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/generators/seexpr/wdgseexpr.ui:46
@@ -52841,13 +52972,13 @@ msgstr "პარამეტრები"
 #: plugins/generators/seexpr/wdgseexpr.ui:237
 #, kde-format
 msgid "Save New SeExpr Preset..."
-msgstr ""
+msgstr "ახალი SeExpr-ის პრესეტის შენახვა..."
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: plugins/generators/seexpr/wdgseexpr.ui:244
 #, kde-format
 msgid "Overwrite Preset"
-msgstr ""
+msgstr "პრესეტის თავზე გადაწერა"
 
 #. i18n: ectx: property (text), widget (QLabel, newPresetNameLabel)
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:35
@@ -52859,7 +52990,7 @@ msgstr "პრესეტის სახელი:"
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:126
 #, kde-format
 msgid "&Render Script to Thumbnail"
-msgstr ""
+msgstr "სკრიპტის &რენდერი მინიატურაში"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, kde-format
@@ -52869,7 +53000,7 @@ msgstr "&შემთხვევითი ხმაური..."
 #: plugins/generators/simplexnoise/simplexnoisegenerator.h:40
 #, kde-format
 msgid "Simplex Noise"
-msgstr ""
+msgstr "სიმპლექსური ხმაური"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_looping)
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:78
@@ -52881,7 +53012,7 @@ msgstr "დამარყუჟება"
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:91
 #, kde-format
 msgid "Use Custom Seed"
-msgstr ""
+msgstr "მომხმარებლის თესლის გამოყენება"
 
 #: plugins/generators/solid/colorgenerator.cpp:44
 #, kde-format
@@ -52897,7 +53028,7 @@ msgstr "&ფერი:"
 #: plugins/impex/brush/KisAnimatedBrushAnnotation.cpp:17
 #, kde-format
 msgid "Brush selection information for animated brushes"
-msgstr ""
+msgstr "ფუნჯის არჩევნის ინფორმაცია ანიმირებული ფუნჯებისთვის"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #: plugins/impex/brush/KisWdgOptionsBrush.h:33
@@ -52975,14 +53106,14 @@ msgstr "დაშორება:"
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, kde-format
 msgid "Create mask from color"
-msgstr ""
+msgstr "ნიღბის შექმნა ფერიდან"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/brush/wdg_export_gih.ui:66
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
 #, kde-format
 msgid "Brush Style"
-msgstr ""
+msgstr "ფუნჯის სტილი"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
@@ -53010,7 +53141,7 @@ msgstr "ანიმირებული"
 #: plugins/impex/brush/wdg_export_gih.ui:124
 #, kde-format
 msgid "Animated style options"
-msgstr ""
+msgstr "ანიმირებული სტილის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
@@ -53018,7 +53149,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
 #, kde-format
 msgid "Selection mode:"
-msgstr ""
+msgstr "მონიშვნის რეჟიმი:"
 
 #: plugins/impex/exr/exr_converter.cc:920
 #, kde-format
@@ -53034,13 +53165,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
-msgstr ""
+msgstr "EXR გამოსახულება შეუცვალა"
 
 #: plugins/impex/exr/exr_converter.cc:1353
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
-msgstr ""
+msgstr "%1 (ტიპი: \"%2\")"
 
 #: plugins/impex/exr/exr_converter.cc:1358
 #, kde-format
@@ -53062,6 +53193,8 @@ msgid ""
 "This option will merge all layers. It is advisable to check this option, "
 "otherwise other applications might not be able to read your file correctly."
 msgstr ""
+"ეს არჩევანი ყველა ფენას შეაერთებს. გირჩევთ, ეს პარამეტრი ჩართოთ. წინააღმდეგ "
+"შემთხვევაში, შეიძლება, სხვა აპლიკაციებმა თქვენი ფაილი სწორად ვერ წაიკითხონ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, flatten)
 #. i18n: ectx: property (text), widget (QCheckBox, chkFlatten)
@@ -53069,7 +53202,7 @@ msgstr ""
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:147
 #, kde-format
 msgid "Flatten the &image"
-msgstr ""
+msgstr "გამოსახულებ&ის გაბრტყელება"
 
 #: plugins/impex/heif/HeifError.cpp:37
 #, kde-format
@@ -53084,7 +53217,7 @@ msgstr "გამოსახულების დაშიფვრა ან 
 #: plugins/impex/heif/HeifError.cpp:45
 #, kde-format
 msgid "Color profile was not found in the document."
-msgstr ""
+msgstr "დოკუმენტში ფერთა პროფილი აღმოჩენილი არაა."
 
 #: plugins/impex/heif/HeifError.cpp:49
 #, kde-format
@@ -53098,6 +53231,8 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved in both dimensions."
 msgstr ""
+"გამოსახულების სიკაშკაშე სრული გაფართოებით იქნება მაშინ, როცა ფერიანობა "
+"განახევრდება ორივე განზომილებაში."
 
 #: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
@@ -53106,13 +53241,15 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved horizontally."
 msgstr ""
+"გამოსახულების სიკაშკაშე სრული გაფართოებით იქნება მაშინ, როცა ფერიანობა "
+"განახევრდება ჰორიზონტალურად."
 
 #: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr ""
+msgstr "გამოსახულების სიკაშკაშე და ფერიანობა სრული გაფართოებით იქნება."
 
 #: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
@@ -53153,7 +53290,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
-msgstr ""
+msgstr "პიგმენტების შენარჩუნება, PQ-ის კოდირება"
 
 #: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
@@ -53170,7 +53307,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
-msgstr ""
+msgstr "პიგმენტების შენარჩუნება, HLG-ის კოდირება"
 
 #: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
@@ -53186,7 +53323,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
-msgstr ""
+msgstr "პიგმენტების შენარჩუნება, SMPTE ST 428-ის კოდირება"
 
 #: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
@@ -53202,7 +53339,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
-msgstr ""
+msgstr "ცვლილებების გარეშე. წაკვეთა"
 
 #: plugins/impex/heif/HeifExport.cpp:581
 #, kde-format
@@ -53211,12 +53348,15 @@ msgid ""
 "The image will be converted plainly to 12bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
+"გამოსახულება უბრალოდ გადაყვანილი იქნება 12-ბიტიან მთელ რიცხვში და "
+"მნიშვნელობები, რომლებიც ზღვარს სცდებიან, წაკვეთილია. ასევე ხდება icc "
+"პროფილების ჩაშენება."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossySettings)
 #: plugins/impex/heif/WdgHeifExport.ui:21
 #, kde-format
 msgid "Lossy Advanced Settings"
-msgstr ""
+msgstr "კარგვითი შენახვის დამატებითი პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QLabel, qualityLabel)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
@@ -53230,7 +53370,7 @@ msgstr "ხარისხი:"
 #: plugins/impex/heif/WdgHeifExport.ui:47
 #, kde-format
 msgid "Chroma:"
-msgstr ""
+msgstr "ფერის ინტენსივობა:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, conversionSettings)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -53238,7 +53378,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:280
 #, kde-format
 msgid "Conversion settings"
-msgstr ""
+msgstr "გადაყვანის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:69
@@ -53254,7 +53394,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:324
 #, kde-format
 msgid "Space:"
-msgstr ""
+msgstr "სივრცე:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: plugins/impex/heif/WdgHeifExport.ui:96
@@ -53264,6 +53404,8 @@ msgid ""
 "<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
 "from PQ.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>გამას ჩვენება. ნაგულისხმევად არის 1.2 PQ-დან "
+"გადასაყვანად.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
 #: plugins/impex/heif/WdgHeifExport.ui:113
@@ -53273,6 +53415,8 @@ msgid ""
 "<html><head/><body><p>The display brightness in nits. By default this is set "
 "to 1000 for converting from PQ.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ეკრანის სიკაშკაშე. ნაგულისხმევად დაყენებულია 1000-ზე "
+"PQ-დან გადაყვანისთვის.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
@@ -53292,13 +53436,13 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:337
 #, kde-format
 msgid "Apply reverse Hybrid Log Gamma OOTF"
-msgstr ""
+msgstr "რევერსული HLG OOTF-ის გადატარება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLossless)
 #: plugins/impex/heif/WdgHeifExport.ui:151
 #, kde-format
 msgid "&Lossless"
-msgstr ""
+msgstr "&კარგვის გარეშე"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMonochromesRGB)
 #: plugins/impex/heif/WdgHeifExport.ui:161
@@ -53314,7 +53458,7 @@ msgstr ""
 #: plugins/impex/heif/WdgHeifExport.ui:164
 #, kde-format
 msgid "Convert to sRGB for extra compatibility"
-msgstr ""
+msgstr "sRGB-ში გადაყვანა დამატებითი თავსებადობისთვის"
 
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:70
 #, kde-format
@@ -53334,12 +53478,12 @@ msgstr "შეცდომა: "
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:105
 #, kde-format
 msgid "Input does not match file size"
-msgstr ""
+msgstr "შეყვანა ფაილის ზომას არ ემთხვევა"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:107
 #, kde-format
 msgid "Please specify width and height"
-msgstr ""
+msgstr "მიუთითეთ სიგანე და სიმაღლე"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:110
 #, kde-format
@@ -53349,17 +53493,19 @@ msgstr "მიუთითეთ სიგანე"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:113
 #, kde-format
 msgid "Please specify height"
-msgstr ""
+msgstr "მიუთითეთ სიმაღლე"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:182
 #, kde-format
 msgid "Too many possible combinations. Input a width or height and try again."
 msgstr ""
+"მეტისმეტად ბევრი შესაძლო კომბინაცია. შეიყვანეთ სიგანე, ან სიმაღლე და თავიდან "
+"სცადეთ."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:195
 #, kde-format
 msgid "Width exceeds available pixels."
-msgstr ""
+msgstr "სიგანე ხელმისაწვდომი პიქსელების რაოდენობას სცდება."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:200
 #, kde-format
@@ -53367,11 +53513,13 @@ msgid ""
 "Unable to calculate an appropriate height. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
+"შესაბამისი სიმაღლის გამოთვლა შეუძლებელია. ფაილი არ შეიცავს საკმარის "
+"პიქსელებს მართკუთხედის ჩამოსაყალიბებლად."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
 #, kde-format
 msgid "Height exceeds available pixels."
-msgstr ""
+msgstr "სიმაღლე ხელმისაწვდომი პიქსელების რაოდენობას სცდება."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:212
 #, kde-format
@@ -53379,6 +53527,8 @@ msgid ""
 "Unable to calculate an appropriate width. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
+"შესაბამისი სიგანის გამოთვლა შეუძლებელია. ფაილი არ შეიცავს საკმარის პიქსელებს "
+"მართკუთხედის ჩამოსაყალიბებლად."
 
 #. i18n: ectx: property (text), widget (QLabel, fileSizeDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:33
@@ -53390,19 +53540,19 @@ msgstr "ფაილის ზომა:"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:46
 #, kde-format
 msgid "File size (bytes)"
-msgstr ""
+msgstr "ფაილის ზომა (ბაიტებში)"
 
 #. i18n: ectx: property (text), widget (QLabel, endiannessLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:56
 #, kde-format
 msgid "Endianness:"
-msgstr ""
+msgstr "ბოლოიანობა:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioLittle)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:65
 #, kde-format
 msgid "Little Endian"
-msgstr ""
+msgstr "წვრილბოლოიანი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLittle)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:68
@@ -53429,30 +53579,32 @@ msgid ""
 "Guess width and height based on file size and bits per pixel. Only values "
 "set to 0 will be updated."
 msgstr ""
+"სიგანისა და სიმაღლის მიხვედრა ფაილის ზომაზე და პიქსელზე არსებულ ბიტებზე "
+"დაყრდნობით. განახლდება, მხოლოდ, მნიშვნელობები, რომელიც 0-ს უდრის."
 
 #. i18n: ectx: property (text), widget (QPushButton, guessButton)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:105
 #, kde-format
 msgid "Guess dimensions"
-msgstr ""
+msgstr "ზომების მიხვედრა"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, heightInput)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:132
 #, kde-format
 msgid "Height of image in pixels."
-msgstr ""
+msgstr "გამოსახულების სიმაღლე პიქსელებში."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, widthInput)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:155
 #, kde-format
 msgid "Width of image in pixels."
-msgstr ""
+msgstr "გამოსახულების სიგანე პიქსელებში."
 
 #. i18n: ectx: property (text), widget (QLabel, bppDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:182
 #, kde-format
 msgid "Bits per pixel:"
-msgstr ""
+msgstr "ბიტი პიქსელზე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/impex/jp2/kis_wdg_options_jp2.ui:23
@@ -53475,7 +53627,7 @@ msgstr ""
 #: plugins/impex/jp2/kis_wdg_options_jp2.ui:78
 #, kde-format
 msgid "Number of resolutions:"
-msgstr ""
+msgstr "გაფართოებების რაოდენობა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:25
@@ -53496,7 +53648,7 @@ msgstr "პროგრესული"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:146
 #, kde-format
 msgid "Force convert to sRGB"
-msgstr ""
+msgstr "ნაძალადევი გადაყვანა sRGB-ში"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -53504,7 +53656,7 @@ msgstr ""
 #: plugins/impex/rgbe/kis_wdg_options_rgbe.ui:53
 #, kde-format
 msgid "Transparent pixel fill color:"
-msgstr ""
+msgstr "გამჭვირვალე პიქსელის შევსების ფერი:"
 
 #. i18n: ectx: property (toolTip), widget (KisColorButton, bnTransparencyFillColor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:110
@@ -53515,6 +53667,8 @@ msgid ""
 "<html><head/><body><p>Background color to replace transparent pixels with.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>ფონის ფერი, რომლითაც გამჭვირვალე პიქსელები ჩანაცვლდება."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProfile)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:132
@@ -53522,13 +53676,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:153
 #, kde-format
 msgid "Save ICC Profile"
-msgstr ""
+msgstr "ICC პროფილის შენახვა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:143
 #, kde-format
 msgid "Advanced quality"
-msgstr ""
+msgstr "დამატებითი ხარისხი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:176
@@ -53541,7 +53695,7 @@ msgstr "მოგლუვება:"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:192
 #, kde-format
 msgid "Subsampling:"
-msgstr ""
+msgstr "ქვედისკრეტიზაცია:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:203
@@ -53571,7 +53725,7 @@ msgstr "1x1, 1x1, 1x1 (საუკეთესო ხარისხი)"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
 #, kde-format
 msgid "Force baseline JPEG"
-msgstr ""
+msgstr "ნაძალადევი საბაზისო JPEG"
 
 #. i18n: ectx: property (text), widget (QCheckBox, optimize)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:238
@@ -53612,6 +53766,8 @@ msgid ""
 "<html><head/><body><p>Store document metadata that is in the document "
 "information. This will override any layer metadata.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>დოკუმენტის ინფორმაციაში შენახული მეტამონაცემების "
+"დამახსოვრება. ეს ყველა ფენის მეტამონაცემებს გადაფარავს.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkMetadata)
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
@@ -53620,7 +53776,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:824
 #, kde-format
 msgid "Store Document Metadata"
-msgstr ""
+msgstr "დოკუმენტის მეტამონაცემების დამახსოვრება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:343
@@ -53636,13 +53792,15 @@ msgid ""
 "<html><head/><body><p>Add the author nickname and the first contact of the "
 "author profile. This is overridden by the anonymizer.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ავტორის მეტსახელის და პირველი კონტაქტის დამატება "
+"ავტორის პროფილში. ამას ანონიმიზატორის გადაფარავს.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1080
 #, kde-format
 msgid "Sign with Author Profile Data"
-msgstr ""
+msgstr "ხელმოწერა ავტორის პროფილის მონაცემებით"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:377
 #, kde-format
@@ -53650,6 +53808,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"არმოჩენილია JPEG-XL გამოსახულება ადგილის ფერის არხებით. შემოტანილია "
+"გაბრტყელებული გამოსახულება"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:680
 #: plugins/impex/jxl/JPEGXLImport.cpp:692
@@ -53664,25 +53824,28 @@ msgstr "გამოსახულების პროფილის წა�
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "არასწორი JPEG-XL-ის ფენის სახელის სიგრძე"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:927
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
-msgstr ""
+msgstr "ანიმაციამ კადრების სიხშირე 240 კადრ/წმ-ზე მეტი გამოაცხადა."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
 msgstr ""
+"გამოსახულების გაბრტყელება და ერთფენიან გამოსახულებად შენახვა (ნაგულისხმევი)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
 msgstr ""
+"გამოსახულების გაბრტყელება და ანიმაციის კადრების რენდერი ანიმირებული "
+"გამოსახულების სახით"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -53691,6 +53854,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"ფენების რასტერიზაცია (ჯგუფისა და ფილტრის ფენების ჩათვლით) და მრავალფენიანი "
+"გამოსახულების სახით შენახვა"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -53699,13 +53864,15 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"ფენების რასტერიზაცია (ჯგუფისა და ფილტრის ფენების ჩათვლით) და მრავალგვერდიანი "
+"გამოსახულების სახით შენახვა"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr ""
+msgstr "ნაგულისხმევი (მხოლოდ, დაბალი ხარისხისთვის)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
@@ -53719,21 +53886,21 @@ msgstr "დისკრეტიზაციის შემცირები�
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr ""
+msgstr "დისკრეტიზაციის შემცირება 2x2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:39
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr ""
+msgstr "დისკრეტიზაციის შემცირება 4x4"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:40
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr ""
+msgstr "დისკრეტიზაციის შემცირება 8x8"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
 #. i18n: ectx: property (text), widget (QLabel, lblNone2)
@@ -53758,7 +53925,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr ""
+msgstr "ნაგულისხმევი (ირჩევს ენკოდერი)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:45
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:51
@@ -53793,13 +53960,13 @@ msgstr "ჩართულია"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr ""
+msgstr "რეჟიმი VarDCT (მაგ: ფოტოგრაფიული გამოსახულებებისთვის)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr ""
+msgstr "მოდულარული რეჟიმი (მაგ: კარგვის გარეშე გამოსახულებებისთვის"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:75
 #, kde-format
@@ -53823,7 +53990,7 @@ msgstr "64x64 დაბალი გარჩევადობის გავ�
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr ""
+msgstr "512x512 + 64x64 დაბალი გარჩევადობის გავლები"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
 #, kde-format
@@ -53871,7 +54038,7 @@ msgstr "თავში"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
-msgstr ""
+msgstr "საშ0"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
 #, kde-format
@@ -53913,25 +54080,25 @@ msgstr "მარცხენა მარცხენა"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
-msgstr ""
+msgstr "საშ1"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:131
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
-msgstr ""
+msgstr "საშ2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:132
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
-msgstr ""
+msgstr "საშ3"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:133
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
-msgstr ""
+msgstr "ზედაზედა პროგნოზირებადი საშუალო"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:134
 #, kde-format
@@ -53943,7 +54110,7 @@ msgstr "გრადიენტი + აწონილი"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
-msgstr ""
+msgstr "პროგნოზის ყველა საშუალების გამოყენება"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:192
 #, kde-format
@@ -53958,6 +54125,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"გამოსახულება შენახული იქნება გადაყვანის გარეშე. ICC პროფილი გადაყვანილი "
+"იქნება CICP-ში, ან ჩაშენებული იქნება, თუ ეს შეუძლებელია."
 
 #. i18n: ectx: property (toolTip), widget (QTabWidget, tabWidget)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:27
@@ -54010,7 +54179,7 @@ msgstr "მრავალფენიანი გამოსახულე�
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "მრავალგვერდიანი გამოსახულება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -54024,7 +54193,7 @@ msgstr "კოდირების პარამეტრები"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:89
 #, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr ""
+msgstr "თუ ეს ჩართული არაა, გამოსახულება კარგვის გარეშე იქნება შენახული"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:92
@@ -54047,6 +54216,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
+"JPEG-XL-ში გატანის კარგვის შემცველი ხარისხის დაყენება.\n"
+"ნაგულისხმევი: 90 (ვიზუალურად კარგვის გარეშე)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:140
@@ -54064,12 +54235,16 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
+"მოდულური კოდირების გამოყენება ნაგულისხმევი VarDCT-ის მაგიერ კარგვიანი "
+"შეკუმშვისთვის\n"
+"(მაგ: არაფოტოგრაფიული გამოსახულებებისთვის).\n"
+"ნაგულისხმევი: გამორთულია"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:154
 #, kde-format
 msgid "Use modular mode"
-msgstr ""
+msgstr "მოდულური რეჟიმის გამოყენება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:161
@@ -54091,7 +54266,7 @@ msgstr "კარგვის გარეშე ალფა"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:95
 #, kde-format
 msgid "Tradeoff"
-msgstr ""
+msgstr "ოპტიმალური ფარდობა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaster)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:183
@@ -54121,7 +54296,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:220
 #, kde-format
 msgid "Decoding speed"
-msgstr ""
+msgstr "დეკოდირების სიჩქარე"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowest)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:229
@@ -54133,7 +54308,7 @@ msgstr "უფრო ნელი/უკეთესი"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
 #, kde-format
 msgid "Fastest/Slight quality loss"
-msgstr ""
+msgstr "უსწრაფესი/ხარისხის ოდნავი კარგვა"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, decodingSpeed)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:248
@@ -54164,7 +54339,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:295
 #, kde-format
 msgid "(Lossless) Use CICP instead of ICC if possible"
-msgstr ""
+msgstr "(კარგვის გარეშე) თუ შესაძლებელია, CICP-ის გამოყენება ICC-ის მაგიერ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:305
@@ -54179,12 +54354,15 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"აპლიკაციები, მაგალითად Google Chrome ელოდება, რომ HDR გამოსახულებები თავიანთ "
+"ფერთა პროფილებს CICP მნიშვნელობების სახით ინახავენ. ICC პროფილის გადაყვანა "
+"ქვემოთ შეგიძლიათ, მოირგოთ."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:412
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "გააჩერეთ თაგუნა ამ ტექსტზე ინფორმაციული მინიშნებისთვის"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -54214,7 +54392,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
-msgstr ""
+msgstr "ფერთა არხის დისკრეტიზაციის შეცვლა"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:442
@@ -54238,7 +54416,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
 #, kde-format
 msgid "Alpha channel resampling"
-msgstr ""
+msgstr "ალფა არხის დისკრეტიზაციის შეცვლა"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:459
@@ -54262,7 +54440,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
-msgstr ""
+msgstr "ფოტონური ხმაური"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:484
@@ -54295,7 +54473,7 @@ msgstr "წერტილების გენერაცია"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:504
 #, kde-format
 msgid "Enables or disables dots generation."
-msgstr ""
+msgstr "ჩართავს, ან გამორთავს წერტილების გენერაციას."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:511
@@ -54317,7 +54495,7 @@ msgstr "პაჩების გენერაცია"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:521
 #, kde-format
 msgid "Enables or disables patches generation."
-msgstr ""
+msgstr "ჩართავს, ან გამორთავს პაჩების გენერაციას."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:528
@@ -54332,7 +54510,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:531
 #, kde-format
 msgid "Edge preserving filter strength"
-msgstr ""
+msgstr "წიბოს შემნარჩუნებელი ფილტრის სიძლიერე"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:555
@@ -54367,7 +54545,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
 #, kde-format
 msgid "Enables or disables the gaborish filter."
-msgstr ""
+msgstr "ჩართავს, ან გამორთავს გაბორის ფილტრს."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:603
@@ -54383,7 +54561,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "გაბორის ფილტრი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:613
@@ -54405,13 +54583,13 @@ msgstr "მოდულარული კოდირება"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:623
 #, kde-format
 msgid "Enables modular encoding."
-msgstr ""
+msgstr "ჩართავს მოდულური კოდირებას."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
 #, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
-msgstr ""
+msgstr "ჩართავს, ან გამორთავს უხილავი პიქსელების ფერის შენარჩუნებას."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:637
@@ -54434,7 +54612,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:650
 #, kde-format
 msgid "Keep color of invisible pixels"
-msgstr ""
+msgstr "უხილავი პიქსელების ფერის შენარჩუნება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
@@ -54466,13 +54644,13 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr ""
+msgstr "ინტენსივობა განათებულობიდან"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
 #, kde-format
 msgid "VarDCT parameters"
-msgstr ""
+msgstr "VarDCT-ის მორგება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -54488,7 +54666,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
 #, kde-format
 msgid "Spectral progression"
-msgstr ""
+msgstr "სპექტრალური პროგრესია"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveAC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
@@ -54540,7 +54718,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:739
 #, kde-format
 msgid "Modular parameters"
-msgstr ""
+msgstr "მოდულურობის პარამეტრები"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:745
@@ -54561,7 +54739,7 @@ msgstr "პროგრესული კოდირება"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
+msgstr "ჩართავს, ან გამორთავს პროგრესიული კოდირებას მოდულური რეჟიმისთვის."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
@@ -54576,7 +54754,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
 #, kde-format
 msgid "Global channel palette range"
-msgstr ""
+msgstr "გლობალური არხის პალიტრის შუალედი"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
@@ -54601,7 +54779,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
 #, kde-format
 msgid "Local channel palette range"
-msgstr ""
+msgstr "ლოკალური არხის პალიტრის შუალედი"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:831
@@ -54626,7 +54804,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr ""
+msgstr "ფერთა პალიტრის გამოყენება ... ფერისთვის, ან ნაკლებისთვის"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:889
@@ -59074,12 +59252,12 @@ msgstr "გაფანტვა"
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:45
 #, kde-format
 msgid "Axis X"
-msgstr ""
+msgstr "X ღერძი"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:46
 #, kde-format
 msgid "Axis Y"
-msgstr ""
+msgstr "Y ღერძი"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:47
 #, kde-format
@@ -59100,13 +59278,13 @@ msgstr "წიბოს დარბილება:"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
-msgstr ""
+msgstr "ზომა -> ბუნდოვანი (სენსორი)"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
-msgstr ""
+msgstr "ზომა -> მინავლება (სენსორი)"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format
@@ -59168,12 +59346,12 @@ msgstr "+180°"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:87
 #, kde-format
 msgid "CCW hue"
-msgstr ""
+msgstr "CCW ტონი"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:98
 #, kde-format
 msgid "CW hue"
-msgstr ""
+msgstr "CW ტონი"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:104
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
@@ -65626,6 +65804,8 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
+"ტექსტი თითოეული ხაზის მოსათავსებლად SVG 1.1-ის სიმბოლოს გარდაქმნებს იყენებს. "
+"ეს SVG 1.1-თან უკუთავსებადობისთვის გამოიყენება."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
 #, kde-format

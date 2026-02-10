@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-04 00:42+0000\n"
+"POT-Creation-Date: 2026-02-10 00:42+0000\n"
 "PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -24102,28 +24102,28 @@ msgstr ""
 "O esquema de base de datos de recurso cambiou. Krita salvagardará a súa base "
 "de datos e creará unha nova base de datos."
 
-#: libs/resources/KisResourceLocator.cpp:91
+#: libs/resources/KisResourceLocator.cpp:106
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. Non foi posíbel crear a localización do recurso en %1."
 
-#: libs/resources/KisResourceLocator.cpp:98
+#: libs/resources/KisResourceLocator.cpp:113
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Non se pode escribir na localización do recurso en %1"
 
-#: libs/resources/KisResourceLocator.cpp:852
+#: libs/resources/KisResourceLocator.cpp:865
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Non foi posíbel engadir %1 á base de datos"
 
-#: libs/resources/KisResourceLocator.cpp:896
-#: libs/resources/KisResourceLocator.cpp:1257
+#: libs/resources/KisResourceLocator.cpp:909
+#: libs/resources/KisResourceLocator.cpp:1262
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Non foi posíbel retirar o almacenamento %1 da base de datos"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1018
 #, fuzzy, kde-format
 #| msgid "Could not synchronize updated font registery with the database"
 msgid "Could not synchronize updated font registry with the database"
@@ -24131,48 +24131,48 @@ msgstr ""
 "Non foi posíbel sincronizar o rexistro de fontes actualizado coa base de "
 "datos."
 
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1026
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita está a executarse por primeira vez. A preparación levará un tempo."
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1033
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Non foi posíbel crear a localización do recurso en %1."
 
-#: libs/resources/KisResourceLocator.cpp:1037
-#: libs/resources/KisResourceLocator.cpp:1053
+#: libs/resources/KisResourceLocator.cpp:1046
+#: libs/resources/KisResourceLocator.cpp:1062
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Non foi posíbel copiar o recurso %1 en %2"
 
-#: libs/resources/KisResourceLocator.cpp:1049
+#: libs/resources/KisResourceLocator.cpp:1058
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Instalando os recursos do lote %1."
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1086
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Recursos temporais"
 
-#: libs/resources/KisResourceLocator.cpp:1083
+#: libs/resources/KisResourceLocator.cpp:1092
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "Almacenamento de fontes"
 
-#: libs/resources/KisResourceLocator.cpp:1206
+#: libs/resources/KisResourceLocator.cpp:1211
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "Preparando os recursos."
 
-#: libs/resources/KisResourceLocator.cpp:1219
-#: libs/resources/KisResourceLocator.cpp:1227
+#: libs/resources/KisResourceLocator.cpp:1224
+#: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Non foi posíbel sincronizar %1 coa base de datos"

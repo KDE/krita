@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-04 00:42+0000\n"
+"POT-Creation-Date: 2026-02-10 00:42+0000\n"
 "PO-Revision-Date: 2026-02-06 17:34+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -24372,82 +24372,82 @@ msgid ""
 "and create a new database."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:91
+#: libs/resources/KisResourceLocator.cpp:106
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "1. Could not create the resource location at %1."
 msgstr "Il non pote crear le plugin de filtro"
 
-#: libs/resources/KisResourceLocator.cpp:98
+#: libs/resources/KisResourceLocator.cpp:113
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "2. The resource location at %1 is not writable."
 msgstr "Il non pote crear le plugin de filtro"
 
-#: libs/resources/KisResourceLocator.cpp:852
+#: libs/resources/KisResourceLocator.cpp:865
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Il non pote cargar  insimul %1."
 
-#: libs/resources/KisResourceLocator.cpp:896
-#: libs/resources/KisResourceLocator.cpp:1257
+#: libs/resources/KisResourceLocator.cpp:909
+#: libs/resources/KisResourceLocator.cpp:1262
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "Could not remove storage %1 from the database"
 msgstr "Il non pote crear le plugin de filtro"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1018
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Il non pote crear le plugin de filtro"
 
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1026
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1033
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "3. Could not create the resource location at %1."
 msgstr "Il non pote crear le plugin de filtro"
 
-#: libs/resources/KisResourceLocator.cpp:1037
-#: libs/resources/KisResourceLocator.cpp:1053
+#: libs/resources/KisResourceLocator.cpp:1046
+#: libs/resources/KisResourceLocator.cpp:1062
 #, fuzzy, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Il non pote cargar a selection de vector %1."
 
-#: libs/resources/KisResourceLocator.cpp:1049
+#: libs/resources/KisResourceLocator.cpp:1058
 #, fuzzy, kde-format
 #| msgid "Could not load bundle %1."
 msgid "Installing the resources from bundle %1."
 msgstr "Il non pote cargar  insimul %1."
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1086
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
 msgid "Temporary Resources"
 msgstr "Importa ressource"
 
-#: libs/resources/KisResourceLocator.cpp:1083
+#: libs/resources/KisResourceLocator.cpp:1092
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "Stilo de Font"
 
-#: libs/resources/KisResourceLocator.cpp:1206
+#: libs/resources/KisResourceLocator.cpp:1211
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Synchronizing the resources."
 msgstr "Gere Ressources..."
 
-#: libs/resources/KisResourceLocator.cpp:1219
-#: libs/resources/KisResourceLocator.cpp:1227
+#: libs/resources/KisResourceLocator.cpp:1224
+#: libs/resources/KisResourceLocator.cpp:1232
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "Could not synchronize %1 with the database"

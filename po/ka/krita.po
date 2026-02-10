@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-04 00:42+0000\n"
-"PO-Revision-Date: 2026-02-08 14:37+0100\n"
+"POT-Creation-Date: 2026-02-10 00:42+0000\n"
+"PO-Revision-Date: 2026-02-09 13:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -23684,73 +23684,73 @@ msgstr ""
 "რესურსების მონაცემთა ბაზის სქემა შეიცვალა. Krita მოახდენს თქვენი მონაცემთა "
 "ბაზის მარქაფს და ახალს შექმნის."
 
-#: libs/resources/KisResourceLocator.cpp:91
+#: libs/resources/KisResourceLocator.cpp:106
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. ვერ შევქმენი რესურსის მდებარეობა მისამართზე %1."
 
-#: libs/resources/KisResourceLocator.cpp:98
+#: libs/resources/KisResourceLocator.cpp:113
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. რესურსი მდებარეობაზე %1 ჩაწერადი არაა."
 
-#: libs/resources/KisResourceLocator.cpp:852
+#: libs/resources/KisResourceLocator.cpp:865
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1-ის მონაცემთა ბაზაში ჩამატება შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:896
-#: libs/resources/KisResourceLocator.cpp:1257
+#: libs/resources/KisResourceLocator.cpp:909
+#: libs/resources/KisResourceLocator.cpp:1262
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "მონაცემთა ბაზიდან საცავის %1 წაშლა შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1018
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 "განახლებული ფონტის რეესტრის მონაცემთა ბაზასთან სინქრონიზაცია შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1026
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita პირველადაა გაშვებული. ინიციალიზაციას რაღაც დრო დასჭირდება."
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1033
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. ვერ შევქმენი რესურსის მდებარეობა მისამართზე %1."
 
-#: libs/resources/KisResourceLocator.cpp:1037
-#: libs/resources/KisResourceLocator.cpp:1053
+#: libs/resources/KisResourceLocator.cpp:1046
+#: libs/resources/KisResourceLocator.cpp:1062
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "რესურსი %1-ის %2-ში კოპირება შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:1049
+#: libs/resources/KisResourceLocator.cpp:1058
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "მიმდინარეობს რესურსების დაყენება პაკეტიდან %1."
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1086
 #, kde-format
 msgid "Temporary Resources"
 msgstr "დროებითი რესურსები"
 
-#: libs/resources/KisResourceLocator.cpp:1083
+#: libs/resources/KisResourceLocator.cpp:1092
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "ფონტის საცავი"
 
-#: libs/resources/KisResourceLocator.cpp:1206
+#: libs/resources/KisResourceLocator.cpp:1211
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr "რესურსების სინქრონიზაცია."
 
-#: libs/resources/KisResourceLocator.cpp:1219
-#: libs/resources/KisResourceLocator.cpp:1227
+#: libs/resources/KisResourceLocator.cpp:1224
+#: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1-ის მონაცემთა ბაზასთან სინქრონიზაცია შეუძლებელია"
@@ -53809,7 +53809,7 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 "არმოჩენილია JPEG-XL გამოსახულება ადგილის ფერის არხებით. შემოტანილია "
-"გაბრტყელებული გამოსახულება"
+"გაბრტყელებული გამოსახულება."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:680
 #: plugins/impex/jxl/JPEGXLImport.cpp:692
@@ -54193,7 +54193,7 @@ msgstr "კოდირების პარამეტრები"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:89
 #, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "თუ ეს ჩართული არაა, გამოსახულება კარგვის გარეშე იქნება შენახული"
+msgstr "თუ ეს ჩართული არაა, გამოსახულება კარგვის გარეშე იქნება შენახული."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:92
@@ -54238,7 +54238,7 @@ msgstr ""
 "მოდულური კოდირების გამოყენება ნაგულისხმევი VarDCT-ის მაგიერ კარგვიანი "
 "შეკუმშვისთვის\n"
 "(მაგ: არაფოტოგრაფიული გამოსახულებებისთვის).\n"
-"ნაგულისხმევი: გამორთულია"
+"ნაგულისხმევი: გამორთულია."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:154
@@ -54739,7 +54739,7 @@ msgstr "პროგრესული კოდირება"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr "ჩართავს, ან გამორთავს პროგრესიული კოდირებას მოდულური რეჟიმისთვის."
+msgstr "ჩართავს, ან გამორთავს პროგრესულ კოდირებას მოდულური რეჟიმისთვის."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
@@ -54835,7 +54835,7 @@ msgstr "დელტა პალიტრა"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:921
 #, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
-msgstr ""
+msgstr "ჩართავს, ან გამორთავს დელტა პალიტრას. გამოიყენება მოდულურ რეჟიმში."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:928
@@ -54844,6 +54844,9 @@ msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>დააყენებს ფილის ზომას შეკუმშვისთვის. დიდმა ჯგუფებმა, "
+"შეიძლება, გააუმჯობესონ შეკუმშვის დონე, მაგრამ მათ მეტი მეხსიერება სჭირდებათ."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
@@ -54856,13 +54859,13 @@ msgstr "ჯგუფის ზომა"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
 #, kde-format
 msgid "Group size for modular encoding."
-msgstr ""
+msgstr "ჯგუფის ზომა მოდულური კოდირებისთვის."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:945
 #, kde-format
 msgid "Predictor for modular encoding."
-msgstr ""
+msgstr "მოდულური კოდირების პროგნოზი."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:952
@@ -54872,13 +54875,17 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ირჩევს ალგორითმს, რომელიც გამოიყენება პიქსელის "
+"მნიშვნელობების პროგნოზისთვის მიმდებარე პიქსელებზე დაყრდნობით. სხვადასხვა "
+"პროგნოზები უკეთესად მუშაობს სხვადასხვა ტიპის გამოსახულებისთვის.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:955
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Predictor"
-msgstr ""
+msgstr "პროგნოზი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:962
@@ -54894,7 +54901,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:965
 #, kde-format
 msgid "Pixels for MA tree learning"
-msgstr ""
+msgstr "პიქსელები MA ხის სწავლებისთვის"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:993
@@ -54942,7 +54949,7 @@ msgctxt "Warning during loading a kra file with a filter layer"
 msgid ""
 "Selection on layer %s couldn't be loaded. It will be replaced by an empty "
 "selection."
-msgstr ""
+msgstr "ფენაზე %s მონიშნული ვერ ჩაიტვირთა. იგი შეიცვლება ცარიელი მონიშნულით."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:321
 #, kde-format
@@ -54951,16 +54958,18 @@ msgid ""
 "The file contains a clone layer that has an incorrect source node id. This "
 "layer will be converted into a paint layer."
 msgstr ""
+"ფაილი შეიცავს კლონ ფენას, რომელსაც აქვს არასწორი წყარო კვანძის "
+"იდენტიფიკატორი. ეს ფენა გარდაიქმნება ხატვის ფენად."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
-msgstr ""
+msgstr "ტრანსფორმაციის ნიღბის \"id\" ჩატვირთვა შეუძლებელია"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:400
 #, kde-format
 msgid "Could not find transform mask XML element"
-msgstr ""
+msgstr "გარდაქმნის ნიღბის XML ელემენტის პოვნა შეუძლებელია"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:422
 #, kde-format
@@ -54971,11 +54980,14 @@ msgstr "გარდაქმნის ნიღბის პარამეტ�
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
+"საკვანძო კადრის პიქსელის მონაცემები კადრისთვის %1 %2-ში აღმოჩენილი არაა."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:582
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
+"შეუძლებელია საკვანძო კადრის პიქსელის მონაცემების ჩატვირთვა კადრისთვის %1 %2-"
+"ში."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:611
 #, kde-format
@@ -55029,22 +55041,22 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:846
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
-msgstr ""
+msgstr "უცნობი საკვანძო კადრების არხის ტიპი: %1 %2-ში"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:210
 #, kde-format
 msgid "Image does not have a name."
-msgstr ""
+msgstr "გამოსახულებას სახელი არ აქვს."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:215
 #, kde-format
 msgid "Image does not specify a width."
-msgstr ""
+msgstr "გამოსახულებას სიგანე მითითებული არ აქვს."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:221
 #, kde-format
 msgid "Image does not specify a height."
-msgstr ""
+msgstr "გამოსახულებას სიმაღლე მითითებული არ აქვს."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:271
 #, kde-format
@@ -55057,18 +55069,20 @@ msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr ""
+"ჩაშენებული პალიტრა ცარიელია და მისი ჩატვირთვა შეუძლებელია. პალიტრის სახელი: "
+"%1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:599
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
-msgstr ""
+msgstr "ჩაშენებული რესურსის წაკითხვა შეუძლებელია. რესურსის ფაილის სახელი: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:608
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
-msgstr ""
+msgstr "ჩაშენებული რესურსის შემოტანა შეუძლებელია. რესურსის ფაილის სახელი: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:692
 #, kde-format
@@ -55081,6 +55095,12 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
+"აუდიოს არხის ფაილი \"%1\" არ არსებობს!\n"
+"\n"
+"მოსალოდნელი ბილიკი:\n"
+"%2\n"
+"\n"
+"გნებავთ მისი ხელით პოვნა?"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:867
 #, kde-format
@@ -55088,26 +55108,28 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
+"აღმოჩენილია ორი გლობალური მონიშვნის ნიღაბი აქტიურ მდგომარებაში. \"%1\" "
+"დატოვებულია აქტიურად, \"%2\" კი - დეაქტივირებულია"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
-msgstr ""
+msgstr "ფენა %1 მიუთითებს მხარდაუჭერელ ფერის რეჟიმზე: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:955
 #, kde-format
 msgid "Layer %1 has an unsupported type."
-msgstr ""
+msgstr "ფენის %1 ტიპი მხარდაჭერილი არაა."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:990
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
-msgstr ""
+msgstr "ფენის %1 ტიპი მხარდაჭერილი არაა: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:997
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
-msgstr ""
+msgstr "ჩატვირთვის შეცდომა ფენისთვის %1 ტიპით: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1021
 #, kde-format
@@ -55129,6 +55151,11 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
+"ფაილი, ასოცირებული ფაილის ფენასთან სახელით \"%1\" აღმოჩენილი არაა.\n"
+"\n"
+"მოსალოდნელი ბილიკი:\n"
+"%2\n"
+"გნებავთ მისი ხელით პოვნა?"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
@@ -55159,22 +55186,22 @@ msgstr "პიქსელის მონაცემების შენა�
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr ""
+msgstr "ანოტაციების შენახვის შეცდომა ფენისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
 msgid "Failed to save the filter layer %1: it has no filter."
-msgstr ""
+msgstr "ფილტრის ფენის %1 შენახვის შეცდომა: ფილტრი არ აქვს."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
 #, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr ""
+msgstr "მონიშნულის შენახვის შეცდომა ფილტრის ფენისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
-msgstr ""
+msgstr "ფილტრის კონფიგურაციის შენახვის შეცდომა ფილტრის ფენისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
@@ -55184,47 +55211,48 @@ msgstr "მონიშნულის შენახვის შეცდო�
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr ""
+msgstr "გენერატორის კონფიგურაციის შენახვის შეცდომა ფენისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
 msgid "Failed to save filter mask %1. It has no filter."
-msgstr ""
+msgstr "ფილტრის ნიღბის %1 შენახვის შეცდომა. მას ფილტრი არ აქვს."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr ""
+msgstr "მონიშნულის შენახვის შეცდომა ფილტრის ნიღბისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
-msgstr ""
+msgstr "ფილტრის კონფიგურაციის შენახვის შეცდომა ფილტრის ნიღბისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr ""
+msgstr "მონიშნულის შენახვის შეცდომა გამჭვირვალობის ნიღბისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr ""
+msgstr "მონიშნულის შენახვის შეცდომა ლოკალური მონიშნულისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
-msgstr ""
+msgstr "პიქსელის მონიშვნის მონაცემების შენახვის შეცდომა ფენისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
-msgstr ""
+msgstr "ვექტორული მონიშნულის მონაცემების შენახვის შეცდომა ფენისთვის %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
 msgstr ""
+"მეტამონაცემების უკანაბოლოს შეცდომა %1-ისთვის მეტამონაცემების შენახვისას"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, kde-format
@@ -55235,7 +55263,7 @@ msgstr "%1-ის მეტამონაცემების ფაილშ�
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
-msgstr ""
+msgstr "რესურსის ჩასაშენებლად გატანა შეუძლებელია: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:231
 #, kde-format
@@ -55247,13 +55275,13 @@ msgstr "რესურსის ჩაწერა შეუძლებელ�
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
-msgstr ""
+msgstr "ჩაწერილი რესურსი ცარიელია: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:249
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
-msgstr ""
+msgstr "ჩაწერილი რესურსი არასრულია: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:266
 #: plugins/impex/libkra/kis_kra_saver.cpp:288
@@ -55298,7 +55326,7 @@ msgstr "გამოსახულების პროფილის შე�
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr ""
+msgstr "პროგრამულად დამოწმებული ფერთა პროფილის შენახვა შეუძლებელია."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:616
 #, kde-format
@@ -55366,7 +55394,7 @@ msgstr "ფორმატი მხარდაჭერილი არაა,
 #: plugins/impex/libkra/kra_converter.cpp:359
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
-msgstr ""
+msgstr "ეს ფაილი მეტისმეტად ახალია Krita-ის ამ ვერსიისთვის (%1)."
 
 #: plugins/impex/libkra/kra_converter.cpp:365
 #, kde-format
@@ -55382,7 +55410,7 @@ msgstr "ფაილი გამოსახულებას არ შეი
 #: plugins/impex/pdf/kis_pdf_import.cpp:78
 #, kde-format
 msgid "A password is required to read that pdf"
-msgstr ""
+msgstr "ამ PDF-ის წასაკითხად აუცილებელია პაროლი"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:87
 #, kde-format
@@ -55398,7 +55426,7 @@ msgstr "გვერდი %1"
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:18
 #, kde-format
 msgid "PDFImportWidget"
-msgstr ""
+msgstr "PDFImportWidget"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:24
@@ -55410,19 +55438,19 @@ msgstr "გვერდები"
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:30
 #, kde-format
 msgid "All pa&ges"
-msgstr ""
+msgstr "ყველა &გვერდი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolFirstPage)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:37
 #, kde-format
 msgid "&First page"
-msgstr ""
+msgstr "&პირველი გვერდი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolSelectionPage)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:47
 #, kde-format
 msgid "Selec&tion of page"
-msgstr ""
+msgstr "გვერდის მო&ნიშვნა"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intResolution)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:304
@@ -55441,13 +55469,13 @@ msgstr "გარჩევადობა:"
 #: plugins/impex/png/kis_wdg_options_png.ui:18
 #, kde-format
 msgid "PNG Options"
-msgstr ""
+msgstr "PNG-ის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/png/kis_wdg_options_png.ui:44
 #, kde-format
 msgid "Transparent color: "
-msgstr ""
+msgstr "გამჭვირვალე ფერი: "
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, compressionLevelDeflate)
@@ -55463,7 +55491,7 @@ msgstr ""
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:500
 #, kde-format
 msgid "Note: the compression level does not change the quality of the result"
-msgstr ""
+msgstr "შენიშვნა: შეკუმშვის დონე შედეგის ხარისხს არ ცვლის"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, label_2)
 #. i18n: ectx: property (whatsThis), widget (QLabel, lblFast)
@@ -55498,6 +55526,8 @@ msgid ""
 "<br>Note: the compression level does not change the quality of the result.</"
 "p>"
 msgstr ""
+"<p>შეკუმშვის დროის გასწორება. რაც უკეთესია შეკუმშვა, მით მეტი დროა საჭირო.\n"
+"<br>შენიშვნა: შეკუმშვის დროს შედეგის ხარისხზე გავლენა არ აქვს.</p>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMetaData)
 #: plugins/impex/png/kis_wdg_options_png.ui:84
@@ -55506,19 +55536,21 @@ msgid ""
 "<html><head/><body><p>Store information like keywords, title and subject and "
 "license, if possible.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>თუ შესაძლებელია, მოხდება ისეთი ინფორმაციის შენახვა, "
+"როგორიცაა საკვანძო სიტყვები, სათაური, თემა და ლიცენზია.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/png/kis_wdg_options_png.ui:87
 #, kde-format
 msgid "Store Metadata"
-msgstr ""
+msgstr "მეტამონაცემების შენახვა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/png/kis_wdg_options_png.ui:98
 #, kde-format
 msgctxt "The file will save fast but will not be compressed a lot"
 msgid "Large file size"
-msgstr ""
+msgstr "ფაილის დიდი ზომა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, tryToSaveAsIndexed)
 #: plugins/impex/png/kis_wdg_options_png.ui:112
@@ -55527,18 +55559,21 @@ msgid ""
 "Indexed PNG images are smaller. If you enabled this option, your image will "
 "be analyzed to see whether it is possible to save as an indexed PNG."
 msgstr ""
+"დაინდექსებული PNG გამოსახულებები უფრო პატარებია. თუ ამ პარამეტრს ჩართავთ, "
+"მოხდება თქვენი გამოსახულების ანალიზი რომ შემოწმდეს, შესაძლებელია, თუ არა "
+"მისი შენახვა დაინდექსებულ PNG-ში."
 
 #. i18n: ectx: property (text), widget (QCheckBox, tryToSaveAsIndexed)
 #: plugins/impex/png/kis_wdg_options_png.ui:115
 #, kde-format
 msgid "Save as indexed PNG, if possible"
-msgstr ""
+msgstr "დაინდექსებული PNG-ის სახით შენახვა, თუ ეს შესაძლებელია"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, interlacing)
 #: plugins/impex/png/kis_wdg_options_png.ui:125
 #, kde-format
 msgid "Use interlacing when publishing on the Internet."
-msgstr ""
+msgstr "ხაზგამოტოვების გამოყენება ინტერნეტში გამოქვეყნებისას."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, interlacing)
 #: plugins/impex/png/kis_wdg_options_png.ui:129
@@ -55554,26 +55589,26 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:132
 #, kde-format
 msgid "Interlacing"
-msgstr ""
+msgstr "ხაზგამოტოვება"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
 #, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small File Size"
-msgstr ""
+msgstr "ფაილის მცირე ზომა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveAsHDR)
 #: plugins/impex/png/kis_wdg_options_png.ui:153
 #, kde-format
 msgid "Save as HDR image (Rec. 2020 PQ)"
-msgstr ""
+msgstr "შენახვა HDR გამოსახულების სახით (Rec. 2020 PQ)"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/impex/png/kis_wdg_options_png.ui:167
 #, kde-format
 msgid "Compression (Lossless): "
-msgstr ""
+msgstr "შეკუმშვა (კარგვის გარეშე): "
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:177
@@ -55581,6 +55616,8 @@ msgstr ""
 #, kde-format
 msgid "Disable to get smaller files if your image has no transparency"
 msgstr ""
+"გამორთეთ, რომ მიიღოთ უფრო პატარა ფაილებით, თუ თქვენს გამოსახულებას "
+"გამჭვირვალობა არ აქვს"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:181
@@ -55598,7 +55635,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:184
 #, kde-format
 msgid "Store alpha channel (transparency)"
-msgstr ""
+msgstr "ალფა არხის (გამჭვირვალობის) შენახვა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:194
@@ -55612,12 +55649,18 @@ msgid ""
 "<span style=\" font-style:italic;\">enable</span> this option.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-weight:600;\">PNG</span> ფაილება "
+"აქვთ <span style=\" font-style:italic;\">ორი</span> არჩევანი <span style=\" "
+"font-weight:600;\">sRGB</span> ინფორმაციის შესანახად: ჭდის სახით, ან აშკარა "
+"პროფილის სახით. ვებში გამოსაყენებლად <span style=\" font-style:italic;"
+"\">გამორთეთ</span> ეს პარამეტრი. სხვა აპლიკაციებთან მუშაობისთვის კი <span "
+"style=\" font-style:italic;\">ჩართეთ</span> ის.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197
 #, kde-format
 msgid "Embed sRGB profile"
-msgstr ""
+msgstr "sRGB პროფილის ჩაშენება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAuthor)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
@@ -55626,18 +55669,20 @@ msgid ""
 "<html><head/><body><p>Save author nickname and the first contact information "
 "of the author profile into the png, if possible.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ავტორის მეტსახელისა და პროფილის პირველი კონტაქტის "
+"ინფორმაციის png-ში შენახვა, თუ ეს შესაძლებელია.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/png/kis_wdg_options_png.ui:207
 #, kde-format
 msgid "Sign with author data"
-msgstr ""
+msgstr "ხელმოწერა ავტორის მონაცემებით"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
 #, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr ""
+msgstr "ძალით გადაყვანა 8-ბიტში თითოეული არხისთვის"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -55646,6 +55691,8 @@ msgid ""
 "Your image contains one or more layers with a color model that is different "
 "from the image."
 msgstr ""
+"თქვენი გამოსახულება შეიცავს ერთ, ან მეტ ფენას ფერის მოდელით, რომელიც "
+"განსხვავდება გამოსახულებისგან."
 
 #: plugins/impex/psd/psd_export.cc:88
 #, kde-format
@@ -55654,11 +55701,14 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"როცა ტექსტური მოხაზულობების შენახვა PSD-ში ხდება, მხარდაჭერილია, მხოლოდ, "
+"ძირითადი ფუნქციები. დამატებითი ფუნქციები, როგორიცაა ტექსტი-ბილიკზე და "
+"opentype, შენახული არ იქნება."
 
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
 msgid "Duotone Colormode Block"
-msgstr ""
+msgstr "ფერების ორტონიანი რეჟიმი"
 
 #: plugins/impex/psd/psd_loader.cpp:255
 #, kde-format
@@ -55702,6 +55752,8 @@ msgstr "უმდაბლესი ხარისხი"
 #, kde-format
 msgid "Note:  100 uses lossless compression, everything below is lossy."
 msgstr ""
+"შენიშვნა:   100 იყენებს უდანაკარგო შეკუმშვას. ყველაფერი ქვემოთ კარგვებს "
+"შეიცავს."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1)
 #. i18n: ectx: property (whatsThis), widget (KisDoubleSliderSpinBox, imageQuality)
@@ -56064,7 +56116,7 @@ msgstr "ექსპოზიციის კორექცია (E.V)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "<p>Turn on the exposure correction before interpolation.</p>"
-msgstr ""
+msgstr "<p>ექსპოზიციის კორექციის ჩართვა ინტერპოლაციამდე.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:524
 #, kde-format
@@ -56218,13 +56270,13 @@ msgstr "FBDD"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
-msgstr ""
+msgstr "CFA წრფივი ხმაურის მოცილება"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
-msgstr ""
+msgstr "იმპულსური ხმაურის მოცილება"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:639
 #, kde-format
@@ -56246,7 +56298,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
-msgstr ""
+msgstr "ქრომატული აბერაციის კორექციის ჩართვა"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
@@ -56382,7 +56434,7 @@ msgstr "ფართო გამა"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
-msgstr ""
+msgstr "ProPhoto"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
@@ -56480,17 +56532,17 @@ msgstr "პოვნა..."
 #: plugins/impex/raw/wdgrawimport.ui:55
 #, kde-format
 msgid "No image loaded"
-msgstr ""
+msgstr "გამოსახულება ჩატვირთული არაა"
 
 #: plugins/impex/svg/kis_svg_import.cc:48
 #, kde-format
 msgid "Import SVG"
-msgstr ""
+msgstr "SVG-ის შემოტანა"
 
 #: plugins/impex/svg/kis_svg_import.cc:49
 #, kde-format
 msgid "Enter preferred resolution (PPI) for \"%1\""
-msgstr ""
+msgstr "შეიყვანეთ სასურველი გარჩევადობა (PPI) \"%1\"-ისთვის"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
@@ -56509,19 +56561,19 @@ msgstr "JPEG DCT შეკუმშვა"
 #, kde-format
 msgctxt "TIFF options"
 msgid "Deflate (ZIP)"
-msgstr ""
+msgstr "Deflate (ZIP)"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:44
 #, kde-format
 msgctxt "TIFF options"
 msgid "Lempel-Ziv & Welch"
-msgstr ""
+msgstr "ლემპელ-ზივი & უელჩი"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:46
 #, kde-format
 msgctxt "TIFF options"
 msgid "Pixar Log"
-msgstr ""
+msgstr "შეკუმშვა Pixar Log"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:59
 #, kde-format
@@ -56533,7 +56585,7 @@ msgstr "ჰორიზონტალური დიფერენცია�
 #, kde-format
 msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
-msgstr ""
+msgstr "მცურავმძიმიანი ჰორიზონტალური დიფერენციაცია"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1043
 #, kde-format
@@ -56543,6 +56595,9 @@ msgid ""
 "coefficient quantization and/or Huffman coding tables. Please upgrade your "
 "version of libjpeg-turbo and try again."
 msgstr ""
+"ეს TIFF ფაილი შეკუმშულია JPEG-ით, მაგრამ libjpeg-turbo-მა ვერ ჩატვირთა მისი "
+"კოეფიციენტის კვანტიზაცია და/ან ჰაფმანის კოდირების ცხრილები. გთხოვთ, "
+"განაახლეთ libjpeg-turbo-ის თქვენი ვერსია და თავიდან სცადეთ."
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1146
 #: plugins/impex/tiff/kis_tiff_import.cc:1329
@@ -56550,12 +56605,14 @@ msgstr ""
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr ""
+"ქვედისკრეტიზებული YCbCr TIFF ფაილების ჩატვირთვა, რომლებიც JPEG-ითაა "
+"შეკუმშული, შეუძლებელია."
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1578
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "TIFF სურათი PSD მონაცემებით"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1580
 #, kde-format
@@ -56564,6 +56621,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"TIFF გამოსახულება შეიცავს ჩაშენებულ სწორ PSD მონაცემებს. გსურთ გამოიყენოთ "
+"PSD მონაცემები ჩვეულებრივი TIFF-ის მონაცემების ნაცვლად?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -56571,7 +56630,7 @@ msgstr ""
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:36
 #, kde-format
 msgid "TIFF Options"
-msgstr ""
+msgstr "TIFF-ის პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressionType)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:42
@@ -56584,7 +56643,7 @@ msgstr "შეკუმშვის ტიპი"
 #, kde-format
 msgctxt "TIFF encoder options"
 msgid "Predictor"
-msgstr ""
+msgstr "პროგნოზი"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kComboBoxPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:69
@@ -56592,18 +56651,20 @@ msgstr ""
 msgid ""
 "Using a predictor can improve the compression (mostly for LZW and deflate.)"
 msgstr ""
+"პროგნოზის გამოყენებას შეკუმშვის გაუმჯობესება შეუძლია (ძირითადად "
+"ალგორითმებისთვის LZW და deflate.)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkPhotoshop)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:79
 #, kde-format
 msgid "Save layers as Photoshop"
-msgstr ""
+msgstr "ფენების შენახვა როგორც Photoshop-ში"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:88
 #, kde-format
 msgid "Layer compression"
-msgstr ""
+msgstr "ფენის შეკუმშვა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kComboBoxPSDCompressionType)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:99
@@ -56621,13 +56682,13 @@ msgstr "ZIP"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:134
 #, kde-format
 msgid "Store alpha &channel (transparency)"
-msgstr ""
+msgstr "ალფა არხის (გამჭვირვალობის) შენახვა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxJPEG)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:230
 #, kde-format
 msgid "JPEG Compression Options"
-msgstr ""
+msgstr "JPEG შეკუმშვის პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSmallest)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:251
@@ -56648,12 +56709,13 @@ msgstr "საუკეთესო"
 msgid ""
 "These settings determine how much information is lost during compression"
 msgstr ""
+"ეს პარამეტრები განსაზღვრავს, რამდენი ინფორმაცია იკარგება შეკუმშვის დროს"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxDeflate)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:329
 #, kde-format
 msgid "Deflate Compression Options"
-msgstr ""
+msgstr "Deflate შეკუმშვის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -56681,7 +56743,7 @@ msgstr "პატარა"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:441
 #, kde-format
 msgid "Pixar Log Compression Options"
-msgstr ""
+msgstr "Pixar Log შეკუმშვის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFast_2)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:473
@@ -56773,13 +56835,13 @@ msgstr "სეგმენტის მოგლუვება"
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Pseudo-random dithering"
-msgstr ""
+msgstr "ფსევდოშემთხვევითი დიზერინგი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
 #, kde-format
 msgid "Save as animated WebP"
-msgstr ""
+msgstr "შენახვა ანიმირებული WebP-ის სახით"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
@@ -56803,12 +56865,15 @@ msgid ""
 "better.\n"
 "If Lossless is disabled: 0 = smallest size, 100 = largest size."
 msgstr ""
+"თუ კარგვის გარეშე ჩართულია: 0 = უსწრაფესი, მაგრამ დიდი ფაილები. 100 = უფრო "
+"ნელი, მაგრამ უკეთესი.\n"
+"თუ კარგვის გარეშე გამორთულია: 0 = უმცირესი, 100 = უდიდესი ზომა."
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, tradeoff)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:121
 #, kde-format
 msgid "Quality/speed trade-off (0 = fast, 6 = slower-better)"
-msgstr ""
+msgstr "ხარისხი/სიჩქარის კომპრომისი (0 = ჩქარი, 6 = უფრო ნელი-უკეთესი)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dithering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:136
@@ -56825,6 +56890,8 @@ msgid ""
 "If non-zero, sets the desired target size in bytes. Takes precedence over "
 "the compression parameters."
 msgstr ""
+"თუ ნულის ტოლი არაა, აყენებს სასურველ სამიზნე ზომას ბაიტებში. აქვს გავლენა "
+"შეკუმშვის პარამეტრებზე."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:232
@@ -56847,12 +56914,14 @@ msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
 "precedence over Target Size."
 msgstr ""
+"თუ ნულის ტოლი არაა, მიუთითებს მინიმალურ დამახინჯებას, რის მიღწევასაც "
+"ცდილობთ. აქვს გავლენა სამიზნე ზომაზე."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:261
 #, kde-format
 msgid "Target PSNR"
-msgstr ""
+msgstr "სამიზნე PSNR"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSegments)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
@@ -56860,7 +56929,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:303
 #, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr ""
+msgstr "სეგმენტების მაქს. რაოდენობა (1-დან 4-მდე)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:290
@@ -56874,13 +56943,13 @@ msgstr "სეგმენტი"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:329
 #, kde-format
 msgid "Spatial Noise Shaping: 0 = off, 100 = maximum."
-msgstr ""
+msgstr "სივრცითი ხმაურის ფორმა: 0 = გამორთ, 100 = მაქს."
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:322
 #, kde-format
 msgid "SNS Strength"
-msgstr ""
+msgstr "SNS-ის სიძლიერე"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
@@ -56888,14 +56957,14 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:352
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
-msgstr ""
+msgstr "ფილტრის სიძლიერე: 0 = გამორთ. 100 = უძლიერესი."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:345
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Strength"
-msgstr ""
+msgstr "ფილტრის სიძლიერე"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
@@ -56903,14 +56972,14 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:375
 #, kde-format
 msgid "Filter sharpness: 0 = off, 7 = least sharp."
-msgstr ""
+msgstr "ფილტრის სიმკვეთრე: 0 = გამორთ. 7 = ყველაზე ნაკლებად მკვეთრი."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterSharpness)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:368
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Sharpness"
-msgstr ""
+msgstr "ფილტრის სიმკვეთრე"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterType)
 #. i18n: ectx: property (toolTip), widget (QComboBox, filterType)
@@ -56921,6 +56990,8 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
+"0 = მარტივი, 1 = ძლიერი. გამოიყენება, მხოლოდ, მაშინ, თუ ფილტრის სიძლიერე 0-"
+"ზე მეტია, ან ფილტრის ავტომორგებაა ჩართული."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:391
@@ -56933,7 +57004,7 @@ msgstr "ფილტრის ტიპი"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr ""
+msgstr "ფილტრის სიძლიერის ავტომატური გასწორება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -56960,18 +57031,20 @@ msgid ""
 "Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP "
 "lossless). Default is 1."
 msgstr ""
+"ალფა არხის კოდირების ალგორითმი (0 = არცერთი, 1 = შეკუმშული კარგვის გარეშე "
+"WebP-ით). ნაგულისხმევია 1."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:422
 #, kde-format
 msgid "Alpha Plane Compression"
-msgstr ""
+msgstr "ალფა არხის შეკუმშვა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:432
 #, kde-format
 msgid "Predictive Filtering for Alpha Plane"
-msgstr ""
+msgstr "მაპროგნოზებელი გაფილტვრა ალფა არხისთვის"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
@@ -56988,13 +57061,13 @@ msgstr "სწრაფი"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:490
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
-msgstr ""
+msgstr "0 = უმცირესი ზომა, 100 = კარგვის გარეშე. ნაგულისხმევია 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:483
 #, kde-format
 msgid "Alpha Plane Quality"
-msgstr ""
+msgstr "ალფა არხის ხარისხი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
@@ -57002,13 +57075,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:522
 #, kde-format
 msgid "Number of entropy-analysis passes (1 to 10)."
-msgstr ""
+msgstr "ენტროპიის ანალიზის გავლების რაოდენობა (1-დან 10-მდე)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPass)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:509
 #, kde-format
 msgid "Entropy Passes"
-msgstr ""
+msgstr "ენტროპიის გავლები"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblShowCompressed)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showCompressed)
@@ -57019,19 +57092,21 @@ msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
 "applied."
 msgstr ""
+"თუ ჩართულია, მოხდება შეკუმშული სურათის უკან გატანა. მარყუჟული გაფილტვრა "
+"გამოყენებული არ იქნება."
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:544
 #, kde-format
 msgid "Show Compressed"
-msgstr ""
+msgstr "შეკუმშულის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:561
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
-msgstr ""
+msgstr "წინასწარი დამუშავების ფილტრი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
@@ -57042,6 +57117,8 @@ msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
 "progressive decoding."
 msgstr ""
+"log2(ტოკენის დანაყოფების რაოდენობა) 0-სა და3-ს შორის. ნაგულისხმევია 0 უფრო "
+"ადვილი პროგრესული დეკოდირებისთვის."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:574
@@ -57058,24 +57135,27 @@ msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
 "coding (0 = no degradation, 100 = maximum possible degradation)."
 msgstr ""
+"ხარისხის დეგრადაცია საშუალებას მისცემს მოერგოს 512 კბ ლიმიტს პროგნოზირების "
+"რეჟიმების კოდირებაზე (0 = დეგრადაციის გარეშე, 100 = მაქსიმალური შესაძლო "
+"დეგრადაცია)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:594
 #, kde-format
 msgid "Partition Limit"
-msgstr ""
+msgstr "დანაყოფის ზღვარი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:603
 #, kde-format
 msgid "Maximum degradation"
-msgstr ""
+msgstr "მაქსიმალური დეგრადაცია"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:613
 #, kde-format
 msgid "No degradation"
-msgstr ""
+msgstr "დეგრადაციის გარეშე"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
@@ -57087,12 +57167,15 @@ msgid ""
 "expected output size from JPEG compression. Generally, the output size will "
 "be similar but the degradation will be lower."
 msgstr ""
+"თუ ჩართულია, მოხდება შეკუმშვის პარამეტრების თავიდან სახვა, რომ ისინი უკეთ "
+"დაემთხვეს გამოტანის ზომას JPEG შეკუმშვისთვის. ზოგადად, გამოტანის ზომა "
+"მსგავსი იქნება, მაგრამ დეგრადაცია უფრო დაბალია."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmulateJPEGSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "Emulate JPEG Size"
-msgstr ""
+msgstr "JPEG ზომის ემულაცია"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblThreadLevel)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, threadLevel)
@@ -57100,13 +57183,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:668
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
-msgstr ""
+msgstr "თუ ჩართულია, მოხდება მრავალნაკადიანი კოდირების გამოყენების მცდელობა."
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:661
 #, kde-format
 msgid "Multithreaded Encoding"
-msgstr ""
+msgstr "მრავალძაფიანი კოდირება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
@@ -57115,12 +57198,14 @@ msgstr ""
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
+"თუ ჩართულია, შეამცირებს მეხსიერების გამოყენებას (მაგრამ გაზრდის CPU-ის "
+"გამოყენებას)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:681
 #, kde-format
 msgid "Reduce Memory Usage"
-msgstr ""
+msgstr "მეხსიერების მოხმარების შემცირება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNearLossless)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, nearLossless)
@@ -57129,12 +57214,14 @@ msgstr ""
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
+"თითქმის უდანაკარგო კოდირება: 0 = მაქს. დანაკარგი, 100 = გამორთ. "
+"ნაგულისხმევია 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:701
 #, kde-format
 msgid "Near Lossless"
-msgstr ""
+msgstr "თითქმის უდანაკარგო"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
@@ -57146,6 +57233,9 @@ msgid ""
 "Otherwise, discard this invisible RGB information for better compression. "
 "The default is disabled."
 msgstr ""
+"თუ ჩართულია, მოხდება ზუსტი RGB მნიშვნელობების შენარჩუნება გამჭვირვალე "
+"არეებში. წინააღმდეგ შემთხვევაში მოხდება უჩინარი RGB ინფორმაციის მოცილება "
+"უკეთესი შეკუმშვისთვის. ნაგულისხმევად გამორთულია."
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:727
@@ -57160,12 +57250,13 @@ msgstr "ზუსტი"
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
+"თუ ჩართულია, გამოყენებული იქნება მკვეთრი (და ნელი) RGB -> YUV გადაყვანა."
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:747
 #, kde-format
 msgid "Use Sharp YUV"
-msgstr ""
+msgstr "მკვეთრი YUV-ის გამოყენება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMin)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMin)
@@ -57173,13 +57264,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:774
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
-msgstr ""
+msgstr "მინიმალური დასაშვები ხარისხის კოეფიციენტი. ნაგულისხმევია 0."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:767
 #, kde-format
 msgid "Minimum Quality"
-msgstr ""
+msgstr "მინიმალური ხარისხი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
@@ -57187,13 +57278,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
-msgstr ""
+msgstr "მაქსიმალური დასაშვები ხარისხის კოეფიციენტი. ნაგულისხმევია 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:790
 #, kde-format
 msgid "Maximum Quality"
-msgstr ""
+msgstr "მაქსიმალური ხარისხი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:856
@@ -57213,6 +57304,8 @@ msgid ""
 "This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
 "or newer."
 msgstr ""
+"ეს XFC ფაილი მეტისმეტად ახალია. Krita-ს არ აქვს GIMP 2.9 ან უფრო ახლის მიერ "
+"ჩაწერილი XFC ფაილების მხარდაჭერა."
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
@@ -57229,19 +57322,19 @@ msgstr "ფერის გადღაბნა"
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
 #, kde-format
 msgid "Smudge Mode"
-msgstr ""
+msgstr "გადღაბნის რეჟიმი"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
 #, kde-format
 msgid "Smearing"
-msgstr ""
+msgstr "დალაქავება"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:45
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:107
 #, kde-format
 msgid "Dulling"
-msgstr ""
+msgstr "დაბლაგვება"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:105
 #, kde-format
@@ -57268,28 +57361,30 @@ msgstr "სუსტი"
 #, kde-format
 msgctxt "Color rate of active Foreground color"
 msgid "Color Rate"
-msgstr ""
+msgstr "ფერის დონე"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionData.h:40
 #, kde-format
 msgid "Paint Thickness"
-msgstr ""
+msgstr "საღებავის სისქე"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:38
 #: plugins/paintops/libpaintop/KisLightnessStrengthOptionWidget.cpp:30
 #, kde-format
 msgid "Disabled: brush must be in Lightness mode for this option to apply"
 msgstr ""
+"გამორთულია: ამ პარამეტრის გამოსაყენებლად ფუნჯი განათებულობის რეჟიმში უნდა "
+"იყოს"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:43
 #, kde-format
 msgid "Overwrite (Smooth out when low) existing paint thickness"
-msgstr ""
+msgstr "არსებული საღებავის სისქის თავზე გადაწერა (მოგლუვება, როცა დაბალია)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:44
 #, kde-format
 msgid "Paint over existing paint thickness (controlled by Smudge Length)"
-msgstr ""
+msgstr "ხატვა უკვე არსებულ ნახატის სისქეზე (კონტროლდება გადღაბნის სიგრძით)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:47
 #, kde-format
@@ -57302,12 +57397,14 @@ msgid ""
 "Describes how the brush's paint thickness interacts with existing thick "
 "paint, especially at low values."
 msgstr ""
+"აღწერს, როგორი ურთიერთობა აქვს ფუნჯის საღებავის სისქეს არსებულ სქელ "
+"საღებავთან. განსაკუთრებით - დაბალი მნიშვნელობებისას."
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionData.h:39
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
 #, kde-format
 msgid "Smudge Length"
-msgstr ""
+msgstr "ლაქის სიგრძე"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:59
 #, kde-format
@@ -57322,17 +57419,19 @@ msgstr "ალფას გადღაბნა:"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr ""
+msgstr "ახალი ლაქის ალგორითმის გამოყენება:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
 #, kde-format
 msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
 msgstr ""
+"(საჭიროა ფერადი გამოსახულების, განათებულობის რუკის და გრადიენტის რუკის "
+"ფუნჯებისთვის)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
 #, kde-format
 msgid " (caution, pierced brush!)"
-msgstr ""
+msgstr "  (ფრთხილად. ფუნჯი გახვრეტილია!)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:112
 #, kde-format
@@ -57341,6 +57440,9 @@ msgid ""
 "This brush has transparent pixels in its center. \"Dulling\" mode may give "
 "unstable results. Consider using \"Smearing\" mode instead."
 msgstr ""
+"ამ ფუნჯს ცენტრში გამჭვირვალე პიქსელები გააჩნია. \"დაბლაგვების\" რეჟიმმა, "
+"შეიძლება, არასტაბილური შედეგი მოგცეთ. იფიქრეთ, სამაგიეროდ \"დალაქავების\" "
+"რეჟიმი გამოიყენოთ."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
 #, kde-format
@@ -57360,11 +57462,16 @@ msgid ""
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
+"ხატვა ხდება მიმდინარე ფენაზე,\n"
+"მაგრამ გამოიყენებს ყველა ფენას, რომლებიც ამჟამად ხილულია გადღაბნის "
+"შეყვანისთვის\n"
+"შენიშვნა: ამ რეჟიმს სწორად მუშაობა, მხოლოდ, სრულად გაუმჭვირვალე ფონით შეუძლია"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
+"გამორთულია: ფუნჯის განათებულობის რეჟიმში გადალაგების რეჟიმი მხარდაჭერილი არაა"
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
@@ -57416,7 +57523,7 @@ msgstr "ხაზის სიგანე"
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
 #, kde-format
 msgid "Curves opacity"
-msgstr ""
+msgstr "მრუდების გაუმჭვირვალობა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lineWidthLbl)
@@ -57436,14 +57543,14 @@ msgstr "ისტორიის ზომა:"
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:39
 #, kde-format
 msgid "Curves opacity:"
-msgstr ""
+msgstr "მრუდების გაუმჭვირვალობა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, connectionCHBox)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:52
 #: plugins/paintops/sketch/wdgsketchoptions.ui:141
 #, kde-format
 msgid "Paint connection line"
-msgstr ""
+msgstr "დაკავშირების ხაზის დახატვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, smoothingCHBox)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:59
@@ -57479,7 +57586,7 @@ msgstr "წყაროს გადატანა"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Clone Brush (temporarily disabled)"
-msgstr ""
+msgstr "ფუნჯის კლონირება (დროებით გამორთულია)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
@@ -57491,13 +57598,13 @@ msgstr "ხატვის რეჟიმი"
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:32
 #, kde-format
 msgid "To correct perspective, first create a perspective grid."
-msgstr ""
+msgstr "პერსპექტივის გასასწორებლად ჯერ შექმენით პერსპექტივის ბადე."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPerspective)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:38
 #, kde-format
 msgid "Correct the perspective"
-msgstr ""
+msgstr "პერსპექტივის გასწორება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:45
@@ -57506,24 +57613,26 @@ msgid ""
 "Move the clone origin with the brush. Uncheck to keep cloning from the "
 "selected point."
 msgstr ""
+"წყაროს კლონის გადაადგილება ფუნჯთან ერთად. გამორთეთ, რომ დაკლონოთ სასურველი "
+"წერტილი."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:48
 #, kde-format
 msgid "Source point move"
-msgstr ""
+msgstr "წყარო წერტილის გადაადგილება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbResetSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:58
 #, kde-format
 msgid "Reset the origin every time you make a new stroke."
-msgstr ""
+msgstr "წყაროს ჩამოყრა ყოველთვის, როცა ახალ შტრიხს ქმნით."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbResetSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:61
 #, kde-format
 msgid "Source point reset before a new stroke"
-msgstr ""
+msgstr "წყარო წერტილის ჩამოყრა ახალი შტრიხამდე"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCloneProjection)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:71
@@ -57532,12 +57641,14 @@ msgid ""
 "When checked, clone from all visible layers. Otherwise, clone from the "
 "active layer."
 msgstr ""
+"როცა ჩართულია, მოხდება ყველა ხილული ფენის დაკლონვა. თუ არა - დაბლოკვა "
+"აქტიური ფენიდან მოხდება."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCloneProjection)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:74
 #, kde-format
 msgid "Clone From All Visible Layers"
-msgstr ""
+msgstr "დაკლონვა ყველა ხილული ფენიდან"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:102
@@ -57564,7 +57675,7 @@ msgstr "რაოდენობა"
 #: plugins/paintops/deform/wdgdeformoptions.ui:39
 #, kde-format
 msgid "Deform Mode"
-msgstr ""
+msgstr "დეფორმაციის რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, growBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:139
@@ -57587,14 +57698,14 @@ msgstr "დაპატარავება"
 #: plugins/paintops/deform/wdgdeformoptions.ui:69
 #, kde-format
 msgid "Swirl CW"
-msgstr ""
+msgstr "მორევა სმ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCCWBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:142
 #: plugins/paintops/deform/wdgdeformoptions.ui:62
 #, kde-format
 msgid "Swirl CCW"
-msgstr ""
+msgstr "მორევა სსმ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, moveBtn)
 #. i18n: ectx: property (text), widget (QPushButton, moveOriginButton)
@@ -57627,7 +57738,7 @@ msgstr "ფერის დეფორმაცია"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Deform Brush (unsupported)"
-msgstr ""
+msgstr "ფუნჯის დეფორმაცია (მხარდაჭერილი არაა)"
 
 #: plugins/paintops/deform/KisDeformOptionWidget.cpp:46
 #, kde-format
@@ -57639,43 +57750,43 @@ msgstr "დეფორმაციის მორგება"
 #, kde-format
 msgctxt "Rearrange the pixels positions under the cursor"
 msgid "Color deformation"
-msgstr ""
+msgstr "ფერის დეფორმაცია"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lensOutBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:93
 #, kde-format
 msgid "Lens zoom out"
-msgstr ""
+msgstr "დამაპატარავებელი ლინზა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lensBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:100
 #, kde-format
 msgid "Lens zoom in"
-msgstr ""
+msgstr "გამადიდებელი ლინზა"
 
 #. i18n: ectx: property (text), widget (QLabel, deformAmountLbl)
 #: plugins/paintops/deform/wdgdeformoptions.ui:135
 #, kde-format
 msgid "Deform amount:"
-msgstr ""
+msgstr "დეფორმაციის რაოდენობა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, interpolationChBox)
 #: plugins/paintops/deform/wdgdeformoptions.ui:170
 #, kde-format
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "ორხაზოვანი ინტერპოლაცია"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCounter)
 #: plugins/paintops/deform/wdgdeformoptions.ui:180
 #, kde-format
 msgid "Use counter"
-msgstr ""
+msgstr "მრიცხველის გამოყენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useOldData)
 #: plugins/paintops/deform/wdgdeformoptions.ui:187
 #, kde-format
 msgid "Use undeformed image"
-msgstr ""
+msgstr "არადეფორმირებული გამოსახულების გამოყენება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shapeGroup)
 #: plugins/paintops/experiment/experiment_paintop_plugin.cpp:31
@@ -57718,7 +57829,7 @@ msgstr "ექსპერიმენტული პარამეტრი"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:33
 #, kde-format
 msgid "Shape creation:"
-msgstr ""
+msgstr "მოხაზულობის შექმნა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, smoothCHBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:71
@@ -57731,13 +57842,13 @@ msgstr "რბილი"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:93
 #, kde-format
 msgid "Post-processing"
-msgstr ""
+msgstr "პოსტპროცესინგი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, windingFillCHBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:116
 #, kde-format
 msgid "Winding fill"
-msgstr ""
+msgstr "სრული შევსება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hardEdgeCHBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:123
@@ -57755,7 +57866,7 @@ msgstr "შევსების სტილი"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:166
 #, kde-format
 msgid "Global Pattern"
-msgstr ""
+msgstr "გლობალური ნიმუში"
 
 #: plugins/paintops/filterop/filterop.cpp:31
 #, kde-format
@@ -57785,49 +57896,49 @@ msgstr "ნაწილაკის ტიპი"
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:80
 #, kde-format
 msgid "Anti-aliased pixel"
-msgstr ""
+msgstr "მოგლუვებული პიქსელი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:42
 #, kde-format
 msgid "Grid height:"
-msgstr ""
+msgstr "ბადის სიმაღლე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:52
 #, kde-format
 msgid "Vertical border:"
-msgstr ""
+msgstr "ვერტიკალური საზღვარი:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, divisionPressureCHBox)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:68
 #, kde-format
 msgid "Division by pressure"
-msgstr ""
+msgstr "გაყოფა დაწოლით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:98
 #, kde-format
 msgid "Horizontal border:"
-msgstr ""
+msgstr "ჰორიზონტალური საზღვარი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:108
 #, kde-format
 msgid "Grid width:"
-msgstr ""
+msgstr "ბადის სიგანე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:121
 #, kde-format
 msgid "Division level:"
-msgstr ""
+msgstr "გაყოფის დონე:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, jitterBorderCHBox)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:131
 #, kde-format
 msgid "Jitter borders"
-msgstr ""
+msgstr "საზღვრების არამდგრადობა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
@@ -57850,7 +57961,7 @@ msgstr "ჯაგრისი"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
-msgstr ""
+msgstr "ჯაგრიანი ფუნჯი (ხაზები უფრო თხელი იქნება, ვიდრე მინიატურაზე)"
 
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format
@@ -57862,13 +57973,13 @@ msgstr "ჯაგრისის მორგება"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
-msgstr ""
+msgstr "მელნის ამოწურვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:66
 #, kde-format
 msgid "Random offset:"
-msgstr ""
+msgstr "შემთხვევითი წანაცვლება:"
 
 #. i18n: ectx: property (text), widget (QLabel, densityLbl)
 #. i18n: ectx: property (text), widget (QLabel, lblDensity)
@@ -57886,25 +57997,25 @@ msgstr "სიმკვრივე:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:177
 #, kde-format
 msgid "Mouse pressure:"
-msgstr ""
+msgstr "თაგუნათი დაწოლა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:191
 #, kde-format
 msgid "Connect hairs:"
-msgstr ""
+msgstr "ჯაგრის შეერთება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:198
 #, kde-format
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "მოგლუვება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:205
 #, kde-format
 msgid "Composite bristles:"
-msgstr ""
+msgstr "კომპოზიტური ჯაგარი:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, brushTab)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:37
@@ -57934,7 +58045,7 @@ msgstr "ფუნჯის მორგება"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:134
 #, kde-format
 msgid "Mouse pressure"
-msgstr ""
+msgstr "თაგუნათი დაწოლა"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:144
@@ -57954,7 +58065,7 @@ msgstr "სიგმა"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:175
 #, kde-format
 msgid "Experimental Params"
-msgstr ""
+msgstr "ექსპერიმენტული პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:194
@@ -57966,13 +58077,13 @@ msgstr "გადიდების კოეფიციენტი"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:214
 #, kde-format
 msgid "Shear factor"
-msgstr ""
+msgstr "დახრის კოეფიციენტი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:234
 #, kde-format
 msgid "Random offset"
-msgstr ""
+msgstr "შემთხვევითი წანაცვლება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:269
@@ -57985,45 +58096,45 @@ msgstr "მელანი"
 #: plugins/paintops/hairy/wdgInkOptions.ui:45
 #, kde-format
 msgid "Ink Amount"
-msgstr ""
+msgstr "მელნის რაოდენობა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:335
 #: plugins/paintops/hairy/wdgInkOptions.ui:135
 #, kde-format
 msgid "Ink Depletion Curve"
-msgstr ""
+msgstr "მელნის ამოწურვის მრუდი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, weightGroup)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:347
 #: plugins/paintops/hairy/wdgInkOptions.ui:158
 #, kde-format
 msgid "Saturation Weights"
-msgstr ""
+msgstr "გაჯერების წონები"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, pressureSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:359
 #, kde-format
 msgid "pressure weight"
-msgstr ""
+msgstr "წნევის ფაქტორი"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, inkDepletionSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:387
 #, kde-format
 msgid "Ink depletion curve weight"
-msgstr ""
+msgstr "მელნის ამოწურვის მრუდის ფაქტორი"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, bristleLengthSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:415
 #, kde-format
 msgid "bristle length weight"
-msgstr ""
+msgstr "ჯაგრის სიგრძის ფაქტორი"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, bristleInkAmountSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:443
 #, kde-format
 msgid "Bristle ink amount weight"
-msgstr ""
+msgstr "ჯაგრის მელნის რაოდენობის ფაქტორი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useWeightCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, weightSaturationCBox)
@@ -58031,7 +58142,7 @@ msgstr ""
 #: plugins/paintops/hairy/wdgInkOptions.ui:164
 #, kde-format
 msgid "weighted saturation"
-msgstr ""
+msgstr "ფაქტორებზე დამოკიდებული გაჯერებულობა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, oneDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:94
@@ -58049,37 +58160,37 @@ msgstr "&2D"
 #: plugins/paintops/hairy/wdgInkOptions.ui:88
 #, kde-format
 msgid "Soak ink from the initial position of the stroke"
-msgstr ""
+msgstr "მელნით გაჟღენთვა შტრიხის საწყისი მდებარეობიდან"
 
 #. i18n: ectx: property (text), widget (QCheckBox, soakInkCBox)
 #: plugins/paintops/hairy/wdgInkOptions.ui:91
 #, kde-format
 msgid "Soak ink"
-msgstr ""
+msgstr "მელნით გაჟღენთვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/hairy/wdgInkOptions.ui:171
 #, kde-format
 msgid "Bristle Ink Weight:"
-msgstr ""
+msgstr "ჯაგრის მელნის წონა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hairy/wdgInkOptions.ui:178
 #, kde-format
 msgid "Pressure Weight:"
-msgstr ""
+msgstr "წნევის ფაქტორი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdgInkOptions.ui:195
 #, kde-format
 msgid "Bristle Length Weight:"
-msgstr ""
+msgstr "ჯაგრის სიგრძის ფაქტორი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/hairy/wdgInkOptions.ui:222
 #, kde-format
 msgid "Ink Depletion Curve Weight:"
-msgstr ""
+msgstr "მელნის ამოწურვის მრუდის ფაქტორი:"
 
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
 #, kde-format
@@ -58107,7 +58218,7 @@ msgstr "სისქე"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Hatching Brush (heavy aliasing in preview mode)"
-msgstr ""
+msgstr "დაშტრიხული ფუნჯი (ბევრი ხმაური მინიატურის რეჟიმში)"
 
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
 #, kde-format
@@ -58117,12 +58228,12 @@ msgstr "დაშტრიხვის მორგება"
 #: plugins/paintops/hatching/KisHatchingPreferencesWidget.cpp:43
 #, kde-format
 msgid "Hatching preferences"
-msgstr ""
+msgstr "დაშტრიხვის მორგება"
 
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
 msgid "Crosshatching"
-msgstr ""
+msgstr "ჯვარედინი დაშტრიხვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
@@ -58134,67 +58245,67 @@ msgstr "გაცალკევება:"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:148
 #, kde-format
 msgid "Origin X:"
-msgstr ""
+msgstr "საწყისი X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:186
 #, kde-format
 msgid "Origin Y:"
-msgstr ""
+msgstr "საწყისი Y:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
 #, kde-format
 msgid "Crosshatching style"
-msgstr ""
+msgstr "ჯვარედინი დაშტრიხვის სტილი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noCrosshatchingRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:286
 #, kde-format
 msgid "No crosshatch&ing"
-msgstr ""
+msgstr "ჯვარედ&ინი დაშტრიხვის გარეშე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, perpendicularRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:308
 #, kde-format
 msgid "Pe&rpendicular plane only"
-msgstr ""
+msgstr "მხოლოდ პე&რპენდიკულატური სიბრტყე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minusThenPlusRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:330
 #, kde-format
 msgid "-&45° plane then +45° plane"
-msgstr ""
+msgstr "-&45° სიბრტყე, შემდეგ +45° სიბრტყე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, plusThenMinusRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:349
 #, kde-format
 msgid "+45° plane &then -45° plane"
-msgstr ""
+msgstr "+45° სიბრ&ტყე, შემდეგ -45° სიბრტყე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, moirePatternRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:368
 #, kde-format
 msgid "&Moiré pattern"
-msgstr ""
+msgstr "&მუარის ნიმუში"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384
 #, kde-format
 msgid "Separation Style"
-msgstr ""
+msgstr "გაყოფის სტილი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:396
 #, kde-format
 msgid "Input-based intervals:"
-msgstr ""
+msgstr "შეყვანაზე დაფუძნებული შუალედები:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:30
 #, kde-format
 msgid "Graphical Tweaks"
-msgstr ""
+msgstr "გრაფიკის დაწვრილებითი მორგება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antialiasCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:36
@@ -58206,13 +58317,13 @@ msgstr "მომრგვალებული ხაზები"
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:46
 #, kde-format
 msgid "Subpixel precision"
-msgstr ""
+msgstr "ქვეპიქსელის სიზუსტე"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opaqueBackgroundCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:56
 #, kde-format
 msgid "Color background"
-msgstr ""
+msgstr "ფონის გაფერადება"
 
 #. i18n: ectx: property (text), widget (QLabel, rateLbl)
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:41
@@ -58224,13 +58335,13 @@ msgstr "შეაფასეთ:"
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:76
 #, kde-format
 msgid "Override Spacing"
-msgstr ""
+msgstr "დაშორების გადაფარვა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaskType)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:69
 #, kde-format
 msgid "Mask Type:"
-msgstr ""
+msgstr "ნიღბის ტიპი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShape)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:101
@@ -58245,12 +58356,14 @@ msgstr "კვადრატი"
 #, kde-format
 msgid "The border of the brush will be smoothed to avoid aliasing"
 msgstr ""
+"მოხდება ფუნჯის საზღვრის მოგლუვება კბილანების მსგავსი ეფექტის თავიდან "
+"ასაცილებლად"
 
 #. i18n: ectx: property (text), widget (QCheckBox, btnAntialiasing)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:112
 #, kde-format
 msgid "Anti-alias"
-msgstr ""
+msgstr "მომრგვალება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
@@ -58292,19 +58405,19 @@ msgstr "სირბილე:"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:337
 #, kde-format
 msgid "Randomness:"
-msgstr ""
+msgstr "შემთხვევითობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:347
 #, kde-format
 msgid "Spikes:"
-msgstr ""
+msgstr "წვერები:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, jitterMoveBox)
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:53
 #, kde-format
 msgid "Jitter Movement"
-msgstr ""
+msgstr "მთრთოლავი გადაადგილება"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLbl)
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:185
@@ -58322,7 +58435,7 @@ msgstr "ალფას შენარჩუნება"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
 msgid "Random HSV"
-msgstr ""
+msgstr "შემთხვევითი HSV"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHbox)
@@ -58330,13 +58443,13 @@ msgstr ""
 #: plugins/paintops/sketch/wdgsketchoptions.ui:155
 #, kde-format
 msgid "Random opacity"
-msgstr ""
+msgstr "შემთხვევითი გაუმჭვირვალობა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, colorPerParticleCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:122
 #, kde-format
 msgid "Color per particle"
-msgstr ""
+msgstr "ფერი თითო ნაწილაკზე"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, fillBackgroundCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:151
@@ -58346,6 +58459,8 @@ msgid ""
 "color. The background of particle is rectangle of grid width and height and "
 "by default it is transparent."
 msgstr ""
+"თუ ჩართულია, ნაწილაკებს შორის ადგილი ფონის ფერით შეივსება. ნაგულისხმევად "
+"გამოიყენება გამჭვირვალე ფერი."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fillBackgroundCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:154
@@ -58357,13 +58472,13 @@ msgstr "ფონის შევსება"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:167
 #, kde-format
 msgid "Sample Input layer"
-msgstr ""
+msgstr "სინჯის აღება შეყვანის ფერიდან"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mixBgColorCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:180
 #, kde-format
 msgid "Mix with background color"
-msgstr ""
+msgstr "შერევა ფონის ფერთან"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:41
@@ -58375,13 +58490,13 @@ msgstr "არჩეულია:"
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:85
 #, kde-format
 msgid "Turn the preset into an Eraser preset (overrides the blending mode)"
-msgstr ""
+msgstr "პრესეტის გადაყვანა საშლელის პრესეტში (გადაფარავს შერევის რეჟიმს)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:116
 #, kde-format
 msgid "Available Blending Modes"
-msgstr ""
+msgstr "ხელმისაწვდომი შერევის რეჟიმები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxUseCurve)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:52
@@ -58389,7 +58504,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:57
 #, kde-format
 msgid "Enable Pen Settings"
-msgstr ""
+msgstr "კალმის პარამეტრების ჩართვა"
 
 #. i18n: ectx: property (text), widget (QLabel, yRangeLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -58397,7 +58512,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:469
 #, kde-format
 msgid "Y Range:"
-msgstr ""
+msgstr "Y დიაპაზონი:"
 
 #. i18n: ectx: property (text), widget (QLabel, toLabel2)
 #. i18n: ectx: property (text), widget (QLabel, toLabel1)
@@ -58409,7 +58524,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:608
 #, kde-format
 msgid "To"
-msgstr ""
+msgstr "სადამდე"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (toolTip), widget (QComboBox, curveMode)
@@ -58442,7 +58557,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:529
 #, kde-format
 msgid "Curves calculation mode:"
-msgstr ""
+msgstr "მრუდების გამოთვლის რეჟიმი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:544
@@ -58450,7 +58565,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:549
 #, kde-format
 msgid "multiply"
-msgstr ""
+msgstr "გამრავლება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:549
@@ -58458,7 +58573,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:554
 #, kde-format
 msgid "addition"
-msgstr ""
+msgstr "დამატება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:554
@@ -58482,7 +58597,7 @@ msgstr "მინიმუმი"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:569
 #, kde-format
 msgid "difference"
-msgstr ""
+msgstr "სხვაობა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxUseSameCurve)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:574
@@ -58490,7 +58605,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:579
 #, kde-format
 msgid "Share curve across all settings"
-msgstr ""
+msgstr "მრუდის გაზიარება ყველა პარამეტრში"
 
 #. i18n: ectx: property (text), widget (QLabel, xRangeLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -58498,13 +58613,13 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:591
 #, kde-format
 msgid "X Range:"
-msgstr ""
+msgstr "X დიაპაზონი:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
 #, kde-format
 msgid "Preserve alpha channel"
-msgstr ""
+msgstr "ალფა არხის შენარჩუნება"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
@@ -58524,13 +58639,13 @@ msgstr "ფილტრის მორგება"
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:24
 #, kde-format
 msgid "Painting mode"
-msgstr ""
+msgstr "ხატვის რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBuildup)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:36
 #, kde-format
 msgid "Build up"
-msgstr ""
+msgstr "დაგროვება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
@@ -58538,7 +58653,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2111
 #, kde-format
 msgid "Wash"
-msgstr ""
+msgstr "თანაბარი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:54
@@ -58548,6 +58663,9 @@ msgid ""
 "<p><b>Note:</b> this is the same thing as the \"incremental\" option in the "
 "Krita 1.6 freehand tool options.</p></html>"
 msgstr ""
+"<html>\n"
+"<p><b>შენიშვნა:</b> ეს იგივეა, რაც პარამეტრი \"ინკრემენტული\" Krita 1.6-ის "
+"თავისუფალი ხატვის პარამეტრებში.</p></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:58
@@ -58571,13 +58689,13 @@ msgstr "შტამპი"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
 #, kde-format
 msgid "Current Brush Tip"
-msgstr ""
+msgstr "მიმდინარე ფუნჯის წვერო"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
 #, kde-format
 msgid "Brush Details"
-msgstr ""
+msgstr "ფუნჯის დეტალები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
@@ -58589,20 +58707,20 @@ msgstr "ფუნჯის პრესეტის პარამეტრე�
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
 #, kde-format
 msgid "Reset Predefined Tip"
-msgstr ""
+msgstr "წინასწარ აღწერილი წვეროს ჩამოყრა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
-msgstr ""
+msgstr "ფუნჯის რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
 #, kde-format
 msgid "Reset Adjustments"
-msgstr ""
+msgstr "გასწორებების ჩამოყრა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFont)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:72
@@ -58626,13 +58744,13 @@ msgstr "ბაყაყი წყალში ყიყინებს"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171
 #, kde-format
 msgid "use only one letter at a time"
-msgstr ""
+msgstr "ერთდროულად, მხოლოდ, ერთი ასოს გამოყენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:174
 #, kde-format
 msgid "Pipe mode"
-msgstr ""
+msgstr "ასოასო ძებნის რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
@@ -58662,13 +58780,13 @@ msgstr "მასშტაბი: "
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
 #, kde-format
 msgid "Cutoff Policy:"
-msgstr ""
+msgstr "ამოჭრის პოლიტიკა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDensity)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:157
 #, kde-format
 msgid "Texturing Mode:"
-msgstr ""
+msgstr "ტექსტურირების რეჟიმი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
@@ -58684,6 +58802,9 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"ნაკლები ტექსტურების გადატარება, როცა სიძლიერე დაბალია. გამოიყენეთ ეს "
+"პარამეტრი, თუ გნებავთ, ფუნჯი გადავიდეს არატექსტურირებულიდან ტექსტურირებულ "
+"გარეგნობამდე"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
@@ -58703,25 +58824,25 @@ msgstr "ვერტიკალური წანაცვლება:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
 #, kde-format
 msgid "Random Offset"
-msgstr ""
+msgstr "შემთხვევითი წანაცვლება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:291
 #, kde-format
 msgid "Horizontal Offset:"
-msgstr ""
+msgstr "ჰორიზონტალური წანაცვლება:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304
 #, kde-format
 msgid "Invert Pattern"
-msgstr ""
+msgstr "ნიმუშის ინვერსია"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoInvertOnErase)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
 #, kde-format
 msgid "Auto Invert For Eraser"
-msgstr ""
+msgstr "ავტოინვერსია საშლელისთვის"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -58744,6 +58865,11 @@ msgid ""
 "\n"
 "Optimal for very big brushes"
 msgstr ""
+"სიზუსტის დონე 1 (უსწრაფესი)\n"
+"ქვეპიქსელის სიზუსტე: გათიშულია\n"
+"ფუნჯის ზომის სიზუსტე: 5%\n"
+"\n"
+"ოპტიმალურია ძალიან დიდი ფუნჯებისთვის"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
 #, kde-format
@@ -58754,6 +58880,11 @@ msgid ""
 "\n"
 "Optimal for big brushes"
 msgstr ""
+"სიზუსტის დონე 2\n"
+"ქვეპიქსელის სიზუსტე: გათიშულია\n"
+"ფუნჯის ზომის სიზუსტე: 1%\n"
+"\n"
+"ოპტიმალურია დიდი ფუნჯებისთვის"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
 #, kde-format
@@ -58762,6 +58893,9 @@ msgid ""
 "Subpixel precision: disabled\n"
 "Brush size precision: exact"
 msgstr ""
+"სიზუსტის დონე 3\n"
+"ქვეპიქსელის სიზუსტე: გათიშულია\n"
+"ფუნჯის ზომის სიზუსტე: ზუსტად იგივე"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
 #, kde-format
@@ -58772,6 +58906,11 @@ msgid ""
 "\n"
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
+"სიზუსტის დონე 4 (ოპტიმალური\n"
+"ქვეპიქსელის სიზუსტე: 50%\n"
+"ფუნჯის ზომის სიზუსტე: ზუსტად იგივე\n"
+"\n"
+"აქვს 50%-ით უკეთესი წარმადობა მე-5-ე დონესთან შედარებით"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
 #, kde-format
@@ -58782,6 +58921,11 @@ msgid ""
 "\n"
 "The slowest performance. Best quality."
 msgstr ""
+"სიზუსტის დონე 5 (საუკეთესო ხარისხი)\n"
+"ქვეპიქსელის სიზუსტე: ზუსტად იგივე\n"
+"ფუნჯის ზომის სიზუსტე: ზუსტად იგივე\n"
+"\n"
+"უნელესი წარმადობა, საუკეთესო ხარისხი."
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, kde-format
@@ -58817,11 +58961,13 @@ msgid ""
 "Creates a brush tip from the current image selection.\n"
 " If no selection is present the whole image will be used."
 msgstr ""
+"შექმნის ფუნჯის წვეროს მონიშნული გამოსახულების მონიშნულიდან.\n"
+"თუ მონიშნული არ არსებობს, გამოყენებული იქნება მთელი გამოსახულება."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
 #, kde-format
 msgid "Creates a brush tip from the image in the clipboard."
-msgstr ""
+msgstr "შექმნის ფუნჯის წვეროს ბუფერში მყოფი გამოსახულებიდან."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
 #, kde-format
@@ -58830,6 +58976,9 @@ msgid ""
 "Sets Scale to 1.0\n"
 "Sets Rotation to 0.0"
 msgstr ""
+"დაშორების თავიდან ჩატვირთვა ფაილიდან\n"
+"დააყენებს მასშტაბს 1.0-ზე\n"
+"დააყენებს ბრუნვას 0.0-ზე"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
@@ -58858,16 +59007,22 @@ msgid ""
 " Brightness: 0%\n"
 " Contrast: 0%"
 msgstr ""
+"ჩამოყრის ყველა გასწორებას ნაგულისხმევ მნიშვნელობაზე:\n"
+" ნეიტრალური წერტილი: 127\n"
+" სიკაშკაშე: 0%\n"
+" კონტრასტი: 0%"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
 msgid "Makes texture lighter or darker"
-msgstr ""
+msgstr "გააღიავებს ან გაამუქებს ტექსტურას"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:40
 #, kde-format
 msgid "Set gray value to be considered neutral for lightness mode"
 msgstr ""
+"დააყენეთ ნაცრისფრის მნიშვნელობა, რომელიც აღქმული იქნება, როგორც ნეიტრალური "
+"განათებულობის რეჟიმისთვის"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
 #, kde-format
@@ -58926,6 +59081,8 @@ msgid ""
 "When pattern texture values are outside the range specified by the slider, "
 "the cut-off policy will be applied."
 msgstr ""
+"როცა ნიმუშის ტექსტურის მნიშვნელობები სლაიდერის მიერ მითითებული შუალედის "
+"გარეთაა, გამოყენებული იქნება ამოჭრის პოლიტიკა."
 
 #: plugins/paintops/libpaintop/KisAirbrushOptionWidget.cpp:55
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
@@ -58951,7 +59108,7 @@ msgstr "ერთგვაროვანი შემთხვევითი"
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:19
 #, kde-format
 msgid "Total random"
-msgstr ""
+msgstr "სრულიად შემთხევით"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:21
 #, kde-format
@@ -59068,13 +59225,13 @@ msgstr "%1 მწმ"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fuzzy Dab"
-msgstr ""
+msgstr "ბუნდოვანი გასმა"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:12
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fuzzy Stroke"
-msgstr ""
+msgstr "ბუნდოვანი დაშტრიხვა"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:13
 #, kde-format
@@ -59104,7 +59261,7 @@ msgstr "დრო"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Drawing angle"
-msgstr ""
+msgstr "ხატვის კუთხე"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:18
 #, kde-format
@@ -59122,31 +59279,31 @@ msgstr "წნევა"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "PressureIn"
-msgstr ""
+msgstr "შემავალი წნევა"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:21
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "X-Tilt"
-msgstr ""
+msgstr "X-დახრა"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:22
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Y-Tilt"
-msgstr ""
+msgstr "Y-დახრა"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:30
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt direction"
-msgstr ""
+msgstr "დახრის მიმართულება"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:31
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt elevation"
-msgstr ""
+msgstr "დახრის სიმაღლე"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:33
 #, kde-format
@@ -59158,7 +59315,7 @@ msgstr "პერსპექტივა"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tangential pressure"
-msgstr ""
+msgstr "მხები წნევა"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:47
 #, kde-format
@@ -59167,6 +59324,8 @@ msgid ""
 "WARNING: Dependent size of the masked brush grew too big (%1 pixels). Its "
 "value has been cropped to %2 pixels."
 msgstr ""
+"გაფრთხილება: შენიღბული ფუნჯის დამოკიდებული ზომა ძალიან დიდია (%1 პიქსელი). "
+"მისი მნიშვნელობა შეიკვეცება %2 პიქსელზე."
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
@@ -59193,6 +59352,7 @@ msgstr "ვერტიკალურად"
 msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr ""
+"შენიღბული ფუნჯის გამოყენებისას შესაძლებელია, მხოლოდ, ჩამორეცხვის რეჟიმი."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
@@ -59200,6 +59360,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Luminosity of the brush tip image is used as alpha channel for the stroke"
 msgstr ""
+"ფუნჯის წვეროს გამოსახულების განათებულობა დაშტრიხვის ალფა არხად გამოიყენება"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, kde-format
@@ -59210,7 +59371,7 @@ msgstr "ფერადი გამოსახულება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The brush tip image is painted as it is"
-msgstr ""
+msgstr "ფუნჯის წვეროს გამოსახულება იხატება ისეთი, როგორიც არის"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, kde-format
@@ -59225,6 +59386,9 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
+"ფუნჯის წვეროს გამოსახულება სახატავი ფერის განათებულობის გასასწორებლად "
+"გამოიყენება. ფუნჯის წვეროს გამოსახულების ალფა არხი საბოლოო შტრიხის ალფად "
+"გამოიყენება"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
@@ -59238,6 +59402,8 @@ msgid ""
 "The brush tip maps its value to the currently selected gradient. Alpha "
 "channel of the brush tip image is used as alpha for the final stroke"
 msgstr ""
+"ფუნჯის წვეროს მნიშვნელობა ამჟამად არჩეულ გრადიენტზე აისახება. ფუნჯის წვეროს "
+"გამოსახულების ალფა არხი გამოიყენება საბოლოო შტრიხის ალფად"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, kde-format
@@ -59294,7 +59460,7 @@ msgstr "იზოტროპიული დაშორება"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
 msgid "Update Between Dabs"
-msgstr ""
+msgstr "განახლება გასმებს შორის"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
@@ -59335,7 +59501,7 @@ msgstr "წინა პლანი"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:93
 #, no-c-format, kde-format
 msgid "(0° is active color)"
-msgstr ""
+msgstr "(0° აქტიური ფერია)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:84
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:95
@@ -59439,13 +59605,13 @@ msgstr "სიძლიერე"
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, kde-format
 msgid "Lightness Strength"
-msgstr ""
+msgstr "განათებულობის სიძლიერე"
 
 #: plugins/paintops/libpaintop/KisTextureOptionData.cpp:67
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
-msgstr ""
+msgstr "ტექსტურა->ნიმუში (დაბალი ხარისხის მინიატურა)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRepeat)
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39
@@ -59481,6 +59647,7 @@ msgstr "მაქს X: "
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
+"პარამეტრში %1 აქტიურია შემთხვევითი სენსორი. სჯობს, მყისი მინიატურა გამორთოთ"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
 #, kde-format
@@ -59514,7 +59681,7 @@ msgstr "სიჩქარე"
 #, kde-format
 msgctxt "Option Category"
 msgid "Dabs"
-msgstr ""
+msgstr "გასმები"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
 #, kde-format
@@ -59549,12 +59716,12 @@ msgstr "ხელით"
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
 #, kde-format
 msgid "Fine Speed"
-msgstr ""
+msgstr "ზუსტი სიჩქარე"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:19
 #, kde-format
 msgid "Gross Speed"
-msgstr ""
+msgstr "არაზუსტი სიჩქარე"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:21
 #, kde-format
@@ -59580,7 +59747,7 @@ msgstr "დახრილობა"
 #, kde-format
 msgctxt "Pen tilt ascension"
 msgid "Ascension"
-msgstr ""
+msgstr "აღმავლობით"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
 #, kde-format
@@ -59595,13 +59762,13 @@ msgstr "სიმაგრე"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:31
 #, kde-format
 msgid "Radius by Random"
-msgstr ""
+msgstr "შემთხვევითი რადიუსი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:39
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr ""
+msgstr "რადიუსი შემთხვევითია. სჯობს, გამორთოთ მყისი მინიატურა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
 #, kde-format
@@ -59611,12 +59778,12 @@ msgstr "მომრგვალება"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, kde-format
 msgid "Elliptical Dab Angle"
-msgstr ""
+msgstr "ელიფსური მოსმის კუთხე"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:67
 #, kde-format
 msgid "Elliptical Dab Ratio"
-msgstr ""
+msgstr "ელიფსური მოსმის ფარდობა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:77
 #, kde-format
@@ -59671,83 +59838,83 @@ msgstr "პოსტერიზაციის დონეები"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
-msgstr ""
+msgstr "ზუსტი სიჩქარის გამა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
 msgid "Gross Speed Gamma"
-msgstr ""
+msgstr "არაზუსტი სიჩქარის გამა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
-msgstr ""
+msgstr "ზუსტი სიჩქარის სინელე"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
 msgid "Gross Speed Slowness"
-msgstr ""
+msgstr "არაზუსტი სიჩქარის სინელე"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
 #, kde-format
 msgid "Offset By Speed"
-msgstr ""
+msgstr "წანაცვლება სიჩქარესთან შედარებით"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
 #, kde-format
 msgid "Offset by Speed Filter"
-msgstr ""
+msgstr "სიჩქარესთან შედარებით წანაცვლების ფილტრი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
 msgid "Offset By Random"
-msgstr ""
+msgstr "შემთხვევითი წანაცვლება"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr ""
+msgstr "წანაცვლება შემთხვევითია. სჯობს, გამორთოთ მყისი მინიატურა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, kde-format
 msgid "Dabs Per Basic Radius"
-msgstr ""
+msgstr "გასმა თითოეული საბაზისო რადიუსისთვის"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:259
 #, kde-format
 msgid "Dabs Per Actual Radius"
-msgstr ""
+msgstr "გასმა თითოეული ნამდვილი რადიუსისთვის"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:268
 #, kde-format
 msgid "Dabs per Second"
-msgstr ""
+msgstr "გასმა წამში"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:278
 #, kde-format
 msgid "Opaque Linearize"
-msgstr ""
+msgstr "გაუმჭვირვალობის გაწრფევება"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
 #, kde-format
 msgid "Opaque Multiply"
-msgstr ""
+msgstr "გაუმჭვირვალობის მამრავლი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
-msgstr ""
+msgstr "თითოეული გასმის ნელი ტრეკინგი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
 msgid "Slow Tracking"
-msgstr ""
+msgstr "ნელი ტრეკინგი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:314
 #, kde-format
 msgid "Tracking Noise"
-msgstr ""
+msgstr "ხმაურის ტრეკინგი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
 #, kde-format
@@ -59757,12 +59924,12 @@ msgstr "გადღაბნა"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, kde-format
 msgid "Smudge Radius Log"
-msgstr ""
+msgstr "გადღაბნის რადიუსის ჟურნალი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
 #, kde-format
 msgid "Smudge Length Multiplier"
-msgstr ""
+msgstr "გადღაბნის სიგრძის მამრავლი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
 #, kde-format
@@ -59777,33 +59944,33 @@ msgstr "გადღაბნის გამჭვირვალობა"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
 msgid "Stroke Duration log"
-msgstr ""
+msgstr "დაშტრიხვის ხანგრძლივობის ჟურნალი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
 #, kde-format
 msgid "Stroke Holdtime"
-msgstr ""
+msgstr "დაშტრიხვის შენარჩუნების დრო"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:395
 #, kde-format
 msgid "Stroke Threshold"
-msgstr ""
+msgstr "დაშტრიხვის ზღვარი"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:404
 #, kde-format
 msgid "Custom Input"
-msgstr ""
+msgstr "მორგებული შეყვანა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:413
 #, kde-format
 msgid "Custom Input Slowness"
-msgstr ""
+msgstr "მორგებული შეყვანის სინელე"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
 #, kde-format
 msgid "Radius Logarithmic:"
-msgstr ""
+msgstr "ლოგარითმული რადიუსი:"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
 #, kde-format
@@ -59839,7 +60006,7 @@ msgstr "იტერაციები"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Particle Brush (not supported)"
-msgstr ""
+msgstr "ნაწილაკური ფუნჯი (მხარდაჭერილი არა)"
 
 #: plugins/paintops/particle/particle_paintop_plugin.cpp:30
 #, kde-format
@@ -59892,6 +60059,7 @@ msgstr "სწრაფი ფუნჯი"
 msgctxt "PaintOp instant preview limitation"
 msgid "Sketch brush (differences in connecting lines are possible)"
 msgstr ""
+"ესკიზის ფუნჯი (განსხვავდება იმით, რომ დამაკავშირებელი ხაზები შესაძლებელია)"
 
 #: plugins/paintops/sketch/KisSketchStandardOptionData.h:15
 #, kde-format
@@ -59914,37 +60082,37 @@ msgstr "ესკიზი"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:64
 #, kde-format
 msgid "Offset scale:"
-msgstr ""
+msgstr "წანაცვლების მასშტაბი:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceDensityCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:114
 #, kde-format
 msgid "Use distance density"
-msgstr ""
+msgstr "მანძილის სიმკვრივის გამოყენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, simpleModeCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:124
 #, kde-format
 msgid "Simple mode"
-msgstr ""
+msgstr "მარტივი რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, magnetifyCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:131
 #, kde-format
 msgid "Magnetify"
-msgstr ""
+msgstr "დამაგნიტება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRGBCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
 #, kde-format
 msgid "Random RGB"
-msgstr ""
+msgstr "შემთხვევითი RGB"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceOpacityCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:169
 #, kde-format
 msgid "Distance opacity"
-msgstr ""
+msgstr "მანძილის გაუმჭვირვალობა"
 
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:133
 #, kde-format
@@ -59957,6 +60125,8 @@ msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
+"აირჩიეთ, როგორ ხდება ნაწილაკების განაწილება შესხურების არეს ცენტრის მიმართ "
+"კუთხის ფუნქციის სახით."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:67
 #, kde-format
@@ -59986,7 +60156,7 @@ msgstr "x"
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
-msgstr ""
+msgstr "დააყენეთ რამდენჯერ უნდა გამეორდეს მრუდი 0-დან 360 გრადუსამდე."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:79
 #, kde-format
@@ -60018,7 +60188,7 @@ msgstr ""
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
 #, kde-format
 msgid "Clustering amount: "
-msgstr ""
+msgstr "დაგროვების რაოდენობა: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
@@ -60088,19 +60258,19 @@ msgstr "მორგება"
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:52
 #, kde-format
 msgid "Fixed rotation:"
-msgstr ""
+msgstr "ფიქსირებული ბრუნვა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRotation)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:62
 #, kde-format
 msgid "Randomize rotation:"
-msgstr ""
+msgstr "ბრუნვის შემთხვევითობა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, followCursor)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:72
 #, kde-format
 msgid "Follow cursor weight:"
-msgstr ""
+msgstr "კურსორისთვის მიყოლის წონა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, drawingAngle)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:85
@@ -60156,7 +60326,7 @@ msgstr "დაშორება:"
 #, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr ""
+msgstr "მთრთოლავი გადაადგილება:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
@@ -60250,7 +60420,7 @@ msgctxt ""
 "where particles are biased towards the center of the spray area in the spray "
 "engine"
 msgid "Center-biased spread (legacy)"
-msgstr ""
+msgstr "გაფანტვა ცენტრში კონცენტრაციით (მოძველებული)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
@@ -60286,13 +60456,13 @@ msgstr "მხების დახრა"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:33
 #, kde-format
 msgid "A Brush Engine for Drawing 3d Tangent Normal Maps"
-msgstr ""
+msgstr "ფუნჯის რეჟიმი 3d მხები ნორმალის რუკების დასახატად"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TangentEncoding)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:43
 #, kde-format
 msgid "Tangent Encoding"
-msgstr ""
+msgstr "მხების კოდირება"
 
 #. i18n: Positive horizontal axis
 #. i18n: Positive horizontal axis
@@ -60394,7 +60564,7 @@ msgstr "- Z"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:219
 #, kde-format
 msgid "Tilt Options"
-msgstr ""
+msgstr "დახრის მორგება"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:227
@@ -60403,6 +60573,8 @@ msgid ""
 "<html><head/><body><p>Use the tilt of the tablet to determine the normals.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>ტაბლეტის დახრის გამოყენება ნორმალების განსაზღვრისთვის."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:230
@@ -60447,19 +60619,19 @@ msgstr ""
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
 #, kde-format
 msgid "Direction/Tilt Mix"
-msgstr ""
+msgstr "მიმართულების/დახრის შერევა"
 
 #. i18n: ectx: property (text), widget (QLabel, L_elevation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
 #, kde-format
 msgid "Elevation Sensitivity"
-msgstr ""
+msgstr "სიმაღლის მგრძნობიარობა"
 
 #. i18n: ectx: property (text), widget (QLabel, L_mix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:291
 #, kde-format
 msgid "Direction/Tilt Mix Value"
-msgstr ""
+msgstr "მიმართულების/დახრის შერევის მნიშვნელობა"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "Assign Profile"
@@ -60467,7 +60639,7 @@ msgstr "პროფილის მინიჭება"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:26
 msgid "There is no active document."
-msgstr ""
+msgstr "აქტიური დოკუმენტის გარეშე."
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:59
 msgid "Assign Profile to Image"
@@ -60484,23 +60656,23 @@ msgstr "RGB ფერები"
 
 #: plugins/python/channels2layers/channels2layers.py:94
 msgid "CMY Colors"
-msgstr ""
+msgstr "CMY ფერები"
 
 #: plugins/python/channels2layers/channels2layers.py:95
 msgid "CMYK Colors"
-msgstr ""
+msgstr "CMYK ფერები"
 
 #: plugins/python/channels2layers/channels2layers.py:96
 msgid "RGB Grayscale levels"
-msgstr ""
+msgstr "RGB ნაცრისფრის დონეები"
 
 #: plugins/python/channels2layers/channels2layers.py:97
 msgid "CMY Grayscale levels"
-msgstr ""
+msgstr "CMY ნაცრისფრის დონეები"
 
 #: plugins/python/channels2layers/channels2layers.py:98
 msgid "CMYK Grayscale levels"
-msgstr ""
+msgstr "CMYK ნაცრისფრის დონეები"
 
 #: plugins/python/channels2layers/channels2layers.py:103
 msgid "Unchanged"
@@ -60508,24 +60680,24 @@ msgstr "შეუცვლელი"
 
 #: plugins/python/channels2layers/channels2layers.py:1038
 msgid "Processing layer"
-msgstr ""
+msgstr "დონის დამუშავება"
 
 #: plugins/python/channels2layers/channels2layers.py:1068
 msgctxt ""
 "The name for a new group layer; the generated layers will be placed in this "
 "group."
 msgid "New layer group name"
-msgstr ""
+msgstr "ახალი ფენების ჯგუფის სახელი"
 
 #: plugins/python/channels2layers/channels2layers.py:1073
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
-msgstr ""
+msgstr "ახალი ფენების ფერის სახელი"
 
 #: plugins/python/channels2layers/channels2layers.py:1084
 msgid "Original layer"
-msgstr ""
+msgstr "ორიგინალი ფენა"
 
 #: plugins/python/channels2layers/channels2layers.py:1143
 msgctxt "the original layer"
@@ -60534,23 +60706,23 @@ msgstr "ორიგინალი"
 
 #: plugins/python/channels2layers/channels2layers.py:1156
 msgid "<i>Cyan</i>"
-msgstr ""
+msgstr "<i>მომწვანო-მოცისფრო</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1168
 msgid "<i>Magenta</i>"
-msgstr ""
+msgstr "<i>ფუქსინი</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1180
 msgid "<i>Yellow</i>"
-msgstr ""
+msgstr "<i>ყვითელი</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1192
 msgid "<i>Black</i>"
-msgstr ""
+msgstr "<i>შავი</i>"
 
 #: plugins/python/colorspace/colorspace.py:19
 msgid "Plugin to change color space of selected documents."
-msgstr ""
+msgstr "დამატება მონიშნულ დოკუმენტებში ფერის სივრცის შესაცვლელად."
 
 #: plugins/python/colorspace/uicolorspace.py:37
 #: plugins/python/documenttools/uidocumenttools.py:25
@@ -60575,20 +60747,20 @@ msgstr "ფერის პროფილი:"
 
 #: plugins/python/colorspace/uicolorspace.py:140
 msgid "The selected documents have been converted."
-msgstr ""
+msgstr "მონიშნული დოკუმენტები გადაყვანილია."
 
 #: plugins/python/colorspace/uicolorspace.py:142
 #: plugins/python/documenttools/uidocumenttools.py:112
 msgid "Select at least one document."
-msgstr ""
+msgstr "აირჩიეთ ერთი დოკუმენტი მაინც."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:37
 msgid "Adjust Working File"
-msgstr ""
+msgstr "სამუშაო ფაილის მორგება"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:40
 msgid "Crop files before resize"
-msgstr ""
+msgstr "ფაილების ამოჭრა ზომის შეცვლამდე"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Percentage"
@@ -60629,17 +60801,19 @@ msgstr "ამოჭრის მორგება"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:230
 msgid "Crop to outmost guides"
-msgstr ""
+msgstr "ამოჭრა ყველაზე შორ მიმმართველებამდე"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:232
 msgid ""
 "This will crop to the outmost guides if possible and otherwise use the "
 "underlying crop settings."
 msgstr ""
+"ეს ამოჭრის ყველაზე გარე მიმმართველებამდე, თუ ეს შესაძლებელია და თუ არა, "
+"მაშინ გამოიყენებს ქვემო ამოჭრის პარამეტრებს."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:234
 msgid "Set Margins from Active Selection"
-msgstr ""
+msgstr "საზღვრების დაყენება აქტიური მონიშნულიდან"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:241
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:213
@@ -60667,7 +60841,7 @@ msgstr "ქვედა:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
 msgid "Label for removal:"
-msgstr ""
+msgstr "წასაშლელი ჭდე:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:260
 msgid ""
@@ -60685,19 +60859,19 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
 msgid "Text Layer Key:"
-msgstr ""
+msgstr "ტექსტური ფენის გასაღები:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:264
 msgid "Panel Layer Key:"
-msgstr ""
+msgstr "პანელის ფენის გასაღები:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
 msgid "Export to CBZ"
-msgstr ""
+msgstr "გატანა CBZ-ში"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:278
 msgid "Metadata to Add"
-msgstr ""
+msgstr "დასამატებელი მეტამონაცემები"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:282
 msgid "CBZ"
@@ -60705,7 +60879,7 @@ msgstr "CBZ"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:289
 msgid "ACBF Document Info"
-msgstr ""
+msgstr "ACBF დოკუმენტის ინფორმაცია"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
@@ -60719,11 +60893,11 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:297
 msgid "Add History Entry"
-msgstr ""
+msgstr "ისტორიის ჩანაწერის დამატება"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 msgid "Include translator's comments"
-msgstr ""
+msgstr "მთარგმნელის კომენტარების ჩასმა"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
 msgid ""
@@ -60737,15 +60911,15 @@ msgstr "ACBF UID:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:306
 msgid "Version history:"
-msgstr ""
+msgstr "ვერსიის ისტორია:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:309
 msgid "Translator header:"
-msgstr ""
+msgstr "მთარგმნელის თავსართი:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:313
 msgid "The people responsible for the generation of the CBZ/ACBF files."
-msgstr ""
+msgstr "ხალხი, რომელიც CBZ/ACBF ფაილების გენერაციაზეა პასუხისმგებელი."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
@@ -60770,16 +60944,16 @@ msgstr "საოჯახო სახელი"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:371
 msgid "Add Author"
-msgstr ""
+msgstr "ავტორის დამატება"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid "Remove Author"
-msgstr ""
+msgstr "ავტორის წაშლა"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
-msgstr ""
+msgstr "ფონტის გამოყენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -60813,23 +60987,23 @@ msgstr "კურსივი"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"
-msgstr ""
+msgstr "ტექსტის ფერები"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:374
 msgid "Regular Text"
-msgstr ""
+msgstr "ჩვეულებრივი ტექსტი"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:376
 msgid "Inverted Text"
-msgstr ""
+msgstr "შებრუნებული ტექსტი"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:391
 msgid "Document Info"
-msgstr ""
+msgstr "დოკუმენტის ინფორმაცია"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:392
 msgid "Author Info"
-msgstr ""
+msgstr "ინფორმაცია ავტორზე"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:393
 msgid "Style Sheet"
@@ -60841,7 +61015,7 @@ msgstr "ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "Export to EPUB"
-msgstr ""
+msgstr "გატანა EPUB-ში"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "EPUB"
@@ -60849,7 +61023,7 @@ msgstr "EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
 msgid "Export to TIFF"
-msgstr ""
+msgstr "გატანა TIFF-ში"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:415
 msgid "TIFF"
@@ -60858,12 +61032,12 @@ msgstr "TIFF"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:428
 #, python-brace-format
 msgid "v{version}-in this version..."
-msgstr ""
+msgstr "v{version}-ამ ვერსიაში..."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:451
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:539
 msgid "Anon"
-msgstr ""
+msgstr "ანონიმური"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:452
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
@@ -60877,47 +61051,53 @@ msgstr "ვიღაცაშვილი"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:138
 msgid "Preparing export."
-msgstr ""
+msgstr "გატანის მომზადება."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:139
 msgid "Exporting Comic..."
-msgstr ""
+msgstr "კომიქსის გატანა..."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
 msgstr ""
+"ACBF ფაილის შენახვა\n"
+"და ACBF-ის ცალკე"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:168
 msgid "Saving out EPUB"
-msgstr ""
+msgstr "შენახვა EPUB-ის სახით"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 #: plugins/python/comics_project_management_tools/comics_exporter.py:207
 #: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not Possible"
-msgstr ""
+msgstr "გატანა შეუძლებელია"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
-msgstr ""
+msgstr "გასატანი არაფერია. URL დაყენებული არაა."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
 msgstr ""
+"მიმდინარეობს CoMet-ის\n"
+"მეტამონაცემების ფაილის შენახვა"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:191
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
 msgstr ""
+"მიმდინარეობს Comicrack-ის\n"
+"მეტამონაცემების ფაილის შენახვა"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:207
 msgid "Export failed because there's no export settings configured."
-msgstr ""
+msgstr "გატანა ჩავარდა, რადგან გატანის პარამეტრები მორგებული არაა."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:224
 #, python-brace-format
@@ -60925,38 +61105,42 @@ msgid ""
 "Time passed: {passedString}\n"
 " Estimated: {estimated}"
 msgstr ""
+"გასული დრო: {passedString}\n"
+" დაახლოებით: {estimated}"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:227
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
-msgstr ""
+msgstr "დასრულდა {pages} გვერდი {pagesTotal}-დან."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:238
 msgid "Opening next page"
-msgstr ""
+msgstr "იხსნება შემდეგი გვერდი"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:246
 msgid "Cleaning up page"
-msgstr ""
+msgstr "გვერდის მოსუფთავება"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:280
 #, python-brace-format
 msgid "Exporting for {key}"
-msgstr ""
+msgstr "გატანა {key}-ისთვის"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not happening because there are no pages."
-msgstr ""
+msgstr "გატანა არ მოხდება, რადგან გვერდები არ არსებობს."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
 msgstr ""
+"მიმდინარეობს Comicbook-ის შენახვა\n"
+"ინფორმაციის მეტამონაცემების ფაილში"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
-msgstr ""
+msgstr "CBZ-ის შეფუთვა"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Science Fiction"
@@ -61078,11 +61262,11 @@ msgstr "შემსრულებელი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Penciller"
-msgstr ""
+msgstr "ფანქრით მხატვარი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Inker"
-msgstr ""
+msgstr "მელნით მხატვარი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
@@ -61091,15 +61275,15 @@ msgstr "კოლორისტი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Letterer"
-msgstr ""
+msgstr "ასოების მხატვარი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Cover Artist"
-msgstr ""
+msgstr "ყდის მხატვარი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Photographer"
-msgstr ""
+msgstr "ფოტოგრაფი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
@@ -61108,7 +61292,7 @@ msgstr "რედაქტორი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Assistant Editor"
-msgstr ""
+msgstr "რედაქტორის დამხმარე"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
@@ -61122,15 +61306,15 @@ msgstr "მთარგმნელი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:259
 msgid "Comic Metadata"
-msgstr ""
+msgstr "კომიქსის მეტამონაცემები"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:271
 msgid "The proper title of the comic."
-msgstr ""
+msgstr "კომიქსის სწორი სათაური."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:274
 msgid "What will you tell others to entice them to read your comic?"
-msgstr ""
+msgstr "რას ეტყვით სხვებს, რომ მათ თქვენი კომიქსის წაკითხვა მოუნდეთ?"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:281
 msgid ""
@@ -61138,30 +61322,35 @@ msgid ""
 "in your own. Separate genres with commas. Try to limit the amount to about "
 "two or three."
 msgstr ""
+"ნაშრომის ჟანრი. წინასწარ შევსებული მნიშვნელობები მოდის ACBF-დან, მაგრამ "
+"შეგიძლიათ, საკუთარით შეავსოთ. ჟანრების გამოყოფა მძიმით ხდება. სცადეთ, "
+"შეზღუდოთ რაოდენობა ორზე, ან სამზე."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:289
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
-msgstr ""
+msgstr "პერსონაჟის სახელები, რომელსაც კომიქსი ეხება. მძიმით გამოყოფილი სია."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
-msgstr ""
+msgstr "თუ ეს სერიალის ნაწილია, შეიყვანეთ სერიალის სახელი და ნომერი."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
 msgid "No. "
-msgstr ""
+msgstr "ნომერი. "
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:312
 msgid "Vol. "
-msgstr ""
+msgstr "სერია. "
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
 msgstr ""
+"სხვა საკვანძო სიტყვები, რომლებიც ადრე მოხსენიებულ ნაკრებებში არ ჯდებოდა. "
+"როგორც ყოველთვის, მძიმით გამოყოფილი სია."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 msgid "Left to Right"
@@ -61173,11 +61362,11 @@ msgstr "მარჯვნიდან მარცხნივ"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 msgid "Which page is the cover page? This will be empty if there are no pages."
-msgstr ""
+msgstr "რომელი გვერდია ყდის? ეს ცარიელი იქნება, თუ გვერდები არ არსებობს."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 msgid "Cover page:"
-msgstr ""
+msgstr "ყდის გვერდი:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 msgid "Language:"
@@ -61185,7 +61374,7 @@ msgstr "ენა:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
 msgid "Reading direction:"
-msgstr ""
+msgstr "კითხვის მიმართულება:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Genre:"
@@ -61221,6 +61410,8 @@ msgid ""
 "can set their nickname, proper names (first, middle, last), role (penciller, "
 "inker, etc), email and homepage."
 msgstr ""
+"ეს ცხრილია ავტორებისა, რომლებმაც ეს კომიქსი შექმნეს. შეგიძლიათ, დაამატოთ "
+"მათი მეტსახელი, სრული სახელი, როლი, ელფოსტა და ვებგვერდი."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Role"
@@ -61235,20 +61426,24 @@ msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
 msgstr ""
+"კომპანიის, ჯგუფის ან პიროვნების სახელი, რომელიც პასუხისმგებელია საბოლოო "
+"ვერსიაზე, რომელსაც მკითხველი იღებს."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:391
 msgid "Set Today"
-msgstr ""
+msgstr "დღევანდელი თარიღის დაყენება"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Sets the publish date to the current date."
-msgstr ""
+msgstr "გამოცემის თარიღის დაყენება დღევანდელზე."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
 msgstr ""
+"ტრადიციული გამომცემლები ყოველთვის მოიხსენიება წყაროში ქალაქთან ერთად, "
+"რომლებშიც იცინი არიან."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
 msgid ""
@@ -61256,6 +61451,9 @@ msgid ""
 "unlikely to be a factor for comics from scratch, but useful when doing a "
 "conversion."
 msgstr ""
+"თუ კომიქსების მონაცემთა ბაზაში ჩანაწერი არსებობს, ის აქ უნდა დაამატოთ. იმისი "
+"შანსი, რომ კომიქსი, რომელიც ნულიდან შეიქმნა, იქ იყოს, მცირეა, მაგრამ ეს "
+"სასარგებლოა უკვე არსებული და ადაპტირებული კომიქსებისთვის."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
 msgid ""
@@ -61287,11 +61485,11 @@ msgstr "გამომცემელი"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:117
 msgid "No keywords"
-msgstr ""
+msgstr "საკვანძო სიტყვების გარეშე"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:131
 msgid "No last edit timestamp"
-msgstr ""
+msgstr "ბოლო ჩასწორების დროის შტამპის გარესე"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:151
 msgid "No description"
@@ -61299,7 +61497,7 @@ msgstr "აღწერის გარეშე"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:196
 msgid "Comics Manager"
-msgstr ""
+msgstr "კომიქსების მმართველი"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:253
 msgid "New Project"
@@ -61324,11 +61522,11 @@ msgstr "გვერდის დამატება"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
 msgid "Add Page from Template"
-msgstr ""
+msgstr "გვერდის დამატება ნიმუშიდან"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:291
 msgid "Add Existing Pages"
-msgstr ""
+msgstr "არსებული გვერდების დამატება"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "Remove Page"
@@ -61336,29 +61534,31 @@ msgstr "გვერდის წაშლა"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Batch Resize"
-msgstr ""
+msgstr "ჯგუფური ზომის სეცვლა"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "View Page In Window"
-msgstr ""
+msgstr "გვერდის ნახვა ფანჯარაში"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:300
 msgid "Scrape Author Info"
-msgstr ""
+msgstr "ავტორის ინფორმაციის მოპოვება"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
 msgstr ""
+"ავტორის შესახებ ინფორმაციის მოძებნა დოკუმენტებში და მისი ავტორების სიაში "
+"ჩამატება. ეს არ ამოწმებს გამეორებებს."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:303
 msgid "Scrape Text for Translation"
-msgstr ""
+msgstr "ტექსტის მოგროვება სათარგმნად"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Export Comic"
-msgstr ""
+msgstr "კომიქსის გატანა"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:329
 msgid "Copy Location"
@@ -61372,7 +61572,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "Please select the JSON comic config file."
-msgstr ""
+msgstr "აირჩიეთ JSON კომიქსის კონფიგურაციის ფაილი."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "JSON files"
@@ -61380,7 +61580,7 @@ msgstr "JSON ფაილები"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid "Config cannot be used"
-msgstr ""
+msgstr "კონფიგურაციის გამოყენება შეუძლებელია"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid ""
@@ -61388,54 +61588,57 @@ msgid ""
 "Please configure the folder access or move the project to a folder that can "
 "be written to."
 msgstr ""
+"Krita-ს არ აქვს საქაღალდეში ჩაწერის უფლება, ასე რომ ახალი ფაილები ვერ "
+"შეიქმნება. შეცვალეთ წვდომა საქაღალდეზე, ან გადაიტანეთ პროექტი საქაღალდეში, "
+"სადაც ჩაწერა შესაძლებელია."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:386
 msgid "Loading Pages..."
-msgstr ""
+msgstr "გვერდების ჩატვირთვა..."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Krita files"
-msgstr ""
+msgstr "Krita-ის ფაილები"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 msgid "Which existing pages to add?"
-msgstr ""
+msgstr "რომელი არსებული გვერდები დაემატოს?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:600
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:621
 msgid "Where are the templates located?"
-msgstr ""
+msgstr "სადაა მოთავსებული ნიმუშები?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:647
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
 msgid "Where should the pages go?"
-msgstr ""
+msgstr "სად უნდა წავიდნენ გვერდები?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 msgid "Which image should be the basis for the new page?"
-msgstr ""
+msgstr "რომელი გამოსახულება უნდა იყოს საბაზისო ახალი გვერდისთვის?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "Export success"
-msgstr ""
+msgstr "გატანა წარმატებულია"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "The files have been written to the export folder."
-msgstr ""
+msgstr "ფაილები ჩაიწერა გატანის საქაღალდეში."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:899
 msgid "Resize all Pages"
-msgstr ""
+msgstr "ყველა გვერდის ზომის შეცვლა"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 msgid "Resizing pages..."
-msgstr ""
+msgstr "მიმდინარეობს გვერდების ზომის შეცვლა..."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 msgid "Resizing Pages"
-msgstr ""
+msgstr "გვერდების ზომის შეცვლა"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:925
 #, python-brace-format
@@ -61444,19 +61647,22 @@ msgid ""
 "Time passed: {passedString}:\n"
 " Estimated:{estimated}"
 msgstr ""
+"მზადაა {pages} გვერდი {pagesTotal}-დან. \n"
+"გასული დრო: {passedString}:\n"
+" დაახლ:{estimated}"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 msgid "Scraping success"
-msgstr ""
+msgstr "მოგროვება წარამატებულია"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 #, python-brace-format
 msgid "POT file has been written to: {file}"
-msgstr ""
+msgstr "POT ფაილი ჩაიწერა ფაილში: {file}"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:30
 msgid "Which folder?"
-msgstr ""
+msgstr "რომელი საქაღალდე?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:61
 msgid "Change Folder"
@@ -61464,23 +61670,23 @@ msgstr "საქაღალდის შეცვლა"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:110
 msgid "Comic Project Settings"
-msgstr ""
+msgstr "კომიქსის პროექტის მორგება"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where should the export go?"
-msgstr ""
+msgstr "სად უნდა მოხდეს გატანა?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
 msgid "Where are the templates?"
-msgstr ""
+msgstr "სადაა ნიმუშები?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
 msgid "Where are the translations?"
-msgstr ""
+msgstr "სადაა თარგმანები?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
 msgid "Where are the extra auto-completion keys located?"
-msgstr ""
+msgstr "სადაა მოთავსებული დამატებითი ავტოდასრულების გასაღებები?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
 msgid ""
@@ -61498,11 +61704,11 @@ msgstr "პროექტის სახელი:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 msgid "Project concept:"
-msgstr ""
+msgstr "პროექტის კონცეფცია:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
 msgid "Pages folder:"
-msgstr ""
+msgstr "გვერდების საქაღალდე:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
 msgid "Export folder:"
@@ -61510,45 +61716,47 @@ msgstr "გასატანი საქაღალდე:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
 msgid "Template folder:"
-msgstr ""
+msgstr "ნიმუშების საქაღალდე:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
 msgid "Translation folder:"
-msgstr ""
+msgstr "თარგმანების საქაღალდე:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 msgid "Default template:"
-msgstr ""
+msgstr "ნაგულისხმევი ნიმუში:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:134
 msgid "Extra keys folder:"
-msgstr ""
+msgstr "დამატებითი გასაღებების საქაღალდე:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:59
 msgid "Where should the comic project go?"
-msgstr ""
+msgstr "სად უნდა წავიდეს კომიქსის პროექტი?"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid "Folder cannot be used"
-msgstr ""
+msgstr "საქაღალდის გამოყენება შეუძლებელია"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
 msgstr ""
+"Krita-ს საქაღალდეში ჩაწერის უფლება არ აქვს, ასე რომ, ფაილების შექმნა "
+"შეუძლებელია. აირჩიეთ სხვა საქაღალდე."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
 msgid "Comic Project Setup"
-msgstr ""
+msgstr "კომიქსების პროექტის მორგება"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
 msgid "Basic Comic Project Settings"
-msgstr ""
+msgstr "საბაზისო კომიქსის პროექტის მორგება"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:81
 msgid "A Project name. This can be different from the eventual title"
-msgstr ""
+msgstr "პროექტის სახელი. ეს, შეიძლება, განსხვავდებოდეს სათაურისგან"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 msgid "Generate"
@@ -61568,11 +61776,11 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:91
 msgid "The main language the comic is in"
-msgstr ""
+msgstr "მთავარი ენა, რომელშიც კომიქსია"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:104
 msgid "Make a new directory with the project name."
-msgstr ""
+msgstr "ახალი საქაღალდის შექმნა პროექტის სახელით."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid ""
@@ -61614,35 +61822,35 @@ msgstr "თარგმანები"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Comic concept:"
-msgstr ""
+msgstr "კომიქსის კონცეფცია:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:125
 msgid "Main language:"
-msgstr ""
+msgstr "მთავარი ენა:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Folder names and other."
-msgstr ""
+msgstr "საქაღალდის სახელები და სხვ."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Project directory:"
-msgstr ""
+msgstr "პროექტის საქაღალდე:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
 msgid "Pages directory"
-msgstr ""
+msgstr "გვერდების საქაღალდე"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
 msgid "Export directory"
-msgstr ""
+msgstr "გატანის საქაღალდე"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
 msgid "Template directory"
-msgstr ""
+msgstr "ნიმუშების საქაღალდე"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:142
 msgid "Translation directory"
-msgstr ""
+msgstr "თარგმანის საქაღალდე"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
@@ -61660,19 +61868,19 @@ msgstr "მილიმეტრი"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:81
 msgid "Add new Template"
-msgstr ""
+msgstr "ახალი ნიმუშის დამატება"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:98
 msgid "Import Templates"
-msgstr ""
+msgstr "ნიმუშების შემოტანა"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Which files should be added to the template folder?"
-msgstr ""
+msgstr "რომელი ფაილები უნდა იქნას დამატებული ნიმუშების საქაღალდეში?"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
 msgid "Create new Template"
-msgstr ""
+msgstr "ახალი ნიმუშის შექმნა"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:147
 msgid ""
@@ -61684,7 +61892,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:167
 msgid "Select background color"
-msgstr ""
+msgstr "აირჩიეთ ფონის ფერი"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:225
 msgid "Margins"

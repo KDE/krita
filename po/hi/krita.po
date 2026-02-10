@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-04 00:42+0000\n"
+"POT-Creation-Date: 2026-02-10 00:42+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -24244,75 +24244,75 @@ msgid ""
 msgstr ""
 "संसाधन डेटाबेस योजना बदल गई है। क्रिता आपके डेटाबेस का बैकअप लेकर एक नया डेटाबेस बनाएगा।"
 
-#: libs/resources/KisResourceLocator.cpp:91
+#: libs/resources/KisResourceLocator.cpp:106
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "१. %1 पर संसाधन स्थान नहीं बना सका।"
 
-#: libs/resources/KisResourceLocator.cpp:98
+#: libs/resources/KisResourceLocator.cpp:113
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. %1 पर संसाधन स्थान लिखने योग्य नहीं है।"
 
-#: libs/resources/KisResourceLocator.cpp:852
+#: libs/resources/KisResourceLocator.cpp:865
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "डेटाबेस में %1 नहीं जोडा जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:896
-#: libs/resources/KisResourceLocator.cpp:1257
+#: libs/resources/KisResourceLocator.cpp:909
+#: libs/resources/KisResourceLocator.cpp:1262
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "डेटाबेस से %1 संचय नहीं निकाला जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1018
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "डेटाबेस से %1 को सिंक्रनाइज़ नहीं किया जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1026
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "क्रिता पहली चलाया जा रहा है। प्रारंभ होने में कुछ समय लगेगा।"
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1033
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "३. %1 पर संसाधन स्थान नहीं बना सका।"
 
-#: libs/resources/KisResourceLocator.cpp:1037
-#: libs/resources/KisResourceLocator.cpp:1053
+#: libs/resources/KisResourceLocator.cpp:1046
+#: libs/resources/KisResourceLocator.cpp:1062
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "संसाधन की नकल %1 से %2 में नहीं बन सकी"
 
-#: libs/resources/KisResourceLocator.cpp:1049
+#: libs/resources/KisResourceLocator.cpp:1058
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "बंडल %1 से संसाधनों को स्थापित किया जा रहा है।"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1086
 #, kde-format
 msgid "Temporary Resources"
 msgstr "अस्थाई संसाधन"
 
-#: libs/resources/KisResourceLocator.cpp:1083
+#: libs/resources/KisResourceLocator.cpp:1092
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "फ़ॉन्ट शैली"
 
-#: libs/resources/KisResourceLocator.cpp:1206
+#: libs/resources/KisResourceLocator.cpp:1211
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "संसाधनों को प्रारंभ किया जा रहा है।"
 
-#: libs/resources/KisResourceLocator.cpp:1219
-#: libs/resources/KisResourceLocator.cpp:1227
+#: libs/resources/KisResourceLocator.cpp:1224
+#: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "डेटाबेस से %1 को सिंक्रनाइज़ नहीं किया जा सका"

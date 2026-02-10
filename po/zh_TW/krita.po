@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-04 00:42+0000\n"
+"POT-Creation-Date: 2026-02-10 00:42+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -24129,75 +24129,75 @@ msgid ""
 msgstr ""
 "資源資料庫綱要已變更。Krita 會先備份您的資料庫，然後再建立一個新的資料庫。"
 
-#: libs/resources/KisResourceLocator.cpp:91
+#: libs/resources/KisResourceLocator.cpp:106
 #, kde-format
 msgid "1. Could not create the resource location at %1."
 msgstr "1. 無法建立位於 %1 的資源位置。"
 
-#: libs/resources/KisResourceLocator.cpp:98
+#: libs/resources/KisResourceLocator.cpp:113
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. 位於 %1 的資源位置無法寫入。"
 
-#: libs/resources/KisResourceLocator.cpp:852
+#: libs/resources/KisResourceLocator.cpp:865
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "無法新增 %1 至資料庫"
 
-#: libs/resources/KisResourceLocator.cpp:896
-#: libs/resources/KisResourceLocator.cpp:1257
+#: libs/resources/KisResourceLocator.cpp:909
+#: libs/resources/KisResourceLocator.cpp:1262
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "無法從資料庫移除 %1 儲存空間"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1018
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "無法與資料庫同步 %1"
 
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1026
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita 為第一次執行。需要一點時間初始化。"
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1033
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. 無法建立位於 %1 的資源位置。"
 
-#: libs/resources/KisResourceLocator.cpp:1037
-#: libs/resources/KisResourceLocator.cpp:1053
+#: libs/resources/KisResourceLocator.cpp:1046
+#: libs/resources/KisResourceLocator.cpp:1062
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "無法複製 %1 資源至 %2"
 
-#: libs/resources/KisResourceLocator.cpp:1049
+#: libs/resources/KisResourceLocator.cpp:1058
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "正在從 %1 資源包安裝資源。"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1086
 #, kde-format
 msgid "Temporary Resources"
 msgstr "暫存資源"
 
-#: libs/resources/KisResourceLocator.cpp:1083
+#: libs/resources/KisResourceLocator.cpp:1092
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "字型樣式"
 
-#: libs/resources/KisResourceLocator.cpp:1206
+#: libs/resources/KisResourceLocator.cpp:1211
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "正在初始化資源。"
 
-#: libs/resources/KisResourceLocator.cpp:1219
-#: libs/resources/KisResourceLocator.cpp:1227
+#: libs/resources/KisResourceLocator.cpp:1224
+#: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "無法與資料庫同步 %1"

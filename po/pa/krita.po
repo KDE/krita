@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-04 03:00+0000\n"
+"POT-Creation-Date: 2026-02-10 02:36+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -25661,7 +25661,7 @@ msgid ""
 "and create a new database."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:91
+#: libs/resources/KisResourceLocator.cpp:106
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25671,7 +25671,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:98
+#: libs/resources/KisResourceLocator.cpp:113
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25681,7 +25681,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:852
+#: libs/resources/KisResourceLocator.cpp:865
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25691,8 +25691,8 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:896
-#: libs/resources/KisResourceLocator.cpp:1257
+#: libs/resources/KisResourceLocator.cpp:909
+#: libs/resources/KisResourceLocator.cpp:1262
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25702,7 +25702,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1018
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25712,13 +25712,13 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:1017
+#: libs/resources/KisResourceLocator.cpp:1026
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1024
+#: libs/resources/KisResourceLocator.cpp:1033
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25728,8 +25728,8 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:1037
-#: libs/resources/KisResourceLocator.cpp:1053
+#: libs/resources/KisResourceLocator.cpp:1046
+#: libs/resources/KisResourceLocator.cpp:1062
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25739,7 +25739,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:1049
+#: libs/resources/KisResourceLocator.cpp:1058
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -25749,27 +25749,27 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1086
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Temporary Resources"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/resources/KisResourceLocator.cpp:1083
+#: libs/resources/KisResourceLocator.cpp:1092
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Font Storage"
 msgstr "ਸਾਈਜ਼"
 
-#: libs/resources/KisResourceLocator.cpp:1206
+#: libs/resources/KisResourceLocator.cpp:1211
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Synchronizing the resources."
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: libs/resources/KisResourceLocator.cpp:1219
-#: libs/resources/KisResourceLocator.cpp:1227
+#: libs/resources/KisResourceLocator.cpp:1224
+#: libs/resources/KisResourceLocator.cpp:1232
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"

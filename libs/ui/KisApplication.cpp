@@ -221,6 +221,12 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new Private)
 {
+#ifdef Q_OS_ANDROID
+    // The hardware renderer backend on Android doesn't support proper stacking,
+    // causing windows with QtQuick widgets to always stack behind everything
+    // else, including our own dialog decorations.
+    qputenv("QT_QUICK_BACKEND", "software");
+#endif
 #ifdef Q_OS_MACOS
     setMouseCoalescingEnabled(false);
 #endif

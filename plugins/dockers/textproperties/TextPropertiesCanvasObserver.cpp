@@ -223,12 +223,12 @@ bool TextPropertiesCanvasObserver::createNewPresetFromSettings()
     preset->setStyleType("character");
     preset->updateThumbnail();
 
-    CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(qApp->activeWindow());
-    dialog->setDpi(d->currentDpi);
-    dialog->setCurrentResource(preset);
+    CssStylePresetEditDialog dialog(qApp->activeWindow());
+    dialog.setDpi(d->currentDpi);
+    dialog.setCurrentResource(preset);
 
-    if (dialog->exec() == QDialog::Accepted) {
-        return KisResourceUserOperations::addResourceWithUserInput(qApp->activeWindow(), dialog->currentResource());
+    if (dialog.exec() == QDialog::Accepted) {
+        return KisResourceUserOperations::addResourceWithUserInput(qApp->activeWindow(), dialog.currentResource());
     }
 
     return false;
@@ -239,11 +239,11 @@ void TextPropertiesCanvasObserver::editPreset(KoResourceSP resource)
     KoCssStylePresetSP preset = resource.staticCast<KoCssStylePreset>();
     if (!preset) return;
 
-    CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(qApp->activeWindow());
-    dialog->setCurrentResource(preset);
+    CssStylePresetEditDialog dialog(qApp->activeWindow());
+    dialog.setCurrentResource(preset);
 
-    if (dialog->exec() == QDialog::Accepted) {
-        KisResourceUserOperations::updateResourceWithUserInput(qApp->activeWindow(), dialog->currentResource());
+    if (dialog.exec() == QDialog::Accepted) {
+        KisResourceUserOperations::updateResourceWithUserInput(qApp->activeWindow(), dialog.currentResource());
     } else {
         KisResourceModel model = KisResourceModel(ResourceType::CssStyles, qApp->activeWindow());
         model.reloadResource(preset);
@@ -256,11 +256,11 @@ void TextPropertiesCanvasObserver::cloneAndEditPreset(KoResourceSP resource)
     KoCssStylePresetSP preset = newResource.staticCast<KoCssStylePreset>();
     if (!preset) return;
 
-    CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(qApp->activeWindow());
-    dialog->setCurrentResource(preset);
+    CssStylePresetEditDialog dialog(qApp->activeWindow());
+    dialog.setCurrentResource(preset);
 
-    if (dialog->exec() == QDialog::Accepted) {
-        preset = dialog->currentResource();
+    if (dialog.exec() == QDialog::Accepted) {
+        preset = dialog.currentResource();
         preset->setFilename(preset->name().replace(' ', '_').replace('.', '_') + preset->defaultFileExtension());
         KisResourceUserOperations::addResourceWithUserInput(qApp->activeWindow(), preset);
     }

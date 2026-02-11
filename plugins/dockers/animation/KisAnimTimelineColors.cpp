@@ -88,7 +88,9 @@ QFont KisAnimTimelineColors::getOnionSkinsFont(const QString &maxString, const Q
 {
     QFont font = qApp->font();
 
-    while(font.pointSize() > 8) {
+    // Font size may be in pixels (on Android) or points (everywhere else.)
+    bool inPoints = font.pixelSize() == -1;
+    while((inPoints ? font.pointSize() : font.pixelSize()) > 8) {
         QFontMetrics fm(font);
 
         QRect rc = fm.boundingRect(maxString);
@@ -96,7 +98,11 @@ QFont KisAnimTimelineColors::getOnionSkinsFont(const QString &maxString, const Q
         if (rc.width() > availableSize.width() ||
             rc.height() > availableSize.height()) {
 
-            font.setPointSize(font.pointSize() - 1);
+            if (inPoints) {
+                font.setPointSize(font.pointSize() - 1);
+            } else {
+                font.setPixelSize(font.pixelSize() - 1);
+            }
         } else {
             break;
         }

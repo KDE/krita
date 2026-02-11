@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-10 00:42+0000\n"
-"PO-Revision-Date: 2026-01-31 11:42+0100\n"
+"PO-Revision-Date: 2026-02-10 20:04+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -27437,7 +27437,7 @@ msgstr "Lo spazio dei colori dello schermo è gestito dal sistema operativo"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1310
 #, kde-format
 msgid "Enable canvas color management"
-msgstr "Abilita la gestione dei colori della tela"
+msgstr "Abilita la gestione del colore della tela"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1313
 #, kde-format
@@ -27748,7 +27748,7 @@ msgstr "Inserimento su tela"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
-msgstr "Gestione dei colori"
+msgstr "Gestione del colore"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2536
 #, kde-format
@@ -28205,7 +28205,7 @@ msgid ""
 "color management configuration."
 msgstr ""
 "Usa l'obbiettivo di resa, la compensazione del punto nero e l'adattamento "
-"impostati nella configurazione della gestione dei colori."
+"impostati nella configurazione della gestione del colore."
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:97
 #, kde-format
@@ -30145,7 +30145,7 @@ msgstr "Abilita il supporto HiDPI"
 #: libs/ui/forms/wdggeneralsettings.ui:575
 #, kde-format
 msgid "Enable fractional scale factor"
-msgstr "Abilita il fattore di scala frazionale"
+msgstr "Abilita il fattore di scala frazionaria"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
@@ -31230,8 +31230,8 @@ msgid ""
 "If you know a bit about color management and want to use your monitor to "
 "determine the color profile."
 msgstr ""
-"Se ti intendi un po' della gestione dei colori e vuoi usare il tuo monitor "
-"per determinare il profilo dei colori."
+"Se ti intendi un po' di gestione dei colori e vuoi usare il tuo monitor per "
+"determinare il profilo dei colori."
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontPrompt)
 #: libs/ui/forms/wdgMissingColorProfile.ui:115
@@ -39133,8 +39133,8 @@ msgid ""
 "showFoto, and GIMP 2.9.</p>"
 msgstr ""
 "<p>Usa i profili V4 per modificare le immagini tramite editor di immagine ad "
-"alta profondità di bit, che utilizzano LCMS come modulo di gestione dei "
-"colori. Questo include Krita, digiKam/showFoto e GIMP 2.9.</p>"
+"alta profondità di bit, che utilizzano LCMS come modulo di gestione del "
+"colore. Questo include Krita, digiKam/showFoto e GIMP 2.9.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
@@ -58077,7 +58077,7 @@ msgstr "File ICC (*.icc *.icm)"
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
-msgstr "Gestione dei colori"
+msgstr "Gestione del colore"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:989
 #, kde-format

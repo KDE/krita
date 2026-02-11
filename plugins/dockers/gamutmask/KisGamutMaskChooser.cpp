@@ -127,7 +127,12 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
         const int resourceId = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
         const QString description = m_metaDataModel->metaDataValue(resourceId, descriptionKey).toString();
         if (!description.isEmpty() && !description.isNull()) {
-            font.setPointSize(font.pointSize()-1);
+            // Font size may be in pixels (on Android) or points (everywhere else.)
+            if (font.pixelSize() == -1) {
+                font.setPointSize(font.pointSize() - 1);
+            } else {
+                font.setPixelSize(font.pixelSize() - 1);
+            }
             font.setBold(false);
             font.setStyle(QFont::StyleItalic);
             painter->setFont(font);

@@ -51,12 +51,7 @@ QFont systemDefaultUiFont()
 #if defined(Q_OS_WIN) && QT_VERSION < 0x060000
     return windowsSystemUiFont();
 #else
-    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    // On Android, font size may be in pixels, but we expect it to be in points
-    if (font.pointSizeF() == -1) {
-        font.setPointSizeF(font.pixelSize());
-    }
-    return font;
+    return QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 #endif
 }
 
@@ -70,7 +65,12 @@ boost::optional<QFont> userCfgUiFont()
         }
         int fontSize = cfg.readEntry<int>(customFontSizeCfgName, -1);
         if (fontSize <= 6) {
-            fontSize = systemDefaultUiFont().pointSize();
+            // Font size may be in pixels (on Android) or points (everywhere else.)
+            QFont systemFont = systemDefaultUiFont();
+            fontSize = systemFont.pointSize();
+            if (fontSize == -1) {
+                fontSize = systemFont.pixelSize();
+            }
         }
         return QFont(fontName, fontSize);
     } else {
@@ -98,7 +98,13 @@ QFont normalFont()
 QFont dockFont()
 {
     QFont font = normalFont();
-    font.setPointSizeF(font.pointSizeF() * 0.9);
+    // Font size may be in pixels (on Android) or points (everywhere else.)
+    qreal ratio = 0.9;
+    if (font.pixelSize() == -1) {
+        font.setPointSizeF(font.pointSizeF() * ratio);
+    } else {
+        font.setPixelSize(qRound(font.pixelSize() * ratio));
+    }
     return font;
 }
 

@@ -102,6 +102,16 @@ variables:
         coverage_format: cobertura
         path: CoberturaLcovResults.xml
 
+.upload-packages-to-cdn-base-mixin:
+  extends:
+    - .ci-artifacts-without-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: True
+    KRITACI_SKIP_DEBUG_PACKAGE: False
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
+    KRITACI_BUILD_INSTALLERS: True
+
 workflow:
   rules:
     # Prevent branch pipelines if an MR is open on the branch.

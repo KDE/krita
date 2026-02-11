@@ -1,11 +1,10 @@
-windows-build:
+.windows-base:
   stage: build
   image: $VM_IMAGE_NAME_WINDOWS
   tags:
     - VM
     - amd64
   extends:
-    - .ci-always-job-mixin
     - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
@@ -46,47 +45,56 @@ windows-build:
     - python -u build-tools/ci-scripts/upload-nightly-packages.py --platform $EFFECTIVE_PUBLISH_PLATFORM_NAME --folder $CI_PROJECT_DIR 2>&1 | Tee-Object -FilePath "installers-publish.log"
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
-windows-build-qt6-nightly:
+.windows-qt6-base:
   extends:
-  - windows-build
-  - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
-  interruptible: false
+  - .windows-base
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_PUBLISH_PLATFORM_NAME: windows
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
-    KDECI_ONLY_BUILD: True
 
-windows-build-qt6-manual:
+windows-build-qt5:
   extends:
-  - windows-build-qt6-nightly
+  - .windows-base
   - .ci-manual-job-mixin
 
-windows-nightly:
+windows-build-qt6:
   extends:
-    - windows-build
-    - .nightly-job-mixin
-    - .ci-artifacts-without-packages-mixin
-  interruptible: false
+  - .windows-qt6-base
+  - .ci-always-job-mixin
+
+windows-build-qt5-nightly:
+  extends:
+    - .windows-base
+    - .weekly-job-mixin
+    - .upload-packages-to-cdn-base-mixin
   variables:
     KDECI_BUILD_TYPE: RelWithDebInfo
-    KDECI_ONLY_BUILD: True
-    KRITACI_SKIP_DEBUG_PACKAGE: False
-    KRITACI_BUILD_INSTALLERS: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
 
-windows-asan-weekly:
+windows-build-qt6-nightly:
   extends:
-  - windows-build
+  - .windows-qt6-base
+  - .weekly-job-mixin
+  - .upload-packages-to-cdn-base-mixin
+  variables:
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DBUILD_WITH_QT6=ON
+
+
+# TODO: disable for now, we need to update to clang-21 to support ASAN on Win11
+.windows-qt5-asan-weekly:
+  extends:
+  - .windows-base
   - .weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
@@ -106,11 +114,10 @@ windows-asan-weekly:
     KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-asan }'
     ASAN_OPTIONS: 'new_delete_type_mismatch=0:detect_leaks=0:halt_on_error=0'
 
-windows-release:
+windows-release-qt5:
   extends:
-    - windows-build
+    - .windows-base
     - .ci-release-job-mixin
-  interruptible: false
   variables:
     KDECI_BUILD_TYPE: RelWithDebInfo
     KDECI_ONLY_BUILD: True
@@ -123,12 +130,9 @@ windows-release:
 
 windows-release-qt6:
   extends:
-    - windows-build
+    - .windows-qt6-base
     - .ci-release-job-mixin
-  interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_BUILD_TYPE: RelWithDebInfo
     KDECI_ONLY_BUILD: True
     KRITACI_SKIP_DEBUG_PACKAGE: False

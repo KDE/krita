@@ -1,11 +1,10 @@
-linux-build:
+.linux-base:
   stage: build
   image: $VM_IMAGE_NAME_LINUX
   tags:
     - VM
     - amd64
   extends:
-    - .ci-always-job-mixin
     - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
@@ -50,44 +49,52 @@ linux-build:
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $EFFECTIVE_PUBLISH_PLATFORM_NAME --folder $CI_PROJECT_DIR/_packaging
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
-linux-build-qt6-nightly:
+.linux-qt6-base:
   extends:
-  - linux-build
-  - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
-  interruptible: false
+  - .linux-base
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_PUBLISH_PLATFORM_NAME: linux
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
-    KDECI_ONLY_BUILD: True
 
-linux-build-qt6-manual:
+linux-build-qt5:
   extends:
-  - linux-build-qt6-nightly
+  - .linux-base
+  - .ci-always-job-mixin
+
+linux-build-qt6:
+  extends:
+  - .linux-qt6-base
   - .ci-manual-job-mixin
 
-linux-nightly:
+linux-build-qt5-nightly:
   extends:
-  - linux-build
-  - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
-  interruptible: false
+  - .linux-base
+  - .weekly-job-mixin
+  - .upload-packages-to-cdn-base-mixin
   variables:
-    KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
 
-linux-debug-weekly:
+linux-build-qt6-nightly:
   extends:
-  - linux-build
+  - .linux-qt6-base
+  - .nightly-job-mixin
+  - .upload-packages-to-cdn-base-mixin
+  variables:
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DBUILD_WITH_QT6=ON
+
+linux-qt5-debug-weekly:
+  extends:
+  - .linux-base
   - .weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
@@ -100,9 +107,9 @@ linux-debug-weekly:
       -DENABLE_UPDATERS=OFF
     KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-debug }'
 
-linux-asan-weekly:
+linux-qt5-asan-weekly:
   extends:
-  - linux-build
+  - .linux-base
   - .weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
@@ -124,16 +131,15 @@ linux-asan-weekly:
     # so let's try just to reduce the number of threads to 1
     KRITACI_PARALLEL_JOBS: 1
 
-linux-asan-manual:
+linux-qt5-asan-manual:
   extends:
-  - linux-asan-weekly
+  - linux-qt5-asan-weekly
   - .ci-manual-job-mixin
 
-linux-release:
+linux-release-qt5:
   extends:
-  - linux-build
+  - .linux-base
   - .ci-release-job-mixin
-  interruptible: false
   variables:
     KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
@@ -142,12 +148,9 @@ linux-release:
 
 linux-release-qt6:
   extends:
-  - linux-build
+  - .linux-qt6-base
   - .ci-release-job-mixin
-  interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON

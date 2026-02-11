@@ -518,6 +518,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         QGuiApplication *app = qApp;
         KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+        //Have to explicitly set the bug address since the kde api now sets it to null by default
+        //https://invent.kde.org/frameworks/kcoreaddons/-/commit/3324b59b
+        aboutData.setBugAddress("submit@bugs.kde.org");
 
         d->helpMenu = new KisKHelpMenu(this, aboutData, false);
 

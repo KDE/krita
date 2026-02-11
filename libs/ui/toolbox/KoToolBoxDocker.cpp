@@ -34,7 +34,13 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     w->setFrameShadow(QFrame::Raised);
     w->setFrameStyle(QFrame::Panel | QFrame::Raised);
     QFont font = qApp->font();
-    font.setPointSizeF(font.pointSizeF() * 0.9);
+    // Font size may be in pixels (on Android) or points (everywhere else.)
+    qreal ratio = 0.9;
+    if (font.pixelSize() == -1) {
+        font.setPointSizeF(font.pointSizeF() * ratio);
+    } else {
+        font.setPixelSize(qRound(font.pixelSize() * ratio));
+    }
     int titleSize = QFontMetrics(font).height();
     w->setMinimumSize(titleSize, titleSize);
     setTitleBarWidget(w);

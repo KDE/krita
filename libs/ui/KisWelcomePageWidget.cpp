@@ -811,6 +811,12 @@ void KisWelcomePageWidget::slotUpdateDonationState()
 QFont KisWelcomePageWidget::largerFont()
 {
     QFont larger = font();
-    larger.setPointSizeF(larger.pointSizeF() * 1.1f);
+    // Font size may be in pixels (on Android) or points (everywhere else.)
+    qreal ratio = 1.1;
+    if (larger.pixelSize() == -1) {
+        larger.setPointSizeF(larger.pointSizeF() * ratio);
+    } else {
+        larger.setPixelSize(qRound(larger.pixelSize() * ratio));
+    }
     return larger;
 }

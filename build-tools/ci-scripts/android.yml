@@ -1,4 +1,4 @@
-.android-build-base:
+.android-base:
   stage: build
   image: $VM_IMAGE_NAME_ANDROID
   tags:
@@ -64,22 +64,19 @@
 
 .android-nightly-base:
   extends:
-    - .android-build-base
-    - .nightly-job-mixin
-    - .ci-artifacts-without-packages-mixin
-  interruptible: false
+    - .android-base
+    - .weekly-job-mixin
+    - .upload-packages-to-cdn-base-mixin
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: nightly
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
 
 .android-release-base:
   extends:
-  - .android-build-base
+  - .android-base
   - .ci-release-job-mixin
-  interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: release
     KRITACI_ANDROID_RELEASE_MODE: 1
@@ -145,17 +142,17 @@ android-build-appbundle:
 
 android-build-x86_64:
   extends:
-  - .android-build-base
+  - .android-base
   - .android-x86_64-mixin
 
 android-build-arm64-v8a:
   extends:
-  - .android-build-base
+  - .android-base
   - .android-arm64-v8a-mixin
 
 android-build-armeabi-v7a:
   extends:
-  - .android-build-base
+  - .android-base
   - .android-armeabi-v7a-mixin
 
 android-build-x86_64-nightly:

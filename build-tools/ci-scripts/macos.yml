@@ -111,13 +111,13 @@ macos-build-qt6:
 macos-build-qt5-nightly:
   extends:
   - .macos-base
-  - .weekly-job-mixin
+  - .nightly-job-mixin
   - .upload-packages-to-cdn-base-mixin
 
 macos-build-qt6-nightly:
   extends:
   - .macos-qt6-base
-  - .weekly-job-mixin
+  - .nightly-job-mixin
   - .upload-packages-to-cdn-base-mixin
 
 macos-release-qt5:

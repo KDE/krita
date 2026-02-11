@@ -64,17 +64,17 @@
 linux-build-qt5:
   extends:
   - .linux-base
-  - .ci-always-job-mixin
+  - .ci-manual-job-mixin
 
 linux-build-qt6:
   extends:
   - .linux-qt6-base
-  - .ci-manual-job-mixin
+  - .ci-always-job-mixin
 
 linux-build-qt5-nightly:
   extends:
   - .linux-base
-  - .weekly-job-mixin
+  - .nightly-job-mixin
   - .upload-packages-to-cdn-base-mixin
   variables:
     KDECI_EXTRA_CMAKE_ARGS: >

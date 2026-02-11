@@ -65,7 +65,7 @@
 .android-nightly-base:
   extends:
     - .android-base
-    - .weekly-job-mixin
+    - .nightly-job-mixin
     - .upload-packages-to-cdn-base-mixin
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: nightly

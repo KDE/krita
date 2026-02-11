@@ -60,17 +60,17 @@
 windows-build-qt5:
   extends:
   - .windows-base
-  - .ci-manual-job-mixin
+  - .ci-always-job-mixin
 
 windows-build-qt6:
   extends:
   - .windows-qt6-base
-  - .ci-always-job-mixin
+  - .ci-manual-job-mixin
 
 windows-build-qt5-nightly:
   extends:
     - .windows-base
-    - .weekly-job-mixin
+    - .nightly-job-mixin
     - .upload-packages-to-cdn-base-mixin
   variables:
     KDECI_BUILD_TYPE: RelWithDebInfo
@@ -81,7 +81,7 @@ windows-build-qt5-nightly:
 windows-build-qt6-nightly:
   extends:
   - .windows-qt6-base
-  - .weekly-job-mixin
+  - .nightly-job-mixin
   - .upload-packages-to-cdn-base-mixin
   variables:
     KDECI_BUILD_TYPE: RelWithDebInfo

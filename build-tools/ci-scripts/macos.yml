@@ -1,9 +1,8 @@
-macos-build:
+.macos-base:
   stage: build
   tags:
     - macOS
   extends:
-    - .ci-manual-job-mixin
     - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
@@ -83,16 +82,12 @@ macos-build:
     - if [[ -e /tmp/task-debug.log ]]; then mv /tmp/task-debug.log $CI_PROJECT_DIR/; fi
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
-macos-build-qt6-nightly:
+.macos-qt6-base:
   extends:
-  - macos-build
-  - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
-  interruptible: false
+  - .macos-base
   variables:
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
     EFFECTIVE_PUBLISH_PLATFORM_NAME: macos-universal
     MACOSX_DEPLOYMENT_TARGET: "12"
     QMAKE_MACOSX_DEPLOYMENT_TARGET: "12"
@@ -103,48 +98,44 @@ macos-build-qt6-nightly:
     # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
     KDECI_ONLY_BUILD: True
 
-macos-build-qt6-manual:
+macos-build-qt5:
   extends:
-  - macos-build-qt6-nightly
+  - .macos-base
   - .ci-manual-job-mixin
 
-macos-nightly:
+macos-build-qt6:
   extends:
-  - macos-build
-  - .nightly-job-mixin
-  - .ci-artifacts-without-packages-mixin
-  interruptible: false
-  variables:
-    # still run the tests, since we don't run them for every commit!
-    # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
-    KDECI_ONLY_BUILD: True
-    KDECI_EXTRA_CMAKE_ARGS: >
-      -DHIDE_SAFE_ASSERTS=OFF
-      -DBUILD_TESTING=ON
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
+  - .macos-qt6-base
+  - .ci-manual-job-mixin
 
-macos-release:
+macos-build-qt5-nightly:
   extends:
-  - macos-build
+  - .macos-base
+  - .weekly-job-mixin
+  - .upload-packages-to-cdn-base-mixin
+
+macos-build-qt6-nightly:
+  extends:
+  - .macos-qt6-base
+  - .weekly-job-mixin
+  - .upload-packages-to-cdn-base-mixin
+
+macos-release-qt5:
+  extends:
+  - .macos-base
   - .ci-release-job-mixin
-  interruptible: false
   variables:
     KRITACI_RELEASE_PACKAGE_NAMING: True
-    KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
 
 macos-release-qt6:
   extends:
-  - macos-build
+  - .macos-qt6-base
   - .ci-release-job-mixin
-  interruptible: false
   variables:
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KRITACI_RELEASE_PACKAGE_NAMING: True
-    KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF

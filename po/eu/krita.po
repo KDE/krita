@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-10 00:42+0000\n"
+"POT-Creation-Date: 2026-02-12 00:41+0000\n"
 "PO-Revision-Date: 2026-01-04 16:33+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16401,8 +16401,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Languneak"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:510
-#: libs/ui/KisApplication.cpp:822
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -22009,8 +22009,8 @@ msgid "Processing"
 msgstr "Prozesatzea"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1399
-#: libs/ui/KisMainWindow.cpp:1772 libs/ui/KisMainWindow.cpp:1785
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1413
+#: libs/ui/KisMainWindow.cpp:1786 libs/ui/KisMainWindow.cpp:1799
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22782,8 +22782,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Irudia bereizi"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2143
-#: libs/ui/KisMainWindow.cpp:2222
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2157
+#: libs/ui/KisMainWindow.cpp:2236
 #, kde-format
 msgid "Import frames"
 msgstr "Inportatu fotogramak"
@@ -24139,17 +24139,17 @@ msgstr "Baliabide lokalak"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
 #: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
-#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
-#: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
-#: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
-#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1223
+#: libs/ui/KisApplication.cpp:1226 libs/ui/KisApplication.cpp:1242
+#: libs/ui/KisApplication.cpp:1274 libs/ui/KisApplication.cpp:1288
+#: libs/ui/KisApplication.cpp:1316 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
-#: libs/ui/KisMainWindow.cpp:1180 libs/ui/KisMainWindow.cpp:1277
-#: libs/ui/KisMainWindow.cpp:2003 libs/ui/KisMainWindow.cpp:2012
-#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2210
-#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2861
+#: libs/ui/KisMainWindow.cpp:1194 libs/ui/KisMainWindow.cpp:1291
+#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2026
+#: libs/ui/KisMainWindow.cpp:2165 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2243 libs/ui/KisMainWindow.cpp:2875
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24701,7 +24701,7 @@ msgid "Delete resource"
 msgstr "Ezabatu baliabidea"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2672
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25183,7 +25183,7 @@ msgstr ""
 "osatugabe dago."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2251
+#: libs/ui/KisMainWindow.cpp:2265
 #, kde-format
 msgid "Render Animation"
 msgstr "Errendatu animazioa"
@@ -27176,7 +27176,7 @@ msgid "Numerical"
 msgstr "Zenbakizkoa"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1145
+#: libs/ui/KisMainWindow.cpp:1159
 #, kde-format
 msgid "Import Images"
 msgstr "Inportatu irudiak"
@@ -27293,7 +27293,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Sartu estilo-izen berria"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32695,7 +32695,7 @@ msgid "HSV CCW"
 msgstr "ÑSB erloju-orratzen kontrako noranzkoan"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:449
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:455
 #, kde-format
 msgid "Sessions"
 msgstr "Saioak"
@@ -34266,7 +34266,7 @@ msgstr "Atzeko planoko kolore-hautatzailea"
 msgid "&Docker Box"
 msgstr "&Zamaketaria"
 
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:451
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34280,8 +34280,8 @@ msgstr "Ereduak"
 msgid "Custom Pattern"
 msgstr "Eredu pertsonalizatua"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:436
+#: libs/ui/KisApplication.cpp:437
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -35336,20 +35336,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zooma: %%1"
 
-#: libs/ui/KisApplication.cpp:422
+#: libs/ui/KisApplication.cpp:428
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Pintzelen aurrezarpenak"
 
-#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
-#: libs/ui/KisApplication.cpp:427 libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:431 libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:433 libs/ui/KisApplication.cpp:434
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Pintzelaren puntak"
 
-#: libs/ui/KisApplication.cpp:433
+#: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -35357,7 +35357,7 @@ msgstr "Pintzelaren puntak"
 msgid "Palettes"
 msgstr "Paletak"
 
-#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:452 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -35365,46 +35365,46 @@ msgstr "Paletak"
 msgid "Workspaces"
 msgstr "Laneko areak"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:453
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG ikur liburutegiak"
 
-#: libs/ui/KisApplication.cpp:448 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:454 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Leiho-antolaerak"
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:456
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Gamako maskarak"
 
-#: libs/ui/KisApplication.cpp:452
+#: libs/ui/KisApplication.cpp:458
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr gidoiak"
 
-#: libs/ui/KisApplication.cpp:457
+#: libs/ui/KisApplication.cpp:463
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Geruzen estiloak"
 
-#: libs/ui/KisApplication.cpp:460
+#: libs/ui/KisApplication.cpp:466
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Letra-tipoen familia"
 
-#: libs/ui/KisApplication.cpp:461
+#: libs/ui/KisApplication.cpp:467
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgid "Style Presets"
 msgstr "Aurrezarpenak editatu"
 
-#: libs/ui/KisApplication.cpp:473
+#: libs/ui/KisApplication.cpp:479
 #, kde-format
 msgid ""
 "%1\n"
@@ -35415,13 +35415,13 @@ msgstr ""
 "\n"
 "Krita orain itxi egingo da."
 
-#: libs/ui/KisApplication.cpp:473 libs/ui/KisApplication.cpp:479
+#: libs/ui/KisApplication.cpp:479 libs/ui/KisApplication.cpp:485
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Errore larria"
 
-#: libs/ui/KisApplication.cpp:479
+#: libs/ui/KisApplication.cpp:485
 #, kde-format
 msgid ""
 "\n"
@@ -35432,7 +35432,7 @@ msgstr ""
 "\n"
 "Krita orain itxiko da."
 
-#: libs/ui/KisApplication.cpp:511
+#: libs/ui/KisApplication.cpp:517
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35443,66 +35443,66 @@ msgstr ""
 "Ez da halakorik gomendatzen.\n"
 "Mesedez, horren ordez zama-jaitsi eta instalatu 64 biteko eraikina."
 
-#: libs/ui/KisApplication.cpp:528
+#: libs/ui/KisApplication.cpp:534
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Globalak hasieratzen..."
 
-#: libs/ui/KisApplication.cpp:560
+#: libs/ui/KisApplication.cpp:566
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Baliabide motak gehitzen..."
 
-#: libs/ui/KisApplication.cpp:564
+#: libs/ui/KisApplication.cpp:570
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Pluginak zamatzen..."
 
-#: libs/ui/KisApplication.cpp:570
+#: libs/ui/KisApplication.cpp:576
 #, kde-format
 msgid "Loading resources..."
 msgstr "Baliabideak zamatzen..."
 
-#: libs/ui/KisApplication.cpp:579
+#: libs/ui/KisApplication.cpp:585
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Leiho nagusia zamatzen..."
 
-#: libs/ui/KisApplication.cpp:611
+#: libs/ui/KisApplication.cpp:617
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "Aztertzen..."
 
-#: libs/ui/KisApplication.cpp:714
+#: libs/ui/KisApplication.cpp:720
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME-mota ez du aurkitu, saia zaitez «-mimetype» aukera erabiltzen"
 
-#: libs/ui/KisApplication.cpp:775
+#: libs/ui/KisApplication.cpp:781
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Animazioko fotogramak errendatzea huts egin du!"
 
-#: libs/ui/KisApplication.cpp:803 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:809 libs/ui/KisApplication.cpp:1082
 #, kde-format
 msgid "File layer"
 msgstr "Fitxategi geruza"
 
-#: libs/ui/KisApplication.cpp:811 libs/ui/KisApplication.cpp:816
-#: libs/ui/KisApplication.cpp:1070 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1089
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:822
+#: libs/ui/KisApplication.cpp:1076 libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1095
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Abisua"
 
-#: libs/ui/KisApplication.cpp:812 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:818 libs/ui/KisApplication.cpp:1091
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ezin da gehitu %1 fitxategi-geruza gisa: fitxategia ez da existitzen."
 
-#: libs/ui/KisApplication.cpp:817
+#: libs/ui/KisApplication.cpp:823
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35524,7 +35524,7 @@ msgstr ""
 "-> Orokorra -> Leihoa) \"Baimendu Kritaren instantzia bakarra\" kontrol-"
 "laukia."
 
-#: libs/ui/KisApplication.cpp:823
+#: libs/ui/KisApplication.cpp:829
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35535,32 +35535,32 @@ msgstr ""
 "Dokumentu berri bat sor dezakezu « --new-image » aukera erabiliz, edo "
 "existitzen den fitxategi bat ireki dezakezu."
 
-#: libs/ui/KisApplication.cpp:1071
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Ezin izan du %1 fitxategia ireki"
 
-#: libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1096
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ezin du fitxategi geruza gehitu: ez dago irekitako dokumenturik."
 
-#: libs/ui/KisApplication.cpp:1218
+#: libs/ui/KisApplication.cpp:1224
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ez da txantiloirik aurkitu honentzat: %1"
 
-#: libs/ui/KisApplication.cpp:1221
+#: libs/ui/KisApplication.cpp:1227
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Txantiloi gehiegi aurkitu dira honentzat: %1"
 
-#: libs/ui/KisApplication.cpp:1237
+#: libs/ui/KisApplication.cpp:1243
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "%1 txantiloia zamatzea huts egin du."
 
-#: libs/ui/KisApplication.cpp:1269
+#: libs/ui/KisApplication.cpp:1275
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35575,7 +35575,7 @@ msgstr ""
 "\n"
 "Berrabiarazi Krita aldaketak indarrean sar daitezen."
 
-#: libs/ui/KisApplication.cpp:1283
+#: libs/ui/KisApplication.cpp:1289
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35587,7 +35587,7 @@ msgstr ""
 "Mesedez, ziurtatu beste programarik ez duela fitxategia erabiltzen eta "
 "berriz saiatu."
 
-#: libs/ui/KisApplication.cpp:1311
+#: libs/ui/KisApplication.cpp:1317
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ezarpenen fitxategia garbitu nahi duzu?"
@@ -36346,12 +36346,12 @@ msgstr "Gorde %1 gisa"
 msgid "The file %1 does not exist."
 msgstr "%1 fitxategia ez da existitzen."
 
-#: libs/ui/KisMainWindow.cpp:1145
+#: libs/ui/KisMainWindow.cpp:1159
 #, kde-format
 msgid "Open Images"
 msgstr "Ireki irudiak"
 
-#: libs/ui/KisMainWindow.cpp:1278
+#: libs/ui/KisMainWindow.cpp:1292
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36364,37 +36364,37 @@ msgstr ""
 "\n"
 "Hautatu, jatorrizko irudia gainidatziko ez den kokaleku bat!"
 
-#: libs/ui/KisMainWindow.cpp:1334
+#: libs/ui/KisMainWindow.cpp:1348
 #, kde-format
 msgid "Exporting"
 msgstr "Esportatzea"
 
-#: libs/ui/KisMainWindow.cpp:1334
+#: libs/ui/KisMainWindow.cpp:1348
 #, kde-format
 msgid "Saving As"
 msgstr "Honela gordetzea"
 
-#: libs/ui/KisMainWindow.cpp:1751
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Create new document"
 msgstr "Sortu dokumentu berria"
 
-#: libs/ui/KisMainWindow.cpp:1775
+#: libs/ui/KisMainWindow.cpp:1789
 #, kde-format
 msgid "Custom Document"
 msgstr "Neurriko dokumentua"
 
-#: libs/ui/KisMainWindow.cpp:1787
+#: libs/ui/KisMainWindow.cpp:1801
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Sortu arbeletik"
 
-#: libs/ui/KisMainWindow.cpp:1972
+#: libs/ui/KisMainWindow.cpp:1986
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Geruzak/maskarak"
 
-#: libs/ui/KisMainWindow.cpp:1998
+#: libs/ui/KisMainWindow.cpp:2012
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
@@ -36402,7 +36402,7 @@ msgstr "Geruzak/maskarak"
 msgid "You don't have any resource bundles enabled."
 msgstr "Ezin izan da irteerako dokumentua sortu"
 
-#: libs/ui/KisMainWindow.cpp:2002
+#: libs/ui/KisMainWindow.cpp:2016
 #, fuzzy, kde-format
 #| msgid ""
 #| "\n"
@@ -36417,7 +36417,7 @@ msgstr ""
 "Ez dago %1 motako baliabide erabilgarririk. Mesedez, gaitu gutxienez fardel "
 "bat."
 
-#: libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2026
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36428,7 +36428,7 @@ msgstr ""
 "\n"
 "Baliabide lokalak bakarrik daude eskuragarri."
 
-#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2229
+#: libs/ui/KisMainWindow.cpp:2165 libs/ui/KisMainWindow.cpp:2243
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36437,44 +36437,44 @@ msgstr ""
 "Ezin izan da animazioa inportatzen amaitu:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2210
+#: libs/ui/KisMainWindow.cpp:2224
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Dokumentu berria sortzea huts egin du. Animazioa inportatzea bertan behera "
 "utzi egin da."
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Inportatu langunea..."
 
-#: libs/ui/KisMainWindow.cpp:2664
+#: libs/ui/KisMainWindow.cpp:2678
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Langune &berria..."
 
-#: libs/ui/KisMainWindow.cpp:2668
+#: libs/ui/KisMainWindow.cpp:2682
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Langune berria..."
 
-#: libs/ui/KisMainWindow.cpp:2712
+#: libs/ui/KisMainWindow.cpp:2726
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2715
+#: libs/ui/KisMainWindow.cpp:2729
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2884
+#: libs/ui/KisMainWindow.cpp:2898
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36483,19 +36483,19 @@ msgstr ""
 "Krita-ren LittleCMS koloreak kudeatzeko plugina instalatuta gabe dago. "
 "Krita, orain, itxi egingo da."
 
-#: libs/ui/KisMainWindow.cpp:2900
+#: libs/ui/KisMainWindow.cpp:2914
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Instalazio errorea"
 
-#: libs/ui/KisMainWindow.cpp:3010
+#: libs/ui/KisMainWindow.cpp:3024
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Gaiak"
 
-#: libs/ui/KisMainWindow.cpp:3069
+#: libs/ui/KisMainWindow.cpp:3083
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"
@@ -38214,7 +38214,7 @@ msgstr "%1x%2"
 msgid "Toolbox"
 msgstr "Tresna-kutxa"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:142
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38223,25 +38223,25 @@ msgstr "Tresna-kutxa"
 msgid "Icon Size"
 msgstr "Ikonoen neurria"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:145
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Antolamendua"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Automatikoa"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:155
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "E&zkerretik eskuinera"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:162
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
@@ -39469,7 +39469,7 @@ msgstr "Erdi-gris maila:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:182
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
@@ -39478,7 +39478,7 @@ msgstr "Azaldu"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:185
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:190
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
 msgid "Thumbnails"
@@ -39487,7 +39487,7 @@ msgstr "Koadro txikiak"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:191
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
 #, kde-format

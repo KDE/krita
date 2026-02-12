@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-10 02:36+0000\n"
+"POT-Creation-Date: 2026-02-12 02:39+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -16703,8 +16703,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:510
-#: libs/ui/KisApplication.cpp:822
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -22374,8 +22374,8 @@ msgid "Processing"
 msgstr "Feldolgozás"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1399
-#: libs/ui/KisMainWindow.cpp:1772 libs/ui/KisMainWindow.cpp:1785
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1413
+#: libs/ui/KisMainWindow.cpp:1786 libs/ui/KisMainWindow.cpp:1799
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -23173,8 +23173,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "A kép átnevezése"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2143
-#: libs/ui/KisMainWindow.cpp:2222
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2157
+#: libs/ui/KisMainWindow.cpp:2236
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Kép importálása"
@@ -24650,17 +24650,17 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
 #: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
-#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1217
-#: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
-#: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
-#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1223
+#: libs/ui/KisApplication.cpp:1226 libs/ui/KisApplication.cpp:1242
+#: libs/ui/KisApplication.cpp:1274 libs/ui/KisApplication.cpp:1288
+#: libs/ui/KisApplication.cpp:1316 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
-#: libs/ui/KisMainWindow.cpp:1180 libs/ui/KisMainWindow.cpp:1277
-#: libs/ui/KisMainWindow.cpp:2003 libs/ui/KisMainWindow.cpp:2012
-#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2210
-#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2861
+#: libs/ui/KisMainWindow.cpp:1194 libs/ui/KisMainWindow.cpp:1291
+#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2026
+#: libs/ui/KisMainWindow.cpp:2165 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2243 libs/ui/KisMainWindow.cpp:2875
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -25229,7 +25229,7 @@ msgid "Delete resource"
 msgstr "Erőforrás törlése"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2672
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25717,7 +25717,7 @@ msgstr ""
 "Az animációs képkocka renderelése sikertelen. A kimeneti fájlok hiányosak."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2251
+#: libs/ui/KisMainWindow.cpp:2265
 #, kde-format
 msgid "Render Animation"
 msgstr "Animáció renderelése"
@@ -27701,7 +27701,7 @@ msgid "Numerical"
 msgstr "Függőleges"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1145
+#: libs/ui/KisMainWindow.cpp:1159
 #, kde-format
 msgid "Import Images"
 msgstr "Képek importálása"
@@ -27819,7 +27819,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Adja meg az új stílus nevét"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -33211,7 +33211,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:449
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:455
 #, kde-format
 msgid "Sessions"
 msgstr "Munkamenetek"
@@ -34789,7 +34789,7 @@ msgstr "Háttérszín"
 msgid "&Docker Box"
 msgstr "&Dokkoló"
 
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:445
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:451
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34803,8 +34803,8 @@ msgstr "Minták"
 msgid "Custom Pattern"
 msgstr "Egyéni minta"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:430
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:436
+#: libs/ui/KisApplication.cpp:437
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -35776,22 +35776,22 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Nagyítás: %1 %"
 
-#: libs/ui/KisApplication.cpp:422
+#: libs/ui/KisApplication.cpp:428
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Előre beállított ecsetek"
 
-#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
-#: libs/ui/KisApplication.cpp:427 libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:431 libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:433 libs/ui/KisApplication.cpp:434
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "Ecset hegye"
 
-#: libs/ui/KisApplication.cpp:433
+#: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -35799,7 +35799,7 @@ msgstr "Ecset hegye"
 msgid "Palettes"
 msgstr "Paletták"
 
-#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:452 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -35807,48 +35807,48 @@ msgstr "Paletták"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:453
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektor réteg"
 
-#: libs/ui/KisApplication.cpp:448 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:454 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Ablakelrendezések"
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:456
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Kráterek"
 
-#: libs/ui/KisApplication.cpp:452
+#: libs/ui/KisApplication.cpp:458
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Alsó index"
 
-#: libs/ui/KisApplication.cpp:457
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Rétegméret"
 
-#: libs/ui/KisApplication.cpp:460
+#: libs/ui/KisApplication.cpp:466
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Betűcsalád"
 
-#: libs/ui/KisApplication.cpp:461
+#: libs/ui/KisApplication.cpp:467
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgid "Style Presets"
 msgstr "Előre beállítottak szerkesztése"
 
-#: libs/ui/KisApplication.cpp:473
+#: libs/ui/KisApplication.cpp:479
 #, kde-format
 msgid ""
 "%1\n"
@@ -35859,13 +35859,13 @@ msgstr ""
 "\n"
 "A Krita kilép."
 
-#: libs/ui/KisApplication.cpp:473 libs/ui/KisApplication.cpp:479
+#: libs/ui/KisApplication.cpp:479 libs/ui/KisApplication.cpp:485
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Végzetes hiba"
 
-#: libs/ui/KisApplication.cpp:479
+#: libs/ui/KisApplication.cpp:485
 #, kde-format
 msgid ""
 "\n"
@@ -35876,7 +35876,7 @@ msgstr ""
 "\n"
 "A Krita kilép."
 
-#: libs/ui/KisApplication.cpp:511
+#: libs/ui/KisApplication.cpp:517
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35887,67 +35887,67 @@ msgstr ""
 "Ez nem javasolt.\n"
 "Kérjük töltse le és telepítse helyette az x64-es verziót."
 
-#: libs/ui/KisApplication.cpp:528
+#: libs/ui/KisApplication.cpp:534
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "Erőforrások kezelése"
 
-#: libs/ui/KisApplication.cpp:560
+#: libs/ui/KisApplication.cpp:566
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Erőforrások hozzáadása"
 
-#: libs/ui/KisApplication.cpp:564
+#: libs/ui/KisApplication.cpp:570
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Előre definiált ecsetek"
 
-#: libs/ui/KisApplication.cpp:570
+#: libs/ui/KisApplication.cpp:576
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Erőforráscsomagok kezelése…"
 
-#: libs/ui/KisApplication.cpp:579
+#: libs/ui/KisApplication.cpp:585
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Követési beállítások módosítása"
 
-#: libs/ui/KisApplication.cpp:611
+#: libs/ui/KisApplication.cpp:617
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "A ké&p nyírása..."
 
-#: libs/ui/KisApplication.cpp:714
+#: libs/ui/KisApplication.cpp:720
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:775
+#: libs/ui/KisApplication.cpp:781
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisApplication.cpp:803 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:809 libs/ui/KisApplication.cpp:1082
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Fájlréteg…"
 
-#: libs/ui/KisApplication.cpp:811 libs/ui/KisApplication.cpp:816
-#: libs/ui/KisApplication.cpp:1070 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1089
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:822
+#: libs/ui/KisApplication.cpp:1076 libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1095
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Figyelmeztetés"
 
-#: libs/ui/KisApplication.cpp:812 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:818 libs/ui/KisApplication.cpp:1091
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Nem vehető fel szín, ha az aktív réteg nem látható."
 
-#: libs/ui/KisApplication.cpp:817
+#: libs/ui/KisApplication.cpp:823
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35960,7 +35960,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:823
+#: libs/ui/KisApplication.cpp:829
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35968,33 +35968,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1071
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Nem sikerült megnyitni a fájlt: %1"
 
-#: libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1096
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add the file layer: no document is open."
 msgstr "Nem vehető fel szín, ha az aktív réteg nem látható."
 
-#: libs/ui/KisApplication.cpp:1218
+#: libs/ui/KisApplication.cpp:1224
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "%1 tulajdonságai"
 
-#: libs/ui/KisApplication.cpp:1221
+#: libs/ui/KisApplication.cpp:1227
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Túl sok sablon található ehhez: %1"
 
-#: libs/ui/KisApplication.cpp:1237
+#: libs/ui/KisApplication.cpp:1243
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "LUT fájl kiválasztása"
 
-#: libs/ui/KisApplication.cpp:1269
+#: libs/ui/KisApplication.cpp:1275
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36004,7 +36004,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1283
+#: libs/ui/KisApplication.cpp:1289
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36012,7 +36012,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1311
+#: libs/ui/KisApplication.cpp:1317
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -36771,12 +36771,12 @@ msgstr "Mentés mint %1"
 msgid "The file %1 does not exist."
 msgstr "Nem létezik %1 nevű fájl."
 
-#: libs/ui/KisMainWindow.cpp:1145
+#: libs/ui/KisMainWindow.cpp:1159
 #, kde-format
 msgid "Open Images"
 msgstr "Képek megnyitása"
 
-#: libs/ui/KisMainWindow.cpp:1278
+#: libs/ui/KisMainWindow.cpp:1292
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36785,45 +36785,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1334
+#: libs/ui/KisMainWindow.cpp:1348
 #, kde-format
 msgid "Exporting"
 msgstr "Exportálás"
 
-#: libs/ui/KisMainWindow.cpp:1334
+#: libs/ui/KisMainWindow.cpp:1348
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Mentés formátuma"
 
-#: libs/ui/KisMainWindow.cpp:1751
+#: libs/ui/KisMainWindow.cpp:1765
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Nemrég használt dokumentumok"
 
-#: libs/ui/KisMainWindow.cpp:1775
+#: libs/ui/KisMainWindow.cpp:1789
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Egyéni színátmenet"
 
-#: libs/ui/KisMainWindow.cpp:1787
+#: libs/ui/KisMainWindow.cpp:1801
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Létrehozás a vágólapról"
 
-#: libs/ui/KisMainWindow.cpp:1972
+#: libs/ui/KisMainWindow.cpp:1986
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Réteg/maszk mentése…"
 
-#: libs/ui/KisMainWindow.cpp:1998
+#: libs/ui/KisMainWindow.cpp:2012
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisMainWindow.cpp:2002
+#: libs/ui/KisMainWindow.cpp:2016
 #, fuzzy, kde-format
 #| msgid ""
 #| "\n"
@@ -36837,7 +36837,7 @@ msgstr ""
 "\n"
 "Nincsenek %1 típusú erőforrások. Engedélyezzen legalább egy csomagot."
 
-#: libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2026
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36846,7 +36846,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2151 libs/ui/KisMainWindow.cpp:2229
+#: libs/ui/KisMainWindow.cpp:2165 libs/ui/KisMainWindow.cpp:2243
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36855,43 +36855,43 @@ msgstr ""
 "Nem sikerült befejezni az animáció importálását:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2210
+#: libs/ui/KisMainWindow.cpp:2224
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Munkaterület &importálása…"
 
-#: libs/ui/KisMainWindow.cpp:2664
+#: libs/ui/KisMainWindow.cpp:2678
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Ú&j munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2668
+#: libs/ui/KisMainWindow.cpp:2682
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Új munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2712
+#: libs/ui/KisMainWindow.cpp:2726
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2715
+#: libs/ui/KisMainWindow.cpp:2729
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2884
+#: libs/ui/KisMainWindow.cpp:2898
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36900,13 +36900,13 @@ msgstr ""
 "A Krita LittleCMS színkezelő bővítmény nincs telepítve. A Krita most ki fog "
 "lépni."
 
-#: libs/ui/KisMainWindow.cpp:2900
+#: libs/ui/KisMainWindow.cpp:2914
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Telepítési hiba"
 
-#: libs/ui/KisMainWindow.cpp:3010
+#: libs/ui/KisMainWindow.cpp:3024
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Themes"
@@ -36914,7 +36914,7 @@ msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Témák"
 
-#: libs/ui/KisMainWindow.cpp:3069
+#: libs/ui/KisMainWindow.cpp:3083
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"
@@ -38643,7 +38643,7 @@ msgstr ""
 msgid "Toolbox"
 msgstr "Eszközkészlet"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:142
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38652,28 +38652,28 @@ msgstr "Eszközkészlet"
 msgid "Icon Size"
 msgstr "Ikonméret"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:145
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Oldalelrendezés"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
 #, fuzzy, kde-format
 #| msgid "Automatic"
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "Automatikus"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:155
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
 #, fuzzy, kde-format
 #| msgid "Left to right"
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "Balról jobbra"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:162
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
 #, fuzzy, kde-format
 #| msgid "Right to left"
 msgctxt "@item:inmenu Toolbox layout direction"
@@ -39872,7 +39872,7 @@ msgstr "Szintek megjelenítése:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:182
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, fuzzy, kde-format
 #| msgid "Display"
@@ -39882,7 +39882,7 @@ msgstr "Megjelenítés"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:185
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:190
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
 msgid "Thumbnails"
@@ -39891,7 +39891,7 @@ msgstr "Bélyegképek"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:191
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
 #, kde-format

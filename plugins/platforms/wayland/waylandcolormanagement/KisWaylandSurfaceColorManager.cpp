@@ -40,7 +40,13 @@ std::shared_ptr<KisWaylandAPIColorManager> KisWaylandSurfaceColorManager::getOrC
 
     if (s_waylandManager.exists()) {
         result = s_waylandManager->lock();
-    } else {
+    }
+
+    /**
+     * A weak pointer in `s_waylandManager` may have become released,
+     * so it may be null, even though the static itself is non-null.
+     */
+    if (!result) {
         result.reset(new KisWaylandAPIColorManager());
         *s_waylandManager = result;
     }

@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-12 02:39+0000\n"
+"POT-Creation-Date: 2026-02-13 02:40+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -21703,8 +21703,8 @@ msgid "Processing"
 msgstr "&படத்துணுக்கு அளவுகள்"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1413
-#: libs/ui/KisMainWindow.cpp:1786 libs/ui/KisMainWindow.cpp:1799
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1416
+#: libs/ui/KisMainWindow.cpp:1789 libs/ui/KisMainWindow.cpp:1802
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -22466,8 +22466,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "உருவத்திற்கு மறுபெயரிடு"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2157
-#: libs/ui/KisMainWindow.cpp:2236
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2160
+#: libs/ui/KisMainWindow.cpp:2239
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "உருவத்தை இறக்குமதிசெய்"
@@ -23836,11 +23836,11 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/KisApplication.cpp:1316 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
-#: libs/ui/KisMainWindow.cpp:981 libs/ui/KisMainWindow.cpp:1051
-#: libs/ui/KisMainWindow.cpp:1194 libs/ui/KisMainWindow.cpp:1291
-#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2026
-#: libs/ui/KisMainWindow.cpp:2165 libs/ui/KisMainWindow.cpp:2224
-#: libs/ui/KisMainWindow.cpp:2243 libs/ui/KisMainWindow.cpp:2875
+#: libs/ui/KisMainWindow.cpp:984 libs/ui/KisMainWindow.cpp:1054
+#: libs/ui/KisMainWindow.cpp:1197 libs/ui/KisMainWindow.cpp:1294
+#: libs/ui/KisMainWindow.cpp:2020 libs/ui/KisMainWindow.cpp:2029
+#: libs/ui/KisMainWindow.cpp:2168 libs/ui/KisMainWindow.cpp:2227
+#: libs/ui/KisMainWindow.cpp:2246 libs/ui/KisMainWindow.cpp:2878
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24394,7 +24394,7 @@ msgid "Delete resource"
 msgstr "உரையை அழி"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2672
+#: libs/ui/KisMainWindow.cpp:2675
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -24869,7 +24869,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "%1 புதிதாக உருவாக்கு"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2265
+#: libs/ui/KisMainWindow.cpp:2268
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "நிறமாற்றம்:"
@@ -26786,7 +26786,7 @@ msgid "Numerical"
 msgstr "மேல்கீழ் மங்கல்:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1159
+#: libs/ui/KisMainWindow.cpp:1162
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "உருவத்தை இறக்குமதிசெய்"
@@ -26905,7 +26905,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "குழு பெரை உள்ளிடு:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2686
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31024,7 +31024,7 @@ msgstr "நிகழ்விலுள்ள அடுக்கை மாற்�
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1026
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1029
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -35430,32 +35430,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:595
+#: libs/ui/KisMainWindow.cpp:598
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "&அடுக்கை வெட்டு..."
 
-#: libs/ui/KisMainWindow.cpp:597
+#: libs/ui/KisMainWindow.cpp:600
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "ஒட்டும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:1023
+#: libs/ui/KisMainWindow.cpp:1026
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "கூட்டு"
 
-#: libs/ui/KisMainWindow.cpp:1051
+#: libs/ui/KisMainWindow.cpp:1054
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "கோப்பு %1 இல்லை."
 
-#: libs/ui/KisMainWindow.cpp:1159
+#: libs/ui/KisMainWindow.cpp:1162
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "உருவம்"
 
-#: libs/ui/KisMainWindow.cpp:1292
+#: libs/ui/KisMainWindow.cpp:1295
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35464,44 +35464,44 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1348
+#: libs/ui/KisMainWindow.cpp:1351
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "அடுக்கை ஏற்றுமதிசெய்"
 
-#: libs/ui/KisMainWindow.cpp:1348
+#: libs/ui/KisMainWindow.cpp:1351
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "நேர வடிவம்"
 
-#: libs/ui/KisMainWindow.cpp:1765
+#: libs/ui/KisMainWindow.cpp:1768
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "காலியான ஆவணத்தை உருவாக்கு"
 
-#: libs/ui/KisMainWindow.cpp:1789
+#: libs/ui/KisMainWindow.cpp:1792
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "தானியங்கிநிறமாற்றம்"
 
-#: libs/ui/KisMainWindow.cpp:1801
+#: libs/ui/KisMainWindow.cpp:1804
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "உருவகைகள்"
 
-#: libs/ui/KisMainWindow.cpp:1986
+#: libs/ui/KisMainWindow.cpp:1989
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "அடுக்கை உருவமாக சேமி..."
 
-#: libs/ui/KisMainWindow.cpp:2012
+#: libs/ui/KisMainWindow.cpp:2015
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: libs/ui/KisMainWindow.cpp:2016
+#: libs/ui/KisMainWindow.cpp:2019
 #, kde-format
 msgid ""
 "\n"
@@ -35509,7 +35509,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2026
+#: libs/ui/KisMainWindow.cpp:2029
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35518,7 +35518,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2165 libs/ui/KisMainWindow.cpp:2243
+#: libs/ui/KisMainWindow.cpp:2168 libs/ui/KisMainWindow.cpp:2246
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35527,59 +35527,59 @@ msgstr ""
 "திறக்க முடியவில்லை\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2227
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "%1 புதிதாக உருவாக்கு"
 
-#: libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/KisMainWindow.cpp:2666
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:2678
+#: libs/ui/KisMainWindow.cpp:2681
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:2682
+#: libs/ui/KisMainWindow.cpp:2685
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:2726
+#: libs/ui/KisMainWindow.cpp:2729
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2729
+#: libs/ui/KisMainWindow.cpp:2732
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2898
+#: libs/ui/KisMainWindow.cpp:2901
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2914
+#: libs/ui/KisMainWindow.cpp:2917
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "அடுக்கு பிழை"
 
-#: libs/ui/KisMainWindow.cpp:3024
+#: libs/ui/KisMainWindow.cpp:3027
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3083
+#: libs/ui/KisMainWindow.cpp:3086
 #, fuzzy, kde-format
 msgid "Expanding Spacer"
 msgstr "உருவகைகள்"

@@ -123,9 +123,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
 
     setAcceptDrops(true);
     //setStandardToolBarMenuEnabled(true);
-#ifdef Q_OS_MACOS
-    setUnifiedTitleAndToolBarOnMac(true);
-#endif
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     m_syntaxHighlighter = new BasicXMLSyntaxHighlighter(m_textEditorWidget.svgTextEdit);

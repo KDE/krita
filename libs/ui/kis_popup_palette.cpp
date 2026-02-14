@@ -1083,7 +1083,7 @@ void KisPopupPalette::popup(const QPoint &position) {
     KIS_SAFE_ASSERT_RECOVER_RETURN(parentWidget());
     const QPoint globalPos = parentWidget()->mapToGlobal(position);
     ensureWithinParent(globalPos, false);
-    m_mirrorPos = QCursor::pos();
+    m_mirrorPos = globalPos;
 }
 
 void KisPopupPalette::dismiss()

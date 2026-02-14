@@ -421,8 +421,10 @@ bool KoDualColorButton::event(QEvent *event)
         QRect backgroundRect;
         metrics( foregroundRect, backgroundRect );
 
-        if (this->mapFromGlobal(QCursor::pos()).x() < backgroundRect.x() ) {
-            if (this->mapFromGlobal(QCursor::pos()).y() < backgroundRect.y()){
+        const QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
+
+        if (this->mapFromGlobal(helpEvent->globalPos()).x() < backgroundRect.x() ) {
+            if (this->mapFromGlobal(helpEvent->globalPos()).y() < backgroundRect.y()){
                 this->setToolTip(i18n("Foreground color selector"));
             }
             else{
@@ -430,7 +432,7 @@ bool KoDualColorButton::event(QEvent *event)
             }
         }
         else {
-            if (this->mapFromGlobal(QCursor::pos()).y() < backgroundRect.y() ) {
+            if (this->mapFromGlobal(helpEvent->globalPos()).y() < backgroundRect.y() ) {
                 this->setToolTip(i18n("Swap foreground and background colors"));
             }
             else{

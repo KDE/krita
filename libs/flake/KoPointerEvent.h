@@ -13,6 +13,7 @@
 
 #include <QSharedPointer>
 #include <QPointF>
+#include <optional>
 
 class QEvent;
 class QTabletEvent;
@@ -205,6 +206,8 @@ public:
     static void copyQtPointerEvent(const QTabletEvent *event, QScopedPointer<QEvent> &dst);
     static void copyQtPointerEvent(const QTouchEvent *event, QScopedPointer<QEvent> &dst);
 #endif
+
+    static std::optional<QPointF> fetchGlobalPositionFromPointerEvent(QEvent *event);
 
 protected:
     friend class KoToolProxy;

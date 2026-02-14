@@ -53,45 +53,23 @@ void KisPopupWidgetAction::end(QEvent *event)
 {
     if (QMenu *popupMenu = inputManager()->toolProxy()->popupActionsMenu()) { // Handle popup menus...
         QEvent::Type requestingEventType = event ? event->type() : QEvent::None;
-
-        // Touch events don't update the cursor position.
-        QPointF touchPos;
-        if (requestingEventType == QEvent::TouchBegin) {
-            const QTouchEvent *touchEvent = static_cast<const QTouchEvent *>(event);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            const QList<QEventPoint> &touchPoints = touchEvent->points();
-#else
-            const QList<QTouchEvent::TouchPoint> &touchPoints = touchEvent->touchPoints();
-#endif
-            if (touchPoints.isEmpty()) {
-                // Getting zero touch points can happen on Android when pressing
-                // on the screen with an entire palm. Punt to using the cursor
-                // position after all.
-                requestingEventType = QEvent::None;
-            } else {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-                touchPos = touchPoints.constFirst().globalPosition();
-#else
-                touchPos = touchPoints.constFirst().screenPos();
-#endif
-            }
-        }
+        std::optional<QPointF> basePopupPos = KoPointerEvent::fetchGlobalPositionFromPointerEvent(event);
 
         /**
          * Opening a menu changes the focus of the windows, so we should not open it
          * inside the filtering loop. Just raise it using the timer.
          */
-        QTimer::singleShot(0, this, [popupMenu, requestingEventType, touchPos](){
+        QTimer::singleShot(0, this, [popupMenu, requestingEventType, basePopupPos](){
             if (popupMenu) {
                 QPoint popupPos;
                 QScopedPointer<SinglePressEventEater> eventEater;
 
-                if (requestingEventType == QEvent::TabletPress) {
+                if (basePopupPos && requestingEventType == QEvent::TabletPress) {
                     eventEater.reset(new SinglePressEventEater());
                     popupMenu->installEventFilter(eventEater.data());
-                    popupPos = QCursor::pos() + QPoint(10,10);
-                } else if (requestingEventType == QEvent::TouchBegin) {
-                    popupPos = touchPos.toPoint();
+                    popupPos = basePopupPos->toPoint() + QPoint(10,10);
+                } else if (basePopupPos) {
+                    popupPos = basePopupPos->toPoint();
                 } else {
                     popupPos = QCursor::pos();
                 }
@@ -107,6 +85,9 @@ void KisPopupWidgetAction::end(QEvent *event)
                 pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
             }
             inputManager()->registerPopupWidget(popupWidget);
+
+            /// the popup widget in not modal, so we shouldn't
+            /// wrap it into a QTimer
             popupWidget->popup(pos);
         } else {
             popupWidget->dismiss();

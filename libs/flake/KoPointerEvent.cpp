@@ -18,6 +18,7 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kis_config_notifier.h>
+#include <kis_assert.h>
 
 class KisTouchPressureSensitivityOptionContainer : public QObject
 {
@@ -242,8 +243,8 @@ QPoint KoPointerEvent::globalPos() const
         QPoint operator() (const QTabletEvent *event) {
             return event->globalPos();
         }
-        QPoint operator() (const QTouchEvent *) {
-            return QPoint();
+        QPoint operator() (const QTouchEvent *event) {
+            return event->touchPoints().constFirst().screenPos().toPoint();
         }
 #else
     struct Visitor {
@@ -253,8 +254,8 @@ QPoint KoPointerEvent::globalPos() const
         QPoint operator() (const QTabletEvent *event) {
             return event->globalPosition().toPoint();
         }
-        QPoint operator() (const QTouchEvent *) {
-            return QPoint();
+        QPoint operator() (const QTouchEvent *event) {
+            return event->points().constFirst().globalPosition().toPoint();
         }
 #endif
 
@@ -499,5 +500,49 @@ void KoPointerEvent::copyQtPointerEvent(const QTouchEvent *event, QScopedPointer
     detail::copyEventHack(event, dst);
 }
 #endif
+
+std::optional<QPointF> KoPointerEvent::fetchGlobalPositionFromPointerEvent(QEvent *event)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(event, std::nullopt);
+
+    if (event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchEnd) {
+        const QTouchEvent *touchEvent = static_cast<const QTouchEvent *>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        const QList<QEventPoint> &touchPoints = touchEvent->points();
+#else
+        const QList<QTouchEvent::TouchPoint> &touchPoints = touchEvent->touchPoints();
+#endif
+        if (touchPoints.isEmpty()) {
+            // Getting zero touch points can happen on Android when pressing
+            // on the screen with an entire palm. Punt to using the cursor
+            // position after all.
+            return std::nullopt;
+        } else {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+            return touchPoints.constFirst().globalPosition();
+#else
+            return touchPoints.constFirst().screenPos();
+#endif
+        }
+    } else if (event->type() == QEvent::TabletPress || event->type() == QEvent::TabletRelease) {
+        const QTabletEvent *tabletEvent = static_cast<const QTabletEvent *>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return tabletEvent->globalPosition();
+#else
+        return tabletEvent->globalPos();
+#endif
+    } else if (event->type() == QEvent::MouseButtonPress ||
+               event->type() == QEvent::MouseButtonRelease ||
+               event->type() == QEvent::MouseMove) {
+        const QMouseEvent *mouseEvent = static_cast<const QMouseEvent *>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return mouseEvent->globalPosition();
+#else
+        return mouseEvent->globalPos();
+#endif
+    }
+
+    return std::nullopt;
+}
 
 #include <KoPointerEvent.moc>

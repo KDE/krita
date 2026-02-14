@@ -200,7 +200,7 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
         m_d->lastMouseWidgetPos = widgetPoint;
         m_d->startResizeImagePos = m_d->converter->documentToImage(event->point);
-        m_d->startResizeGlobalCursorPos = QCursor::pos();
+        m_d->startResizeGlobalCursorPos = event->globalPos();
         return true;
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
                action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {

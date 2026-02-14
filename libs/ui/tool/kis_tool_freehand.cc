@@ -334,7 +334,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
 
     setMode(GESTURE_MODE);
     m_initialGestureDocPoint = event->point;
-    m_initialGestureGlobalPoint = QCursor::pos();
+    m_initialGestureGlobalPoint = event->globalPos();
 
     m_lastDocumentPoint = event->point;
     m_lastPaintOpSize = currentPaintOpPreset()->settings()->paintOpSize();

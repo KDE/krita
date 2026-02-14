@@ -12,16 +12,35 @@ bool KisPaintingModeOptionData::read(const KisPropertiesConfiguration *setting)
 {
     hasPaintingModeProperty = setting->hasProperty("PaintOpAction");
 
-    const int value = setting->getInt("PaintOpAction", 2);
-    paintingMode = value == 1 ? enumPaintingMode::BUILDUP : enumPaintingMode::WASH;
+    switch (setting->getInt("PaintOpAction", 2)) {
+    case 1:
+        paintingMode = enumPaintingMode::BUILDUP;
+        break;
+    case 3:
+        paintingMode = enumPaintingMode::SOFT;
+        break;
+    default:
+        paintingMode = enumPaintingMode::WASH;
+        break;
+    }
 
     return true;
 }
 
 void KisPaintingModeOptionData::write(KisPropertiesConfiguration *setting) const
 {
-    const int value =
-        paintingMode == enumPaintingMode::WASH ? 2 : 1;
+    int value;
+    switch (paintingMode) {
+    case enumPaintingMode::BUILDUP:
+        value = 1;
+        break;
+    case enumPaintingMode::SOFT:
+        value = 3;
+        break;
+    default:
+        value = 2;
+        break;
+    }
 
     setting->setProperty("PaintOpAction", value);
 }

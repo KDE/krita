@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2026 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -15,7 +16,7 @@
 /**
  * A template version of the alphadarken composite operation to use in colorspaces
  */
-template<class Traits, class ParamsWrapper>
+template<class Traits, class ParamsWrapper, bool wash = true>
 class KoCompositeOpAlphaDarken: public KoCompositeOp
 {
     typedef typename Traits::channels_type channels_type;
@@ -25,7 +26,7 @@ class KoCompositeOpAlphaDarken: public KoCompositeOp
 
 public:
     KoCompositeOpAlphaDarken(const KoColorSpace* cs):
-        KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, KoCompositeOp::categoryMix()) { }
+        KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_SOFT, KoCompositeOp::categoryMix()) { }
 
     using KoCompositeOp::composite;
 
@@ -77,7 +78,11 @@ public:
                 }
 
                 if(alpha_pos != -1) {
-                    dst[alpha_pos] = calculateAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
+                    if constexpr (wash) {
+                        dst[alpha_pos] = calculateAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
+                    } else {
+                        dst[alpha_pos] = calculateSoftAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
+                    }
                 }
 
                 src += srcInc;
@@ -135,6 +140,40 @@ public:
         } else {
             channels_type zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlphaLegacy(srcAlpha, dstAlpha);
             return lerp(zeroFlowAlpha, fullFlowAlpha, flow);
+        }
+    }
+
+    static channels_type calculateSoftAlpha(const KoCompositeOp::ParameterInfo &params,
+                                            const ParamsWrapper &paramsWrapper,
+                                            channels_type flow,
+                                            channels_type opacity,
+                                            channels_type srcAlpha,
+                                            channels_type dstAlpha,
+                                            channels_type mskAlpha)
+    {
+        using namespace Arithmetic;
+
+        /**
+         * Soft paint mode is per-pixel instead of per-stroke. Since it has no
+         * legacy brushes like wash, it effectively always uses "creamy" flow.
+         */
+        channels_type averageOpacity = scale<channels_type>(paramsWrapper.averageOpacity);
+        channels_type fullFlowAlpha = srcAlpha;
+
+        if (averageOpacity > opacity) {
+            channels_type ceilingAlpha = mul(mskAlpha, averageOpacity);
+            if (ceilingAlpha > dstAlpha && ceilingAlpha != zeroValue<channels_type>()) {
+                channels_type reverseBlend = KoColorSpaceMaths<channels_type>::divide(dstAlpha, ceilingAlpha);
+                fullFlowAlpha = lerp(srcAlpha, ceilingAlpha, reverseBlend);
+            }
+        }
+
+        if (fullFlowAlpha <= dstAlpha) {
+            return dstAlpha;
+        } else if (params.flow == 1.0f) {
+            return fullFlowAlpha;
+        } else {
+            return lerp(dstAlpha, fullFlowAlpha, flow);
         }
     }
 };

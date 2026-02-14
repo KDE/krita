@@ -423,7 +423,7 @@ namespace KisToolUtils {
             } else if(!node->visible()) {
                 message = i18n("Layer is invisible.");
             } else if (blockedNoIndirectPainting) {
-                message = i18n("Layer can be painted in Wash Mode only.");
+                message = i18n("Layer can't be painted in Build Up mode.");
             } else {
                 message = i18n("Group not editable.");
             }

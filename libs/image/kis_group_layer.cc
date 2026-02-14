@@ -239,6 +239,7 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
                 child->visible() &&
                 (child->compositeOpId() == COMPOSITE_OVER ||
                  child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+                 child->compositeOpId() == COMPOSITE_ALPHA_DARKEN_SOFT ||
                  child->compositeOpId() == COMPOSITE_COPY) &&
                 child->opacity() == OPACITY_OPAQUE_U8 &&
                 *projection->colorSpace() == *colorSpace() &&

@@ -6,12 +6,17 @@
 #include "KisPaintingModeOptionModel.h"
 
 #include <KisLager.h>
+#include <lager/constant.hpp>
 
 using ToControlState = KisWidgetConnectionUtils::ToControlState;
 
 namespace {
 int calcEffectivePaintingMode(enumPaintingMode mode, bool maskingBrushEnabled) {
-    return static_cast<int>(maskingBrushEnabled ? enumPaintingMode::WASH : mode);
+    if (maskingBrushEnabled && mode == enumPaintingMode::BUILDUP) {
+        return int(enumPaintingMode::WASH);
+    } else {
+        return int(mode);
+    }
 }
 }
 
@@ -25,7 +30,7 @@ KisPaintingModeOptionModel::KisPaintingModeOptionModel(lager::cursor<KisPainting
             .map(&calcEffectivePaintingMode)}
     , LAGER_QT(paintingModeState) {
         lager::with(LAGER_QT(effectivePaintingMode),
-                    maskingBrushEnabled.map(std::logical_not{}))
+                    lager::make_constant(true))
             .map(ToControlState{})}
 {
 }

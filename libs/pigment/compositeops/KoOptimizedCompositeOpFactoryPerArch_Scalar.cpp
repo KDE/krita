@@ -33,6 +33,15 @@ KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
 
 template<>
 template<>
+KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
+    KoOptimizedCompositeOpAlphaDarkenSoft32>::
+    create<xsimd::generic>(const KoColorSpace *param)
+{
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy, false>(param);
+}
+
+template<>
+template<>
 KoCompositeOp *
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<
     xsimd::generic>(const KoColorSpace *param)
@@ -56,6 +65,15 @@ KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
     create<xsimd::generic>(const KoColorSpace *param)
 {
     return new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy>(param);
+}
+
+template<>
+template<>
+KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
+    KoOptimizedCompositeOpAlphaDarkenSoft128>::
+    create<xsimd::generic>(const KoColorSpace *param)
+{
+    return new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy, false>(param);
 }
 
 template<>
@@ -119,5 +137,14 @@ KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
     create<xsimd::generic>(const KoColorSpace *param)
 {
     return new KoCompositeOpAlphaDarken<KoBgrU16Traits, KoAlphaDarkenParamsWrapperCreamy>(param);
+}
+
+template<>
+template<>
+KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
+    KoOptimizedCompositeOpAlphaDarkenSoftU64>::
+    create<xsimd::generic>(const KoColorSpace *param)
+{
+    return new KoCompositeOpAlphaDarken<KoBgrU16Traits, KoAlphaDarkenParamsWrapperCreamy, false>(param);
 }
 

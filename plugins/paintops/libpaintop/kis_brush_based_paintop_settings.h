@@ -23,6 +23,7 @@ public:
 
     ///Reimplemented
     bool paintIncremental() override;
+    QString indirectPaintingCompositeOp() const override;
 
     using KisPaintOpSettings::brushOutline;
     KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;

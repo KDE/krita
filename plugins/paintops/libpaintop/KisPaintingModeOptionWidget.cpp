@@ -26,7 +26,7 @@ public:
 QString calcButtonGroupToolTip(bool maskingBrushEnabled) {
     return maskingBrushEnabled ?
         i18nc("@info:tooltip",
-              "Only wash mode is possible when using a masked brush.") :
+              "Build up mode is not available when using a masked brush.") :
         "";
 }
 
@@ -65,14 +65,22 @@ KisPaintingModeOptionWidget::KisPaintingModeOptionWidget(lager::cursor<KisPainti
     QButtonGroup *group = new QButtonGroup(widget);
     group->addButton(widget->radioBuildup, static_cast<int>(enumPaintingMode::BUILDUP));
     group->addButton(widget->radioWash, static_cast<int>(enumPaintingMode::WASH));
+    group->addButton(widget->radioSoft, static_cast<int>(enumPaintingMode::SOFT));
     group->setExclusive(true);
 
     setConfigurationPage(widget);
 
     connectControlState(group, &m_d->model, "paintingModeState", "paintingMode");
-    m_d->buttonGroupToolTip.bind(std::bind(&QWidget::setToolTip, widget->radioBuildup, std::placeholders::_1));
-    m_d->buttonGroupToolTip.bind(std::bind(&QWidget::setToolTip, widget->radioWash, std::placeholders::_1));
-    m_d->buttonGroupToolTip.bind(std::bind(&QWidget::setToolTip, widget->label, std::placeholders::_1));
+    m_d->model.maskingBrushEnabled.bind([radioBuildup = widget->radioBuildup](bool enabled) {
+        QFont font = radioBuildup->font();
+        font.setStrikeOut(enabled);
+        radioBuildup->setFont(font);
+    });
+
+    QWidget *toolTipWidgets[] = {widget->radioBuildup, widget->lblBuildup};
+    for (QWidget *w : toolTipWidgets) {
+        m_d->buttonGroupToolTip.bind(std::bind(&QWidget::setToolTip, w, std::placeholders::_1));
+    }
 
     m_d->model.optionData.bind(std::bind(&KisPaintingModeOptionWidget::emitSettingChanged, this));
 }

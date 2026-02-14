@@ -21,6 +21,7 @@ private Q_SLOTS:
     void benchmarkCompositeOver();
     void benchmarkCompositeAlphaDarkenHard();
     void benchmarkCompositeAlphaDarkenCreamy();
+    void benchmarkCompositeAlphaDarkenSoft();
 
 private:
     quint8 * m_dstBuffer;

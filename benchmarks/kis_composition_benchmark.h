@@ -38,6 +38,11 @@ private Q_SLOTS:
     void compareRgbU16AlphaDarkenOps();
     void compareRgbF32AlphaDarkenOps();
 
+    void compareAlphaDarkenSoftOps();
+    void compareAlphaDarkenSoftOpsNoMask();
+    void compareRgbU16AlphaDarkenSoftOps();
+    void compareRgbF32AlphaDarkenSoftOps();
+
     void compareOverOps();
     void compareOverOpsNoMask();
     void compareRgbU16OverOps();
@@ -49,6 +54,9 @@ private Q_SLOTS:
 
     void testRgb8CompositeAlphaDarkenLegacy();
     void testRgb8CompositeAlphaDarkenOptimized();
+
+    void testRgb8CompositeAlphaDarkenSoftLegacy();
+    void testRgb8CompositeAlphaDarkenSoftOptimized();
 
     void testRgb8CompositeOverLegacy();
     void testRgb8CompositeOverOptimized();

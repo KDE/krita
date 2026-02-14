@@ -99,4 +99,13 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenCreamy()
 }
 
 
+void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenSoft()
+{
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(KoColorSpaceRegistry::instance()->rgb8());
+    QBENCHMARK{
+        COMPOSITE_BENCHMARK
+    }
+}
+
+
 QTEST_GUILESS_MAIN(KoCompositeOpsBenchmark)

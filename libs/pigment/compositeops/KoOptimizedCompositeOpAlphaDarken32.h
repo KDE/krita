@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2026 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -14,7 +15,7 @@
 #include "KoStreamedMath.h"
 #include "KoAlphaDarkenParamsWrapper.h"
 
-template<typename channels_type, typename pixel_type, typename ParamsWrapperT>
+template<typename channels_type, typename pixel_type, typename ParamsWrapperT, bool wash = true>
 struct AlphaDarkenCompositor32 {
     using ParamsWrapper = ParamsWrapperT;
 
@@ -112,37 +113,68 @@ struct AlphaDarkenCompositor32 {
             dst_c3 = xsimd::select(empty_dst_pixels_mask, src_c3, dst_blend * (src_c3 - dst_c3) + dst_c3);
         }
 
-        const float_v fullFlowAlpha = [&]() {
+        if constexpr (wash) {
+            const float_v fullFlowAlpha = [&]() {
+                if (oparams.averageOpacity > opacity) {
+                    const float_m fullFlowAlpha_mask = average_opacity_vec > dst_alpha;
+
+                    if (xsimd::none(fullFlowAlpha_mask)) {
+                        return dst_alpha;
+                    } else {
+                        const float_v reverse_blend = dst_alpha / average_opacity_vec;
+                        const float_v opt1 = (average_opacity_vec - src_alpha) * reverse_blend + src_alpha;
+                        return xsimd::select(fullFlowAlpha_mask, opt1, dst_alpha);
+                    }
+                } else {
+                    const float_m fullFlowAlpha_mask = opacity_vec > dst_alpha;
+
+                    if (xsimd::none(fullFlowAlpha_mask)) {
+                        return dst_alpha;
+                    } else {
+                        const float_v opt1 = (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha;
+                        return xsimd::select(fullFlowAlpha_mask, opt1, dst_alpha);
+                    }
+                }
+            }();
+
+            dst_alpha = [&]() {
+                if (oparams.flow == 1.0) {
+                    return fullFlowAlpha;
+                } else {
+                    const float_v zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(src_alpha, dst_alpha, uint8MaxRec1);
+                    return (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
+                }
+            }();
+        } else {
+            // Soft paint mode. Always uses "creamy" flow.
+            float_v fullFlowAlpha = src_alpha;
+
             if (oparams.averageOpacity > opacity) {
-                const float_m fullFlowAlpha_mask = average_opacity_vec > dst_alpha;
+                float_v ceilingAlpha = msk_norm_alpha * average_opacity_vec;
+                float_m ceilingMask = ceilingAlpha > dst_alpha;
 
-                if (xsimd::none(fullFlowAlpha_mask)) {
-                    return dst_alpha;
-                } else {
-                    const float_v reverse_blend = dst_alpha / average_opacity_vec;
-                    const float_v opt1 = (average_opacity_vec - src_alpha) * reverse_blend + src_alpha;
-                    return xsimd::select(fullFlowAlpha_mask, opt1, dst_alpha);
-                }
-            } else {
-                const float_m fullFlowAlpha_mask = opacity_vec > dst_alpha;
-
-                if (xsimd::none(fullFlowAlpha_mask)) {
-                    return dst_alpha;
-                } else {
-                    const float_v opt1 = (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha;
-                    return xsimd::select(fullFlowAlpha_mask, opt1, dst_alpha);
+                if (!xsimd::none(ceilingMask)) {
+                    // Avoid division by zero.
+                    float_v safeCeiling = xsimd::select(ceilingMask, ceilingAlpha, uint8Max);
+                    float_v reverseBlend = dst_alpha / safeCeiling;
+                    float_v opt1 = (ceilingAlpha - src_alpha) * reverseBlend + src_alpha;
+                    fullFlowAlpha = xsimd::select(ceilingMask, opt1, src_alpha);
                 }
             }
-        }();
 
-        dst_alpha = [&]() {
-            if (oparams.flow == 1.0) {
-                return fullFlowAlpha;
-            } else {
-                const float_v zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(src_alpha, dst_alpha, uint8MaxRec1);
-                return (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
+            float_m updateMask = fullFlowAlpha > dst_alpha;
+            if (!xsimd::none(updateMask)) {
+                dst_alpha = [&]() {
+                    float flow = oparams.flow;
+                    if (flow == 1.0f) {
+                        return xsimd::select(updateMask, fullFlowAlpha, dst_alpha);
+                    } else {
+                        float_v lerped = (fullFlowAlpha - dst_alpha) * flow_norm_vec + dst_alpha;
+                        return xsimd::select(updateMask, lerped, dst_alpha);
+                    }
+                }();
             }
-        }();
+        }
 
         KoStreamedMath<_impl>::write_channels_32(dst, dst_alpha, dst_c1, dst_c2, dst_c3);
     }
@@ -182,33 +214,65 @@ struct AlphaDarkenCompositor32 {
             dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcAlphaNorm);
             dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcAlphaNorm);
         } else {
-            const auto *s = reinterpret_cast<const pixel_type*>(src);
-            auto *d = reinterpret_cast<pixel_type*>(dst);
-            *d = *s;
+            if constexpr (wash) {
+                const auto *s = reinterpret_cast<const pixel_type*>(src);
+                auto *d = reinterpret_cast<pixel_type*>(dst);
+                *d = *s;
+            } else {
+                dst[0] = src[0];
+                dst[1] = src[1];
+                dst[2] = src[2];
+            }
         }
 
+        if constexpr (wash) {
+            const float flow = oparams.flow;
+            const float averageOpacity = oparams.averageOpacity;
 
-        const float flow = oparams.flow;
-        const float averageOpacity = oparams.averageOpacity;
+            const float fullFlowAlpha = [&]() {
+                if (averageOpacity > opacity) {
+                    return averageOpacity > dstAlphaNorm ? lerp(srcAlphaNorm, averageOpacity, dstAlphaNorm / averageOpacity) : dstAlphaNorm;
+                } else {
+                    return opacity > dstAlphaNorm ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm;
+                }
+            }();
 
-        const float fullFlowAlpha = [&]() {
+            const float dstAlpha = [&](){
+                if (flow == 1.0f) {
+                    return fullFlowAlpha * uint8Max;
+                } else {
+                    const float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);
+                    return lerp(zeroFlowAlpha, fullFlowAlpha, flow) * uint8Max;
+                }
+            }();
+
+            dst[alpha_pos] = KoStreamedMath<_impl>::round_float_to_u8(dstAlpha);
+        } else {
+            // Soft paint mode. Always uses "creamy" flow.
+            float averageOpacity = oparams.averageOpacity;
+            float fullFlowAlpha = srcAlphaNorm;
+
             if (averageOpacity > opacity) {
-                return averageOpacity > dstAlphaNorm ? lerp(srcAlphaNorm, averageOpacity, dstAlphaNorm / averageOpacity) : dstAlphaNorm;
-            } else {
-                return opacity > dstAlphaNorm ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm;
+                float ceilingAlpha = mskAlphaNorm * averageOpacity;
+                if (ceilingAlpha > dstAlphaNorm) {
+                    fullFlowAlpha = lerp(srcAlphaNorm, ceilingAlpha, dstAlphaNorm / ceilingAlpha);
+                }
             }
-        }();
 
-        const float dstAlpha = [&](){
-            if (flow == 1.0f) {
-                return fullFlowAlpha * uint8Max;
-            } else {
-                const float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);
-                return lerp(zeroFlowAlpha, fullFlowAlpha, flow) * uint8Max;
+            if (fullFlowAlpha > dstAlphaNorm) {
+                float dstAlpha = [&]() {
+                    float flow = oparams.flow;
+                    if (flow == 1.0f) {
+                        return fullFlowAlpha * uint8Max;
+                    } else {
+                        return lerp(dstAlphaNorm, fullFlowAlpha, flow) * uint8Max;
+                    }
+                }();
+
+                dst[alpha_pos] = KoStreamedMath<_impl>::round_float_to_u8(dstAlpha);
             }
-        }();
+        }
 
-        dst[alpha_pos] = KoStreamedMath<_impl>::round_float_to_u8(dstAlpha);
     }
 };
 
@@ -217,21 +281,21 @@ struct AlphaDarkenCompositor32 {
  * colorspaces with alpha channel placed at the last byte of
  * the pixel: C1_C2_C3_A.
  */
-template<typename _impl, class ParamsWrapper>
+template<typename _impl, class ParamsWrapper, bool wash = true>
 class KoOptimizedCompositeOpAlphaDarken32Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarken32Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_SOFT, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
     void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
-            KoStreamedMath<_impl>::template genericComposite32<true, true, AlphaDarkenCompositor32<quint8, quint32, ParamsWrapper> >(params);
+            KoStreamedMath<_impl>::template genericComposite32<true, true, AlphaDarkenCompositor32<quint8, quint32, ParamsWrapper, wash> >(params);
         } else {
-            KoStreamedMath<_impl>::template genericComposite32<false, true, AlphaDarkenCompositor32<quint8, quint32, ParamsWrapper> >(params);
+            KoStreamedMath<_impl>::template genericComposite32<false, true, AlphaDarkenCompositor32<quint8, quint32, ParamsWrapper, wash> >(params);
         }
     }
 };
@@ -253,6 +317,16 @@ class KoOptimizedCompositeOpAlphaDarkenCreamy32 :
 public:
     KoOptimizedCompositeOpAlphaDarkenCreamy32(const KoColorSpace *cs)
         : KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy>(cs) {
+    }
+};
+
+template<typename _impl = xsimd::current_arch>
+class KoOptimizedCompositeOpAlphaDarkenSoft32 :
+        public KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>
+{
+public:
+    KoOptimizedCompositeOpAlphaDarkenSoft32(const KoColorSpace *cs)
+        : KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>(cs) {
     }
 };
 

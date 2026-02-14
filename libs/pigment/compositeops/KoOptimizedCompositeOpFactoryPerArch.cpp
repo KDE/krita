@@ -36,6 +36,15 @@ KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
 
 template<>
 template<>
+KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
+    KoOptimizedCompositeOpAlphaDarkenSoft32>::
+    create<xsimd::current_arch>(const KoColorSpace *param)
+{
+    return new KoOptimizedCompositeOpAlphaDarkenSoft32<xsimd::current_arch>(param);
+}
+
+template<>
+template<>
 KoCompositeOp *
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<
     xsimd::current_arch>(const KoColorSpace *param)
@@ -59,6 +68,15 @@ KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
     create<xsimd::current_arch>(const KoColorSpace *param)
 {
     return new KoOptimizedCompositeOpAlphaDarkenCreamy128<xsimd::current_arch>(param);
+}
+
+template<>
+template<>
+KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
+    KoOptimizedCompositeOpAlphaDarkenSoft128>::
+    create<xsimd::current_arch>(const KoColorSpace *param)
+{
+    return new KoOptimizedCompositeOpAlphaDarkenSoft128<xsimd::current_arch>(param);
 }
 
 template<>
@@ -122,6 +140,15 @@ KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
     create<xsimd::current_arch>(const KoColorSpace *param)
 {
     return new KoOptimizedCompositeOpAlphaDarkenCreamyU64<xsimd::current_arch>(param);
+}
+
+template<>
+template<>
+KoCompositeOp *KoOptimizedCompositeOpFactoryPerArch<
+    KoOptimizedCompositeOpAlphaDarkenSoftU64>::
+    create<xsimd::current_arch>(const KoColorSpace *param)
+{
+    return new KoOptimizedCompositeOpAlphaDarkenSoftU64<xsimd::current_arch>(param);
 }
 
 #endif // XSIMD_UNIVERSAL_BUILD_PASS

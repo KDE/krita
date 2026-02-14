@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,12 +10,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>311</width>
-    <height>238</height>
+    <width>350</width>
+    <height>280</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -29,15 +38,25 @@
      <property name="checked">
       <bool>false</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item column="0" row="0">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
        <widget class="QRadioButton" name="radioBuildup">
         <property name="text">
          <string>Build up</string>
         </property>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item>
+       <widget class="QLabel" name="lblBuildup">
+        <property name="text">
+         <string>Applies strokes directly, building up opacity on the layer unless you use a blend mode that prevents it, such as Marker or Greater. Not available with masked brushes.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QRadioButton" name="radioWash">
         <property name="text">
          <string>Wash</string>
@@ -47,49 +66,42 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="3">
-       <widget class="QLabel" name="label">
-        <property name="toolTip">
-         <string>&lt;html&gt;
-&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; this is the same thing as the &quot;incremental&quot; option in the Krita 1.6 freehand tool options.&lt;/p&gt;&lt;/html&gt;</string>
-        </property>
+      <item>
+       <widget class="QLabel" name="lblWash">
         <property name="text">
-         <string>&lt;html&gt;
-&lt;p&gt;&lt;b&gt;Painting mode&lt;/b&gt;: Krita offers a choice between two painting modes: &lt;i&gt;buildup&lt;/i&gt; and &lt;i&gt;wash&lt;/i&gt;. The first choice builds up color while painting in one stroke, the second choices gives you an even color in one stroke even if you go over the same place again and again.&lt;/p&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::RichText</enum>
+         <string>Maintains uniform opacity within each stroke, even when it overlaps itself.</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item column="0" row="4">
+      <item>
+       <widget class="QRadioButton" name="radioSoft">
+        <property name="text">
+         <string>Soft</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSoft">
+        <property name="text">
+         <string>Prevents opacity from building up at all during a stroke, keeping edges soft and not compounding textures.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item column="0" row="2">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>10</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
        </spacer>

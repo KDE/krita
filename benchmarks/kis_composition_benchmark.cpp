@@ -797,6 +797,54 @@ void KisCompositionBenchmark::compareRgbU16AlphaDarkenOps()
     delete opAct;
 }
 
+void KisCompositionBenchmark::compareAlphaDarkenSoftOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy, false>(cs);
+
+    QVERIFY(compareTwoOps(true, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareRgbF32AlphaDarkenSoftOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp128(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy, false>(cs);
+
+    QVERIFY(compareTwoOps(true, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareAlphaDarkenSoftOpsNoMask()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy, false>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareRgbU16AlphaDarkenSoftOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOpU64(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbU16Traits, KoAlphaDarkenParamsWrapperCreamy, false>(cs);
+
+    QVERIFY(compareTwoOps(true, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
 void KisCompositionBenchmark::compareOverOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -897,6 +945,22 @@ void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs);
+    benchmarkCompositeOp(op, "Optimized");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenSoftLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy, false>(cs);
+    benchmarkCompositeOp(op, "Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenSoftOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(cs);
     benchmarkCompositeOp(op, "Optimized");
     delete op;
 }

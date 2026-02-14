@@ -19,6 +19,7 @@
 #include "kis_texture_option.h"
 #include <KoResourceCacheInterface.h>
 #include <KisOptimizedBrushOutline.h>
+#include <KoCompositeOpRegistry.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -70,6 +71,17 @@ bool KisBrushBasedPaintOpSettings::paintIncremental()
     KisPaintingModeOptionData data;
     data.read(this);
     return !data.hasPaintingModeProperty || data.paintingMode == enumPaintingMode::BUILDUP;
+}
+
+QString KisBrushBasedPaintOpSettings::indirectPaintingCompositeOp() const
+{
+    KisPaintingModeOptionData data;
+    data.read(this);
+    if (data.hasPaintingModeProperty && data.paintingMode == enumPaintingMode::SOFT) {
+        return COMPOSITE_ALPHA_DARKEN_SOFT;
+    } else {
+        return COMPOSITE_ALPHA_DARKEN;
+    }
 }
 
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const

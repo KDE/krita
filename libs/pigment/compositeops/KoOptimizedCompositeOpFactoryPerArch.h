@@ -20,6 +20,9 @@ template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenHard32;
 
 template<typename _impl>
+class KoOptimizedCompositeOpAlphaDarkenSoft32;
+
+template<typename _impl>
 class KoOptimizedCompositeOpOver32;
 
 template<typename _impl>
@@ -29,10 +32,16 @@ template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenCreamy128;
 
 template<typename _impl>
+class KoOptimizedCompositeOpAlphaDarkenSoft128;
+
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenHardU64;
 
 template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenCreamyU64;
+
+template<typename _impl>
+class KoOptimizedCompositeOpAlphaDarkenSoftU64;
 
 template<typename _impl>
 class KoOptimizedCompositeOpOver128;

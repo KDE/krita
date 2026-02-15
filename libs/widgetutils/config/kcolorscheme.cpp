@@ -572,6 +572,7 @@ QPalette KColorScheme::createApplicationPalette(const KSharedConfigPtr &config)
         palette.setBrush(state, QPalette::HighlightedText, schemeSelection.foreground());
         palette.setBrush(state, QPalette::ToolTipBase, schemeTooltip.background());
         palette.setBrush(state, QPalette::ToolTipText, schemeTooltip.foreground());
+        palette.setBrush(state, QPalette::PlaceholderText, schemeView.foreground(KColorScheme::InactiveText));
 
         palette.setColor(state, QPalette::Light, schemeWindow.shade(KColorScheme::LightShade));
         palette.setColor(state, QPalette::Midlight, schemeWindow.shade(KColorScheme::MidlightShade));

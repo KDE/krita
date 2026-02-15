@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-13 02:40+0000\n"
-"PO-Revision-Date: 2026-02-13 18:35+0200\n"
+"POT-Creation-Date: 2026-02-15 02:57+0000\n"
+"PO-Revision-Date: 2026-02-14 18:12+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -23838,7 +23838,7 @@ msgstr "ה&סר שכבה"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -38976,22 +38976,22 @@ msgid ""
 "information</a></p></body></html>"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:426
+#: libs/ui/widgets/KoDualColorButton.cpp:428
 #, fuzzy, kde-format
 msgid "Foreground color selector"
 msgstr "צבע &טקסט"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:429
+#: libs/ui/widgets/KoDualColorButton.cpp:431
 #, fuzzy, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "צבע &טקסט"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:434
+#: libs/ui/widgets/KoDualColorButton.cpp:436
 #, fuzzy, kde-format
 msgid "Swap foreground and background colors"
 msgstr "צבע &טקסט"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:437
+#: libs/ui/widgets/KoDualColorButton.cpp:439
 #, fuzzy, kde-format
 msgid "Background color selector"
 msgstr "&צבע רקע"
@@ -49503,97 +49503,97 @@ msgid ""
 msgstr ""
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:120
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Resource Importer file dialog title"
 msgid "Import Resources and Resource Libraries"
-msgstr "ייבוא מסמך"
+msgstr "ייבוא משאבים וספריות משאבים"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage Resource Libraries..."
-msgstr "ערוצים"
+msgstr "ניהול ספריות משאבים…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage Resources..."
-msgstr "ערוצים"
+msgstr "ניהול משאבים…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Resources"
-msgstr "ערוצים"
+msgstr "מ&שאבים"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit a resource library"
-msgstr "ייבוא מסמך"
+msgstr "עריכת ספריית משאבים"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create a resource library"
-msgstr "ה&סר שכבה"
+msgstr "יצירת ספריית משאבים"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import a resource library"
-msgstr "ייבוא מסמך"
+msgstr "ייבוא ספריית משאבים"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete a resource library"
-msgstr "מחיקת טקסט"
+msgstr "מחיקת ספריית משאבים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:441
-#, fuzzy, kde-format
+#, kde-format
 msgid "Updated:"
-msgstr "חזרה:"
+msgstr "עודכן:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgCreateBundle)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgEmbedTags)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:30
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Bundle..."
-msgstr "ה&סר שכבה"
+msgstr "מאגד חדש…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:106
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available"
-msgstr "לוחות צבעים"
+msgstr "זמין"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:193
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selected"
-msgstr "בחירה"
+msgstr "נבחר"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Resources"
-msgstr "ייבוא מסמך"
+msgstr "ייבוא משאבים"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open Resource Folder"
-msgstr "ה&סר שכבה"
+msgstr "פתיחת תיקיית משאבים"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create a Bundle"
-msgstr "ה&סר שכבה"
+msgstr "יצירת מאגד"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:116
@@ -49605,9 +49605,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Tags to Folder"
-msgstr "כלי בחירה"
+msgstr "שמירת תגיות לתיקייה"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
@@ -49617,9 +49617,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filename:"
-msgstr "מקושר"
+msgstr "שם הקובץ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:254
@@ -49629,37 +49629,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/wdgresourcepreview.ui:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show deleted resources"
-msgstr "מחיקת טקסט"
+msgstr "הצגת משאבים שנמחקו"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "Choose Save Location"
-msgstr "ניווט"
+msgstr "בחירת מקום שמירה"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer styles"
-msgstr "&תמונה"
+msgstr "סגנונות שכבות"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
-#, fuzzy, kde-format
+#, kde-format
 msgid "SeExpr scripts"
-msgstr "כתב תחתי"
+msgstr "סקריפטים מסוג SeExpr"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr "גל משולש"
+msgstr "היפוך התמונה אנכית"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr "גל משולש"
+msgstr "היפוך התמונה אופקית"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
@@ -49672,76 +49670,75 @@ msgstr[3] ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Orientation"
-msgstr "עירוב:"
+msgstr "כיוון"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCW)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Right"
-msgstr "גובה:"
+msgstr "&ימין"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCCW)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Left"
-msgstr "&צבע"
+msgstr "&שמאל"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radio90)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "90 &degrees"
-msgstr "בחירה"
+msgstr "90 מע&לות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radio180)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "&180 degrees"
-msgstr "בחירה"
+msgstr "&180 מעלות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radio270)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "270 de&grees"
-msgstr "בחירה"
+msgstr "270 מ&עלות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCustom)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Custom:"
-msgstr "מברשות"
+msgstr "ה&תאמה אישית:"
 
 #: plugins/extensions/separate_channels/dlg_separate.cc:27
 #: plugins/extensions/separate_channels/kis_separate_channels_plugin.cc:63
 #: plugins/extensions/separate_channels/kis_separate_channels_plugin.cc:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Separate Image"
-msgstr "תמונה חדשה"
+msgstr "תמונה נפרדת"
 
 #: plugins/extensions/separate_channels/kis_channel_separator.cc:197
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
-msgstr "תמונה חדשה"
+msgstr "תמונה נפרדת"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/separate_channels/wdg_separations.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current color model:"
-msgstr "מצב צבעים"
+msgstr "דגם הצבע הנוכחי:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSource)
 #: plugins/extensions/separate_channels/wdg_separations.ui:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Source"
-msgstr "מאפייני שכבה..."
+msgstr "מקור"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCurrentLayer)
 #: plugins/extensions/separate_channels/wdg_separations.ui:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current layer"
-msgstr "הסר שכבה נוכחית"
+msgstr "השכבה הנוכחית"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAllLayers)
 #: plugins/extensions/separate_channels/wdg_separations.ui:78
@@ -49751,9 +49748,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alpha Options"
-msgstr "אלפא"
+msgstr "אפשרויות שקיפות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCopyAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:96
@@ -65421,33 +65418,33 @@ msgstr "הזחת קו בסיס"
 msgid "Text Tool"
 msgstr "כלי טקסט"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
 msgid "Conversion failed"
 msgstr "ההמרה נכשלה"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:220
 #, kde-format
 msgid "Find Text"
 msgstr "איתור טקסט"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Find:"
 msgstr "איתור:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:262
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:268
 #, kde-format
 msgid "Replace:"
 msgstr "החלפה:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""

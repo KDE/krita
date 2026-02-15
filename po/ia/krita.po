@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-13 00:41+0000\n"
+"POT-Creation-Date: 2026-02-15 00:41+0000\n"
 "PO-Revision-Date: 2026-02-06 17:34+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -24358,7 +24358,7 @@ msgstr "Crea insimul de Ressources"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -39985,23 +39985,23 @@ msgid ""
 "information</a></p></body></html>"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:426
+#: libs/ui/widgets/KoDualColorButton.cpp:428
 #, fuzzy, kde-format
 #| msgid "Foreground color"
 msgid "Foreground color selector"
 msgstr "Color de prime plano"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:429
+#: libs/ui/widgets/KoDualColorButton.cpp:431
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "Fixa Colores de Prime Plano e de fundo a Nigro e Blanco "
 
-#: libs/ui/widgets/KoDualColorButton.cpp:434
+#: libs/ui/widgets/KoDualColorButton.cpp:436
 #, kde-format
 msgid "Swap foreground and background colors"
 msgstr "Excambia Colores de Prime Plano e de Fundo"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:437
+#: libs/ui/widgets/KoDualColorButton.cpp:439
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Background color selector"
@@ -67500,33 +67500,33 @@ msgstr "Linea de base (baseline)"
 msgid "Text Tool"
 msgstr "Instrumento de Texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
 msgid "Conversion failed"
 msgstr "Conversion fallite"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:220
 #, kde-format
 msgid "Find Text"
 msgstr "Trova texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Find:"
 msgstr "Trova:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:262
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:268
 #, kde-format
 msgid "Replace:"
 msgstr "Reimplacia:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""

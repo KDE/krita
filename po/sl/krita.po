@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-13 00:41+0000\n"
+"POT-Creation-Date: 2026-02-15 00:41+0000\n"
 "PO-Revision-Date: 2026-01-30 22:02+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -23865,7 +23865,7 @@ msgstr "Krajevni viri"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -39751,22 +39751,22 @@ msgstr ""
 "general_concepts/colors/color_managed_workflow.html\">Več informacij</a></"
 "p></body></html>"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:426
+#: libs/ui/widgets/KoDualColorButton.cpp:428
 #, kde-format
 msgid "Foreground color selector"
 msgstr "Izbirnik barve ospredja"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:429
+#: libs/ui/widgets/KoDualColorButton.cpp:431
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "Nastavi barvi ospredja in ozadja na črno in belo"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:434
+#: libs/ui/widgets/KoDualColorButton.cpp:436
 #, kde-format
 msgid "Swap foreground and background colors"
 msgstr "Zamenjaj barvi ospredja in ozadja"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:437
+#: libs/ui/widgets/KoDualColorButton.cpp:439
 #, kde-format
 msgid "Background color selector"
 msgstr "Izbirnik barve ozadja"
@@ -66810,33 +66810,33 @@ msgstr "Zamik osnovnice"
 msgid "Text Tool"
 msgstr "Orodje Besedilo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
 msgid "Conversion failed"
 msgstr "Pretvorba ni uspela"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:220
 #, kde-format
 msgid "Find Text"
 msgstr "Najdi besedilo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Find:"
 msgstr "Išči:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:262
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Najdi in zamenjaj vse"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:268
 #, kde-format
 msgid "Replace:"
 msgstr "Zamenjaj:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Besedilo ste spremenili. Ali želite zavreči spremembe?"

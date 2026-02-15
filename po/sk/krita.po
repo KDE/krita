@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-13 00:41+0000\n"
+"POT-Creation-Date: 2026-02-15 00:41+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -24308,7 +24308,7 @@ msgstr "Lokálne zdroje"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -40476,22 +40476,22 @@ msgstr ""
 "docs.krita.org/en/general_concepts/colors/color_managed_workflow.html"
 "\">Ďalšie informácie</a></p></body></html>"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:426
+#: libs/ui/widgets/KoDualColorButton.cpp:428
 #, kde-format
 msgid "Foreground color selector"
 msgstr "Výber farby popredia"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:429
+#: libs/ui/widgets/KoDualColorButton.cpp:431
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "Nastaviť farby popredia a pozadia na čiernu a bielu"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:434
+#: libs/ui/widgets/KoDualColorButton.cpp:436
 #, kde-format
 msgid "Swap foreground and background colors"
 msgstr "Vymeniť farby popredia a pozadia"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:437
+#: libs/ui/widgets/KoDualColorButton.cpp:439
 #, kde-format
 msgid "Background color selector"
 msgstr "Výber farby pozadia"
@@ -68002,34 +68002,34 @@ msgstr "základný"
 msgid "Text Tool"
 msgstr "Textový nástroj"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
 msgid "Conversion failed"
 msgstr "Konverzia zlyhala"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:220
 #, fuzzy, kde-format
 #| msgid "Find &Next"
 msgid "Find Text"
 msgstr "&Nájsť nasledujúce"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Find:"
 msgstr "Nájsť:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:262
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Nájsť a nahradiť všetko"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:268
 #, kde-format
 msgid "Replace:"
 msgstr "Nahradiť:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Zmenili ste text. Zahodiť zmeny?"

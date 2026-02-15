@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-13 00:41+0000\n"
+"POT-Creation-Date: 2026-02-15 00:41+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -24114,7 +24114,7 @@ msgstr "本機資源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -39805,22 +39805,22 @@ msgstr ""
 "\"https://docs.krita.org/en/general_concepts/colors/color_managed_workflow."
 "html\">詳細資料</a></p></body></html>"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:426
+#: libs/ui/widgets/KoDualColorButton.cpp:428
 #, kde-format
 msgid "Foreground color selector"
 msgstr "選取前景色"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:429
+#: libs/ui/widgets/KoDualColorButton.cpp:431
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "將前景色和背景色設定為黑色和白色"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:434
+#: libs/ui/widgets/KoDualColorButton.cpp:436
 #, kde-format
 msgid "Swap foreground and background colors"
 msgstr "交換前景色和背景色"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:437
+#: libs/ui/widgets/KoDualColorButton.cpp:439
 #, kde-format
 msgid "Background color selector"
 msgstr "選取背景色"
@@ -66741,34 +66741,34 @@ msgstr "baseline"
 msgid "Text Tool"
 msgstr "文字工具"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
 msgid "Conversion failed"
 msgstr "轉換失敗"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:220
 #, fuzzy, kde-format
 #| msgid "Find &Next"
 msgid "Find Text"
 msgstr "尋找下一個(&N)"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Find:"
 msgstr "尋找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:262
 #, kde-format
 msgid "Find and Replace all"
 msgstr "尋找並取代全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:268
 #, kde-format
 msgid "Replace:"
 msgstr "取代："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。要放棄變更嗎？"

@@ -24,6 +24,7 @@
 #include <kundo2command.h>
 #include <KoKeepShapesSelectedCommand.h>
 #include <QtMath>
+#include <KoSvgTextShape.h>
 
 
 CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, const QList<KoShape *> &shapes, QPointF startPoint, const GutterWidthsConfig &width)
@@ -183,6 +184,15 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
         KoShape* referenceShape = m_allShapes[i];
         bool wasSelected = m_selectedShapes.contains(referenceShape);
+
+
+        if (dynamic_cast<KoSvgTextShape*>(referenceShape)) {
+            // skip all text
+            if (wasSelected) {
+                newSelectedShapes << referenceShape;
+            }
+            continue;
+        }
 
         if ((srcOutlines[i].boundingRect() & leftOpposite.boundingRect()).isEmpty()
                 || (srcOutlines[i].boundingRect() & rightOpposite.boundingRect()).isEmpty()) {

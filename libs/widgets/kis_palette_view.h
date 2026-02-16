@@ -90,6 +90,8 @@ public:
      */
     bool addGroupWithDialog();
 
+    void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
+
 Q_SIGNALS:
     void sigIndexSelected(const QModelIndex &index);
     void sigColorSelected(const KoColor &);

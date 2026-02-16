@@ -12,6 +12,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QScopedValueRollback>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -37,6 +38,7 @@ int KisPaletteView::MINIMUM_ROW_HEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
+    bool foregroundColorChangeInProgress = false;
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
@@ -155,6 +157,13 @@ bool KisPaletteView::addGroupWithDialog()
     return false;
 }
 
+void KisPaletteView::scrollTo(const QModelIndex &index, ScrollHint hint)
+{
+    if(!d->foregroundColorChangeInProgress) {
+        QTableView::scrollTo(index, hint);
+    }
+}
+
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
     bool keepColors = false;
@@ -202,6 +211,7 @@ const KoColor KisPaletteView::closestColor(const KoColor &color) const
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
+    QScopedValueRollback<bool> rollback(d->foregroundColorChangeInProgress, true);
     selectClosestColor(color);
 }
 

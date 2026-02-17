@@ -99,6 +99,7 @@
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
+#include <KisAndroidUtils.h>
 #endif
 
 #include <KisUsageLogger.h>
@@ -1138,17 +1139,23 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
     Q_EMIT guiLoadingFinished();
 
 #ifdef Q_OS_ANDROID
-    // HACK: When opening documents on some Android devices (Samsung, possibly
-    // others), the main window sometimes fails to update until the application
-    // is shunted to the background and brought back or the menu bar is fiddled
-    // with. This slight resize and back fixes this and has no apparent visual
-    // effect. This seems to be an OpenGL issue, since if we switch the QtQuick
-    // backend to hardware, it also fixes the issue (but introduces a bunch of
-    // brutal stacking order problems instead, so software mode it is.)
-    QSize originalSize = size();
-    resize(originalSize.width() + 1, originalSize.height());
-    QCoreApplication::processEvents();
-    resize(originalSize);
+    // HACK: When opening documents on Android, the main window sometimes fails
+    // to update until the application is shunted to the background and brought
+    // back or the menu bar is fiddled with. Flickering the window fixes this.
+    // Having a docker that uses QML somehow also fixes this, so this hack is
+    // gone again in 5.3 with the introduction of the text properties docker.
+    // UNHACK: But not on Xiaomi devices! There flickering the window makes it
+    // sorta exit fullscreen, adding black bars at the top and bottom. Just
+    // opening a document seems to work fine on these devices though, it delays
+    // for a moment then displays fine, so just skip this there I guess.
+    if (!KisAndroidUtils::looksLikeXiaomiDevice()) {
+        QTimer::singleShot(0, this, [this] {
+            hide();
+            QTimer::singleShot(0, this, [this] {
+                show();
+            });
+        });
+    }
 #endif
 
     return view;

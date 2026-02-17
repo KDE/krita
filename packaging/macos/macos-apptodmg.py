@@ -43,8 +43,8 @@ def main():
     # --- Style options DMG
     if args.buildroot:
         print(f"root {args.buildroot}")
-        if args.source:
-            print("WARNING: --source ignored as --buildroot or env BUILDROOT is present")
+        if args.media_path:
+            print("WARNING: --media-path ignored as --buildroot or env BUILDROOT is present")
         krita_root: pathlib.Path = pathlib.Path(args.buildroot).resolve()
         krita_source_dir = pathlib.Path(os.path.join(krita_root, "krita"))
         krita_media_path = krita_source_dir.joinpath('packaging','macos')

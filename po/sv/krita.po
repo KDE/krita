@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-15 00:41+0000\n"
+"POT-Creation-Date: 2026-02-17 00:41+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -36168,7 +36168,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Tar bort färgrutegrupp"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:166
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
@@ -36181,14 +36181,14 @@ msgid "Color %1"
 msgstr "Färg %1"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:100
+#: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Lägg till en ny färgruta"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:111
+#: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -36199,31 +36199,31 @@ msgstr ""
 "tillgängliga tryckfärgerna. Motsatsen kallas processfärg."
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "Färgruteidentifierare:"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:114
+#: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Färgrutenamn:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Färg:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "Punktfärg:"
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:112
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Färgrutegrupp:"
@@ -40091,37 +40091,37 @@ msgstr "Välj en fil att läsa in..."
 msgid "Select a directory to load..."
 msgstr "Välj en katalog att läsa in..."
 
-#: libs/widgets/kis_palette_view.cpp:104
+#: libs/widgets/kis_palette_view.cpp:106
 #, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Förval"
 
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:120
 #, kde-format
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Färg"
 
-#: libs/widgets/kis_palette_view.cpp:144
+#: libs/widgets/kis_palette_view.cpp:146
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "Lägg till en ny grupp"
 
-#: libs/widgets/kis_palette_view.cpp:147
+#: libs/widgets/kis_palette_view.cpp:149
 #, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "Färggrupp"
 
-#: libs/widgets/kis_palette_view.cpp:148
+#: libs/widgets/kis_palette_view.cpp:150
 #, kde-format
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "Namn"
 
-#: libs/widgets/kis_palette_view.cpp:163
+#: libs/widgets/kis_palette_view.cpp:172
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"

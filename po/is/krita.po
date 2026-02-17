@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-15 00:41+0000\n"
+"POT-Creation-Date: 2026-02-17 00:41+0000\n"
 "PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -36106,7 +36106,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Fjarlægi hóp"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:166
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
 #, fuzzy, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
@@ -36119,14 +36119,14 @@ msgid "Color %1"
 msgstr "Litir"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:100
+#: libs/widgets/kis_palette_view.cpp:102
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Mynstur"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:111
+#: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -36135,7 +36135,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:115
 #, fuzzy, kde-format
 #| msgctxt "./krita/data/palettes/swatch-rgb.gpl"
 #| msgid "Swatch RGB"
@@ -36143,25 +36143,25 @@ msgid "Swatch ID:"
 msgstr "RGB litaprufa"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:114
+#: libs/widgets/kis_palette_view.cpp:116
 #, fuzzy, kde-format
 msgid "Color swatch name:"
 msgstr "Eða heiti:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:117
 #, fuzzy, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Litur:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:118
 #, fuzzy, kde-format
 msgid "Spot color:"
 msgstr "Litur stoppmerkis"
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:112
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch Group:"
@@ -39795,37 +39795,37 @@ msgstr "Select a file to load."
 msgid "Select a directory to load..."
 msgstr "Velja allt"
 
-#: libs/widgets/kis_palette_view.cpp:104
+#: libs/widgets/kis_palette_view.cpp:106
 #, fuzzy, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Sjálfgefið"
 
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:120
 #, fuzzy, kde-format
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Litir"
 
-#: libs/widgets/kis_palette_view.cpp:144
+#: libs/widgets/kis_palette_view.cpp:146
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "Bæta við hópi"
 
-#: libs/widgets/kis_palette_view.cpp:147
+#: libs/widgets/kis_palette_view.cpp:149
 #, fuzzy, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "bakgrunnur"
 
-#: libs/widgets/kis_palette_view.cpp:148
+#: libs/widgets/kis_palette_view.cpp:150
 #, fuzzy, kde-format
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "Nafn"
 
-#: libs/widgets/kis_palette_view.cpp:163
+#: libs/widgets/kis_palette_view.cpp:172
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"

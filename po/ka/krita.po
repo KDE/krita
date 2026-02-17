@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-15 00:41+0000\n"
+"POT-Creation-Date: 2026-02-17 00:41+0000\n"
 "PO-Revision-Date: 2026-02-10 14:18+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -35561,7 +35561,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "ნიმუშების ჯგუფის წაშლა"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:166
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
@@ -35574,14 +35574,14 @@ msgid "Color %1"
 msgstr "ფერი %1"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:100
+#: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "ახალი ფერის ნიმუშის დამატება"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:111
+#: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -35592,31 +35592,31 @@ msgstr ""
 "ხელმისაწვდომი საღებავების შერევის გარეშე. საპირისპიროს პროცესის ფერი ეწოდება."
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "ნიმუშის ID:"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:114
+#: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "ფერის სინჯის სახელი:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "ფერი:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "ადგილის ფერი:"
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:112
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "ნიმუშების ჯგუფი:"
@@ -39250,37 +39250,37 @@ msgstr "აირჩეთ ჩასატვირთი ფაილი..."
 msgid "Select a directory to load..."
 msgstr "აირჩიეთ ჩასატვირთი საქაღალდე..."
 
-#: libs/widgets/kis_palette_view.cpp:104
+#: libs/widgets/kis_palette_view.cpp:106
 #, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "ნაგულისხმევი"
 
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:120
 #, kde-format
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "ფერი"
 
-#: libs/widgets/kis_palette_view.cpp:144
+#: libs/widgets/kis_palette_view.cpp:146
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "ახალი ჯგუფის დამატება"
 
-#: libs/widgets/kis_palette_view.cpp:147
+#: libs/widgets/kis_palette_view.cpp:149
 #, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "ფერების ჯგუფი"
 
-#: libs/widgets/kis_palette_view.cpp:148
+#: libs/widgets/kis_palette_view.cpp:150
 #, kde-format
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "სახელი"
 
-#: libs/widgets/kis_palette_view.cpp:163
+#: libs/widgets/kis_palette_view.cpp:172
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"

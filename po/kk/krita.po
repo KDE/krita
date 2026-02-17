@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-15 02:57+0000\n"
+"POT-Creation-Date: 2026-02-17 02:38+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -37012,7 +37012,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Қабатты алып тастау"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:166
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
 #, fuzzy, kde-format
 #| msgid "Delete color"
 msgctxt "Shows up when deleting a swatch group"
@@ -37027,14 +37027,14 @@ msgid "Color %1"
 msgstr "Түсі"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:100
+#: libs/widgets/kis_palette_view.cpp:102
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Түс профилін ашу"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:111
+#: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -37043,20 +37043,20 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:115
 #, fuzzy, kde-format
 msgid "Swatch ID:"
 msgstr "Sc сызықтар"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:114
+#: libs/widgets/kis_palette_view.cpp:116
 #, fuzzy, kde-format
 #| msgid "Color name:"
 msgid "Color swatch name:"
 msgstr "Түстің аты:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:117
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgctxt "Color as the Color of a Swatch in a Palette"
@@ -37064,13 +37064,13 @@ msgid "Color:"
 msgstr "Түсі:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:118
 #, fuzzy, kde-format
 #| msgid "Stop color."
 msgid "Spot color:"
 msgstr "Шек түсі."
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:112
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch Group:"
@@ -40822,21 +40822,21 @@ msgstr "LUT файлын таңдау"
 msgid "Select a directory to load..."
 msgstr "LUT файлын таңдау"
 
-#: libs/widgets/kis_palette_view.cpp:104
+#: libs/widgets/kis_palette_view.cpp:106
 #, fuzzy, kde-format
 #| msgid "Default"
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Әдетті"
 
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:120
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Түсі"
 
-#: libs/widgets/kis_palette_view.cpp:144
+#: libs/widgets/kis_palette_view.cpp:146
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Add shapes to group"
@@ -40844,20 +40844,20 @@ msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "Қалыпты топқа қосу"
 
-#: libs/widgets/kis_palette_view.cpp:147
+#: libs/widgets/kis_palette_view.cpp:149
 #, fuzzy, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "Түсі:"
 
-#: libs/widgets/kis_palette_view.cpp:148
+#: libs/widgets/kis_palette_view.cpp:150
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "Атауы"
 
-#: libs/widgets/kis_palette_view.cpp:163
+#: libs/widgets/kis_palette_view.cpp:172
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"

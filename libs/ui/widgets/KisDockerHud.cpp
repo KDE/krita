@@ -214,7 +214,7 @@ void KisDockerHud::showDockerConfig()
 
     KisDlgListPicker config = KisDlgListPicker(i18nc("%1 is the name of the widget", "Configure %1 dockers", m_d->borrowerName),
                                                     i18n("Available dockers"), i18n("Current dockers"),
-                                                    dockerNames, dockerIds, currentDockerNames, currentDockerIds, this);
+                                                    dockerNames, dockerIds, currentDockerNames, currentDockerIds, mainWindow);
 
     if (config.exec() == QDialog::Accepted) {
         writeDockerList(config.getChosenData());

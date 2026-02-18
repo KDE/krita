@@ -16,6 +16,11 @@ private Q_SLOTS:
     void testPoints();
     void testPointsQImage();
     void testIdentityTransform();
+
+    void testMaskRendering_data();
+    void testMaskRendering();
+
+
 };
 
 #endif /* __KIS_LIQUIFY_TRANSFORM_WORKER_TEST_H */

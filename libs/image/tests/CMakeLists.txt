@@ -73,7 +73,6 @@ kis_add_tests(
     kis_shared_ptr_test.cpp
     kis_bsplines_test.cpp
     kis_warp_transform_worker_test.cpp
-    kis_liquify_transform_worker_test.cpp
     kis_transparency_mask_test.cpp
     kis_types_test.cpp
     kis_vec_test.cpp
@@ -148,6 +147,13 @@ kis_add_test(
     LINK_LIBRARIES kritaimage kritatestsdk kritaglobal kritatransformmaskstubs
     )
 
+
+include_directories(${QUAZIP_INCLUDE_DIRS})
+
+kis_add_test(
+    kis_liquify_transform_worker_test.cpp
+    LINK_LIBRARIES kritaimage kritatestsdk ${QUAZIP_LIBRARIES}
+    )
 
 krita_add_broken_unit_tests(
     kis_perspective_transform_worker_test.cpp

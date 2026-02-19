@@ -60,6 +60,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     wdgTab->lblAuthors->setText(authors);
 
     // Translators
+    // TODO: move to KisApplication after string freeze is lifted
     KAboutData aboutData(KAboutData::applicationData());
     if (aboutData.translators().isEmpty()) {
         aboutData.setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),

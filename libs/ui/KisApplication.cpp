@@ -44,6 +44,7 @@
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kaboutdata.h>
 
 #include <KoDockRegistry.h>
 #include <KoToolRegistry.h>
@@ -216,7 +217,6 @@ public:
     int m_fileCount;
 };
 
-
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new Private)
@@ -233,14 +233,32 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
-    setApplicationDisplayName("Krita");
-    setApplicationName("krita");
-    // Note: Qt docs suggest we set this, but if we do, we get resource paths of the form of krita/krita, which is weird.
-    //    setOrganizationName("krita");
-    setOrganizationDomain("krita.org");
+    {
+        /// Initialize application info, it will be used by both, Qt and
+        /// DrKonqi of the host system
 
-    QString version = KritaVersionWrapper::versionString(true);
-    setApplicationVersion(version);
+        KAboutData aboutData("krita",
+                             "Krita",
+                             KritaVersionWrapper::versionString(true),
+                             "", // TODO: "short description" needs new string exception
+                             KAboutLicense::GPL,
+                             i18nc("@info:credit", "© 1999–2026 The Krita Developers"));
+        aboutData.setHomepage(QStringLiteral("https://krita.org"));
+        aboutData.setOrganizationDomain("krita.org");
+        // Have to explicitly set the bug address since the kde api now sets it to null by default
+        // https://invent.kde.org/frameworks/kcoreaddons/-/commit/3324b59b
+        aboutData.setBugAddress("submit@bugs.kde.org");
+
+        // this call sets corresponding fields of QApplication as well
+        KAboutData::setApplicationData(aboutData);
+
+        // Note: Qt docs suggest we set organization name, but if we do, we get resource
+        // paths of the form of krita/krita, which is weird.
+        KIS_SAFE_ASSERT_RECOVER(this->organizationName().isEmpty()) {
+            this->setOrganizationName("");
+        }
+    }
+
 #ifndef Q_OS_MACOS
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 #endif

@@ -238,9 +238,9 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
         /// DrKonqi of the host system
 
         KAboutData aboutData("krita",
-                             "Krita",
+                             i18n("Krita"),
                              KritaVersionWrapper::versionString(true),
-                             "", // TODO: "short description" needs new string exception
+                             i18nc("@title", "Krita is the full-featured digital art studio"),
                              KAboutLicense::GPL,
                              i18nc("@info:credit", "© 1999–2026 The Krita Developers"));
         aboutData.setHomepage(QStringLiteral("https://krita.org"));

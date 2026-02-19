@@ -198,7 +198,9 @@ struct PaintDevicePolygonOp
             if (areaToCopy.containsPoint(QPoint(dstIt.x(), dstIt.y()), Qt::OddEvenFill)) {
                 memcpy(dstIt.rawData(), srcIt.oldRawData(), m_dstDev->pixelSize());
 #ifdef DEBUG_PAINTING_POLYGONS
-                m_dstDev->colorSpace()->fromQColor(m_debugColor, dstIt.rawData());
+                QColor color = m_debugColor;
+                color.setHsl(KisAlgebra2D::wrapValue(m_debugColor.hslHue() + 20, 0, 360), m_debugColor.hslSaturation(), m_debugColor.lightness());
+                m_dstDev->colorSpace()->fromQColor(color, dstIt.rawData());
 #endif
             }
         }
@@ -225,6 +227,9 @@ struct PaintDevicePolygonOp
     }
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
+#ifdef DEBUG_PAINTING_POLYGONS
+        //m_rectId++;
+#endif
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
         if (boundRect.isEmpty()) return;
 
@@ -282,7 +287,7 @@ struct PaintDevicePolygonOp
                     srcAcc->sampledOldRawData(rawData);
 #ifdef DEBUG_PAINTING_POLYGONS
                     QColor color = m_debugColor;
-                    color.setHsl(m_debugColor.hslHue(), m_debugColor.hslSaturation(), qMin(m_debugColor.lightness() - 50 - pixelId, 100));
+                    color.setHsl(KisAlgebra2D::wrapValue(m_debugColor.hslHue() + m_rectId, 0, 360), m_debugColor.hslSaturation(), qBound(0, m_debugColor.lightness() - 50 - pixelId, 100));
                     pixelId++;
                     m_dstDev->colorSpace()->fromQColor(color, rawData);
 #endif
@@ -299,7 +304,7 @@ struct PaintDevicePolygonOp
                     srcAcc->sampledOldRawData(dstIt.rawData());
 #ifdef DEBUG_PAINTING_POLYGONS
                     QColor color = m_debugColor;
-                    color.setHsl(m_debugColor.hslHue(), m_debugColor.hslSaturation(), m_debugColor.lightness() + 50);
+                    color.setHsl(KisAlgebra2D::wrapValue(m_debugColor.hslHue() + m_rectId, 0, 360), m_debugColor.hslSaturation(), qBound(0, m_debugColor.lightness() + 50, 100));
                     m_dstDev->colorSpace()->fromQColor(color, dstIt.rawData());
 #endif
                 }
@@ -328,7 +333,8 @@ struct PaintDevicePolygonOp
     const qreal m_epsilon {0.1};
 
 #ifdef DEBUG_PAINTING_POLYGONS
-    QColor m_debugColor;
+    QColor m_debugColor {Qt::red};
+    int m_rectId {0};
     inline void setDebugColor(QColor color) {
         m_debugColor = color;
     }

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-17 00:41+0000\n"
+"POT-Creation-Date: 2026-02-19 00:42+0000\n"
 "PO-Revision-Date: 2026-01-29 17:43+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -21015,7 +21015,7 @@ msgstr "Tamaño"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:494
+#: plugins/tools/basictools/kis_tool_brush.cc:498
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -21765,8 +21765,8 @@ msgid "Processing"
 msgstr "Procesando"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1416
-#: libs/ui/KisMainWindow.cpp:1789 libs/ui/KisMainWindow.cpp:1802
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1423
+#: libs/ui/KisMainWindow.cpp:1796 libs/ui/KisMainWindow.cpp:1809
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22538,8 +22538,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Imagen RGBE Radiance"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2160
-#: libs/ui/KisMainWindow.cpp:2239
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2167
+#: libs/ui/KisMainWindow.cpp:2246
 #, kde-format
 msgid "Import frames"
 msgstr "Importar fotogramas"
@@ -23892,11 +23892,11 @@ msgstr "Recursos locales"
 #: libs/ui/KisApplication.cpp:1316 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
-#: libs/ui/KisMainWindow.cpp:984 libs/ui/KisMainWindow.cpp:1054
-#: libs/ui/KisMainWindow.cpp:1197 libs/ui/KisMainWindow.cpp:1294
-#: libs/ui/KisMainWindow.cpp:2020 libs/ui/KisMainWindow.cpp:2029
-#: libs/ui/KisMainWindow.cpp:2168 libs/ui/KisMainWindow.cpp:2227
-#: libs/ui/KisMainWindow.cpp:2246 libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:985 libs/ui/KisMainWindow.cpp:1055
+#: libs/ui/KisMainWindow.cpp:1204 libs/ui/KisMainWindow.cpp:1301
+#: libs/ui/KisMainWindow.cpp:2027 libs/ui/KisMainWindow.cpp:2036
+#: libs/ui/KisMainWindow.cpp:2175 libs/ui/KisMainWindow.cpp:2234
+#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2885
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24444,7 +24444,7 @@ msgid "Delete resource"
 msgstr "Borrar recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2675
+#: libs/ui/KisMainWindow.cpp:2682
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24922,7 +24922,7 @@ msgstr ""
 "de salida están incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2268
+#: libs/ui/KisMainWindow.cpp:2275
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderizar animación"
@@ -26934,7 +26934,7 @@ msgid "Numerical"
 msgstr "Numérico"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1162
+#: libs/ui/KisMainWindow.cpp:1169
 #, kde-format
 msgid "Import Images"
 msgstr "Importar imágenes"
@@ -27051,7 +27051,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduzca nuevo nombre de estilo"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2693
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31431,7 +31431,7 @@ msgstr "Valor predefinido del pincel actual"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1029
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1030
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -35994,62 +35994,62 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Actualizar miniaturas de la capa"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Estilos"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Paneles"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Ventana"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Nueva &vista"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Espacio de &trabajo"
 
-#: libs/ui/KisMainWindow.cpp:598
+#: libs/ui/KisMainWindow.cpp:599
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostrar barra de herramientas %1"
 
-#: libs/ui/KisMainWindow.cpp:600
+#: libs/ui/KisMainWindow.cpp:601
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Ocultar barra de herramientas %1"
 
-#: libs/ui/KisMainWindow.cpp:1026
+#: libs/ui/KisMainWindow.cpp:1027
 #, kde-format
 msgid "Save as %1"
 msgstr "Guardar como %1"
 
-#: libs/ui/KisMainWindow.cpp:1054
+#: libs/ui/KisMainWindow.cpp:1055
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "El archivo %1 no existe."
 
-#: libs/ui/KisMainWindow.cpp:1162
+#: libs/ui/KisMainWindow.cpp:1169
 #, kde-format
 msgid "Open Images"
 msgstr "Abrir imágenes"
 
-#: libs/ui/KisMainWindow.cpp:1295
+#: libs/ui/KisMainWindow.cpp:1302
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36062,44 +36062,44 @@ msgstr ""
 "\n"
 "Seleccione una ubicación para no sobrescribir el archivo original."
 
-#: libs/ui/KisMainWindow.cpp:1351
+#: libs/ui/KisMainWindow.cpp:1358
 #, kde-format
 msgid "Exporting"
 msgstr "Exportando"
 
-#: libs/ui/KisMainWindow.cpp:1351
+#: libs/ui/KisMainWindow.cpp:1358
 #, kde-format
 msgid "Saving As"
 msgstr "Guardando como"
 
-#: libs/ui/KisMainWindow.cpp:1768
+#: libs/ui/KisMainWindow.cpp:1775
 #, kde-format
 msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
-#: libs/ui/KisMainWindow.cpp:1792
+#: libs/ui/KisMainWindow.cpp:1799
 #, kde-format
 msgid "Custom Document"
 msgstr "Documento personalizado"
 
-#: libs/ui/KisMainWindow.cpp:1804
+#: libs/ui/KisMainWindow.cpp:1811
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Crear desde el portapapeles"
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1996
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Capas/máscaras"
 
-#: libs/ui/KisMainWindow.cpp:2015
+#: libs/ui/KisMainWindow.cpp:2022
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "No tiene activado ningún paquete de recursos."
 
-#: libs/ui/KisMainWindow.cpp:2019
+#: libs/ui/KisMainWindow.cpp:2026
 #, kde-format
 msgid ""
 "\n"
@@ -36110,7 +36110,7 @@ msgstr ""
 "No hay disponibles preajustes de pincel. Active un paquete que contenga "
 "preajustes antes de continuar.\n"
 
-#: libs/ui/KisMainWindow.cpp:2029
+#: libs/ui/KisMainWindow.cpp:2036
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36121,7 +36121,7 @@ msgstr ""
 "\n"
 "Solo están disponibles sus recursos locales."
 
-#: libs/ui/KisMainWindow.cpp:2168 libs/ui/KisMainWindow.cpp:2246
+#: libs/ui/KisMainWindow.cpp:2175 libs/ui/KisMainWindow.cpp:2253
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36130,42 +36130,42 @@ msgstr ""
 "No se ha podido terminar la importación de la animación:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2227
+#: libs/ui/KisMainWindow.cpp:2234
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "No se ha podido crear el nuevo documento. Se ha interrumpido la importación "
 "de la animación."
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2673
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importar espacio de trabajo…"
 
-#: libs/ui/KisMainWindow.cpp:2681
+#: libs/ui/KisMainWindow.cpp:2688
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nuevo espacio de trabajo…"
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2692
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nuevo espacio de trabajo…"
 
-#: libs/ui/KisMainWindow.cpp:2729
+#: libs/ui/KisMainWindow.cpp:2736
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2732
+#: libs/ui/KisMainWindow.cpp:2739
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2901
+#: libs/ui/KisMainWindow.cpp:2908
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36174,19 +36174,19 @@ msgstr ""
 "El complemento de gestión de color LittleCMS de Krita no está instalado. Se "
 "saldrá de Krita ahora."
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2924
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Error de instalación"
 
-#: libs/ui/KisMainWindow.cpp:3027
+#: libs/ui/KisMainWindow.cpp:3034
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temas"
 
-#: libs/ui/KisMainWindow.cpp:3086
+#: libs/ui/KisMainWindow.cpp:3093
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Espaciador expansible"
@@ -64950,42 +64950,42 @@ msgstr "Píxel"
 msgid "Brush Smoothing:"
 msgstr "Suavidad del pincel:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:482
+#: plugins/tools/basictools/kis_tool_brush.cc:486
 #, kde-format
 msgid "Delay:"
 msgstr "Retraso:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:487
+#: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Retrasar el trazo del pincel para hacer la línea más suave"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:491
+#: plugins/tools/basictools/kis_tool_brush.cc:495
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Radio en el que el pincel es bloqueado"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:498
+#: plugins/tools/basictools/kis_tool_brush.cc:502
 #, kde-format
 msgid "Finish line:"
 msgstr "Línea final:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:510
+#: plugins/tools/basictools/kis_tool_brush.cc:514
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Sensores de estabilización:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:518
+#: plugins/tools/basictools/kis_tool_brush.cc:522
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Terminación del trazo:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:524
+#: plugins/tools/basictools/kis_tool_brush.cc:528
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Suavizar presión"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:530
+#: plugins/tools/basictools/kis_tool_brush.cc:534
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -64996,38 +64996,38 @@ msgstr ""
 "distancia sea constante visualmente independientemente del nivel de "
 "ampliación escogido"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:535
+#: plugins/tools/basictools/kis_tool_brush.cc:539
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Distancia escalable"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:550
+#: plugins/tools/basictools/kis_tool_brush.cc:554
 #: plugins/tools/basictools/kis_tool_line.cc:111
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Ajustar a los asistentes"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:552
+#: plugins/tools/basictools/kis_tool_brush.cc:556
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Es necesario añadir asistentes para que esta herramienta funcione."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:557
+#: plugins/tools/basictools/kis_tool_brush.cc:561
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Asistente de magnetismo"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:563
+#: plugins/tools/basictools/kis_tool_brush.cc:567
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetismo:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:566
+#: plugins/tools/basictools/kis_tool_brush.cc:570
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Ajustar a línea individual"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:569
+#: plugins/tools/basictools/kis_tool_brush.cc:573
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65037,13 +65037,13 @@ msgstr ""
 "Hacer que se ajuste a una única línea de asistente, previene desajustes "
 "durante el uso de los asistentes infinitos."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:574
+#: plugins/tools/basictools/kis_tool_brush.cc:578
 #: plugins/tools/basictools/kis_tool_line.cc:114
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Borrador de ajuste"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:577
+#: plugins/tools/basictools/kis_tool_brush.cc:581
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

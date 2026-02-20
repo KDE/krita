@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-19 00:42+0000\n"
-"PO-Revision-Date: 2026-02-10 14:18+0100\n"
+"PO-Revision-Date: 2026-02-19 04:05+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -67157,14 +67157,14 @@ msgstr "გარდაქმნის ხელსაწყო (თავის
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr ""
+msgstr "გარდაქმნის ხელსაწყო (პერსპექტივის გარდაქმნა)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr ""
+msgstr "გარდაქმნის ხელსაწყო (დეფორმაციის გარდაქმნა)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
@@ -67178,14 +67178,14 @@ msgstr "გარდაქმნის ხელსაწყო (ჩარჩო
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr ""
+msgstr "გარდაქმნის ხელსაწყო (გათხევადების გარდაქმნა)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr ""
+msgstr "გარდაქმნის ხელსაწყო (ბადის გარდაქმნა)"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -67261,7 +67261,7 @@ msgstr "&ფილტრი:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:389
 #, kde-format
 msgid "Transform around pivot point (Alt)"
-msgstr ""
+msgstr "გარდაქმნა საყრდენი წერტილის გარშემო (Alt)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:642
@@ -67333,7 +67333,7 @@ msgstr "&z:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:916
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
-msgstr ""
+msgstr "სცენის ზემოდან კამერის პოზიციის Z კოორდინატი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:897
@@ -67638,7 +67638,7 @@ msgstr "ფერების მიქსერი"
 #, kde-format
 msgctxt "action"
 msgid "Sample a color from the image or current layer"
-msgstr ""
+msgstr "ფერის სინჯი გამოსახულებიდან, ან მიმდინარე ფენიდან"
 
 #. i18n: context: text @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)

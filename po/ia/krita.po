@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-19 02:44+0000\n"
-"PO-Revision-Date: 2026-02-18 19:21+0100\n"
+"PO-Revision-Date: 2026-02-19 17:32+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -40213,9 +40213,9 @@ msgid "Miter limit"
 msgstr "Delimitator (Miter limit)"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set line width of actual selection"
-msgstr "Scala selection"
+msgstr "Assigna largessa de linea del selection actual"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
@@ -53588,17 +53588,15 @@ msgstr "Forma de Rectangulo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Radius x:"
+#, kde-format
 msgid "Corner radius x:"
-msgstr "Radius x:"
+msgstr "Radius de angulo x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:52
-#, fuzzy, kde-format
-#| msgid "Radius y:"
+#, kde-format
 msgid "Corner radius y:"
-msgstr "Radius y:"
+msgstr "Radius de angulo y:"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:25
 #, kde-format
@@ -53606,12 +53604,9 @@ msgid "A rectangle"
 msgstr "Un Rectangulo"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
-msgstr "Cambia filtro"
+msgstr "Cambiaspiral"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:23
 #, kde-format
@@ -53619,10 +53614,9 @@ msgid "Clockwise"
 msgstr "In senso horari"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:24
-#, fuzzy, kde-format
-#| msgid "C&lockwise"
+#, kde-format
 msgid "Anticlockwise"
-msgstr "In senso &horari"
+msgstr "Anti Horari"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:18

@@ -9,10 +9,6 @@
 #ifndef __KOSTREAMED_MATH_H
 #define __KOSTREAMED_MATH_H
 
-#if defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
-#error "Trying to use SIMD with an unknown architecture!"
-#endif
-
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -115,6 +111,8 @@ struct OptiRound {
 #endif
     }
 };
+
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 template<typename _impl>
 struct OptiDiv {
@@ -841,6 +839,8 @@ struct PixelWrapper<float, _impl> {
         memcpy(dataDst, dataSrc, float_v::size * sizeof(float) * 4);
     }
 };
+
+#endif /* !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) */
 
 namespace KoStreamedMathFunctions
 {

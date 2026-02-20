@@ -107,7 +107,7 @@ void KisSplashScreen::updateSplashImage()
     const int marginRight = splashHeight * 0.1;
 
     QString splashName = QStringLiteral(":/splash/0.png");
-    QString splashArtist = QStringLiteral("Tyson Tan");
+    QString splashArtist = i18nc("Normal splash artist name", "Tyson Tan");
     // TODO: Re-add the holiday splash...
 #if 0
     QDate currentDate = QDate::currentDate();

@@ -876,6 +876,20 @@ bool isPolygonRect(const Polygon &poly, Difference tolerance) {
         return true;
     }
     return sameHoriz(poly[0], poly[1]) && sameVert(poly[1], poly[2]) && sameHoriz(poly[2], poly[3]) && sameVert(poly[3], poly[0]);
+}
+
+template<class Polygon, typename Difference = decltype(Polygon::first())>
+bool isPolygonPixelAlignedRect(const Polygon &poly, Difference tolerance) {
+    if (!isPolygonRect(poly, tolerance)) {
+        return false;
+    }
+
+    for (int i = 0; i < poly.length(); i++) {
+        if (!fuzzyPointCompare(poly[i], QPointF(poly[i].toPoint()), tolerance)) {
+            return false;
+        }
+    }
+    return true;
 
 }
 

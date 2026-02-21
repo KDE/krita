@@ -58,7 +58,8 @@ QString KisSupportedArchitectures::bestArchName()
     return archDetector->name();
 }
 
-#if (XSIMD_VERSION_MAJOR >= 13 && XSIMD_VERSION_MINOR >=1) \
+#if (XSIMD_VERSION_MAJOR >= 14) \
+    || (XSIMD_VERSION_MAJOR == 13 && XSIMD_VERSION_MINOR >=1) \
     || defined(XSIMD_HAS_ARCH_LIST_FIX_PR1032)
 #define XSIMD_SUPPORTS_NEW_ARCH_DETECTION
 #elif XSIMD_VERSION_MAJOR < 13

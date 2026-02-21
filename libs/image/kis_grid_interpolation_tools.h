@@ -176,7 +176,7 @@ struct PaintDevicePolygonOp
         QRect boundRect = areaToCopy.boundingRect().toAlignedRect();
         if (boundRect.isEmpty()) return;
 
-        bool isItRect = KisAlgebra2D::isPolygonRect(areaToCopy, m_epsilon); // no need for lower tolerance
+        bool isItRect = KisAlgebra2D::isPolygonPixelAlignedRect(areaToCopy, m_epsilon);
 
 #ifdef DEBUG_PAINTING_POLYGONS
         isItRect = false; // force to use the code below, to not have to rewrite it for a workaround for copyAreaOptimized
@@ -233,12 +233,13 @@ struct PaintDevicePolygonOp
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
         if (boundRect.isEmpty()) return;
 
-        bool samePolygon = (m_dstDev->colorSpace() == m_srcDev->colorSpace()) && KisAlgebra2D::fuzzyPointCompare(srcPolygon, dstPolygon, m_epsilon);
+        bool samePolygon = (m_dstDev->colorSpace() == m_srcDev->colorSpace())
+                && KisAlgebra2D::fuzzyPointCompare(srcPolygon, dstPolygon, m_epsilon)
+                && KisAlgebra2D::fuzzyPointCompare(srcPolygon, clipDstPolygon, m_epsilon);
 
-        if (samePolygon) {
-            // we can use clipDstPolygon here, because it will be smaller than dstPolygon and srcPolygon, because of how IncompletePolicy works
-            // we could also calculate intersection here if we're worried whether that fact is always true
-            fastCopyArea(clipDstPolygon);
+        if (samePolygon && KisAlgebra2D::isPolygonPixelAlignedRect(dstPolygon, m_epsilon)) {
+            QRect boundRect = dstPolygon.boundingRect().toAlignedRect();
+            fastCopyArea(boundRect);
             return;
         }
 
@@ -330,7 +331,7 @@ struct PaintDevicePolygonOp
 
     KisPaintDeviceSP m_srcDev;
     KisPaintDeviceSP m_dstDev;
-    const qreal m_epsilon {0.1};
+    const qreal m_epsilon {0.001};
 
 #ifdef DEBUG_PAINTING_POLYGONS
     QColor m_debugColor {Qt::red};
@@ -364,7 +365,7 @@ struct QImagePolygonOp
 
         if (boundRect.isEmpty()) return;
 
-        bool isItRect = KisAlgebra2D::isPolygonRect(areaToCopy, m_epsilon); // no need for lower tolerance
+        bool isItRect = KisAlgebra2D::isPolygonPixelAlignedRect(areaToCopy, m_epsilon);
         if (isItRect) {
             fastCopyArea(boundRect);
             return;
@@ -451,12 +452,13 @@ struct QImagePolygonOp
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
 
-        bool samePolygon = m_dstImage.format() == m_srcImage.format() && KisAlgebra2D::fuzzyPointCompare(srcPolygon, dstPolygon, m_epsilon);
+        bool samePolygon = (m_dstImage.format() == m_srcImage.format())
+                && KisAlgebra2D::fuzzyPointCompare(srcPolygon, dstPolygon, m_epsilon)
+                && KisAlgebra2D::fuzzyPointCompare(srcPolygon, clipDstPolygon, m_epsilon);
 
-        if (samePolygon) {
-            // we can use clipDstPolygon here, because it will be smaller than dstPolygon and srcPolygon, because of how IncompletePolicy works
-            // we could also calculate intersection here if we're worried whether that fact is always true
-            fastCopyArea(clipDstPolygon);
+        if (samePolygon && KisAlgebra2D::isPolygonPixelAlignedRect(dstPolygon, m_epsilon)) {
+            QRect boundRect = dstPolygon.boundingRect().toAlignedRect();
+            fastCopyArea(boundRect);
             return;
         }
 
@@ -529,7 +531,7 @@ struct QImagePolygonOp
     QRect m_srcImageRect;
     QRect m_dstImageRect;
 
-    const qreal m_epsilon {0.1};
+    const qreal m_epsilon {0.001};
 
 private:
     bool m_canMergeRects {true};

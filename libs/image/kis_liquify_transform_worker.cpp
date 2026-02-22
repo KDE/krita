@@ -635,8 +635,10 @@ KisLiquifyTransformWorker* KisLiquifyTransformWorker::fromXML(const QDomElement 
         worker->m_d->transformedPoints[i] = transformedPoints[i];
         if (!KisAlgebra2D::fuzzyPointCompare(transformedPoints[i], originalPoints[i])) {
             KisAlgebra2D::accumulateBounds(transformedPoints[i], &changedRect);
+            KisAlgebra2D::accumulateBounds(originalPoints[i], &changedRect);
         }
     }
+    changedRect = kisGrowRect(changedRect, pixelPrecision);
 
     worker->m_d->transformedPointsContainer.initializeWith(worker->m_d->transformedPoints);
     worker->m_d->originalPointsContainer.initializeWith(worker->m_d->originalPoints);

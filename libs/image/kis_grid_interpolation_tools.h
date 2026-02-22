@@ -596,14 +596,14 @@ inline QRect calculateCorrectSubGrid(QRect originalBoundsForGrid, int pixelPreci
         return QRect();
     }
 
-    QPoint offsetB = originalBoundsForGrid.topLeft();
+    QPointF imaginaryGridStartF = QPoint(originalBoundsForGrid.x()/pixelPrecision, originalBoundsForGrid.y()/pixelPrecision)*pixelPrecision;
 
-    QPointF startPointB = currentBounds.topLeft() - offsetB;
+    QPointF startPointB = currentBounds.topLeft() - imaginaryGridStartF;
     QPoint startPointG = QPoint(startPointB.x()/pixelPrecision, startPointB.y()/pixelPrecision);
     startPointG = QPoint(kisBoundFast(0, startPointG.x(), gridSize.width()), kisBoundFast(0, startPointG.y(), gridSize.height()));
 
-    QPointF endPointB = currentBounds.bottomRight() + QPoint(1, 1) - offsetB; // *true* bottomRight
-    QPoint endPointG = QPoint(std::ceil(endPointB.x()/pixelPrecision), std::ceil(endPointB.y()/pixelPrecision));
+    QPointF endPointB = currentBounds.bottomRight() + QPoint(1, 1) - imaginaryGridStartF;
+    QPoint endPointG = QPoint(std::ceil(endPointB.x()/pixelPrecision), std::ceil(endPointB.y()/pixelPrecision)) + QPoint(1, 1);
     QPoint endPointPotential = endPointG;
 
     QPoint trueEndPoint = QPoint(kisBoundFast(0, endPointPotential.x(), gridSize.width()), kisBoundFast(0, endPointPotential.y(), gridSize.height()));
@@ -645,9 +645,9 @@ inline QList<QRectF> cutOutSubgridFromBounds(QRect subGrid, QRect srcBounds, con
 
 
     QRectF top = QRectF(srcBounds.topLeft(), QPointF(srcBounds.right() + 1, topLeftReal.y()));
-    QRectF bottom = QRectF(QPointF(srcBounds.left(), bottomRightReal.y()), srcBounds.bottomRight() + QPointF(1, 1));
-    QRectF left = QRectF(QPointF(srcBounds.left(), cutOut.top()), QPointF(cutOut.left(), cutOut.bottom()));
-    QRectF right = QRectF(QPointF(cutOut.right(), cutOut.top()), QPointF(srcBounds.right() + 1, cutOut.bottom()));
+    QRectF bottom = QRectF(QPointF(srcBounds.left(), bottomRightReal.y() + 1), srcBounds.bottomRight() + QPointF(1, 1));
+    QRectF left = QRectF(QPointF(srcBounds.left(), cutOut.top()), QPointF(cutOut.left(), cutOut.bottom() + 1));
+    QRectF right = QRectF(QPointF(cutOut.right() + 1, cutOut.top()), QPointF(srcBounds.right() + 1, cutOut.bottom() + 1));
     QList<QRectF> rects = {top, left, right, bottom};
     for (int i = 0; i < rects.length(); i++) {
         if (!rects[i].isEmpty()) {

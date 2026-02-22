@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 00:42+0000\n"
+"POT-Creation-Date: 2026-02-22 00:42+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -34747,6 +34747,13 @@ msgstr "Markera ogenomskinlig (symmetrisk differens)"
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Markera ogenomskinlig"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, fuzzy, kde-format
+#| msgid "Tyson Tan"
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -101619,9 +101626,6 @@ msgstr ""
 
 #~ msgid "Todimus"
 #~ msgstr "Todimus"
-
-#~ msgid "Tyson Tan"
-#~ msgstr "Tyson Tan"
 
 #~ msgid "Usamah Philips"
 #~ msgstr "Usamah Philips"

@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 00:42+0000\n"
+"POT-Creation-Date: 2026-02-22 00:42+0000\n"
 "PO-Revision-Date: 2026-02-08 00:25+0100\n"
 "Last-Translator: Alexander Becker <alex-at-kde-l10n-de@freenet.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -36042,6 +36042,13 @@ msgstr "Deckende Bereiche auswählen (Symmetrische Differenz)"
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Undurchlässigkeit auswählen"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, fuzzy, kde-format
+#| msgid "Tyson Tan"
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -102273,9 +102280,6 @@ msgstr ""
 
 #~ msgid "Todimus"
 #~ msgstr "Todimus"
-
-#~ msgid "Tyson Tan"
-#~ msgstr "Tyson Tan"
 
 #~ msgid "Usamah Philips"
 #~ msgstr "Usamah Philips"

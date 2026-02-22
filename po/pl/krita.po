@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 00:42+0000\n"
+"POT-Creation-Date: 2026-02-22 00:42+0000\n"
 "PO-Revision-Date: 2025-11-14 09:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -35165,6 +35165,13 @@ msgstr "Zaznacz nieprzezroczystość (Różnica symetryczna)"
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Zaznacz nieprzezroczystość"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, fuzzy, kde-format
+#| msgid "Tyson Tan"
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -102784,9 +102791,6 @@ msgstr ""
 
 #~ msgid "Todimus"
 #~ msgstr "Todimus"
-
-#~ msgid "Tyson Tan"
-#~ msgstr "Tyson Tan"
 
 #~ msgid "Usamah Philips"
 #~ msgstr "Usamah Philips"

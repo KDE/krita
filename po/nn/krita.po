@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 00:42+0000\n"
+"POT-Creation-Date: 2026-02-22 00:42+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -34522,6 +34522,12 @@ msgstr "Merk alt ugjennomsiktige (symmetrisk differanse)"
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Merk alt ugjennomsiktige"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, kde-format
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr ""
 
 # Unødvendig (og rart) med kolon her, iallfall på norsk.
 #: libs/ui/kis_splash_screen.cpp:158

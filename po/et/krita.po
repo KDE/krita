@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 00:42+0000\n"
+"POT-Creation-Date: 2026-02-22 00:42+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -36700,6 +36700,13 @@ msgstr "Läbipaistmatuse valimine (sümmeetriline erinevus)"
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Läbipaistmatuse valimine"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, fuzzy, kde-format
+#| msgid "Tyson Tan"
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -111704,9 +111711,6 @@ msgstr ""
 
 #~ msgid "Todimus"
 #~ msgstr "Todimus"
-
-#~ msgid "Tyson Tan"
-#~ msgstr "Tyson Tan"
 
 #~ msgid "Usamah Philips"
 #~ msgstr "Usamah Philips"

@@ -237,7 +237,7 @@ processTransformedPixelsBuildUp(ProcessOp op,
     QRectF clipRect(base.x() - maxDist, base.y() - maxDist,
                     2 * maxDist, 2 * maxDist);
 
-    accumulatedBrushStrokes |= clipRect;
+    accumulatedBrushStrokes |= kisGrowRect(clipRect, pixelPrecision);
 
     QVector<int> indexes;
     transformedPointsContainer.findAllInRange(indexes, base, maxDist);
@@ -269,7 +269,7 @@ processTransformedPixelsWash(ProcessOp op,
     QRectF clipRect(base.x() - maxDist, base.y() - maxDist,
                     2 * maxDist, 2 * maxDist);
 
-    accumulatedBrushStrokes |= clipRect;
+    accumulatedBrushStrokes |= kisGrowRect(clipRect, pixelPrecision);
 
     KIS_ASSERT_RECOVER_RETURN(originalPoints.size() ==
                               transformedPoints.size());

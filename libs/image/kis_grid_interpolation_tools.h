@@ -244,6 +244,12 @@ struct PaintDevicePolygonOp
         }
 
 
+        // provess previous rects so they are all processed
+        // in the same order as without any performance improvements
+        // (according to the grid processing order)
+        copyPreviousRects();
+
+
         KisSequentialIterator dstIt(m_dstDev, boundRect);
         KisRandomSubAccessorSP srcAcc = m_srcDev->createRandomSubAccessor();
 
@@ -314,8 +320,7 @@ struct PaintDevicePolygonOp
 
     }
 
-    void finalize() {
-
+    void copyPreviousRects() {
         QVector<QRect>::iterator end = KisRegion::mergeSparseRects(m_rectsToCopy.begin(), m_rectsToCopy.end());
 
         for (QVector<QRect>::iterator it = m_rectsToCopy.begin(); it < end; it++) {
@@ -323,6 +328,10 @@ struct PaintDevicePolygonOp
             fastCopyArea(areaToCopy.adjusted(0, 0, 1, 1), false);
         }
         m_rectsToCopy = QVector<QRect>();
+    }
+
+    void finalize() {
+        copyPreviousRects();
     }
 
     inline void setCanMergeRects(bool newCanMergeRects) {
@@ -462,6 +471,10 @@ struct QImagePolygonOp
             return;
         }
 
+        // provess previous rects so they are all processed
+        // in the same order as without any performance improvements
+        copyPreviousRects();
+
         KisFourPointInterpolatorBackward interp(srcPolygon, dstPolygon);
 
         for (int y = boundRect.top(); y <= boundRect.bottom(); y++) {
@@ -506,7 +519,7 @@ struct QImagePolygonOp
 
     }
 
-    void finalize() {
+    void copyPreviousRects() {
 
         QVector<QRect>::iterator end = KisRegion::mergeSparseRects(m_rectsToCopy.begin(), m_rectsToCopy.end());
 
@@ -516,6 +529,10 @@ struct QImagePolygonOp
         }
 
         m_rectsToCopy = QVector<QRect>();
+    }
+
+    void finalize() {
+        copyPreviousRects();
     }
 
     inline void setCanMergeRects(bool canMergeRects) {

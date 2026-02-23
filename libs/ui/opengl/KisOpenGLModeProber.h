@@ -149,6 +149,10 @@ public:
         return m_extensions;
     }
 
+    std::optional<KisOpenGL::XcbGLProviderProtocol> xcbGlProviderProtocol() {
+        return m_xcbGlProviderProtocol;
+    }
+
 private:
     int m_glMajorVersion = 0;
     int m_glMinorVersion = 0;
@@ -164,6 +168,7 @@ private:
     QString m_shadingLanguageString;
     QSurfaceFormat m_format;
     QSet<QByteArray> m_extensions;
+    std::optional<KisOpenGL::XcbGLProviderProtocol> m_xcbGlProviderProtocol;
 };
 
 #endif // KISOPENGLMODEPROBER_H

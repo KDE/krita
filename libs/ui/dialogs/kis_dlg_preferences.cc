@@ -2159,6 +2159,37 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
     }
 
+    {
+        std::optional<KisOpenGL::XcbGLProviderProtocol> currentXcbGlProvider = KisOpenGL::xcbGlProviderProtocol();
+
+        lblPreferredXcbGlApi->setVisible(currentXcbGlProvider.has_value());
+        cmbPreferredXcbGlApi->setVisible(currentXcbGlProvider.has_value());
+
+        if (currentXcbGlProvider.has_value()) {
+            const QString glxCurrent = i18nc("@item:inlistbox", "GLX (current)");
+            const QString glxNotCurrent = i18nc("@item:inlistbox", "GLX");
+            const QString eglCurrent = i18nc("@item:inlistbox", "EGL (current)");
+            const QString eglNotCurrent = i18nc("@item:inlistbox", "EGL");
+
+            cmbPreferredXcbGlApi->addItem(*currentXcbGlProvider == KisOpenGL::XCB_GLX ? glxCurrent : glxNotCurrent, KisOpenGL::XCB_GLX);
+            cmbPreferredXcbGlApi->addItem(*currentXcbGlProvider == KisOpenGL::XCB_EGL ? eglCurrent : eglNotCurrent, KisOpenGL::XCB_EGL);
+
+            cmbPreferredXcbGlApi->setToolTip(i18nc("@info:tooltip",
+                "<p>If you are using Krita on X11 or XWayland and experience slowness, "
+                "try switching between EGL and GLX</p>"));
+
+            KisOpenGL::XcbGLProviderProtocol preferredValue =
+                cfg.preferXcbEglProvider() ? KisOpenGL::XCB_EGL : KisOpenGL::XCB_GLX;
+
+            int index = cmbPreferredXcbGlApi->findData(preferredValue);
+
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            cmbPreferredXcbGlApi->setCurrentIndex(index);
+        }
+    }
+
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
     grpHDRWarning->setVisible(false);
@@ -2895,6 +2926,10 @@ bool KisDlgPreferences::editPreferences()
             KisOpenGL::setUserPreferredOpenGLRendererConfig(renderer);
         } else {
             KisOpenGL::setUserPreferredOpenGLRendererConfig(KisOpenGL::RendererNone);
+        }
+
+        if (KisOpenGL::xcbGlProviderProtocol().has_value()) {
+            cfg.setPreferXcbEglProvider(m_displaySettings->cmbPreferredXcbGlApi->currentData().value<KisOpenGL::XcbGLProviderProtocol>() == KisOpenGL::XCB_EGL);
         }
 
         cfg.setUseOpenGLTextureBuffer(m_displaySettings->chkUseTextureBuffer->isChecked());

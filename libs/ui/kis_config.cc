@@ -1113,6 +1113,25 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
     m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
+bool KisConfig::preferXcbEglProvider(const QSettings *settings, bool defaultValue)
+{
+    return (defaultValue ? false : settings->value("preferXcbEglProvider", false).toBool());
+}
+
+bool KisConfig::preferXcbEglProvider(bool defaultValue) const
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    return preferXcbEglProvider(&kritarc, defaultValue);
+}
+
+void KisConfig::setPreferXcbEglProvider(bool value)
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    kritarc.setValue("preferXcbEglProvider", value);
+}
+
 int KisConfig::openGLTextureSize(bool defaultValue) const
 {
     return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));

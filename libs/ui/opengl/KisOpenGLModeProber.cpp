@@ -14,6 +14,10 @@
 #include <QWindow>
 #include <QColorSpace>
 
+#ifdef HAVE_X11
+#include <qpa/qplatformnativeinterface.h>
+#endif
+
 #include <QGlobalStatic>
 #include <KisSurfaceColorSpaceWrapper.h>
 
@@ -379,6 +383,19 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
             ((m_glMajorVersion >= 4 && m_glMinorVersion >= 3) ||
              context.hasExtension("GL_ARB_invalidate_subdata"));
     m_supportsLod = context.format().majorVersion() >= 3 || (m_isOpenGLES && context.hasExtension("GL_EXT_shader_texture_lod"));
+
+#ifdef HAVE_X11
+    if (QApplication::platformName() == "xcb") {
+        QPlatformNativeInterface *native = qApp->platformNativeInterface();
+        if (native->nativeResourceFunctionForContext("eglcontext")) {
+            m_xcbGlProviderProtocol = KisOpenGL::XCB_EGL;
+        } else if (native->nativeResourceFunctionForContext("glxcontext")) {
+            m_xcbGlProviderProtocol = KisOpenGL::XCB_GLX;
+        } else {
+            qWarning() << "WARNING: Failed to detect QXcbGlIntegration type!";
+        }
+    }
+#endif /* HAVE_X11 */
 
     m_extensions = context.extensions();
     // Remove empty name extension that sometimes appears on NVIDIA output

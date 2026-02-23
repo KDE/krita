@@ -692,6 +692,8 @@ void KisHsvColorInput::getHsxF(const QColor& color, qreal* h, qreal* s, qreal* x
         float th;
         color.getHslF(&th, &fS, &fX);
         tempH = th;
+        *s = fS;
+        *x = fX;
 #endif
     }
 		break;
@@ -715,6 +717,8 @@ void KisHsvColorInput::getHsxF(const QColor& color, qreal* h, qreal* s, qreal* x
         float th;
         color.getHsvF(&th, &fS, &fX);
         tempH = th;
+        *s = fS;
+        *x = fX;
 #endif
     }
 		break;

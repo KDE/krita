@@ -63,14 +63,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-22 00:42+0000\n"
-"PO-Revision-Date: 2026-01-29 15:37+0100\n"
+"PO-Revision-Date: 2026-02-22 14:26+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -34868,8 +34868,7 @@ msgid "Select Opaque"
 msgstr "Dekking selecteren"
 
 #: libs/ui/kis_splash_screen.cpp:110
-#, fuzzy, kde-format
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"

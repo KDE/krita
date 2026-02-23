@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-22 00:42+0000\n"
-"PO-Revision-Date: 2026-02-14 18:12+0200\n"
+"PO-Revision-Date: 2026-02-22 17:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -65128,10 +65128,10 @@ msgid "Magnetic Selection"
 msgstr "בחירה מגנטית"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:734
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
-msgstr "&בוחר צבעים"
+msgstr "רדיוס מסנן: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
 #, kde-format
@@ -65788,17 +65788,17 @@ msgstr "הדבקת טקסט פשוט"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "מאתחל..."
+msgstr "הדבקת טקסט ללא סגנון."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "הזז בחירה"
+msgstr "העברת בחירת הטקסט למטה"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
@@ -65818,10 +65818,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "הזז בחירה"
+msgstr "העברת בחירת הטקסט למעלה"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
@@ -65841,10 +65841,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "הזז בחירה"
+msgstr "העברת בחירת הטקסט שמאלה"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
@@ -65864,10 +65864,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "הזז בחירה"
+msgstr "העברת בחירת הטקסט ימינה"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
@@ -65891,10 +65891,10 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "שינוי"
+msgstr "הסרת התמרות תווים"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
@@ -65933,17 +65933,16 @@ msgid "SVG Text Tool"
 msgstr "כלי טקסט SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "יצירת טקסטים חדשים עם…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "מאפייני הטקסט הנוכחי"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
@@ -65953,16 +65952,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "מקושר"
+msgstr "בחירת ערכת סגנון"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "מאפיינים"
+msgstr "פתיחת מאפייני טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
@@ -65978,10 +65977,10 @@ msgid "Options"
 msgstr "אפשרויות"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "צייר עם תבנית"
+msgstr "להשתמש בסמן חזותי"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
 #, kde-format
@@ -65990,10 +65989,10 @@ msgid "Use the visual order for bidirectional text."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "הדבקת טקסט עשיר כברירת מחדל"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
 #, kde-format
@@ -66053,10 +66052,10 @@ msgid "Convert Type..."
 msgstr "המרת סוג…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
-msgstr "העדפות"
+msgstr "עוצב מראש"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
@@ -66546,20 +66545,16 @@ msgid "All, excluding a specific color"
 msgstr "הכול, למעט צבע מסוים"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:921
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All, excluding a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "הכול, למעט צבע מסוים"
+msgstr "הכול, למעט שקיפות"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:924
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All, excluding a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "הכול, למעט צבע מסוים"
+msgstr "הכול, למעט צבע מסוים או שקיפות"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:927
 #, fuzzy, kde-format

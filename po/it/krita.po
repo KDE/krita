@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-22 00:42+0000\n"
-"PO-Revision-Date: 2026-02-10 20:04+0100\n"
+"PO-Revision-Date: 2026-02-22 10:57+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -34875,8 +34875,7 @@ msgid "Select Opaque"
 msgstr "Seleziona opacità"
 
 #: libs/ui/kis_splash_screen.cpp:110
-#, fuzzy, kde-format
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
@@ -66247,12 +66246,12 @@ msgid ""
 "transformations.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Nella modalità &quot;Coordinate globali&quot; i campi "
-"Larghezza e Altezza mostrano la dimensione del contorno della forma in "
-"coordinate allineate all'immagine, anche quando la forma è ruotata o subisce "
-"una qualsiasi altra trasformazione. </p><p>Se la modalità &quot;Coordinate "
-"globali&quot; è disabilitata, i campi Larghezza e Altezza mostrano la "
-"dimensione &quot;locale&quot; della forma, prima dell'applicazione di "
-"qualsiasi trasformazione.</p></body></html>"
+"Larghezza e Altezza mostrano la dimensione del riquadro esterno della forma "
+"in coordinate allineate all'immagine, anche quando la forma è ruotata o "
+"subisce una qualsiasi altra trasformazione. </p><p>Se la modalità &quot;"
+"Coordinate globali&quot; è disabilitata, i campi Larghezza e Altezza "
+"mostrano la dimensione &quot;locale&quot; della forma, prima "
+"dell'applicazione di qualsiasi trasformazione.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
@@ -67595,8 +67594,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
 msgstr ""
-"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
-"selezione giù di un pixel."
+"Quando la modalità di composizione tipografica è attiva, sposta l'inizio "
+"della selezione giù di un pixel."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
@@ -67620,8 +67619,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
-"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
-"selezione su di un pixel."
+"Quando la modalità di composizione tipografica è attiva, sposta l'inizio "
+"della selezione su di un pixel."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
@@ -67645,8 +67644,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
-"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
-"selezione a sinistra di un pixel."
+"Quando la modalità di composizione tipografica è attiva, sposta l'inizio "
+"della selezione a sinistra di un pixel."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
@@ -67670,8 +67669,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
-"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
-"selezione a destra di un pixel."
+"Quando la modalità di composizione tipografica è attiva, sposta l'inizio "
+"della selezione a destra di un pixel."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67797,13 +67796,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Modalità impostazioni tipo"
+msgstr "Modalità composizione tipografica"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Abilita la modalità di impostazione del tipo."
+msgstr "Abilita la modalità di composizione tipografica."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
@@ -67905,7 +67904,7 @@ msgstr "Debug"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Mostra rettangoli circoscritti dei caratteri"
+msgstr "Mostra riquadri esterni dei caratteri"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
 #, kde-format

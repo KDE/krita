@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-22 00:42+0000\n"
-"PO-Revision-Date: 2026-02-03 13:07+0100\n"
+"PO-Revision-Date: 2026-02-22 10:01+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -15044,7 +15044,7 @@ msgstr "Retalla a la mida de la imatge"
 #, kde-format
 msgctxt "action"
 msgid "Purge Unused Image Data"
-msgstr "Purga les dades no utilitzades d'imatges"
+msgstr "Purga les dades sense emprar de les imatges"
 
 #. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1199
@@ -22335,7 +22335,8 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr ""
-"La imatge conté <b>estils de capa</b>. Els estils de capa no es guardaran."
+"La imatge conté <b>estils de la capa</b>. Els estils de la capa no es "
+"guardaran."
 
 # skip-rule: punctuation-period-no
 #: libs/impex/ShapeLayerTypeCheck.h:118
@@ -24344,7 +24345,7 @@ msgstr "Conjunts de tasques"
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
-msgstr "Estils de capa"
+msgstr "Estils de la capa"
 
 #: libs/resources/KisResourceTypes.cpp:57
 #, kde-format
@@ -27107,7 +27108,7 @@ msgstr "Canvia les propietats de la capa"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:107
 #, kde-format
 msgid "Layer Styles"
-msgstr "Estils de capa"
+msgstr "Estils de la capa"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:318
 #, kde-format
@@ -34873,7 +34874,7 @@ msgstr "Tria l'opac"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -35154,7 +35155,7 @@ msgstr "Scripts SeExpr"
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
-msgstr "Estils de capa"
+msgstr "Estils de la capa"
 
 #: libs/ui/KisApplication.cpp:466
 #, kde-format
@@ -35983,7 +35984,8 @@ msgid ""
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 "S'està intentant realitzar una exportació avançada amb la imatge que conté "
-"un <b>estil de capa</b>. La imatge s'<b>aplanarà</b> abans de redimensionar."
+"un <b>estil de la capa</b>. La imatge s'<b>aplanarà</b> abans de "
+"redimensionar."
 
 #: libs/ui/KisImportExportManager.cpp:612
 #, kde-format
@@ -50848,7 +50850,7 @@ msgstr "Trieu una ubicació de guardada"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, kde-format
 msgid "Layer styles"
-msgstr "Estils de capa"
+msgstr "Estils de la capa"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
@@ -65171,7 +65173,7 @@ msgstr "Extensió: {n}%"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Separació de tancament:"
+msgstr "Tanca el buit:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -66678,7 +66680,7 @@ msgstr ""
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Separació de tancament:"
+msgstr "Tanca el buit:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -68181,7 +68183,7 @@ msgstr "Extensió: {n}%"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Separació de tancament: "
+msgstr "Tanca el buit: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format

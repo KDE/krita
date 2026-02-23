@@ -60,6 +60,11 @@ public:
         OpenGLRenderer rendererId() const;
     };
 
+    enum XcbGLProviderProtocol {
+        XCB_GLX = 0,
+        XCB_EGL
+    };
+
 public:
     static RendererConfig selectSurfaceConfig(KisOpenGL::OpenGLRenderer preferredRenderer,
                                               KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
@@ -126,6 +131,8 @@ public:
     static void setDebugSynchronous(bool value);
 
     static void glInvalidateBufferData(uint buffer);
+
+    static std::optional<XcbGLProviderProtocol> xcbGlProviderProtocol();
 
 private:
     static void fakeInitWindowsOpenGL(KisOpenGL::OpenGLRenderers supportedRenderers, KisOpenGL::OpenGLRenderer preferredByQt);

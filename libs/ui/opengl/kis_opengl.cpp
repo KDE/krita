@@ -398,6 +398,12 @@ bool KisOpenGL::useFBOForToolOutlineRendering()
     return openGLCheckResult && openGLCheckResult->supportsFBO();
 }
 
+std::optional<KisOpenGL::XcbGLProviderProtocol> KisOpenGL::xcbGlProviderProtocol()
+{
+    initialize();
+    return openGLCheckResult ? openGLCheckResult->xcbGlProviderProtocol() : std::nullopt;
+}
+
 bool KisOpenGL::needsFenceWorkaround()
 {
     initialize();

@@ -276,6 +276,10 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    static bool preferXcbEglProvider(const QSettings *settings, bool defaultValue = false);
+    bool preferXcbEglProvider(bool defaultValue = false) const;
+    void setPreferXcbEglProvider(bool value);
+
     bool forceOpenGLFenceWorkaround(bool defaultValue = false) const;
 
     int numMipmapLevels(bool defaultValue = false) const;

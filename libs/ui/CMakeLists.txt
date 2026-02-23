@@ -726,6 +726,14 @@ if(WIN32)
         )
 endif()
 
+if (HAVE_X11)
+    set_source_files_properties(
+        opengl/KisOpenGLModeProber.cpp
+        PROPERTIES
+        INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
+endif()
+
 if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kritaui
         PRIVATE

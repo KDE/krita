@@ -385,7 +385,15 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
 #endif
 
-        if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
+#ifdef HAVE_X11
+    if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION")) {
+        if (KisConfig::preferXcbEglProvider(&kritarc)) {
+            qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+        }
+    }
+#endif
+
+if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
             enableOpenGLDebug = true;
         } else {
             enableOpenGLDebug = kritarc.value("EnableOpenGLDebug", false).toBool();

@@ -156,6 +156,10 @@ Button {
         x: Math.round(resourceCmb.mirrored ? resourceCmb.padding : resourceCmb.width - width - resourceCmb.padding);
         y: Math.round(resourceCmb.topPadding + (resourceCmb.availableHeight - height) / 2);
         source: resourceCmb.palette.button.hslLightness < 0.5? "qrc:///light_groupOpened.svg": "qrc:///dark_groupOpened.svg";
+        // Setting the source size is required for proper high-DPI scaling.
+        // Qt automatically multiplies the size with the display scaling.
+        sourceSize.width: 12;
+        sourceSize.height: 12;
         width: 12;
         height: 12;
         clip: true;

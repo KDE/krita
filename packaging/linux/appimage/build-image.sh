@@ -346,6 +346,12 @@ if [ -f $DEPS_INSTALL_PREFIX/plugins/platforms/libqwayland-generic.so ]; then
   EXTRA_PLUGINS_LIST="$EXTRA_PLUGINS_LIST,$EXTRA_PLATFORM_PLUGINS"
 fi
 
+for plugin in $DEPS_INSTALL_PREFIX/plugins/wayland-decoration-client/*.so; do
+  echo "Adding client-side-decoration plugin: $plugin"
+  relative_plugin=`realpath -m --relative-to="$DEPS_INSTALL_PREFIX/plugins" $plugin`
+  EXTRA_PLUGINS_LIST="$EXTRA_PLUGINS_LIST,$relative_plugin"
+done
+
 EXTRA_RUNTIME_ARGUMENT=
 
 if [ -f $DEPS_INSTALL_PREFIX/appimage-tools/share/runtime-x86_64 ]; then

@@ -170,6 +170,10 @@ void KisOpenGL::initialize()
 
     if (openGLCheckResult) {
         debugOut << "\n  Qt Platform Name: " << QGuiApplication::platformName();
+        if (openGLCheckResult->xcbGlProviderProtocol()) {
+            debugOut << "\n  Qt XCB GL integration plugin: "
+                     << (*openGLCheckResult->xcbGlProviderProtocol() == KisOpenGL::XCB_EGL ? "xcb_egl" : "xcb_glx");
+        }
         debugOut << "\n  Vendor: " << openGLCheckResult->vendorString();
         debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
         debugOut << "\n  Driver version: " << openGLCheckResult->driverVersionString();

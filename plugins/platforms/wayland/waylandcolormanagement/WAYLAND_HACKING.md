@@ -95,3 +95,20 @@ You can set `WAYLAND_DEBUG` environment variable:
 ```bash
 WAYLAND_DEBUG=1 krita | grep -E 'image|color'
 ```
+
+## How to test client-side-decorations rendering code
+
+Gnome/Mutter refuse to implement server-side window decorations
+(https://gitlab.gnome.org/GNOME/mutter/-/issues/217), so on Gnome
+Krita uses the decorations provided by Qt. To test this codepath
+on a normal compositor with SSD, one needs to disable the
+corresponding protocol support in Qt and choose the CSD plugin
+name:
+
+```bash
+QT_QPA_PLATFORM=wayland QT_WAYLAND_DISABLED_INTERFACES=zxdg_decoration_manager_v1 QT_WAYLAND_DECORATION=adwaita krita
+
+# or
+
+QT_QPA_PLATFORM=wayland QT_WAYLAND_DISABLED_INTERFACES=zxdg_decoration_manager_v1 QT_WAYLAND_DECORATION=bradient krita
+```

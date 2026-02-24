@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-22 00:42+0000\n"
+"POT-Creation-Date: 2026-02-24 00:41+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17245,14 +17245,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "작업 공간"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:516
+#: krita/main.cc:737 libs/ui/KisApplication.cpp:516
 #: libs/ui/KisApplication.cpp:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 경고"
 
-#: krita/main.cc:730
+#: krita/main.cc:738
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -22118,7 +22118,7 @@ msgstr "크기"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
-#: libs/ui/forms/wdgdisplaysettings.ui:368
+#: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
@@ -25375,9 +25375,9 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2205
-#: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -26235,7 +26235,7 @@ msgstr ""
 "50 fps로 지정합니다.</p></body></html>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #, kde-format
 msgid "Warning(s):"
 msgstr "경고:"
@@ -27249,8 +27249,8 @@ msgstr "마스터 디스플레이:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2524
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2555
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -27351,8 +27351,8 @@ msgstr "비디오 애니메이션 가져오기"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2494
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2496
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2525
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27821,7 +27821,7 @@ msgstr "즉시 미리 보기는 OpenGL이 활성화되어야 지원함"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:110
+#: libs/ui/forms/wdgdisplaysettings.ui:149
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "가장 가까운 이웃"
@@ -28264,8 +28264,8 @@ msgstr "레이어 속성"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1766
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1851
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2347 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2378 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -28905,141 +28905,176 @@ msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "자동(%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2187
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#, fuzzy, kde-format
+#| msgid "Current"
+msgctxt "@item:inlistbox"
+msgid "GLX (current)"
+msgstr "현재"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#, fuzzy, kde-format
+#| msgid "GNX"
+msgctxt "@item:inlistbox"
+msgid "GLX"
+msgstr "GNX"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
+#, fuzzy, kde-format
+#| msgid "Current"
+msgctxt "@item:inlistbox"
+msgid "EGL (current)"
+msgstr "현재"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2172
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "EGL"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>If you are using Krita on X11 or XWayland and experience slowness, try "
+"switching between EGL and GLX</p>"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
 msgid "Display Id: %1"
 msgstr "디스플레이 ID: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2188
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "디스플레이 이름: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2220
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "최소 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "최대 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2222
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "최대 풀 프레임 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2192
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "기본 빨간색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2224
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "기본 녹색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2194
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2225
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "기본 파란색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2195
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "백색 점: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2407
 #, fuzzy, kde-format
 #| msgid "WARNING: current display doesn't support HDR rendering"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "경고: 현재 디스플레이에서 HDR 렌더링을 지원하지 않음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2487
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2518
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2504
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2535
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2506
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2516
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "캔버스 입력 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2517
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2548
 #, kde-format
 msgid "Canvas Input"
 msgstr "캔버스 입력"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2534
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2565
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "색 관리"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2536
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "색상"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2544
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2546
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2575
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #, kde-format
 msgid "Performance"
 msgstr "성능"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2554
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2585
 #, kde-format
 msgid "Tablet settings"
 msgstr "태블릿 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2556
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
 #, kde-format
 msgid "Tablet"
 msgstr "태블릿"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2564
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2595
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "캔버스만 보기 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, kde-format
 msgid "Canvas-only"
 msgstr "캔버스만 보기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2574
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2576
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2605
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "팝업 팔레트"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2584
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2615
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2586
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2593
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2624
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -30539,8 +30574,67 @@ msgstr "캔버스 가속"
 msgid "Canvas &Graphics Acceleration"
 msgstr "캔버스 그래픽 가속(&G)"
 
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: libs/ui/forms/wdgdisplaysettings.ui:67
+#, kde-format
+msgid "Current Renderer:"
+msgstr "현재 렌더러:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:104
+#, kde-format
+msgid ""
+"<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
+"problems with drawing assistants.\n"
+"              </p><p>Changing the pixmap cache size requires a restart.</p></"
+"body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:111
+#, kde-format
+msgid "Direct (Recommended)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:116
+#, fuzzy, kde-format
+#| msgid "Animation Cache"
+msgid "Pixmap Cache"
+msgstr "애니메이션 캐시"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:121
+#, kde-format
+msgid "Large Pixmap Cache"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:154
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "이중 선형 필터링"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:159
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "삼중 선형 필터링"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:164
+#, kde-format
+msgid "High Quality Filtering"
+msgstr "고품질 필터링"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:185
+#, kde-format
+msgid "Preferred Renderer (needs restart):"
+msgstr "선호하는 렌더러(다시 시작 필요):"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:73
+#: libs/ui/forms/wdgdisplaysettings.ui:201
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
@@ -30552,134 +30646,84 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:76
+#: libs/ui/forms/wdgdisplaysettings.ui:204
 #, kde-format
 msgid "Use texture buffer"
 msgstr "텍스처 버퍼 사용"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:115
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "이중 선형 필터링"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:120
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "삼중 선형 필터링"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:125
-#, kde-format
-msgid "High Quality Filtering"
-msgstr "고품질 필터링"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:139
+#: libs/ui/forms/wdgdisplaysettings.ui:217
 #, kde-format
 msgid "Scaling Mode:"
 msgstr "크기 조절 모드:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:155
+#: libs/ui/forms/wdgdisplaysettings.ui:233
 #, fuzzy, kde-format
 #| msgid "Assistant:"
 msgid "Assistants Mode:"
 msgstr "도우미:"
 
-#. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:172
-#, kde-format
-msgid ""
-"<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
-"problems with drawing assistants.\n"
-"              </p><p>Changing the pixmap cache size requires a restart.</p></"
-"body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:179
-#, kde-format
-msgid "Direct (Recommended)"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:184
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:244
 #, fuzzy, kde-format
-#| msgid "Animation Cache"
-msgid "Pixmap Cache"
-msgstr "애니메이션 캐시"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:189
-#, kde-format
-msgid "Large Pixmap Cache"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:203
-#, kde-format
-msgid "Preferred Renderer (needs restart):"
+#| msgid "Preferred Renderer (needs restart):"
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
 msgstr "선호하는 렌더러(다시 시작 필요):"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgdisplaysettings.ui:220
-#, kde-format
-msgid "Current Renderer:"
-msgstr "현재 렌더러:"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
-#: libs/ui/forms/wdgdisplaysettings.ui:250
+#: libs/ui/forms/wdgdisplaysettings.ui:261
 #, kde-format
 msgid "HDR Settings"
 msgstr "HDR 설정"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:256
+#: libs/ui/forms/wdgdisplaysettings.ui:267
 #, kde-format
 msgid "Current Display Format"
 msgstr "현재 디스플레이 형식"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgdisplaysettings.ui:263
+#: libs/ui/forms/wdgdisplaysettings.ui:274
 #, kde-format
 msgid "Display Format:"
 msgstr "디스플레이 형식:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:270
+#: libs/ui/forms/wdgdisplaysettings.ui:281
 #, kde-format
 msgid "Current Surface Value"
 msgstr "현재 표면 값"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgdisplaysettings.ui:277
+#: libs/ui/forms/wdgdisplaysettings.ui:288
 #, kde-format
 msgid "Current Output Format:"
 msgstr "현재 출력 형식:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgdisplaysettings.ui:287
+#: libs/ui/forms/wdgdisplaysettings.ui:298
 #, kde-format
 msgid "Preferred Output Format:"
 msgstr "선호하는 출력 형식:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:315
+#: libs/ui/forms/wdgdisplaysettings.ui:326
 #, fuzzy, kde-format
 #| msgid "Decorations"
 msgid "Canvas Decorations"
 msgstr "장식"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgdisplaysettings.ui:321
+#: libs/ui/forms/wdgdisplaysettings.ui:332
 #, kde-format
 msgid "Transparency Checkerboard:"
 msgstr "투명 체커 무늬:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:327
+#: libs/ui/forms/wdgdisplaysettings.ui:338
 #, fuzzy, kde-format
 #| msgctxt "Default name for a color swatch"
 #| msgid "Color %1"
@@ -30687,7 +30731,7 @@ msgid "Color 1:"
 msgstr "%1 색상"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgdisplaysettings.ui:354
+#: libs/ui/forms/wdgdisplaysettings.ui:365
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color 2:"
@@ -30698,7 +30742,7 @@ msgstr "색상:"
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:268
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
 #: libs/ui/kis_paintop_box.cc:275
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -30709,13 +30753,13 @@ msgid "Size:"
 msgstr "크기:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:384
+#: libs/ui/forms/wdgdisplaysettings.ui:395
 #, kde-format
 msgid "Canvas Border Color:"
 msgstr "캔버스 테두리 색상:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:404
+#: libs/ui/forms/wdgdisplaysettings.ui:415
 #, kde-format
 msgid "Pixel Grid:"
 msgstr "픽셀 격자:"
@@ -30730,7 +30774,7 @@ msgstr "픽셀 격자:"
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdgdisplaysettings.ui:410 libs/ui/layerstyles/WdgStroke.ui:163
+#: libs/ui/forms/wdgdisplaysettings.ui:421 libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
@@ -30744,7 +30788,7 @@ msgid "Color:"
 msgstr "색상:"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:427
+#: libs/ui/forms/wdgdisplaysettings.ui:438
 #, kde-format
 msgid "Start showing at:"
 msgstr "다음부터 표시:"
@@ -30767,7 +30811,7 @@ msgstr "다음부터 표시:"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleHeight)
-#: libs/ui/forms/wdgdisplaysettings.ui:434
+#: libs/ui/forms/wdgdisplaysettings.ui:445
 #: libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -30808,27 +30852,27 @@ msgid "%"
 msgstr "%"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:447
+#: libs/ui/forms/wdgdisplaysettings.ui:458
 #, kde-format
 msgid "Selection Overlay:"
 msgstr "선택 오버레이:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:459
+#: libs/ui/forms/wdgdisplaysettings.ui:470
 #, fuzzy, kde-format
 #| msgid "Selection Overlay:"
 msgid "Outline opacity:"
 msgstr "선택 오버레이:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdgdisplaysettings.ui:472
+#: libs/ui/forms/wdgdisplaysettings.ui:483
 #, fuzzy, kde-format
 #| msgid "Overlay Mode"
 msgid "Overlay color:"
 msgstr "오버레이 모드"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:492
+#: libs/ui/forms/wdgdisplaysettings.ui:503
 #, fuzzy, kde-format
 #| msgid "Overall opacity:"
 msgid "Overlay opacity:"
@@ -30836,50 +30880,50 @@ msgstr "전체 불투명도:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:513
+#: libs/ui/forms/wdgdisplaysettings.ui:524
 #: libs/ui/forms/wdggeneralsettings.ui:1273
 #, kde-format
 msgid "Miscellaneous"
 msgstr "기타"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:532
+#: libs/ui/forms/wdgdisplaysettings.ui:543
 #, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "캔버스 스크롤 바 숨기기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:542
+#: libs/ui/forms/wdgdisplaysettings.ui:553
 #, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr "곡선 앤티에일리어싱 활성화"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:549
+#: libs/ui/forms/wdgdisplaysettings.ui:560
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr "레이어 미리 보기 팝업 숨기기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:556
+#: libs/ui/forms/wdgdisplaysettings.ui:567
 #, kde-format
 msgid "Color channels in color"
 msgstr "색상 채널을 색으로 표시"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:566
+#: libs/ui/forms/wdgdisplaysettings.ui:577
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "선택 외곽선 앤티에일리어싱 사용"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:573
+#: libs/ui/forms/wdgdisplaysettings.ui:584
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr "이 옵션을 선택하면 캔버스를 이동할 때 체크 무늬도 따라서 이동합니다."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:576
+#: libs/ui/forms/wdgdisplaysettings.ui:587
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -30887,7 +30931,7 @@ msgid ""
 msgstr "체커를 고정하거나 캔버스와 같이 스크롤할지 여부를 지정합니다"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:579
+#: libs/ui/forms/wdgdisplaysettings.ui:590
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr "스크롤할 때 체커 이동(&M)"
@@ -39132,12 +39176,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:664
+#: libs/ui/opengl/kis_opengl.cpp:670
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "인텔 그래픽 드라이버는 OpenGL 사용 시 알려진 문제가 있습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:666
+#: libs/ui/opengl/kis_opengl.cpp:672
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -39147,7 +39191,7 @@ msgstr ""
 "인텔 그래픽 드라이버는 OpenGL에 문제가 자주 발생하므로 ANGLE을 기본값으로 사"
 "용합니다. OpenGL로 직접 전환할 수 있지만 항상 올바르게 작동하지는 않습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1149
+#: libs/ui/opengl/kis_opengl.cpp:1155
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -39156,7 +39200,7 @@ msgstr ""
 "선호하는 렌더러에서 필요한 표면 형식을 지원하지 않습니다. 다른 렌더러를 선택"
 "했습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1151
+#: libs/ui/opengl/kis_opengl.cpp:1157
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"
@@ -110529,9 +110573,6 @@ msgstr ""
 
 #~ msgid "Giovanni Remigi"
 #~ msgstr "Giovanni Remigi"
-
-#~ msgid "GNX"
-#~ msgstr "GNX"
 
 #~ msgid "goda87"
 #~ msgstr "goda87"

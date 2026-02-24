@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-22 00:42+0000\n"
+"POT-Creation-Date: 2026-02-24 00:41+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16398,14 +16398,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्र"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:516
+#: krita/main.cc:737 libs/ui/KisApplication.cpp:516
 #: libs/ui/KisApplication.cpp:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "क्रिता : चेतावनी"
 
-#: krita/main.cc:730
+#: krita/main.cc:738
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -21233,7 +21233,7 @@ msgstr "आकार"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
-#: libs/ui/forms/wdgdisplaysettings.ui:368
+#: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
@@ -24464,9 +24464,9 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2205
-#: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -25304,7 +25304,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #, kde-format
 msgid "Warning(s):"
 msgstr "चेतावनियां"
@@ -26273,8 +26273,8 @@ msgstr "मुख्य प्रदर्शक :"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2524
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2555
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -26375,8 +26375,8 @@ msgstr "परत मिटाएं"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2494
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2496
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2525
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26838,7 +26838,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:110
+#: libs/ui/forms/wdgdisplaysettings.ui:149
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "निकटस्थ पड़ोसी"
@@ -27263,8 +27263,8 @@ msgstr "परत गुण"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1766
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1851
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2347 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2378 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27892,140 +27892,174 @@ msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "स्वतः (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2187
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#, fuzzy, kde-format
+#| msgid "Current"
+msgctxt "@item:inlistbox"
+msgid "GLX (current)"
+msgstr "मौज़ूदा"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "GLX"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
+#, fuzzy, kde-format
+#| msgid "Current"
+msgctxt "@item:inlistbox"
+msgid "EGL (current)"
+msgstr "मौज़ूदा"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2172
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "EGL"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>If you are using Krita on X11 or XWayland and experience slowness, try "
+"switching between EGL and GLX</p>"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
 msgid "Display Id: %1"
 msgstr "प्रदर्शक आइडी : %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2188
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "प्रदर्शक का नाम : %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2220
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "न्यूनतम ज्योतिर्मयता : %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "अधिकतम ज्योतिर्मयता : %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2222
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2192
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "लाल प्राथमिक : %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2224
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "हरा प्राथमिक : %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2194
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2225
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "नीला प्राथमिक : %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2195
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "श्वेत बिन्दु : %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2407
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2487
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2518
 #, kde-format
 msgid "Configure Krita"
 msgstr "क्रिता को विन्यस्त करें"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2504
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2535
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "कुंजीपटल शार्टकट"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2506
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "शॉर्टकट्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2516
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "कैनवास इन्पुट सेटिंग्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2517
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2548
 #, kde-format
 msgid "Canvas Input"
 msgstr "कैनवास इन्पुट"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2534
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2565
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "रंग प्रबंधन"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2536
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "रंग"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2544
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2546
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2575
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #, kde-format
 msgid "Performance"
 msgstr "निष्पादन"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2554
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2585
 #, kde-format
 msgid "Tablet settings"
 msgstr "टैबलेट सेटिंग्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2556
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
 #, kde-format
 msgid "Tablet"
 msgstr "टेबलेट"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2564
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2595
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "सिर्फ कैनवास सेटिंग्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, kde-format
 msgid "Canvas-only"
 msgstr "सिर्फ कैनवास"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2574
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2576
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2605
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "पॉप-आप रंग पट्टिका"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2584
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2615
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "चित्रकार"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2586
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "चित्रकार"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2593
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2624
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -29453,53 +29487,14 @@ msgstr "कैन्वस वेगवृद्धि"
 msgid "Canvas &Graphics Acceleration"
 msgstr "कैन्वस वेगवृद्धि"
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:73
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: libs/ui/forms/wdgdisplaysettings.ui:67
 #, kde-format
-msgid ""
-"<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
-"Driver combinations (like Intel) or broken on some others (like AMD/Radeon)."
-"</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:76
-#, kde-format
-msgid "Use texture buffer"
-msgstr "टेक्श्चर बफर का उपयोग करें"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:115
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "द्विरेखीय फिल्टर"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:120
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "त्रिरेखीय सेंसर"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:125
-#, kde-format
-msgid "High Quality Filtering"
-msgstr "उच्च गुणवत्ता फिल्टरिंग"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:139
-#, kde-format
-msgid "Scaling Mode:"
-msgstr "स्केलिंग मोड"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-msgid "Assistants Mode:"
-msgstr "गॉसियन:"
+msgid "Current Renderer:"
+msgstr "मौज़ूदा रेंडरर :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:172
+#: libs/ui/forms/wdgdisplaysettings.ui:104
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -29509,88 +29504,136 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:179
+#: libs/ui/forms/wdgdisplaysettings.ui:111
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:184
+#: libs/ui/forms/wdgdisplaysettings.ui:116
 #, fuzzy, kde-format
 #| msgid "Animation Cache"
 msgid "Pixmap Cache"
 msgstr "एनिमेशन केशे"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:189
+#: libs/ui/forms/wdgdisplaysettings.ui:121
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr ""
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:154
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "द्विरेखीय फिल्टर"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:159
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "त्रिरेखीय सेंसर"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:164
+#, kde-format
+msgid "High Quality Filtering"
+msgstr "उच्च गुणवत्ता फिल्टरिंग"
+
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:203
+#: libs/ui/forms/wdgdisplaysettings.ui:185
 #, kde-format
 msgid "Preferred Renderer (needs restart):"
 msgstr "पसंदीदा रेंडरर (क्रिता को पुनः आरंभ करना होगा)"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgdisplaysettings.ui:220
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
+#: libs/ui/forms/wdgdisplaysettings.ui:201
 #, kde-format
-msgid "Current Renderer:"
-msgstr "मौज़ूदा रेंडरर :"
+msgid ""
+"<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
+"Driver combinations (like Intel) or broken on some others (like AMD/Radeon)."
+"</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
+#: libs/ui/forms/wdgdisplaysettings.ui:204
+#, kde-format
+msgid "Use texture buffer"
+msgstr "टेक्श्चर बफर का उपयोग करें"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:217
+#, kde-format
+msgid "Scaling Mode:"
+msgstr "स्केलिंग मोड"
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:233
+#, fuzzy, kde-format
+msgid "Assistants Mode:"
+msgstr "गॉसियन:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:244
+#, fuzzy, kde-format
+#| msgid "Preferred Renderer (needs restart):"
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr "पसंदीदा रेंडरर (क्रिता को पुनः आरंभ करना होगा)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
-#: libs/ui/forms/wdgdisplaysettings.ui:250
+#: libs/ui/forms/wdgdisplaysettings.ui:261
 #, kde-format
 msgid "HDR Settings"
 msgstr "एचडिआर विन्यास"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:256
+#: libs/ui/forms/wdgdisplaysettings.ui:267
 #, kde-format
 msgid "Current Display Format"
 msgstr "वर्तमान प्रदर्शक फॉर्मेट"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgdisplaysettings.ui:263
+#: libs/ui/forms/wdgdisplaysettings.ui:274
 #, kde-format
 msgid "Display Format:"
 msgstr "प्रदर्शक फॉर्मेट :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:270
+#: libs/ui/forms/wdgdisplaysettings.ui:281
 #, kde-format
 msgid "Current Surface Value"
 msgstr "मौज़ूदा सतह मूल्य"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgdisplaysettings.ui:277
+#: libs/ui/forms/wdgdisplaysettings.ui:288
 #, kde-format
 msgid "Current Output Format:"
 msgstr "मौज़ूदा आउटपुट फॉर्मेट :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgdisplaysettings.ui:287
+#: libs/ui/forms/wdgdisplaysettings.ui:298
 #, fuzzy, kde-format
 #| msgid "Current Output Format:"
 msgid "Preferred Output Format:"
 msgstr "मौज़ूदा आउटपुट फॉर्मेट :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:315
+#: libs/ui/forms/wdgdisplaysettings.ui:326
 #, fuzzy, kde-format
 #| msgid "Decorations"
 msgid "Canvas Decorations"
 msgstr "सजावट"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgdisplaysettings.ui:321
+#: libs/ui/forms/wdgdisplaysettings.ui:332
 #, kde-format
 msgid "Transparency Checkerboard:"
 msgstr "पारदर्शिता बिसात"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:327
+#: libs/ui/forms/wdgdisplaysettings.ui:338
 #, fuzzy, kde-format
 #| msgctxt "Default name for a color swatch"
 #| msgid "Color %1"
@@ -29598,7 +29641,7 @@ msgid "Color 1:"
 msgstr "रंग %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgdisplaysettings.ui:354
+#: libs/ui/forms/wdgdisplaysettings.ui:365
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color 2:"
@@ -29609,7 +29652,7 @@ msgstr "रंगः"
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:268
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
 #: libs/ui/kis_paintop_box.cc:275
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -29620,13 +29663,13 @@ msgid "Size:"
 msgstr "आकार :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:384
+#: libs/ui/forms/wdgdisplaysettings.ui:395
 #, kde-format
 msgid "Canvas Border Color:"
 msgstr "केनवस किनारा रंग :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:404
+#: libs/ui/forms/wdgdisplaysettings.ui:415
 #, kde-format
 msgid "Pixel Grid:"
 msgstr "पिक्सेल के ग्रिड:"
@@ -29641,7 +29684,7 @@ msgstr "पिक्सेल के ग्रिड:"
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdgdisplaysettings.ui:410 libs/ui/layerstyles/WdgStroke.ui:163
+#: libs/ui/forms/wdgdisplaysettings.ui:421 libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
@@ -29655,7 +29698,7 @@ msgid "Color:"
 msgstr "रंगः"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:427
+#: libs/ui/forms/wdgdisplaysettings.ui:438
 #, kde-format
 msgid "Start showing at:"
 msgstr "यहां दिखाना शुरू करें :"
@@ -29678,7 +29721,7 @@ msgstr "यहां दिखाना शुरू करें :"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleHeight)
-#: libs/ui/forms/wdgdisplaysettings.ui:434
+#: libs/ui/forms/wdgdisplaysettings.ui:445
 #: libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -29719,77 +29762,77 @@ msgid "%"
 msgstr "%"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:447
+#: libs/ui/forms/wdgdisplaysettings.ui:458
 #, kde-format
 msgid "Selection Overlay:"
 msgstr "चयन ओवरले :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:459
+#: libs/ui/forms/wdgdisplaysettings.ui:470
 #, fuzzy, kde-format
 #| msgid "Selection Overlay:"
 msgid "Outline opacity:"
 msgstr "चयन ओवरले :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdgdisplaysettings.ui:472
+#: libs/ui/forms/wdgdisplaysettings.ui:483
 #, fuzzy, kde-format
 #| msgid "Overlay Mode"
 msgid "Overlay color:"
 msgstr "ओवरले मोड"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:492
+#: libs/ui/forms/wdgdisplaysettings.ui:503
 #, fuzzy, kde-format
 msgid "Overlay opacity:"
 msgstr "अपारदर्शिता:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:513
+#: libs/ui/forms/wdgdisplaysettings.ui:524
 #: libs/ui/forms/wdggeneralsettings.ui:1273
 #, kde-format
 msgid "Miscellaneous"
 msgstr "विविध"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:532
+#: libs/ui/forms/wdgdisplaysettings.ui:543
 #, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "कैनवास स्क्रॉलबार छिपाएँ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:542
+#: libs/ui/forms/wdgdisplaysettings.ui:553
 #, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr " वक्र एन्टी-अलियासिं सक्षम करें"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:549
+#: libs/ui/forms/wdgdisplaysettings.ui:560
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr "परत लघुछवि पॉपअप को छुपाएं"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:556
+#: libs/ui/forms/wdgdisplaysettings.ui:567
 #, kde-format
 msgid "Color channels in color"
 msgstr "रंग चैनल को रंगीन दिखाएँ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:566
+#: libs/ui/forms/wdgdisplaysettings.ui:577
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "चयन आउटलाइन एन्टी-अलियासिंग सक्षम करें"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:573
+#: libs/ui/forms/wdgdisplaysettings.ui:584
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr "यदि चेक किया जाता है, जब केनवास को स्क्रॉल किया जाता है तो चेकर खिसकेगा."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:576
+#: libs/ui/forms/wdgdisplaysettings.ui:587
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -29797,7 +29840,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:579
+#: libs/ui/forms/wdgdisplaysettings.ui:590
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr "जब स्क्रॉलिंग की जाए तो चेकर खिसकाएं (&M)"
@@ -37735,12 +37778,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:664
+#: libs/ui/opengl/kis_opengl.cpp:670
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:666
+#: libs/ui/opengl/kis_opengl.cpp:672
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37748,14 +37791,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1149
+#: libs/ui/opengl/kis_opengl.cpp:1155
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1151
+#: libs/ui/opengl/kis_opengl.cpp:1157
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

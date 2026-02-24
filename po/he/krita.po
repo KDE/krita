@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-22 00:42+0000\n"
-"PO-Revision-Date: 2026-02-22 17:40+0200\n"
+"POT-Creation-Date: 2026-02-24 00:41+0000\n"
+"PO-Revision-Date: 2026-02-23 22:11+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16264,14 +16264,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "&בוחר צבעים"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:516
+#: krita/main.cc:737 libs/ui/KisApplication.cpp:516
 #: libs/ui/KisApplication.cpp:828
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita"
 
-#: krita/main.cc:730
+#: krita/main.cc:738
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20839,7 +20839,7 @@ msgstr "מקושר"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1845
-#: libs/ui/forms/wdgdisplaysettings.ui:368
+#: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
@@ -24070,9 +24070,9 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2205
-#: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -24882,7 +24882,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #, fuzzy, kde-format
 msgid "Warning(s):"
 msgstr "הדפסה אחרונה"
@@ -25814,8 +25814,8 @@ msgstr "חזרה:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2524
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2555
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25917,8 +25917,8 @@ msgstr "עירוב:"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2494
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2496
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2525
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26370,7 +26370,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:110
+#: libs/ui/forms/wdgdisplaysettings.ui:149
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr ""
@@ -26771,8 +26771,8 @@ msgstr "מאפייני שכבה..."
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1762
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1766
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1851
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2347 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2378 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27387,140 +27387,174 @@ msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "&מברשת"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2187
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#, fuzzy, kde-format
+#| msgid "Current"
+msgctxt "@item:inlistbox"
+msgid "GLX (current)"
+msgstr "נוכחי"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "GLX"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
+#, fuzzy, kde-format
+#| msgid "Current"
+msgctxt "@item:inlistbox"
+msgid "EGL (current)"
+msgstr "נוכחי"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2172
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "EGL"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>If you are using Krita on X11 or XWayland and experience slowness, try "
+"switching between EGL and GLX</p>"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, fuzzy, kde-format
 msgid "Display Id: %1"
 msgstr "חזרה:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2188
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2220
 #, fuzzy, kde-format
 msgid "Min Luminance: %1"
 msgstr "רוחב:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, fuzzy, kde-format
 msgid "Max Luminance: %1"
 msgstr "רוחב:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2222
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2192
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2224
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2194
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2225
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2195
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
 #, fuzzy, kde-format
 msgid "White Point: %1, %2"
 msgstr "אלפא"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2407
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2487
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2518
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "זוויות:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2504
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2535
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "ייצוא מסמך בתור"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2506
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "אישור שמירה"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2516
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "הגדרות"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2517
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2548
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "משטח ציור"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2534
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2565
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, fuzzy, kde-format
 msgid "Color Management"
 msgstr "מחליף צבעים"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2536
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
 #, fuzzy, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "&צבע"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2544
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2546
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2575
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #, fuzzy, kde-format
 msgid "Performance"
 msgstr "העדפות"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2554
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2585
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "הגדרות"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2556
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "כחול"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2564
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2595
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "הגדרות"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "&צבע"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2574
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2576
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2605
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "ירקרק"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2584
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2615
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "מחבר"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2586
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "יוצר"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2593
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2624
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -28909,53 +28943,14 @@ msgstr "פעולה בוליאנית"
 msgid "Canvas &Graphics Acceleration"
 msgstr ""
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
-"Driver combinations (like Intel) or broken on some others (like AMD/Radeon)."
-"</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:76
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: libs/ui/forms/wdgdisplaysettings.ui:67
 #, fuzzy, kde-format
-msgid "Use texture buffer"
-msgstr "&בוחר צבעים"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:115
-#, fuzzy, kde-format
-msgid "Bilinear Filtering"
-msgstr "&בוחר צבעים"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:120
-#, fuzzy, kde-format
-msgid "Trilinear Filtering"
-msgstr "גל משולש"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:125
-#, fuzzy, kde-format
-msgid "High Quality Filtering"
-msgstr "&בוחר צבעים"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:139
-#, fuzzy, kde-format
-msgid "Scaling Mode:"
-msgstr "בחירה"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-msgid "Assistants Mode:"
-msgstr "אליפסה"
+msgid "Current Renderer:"
+msgstr "העבר שכבה נוכחית קדימה"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:172
+#: libs/ui/forms/wdgdisplaysettings.ui:104
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -28965,92 +28960,139 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:179
+#: libs/ui/forms/wdgdisplaysettings.ui:111
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:184
+#: libs/ui/forms/wdgdisplaysettings.ui:116
 #, fuzzy, kde-format
 msgid "Pixmap Cache"
 msgstr "&שכבה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:189
+#: libs/ui/forms/wdgdisplaysettings.ui:121
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr ""
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:154
+#, fuzzy, kde-format
+msgid "Bilinear Filtering"
+msgstr "&בוחר צבעים"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:159
+#, fuzzy, kde-format
+msgid "Trilinear Filtering"
+msgstr "גל משולש"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:164
+#, fuzzy, kde-format
+msgid "High Quality Filtering"
+msgstr "&בוחר צבעים"
+
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:203
+#: libs/ui/forms/wdgdisplaysettings.ui:185
 #, fuzzy, kde-format
 msgid "Preferred Renderer (needs restart):"
 msgstr "Krita"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgdisplaysettings.ui:220
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
+#: libs/ui/forms/wdgdisplaysettings.ui:201
+#, kde-format
+msgid ""
+"<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
+"Driver combinations (like Intel) or broken on some others (like AMD/Radeon)."
+"</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
+#: libs/ui/forms/wdgdisplaysettings.ui:204
 #, fuzzy, kde-format
-msgid "Current Renderer:"
-msgstr "העבר שכבה נוכחית קדימה"
+msgid "Use texture buffer"
+msgstr "&בוחר צבעים"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:217
+#, fuzzy, kde-format
+msgid "Scaling Mode:"
+msgstr "בחירה"
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:233
+#, fuzzy, kde-format
+msgid "Assistants Mode:"
+msgstr "אליפסה"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:244
+#, fuzzy, kde-format
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr "Krita"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
-#: libs/ui/forms/wdgdisplaysettings.ui:250
+#: libs/ui/forms/wdgdisplaysettings.ui:261
 #, fuzzy, kde-format
 #| msgid "Settings"
 msgid "HDR Settings"
 msgstr "הגדרות"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:256
+#: libs/ui/forms/wdgdisplaysettings.ui:267
 #, fuzzy, kde-format
 msgid "Current Display Format"
 msgstr "הסר שכבה נוכחית"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgdisplaysettings.ui:263
+#: libs/ui/forms/wdgdisplaysettings.ui:274
 #, fuzzy, kde-format
 msgid "Display Format:"
 msgstr "חזרה:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:270
+#: libs/ui/forms/wdgdisplaysettings.ui:281
 #, fuzzy, kde-format
 msgid "Current Surface Value"
 msgstr "העבר שכבה נוכחית קדימה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgdisplaysettings.ui:277
+#: libs/ui/forms/wdgdisplaysettings.ui:288
 #, fuzzy, kde-format
 msgid "Current Output Format:"
 msgstr "העבר שכבה נוכחית קדימה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgdisplaysettings.ui:287
+#: libs/ui/forms/wdgdisplaysettings.ui:298
 #, fuzzy, kde-format
 msgid "Preferred Output Format:"
 msgstr "העבר שכבה נוכחית קדימה"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:315
+#: libs/ui/forms/wdgdisplaysettings.ui:326
 #, fuzzy, kde-format
 msgid "Canvas Decorations"
 msgstr "&כיוון:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgdisplaysettings.ui:321
+#: libs/ui/forms/wdgdisplaysettings.ui:332
 #, fuzzy, kde-format
 msgid "Transparency Checkerboard:"
 msgstr "מצבע הקידמה לשקוף"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:327
+#: libs/ui/forms/wdgdisplaysettings.ui:338
 #, fuzzy, kde-format
 msgid "Color 1:"
 msgstr "&צבע"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgdisplaysettings.ui:354
+#: libs/ui/forms/wdgdisplaysettings.ui:365
 #, fuzzy, kde-format
 msgid "Color 2:"
 msgstr "&צבע"
@@ -29060,7 +29102,7 @@ msgstr "&צבע"
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:268
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
 #: libs/ui/kis_paintop_box.cc:275
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -29071,13 +29113,13 @@ msgid "Size:"
 msgstr "מקושר"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:384
+#: libs/ui/forms/wdgdisplaysettings.ui:395
 #, fuzzy, kde-format
 msgid "Canvas Border Color:"
 msgstr "&צבע"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:404
+#: libs/ui/forms/wdgdisplaysettings.ui:415
 #, fuzzy, kde-format
 msgid "Pixel Grid:"
 msgstr "&תמונה"
@@ -29092,7 +29134,7 @@ msgstr "&תמונה"
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdgdisplaysettings.ui:410 libs/ui/layerstyles/WdgStroke.ui:163
+#: libs/ui/forms/wdgdisplaysettings.ui:421 libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
@@ -29106,7 +29148,7 @@ msgid "Color:"
 msgstr "&צבע"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:427
+#: libs/ui/forms/wdgdisplaysettings.ui:438
 #, fuzzy, kde-format
 msgid "Start showing at:"
 msgstr "הת&חל ב:"
@@ -29129,7 +29171,7 @@ msgstr "הת&חל ב:"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleHeight)
-#: libs/ui/forms/wdgdisplaysettings.ui:434
+#: libs/ui/forms/wdgdisplaysettings.ui:445
 #: libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -29170,75 +29212,75 @@ msgid "%"
 msgstr "%1%"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:447
+#: libs/ui/forms/wdgdisplaysettings.ui:458
 #, fuzzy, kde-format
 msgid "Selection Overlay:"
 msgstr "בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:459
+#: libs/ui/forms/wdgdisplaysettings.ui:470
 #, fuzzy, kde-format
 msgid "Outline opacity:"
 msgstr "בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdgdisplaysettings.ui:472
+#: libs/ui/forms/wdgdisplaysettings.ui:483
 #, fuzzy, kde-format
 msgid "Overlay color:"
 msgstr "קו עליון"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:492
+#: libs/ui/forms/wdgdisplaysettings.ui:503
 #, fuzzy, kde-format
 msgid "Overlay opacity:"
 msgstr "יישוב:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:513
+#: libs/ui/forms/wdgdisplaysettings.ui:524
 #: libs/ui/forms/wdggeneralsettings.ui:1273
 #, kde-format
 msgid "Miscellaneous"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:532
+#: libs/ui/forms/wdgdisplaysettings.ui:543
 #, fuzzy, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "כלי &עט"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:542
+#: libs/ui/forms/wdgdisplaysettings.ui:553
 #, fuzzy, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr "מאתחל..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:549
+#: libs/ui/forms/wdgdisplaysettings.ui:560
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:556
+#: libs/ui/forms/wdgdisplaysettings.ui:567
 #, fuzzy, kde-format
 msgid "Color channels in color"
 msgstr "&בוחר צבעים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:566
+#: libs/ui/forms/wdgdisplaysettings.ui:577
 #, fuzzy, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "מאתחל..."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:573
+#: libs/ui/forms/wdgdisplaysettings.ui:584
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:576
+#: libs/ui/forms/wdgdisplaysettings.ui:587
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -29246,7 +29288,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:579
+#: libs/ui/forms/wdgdisplaysettings.ui:590
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr ""
@@ -37053,12 +37095,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:664
+#: libs/ui/opengl/kis_opengl.cpp:670
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:666
+#: libs/ui/opengl/kis_opengl.cpp:672
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37066,14 +37108,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1149
+#: libs/ui/opengl/kis_opengl.cpp:1155
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1151
+#: libs/ui/opengl/kis_opengl.cpp:1157
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -62243,10 +62285,9 @@ msgid "Document Tree Model"
 msgstr "מידע מסמך"
 
 #: plugins/python/filtermanager/uifiltermanager.py:48
-#, fuzzy
 msgctxt "Python filters"
 msgid "Filters:"
-msgstr "&לבן"
+msgstr "מסננים:"
 
 #: plugins/python/highpass/highpass.py:40
 #, fuzzy
@@ -62739,56 +62780,46 @@ msgid "Debug Ctrl+D"
 msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
-#, fuzzy
 msgid "New"
-msgstr "שם"
+msgstr "חדש"
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
-#, fuzzy
 msgid "The document has been modified."
-msgstr "פתח מסמך חדש מתוך תבנית"
+msgstr "המסמך נערך."
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
-#, fuzzy
-#| msgid "Do you really want to remove that group?"
 msgid "Do you want to save your changes?"
-msgstr "האם אתה בטוח שברצונך להסיר קבוצה זו?"
+msgstr "לשמור את השינויים שלך?"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
-#, fuzzy
 msgid "Open"
-msgstr "&פתח"
+msgstr "פתיחה"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
-#, fuzzy
 msgid "Python Files"
-msgstr "מאפייני שכבה..."
+msgstr "קובצי Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
-#, fuzzy
 msgid "Invalid File"
-msgstr "&תמונה"
+msgstr "קובץ שגוי"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
 msgid "Open files with .py extension"
 msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:27
-#, fuzzy
 msgid "Reload File"
-msgstr "הורד"
+msgstr "ריענון קובץ"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:31
-#, fuzzy
 msgid "Reload File Alt+R"
-msgstr "הורד"
+msgstr "ריענון קובץ Alt+R"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:44
-#, fuzzy
 msgid "No existing document"
-msgstr "&פתיחת מסמך קיים"
+msgstr "אין מסמך קיים"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:45
 msgid "Please specify a document by opening it before reloading"
@@ -62810,48 +62841,41 @@ msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
 msgid "Save Python File"
-msgstr "מאפייני שכבה..."
+msgstr "שמירת קובץ Python"
 
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
-#, fuzzy
 msgid "Save As"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שמירה בשם"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:22
-#, fuzzy
 msgid "Syntax highlighter:"
-msgstr "&גובה:"
+msgstr "מדגיש תחביר:"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
-#, fuzzy
 msgid "Fonts:"
-msgstr "מדינה:"
+msgstr "גופנים:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"
 msgstr ""
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
-#, fuzzy
 msgctxt "Value in DebuggerTable"
 msgid "Value"
-msgstr "כחול"
+msgstr "ערך"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
-#, fuzzy
 msgid "Step Over"
-msgstr "קו עליון"
+msgstr "דילוג מעבר"
 
 #: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr ""
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
-#, fuzzy
 msgid "Selections Bag"
-msgstr "בחירה"
+msgstr "תיק בחירות"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonSave)
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.ui:27
@@ -62865,10 +62889,10 @@ msgstr ""
 #. i18n: context: text @ Action (ten_brushes), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:4
 #: plugins/python/tenbrushes/tenbrushes.action:8
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ten Brushes"
-msgstr "&מברשת"
+msgstr "עשר מברשות"
 
 #. i18n: context: text @ Action (activate_preset_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:21
@@ -63328,20 +63352,20 @@ msgid "Stabilizer"
 msgstr "גוו&ני אפור"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:419
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
-msgstr "&תמונה"
+msgstr "פיקסל"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:421
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Smoothing:"
-msgstr "הגדרות"
+msgstr "החלקת מברשת:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:486
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delay:"
-msgstr "חזרה:"
+msgstr "השהיה:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
@@ -63354,14 +63378,14 @@ msgid "Radius where the brush is blocked"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:502
-#, fuzzy, kde-format
+#, kde-format
 msgid "Finish line:"
-msgstr "כלי מ&צולע"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:514
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stabilize Sensors:"
-msgstr "גוו&ני אפור"
+msgstr "ייצוב חיישנים:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:522
 #, fuzzy, kde-format
@@ -63448,9 +63472,9 @@ msgid "Draw Ellipse"
 msgstr "ציור אליפסה"
 
 #: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ellipse Tool"
-msgstr "כלי אלי&פסה"
+msgstr "כלי אליפסות"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -64118,9 +64142,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Multiplier:"
-msgstr "מברשות"
+msgstr "מכפיל:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:143
@@ -64130,14 +64154,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Amount of shortcut key movement for Move Tool"
 msgid "Amount:"
-msgstr "זוויות:"
+msgstr "כמות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/basictools/wdgmovetool.ui:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unit:"
 msgstr "יחידה:"
 
@@ -64147,17 +64171,17 @@ msgstr "יחידה:"
 #: plugins/tools/basictools/wdgmovetool.ui:272
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1082
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Translation"
-msgstr "גל משולש"
+msgstr "תרגום אופקי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
 #: plugins/tools/basictools/wdgmovetool.ui:256
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:783
-#, fuzzy, kde-format
+#, kde-format
 msgid "&x:"
-msgstr "מקושר"
+msgstr "&x:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetY)
@@ -64165,93 +64189,93 @@ msgstr "מקושר"
 #: plugins/tools/basictools/wdgmovetool.ui:301
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1120
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Translation"
-msgstr "גל משולש"
+msgstr "תרגום אנכי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)
 #: plugins/tools/basictools/wdgmovetool.ui:304
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:818
-#, fuzzy, kde-format
+#, kde-format
 msgid "&y:"
-msgstr "מקושר"
+msgstr "&y:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowCoordinates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowCoordinates)
 #: plugins/tools/basictools/wdgmovetool.ui:319
 #: plugins/tools/basictools/wdgmovetool.ui:322
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show coordinates on canvas"
-msgstr "הזז בחירה"
+msgstr "הצגת נקודות ציון על משטח הציור"
 
 #. i18n: ectx: property (text), widget (QLabel, brushesLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brushes:"
-msgstr "&מברשת"
+msgstr "מברשות:"
 
 #. i18n: ectx: property (text), widget (QLabel, subbrushLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subbrushes:"
-msgstr "&מברשת"
+msgstr "תת־מברשות:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of Radius in Multibrush tool options"
 msgid "Radius:"
-msgstr "סובב &90"
+msgstr "רדיוס:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, horizontalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal"
-msgstr "גל משולש"
+msgstr "אופקי"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showAxesCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Origin"
-msgstr "הצג סרגל כלים %1"
+msgstr "הצגת מקור"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical"
-msgstr "גל משולש"
+msgstr "אנכי"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmultihandtool.ui:216
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Origin in Multihand Tool"
 msgid "Origin:"
-msgstr "אלכסוני"
+msgstr "מקור:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addSubbrushButton)
 #: plugins/tools/basictools/wdgmultihandtool.ui:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add"
-msgstr "הוספת %1..."
+msgstr "הוספה"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeSubbrushButton)
 #: plugins/tools/basictools/wdgmultihandtool.ui:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove All"
-msgstr "ה&סר שכבה"
+msgstr "הסרה של הכול"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interval X:"
-msgstr "זוויות:"
+msgstr "הפרש ב־X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interval Y:"
-msgstr "זוויות:"
+msgstr "הפרש ב־Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
 #, fuzzy
@@ -64453,9 +64477,9 @@ msgstr "אטימות [*משתנה*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor Lock"
-msgstr "אלפא"
+msgstr "נעילת עוגן"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
@@ -64493,9 +64517,9 @@ msgid "Global Coordinates"
 msgstr "נקודות ציון מקיפות"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Geometry"
-msgstr "אפשרויות עירוב"
+msgstr "גאומטריה"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:40
 #, kde-format
@@ -64899,12 +64923,12 @@ msgid "Spread: {n}%"
 msgstr "אטימות:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "להשתמש בבחירה כתוחם"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
 #, kde-format

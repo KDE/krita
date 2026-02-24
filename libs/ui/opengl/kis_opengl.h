@@ -146,4 +146,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisOpenGL::OpenGLRenderers);
 #endif
 
+Q_DECLARE_METATYPE(KisOpenGL::XcbGLProviderProtocol)
+
 #endif // KIS_OPENGL_H_

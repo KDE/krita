@@ -60,6 +60,15 @@ typedef void (APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
 typedef void (QOPENGLF_APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
 #endif
 
+#include <KisStaticInitializer.h>
+
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisOpenGL::XcbGLProviderProtocol>("KisOpenGL::XcbGLProviderProtocol");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QMetaType::registerEqualsComparator<KisOpenGL::XcbGLProviderProtocol>();
+#endif
+}
+
 namespace
 {
     // config option, set manually by main()

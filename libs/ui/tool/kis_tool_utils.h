@@ -11,11 +11,8 @@
 #include <kis_types.h>
 #include <kritaui_export.h>
 
-class QAction;
 class QPoint;
 class KoColor;
-class KoCanvasBase;
-class KoToolBase;
 
 namespace KisToolUtils {
 
@@ -74,36 +71,6 @@ bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeList nodes, KisSelection
  * not properly handle multiple monitors with different scale factors.
  */
 void KRITAUI_EXPORT setCursorPos(const QPoint &point);
-
-class KRITAUI_EXPORT MoveShortcutsHelper
-{
-public:
-    MoveShortcutsHelper(KoToolBase *tool);
-
-    void activate() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-    void deactivate() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-    void startMoveAction() {
-        setInternalMoveShortcutsEnabled(true);
-    }
-    void endMoveAction() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-    void cancelMoveAction() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-
-    static QList<QAction*> createActions();
-
-private:
-    void setInternalMoveShortcutsEnabled(bool value);
-
-private:
-    KoToolBase *m_tool;
-};
 }
 
 #endif // KIS_TOOL_UTILS_H

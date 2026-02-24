@@ -60,8 +60,8 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout">
-          <item row="1" column="0">
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Current Renderer:</string>
@@ -71,59 +71,30 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="1">
-           <widget class="KisWarningBlock" name="grpOpenGLWarnings">
-            <property name="title">
-             <string/>
+          <item row="0" column="1">
+           <widget class="QLabel" name="lblCurrentRenderer">
+            <property name="text">
+             <string>Unknown</string>
             </property>
            </widget>
           </item>
-          <item row="9" column="0" colspan="2">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="5" column="1">
-           <widget class="QComboBox" name="cmbAssistantsDrawMode">
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblPreferredRenderer">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Can be used to troubleshoot performance or artifacting problems with drawing assistants.
-              &lt;/p&gt;&lt;p&gt;Changing the pixmap cache size requires a restart.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <property name="text">
+             <string>Preferred Renderer (needs restart):</string>
             </property>
-            <property name="currentIndex">
-             <number>0</number>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
-            <item>
-             <property name="text">
-              <string>Direct (Recommended)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Pixmap Cache</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Large Pixmap Cache</string>
-             </property>
-            </item>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="1" column="1">
            <widget class="QComboBox" name="cmbPreferredRenderer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -133,7 +104,34 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblPreferredXcbGlApi">
+            <property name="text">
+             <string>Preferred openGL interface
+(needs restart):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="cmbPreferredXcbGlApi"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Scaling Mode:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
            <widget class="QComboBox" name="cmbFilterMode">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -166,62 +164,7 @@
             </item>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="lblCurrentRenderer">
-            <property name="text">
-             <string>Unknown</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lblPreferredRenderer">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Preferred Renderer (needs restart):</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QCheckBox" name="chkUseTextureBuffer">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Use texture buffer</string>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Scaling Mode:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
            <widget class="QLabel" name="lblAssistantsDrawMode">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -237,16 +180,73 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lblPreferredXcbGlApi">
+          <item row="4" column="1">
+           <widget class="QComboBox" name="cmbAssistantsDrawMode">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Can be used to troubleshoot performance or artifacting problems with drawing assistants.
+              &lt;/p&gt;&lt;p&gt;Changing the pixmap cache size requires a restart.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Direct (Recommended)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Pixmap Cache</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Large Pixmap Cache</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QCheckBox" name="chkUseTextureBuffer">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
-             <string>Preferred openGL interface
-(needs restart):</string>
+             <string>Use texture buffer</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QComboBox" name="cmbPreferredXcbGlApi"/>
+          <item row="6" column="1">
+           <widget class="KisWarningBlock" name="grpOpenGLWarnings">
+            <property name="title">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="2">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

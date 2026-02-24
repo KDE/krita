@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 02:44+0000\n"
-"PO-Revision-Date: 2026-02-22 17:40+0200\n"
+"POT-Creation-Date: 2026-02-24 02:39+0000\n"
+"PO-Revision-Date: 2026-02-23 22:11+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -34283,6 +34283,12 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "בחירה"
 
+#: libs/ui/kis_splash_screen.cpp:110
+#, kde-format
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr ""
+
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
 msgctxt "splash image credit"
@@ -62237,10 +62243,9 @@ msgid "Document Tree Model"
 msgstr "מידע מסמך"
 
 #: plugins/python/filtermanager/uifiltermanager.py:48
-#, fuzzy
 msgctxt "Python filters"
 msgid "Filters:"
-msgstr "&לבן"
+msgstr "מסננים:"
 
 #: plugins/python/highpass/highpass.py:40
 #, fuzzy
@@ -62733,56 +62738,46 @@ msgid "Debug Ctrl+D"
 msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
-#, fuzzy
 msgid "New"
-msgstr "שם"
+msgstr "חדש"
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
-#, fuzzy
 msgid "The document has been modified."
-msgstr "פתח מסמך חדש מתוך תבנית"
+msgstr "המסמך נערך."
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
-#, fuzzy
-#| msgid "Do you really want to remove that group?"
 msgid "Do you want to save your changes?"
-msgstr "האם אתה בטוח שברצונך להסיר קבוצה זו?"
+msgstr "לשמור את השינויים שלך?"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
-#, fuzzy
 msgid "Open"
-msgstr "&פתח"
+msgstr "פתיחה"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
-#, fuzzy
 msgid "Python Files"
-msgstr "מאפייני שכבה..."
+msgstr "קובצי Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
-#, fuzzy
 msgid "Invalid File"
-msgstr "&תמונה"
+msgstr "קובץ שגוי"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
 msgid "Open files with .py extension"
 msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:27
-#, fuzzy
 msgid "Reload File"
-msgstr "הורד"
+msgstr "ריענון קובץ"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:31
-#, fuzzy
 msgid "Reload File Alt+R"
-msgstr "הורד"
+msgstr "ריענון קובץ Alt+R"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:44
-#, fuzzy
 msgid "No existing document"
-msgstr "&פתיחת מסמך קיים"
+msgstr "אין מסמך קיים"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:45
 msgid "Please specify a document by opening it before reloading"
@@ -62804,48 +62799,41 @@ msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
 msgid "Save Python File"
-msgstr "מאפייני שכבה..."
+msgstr "שמירת קובץ Python"
 
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
-#, fuzzy
 msgid "Save As"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שמירה בשם"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:22
-#, fuzzy
 msgid "Syntax highlighter:"
-msgstr "&גובה:"
+msgstr "מדגיש תחביר:"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
-#, fuzzy
 msgid "Fonts:"
-msgstr "מדינה:"
+msgstr "גופנים:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"
 msgstr ""
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
-#, fuzzy
 msgctxt "Value in DebuggerTable"
 msgid "Value"
-msgstr "כחול"
+msgstr "ערך"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
-#, fuzzy
 msgid "Step Over"
-msgstr "קו עליון"
+msgstr "דילוג מעבר"
 
 #: plugins/python/scripter/uicontroller.py:176
 msgid "Error Running Script"
 msgstr ""
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
-#, fuzzy
 msgid "Selections Bag"
-msgstr "בחירה"
+msgstr "תיק בחירות"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonSave)
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.ui:27
@@ -62859,10 +62847,10 @@ msgstr ""
 #. i18n: context: text @ Action (ten_brushes), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:4
 #: plugins/python/tenbrushes/tenbrushes.action:8
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ten Brushes"
-msgstr "&מברשת"
+msgstr "עשר מברשות"
 
 #. i18n: context: text @ Action (activate_preset_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:21
@@ -63322,20 +63310,20 @@ msgid "Stabilizer"
 msgstr "גוו&ני אפור"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:419
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
-msgstr "&תמונה"
+msgstr "פיקסל"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:421
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Smoothing:"
-msgstr "הגדרות"
+msgstr "החלקת מברשת:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:486
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delay:"
-msgstr "חזרה:"
+msgstr "השהיה:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
@@ -63348,14 +63336,14 @@ msgid "Radius where the brush is blocked"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:502
-#, fuzzy, kde-format
+#, kde-format
 msgid "Finish line:"
-msgstr "כלי מ&צולע"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:514
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stabilize Sensors:"
-msgstr "גוו&ני אפור"
+msgstr "ייצוב חיישנים:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:522
 #, fuzzy, kde-format
@@ -63442,9 +63430,9 @@ msgid "Draw Ellipse"
 msgstr "ציור אליפסה"
 
 #: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ellipse Tool"
-msgstr "כלי אלי&פסה"
+msgstr "כלי אליפסות"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -64112,9 +64100,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Multiplier:"
-msgstr "מברשות"
+msgstr "מכפיל:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:143
@@ -64124,14 +64112,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Amount of shortcut key movement for Move Tool"
 msgid "Amount:"
-msgstr "זוויות:"
+msgstr "כמות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/basictools/wdgmovetool.ui:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unit:"
 msgstr "יחידה:"
 
@@ -64141,17 +64129,17 @@ msgstr "יחידה:"
 #: plugins/tools/basictools/wdgmovetool.ui:272
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1082
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Translation"
-msgstr "גל משולש"
+msgstr "תרגום אופקי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
 #: plugins/tools/basictools/wdgmovetool.ui:256
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:783
-#, fuzzy, kde-format
+#, kde-format
 msgid "&x:"
-msgstr "מקושר"
+msgstr "&x:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetY)
@@ -64159,93 +64147,93 @@ msgstr "מקושר"
 #: plugins/tools/basictools/wdgmovetool.ui:301
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1120
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Translation"
-msgstr "גל משולש"
+msgstr "תרגום אנכי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)
 #: plugins/tools/basictools/wdgmovetool.ui:304
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:818
-#, fuzzy, kde-format
+#, kde-format
 msgid "&y:"
-msgstr "מקושר"
+msgstr "&y:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowCoordinates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowCoordinates)
 #: plugins/tools/basictools/wdgmovetool.ui:319
 #: plugins/tools/basictools/wdgmovetool.ui:322
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show coordinates on canvas"
-msgstr "הזז בחירה"
+msgstr "הצגת נקודות ציון על משטח הציור"
 
 #. i18n: ectx: property (text), widget (QLabel, brushesLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brushes:"
-msgstr "&מברשת"
+msgstr "מברשות:"
 
 #. i18n: ectx: property (text), widget (QLabel, subbrushLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subbrushes:"
-msgstr "&מברשת"
+msgstr "תת־מברשות:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of Radius in Multibrush tool options"
 msgid "Radius:"
-msgstr "סובב &90"
+msgstr "רדיוס:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, horizontalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal"
-msgstr "גל משולש"
+msgstr "אופקי"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showAxesCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Origin"
-msgstr "הצג סרגל כלים %1"
+msgstr "הצגת מקור"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical"
-msgstr "גל משולש"
+msgstr "אנכי"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmultihandtool.ui:216
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Origin in Multihand Tool"
 msgid "Origin:"
-msgstr "אלכסוני"
+msgstr "מקור:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addSubbrushButton)
 #: plugins/tools/basictools/wdgmultihandtool.ui:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add"
-msgstr "הוספת %1..."
+msgstr "הוספה"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeSubbrushButton)
 #: plugins/tools/basictools/wdgmultihandtool.ui:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove All"
-msgstr "ה&סר שכבה"
+msgstr "הסרה של הכול"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interval X:"
-msgstr "זוויות:"
+msgstr "הפרש ב־X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interval Y:"
-msgstr "זוויות:"
+msgstr "הפרש ב־Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
 #, fuzzy
@@ -64447,9 +64435,9 @@ msgstr "אטימות [*משתנה*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor Lock"
-msgstr "אלפא"
+msgstr "נעילת עוגן"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
@@ -64487,9 +64475,9 @@ msgid "Global Coordinates"
 msgstr "נקודות ציון מקיפות"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Geometry"
-msgstr "אפשרויות עירוב"
+msgstr "גאומטריה"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:40
 #, kde-format
@@ -64893,12 +64881,12 @@ msgid "Spread: {n}%"
 msgstr "אטימות:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "להשתמש בבחירה כתוחם"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
 #, kde-format

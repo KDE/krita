@@ -198,7 +198,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 40 // 5.2.15 was released with version '40', increment on releasing
+    def versionRelease  = 41 // 5.2.16 was released with version '41', increment on releasing
 
     defaultConfig {
         compileSdk androidCompileSdkVersion.toInteger()
@@ -213,7 +213,7 @@ android {
         targetSdkVersion 35
         minSdkVersion 24
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.2.16"
+        versionName "5.2.17"
         def unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')
         archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName$unstableSuffix" : "krita-$abi-$versionName$unstableSuffix"
     }

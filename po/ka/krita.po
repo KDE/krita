@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 02:44+0000\n"
+"POT-Creation-Date: 2026-02-24 02:39+0000\n"
 "PO-Revision-Date: 2025-04-26 07:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -34376,6 +34376,12 @@ msgstr ""
 #: libs/ui/kis_selection_manager.cc:744
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, kde-format
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:158

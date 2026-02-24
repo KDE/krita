@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 02:44+0000\n"
+"POT-Creation-Date: 2026-02-24 02:39+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -34536,6 +34536,12 @@ msgstr "Pemilihan"
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Pemilihan"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, kde-format
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format

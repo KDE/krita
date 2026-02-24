@@ -81,7 +81,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-19 02:44+0000\n"
+"POT-Creation-Date: 2026-02-24 02:39+0000\n"
 "PO-Revision-Date: 2026-01-28 10:51+0300\n"
 "Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -35087,6 +35087,13 @@ msgid "Select Opaque"
 msgstr ""
 "Выделение непрозрачной области\n"
 "выделение непрозрачной области"
+
+#: libs/ui/kis_splash_screen.cpp:110
+#, fuzzy, kde-format
+#| msgid "Tyson Tan"
+msgctxt "Normal splash artist name"
+msgid "Tyson Tan"
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -106707,9 +106714,6 @@ msgstr ""
 
 #~ msgid "Todimus"
 #~ msgstr "Todimus"
-
-#~ msgid "Tyson Tan"
-#~ msgstr "Tyson Tan"
 
 #~ msgid "Usamah Philips"
 #~ msgstr "Usamah Philips"

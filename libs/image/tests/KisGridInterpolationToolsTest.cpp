@@ -236,6 +236,9 @@ void KisGridInterpolationToolsTest::testCalculateCorrectSubGrid_data()
 
     QTest::addRow("tiny change") << QRect(0, 0, 8, 8) << 8 << QRectF(2.1, 2.1, 0.6, 0.6) << QSize(1, 1) << QRect(0, 0, 1, 1);
 
+    QTest::addRow("from liquify mask unit test") << QRect(QPoint(1024,775), QSize(1483,254)) << pixelPrecision << QRectF(QPointF(1006.38,336.751), QSize(1688.41,691.249)) << QSize(187, 34) << QRect(0, 0, 187, 34);
+    QTest::addRow("from liquify mask unit test - simplified") << QRect(QPoint(1024,7), QSize(1483,14)) << pixelPrecision << QRectF(QPointF(1006.38,6), QSize(1688.41,15)) << QSize(187, 4) << QRect(0, 0, 187, 4);
+
 }
 
 void KisGridInterpolationToolsTest::testCalculateCorrectSubGrid()
@@ -275,9 +278,9 @@ void KisGridInterpolationToolsTest::testCutOutSubgridFromBounds_data()
     QRect srcBoundsSmall = QRect(0, 0, 100, 100);
 
     QTest::addRow("out-of-bounds") << QRect(122, 18, 34, 31) << srcBounds << GridIterationTools::calcGridSize(srcBounds, pixelPrecision)
-                                   << getPoints(srcBounds, pixelPrecision) << QList<QRectF> {QRectF(0,0, 1239,144), QRectF(0,144, 976,240), QRectF(0,384, 1239,1369)};
+                                   << getPoints(srcBounds, pixelPrecision) << QList<QRectF> {QRectF(0,0, 1240,144), QRectF(0,144, 976,241), QRectF(0,385, 1240,1369)};
     QTest::addRow("out-of-bounds") << QRect(10, 5, 4, 7) << srcBoundsSmall << GridIterationTools::calcGridSize(srcBoundsSmall, pixelPrecision)
-                                   << getPoints(srcBoundsSmall, pixelPrecision) << QList<QRectF> {QRectF(0,0, 99,40), QRectF(0,40, 80,48), QRectF(0,88, 99,11)};
+                                   << getPoints(srcBoundsSmall, pixelPrecision) << QList<QRectF> {QRectF(0,0, 100,40), QRectF(0,40, 80,49), QRectF(0,89, 100,11)};
 
     // this happened after an issue in calculateCorrectSubgrid, but it's still weird how it calculates it
     //  GridIterationTools::calcGridSize(QRect(QPoint(824,30), QSize(393,330)), 4)

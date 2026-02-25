@@ -50,6 +50,7 @@ Comment[ar]=اضبط مسبّقًا للفرش بلمسة ومظهر رقميي�
 Comment[bg]=Предварителни настройки за четки с дигитален вид и усещане.
 Comment[ca]=Pinzells predefinits amb un aspecte i comportament digital.
 Comment[ca@valencia]=Pinzells predefinits amb un aspecte i comportament digital.
+Comment[cs]=Přednastavení štětců s digitálním vzhledem.
 Comment[de]=Pinselvoreinstellungen mit einem digitalen Erscheinungsbild
 Comment[el]=Προεπιλογές πινέλου με ψηφιακό αποτύπωμα εμφάνισης και συμπεριφοράς.
 Comment[en_GB]=Brush presets with a digital look and feel.

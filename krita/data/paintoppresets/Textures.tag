@@ -44,6 +44,7 @@ Comment[ar]=اضبط مسبّقًا لفرش الأنسجة
 Comment[bg]=Текстурни четки
 Comment[ca]=Textures dels pinzells predefinits
 Comment[ca@valencia]=Textures dels pinzells predefinits
+Comment[cs]=Přednastavení texturovaných štětců
 Comment[de]=Texturpinsel-Voreinstellungen
 Comment[el]=Προεπιλογές πινέλου υφής
 Comment[en_GB]=Textured Brush Presets

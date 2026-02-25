@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-24 02:39+0000\n"
-"PO-Revision-Date: 2026-02-12 00:12+0100\n"
+"PO-Revision-Date: 2026-02-24 22:32+0100\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -8730,7 +8730,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr ""
+msgstr "Zobrazit rámeček doku"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:343
@@ -9604,6 +9604,8 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
+"Zobrazí globální výběr jako obvyklou výběrovou masku v doku "
+"<interface>Vrstvy</interface>"
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1030
@@ -15857,7 +15859,7 @@ msgstr "Zobrazit doky"
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr ""
+msgstr "Zobrazi&t záhlaví doků"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -15867,7 +15869,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr ""
+msgstr "Zobrazit záhlaví doků"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1821
@@ -26460,6 +26462,8 @@ msgid ""
 "In addition to filtering the currently visible frame, \n"
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
+"Kromě filtrování aktuálně viditelného snímku,\n"
+"filtrujte všechny ostatní klíčové snímky vybrané v doku Časová osa animace."
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:139
 #, kde-format
@@ -29277,7 +29281,7 @@ msgstr "Panely nástrojů"
 #: libs/ui/forms/wdgfullscreensettings.ui:49
 #, kde-format
 msgid "Toolbox and dockers"
-msgstr ""
+msgstr "Nástroje a doky"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScrollbars)
 #: libs/ui/forms/wdgfullscreensettings.ui:56
@@ -29309,7 +29313,7 @@ msgstr ""
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr ""
+msgstr "Vyber masku v doku „Masky gamutu“"
 
 #. i18n: ectx: attribute (title), widget (QWidget, File)
 #: libs/ui/forms/wdggeneralsettings.ui:52
@@ -29914,6 +29918,11 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Pokud je tato možnost zaškrtnuta, bude se automaticky měnit měřítko "
+"zobrazení snímků v doku Časová osa animace tak, aby co nejlépe odpovídalo "
+"rozsahu přehrávání dokumentu. Menší rozsah přehrávání způsobí, že se časová "
+"osa přiblíží, zatímco větší rozsah přehrávání způsobí, že se časová osa "
+"oddálí."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1180
@@ -33358,7 +33367,7 @@ msgstr ""
 #: libs/ui/kis_control_frame.cpp:129
 #, kde-format
 msgid "&Docker Box"
-msgstr ""
+msgstr "Rámeček &doku"
 
 #: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:451
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
@@ -33386,12 +33395,12 @@ msgstr "Přechody"
 #: libs/ui/kis_control_frame.cpp:283
 #, kde-format
 msgid "Docker box"
-msgstr ""
+msgstr "Rámeček doku"
 
 #: libs/ui/kis_control_frame.cpp:289
 #, kde-format
 msgid "Toolbar Docker Box"
-msgstr ""
+msgstr "Panel nástrojů Dok"
 
 #: libs/ui/kis_custom_pattern.cc:103
 #, kde-format
@@ -38784,30 +38793,30 @@ msgstr "Dolů"
 #: libs/ui/widgets/KisDockerHud.cpp:60
 #, kde-format
 msgid "Configure docker panel"
-msgstr ""
+msgstr "Nastavit panel doků"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
+msgstr "Dok je otevřený v %1. Pro zobrazení zde zavřete %1."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr ""
+msgstr "Nastavit doky %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Available dockers"
-msgstr ""
+msgstr "Dostupné doky"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Current dockers"
-msgstr ""
+msgstr "Současné doky"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -41850,7 +41859,7 @@ msgstr[2] ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
 #, kde-format
 msgid "Animation Timeline"
-msgstr ""
+msgstr "Časová osa animace"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
@@ -42311,7 +42320,7 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
 #, kde-format
 msgid "Docker settings"
-msgstr ""
+msgstr "Nastavení doku"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -42744,6 +42753,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
+"Zobrazí globální výběr jako obvyklou výběrovou masku v doku <b>Vrstvy</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
 #, kde-format
@@ -44114,7 +44124,7 @@ msgstr ""
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:81
 #, kde-format
 msgid "Snapshot Docker"
-msgstr ""
+msgstr "Dok snímků"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
 #, kde-format
@@ -46507,7 +46517,7 @@ msgstr ""
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr ""
+msgstr "Dotykový dok"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -61897,6 +61907,10 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
+"<html><head/><body><p>Pokud je tato možnost zaškrtnuta, váš skript bude v "
+"Kritě automaticky povolen. To znamená, že se zobrazí v nabídce Skripty nebo "
+"v seznamu doků. Pokud ne, budete muset skript ručně povolit prostřednictvím "
+"položky v nabídce Krita-&gt;Nastavení. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -61912,7 +61926,7 @@ msgstr "Vytvořit skript"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
-msgstr ""
+msgstr "Dok nedávné dokumenty"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
@@ -61920,7 +61934,7 @@ msgstr "Změnit nastavení"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr ""
+msgstr "Dok s posuvníkovým mixerem"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -62026,7 +62040,7 @@ msgstr ""
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
-msgstr ""
+msgstr "Dok s pythonovou paletou"
 
 #: plugins/python/palette_docker/palette_docker.py:74
 msgid "Set"
@@ -65405,6 +65419,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"K vytvoření nových textů použít aktuální vlastnosti v doku vlastností textu."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, kde-format
@@ -65424,6 +65439,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Otevřete si dok Vlastnosti textu, abyste mohli upravit vlastnosti, jako je "
+"velikost a styl písma."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, kde-format

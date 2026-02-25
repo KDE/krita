@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-24 02:39+0000\n"
-"PO-Revision-Date: 2026-02-03 13:10+0100\n"
+"PO-Revision-Date: 2026-02-24 09:01+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -34877,7 +34877,7 @@ msgstr "Selecciona l'opac"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format

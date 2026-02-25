@@ -43,6 +43,7 @@ Comment[ar]=تأثيرات خاصّة.kpp
 Comment[bg]=Special Effects.kpp
 Comment[ca]=Efectes especials «.kpp»
 Comment[ca@valencia]=Efectes especials «.kpp»
+Comment[cs]=Speciální efekty.kpp
 Comment[de]=Spezialeffekte
 Comment[el]=Special Effects.kpp
 Comment[en_GB]=Special Effects.kpp

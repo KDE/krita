@@ -43,6 +43,7 @@ Comment=A Python-based docker for create actions and point to Python scripts
 Comment[ar]=رصيف بِ‍«بيثون» لإنشاء الإجراءات والإشارة إلى سكربتات «بيثون»
 Comment[ca]=Un acoblador basat en Python per a crear accions i apuntar a scripts en Python
 Comment[ca@valencia]=Un acoblador basat en Python per a crear accions i apuntar cap a scripts en Python
+Comment[cs]=Dok založený na Pythonu pro tvorbu akcí a ukazování pythonové skripty
 Comment[de]=Ein auf Python basierter Dialog zur Erstellung von Aktionen und zum Verweis auf pythonbasierte Skripte.
 Comment[el]=Ένα εργαλείο προσάρτησης σε Python για τη δημιουργία ενεργειών και τη δεικτοδότηση σεναρίων σε Python
 Comment[en_GB]=A Python-based docker for create actions and point to Python scripts

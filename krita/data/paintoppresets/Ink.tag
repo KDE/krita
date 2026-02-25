@@ -43,6 +43,7 @@ Comment[ar]=اضبط مسبّقًا لفرش التحبير
 Comment[bg]=Мастилени четки
 Comment[ca]=Pinzells predefinits de tinta
 Comment[ca@valencia]=Pinzells predefinits de tinta
+Comment[cs]=Přednastavení inkoustového štětce
 Comment[de]=Tuschepinsel-Voreinstellungen
 Comment[el]=Προεπιλογές μελανιών πινέλου
 Comment[en_GB]=Inking Brush Presets

@@ -42,6 +42,7 @@ Comment[ar]=اضبط مسبّقًا لفرشِكَ المفضّلة
 Comment[bg]=Вашите любими четки
 Comment[ca]=Els pinzells predefinits preferits
 Comment[ca@valencia]=Els pinzells predefinits preferits
+Comment[cs]=Vaše oblíbené přednastavení štětců
 Comment[de]=Bevorzugte Pinselvoreinstellungen
 Comment[el]=Οι προτιμήσεις σας για τις προεπιλογές πινέλου
 Comment[en_GB]=Your favourite brush presets

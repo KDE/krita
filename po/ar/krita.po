@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-24 02:39+0000\n"
-"PO-Revision-Date: 2026-01-29 17:24+0400\n"
+"PO-Revision-Date: 2026-02-24 22:54+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -30976,7 +30976,7 @@ msgstr "الار&تفاع:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:108
 #, kde-format
 msgid "Landscape"
-msgstr "بالعرض"
+msgstr "عرضي"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPortrait)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
@@ -30984,7 +30984,7 @@ msgstr "بالعرض"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:103
 #, kde-format
 msgid "Portrait"
-msgstr "بالطّول"
+msgstr "طولي"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
@@ -34547,7 +34547,7 @@ msgstr "حدد المعتم"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "تايسون تان"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -49128,14 +49128,14 @@ msgstr "قياسي"
 #, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of landscapes)"
 msgid "Landscape"
-msgstr "بالعرض"
+msgstr "منظر طبيعي"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:828
 #, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of people)"
 msgid "Portrait"
-msgstr "بالطّول"
+msgstr "صورة شخصية"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:833
@@ -57662,7 +57662,7 @@ msgstr "المبدئيّ"
 #, kde-format
 msgctxt "WebP presets"
 msgid "Portrait"
-msgstr "بالطّول"
+msgstr "صورة شخصية"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:37
 #, kde-format

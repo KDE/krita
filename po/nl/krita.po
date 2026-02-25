@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 00:41+0000\n"
-"PO-Revision-Date: 2026-02-22 14:26+0100\n"
+"POT-Creation-Date: 2026-02-25 00:44+0000\n"
+"PO-Revision-Date: 2026-02-24 12:05+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -24222,7 +24222,7 @@ msgstr "Sommige hulpbronnen ontbreken:"
 #: libs/resources/KisResourceStorage.h:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
-#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -26575,7 +26575,7 @@ msgstr "Permanent miniatuur werkt alleen als OpenGL is geactiveerd"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:149
+#: libs/ui/forms/wdgdisplaysettings.ui:147
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Naaste buur"
@@ -27673,31 +27673,28 @@ msgid "Auto (%1)"
 msgstr "Auto (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Huidige"
+msgstr "GLX (huidige)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
-#, fuzzy, kde-format
-#| msgid "GNX"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr "GNX"
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Huidige"
+msgstr "EGL (huidige)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27706,6 +27703,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"Als u Krita gebruikt op X11 of XWayland en traagheid ervaart, probeer dan te "
+"schakelen tussen EGL en GLX."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -29341,8 +29340,54 @@ msgstr "&Grafische versnelling van werkveld"
 msgid "Current Renderer:"
 msgstr "Huidige renderer:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:90
+#, kde-format
+msgid "Preferred Renderer (needs restart):"
+msgstr "Renderer met voorkeur (heeft opnieuw starten nodig):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:111
+#, kde-format
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr ""
+"Voorkeur voor openGL-interface\n"
+"(heeft opnieuw starten nodig):"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:127
+#, kde-format
+msgid "Scaling Mode:"
+msgstr "Verschalingsmodus:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:152
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "Bi-lineaire filtering"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:157
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "Tri-lineaire filtering"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:162
+#, kde-format
+msgid "High Quality Filtering"
+msgstr "Filteren van hoge kwaliteit"
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:176
+#, kde-format
+msgid "Assistants Mode:"
+msgstr "Assistentmodus:"
+
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:104
+#: libs/ui/forms/wdgdisplaysettings.ui:193
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -29356,49 +29401,25 @@ msgstr ""
 "herstart.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:111
+#: libs/ui/forms/wdgdisplaysettings.ui:200
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr "Direct (aanbevolen)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:116
+#: libs/ui/forms/wdgdisplaysettings.ui:205
 #, kde-format
 msgid "Pixmap Cache"
 msgstr "Afbeeldingenbuffer"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:121
+#: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr "Grote afbeeldingenbuffer"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:154
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "Bi-lineaire filtering"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:159
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "Tri-lineaire filtering"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:164
-#, kde-format
-msgid "High Quality Filtering"
-msgstr "Filteren van hoge kwaliteit"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:185
-#, kde-format
-msgid "Preferred Renderer (needs restart):"
-msgstr "Renderer met voorkeur (heeft opnieuw starten nodig):"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:201
+#: libs/ui/forms/wdgdisplaysettings.ui:224
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
@@ -29410,31 +29431,10 @@ msgstr ""
 "andere (zoals AMD/Radeon).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:204
+#: libs/ui/forms/wdgdisplaysettings.ui:227
 #, kde-format
 msgid "Use texture buffer"
 msgstr "Textuurbuffer gebruiken"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:217
-#, kde-format
-msgid "Scaling Mode:"
-msgstr "Verschalingsmodus:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:233
-#, kde-format
-msgid "Assistants Mode:"
-msgstr "Assistentmodus:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
-#: libs/ui/forms/wdgdisplaysettings.ui:244
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
-msgid ""
-"Preferred openGL interface\n"
-"(needs restart):"
-msgstr "Renderer met voorkeur (heeft opnieuw starten nodig):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:261
@@ -37785,7 +37785,7 @@ msgstr "&Diepte:"
 msgid "Li&nk with Layer"
 msgstr "Aa&n laag koppelen"
 
-#: libs/ui/opengl/kis_opengl.cpp:161
+#: libs/ui/opengl/kis_opengl.cpp:170
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -37794,14 +37794,14 @@ msgstr ""
 "Textuurbuffers zijn expliciet uitgeschakeld op ANGLE-renderer vanwege "
 "problemen met prestaties."
 
-#: libs/ui/opengl/kis_opengl.cpp:670
+#: libs/ui/opengl/kis_opengl.cpp:683
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Het in gebruik zijnde grafische stuurprogramma voor Intel staat bekend om "
 "het hebben van problemen met OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:672
+#: libs/ui/opengl/kis_opengl.cpp:685
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37813,7 +37813,7 @@ msgstr ""
 "omschakelen naar OpenGL maar er is geen garantie dat het op de juiste manier "
 "werkt."
 
-#: libs/ui/opengl/kis_opengl.cpp:1155
+#: libs/ui/opengl/kis_opengl.cpp:1168
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -37822,7 +37822,7 @@ msgstr ""
 "Renderer met voorkeur ondersteunt het gevraagde oppervlakformaat niet. Een "
 "andere renderer is geselecteerd."
 
-#: libs/ui/opengl/kis_opengl.cpp:1157
+#: libs/ui/opengl/kis_opengl.cpp:1170
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -43561,7 +43561,7 @@ msgstr "Terugzetten naar standaard"
 #, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "In-werkblad penseelbewerker"
+msgstr "Op-werkblad penseelbewerker"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -43571,7 +43571,7 @@ msgstr "Originele voorinstelling opnieuw laden"
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:82
 #, kde-format
 msgid "Configure the on-canvas brush editor"
-msgstr "Penseelbewerker on-canvas configureren"
+msgstr "Penseelbewerker op-werkblad configureren"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24

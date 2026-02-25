@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 00:41+0000\n"
-"PO-Revision-Date: 2026-02-22 08:00-0300\n"
+"POT-Creation-Date: 2026-02-25 00:44+0000\n"
+"PO-Revision-Date: 2026-02-24 08:53-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -24150,7 +24150,7 @@ msgstr "Alguns recursos estão faltando:"
 #: libs/resources/KisResourceStorage.h:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
-#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -26499,7 +26499,7 @@ msgstr "A Visualização Instantânea só é suportada com o OpenGL ativo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:149
+#: libs/ui/forms/wdgdisplaysettings.ui:147
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Vizinho mais próximo"
@@ -27595,30 +27595,28 @@ msgid "Auto (%1)"
 msgstr "Automático (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Atual"
+msgstr "GLX (atual)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr ""
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Atual"
+msgstr "EGL (atual)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27627,6 +27625,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>Se você estiver usando o Krita no X11 ou XWayland e estiver enfrentando "
+"lentidão, tente alternar entre EGL e GLX</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -29252,8 +29252,54 @@ msgstr "Aceleração &gráfica da tela de pintura"
 msgid "Current Renderer:"
 msgstr "Renderizador atual:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:90
+#, kde-format
+msgid "Preferred Renderer (needs restart):"
+msgstr "Renderizador preferido (necessário reiniciar):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:111
+#, kde-format
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr ""
+"Interface OpenGL preferida\n"
+"(necessário reiniciar):"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:127
+#, kde-format
+msgid "Scaling Mode:"
+msgstr "Modo de escalonamento:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:152
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "Filtragem bi-linear"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:157
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "Filtragem trilinear"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:162
+#, kde-format
+msgid "High Quality Filtering"
+msgstr "Filtragem de alta qualidade"
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:176
+#, kde-format
+msgid "Assistants Mode:"
+msgstr "Modo do assistente:"
+
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:104
+#: libs/ui/forms/wdgdisplaysettings.ui:193
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -29267,49 +29313,25 @@ msgstr ""
 "reinicialização.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:111
+#: libs/ui/forms/wdgdisplaysettings.ui:200
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr "Direto (recomendado)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:116
+#: libs/ui/forms/wdgdisplaysettings.ui:205
 #, kde-format
 msgid "Pixmap Cache"
 msgstr "Cache de pixmap"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:121
+#: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr "Cache de pixmap grande"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:154
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "Filtragem bi-linear"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:159
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "Filtragem trilinear"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:164
-#, kde-format
-msgid "High Quality Filtering"
-msgstr "Filtragem de alta qualidade"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:185
-#, kde-format
-msgid "Preferred Renderer (needs restart):"
-msgstr "Renderizador preferido (precisa reiniciar):"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:201
+#: libs/ui/forms/wdgdisplaysettings.ui:224
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
@@ -29321,31 +29343,10 @@ msgstr ""
 "(como a AMD/Radeon).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:204
+#: libs/ui/forms/wdgdisplaysettings.ui:227
 #, kde-format
 msgid "Use texture buffer"
 msgstr "Usar buffer de texturas"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:217
-#, kde-format
-msgid "Scaling Mode:"
-msgstr "Modo de escalonamento:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:233
-#, kde-format
-msgid "Assistants Mode:"
-msgstr "Modo do assistente:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
-#: libs/ui/forms/wdgdisplaysettings.ui:244
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
-msgid ""
-"Preferred openGL interface\n"
-"(needs restart):"
-msgstr "Renderizador preferido (precisa reiniciar):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:261
@@ -30256,7 +30257,7 @@ msgstr "Ferramentas"
 #: libs/ui/forms/wdggeneralsettings.ui:985
 #, kde-format
 msgid "Tool Options Location (needs restart)"
-msgstr "Localização das opções da ferramenta (é necessário reiniciar)"
+msgstr "Localização das opções da ferramenta (necessário reiniciar)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
 #: libs/ui/forms/wdggeneralsettings.ui:991
@@ -30274,7 +30275,7 @@ msgstr "N&a barra de ferramentas"
 #: libs/ui/forms/wdggeneralsettings.ui:1011
 #, kde-format
 msgid "Brush Flow Mode (needs restart):"
-msgstr "Modo de fluxo do pincel (é necessário reiniciar):"
+msgstr "Modo de fluxo do pincel (necessário reiniciar):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1019
@@ -30569,7 +30570,7 @@ msgstr "px "
 #: libs/ui/forms/wdggeneralsettings.ui:1564
 #, kde-format
 msgid "(Needs restart)"
-msgstr "(é necessário reiniciar o Krita)"
+msgstr "(Necessário reiniciar)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:1574
@@ -37677,7 +37678,7 @@ msgstr "Profun&didade:"
 msgid "Li&nk with Layer"
 msgstr "Li&gar com a camada"
 
-#: libs/ui/opengl/kis_opengl.cpp:161
+#: libs/ui/opengl/kis_opengl.cpp:170
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -37686,14 +37687,14 @@ msgstr ""
 "Buffers de textura são explicitamente desabilitados no renderizador ANGLE "
 "devido a problemas de performance."
 
-#: libs/ui/opengl/kis_opengl.cpp:670
+#: libs/ui/opengl/kis_opengl.cpp:683
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "O driver gráfico da Intel, em uso, é conhecido por ter problemas com o "
 "OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:672
+#: libs/ui/opengl/kis_opengl.cpp:685
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37704,7 +37705,7 @@ msgstr ""
 "ANGLE será usado por padrão. Você pode alternar manualmente para o OpenGL, "
 "mas não é garantido que trabalhe corretamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:1155
+#: libs/ui/opengl/kis_opengl.cpp:1168
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -37713,7 +37714,7 @@ msgstr ""
 "O renderizador escolhido não suporta o formato de superfície solicitado. "
 "Outro renderizador foi selecionado."
 
-#: libs/ui/opengl/kis_opengl.cpp:1157
+#: libs/ui/opengl/kis_opengl.cpp:1170
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

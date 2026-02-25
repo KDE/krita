@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 00:41+0000\n"
+"POT-Creation-Date: 2026-02-25 00:44+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -25377,7 +25377,7 @@ msgstr ""
 #: libs/resources/KisResourceStorage.h:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
-#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -27821,7 +27821,7 @@ msgstr "즉시 미리 보기는 OpenGL이 활성화되어야 지원함"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:149
+#: libs/ui/forms/wdgdisplaysettings.ui:147
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "가장 가까운 이웃"
@@ -30580,8 +30580,54 @@ msgstr "캔버스 그래픽 가속(&G)"
 msgid "Current Renderer:"
 msgstr "현재 렌더러:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:90
+#, kde-format
+msgid "Preferred Renderer (needs restart):"
+msgstr "선호하는 렌더러(다시 시작 필요):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:111
+#, fuzzy, kde-format
+#| msgid "Preferred Renderer (needs restart):"
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr "선호하는 렌더러(다시 시작 필요):"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:127
+#, kde-format
+msgid "Scaling Mode:"
+msgstr "크기 조절 모드:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:152
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "이중 선형 필터링"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:157
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "삼중 선형 필터링"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:162
+#, kde-format
+msgid "High Quality Filtering"
+msgstr "고품질 필터링"
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:176
+#, fuzzy, kde-format
+#| msgid "Assistant:"
+msgid "Assistants Mode:"
+msgstr "도우미:"
+
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:104
+#: libs/ui/forms/wdgdisplaysettings.ui:193
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -30591,50 +30637,26 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:111
+#: libs/ui/forms/wdgdisplaysettings.ui:200
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:116
+#: libs/ui/forms/wdgdisplaysettings.ui:205
 #, fuzzy, kde-format
 #| msgid "Animation Cache"
 msgid "Pixmap Cache"
 msgstr "애니메이션 캐시"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:121
+#: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:154
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "이중 선형 필터링"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:159
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "삼중 선형 필터링"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:164
-#, kde-format
-msgid "High Quality Filtering"
-msgstr "고품질 필터링"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:185
-#, kde-format
-msgid "Preferred Renderer (needs restart):"
-msgstr "선호하는 렌더러(다시 시작 필요):"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:201
+#: libs/ui/forms/wdgdisplaysettings.ui:224
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
@@ -30646,32 +30668,10 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:204
+#: libs/ui/forms/wdgdisplaysettings.ui:227
 #, kde-format
 msgid "Use texture buffer"
 msgstr "텍스처 버퍼 사용"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:217
-#, kde-format
-msgid "Scaling Mode:"
-msgstr "크기 조절 모드:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:233
-#, fuzzy, kde-format
-#| msgid "Assistant:"
-msgid "Assistants Mode:"
-msgstr "도우미:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
-#: libs/ui/forms/wdgdisplaysettings.ui:244
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
-msgid ""
-"Preferred openGL interface\n"
-"(needs restart):"
-msgstr "선호하는 렌더러(다시 시작 필요):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:261
@@ -39169,19 +39169,19 @@ msgstr "깊이(&D):"
 msgid "Li&nk with Layer"
 msgstr "레이어에 연결(&N)"
 
-#: libs/ui/opengl/kis_opengl.cpp:161
+#: libs/ui/opengl/kis_opengl.cpp:170
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:670
+#: libs/ui/opengl/kis_opengl.cpp:683
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "인텔 그래픽 드라이버는 OpenGL 사용 시 알려진 문제가 있습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:672
+#: libs/ui/opengl/kis_opengl.cpp:685
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -39191,7 +39191,7 @@ msgstr ""
 "인텔 그래픽 드라이버는 OpenGL에 문제가 자주 발생하므로 ANGLE을 기본값으로 사"
 "용합니다. OpenGL로 직접 전환할 수 있지만 항상 올바르게 작동하지는 않습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1155
+#: libs/ui/opengl/kis_opengl.cpp:1168
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -39200,7 +39200,7 @@ msgstr ""
 "선호하는 렌더러에서 필요한 표면 형식을 지원하지 않습니다. 다른 렌더러를 선택"
 "했습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1157
+#: libs/ui/opengl/kis_opengl.cpp:1170
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 00:41+0000\n"
+"POT-Creation-Date: 2026-02-25 00:44+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23921,7 +23921,7 @@ msgstr "缺少某些资源："
 #: libs/resources/KisResourceStorage.h:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
-#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -26238,7 +26238,7 @@ msgstr "快速预渲染必须启用 OpenGL"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:149
+#: libs/ui/forms/wdgdisplaysettings.ui:147
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "最近邻"
@@ -28933,8 +28933,53 @@ msgstr "画布显卡加速(&G)"
 msgid "Current Renderer:"
 msgstr "当前渲染器："
 
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:90
+#, kde-format
+msgid "Preferred Renderer (needs restart):"
+msgstr "首选渲染器 (需要重启)："
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:111
+#, fuzzy, kde-format
+#| msgid "Preferred Renderer (needs restart):"
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr "首选渲染器 (需要重启)："
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:127
+#, kde-format
+msgid "Scaling Mode:"
+msgstr "视图缩放算法："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:152
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "双线性"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:157
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "三线性"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:162
+#, kde-format
+msgid "High Quality Filtering"
+msgstr "最佳画质"
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:176
+#, kde-format
+msgid "Assistants Mode:"
+msgstr "辅助尺模式："
+
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:104
+#: libs/ui/forms/wdgdisplaysettings.ui:193
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -28947,49 +28992,25 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:111
+#: libs/ui/forms/wdgdisplaysettings.ui:200
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr "直接绘制 (推荐)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:116
+#: libs/ui/forms/wdgdisplaysettings.ui:205
 #, kde-format
 msgid "Pixmap Cache"
 msgstr "像素映射缓存"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:121
+#: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr "大像素映射缓存"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:154
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "双线性"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:159
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "三线性"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:164
-#, kde-format
-msgid "High Quality Filtering"
-msgstr "最佳画质"
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:185
-#, kde-format
-msgid "Preferred Renderer (needs restart):"
-msgstr "首选渲染器 (需要重启)："
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:201
+#: libs/ui/forms/wdgdisplaysettings.ui:224
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
@@ -29000,31 +29021,10 @@ msgstr ""
 "某些型号的 AMD 显卡存在兼容性问题。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:204
+#: libs/ui/forms/wdgdisplaysettings.ui:227
 #, kde-format
 msgid "Use texture buffer"
 msgstr "使用纹理缓冲"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:217
-#, kde-format
-msgid "Scaling Mode:"
-msgstr "视图缩放算法："
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:233
-#, kde-format
-msgid "Assistants Mode:"
-msgstr "辅助尺模式："
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
-#: libs/ui/forms/wdgdisplaysettings.ui:244
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
-msgid ""
-"Preferred openGL interface\n"
-"(needs restart):"
-msgstr "首选渲染器 (需要重启)："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:261
@@ -37185,19 +37185,19 @@ msgstr "深度(&D)："
 msgid "Li&nk with Layer"
 msgstr "与图层链接(&N)"
 
-#: libs/ui/opengl/kis_opengl.cpp:161
+#: libs/ui/opengl/kis_opengl.cpp:170
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr "由于性能问题，纹理缓冲在 ANGLE 渲染器下已被禁用。"
 
-#: libs/ui/opengl/kis_opengl.cpp:670
+#: libs/ui/opengl/kis_opengl.cpp:683
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "当前使用的 Intel 核芯显卡驱动程序对 OpenGL 的支持存在问题。"
 
-#: libs/ui/opengl/kis_opengl.cpp:672
+#: libs/ui/opengl/kis_opengl.cpp:685
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37207,14 +37207,14 @@ msgstr ""
 "Intel 核芯显卡的驱动程序与 OpenGL 的兼容性不好，Krita 将默认使用 Direct3D 11 "
 "模式。您也可以手动切换成 OpenGL 模式，但是它不一定能正常工作。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1155
+#: libs/ui/opengl/kis_opengl.cpp:1168
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首选渲染器不支持请求的表面格式。已选择另一个渲染器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1157
+#: libs/ui/opengl/kis_opengl.cpp:1170
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用渲染器不支持首选输出格式"

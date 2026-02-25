@@ -49,8 +49,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 00:41+0000\n"
-"PO-Revision-Date: 2026-02-12 00:12+0100\n"
+"POT-Creation-Date: 2026-02-25 00:44+0000\n"
+"PO-Revision-Date: 2026-02-24 22:32+0100\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -8730,7 +8730,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr ""
+msgstr "Zobrazit rámeček doku"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:343
@@ -9604,6 +9604,8 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
+"Zobrazí globální výběr jako obvyklou výběrovou masku v doku "
+"<interface>Vrstvy</interface>"
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1030
@@ -15857,7 +15859,7 @@ msgstr "Zobrazit doky"
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr ""
+msgstr "Zobrazi&t záhlaví doků"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -15867,7 +15869,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr ""
+msgstr "Zobrazit záhlaví doků"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1821
@@ -23922,7 +23924,7 @@ msgstr ""
 #: libs/resources/KisResourceStorage.h:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
-#: libs/ui/forms/wdgdisplaysettings.ui:172 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
@@ -26187,7 +26189,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
-#: libs/ui/forms/wdgdisplaysettings.ui:149
+#: libs/ui/forms/wdgdisplaysettings.ui:147
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Nejbližší soused"
@@ -26460,6 +26462,8 @@ msgid ""
 "In addition to filtering the currently visible frame, \n"
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
+"Kromě filtrování aktuálně viditelného snímku,\n"
+"filtrujte všechny ostatní klíčové snímky vybrané v doku Časová osa animace."
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:139
 #, kde-format
@@ -28814,8 +28818,52 @@ msgstr ""
 msgid "Current Renderer:"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:90
+#, kde-format
+msgid "Preferred Renderer (needs restart):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
+#: libs/ui/forms/wdgdisplaysettings.ui:111
+#, kde-format
+msgid ""
+"Preferred openGL interface\n"
+"(needs restart):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdgdisplaysettings.ui:127
+#, kde-format
+msgid "Scaling Mode:"
+msgstr "Režim změny měřítka"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:152
+#, kde-format
+msgid "Bilinear Filtering"
+msgstr "Bilineární filtrování"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:157
+#, kde-format
+msgid "Trilinear Filtering"
+msgstr "Trilineární filtrování"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:162
+#, kde-format
+msgid "High Quality Filtering"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:176
+#, kde-format
+msgid "Assistants Mode:"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:104
+#: libs/ui/forms/wdgdisplaysettings.ui:193
 #, kde-format
 msgid ""
 "<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
@@ -28825,49 +28873,25 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:111
+#: libs/ui/forms/wdgdisplaysettings.ui:200
 #, kde-format
 msgid "Direct (Recommended)"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:116
+#: libs/ui/forms/wdgdisplaysettings.ui:205
 #, kde-format
 msgid "Pixmap Cache"
 msgstr "Mezipaměť obrázků"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:121
+#: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:154
-#, kde-format
-msgid "Bilinear Filtering"
-msgstr "Bilineární filtrování"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:159
-#, kde-format
-msgid "Trilinear Filtering"
-msgstr "Trilineární filtrování"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:164
-#, kde-format
-msgid "High Quality Filtering"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
-#: libs/ui/forms/wdgdisplaysettings.ui:185
-#, kde-format
-msgid "Preferred Renderer (needs restart):"
-msgstr ""
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:201
+#: libs/ui/forms/wdgdisplaysettings.ui:224
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use Texture Buffering. This can be faster on some GPU/"
@@ -28876,29 +28900,9 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
-#: libs/ui/forms/wdgdisplaysettings.ui:204
+#: libs/ui/forms/wdgdisplaysettings.ui:227
 #, kde-format
 msgid "Use texture buffer"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:217
-#, kde-format
-msgid "Scaling Mode:"
-msgstr "Režim změny měřítka"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
-#: libs/ui/forms/wdgdisplaysettings.ui:233
-#, kde-format
-msgid "Assistants Mode:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
-#: libs/ui/forms/wdgdisplaysettings.ui:244
-#, kde-format
-msgid ""
-"Preferred openGL interface\n"
-"(needs restart):"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
@@ -29319,7 +29323,7 @@ msgstr "Panely nástrojů"
 #: libs/ui/forms/wdgfullscreensettings.ui:49
 #, kde-format
 msgid "Toolbox and dockers"
-msgstr ""
+msgstr "Nástroje a doky"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScrollbars)
 #: libs/ui/forms/wdgfullscreensettings.ui:56
@@ -29351,7 +29355,7 @@ msgstr ""
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr ""
+msgstr "Vyber masku v doku „Masky gamutu“"
 
 #. i18n: ectx: attribute (title), widget (QWidget, File)
 #: libs/ui/forms/wdggeneralsettings.ui:52
@@ -29956,6 +29960,11 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Pokud je tato možnost zaškrtnuta, bude se automaticky měnit měřítko "
+"zobrazení snímků v doku Časová osa animace tak, aby co nejlépe odpovídalo "
+"rozsahu přehrávání dokumentu. Menší rozsah přehrávání způsobí, že se časová "
+"osa přiblíží, zatímco větší rozsah přehrávání způsobí, že se časová osa "
+"oddálí."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1180
@@ -33400,7 +33409,7 @@ msgstr ""
 #: libs/ui/kis_control_frame.cpp:129
 #, kde-format
 msgid "&Docker Box"
-msgstr ""
+msgstr "Rámeček &doku"
 
 #: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:451
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
@@ -33428,12 +33437,12 @@ msgstr "Přechody"
 #: libs/ui/kis_control_frame.cpp:283
 #, kde-format
 msgid "Docker box"
-msgstr ""
+msgstr "Rámeček doku"
 
 #: libs/ui/kis_control_frame.cpp:289
 #, kde-format
 msgid "Toolbar Docker Box"
-msgstr ""
+msgstr "Panel nástrojů Dok"
 
 #: libs/ui/kis_custom_pattern.cc:103
 #, kde-format
@@ -36930,19 +36939,19 @@ msgstr "&Hloubka:"
 msgid "Li&nk with Layer"
 msgstr "Propojit s vrstvo&u"
 
-#: libs/ui/opengl/kis_opengl.cpp:161
+#: libs/ui/opengl/kis_opengl.cpp:170
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:670
+#: libs/ui/opengl/kis_opengl.cpp:683
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:672
+#: libs/ui/opengl/kis_opengl.cpp:685
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -36950,14 +36959,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1155
+#: libs/ui/opengl/kis_opengl.cpp:1168
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1157
+#: libs/ui/opengl/kis_opengl.cpp:1170
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -38826,30 +38835,30 @@ msgstr "Dolů"
 #: libs/ui/widgets/KisDockerHud.cpp:60
 #, kde-format
 msgid "Configure docker panel"
-msgstr ""
+msgstr "Nastavit panel doků"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
+msgstr "Dok je otevřený v %1. Pro zobrazení zde zavřete %1."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr ""
+msgstr "Nastavit doky %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Available dockers"
-msgstr ""
+msgstr "Dostupné doky"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Current dockers"
-msgstr ""
+msgstr "Současné doky"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -41892,7 +41901,7 @@ msgstr[2] ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
 #, kde-format
 msgid "Animation Timeline"
-msgstr ""
+msgstr "Časová osa animace"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
@@ -42353,7 +42362,7 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
 #, kde-format
 msgid "Docker settings"
-msgstr ""
+msgstr "Nastavení doku"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -42786,6 +42795,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
+"Zobrazí globální výběr jako obvyklou výběrovou masku v doku <b>Vrstvy</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
 #, kde-format
@@ -44156,7 +44166,7 @@ msgstr ""
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:81
 #, kde-format
 msgid "Snapshot Docker"
-msgstr ""
+msgstr "Dok snímků"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
 #, kde-format
@@ -46549,7 +46559,7 @@ msgstr ""
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr ""
+msgstr "Dotykový dok"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -61939,6 +61949,10 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
+"<html><head/><body><p>Pokud je tato možnost zaškrtnuta, váš skript bude v "
+"Kritě automaticky povolen. To znamená, že se zobrazí v nabídce Skripty nebo "
+"v seznamu doků. Pokud ne, budete muset skript ručně povolit prostřednictvím "
+"položky v nabídce Krita-&gt;Nastavení. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -61954,7 +61968,7 @@ msgstr "Vytvořit skript"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
-msgstr ""
+msgstr "Dok nedávné dokumenty"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
@@ -61962,7 +61976,7 @@ msgstr "Změnit nastavení"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr ""
+msgstr "Dok s posuvníkovým mixerem"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -62068,7 +62082,7 @@ msgstr ""
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
-msgstr ""
+msgstr "Dok s pythonovou paletou"
 
 #: plugins/python/palette_docker/palette_docker.py:74
 msgid "Set"
@@ -65447,6 +65461,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"K vytvoření nových textů použít aktuální vlastnosti v doku vlastností textu."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, kde-format
@@ -65466,6 +65481,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Otevřete si dok Vlastnosti textu, abyste mohli upravit vlastnosti, jako je "
+"velikost a styl písma."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, kde-format

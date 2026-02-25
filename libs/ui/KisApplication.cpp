@@ -245,9 +245,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
                              i18nc("@info:credit", "© 1999–2026 The Krita Developers"));
         aboutData.setHomepage(QStringLiteral("https://krita.org"));
         aboutData.setOrganizationDomain("krita.org");
-        // Have to explicitly set the bug address since the kde api now sets it to null by default
-        // https://invent.kde.org/frameworks/kcoreaddons/-/commit/3324b59b
-        aboutData.setBugAddress("submit@bugs.kde.org");
 
         // this call sets corresponding fields of QApplication as well
         KAboutData::setApplicationData(aboutData);

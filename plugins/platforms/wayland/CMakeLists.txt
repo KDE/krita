@@ -38,8 +38,7 @@ set(kritaplatformpluginwayland_LIB_SRCS
     KisWaylandKeyboardWatcher.cpp
     KisExtendedModifiersMapperWayland.cpp
     KritaPlatformPluginWayland.cpp
-
-
+    KisWaylandRegistry.cpp
 )
 
 if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)

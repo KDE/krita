@@ -56,6 +56,10 @@ KisPlatformPluginInterfaceFactory* KisPlatformPluginInterfaceFactory::instance()
 
 KisSurfaceColorManagerInterface* KisPlatformPluginInterfaceFactory::createSurfaceColorManager(QWindow *nativeWindow)
 {
+    if (!surfaceColorManagedByOS()) {
+        return nullptr;
+    }
+
     KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
         std::make_pair("X-Krita-PlatformId", QApplication::platformName()),
         "Krita/PlatformPlugin");

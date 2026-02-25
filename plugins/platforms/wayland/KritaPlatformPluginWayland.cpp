@@ -4,6 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include "KisWaylandRegistry.h"
+#include "qwayland-color-management-v1.h"
 #include <kpluginfactory.h>
 
 #include <kis_assert.h>
@@ -43,7 +45,8 @@ class KisWaylandSurfaceColorManagementInfo : public KisSurfaceColorManagementInf
 public:
     using KisSurfaceColorManagementInfo::KisSurfaceColorManagementInfo;
     bool surfaceColorManagedByOS() override {
-        return true;
+        KisWaylandRegistry* registry = KisWaylandRegistry::getOrCreate();
+        return registry->globalExists(QtWayland::wp_color_manager_v1::interface()->name);
     }
 
     QFuture<QString> debugReport() override {

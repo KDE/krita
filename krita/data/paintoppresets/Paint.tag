@@ -43,6 +43,7 @@ Comment[ar]=فرش الطلاء
 Comment[bg]=Четки за рисуване
 Comment[ca]=Pinzells
 Comment[ca@valencia]=Pinzells
+Comment[cs]=Malířské štětce
 Comment[de]=Malpinsel
 Comment[el]=Πινέλα ζωγραφικής
 Comment[en_GB]=Paint Brushes

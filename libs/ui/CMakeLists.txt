@@ -143,6 +143,8 @@ set(kritaui_LIB_SRCS
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
     kis_selection_actions_panel.cpp
+    kis_selection_actions_panel_handle.cpp
+    kis_selection_actions_panel_button.cpp
     KisDecorationsManager.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp

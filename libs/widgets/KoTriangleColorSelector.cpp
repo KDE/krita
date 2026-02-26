@@ -37,6 +37,8 @@ struct Q_DECL_HIDDEN KoTriangleColorSelector::Private {
     int hue {0};
     int saturation {0};
     int value {0};
+    int rotation {0};
+    bool followHue {true};
     int sizeColorSelector {0};
     qreal centerColorSelector {0.0};
     qreal wheelWidthProportion {0.0};
@@ -128,7 +130,7 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     // Draw the triangle
     p.save();
 
-    p.rotate( hue() + 150 );
+    p.rotate( rotation() );
 
 
     p.drawPixmap( -pos , d->trianglePixmap );
@@ -147,7 +149,7 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
         QColor currentColor = d->displayRenderer->toQColor(getCurrentColor());
 
         p.setBrush(currentColor);
-        p.rotate( hue() + 150 );
+        p.rotate( rotation() );
         p.drawEllipse( QRectF( -d->triangleHandleSize*0.5 + vs_selector_xpos_,
                                -d->triangleHandleSize*0.5 - (d->centerColorSelector - d->triangleTop) + vs_selector_ypos_ * d->triangleHeight,
                                 d->triangleHandleSize , d->triangleHandleSize ));
@@ -165,6 +167,23 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.end();
 }
 
+int KoTriangleColorSelector::rotation() const
+{
+    if (d->followHue) return hue() + 150;
+    return d->rotation;
+}
+
+void KoTriangleColorSelector::setRotation(int angle)
+{
+    d->rotation = angle;
+    setFollowHue(false);
+}
+
+void KoTriangleColorSelector::setFollowHue(bool follow)
+{
+    d->followHue = follow;
+    d->updateTimer.start();
+}
 
 // make sure to always use get/set functions when managing HSV properties (don't call directly like d->hue)
 // these settings get updated A LOT when the color sampler is being used. You might get unexpected results
@@ -422,7 +441,7 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
     }
     else {
     // Compute the s and v value, if they are in range, use them
-        qreal rotation = -(hue() + 150) * M_PI / 180;
+        qreal rotation = -(this->rotation()) * M_PI / 180;
         qreal cr = cos(rotation);
         qreal sr = sin(rotation);
         qreal x1 = x * cr - y * sr; // <- now x1 gives the saturation

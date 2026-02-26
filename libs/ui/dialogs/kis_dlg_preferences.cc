@@ -2454,6 +2454,7 @@ PopupPaletteTab::PopupPaletteTab(QWidget *parent, const char *name)
 
     connect(chkShowColorHistory, SIGNAL(toggled(bool)), cmbColorHistorySorting, SLOT(setEnabled(bool)));
     connect(chkShowColorHistory, SIGNAL(toggled(bool)), lblColorHistorySorting, SLOT(setEnabled(bool)));
+    connect(cmbSelectorType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectorTypeChanged(int)));
     KIS_SAFE_ASSERT_RECOVER_NOOP(cmbColorHistorySorting->count() == allowedColorHistorySortingValues.size());
 }
 
@@ -2469,6 +2470,8 @@ void PopupPaletteTab::load()
     chkShowColorHistory->setChecked(config.readEntry("popuppalette/showColorHistory", true));
     chkShowRotationTrack->setChecked(config.readEntry("popuppalette/showRotationTrack", true));
     chkUseDynamicSlotCount->setChecked(config.readEntry("popuppalette/useDynamicSlotCount", true));
+    grpFixTriangleRotation->setChecked(config.readEntry("popuppalette/fixTriangleRotation", false));
+    sbTriangleRotationAngle->setValue(config.readEntry("popuppalette/triangleRotationAngle", 0));
 
     QString currentSorting = config.readEntry("popuppalette/colorHistorySorting", QString("hsv"));
     if (!allowedColorHistorySortingValues.contains(currentSorting)) {
@@ -2477,6 +2480,7 @@ void PopupPaletteTab::load()
     cmbColorHistorySorting->setCurrentIndex(allowedColorHistorySortingValues.indexOf(currentSorting));
     cmbColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
     lblColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
+    grpFixTriangleRotation->setEnabled(!cmbSelectorType->currentIndex());
 }
 
 void PopupPaletteTab::save()
@@ -2493,6 +2497,8 @@ void PopupPaletteTab::save()
     config.writeEntry<bool>("popuppalette/useDynamicSlotCount", chkUseDynamicSlotCount->isChecked());
     config.writeEntry("popuppalette/colorHistorySorting",
                       allowedColorHistorySortingValues[cmbColorHistorySorting->currentIndex()]);
+    config.writeEntry<bool>("popuppalette/fixTriangleRotation", grpFixTriangleRotation->isChecked());
+    config.writeEntry("popuppalette/triangleRotationAngle", sbTriangleRotationAngle->value());
 }
 
 void PopupPaletteTab::setDefault()
@@ -2507,6 +2513,12 @@ void PopupPaletteTab::setDefault()
     chkUseDynamicSlotCount->setChecked(true);
     cmbColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
     lblColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
+    grpFixTriangleRotation->setChecked(false);
+    sbTriangleRotationAngle->setValue(0);
+}
+
+void PopupPaletteTab::slotSelectorTypeChanged(int index) {
+    grpFixTriangleRotation->setEnabled(!index);
 }
 
 //---------------------------------------------------------------------------------------------------

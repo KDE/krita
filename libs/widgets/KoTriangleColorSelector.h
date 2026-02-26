@@ -33,11 +33,14 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public KisColorSelectorInter
         int hue() const;
         int value() const;
         int saturation() const;
+        int rotation() const;
         KoColor getCurrentColor() const override;
     public Q_SLOTS:
         void setHue(int h);
         void setValue(int v);
         void setSaturation(int s);
+        void setRotation(int angle);
+        void setFollowHue(bool follow);
         void setHSV(int h, int s, int v);
         void slotSetColor(const KoColor& ) override;
     Q_SIGNALS:

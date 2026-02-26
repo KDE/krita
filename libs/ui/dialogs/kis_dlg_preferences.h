@@ -376,6 +376,8 @@ public:
     void load();
     void save();
     void setDefault();
+protected Q_SLOTS:
+    void slotSelectorTypeChanged(int index);
 };
 
 //=======================

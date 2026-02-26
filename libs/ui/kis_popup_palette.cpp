@@ -358,6 +358,14 @@ void KisPopupPalette::reconfigure()
 
     }
 
+    if (KoTriangleColorSelector *srgbColorSelector = dynamic_cast<KoTriangleColorSelector*>(m_colorSelector)) {
+        bool fixTriangleRotation = config.readEntry("popuppalette/fixTriangleRotation", false);
+        if (fixTriangleRotation) {
+            int triangleRotationAngle = config.readEntry("popuppalette/triangleRotationAngle", 0);
+            srgbColorSelector->setRotation(triangleRotationAngle);
+        }
+        else srgbColorSelector->setFollowHue(true);
+    }
 
     const int auxButtonSize = 35;
     m_colorSelector->move(m_popupPaletteSize/2 - selectorRadius, m_popupPaletteSize/2 - selectorRadius);

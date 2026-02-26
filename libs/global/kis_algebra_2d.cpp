@@ -1784,6 +1784,9 @@ QPointF movePointInTheDirection(const QPointF &point, const QPointF &direction, 
 {
     QPointF response = point;
     QLineF line = QLineF(QPointF(0, 0), direction);
+    if (qFuzzyCompare(line.length(), 0)) {
+        return point;
+    }
     return response + distance*direction/line.length();
 }
 

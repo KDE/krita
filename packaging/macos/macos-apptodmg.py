@@ -35,6 +35,7 @@ def main():
     parser.add_argument('--style', help="Style defined from dmgstyle.sh's output",metavar='<file>')
     parser.add_argument('--bg', help="Set a background image for dmg window",metavar='<file>')
     parser.add_argument('-n','--dmg_name', help="Set DMG output dmg_name",metavar='<string>')
+    parser.add_argument('--suffix', dest="suffix", help="Set DMG output name suffix", metavar='<string>')
     args = parser.parse_args()
 
     krita_app = pathlib.Path(args.krita_app).resolve()
@@ -96,6 +97,8 @@ def main():
     kis_name = "krita-" + kis_version_str
     if args.dmg_name:
         kis_name = args.dmg_name
+    if args.suffix:
+        kis_name += args.suffix
 
     krita_dmg = kritaCreateDMG(krita_app, dmg_files, kis_name, kritadmg_style_formatted)
 

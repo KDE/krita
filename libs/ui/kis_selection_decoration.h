@@ -37,6 +37,7 @@ public:
     void setVisible(bool v) override;
 
     void notifyWindowMinimized(bool minimized) override;
+    void setCanvasWidget(KisCanvasWidgetBase* canvas) override;
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;

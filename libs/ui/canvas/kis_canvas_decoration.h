@@ -15,6 +15,7 @@
 #include "KisView.h"
 #include <kis_shared.h>
 
+class KisCanvasWidgetBase;
 class KisCanvas2;
 class QRectF;
 class QPainter;
@@ -63,6 +64,7 @@ public:
     static bool comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2);
 
     virtual void notifyWindowMinimized(bool minimized);
+    virtual void setCanvasWidget(KisCanvasWidgetBase* canvas) {};
 
 public Q_SLOTS:
     /**
@@ -75,6 +77,7 @@ public Q_SLOTS:
     void toggleVisibility();
 protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
+
 
     /**
      * @return the parent KisView

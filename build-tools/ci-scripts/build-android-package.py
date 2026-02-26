@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import os
+import re
 import sys
 import subprocess
 import argparse
@@ -48,6 +49,58 @@ packagingFolder = os.path.join(baseWorkDirectoryPath, '_packaging')
 buildEnvironment = dict(os.environ)
 buildEnvironment['ANDROID_ABI'] = os.environ['KDECI_ANDROID_ABI']
 buildEnvironment['KRITA_INSTALL_PREFIX'] = depsPath
+
+# Gradle 8.13 / AGP 8.12 do not support Java 25 (class file 69). Use JDK 17 or 21 with javac.
+def _find_gradle_jdk():
+    jdk_bases = ['/usr/lib/jvm', '/usr/lib64/jvm']
+    prefer = ['java-21-openjdk', 'java-17-openjdk', 'java-21', 'java-17']  # prefer these names first
+    found = []
+    for base in jdk_bases:
+        if not os.path.isdir(base):
+            continue
+        for name in sorted(os.listdir(base)):
+            jdk_home = os.path.join(base, name)
+            if not os.path.isdir(jdk_home):
+                continue
+            java_exe = os.path.join(jdk_home, 'bin', 'java')
+            javac_exe = os.path.join(jdk_home, 'bin', 'javac')
+            if not (os.path.isfile(javac_exe) and os.access(javac_exe, os.X_OK)):
+                continue
+            if not (os.path.isfile(java_exe) and os.access(java_exe, os.X_OK)):
+                continue
+            try:
+                out = subprocess.check_output([java_exe, '-version'], stderr=subprocess.STDOUT, timeout=5).decode()
+                if re.search(r'version "[^"]*"(17|18|19|20|21)\.', out):
+                    found.append((name in prefer, jdk_home))
+            except Exception:
+                pass
+    if not found:
+        return None
+    found.sort(key=lambda x: (not x[0], x[1]))
+    return found[0][1]
+
+def _java_version_ok(java_home):
+    if not java_home or not os.path.isfile(os.path.join(java_home, 'bin', 'javac')):
+        return False
+    try:
+        out = subprocess.check_output([os.path.join(java_home, 'bin', 'java'), '-version'], stderr=subprocess.STDOUT, timeout=5).decode()
+        return bool(re.search(r'version "[^"]*"(17|18|19|20|21)\.', out))
+    except Exception:
+        return False
+
+_current_java = buildEnvironment.get('JAVA_HOME') if _java_version_ok(buildEnvironment.get('JAVA_HOME')) else None
+if not _current_java:
+    _gradle_jdk = _find_gradle_jdk()
+    if _gradle_jdk:
+        buildEnvironment['JAVA_HOME'] = _gradle_jdk
+        print('## Using JAVA_HOME={} for Gradle (JDK 17/21)'.format(_gradle_jdk))
+    else:
+        print('## ERROR: Gradle 8.13 requires JDK 17 or 21 (with javac). Current Java is too new (e.g. 25) or no suitable JDK found.')
+        print('## Install a full JDK and set JAVA_HOME before running this script:')
+        print('##   Fedora/RHEL: sudo dnf install java-21-openjdk-devel')
+        print('##   Then: export JAVA_HOME=/usr/lib/jvm/java-21-openjdk')
+        print('##   Or: export JAVA_HOME=/usr/lib64/jvm/java-21-openjdk')
+        sys.exit(1)
 
 if arguments.package_type == 'release':
     unstablePackageSuffix = ''

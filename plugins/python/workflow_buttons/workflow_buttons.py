@@ -52,19 +52,21 @@ class WorkflowButtons(DockWidget):
         self.bottomLayout.setContentsMargins(0, 0, 0, 0)
         mainLayout.addLayout(self.bottomLayout)
 
-        self.bottomBar = QToolBar(self)
-        self.bottomBar.setIconSize(QSize(22,22))
-        self.bottomBar.setStyleSheet("QToolBar{spacing:0px; margin:0px;}")
-        barSpacer = QWidget(self.bottomBar)
-        barSpacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.bottomBar.addWidget(barSpacer)
-        self.bottomLayout.addWidget(self.bottomBar)
+        barSpacer = QWidget(mainWidget)
+        barSpacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
+        self.bottomLayout.addWidget(barSpacer)
+
+        self.bottomBarButton = QToolButton(mainWidget)
+        self.bottomBarButton.setAutoRaise(True)
+        self.bottomBarButton.setIconSize(QSize(22,22))
 
         self.settingsAction = QAction(self)
         self.settingsAction.setIcon(INSTANCE.icon('view-choose-22'))
         self.settingsAction.setToolTip(i18n("Open workflow buttons settings dialog"))
         self.settingsAction.triggered.connect(self.openSettingsDialog)
-        self.bottomBar.addAction(self.settingsAction)
+
+        self.bottomBarButton.setDefaultAction(self.settingsAction)
+        self.bottomLayout.addWidget(self.bottomBarButton)
 
         # Inline edit button setup
         self.editButton = QToolButton(self.buttonsWidget)
@@ -99,10 +101,10 @@ class WorkflowButtons(DockWidget):
 
     def refreshSettingsButtonPosition(self):
         if self.settingsButtonPosition == 0:
-            self.bottomBar.setVisible(True)
+            self.bottomBarButton.setVisible(True)
             self.editButton.setVisible(False)
         elif self.settingsButtonPosition == 1:
-            self.bottomBar.setVisible(False)
+            self.bottomBarButton.setVisible(False)
             self.editButton.setVisible(True)
 
     def clearButtons(self):

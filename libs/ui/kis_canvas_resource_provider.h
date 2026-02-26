@@ -119,6 +119,9 @@ public:
     void setSize(qreal size);
     qreal size() const;
 
+    void setFade(qreal fade);
+    qreal fade() const;
+
     void setBrushRotation(qreal rotation);
     qreal brushRotation() const;
 

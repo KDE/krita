@@ -246,6 +246,18 @@ void View::setBrushSize(qreal brushSize)
     d->view->resourceProvider()->setSize(brushSize);
 }
 
+qreal View::brushFade() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->fade();
+}
+
+void View::setBrushFade(qreal brushFade)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setFade(brushFade);
+}
+
 qreal View::brushRotation() const
 {
     if (!d->view) return 0.0;

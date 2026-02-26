@@ -211,6 +211,20 @@ Application.activeWindow().activeView().setForeGroundColor(color)
     void setBrushSize(qreal brushSize);
 
     /**
+     * @brief return the current fade for brush
+     *
+     * @return the brush fade value (0.00 - 1.00)
+     */
+    qreal brushFade() const;
+
+    /**
+     * @brief set the current fade for brush
+     *
+     * @param brushFade the brush fade (0.00 - 1.00)
+     */
+    void setBrushFade(qreal brushFade);
+
+    /**
      * @brief return the current rotation for brush tip
      *
      * @return the brush tip rotation value (in degrees)

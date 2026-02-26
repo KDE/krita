@@ -507,6 +507,16 @@ qreal KisCanvasResourceProvider::size() const
     return m_resourceManager->resource(KoCanvasResource::Size).toReal();
 }
 
+void KisCanvasResourceProvider::setFade(qreal fade)
+{
+    m_resourceManager->setResource(KoCanvasResource::Fade, fade);
+}
+
+qreal KisCanvasResourceProvider::fade() const
+{
+    return m_resourceManager->resource(KoCanvasResource::Fade).toReal();
+}
+
 void KisCanvasResourceProvider::setBrushRotation(qreal rotation)
 {
     m_resourceManager->setResource(KoCanvasResource::BrushRotation, rotation);

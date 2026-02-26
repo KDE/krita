@@ -149,6 +149,11 @@ void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecorationSP > &de
 {
     m_d->decorations=decorations;
     std::stable_sort(m_d->decorations.begin(), m_d->decorations.end(), KisCanvasDecoration::comparePriority);
+
+    Q_FOREACH(auto d, m_d->decorations)
+    {
+        d->setCanvasWidget(this);
+    }
 }
 
 QList<KisCanvasDecorationSP > KisCanvasWidgetBase::decorations() const

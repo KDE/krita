@@ -13,6 +13,8 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_icon_utils.h"
 #include "kis_selection.h"
+#include "kis_selection_actions_panel_button.h"
+#include "kis_selection_actions_panel_handle.h"
 #include "kis_selection_manager.h"
 #include <KoCompositeOpRegistry.h>
 #include <QList>
@@ -31,7 +33,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-static constexpr int BUTTON_SIZE = 25;
+static constexpr int BUTTON_SIZE = 30;
 static constexpr int BUFFER_SPACE = 5;
 
 class KisSelectionManager;
@@ -48,7 +50,6 @@ struct KisSelectionActionsPanel::Private {
     Private()
     {
     }
-
     KisSelectionManager *m_selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
 
@@ -64,7 +65,8 @@ struct KisSelectionActionsPanel::Private {
 
     QScopedPointer<DragHandle> m_dragHandle;
 
-    QVector<QPushButton *> m_buttons;
+    KisSelectionActionsPanelHandle * m_handleWidget;
+    QList<KisSelectionActionsPanelButton *> m_buttons;
     static const QVector<ActionButtonData> &buttonData()
     {
         static const QVector<ActionButtonData> data = {
@@ -82,22 +84,20 @@ struct KisSelectionActionsPanel::Private {
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
 };
 
-KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager, QWidget *parent)
-    : QWidget(parent)
-    , d(new Private)
+KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
+    : d(new Private)
 {
     d->m_viewManager = viewManager;
     d->m_selectionManager = viewManager->selectionManager();
 
-    QWidget *canvasWidget = dynamic_cast<QWidget *>(viewManager->canvas());
-
     // Setup buttons...
     for (const ActionButtonData &buttonData : Private::buttonData()) {
-        QPushButton *button = createButton(buttonData.iconName, buttonData.tooltip);
-        connect(button, &QPushButton::clicked, d->m_selectionManager, buttonData.slot);
-        button->setParent(canvasWidget);
+        KisSelectionActionsPanelButton *button = new KisSelectionActionsPanelButton(buttonData.iconName, buttonData.tooltip, BUTTON_SIZE, viewManager->canvas());
+        connect(button, &QAbstractButton::clicked, d->m_selectionManager, buttonData.slot);
         d->m_buttons.append(button);
     }
+
+    d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, viewManager->canvas());
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -113,13 +113,11 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
     }
 
     drawActionBarBackground(painter);
-
-    for (int i = 0; i < d->m_buttons.size(); i++) {
-        QPushButton *button = d->m_buttons[i];
-        int buttonPosition = i * BUTTON_SIZE;
-        button->move(d->m_dragHandle->position.x() + buttonPosition, d->m_dragHandle->position.y());
-        button->show();
+    Q_FOREACH(KisSelectionActionsPanelButton* button, d->m_buttons){
+        button->draw(painter);
     }
+
+    d->m_handleWidget->draw(painter);
 }
 
 void KisSelectionActionsPanel::setVisible(bool p_visible)
@@ -137,18 +135,20 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
     }
 
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
-        canvasWidget->installEventFilter(this);
+        d->m_handleWidget->installEventFilter(this);
 
         if (!d->m_dragHandle) {
             d->m_dragHandle.reset(new Private::DragHandle());
             d->m_dragHandle->position = initialDragHandlePosition();
+            movePanelWidgets();
         }
     } else { // Now hidden!
-        canvasWidget->removeEventFilter(this);
+        d->m_handleWidget->removeEventFilter(this);
 
-        for (QPushButton *button : d->m_buttons) {
+        for (KisSelectionActionsPanelButton *button : d->m_buttons) {
             button->hide();
         }
+        d->m_handleWidget->hide();
 
         d->m_pressed = false;
         d->m_dragHandle.reset();
@@ -170,10 +170,6 @@ void KisSelectionActionsPanel::setEnabled(bool enabled)
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
     switch (event->type()) {
-    case QEvent::FocusIn:
-        event->accept();
-        return true;
-
     case QEvent::MouseButtonPress: {
         const QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         return handlePress(event, mouseEventPos(mouseEvent), mouseEvent->button());
@@ -194,13 +190,13 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
     case QEvent::MouseMove:
         if (d->m_pressed) {
             const QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-            return handleMove(event, mouseEventPos(mouseEvent), obj);
+            return handleMove(event, mouseEventPos(mouseEvent));
         }
         break;
     case QEvent::TabletMove:
         if (d->m_pressed) {
             const QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
-            return handleMove(event, tabletEventPos(tabletEvent), obj);
+            return handleMove(event, tabletEventPos(tabletEvent));
         }
         break;
     case QEvent::TouchUpdate:
@@ -208,7 +204,7 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
             const QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
             QPoint pos;
             if (touchEventPos(touchEvent, pos)) {
-                return handleMove(event, pos, obj);
+                return handleMove(event, pos);
             }
         }
         break;
@@ -218,12 +214,8 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
     case QEvent::TouchEnd:
     case QEvent::TouchCancel:
         if (d->m_pressed) {
-            if (d->m_pressedIndex >= 0 && d->m_pressedIndex < d->m_buttons.size()) {
-                // A button was pressed, trigger it on the next event loop.
-                QTimer::singleShot(0, d->m_buttons[d->m_pressedIndex], &QPushButton::click);
-            }
+            d->m_handleWidget->set_held(false);
             d->m_pressed = false;
-            d->m_pressedIndex = -1;
             event->accept();
             return true;
         }
@@ -233,6 +225,19 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         break;
     }
     return false;
+}
+
+
+void KisSelectionActionsPanel::canvasWidgetChanged(KisCanvasWidgetBase* canvas)
+{
+
+    Q_FOREACH(QWidget* btn, d->m_buttons)  {
+        btn->setParent(canvas->widget());
+        btn->show();
+    }
+
+    d->m_handleWidget->setParent(canvas->widget());
+    d->m_handleWidget->show();
 }
 
 QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const
@@ -285,60 +290,31 @@ QPoint KisSelectionActionsPanel::initialDragHandlePosition() const
     return updateCanvasBoundaries(widgetBottomCenter.toPoint(), d->m_viewManager->canvas());
 }
 
-QPushButton *KisSelectionActionsPanel::createButton(const QString &iconName, const QString &tooltip)
-{
-    QPushButton *button = new QPushButton();
-    button->setIcon(KisIconUtils::loadIcon(iconName));
-    button->setFixedSize(BUTTON_SIZE, BUTTON_SIZE);
-    button->setToolTip(tooltip);
-    return button;
-}
-
 void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
 {
-    const int CORNER_RADIUS = 4;
-    const int PEN_WIDTH = 5;
-    const QColor BACKGROUND_COLOR = Qt::darkGray;
-    const QColor OUTLINE_COLOR(60, 60, 60, 80);
-    const QColor DOT_COLOR = Qt::lightGray;
-    const int DOT_SIZE = 4;
-    const int DOT_SPACING = 5;
-    const QPoint DRAG_HANDLE_RECT_DOTS_OFFSET(10, 10);
+    const int cornerRadius = 4;
+    QColor outlineColor = Qt::darkGray;
+    const QColor bgColor = qApp->palette().window().color();
+    QColor bgColorTrans = bgColor;
+    bgColorTrans.setAlpha(80);
+    const int outline_width = 4;
 
-    QRectF actionBarRect(d->m_dragHandle->position, QSize(d->m_actionBarWidth, BUTTON_SIZE));
+    //an outer 1px wide outline for contrast against the background
+    QRectF contrastOutline(d->m_dragHandle->position - QPoint(outline_width + 1,outline_width + 1), QSize(d->m_actionBarWidth, BUTTON_SIZE) +QSize(outline_width + 1,outline_width + 1) * 2);
+    QRectF midOutline(d->m_dragHandle->position - QPoint(outline_width,outline_width), QSize(d->m_actionBarWidth, BUTTON_SIZE) +QSize(outline_width,outline_width) * 2);
+    //Add a bit of padding here for the icons
+    QRectF centerBackground(d->m_dragHandle->position - QPoint(outline_width,outline_width) / 2, QSize(d->m_actionBarWidth - BUTTON_SIZE, BUTTON_SIZE) +QSize(outline_width,outline_width));
     QPainterPath bgPath;
-    bgPath.addRoundedRect(actionBarRect, CORNER_RADIUS, CORNER_RADIUS);
-    painter.fillPath(bgPath, BACKGROUND_COLOR);
+    QPainterPath outlinePath;
+    QPainterPath contrastOutlinePath;
 
-    QPen pen(OUTLINE_COLOR);
-    pen.setWidth(PEN_WIDTH);
-    painter.setPen(pen);
-    painter.drawPath(bgPath);
+    bgPath.addRoundedRect(centerBackground, cornerRadius, cornerRadius);
+    outlinePath.addRoundedRect(midOutline, cornerRadius, cornerRadius);
+    contrastOutlinePath.addRoundedRect(contrastOutline, cornerRadius, cornerRadius);
 
-    QRectF dragHandleRect(
-        QPoint(d->m_dragHandle->position.x() + d->m_actionBarWidth - BUTTON_SIZE, d->m_dragHandle->position.y()),
-        QSize(BUTTON_SIZE, BUTTON_SIZE));
-    QPainterPath dragHandlePath;
-    dragHandlePath.addRect(dragHandleRect);
-    painter.fillPath(dragHandlePath, BACKGROUND_COLOR);
-
-    const std::list<std::pair<int, int>> DOT_OFFSETS = {{0, 0},
-                                                        {DOT_SPACING, 0},
-                                                        {-DOT_SPACING, 0},
-                                                        {0, DOT_SPACING},
-                                                        {0, -DOT_SPACING},
-                                                        {DOT_SPACING, DOT_SPACING},
-                                                        {DOT_SPACING, -DOT_SPACING},
-                                                        {-DOT_SPACING, DOT_SPACING},
-                                                        {-DOT_SPACING, -DOT_SPACING}};
-
-    QPainterPath dragHandleRectDots;
-    for (const std::pair<int, int> &offset : DOT_OFFSETS) {
-        dragHandleRectDots.addEllipse(offset.first, offset.second, DOT_SIZE, DOT_SIZE);
-    };
-
-    dragHandleRectDots.translate(dragHandleRect.topLeft() + DRAG_HANDLE_RECT_DOTS_OFFSET);
-    painter.fillPath(dragHandleRectDots, DOT_COLOR);
+    painter.fillPath(contrastOutlinePath, bgColorTrans);
+    painter.fillPath(outlinePath, outlineColor);
+    painter.fillPath(bgPath, bgColor);
 }
 
 bool KisSelectionActionsPanel::handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button)
@@ -349,63 +325,57 @@ bool KisSelectionActionsPanel::handlePress(QEvent *event, const QPoint &pos, Qt:
     }
 
     if (button == Qt::LeftButton) {
-        QRect targetRect(d->m_dragHandle->position, QSize(BUTTON_SIZE * d->m_buttonCount, BUTTON_SIZE));
-        if (targetRect.contains(pos)) {
-            d->m_pressed = true;
+        d->m_pressed = true;
+        d->m_dragHandle->dragOrigin = pos - d->m_dragHandle->position;
+        d->m_handleWidget->set_held(true);
 
-            d->m_pressedIndex = (pos.x() - targetRect.left()) / BUTTON_SIZE;
-            if (d->m_pressedIndex < 0 || d->m_pressedIndex >= d->m_buttons.size()) {
-                d->m_dragHandle->dragOrigin = pos - d->m_dragHandle->position;
-            }
-
-            event->accept();
-            return true;
-        }
+        event->accept();
+        return true;
     }
 
     return false;
 }
 
-bool KisSelectionActionsPanel::handleMove(QEvent *event, const QPoint &pos, QObject *obj)
+bool KisSelectionActionsPanel::handleMove(QEvent *event, const QPoint &pos)
 {
-    // Are we dragging the bar or was a button pressed?
-    if (d->m_pressedIndex < 0 || d->m_pressedIndex >= d->m_buttons.size()) {
-        // bound actionBar to stay within canvas space
-        QWidget *canvasWidget = d->m_viewManager->canvas();
+    QWidget *canvasWidget = d->m_viewManager->canvas();
+    QPoint newPos = pos - d->m_dragHandle->dragOrigin;
+    d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
+    movePanelWidgets();
+    canvasWidget->update();
+    event->accept();
+    return true;
+}
 
-        // Explicitly casting just in case inheritance adjusts the pointer weirdly
-        // (MSVC does spicy things like that sometimes to keep you on your toes.)
-        if (obj == static_cast<QObject *>(canvasWidget)) {
-            QPoint newPos = pos - d->m_dragHandle->dragOrigin;
-            d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
-            canvasWidget->update();
-            event->accept();
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        // Button was pressed, we're just waiting for a release.
-        event->accept();
-        return true;
+void KisSelectionActionsPanel::movePanelWidgets()
+{
+    d->m_handleWidget->move(d->m_dragHandle->position.x() + d->m_buttons.size() * BUTTON_SIZE, d->m_dragHandle->position.y());
+    d->m_handleWidget->show();
+
+    int i = 0;
+    Q_FOREACH(KisSelectionActionsPanelButton *button, d->m_buttons) {
+        int buttonPosition = i * BUTTON_SIZE;
+        button->move(d->m_dragHandle->position.x() + buttonPosition, d->m_dragHandle->position.y());
+        button->show();
+        i++;
     }
 }
 
 QPoint KisSelectionActionsPanel::mouseEventPos(const QMouseEvent *mouseEvent)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    return mouseEvent->position().toPoint();
+    return transformHandleCoords(mouseEvent->position().toPoint());
 #else
-    return mouseEvent->pos();
+    return transformHandleCoords(mouseEvent->pos());
 #endif
 }
 
 QPoint KisSelectionActionsPanel::tabletEventPos(const QTabletEvent *tabletEvent)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    return tabletEvent->position().toPoint();
+    return transformHandleCoords(tabletEvent->position().toPoint());
 #else
-    return tabletEvent->pos();
+    return transformHandleCoords(tabletEvent->pos());
 #endif
 }
 
@@ -415,7 +385,7 @@ bool KisSelectionActionsPanel::touchEventPos(const QTouchEvent *touchEvent, QPoi
     if (touchEvent->pointCount() < 1) {
         return false;
     } else {
-        outPos = touchEvent->points().first().position().toPoint();
+        outPos = transformHandleCoords(touchEvent->points().first().position().toPoint());
         return true;
     }
 #else
@@ -423,8 +393,12 @@ bool KisSelectionActionsPanel::touchEventPos(const QTouchEvent *touchEvent, QPoi
     if (touchPoints.isEmpty()) {
         return false;
     } else {
-        outPos = touchPoints.first().pos().toPoint();
+        outPos = transformHandleCoords(touchPoints.first().pos().toPoint());
         return true;
     }
 #endif
+}
+
+constexpr QPoint KisSelectionActionsPanel::transformHandleCoords(QPoint pos) {
+    return d->m_dragHandle->position + pos;
 }

@@ -65,7 +65,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     // selections should be at the top of the stack
     setPriority(100);
 
-    m_selectionActionsPanel = new KisSelectionActionsPanel(this->view()->viewManager(), this->view());
+    m_selectionActionsPanel = new KisSelectionActionsPanel(this->view()->viewManager());
 
     slotConfigChanged();
 }
@@ -200,13 +200,19 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_UNUSED(canvas);
 
     // render Selection Action Bar first, so that it doesn't blink when making a new selection
-    m_selectionActionsPanel->draw(gc);
 
     if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
-        (m_mode == Mask && m_thumbnailImage.isNull())) return;
+        (m_mode == Mask && m_thumbnailImage.isNull())) {
+
+        //The SAP needs to be drawn on top of the decoration, but to avoid the panel flashing when making a new selection, we also need to call draw here
+        m_selectionActionsPanel->draw(gc);
+
+        return;
+    }
 
     QTransform transform = converter->imageToWidgetTransform();
 
+    gc.save();
     gc.setTransform(transform, false);
 
     if (m_mode == Mask) {
@@ -242,6 +248,14 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
         gc.setPen(m_antsPen);
         gc.drawPath(m_outlinePath);
     }
+
+    gc.restore();
+    m_selectionActionsPanel->draw(gc);
+}
+
+void KisSelectionDecoration::setCanvasWidget(KisCanvasWidgetBase* canvas)
+{
+    m_selectionActionsPanel->canvasWidgetChanged(canvas);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

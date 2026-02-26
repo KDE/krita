@@ -78,5 +78,6 @@
         <file>light_view-choose-22.svg</file>
         <file alias="light_object-align-horizontal-left-calligra.svg">light_ox16-action-object-align-horizontal-left-calligra.svg</file>
         <file alias="light_object-align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-right-calligra.svg</file>
+        <file>light_drag-handle.svg</file>
     </qresource>
 </RCC>

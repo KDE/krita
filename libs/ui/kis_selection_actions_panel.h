@@ -27,12 +27,12 @@ class KisViewManager;
 class KisSelectionActionsPanel;
 typedef KisSharedPtr<KisSelectionActionsPanel> KisSelectionActionsPanelSP;
 
-class KRITAUI_EXPORT KisSelectionActionsPanel : public QWidget
+class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
 {
     Q_OBJECT
 public:
     KisSelectionActionsPanel() = delete;
-    KisSelectionActionsPanel(KisViewManager *viewManager, QWidget *parent);
+    KisSelectionActionsPanel(KisViewManager *viewManager);
     ~KisSelectionActionsPanel();
 
     void draw(QPainter &painter);
@@ -40,27 +40,29 @@ public:
     void setEnabled(bool enabled);
     bool eventFilter(QObject *obj, QEvent *event) override;
 
+    void canvasWidgetChanged(KisCanvasWidgetBase* canvas);
 private:
-    void setupButtons();
-    QPushButton *createButton(const QString &iconName, const QString &tooltip);
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
     QPoint initialDragHandlePosition() const;
     void drawActionBarBackground(QPainter &gc) const;
 
     bool handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button = Qt::LeftButton);
-    bool handleMove(QEvent *event, const QPoint &pos, QObject *obj);
-    bool handleRelease(QEvent *event, const QPoint &pos, QObject *obj);
+    bool handleMove(QEvent *event, const QPoint &pos);
+    bool handleRelease(QEvent *event, const QPoint &pos);
 
-    static QPoint mouseEventPos(const QMouseEvent *mouseEvent);
-    static QPoint tabletEventPos(const QTabletEvent *tabletEvent);
+    ///Moves all the widgets that are a part of the panel
+    void movePanelWidgets();
+
+    QPoint mouseEventPos(const QMouseEvent *mouseEvent);
+    QPoint tabletEventPos(const QTabletEvent *tabletEvent);
     // Touch events can have zero touch points when pressing an entire palm on
     // the screen on Android, so this returns false if this is a non-touch.
-    static bool touchEventPos(const QTouchEvent *touchEvent, QPoint &outPos);
+    bool touchEventPos(const QTouchEvent *touchEvent, QPoint &outPos);
+
+    constexpr QPoint transformHandleCoords(QPoint pos);
 
     struct Private;
     QScopedPointer<Private> d;
-
-Q_SIGNALS:
 };
 
 #endif

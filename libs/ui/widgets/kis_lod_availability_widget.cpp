@@ -17,6 +17,7 @@
 #include "kis_image_config.h"
 #include <QWidgetAction>
 #include <QMenu>
+#include <KisLongPressEventFilter.h>
 #include <KisWidgetConnectionUtils.h>
 
 #include "kis_signals_blocker.h"
@@ -49,6 +50,7 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
 
     m_d->btnLod = new QPushButton(this);
     m_d->btnLod->setFlat(true);
+    m_d->btnLod->setProperty(KisLongPressEventFilter::ENABLED_PROPERTY, true);
 
     connect(m_d->btnLod, SIGNAL(clicked()), SLOT(showLodToolTip()));
 

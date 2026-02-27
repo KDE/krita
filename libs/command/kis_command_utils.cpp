@@ -198,6 +198,29 @@ namespace KisCommandUtils
         KUndo2Command::undo();
     }
 
+    KUndo2Command* composeCommands(KUndo2Command *parent, KUndo2Command *cmd) {
+        KIS_SAFE_ASSERT_RECOVER(cmd) {
+            cmd = new KUndo2Command(kundo2_noi18n("failed"));
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!cmd->hasParent());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!parent || !parent->hasParent());
+
+        if (!parent) return cmd;
+
+        if (CompositeCommand *compositeParent = dynamic_cast<CompositeCommand*>(parent)) {
+            compositeParent->addCommand(cmd);
+            return parent;
+        }
+
+        CompositeCommand *newCompositeParent = new CompositeCommand();
+        newCompositeParent->setText(parent->text());
+        newCompositeParent->addCommand(parent);
+        newCompositeParent->addCommand(cmd);
+
+        return newCompositeParent;
+    }
+
     void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, QScopedPointer<KUndo2Command> &accumulatingCommand)
     {
         cmd->redo();

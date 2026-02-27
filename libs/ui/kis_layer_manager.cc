@@ -261,35 +261,38 @@ void KisLayerManager::layerProperties()
     KisFileLayerSP fileLayer = KisFileLayerSP(dynamic_cast<KisFileLayer*>(layer.data()));
 
     if (adjustmentLayer && !multipleLayersSelected) {
-
         KisPaintDeviceSP dev = adjustmentLayer->projection();
 
         KisDlgAdjLayerProps dlg(adjustmentLayer, adjustmentLayer.data(), dev, m_view, adjustmentLayer->filter().data(), adjustmentLayer->name(), i18n("Filter Layer Properties"), m_view->mainWindow(), "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());
 
-
         KisFilterConfigurationSP configBefore(adjustmentLayer->filter());
         KIS_ASSERT_RECOVER_RETURN(configBefore);
         QString xmlBefore = configBefore->toXML();
 
-
         if (dlg.exec() == QDialog::Accepted) {
-
-            adjustmentLayer->setName(dlg.layerName());
+            KUndo2Command *cmd = nullptr;
 
             KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
             if(xmlBefore != xmlAfter) {
-                KisChangeFilterCmd *cmd
-                        = new KisChangeFilterCmd(adjustmentLayer,
-                                                 configBefore->cloneWithResourcesSnapshot(),
-                                                 configAfter->cloneWithResourcesSnapshot());
-                // FIXME: check whether is needed
-                cmd->redo();
+                cmd = KisCommandUtils::composeCommands(cmd,
+                    new KisChangeFilterCmd(adjustmentLayer,
+                                           configBefore->cloneWithResourcesSnapshot(),
+                                           configAfter->cloneWithResourcesSnapshot()));
+            }
+
+            if (adjustmentLayer->name() != dlg.layerName()) {
+                cmd = KisCommandUtils::composeCommands(cmd,
+                    new KisNodeRenameCommand(adjustmentLayer,
+                                             adjustmentLayer->name(),
+                                             dlg.layerName()));
+            }
+
+            if (cmd) {
                 m_view->undoAdapter()->addCommand(cmd);
-                m_view->document()->setModified(true);
             }
         }
         else {
@@ -323,19 +326,30 @@ void KisLayerManager::layerProperties()
                 QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
                 return;
             }
-            fileLayer->setName(dlg.layerName());
 
-            if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew || scalingFilterOld != scalingFilterNew) {
-                KisChangeFileLayerCmd *cmd
-                        = new KisChangeFileLayerCmd(fileLayer,
-                                                    basePath,
-                                                    fileNameOld,
-                                                    scalingMethodOld,
-                                                    scalingFilterOld,
-                                                    basePath,
-                                                    fileNameNew,
-                                                    scalingMethodNew,
-                                                    scalingFilterNew);
+            KUndo2Command *cmd = nullptr;
+
+            if (fileNameOld != fileNameNew || scalingMethodOld != scalingMethodNew
+                || scalingFilterOld != scalingFilterNew) {
+
+                cmd = KisCommandUtils::composeCommands(cmd,
+                    new KisChangeFileLayerCmd(fileLayer,
+                                                basePath,
+                                                fileNameOld,
+                                                scalingMethodOld,
+                                                scalingFilterOld,
+                                                basePath,
+                                                fileNameNew,
+                                                scalingMethodNew,
+                                                scalingFilterNew));
+            }
+
+            if (fileLayer->name() != dlg.layerName()) {
+                cmd = KisCommandUtils::composeCommands(cmd,
+                    new KisNodeRenameCommand(fileLayer, fileLayer->name(), dlg.layerName()));
+            }
+
+            if (cmd) {
                 m_view->undoAdapter()->addCommand(cmd);
             }
         }

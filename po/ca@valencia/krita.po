@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-26 00:41+0000\n"
-"PO-Revision-Date: 2026-02-24 09:47+0100\n"
+"POT-Creation-Date: 2026-02-27 00:41+0000\n"
+"PO-Revision-Date: 2026-02-26 14:42+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23959,7 +23959,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
@@ -26018,8 +26018,8 @@ msgstr "Visualització mestra:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2555
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2569
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -26120,8 +26120,8 @@ msgstr "Importa l'animació de vídeo"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2525
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2539
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27768,90 +27768,90 @@ msgstr "Punt blanc: %1, %2"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Avís:</b> La pantalla actual no permet la renderització HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2530
 #, kde-format
 msgid "Configure Krita"
 msgstr "Configureu Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2535
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres de teclat"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Dreceres"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Configureu l'entrada del llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2548
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
 #, kde-format
 msgid "Canvas Input"
 msgstr "Entrada del llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2565
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "Gestió del color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2575
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
 #, kde-format
 msgid "Performance"
 msgstr "Rendiment"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, kde-format
 msgid "Tablet settings"
 msgstr "Configureu la tauleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
 #, kde-format
 msgid "Tablet"
 msgstr "Tauleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2595
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Configuració només el llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
 #, kde-format
 msgid "Canvas-only"
 msgstr "Només el llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2605
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2619
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Paleta emergent"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2615
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2627
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autoria"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2629
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "Autoria"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2624
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2636
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -32284,6 +32284,36 @@ msgstr "To, saturació, valor"
 msgid "Sort Color History Ring By:"
 msgstr "Ordena l'anell de l'historial de colors per:"
 
+#. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:180
+#, fuzzy, kde-format
+#| msgid "sRGB Triangle Selector"
+msgid "Fix sRGB Triangle Selector Rotation"
+msgstr "Selector de Triangle sRGB"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:192
+#, fuzzy, kde-format
+#| msgid "Rotation:"
+msgid "Rotation Angle:"
+msgstr "Gir:"
+
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:199
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#, kde-format
+msgid "°"
+msgstr "°"
+
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, kde-format
@@ -34013,7 +34043,7 @@ msgid "Color Sampler"
 msgstr "Mostra de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Deselect"
 msgstr "Desselecciona"
@@ -34829,7 +34859,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "Ajusta el llenç a la vista"
 
-#: libs/ui/kis_popup_palette.cpp:909
+#: libs/ui/kis_popup_palette.cpp:917
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -34838,7 +34868,7 @@ msgstr ""
 "Cliqueu per a intercanviar els colors de primer pla i de fons.\n"
 "Feu clic dret per a establir-ho a blanc i negre."
 
-#: libs/ui/kis_popup_palette.cpp:1047
+#: libs/ui/kis_popup_palette.cpp:1055
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -34848,34 +34878,34 @@ msgstr ""
 "predefinits cal etiquetar-los i després seleccionar ací l'etiqueta."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Selecciona-ho tot"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, kde-format
 msgid "Invert Selection"
 msgstr "Invertix la selecció"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "Òmpliga la selecció amb color"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Clear Selection"
 msgstr "Neteja la selecció"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "Copia a una capa nova"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, kde-format
 msgid "Crop to Selection"
 msgstr "Escapça a la selecció"
@@ -35150,13 +35180,13 @@ msgstr "Zoom: %1 %"
 #, kde-format
 msgctxt "@title"
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "Krita és l'estudi d'art digital ple de funcionalitats"
 
 #: libs/ui/KisApplication.cpp:245
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "© 1999–2026 The Krita Developers"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
@@ -37848,7 +37878,7 @@ msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
 "OpenColorIO està desactivat: no es permet l'espai de color de les imatges"
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"
@@ -46050,7 +46080,7 @@ msgstr "Alinea al centre del quadro em ideogràfic."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Hanging"
+msgstr "Sagnat"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -46617,7 +46647,7 @@ msgstr "No hi ha cap eix variable extra en esta lletra"
 #, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr "Puntuació Hanging"
+msgstr "Puntuació del sagnat"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
 #, kde-format
@@ -46627,9 +46657,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
-"La puntuació Hanging permet l'obertura i el tancament de la puntuació "
-"«hanging», així com les comes. Esta implementació només implementa la "
-"puntuació «hanging» de l'estil asiàtic oriental."
+"La puntuació del sagnat permet l'obertura i el tancament de la puntuació del "
+"sagnat, així com les comes. Esta implementació només implementa la puntuació "
+"del sagnat de l'estil asiàtic oriental."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -46637,13 +46667,13 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr "puntuació hanging, burasagari"
+msgstr "puntuació del sagnat, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr "Primer Hang"
+msgstr "Primer sagnat"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -46655,25 +46685,25 @@ msgstr "Final de línia:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "No Hanging"
+msgstr "Sense sagnat"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr "Permet les comes «hanging»"
+msgstr "Permet les comes amb sagnat"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr "Força les comes «hanging»"
+msgstr "Força les comes amb sagnat"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr "Últim Hang"
+msgstr "Últim sagnat"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -47453,7 +47483,7 @@ msgstr "sagnat de text, indentació"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Sagnat Hanging"
+msgstr "Sagnat Sagnat"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
@@ -60462,7 +60492,7 @@ msgstr "Política de retall:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:157
 #, kde-format
 msgid "Texturing Mode:"
-msgstr "Mode de textura:"
+msgstr "Mode de texturitzat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
@@ -60485,7 +60515,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
 #, kde-format
 msgid "Soft texturing"
-msgstr "Textura suau"
+msgstr "Texturitzat suau"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:242
@@ -60821,20 +60851,6 @@ msgstr "0°"
 #, kde-format
 msgid "360°"
 msgstr "360°"
-
-#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
-#, kde-format
-msgid "°"
-msgstr "°"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:55
 #, kde-format
@@ -67177,7 +67193,7 @@ msgstr "Ideogràfic"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "Hanging"
+msgstr "Sagnat"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format
@@ -68398,7 +68414,7 @@ msgstr "Regions circumdades per un color específic o una transparència"
 msgid "Enclose and Fill Tool"
 msgstr "Eina de delimitació i emplenat"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:148
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

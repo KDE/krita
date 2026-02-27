@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-26 00:41+0000\n"
+"POT-Creation-Date: 2026-02-27 00:41+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -24079,7 +24079,7 @@ msgstr "本機資源"
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
@@ -26112,8 +26112,8 @@ msgstr "主顯示器："
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2555
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2569
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -26214,8 +26214,8 @@ msgstr "匯入影片動畫"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2525
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2539
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27829,90 +27829,90 @@ msgstr "白點：%1, %2"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>警告：</b>目前顯示器不支援 HDR 繪製"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2530
 #, kde-format
 msgid "Configure Krita"
 msgstr "設定 Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2535
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "鍵盤快捷鍵"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "快捷鍵"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "畫布輸入設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2548
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
 #, kde-format
 msgid "Canvas Input"
 msgstr "畫布輸入"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2565
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "色彩管理"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "色彩"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2575
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
 #, kde-format
 msgid "Performance"
 msgstr "效能"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, kde-format
 msgid "Tablet settings"
 msgstr "數位板設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
 #, kde-format
 msgid "Tablet"
 msgstr "數位板"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2595
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "畫布獨佔模式設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
 #, kde-format
 msgid "Canvas-only"
 msgstr "畫布獨佔模式"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2605
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2619
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "浮動畫具板"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2615
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2627
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者檔案"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2629
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2624
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2636
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -32242,6 +32242,37 @@ msgstr "色相/飽和度/明度(HSV)"
 msgid "Sort Color History Ring By:"
 msgstr "顯示色彩歷史選擇環"
 
+#. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:180
+#, fuzzy, kde-format
+#| msgid "sRGB Triangle Selector"
+msgid "Fix sRGB Triangle Selector Rotation"
+msgstr "sRGB 三角形選色器"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:192
+#, fuzzy, kde-format
+#| msgid "Rotation:"
+msgid "Rotation Angle:"
+msgstr "旋轉："
+
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:199
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#, fuzzy, kde-format
+#| msgid "°"
+msgid "°"
+msgstr "°"
+
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, kde-format
@@ -33952,7 +33983,7 @@ msgid "Color Sampler"
 msgstr "色彩取樣器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Deselect"
 msgstr "取消選取"
@@ -34777,7 +34808,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "縮放畫布至符合檢視"
 
-#: libs/ui/kis_popup_palette.cpp:909
+#: libs/ui/kis_popup_palette.cpp:917
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -34786,7 +34817,7 @@ msgstr ""
 "左鍵點擊：交換前景色和背景色\n"
 "右鍵點擊：將前景色和背景色設定為黑色和白色"
 
-#: libs/ui/kis_popup_palette.cpp:1047
+#: libs/ui/kis_popup_palette.cpp:1055
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -34796,40 +34827,40 @@ msgstr ""
 "標籤，然後在此處選取該標籤。"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "全部選擇"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
 msgid "Invert Selection"
 msgstr "反轉選取"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 #| msgid "Select a Color"
 msgid "Fill Selection with Color"
 msgstr "選取一種色彩"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 #| msgid "Feather Selection"
 msgid "Clear Selection"
 msgstr "羽化選取區域"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy Layer"
 msgid "Copy To New Layer"
 msgstr "複製圖層"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
@@ -37801,7 +37832,7 @@ msgstr "可用繪製器不支援首選輸出格式"
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "已停用 OpenColorIO：不支援影像色彩空間"
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"
@@ -60376,21 +60407,6 @@ msgstr "0°"
 msgid "360°"
 msgstr "360°"
 
-#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
-#, fuzzy, kde-format
-#| msgid "°"
-msgid "°"
-msgstr "°"
-
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:55
 #, kde-format
 msgctxt "Lock Drawing angle at start of each stroke"
@@ -68013,7 +68029,7 @@ msgstr "任何被指定色彩或透明度圍繞的區域"
 msgid "Enclose and Fill Tool"
 msgstr "閉合區域填充工具"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:148
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

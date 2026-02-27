@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-26 00:41+0000\n"
+"POT-Creation-Date: 2026-02-27 00:41+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -25611,7 +25611,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
@@ -27827,8 +27827,8 @@ msgstr "ਤਬਦੀਲ"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2555
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2569
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -27936,8 +27936,8 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2525
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2539
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -29616,96 +29616,96 @@ msgstr ""
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2530
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Configure Krita"
 msgstr "ਸੰਰਚਨਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2535
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, fuzzy, kde-format
 #| msgid "Configure..."
 msgid "Keyboard Shortcuts"
 msgstr "...ਸੰਰਚਨਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 #| msgid "Configure..."
 msgid "Shortcuts"
 msgstr "...ਸੰਰਚਨਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Canvas Input Settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2548
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Canvas Input"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2565
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Color Management"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2575
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
 #, kde-format
 msgid "Performance"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Tablet settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Tablet"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2595
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Canvas-only settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Canvas-only"
 msgstr "ਮਾਸਟਰ ਸਫ਼ੇ ਵੇਖੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2605
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2619
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Pop-up Palette"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2615
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2627
 #, fuzzy, kde-format
 #| msgid "Object Name"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2629
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy, kde-format
@@ -29713,7 +29713,7 @@ msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 msgid "Author"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2624
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2636
 #, fuzzy, kde-format
 #| msgid "Remove points"
 msgctxt "@action:button"
@@ -34209,6 +34209,36 @@ msgstr "ਰੇਖਾ ਭਾਰ"
 msgid "Sort Color History Ring By:"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
+#. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:180
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgid "Fix sRGB Triangle Selector Rotation"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:192
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Rotation Angle:"
+msgstr "ਸਥਿਤੀ"
+
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:199
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#, kde-format
+msgid "°"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, fuzzy, kde-format
@@ -36087,7 +36117,7 @@ msgid "Color Sampler"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Deselect"
@@ -37061,7 +37091,7 @@ msgstr ""
 msgid "Fit Canvas to View"
 msgstr "ਸਾਈਜ਼"
 
-#: libs/ui/kis_popup_palette.cpp:909
+#: libs/ui/kis_popup_palette.cpp:917
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid ""
@@ -37069,7 +37099,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/kis_popup_palette.cpp:1047
+#: libs/ui/kis_popup_palette.cpp:1055
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -37077,7 +37107,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
@@ -37085,31 +37115,31 @@ msgstr ""
 msgid "Select All"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Invert Selection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Fill Selection with Color"
 msgstr "ਹਟਾਓ(&e)"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Clear Selection"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgid "Copy To New Layer"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Crop to Selection"
@@ -40296,7 +40326,7 @@ msgstr ""
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"
@@ -64391,20 +64421,6 @@ msgstr ""
 msgid "360°"
 msgstr ""
 
-#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
-#, kde-format
-msgid "°"
-msgstr ""
-
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:55
 #, fuzzy, kde-format
 #| msgid "Locked"
@@ -72924,7 +72940,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 msgid "Enclose and Fill Tool"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:148
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

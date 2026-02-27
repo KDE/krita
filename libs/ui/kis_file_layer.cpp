@@ -113,7 +113,7 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
 
 void KisFileLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
-    KisBaseNode::setSectionModelProperties(properties);
+    KisLayer::setSectionModelProperties(properties);
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.id== KisLayerPropertiesIcons::openFileLayerFile.id()) {
             if (property.state.toBool() == false) {

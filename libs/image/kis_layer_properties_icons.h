@@ -59,6 +59,18 @@ public:
 
     void updateIcons();
 
+    /**
+     * Check if the property is actually stateless, i.e.
+     * cannot be modified by a requesting change. These
+     * properties are used for things like errors, color
+     * space mismatch requests or colorize mask updates.
+     *
+     * For such properties we should toggle them, but do
+     * not expect the value to actually change. That also
+     * means that they don't need undo/redo functionality.
+     */
+    static bool isStatelessProperty(const QString &id);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 02:39+0000\n"
+"POT-Creation-Date: 2026-02-27 02:45+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -33432,7 +33432,7 @@ msgid "Color Sampler"
 msgstr "拾色器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Deselect"
 msgstr "取消选择"
@@ -34259,34 +34259,34 @@ msgstr ""
 "指定标签，然后在此处选中该预设所在的标签。"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "选择全部"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, kde-format
 msgid "Invert Selection"
 msgstr "反向选择"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "填充颜色到选区"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Clear Selection"
 msgstr "清除选区内容"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "复制到新图层"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, kde-format
 msgid "Crop to Selection"
 msgstr "裁剪到选区"
@@ -67004,7 +67004,7 @@ msgstr "被包围区域：被透明、特定颜色包围"
 msgid "Enclose and Fill Tool"
 msgstr "闭合填充工具/圈涂"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:148
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

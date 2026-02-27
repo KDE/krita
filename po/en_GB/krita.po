@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 02:39+0000\n"
+"POT-Creation-Date: 2026-02-27 02:45+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -34192,7 +34192,7 @@ msgid "Color Sampler"
 msgstr "Colour Sampler"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Deselect"
 msgstr "Deselect"
@@ -35033,40 +35033,40 @@ msgstr ""
 "to tag them and then select the tag here."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Select All"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
 msgid "Invert Selection"
 msgstr "Invert Selection"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 #| msgid "Select a Color"
 msgid "Fill Selection with Color"
 msgstr "Select a Colour"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 #| msgid "Feather Selection"
 msgid "Clear Selection"
 msgstr "Feather Selection"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy Layer"
 msgid "Copy To New Layer"
 msgstr "Copy Layer"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
@@ -68561,7 +68561,7 @@ msgstr "Any surrounded by a specific colour or transparency"
 msgid "Enclose and Fill Tool"
 msgstr "Enclose and Fill Tool"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:148
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

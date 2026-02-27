@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-24 02:39+0000\n"
+"POT-Creation-Date: 2026-02-27 02:45+0000\n"
 "PO-Revision-Date: 2026-01-04 16:33+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -34110,7 +34110,7 @@ msgid "Color Sampler"
 msgstr "Kolore lagingailua"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Deselect"
@@ -34983,40 +34983,40 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Hautatu guztia"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
 msgid "Invert Selection"
 msgstr "Alderantzikatu hautapena"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 #| msgid "Select a Color"
 msgid "Fill Selection with Color"
 msgstr "Hautatu kolore bat"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 #| msgid "Feather Selection"
 msgid "Clear Selection"
 msgstr "Lumaz hautatzea"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy Layer"
 msgid "Copy To New Layer"
 msgstr "Kopiatu geruza"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
@@ -68305,7 +68305,7 @@ msgstr "Kolore jakin bat edo gardentasun batez inguratutako edozein"
 msgid "Enclose and Fill Tool"
 msgstr "Hesitu eta bete tresna"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:148
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

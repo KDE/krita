@@ -19,10 +19,12 @@
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <commands/kis_change_filter_command.h>
+#include <commands/KisNodeRenameCommand.h>
 #include <kis_generator_layer.h>
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KisGlobalResourcesInterface.h>
+#include <kis_command_utils.h>
 #include <kis_icon_utils.h>
 
 #define UPDATE_DELAY 100 /*ms */
@@ -79,7 +81,7 @@ void KisDlgGeneratorLayer::saveLayer()
      * the user has accepted the changes.
      */
     if (isEditing) {
-        layer->setName(layerName());
+        KUndo2Command *cmd = nullptr;
 
         KisFilterConfigurationSP configAfter(configuration());
         Q_ASSERT(configAfter);
@@ -87,13 +89,22 @@ void KisDlgGeneratorLayer::saveLayer()
         QString xmlAfter = configAfter->toXML();
 
         if (xmlBefore != xmlAfter) {
-            KisChangeFilterCmd *cmd
-                    = new KisChangeFilterCmd(layer,
-                                             configBefore,
-                                             configAfter->cloneWithResourcesSnapshot());
+            cmd = KisCommandUtils::composeCommands(cmd,
+                new KisChangeFilterCmd(layer,
+                                       configBefore,
+                                       configAfter->cloneWithResourcesSnapshot()));
 
+        }
+
+        if (layer->name() != layerName()) {
+            cmd = KisCommandUtils::composeCommands(cmd,
+                new KisNodeRenameCommand(layer,
+                                         layer->name(),
+                                         layerName()));
+        }
+
+        if (cmd) {
             m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified(true);
         }
     } else {
         KIS_ASSERT_RECOVER_RETURN(layer);

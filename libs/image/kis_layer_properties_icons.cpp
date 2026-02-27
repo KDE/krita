@@ -174,3 +174,13 @@ QVariant KisLayerPropertiesIcons::nodeProperty(KisNodeSP node, const KoID &id, c
 
     return defaultValue;
 }
+
+bool KisLayerPropertiesIcons::isStatelessProperty(const QString &id)
+{
+    return
+        id == colorizeNeedsUpdate.id() ||
+        id == openFileLayerFile.id() ||
+        id == layerError.id() ||
+        id == layerColorSpaceMismatch.id() ||
+        id == colorOverlay.id();
+}

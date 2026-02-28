@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-27 00:41+0000\n"
+"POT-Creation-Date: 2026-02-28 00:41+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -20749,7 +20749,7 @@ msgstr "大小"
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:70
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:187
 #: libs/ui/widgets/kis_selection_options.cc:202
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
@@ -20882,7 +20882,7 @@ msgstr "取消选择"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "添加图层"
@@ -21186,7 +21186,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "颜料图层"
@@ -21938,30 +21938,30 @@ msgstr ""
 "此图像包含的动画使用了 <b>非整数毫秒</b> 的帧持续时间。此格式不支持非整数毫秒"
 "的帧持续时间，它将被四舍五入为最接近的整数毫秒。"
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
 #, kde-format
 msgid "Clone Layer"
 msgstr "克隆图层"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "图层组"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
 #, kde-format
 msgid "File Layer"
 msgstr "文件图层"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "矢量图层"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "Filter Layer"
 msgstr "滤镜图层"
@@ -23014,7 +23014,7 @@ msgstr "超强光"
 #, kde-format
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
-msgstr "高光 (IFS Illusions)"
+msgstr "着色 (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:92
 #, kde-format
@@ -23332,7 +23332,7 @@ msgstr "色相"
 #, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr "高光"
+msgstr "着色"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
@@ -23635,8 +23635,8 @@ msgstr "本地资源"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
@@ -27318,25 +27318,25 @@ msgstr "自动 (%1)"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr ""
+msgstr "GLX (当前)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr ""
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr ""
+msgstr "EGL (当前)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27345,6 +27345,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>如果您在 X11 或 XWayland 环境下使用 Krita 遇到运行缓慢的情况，可尝试在 "
+"EGL 和 GLX 模式之间切换</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -28945,6 +28947,8 @@ msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
 msgstr ""
+"首选 OpenGL 接口\n"
+"(需要重启)："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -31606,7 +31610,7 @@ msgstr "后台缓存预渲染"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:556
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "Instant Preview"
 msgstr "快速预渲染"
@@ -31778,17 +31782,15 @@ msgstr "颜色历史环排序方式："
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
-#, fuzzy, kde-format
-#| msgid "sRGB Triangle Selector"
+#, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "基本三角形拾色器 (sRGB 色域)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Rotation Angle:"
-msgstr "旋转："
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
@@ -33762,90 +33764,90 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "图层为空"
 
-#: libs/ui/kis_layer_manager.cc:267
+#: libs/ui/kis_layer_manager.cc:266
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "滤镜图层属性"
 
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:315
 #, kde-format
 msgid "File Layer Properties"
 msgstr "文件图层属性"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
+#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
 #, kde-format
 msgid "No file name specified"
 msgstr "未指定文件名"
 
-#: libs/ui/kis_layer_manager.cc:350
+#: libs/ui/kis_layer_manager.cc:364
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "填充图层属性"
 
-#: libs/ui/kis_layer_manager.cc:407
+#: libs/ui/kis_layer_manager.cc:421
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "更改克隆图层"
 
-#: libs/ui/kis_layer_manager.cc:522
+#: libs/ui/kis_layer_manager.cc:536
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "转换图层组为动画图层"
 
-#: libs/ui/kis_layer_manager.cc:542
+#: libs/ui/kis_layer_manager.cc:556
 #, kde-format
 msgid "Save layers to..."
 msgstr "将图层保存至..."
 
-#: libs/ui/kis_layer_manager.cc:543
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr "选择图层保存的位置。新文件图层将在此后将引用此位置的数据。"
 
-#: libs/ui/kis_layer_manager.cc:606
+#: libs/ui/kis_layer_manager.cc:620
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "转换为文件图层"
 
-#: libs/ui/kis_layer_manager.cc:738
+#: libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "New Filter Layer"
 msgstr "新建滤镜图层"
 
-#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "填充图层"
 
-#: libs/ui/kis_layer_manager.cc:813
+#: libs/ui/kis_layer_manager.cc:827
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "合并整个图像"
 
-#: libs/ui/kis_layer_manager.cc:814
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "此图像包含隐藏图层，它们将在合并后被丢弃。您确定要继续合并该图像吗？"
 
-#: libs/ui/kis_layer_manager.cc:892
+#: libs/ui/kis_layer_manager.cc:906
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "图层已锁定"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:928
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "图层已锁定"
 
-#: libs/ui/kis_layer_manager.cc:931
+#: libs/ui/kis_layer_manager.cc:945
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -33855,12 +33857,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr "非动画图层已被合并到当前帧。要将它合并到整个剪辑，请至少创建一个帧。"
 
-#: libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:994
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "导出不可见图层组"
 
-#: libs/ui/kis_layer_manager.cc:983
+#: libs/ui/kis_layer_manager.cc:997
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "仅导出顶级图层组"
@@ -34401,7 +34403,7 @@ msgstr "选择不透明区域"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "Tyson Tan (钛山)"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -34626,13 +34628,13 @@ msgstr "缩放：%1 %"
 #, kde-format
 msgctxt "@title"
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "Krita 是一款功能齐全的数字绘画工作室软件"
 
 #: libs/ui/KisApplication.cpp:245
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "© 1999–2026 The Krita Developers"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
@@ -38673,31 +38675,31 @@ msgstr "按颜色标签过滤..."
 msgid "Reset Filters"
 msgstr "重置过滤"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:30
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, kde-format
 msgctxt "@label:slider"
 msgid "Threshold:"
 msgstr "阈值："
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:32
 #, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
 msgstr "快速预渲染阈值："
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:57
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:59
 #, kde-format
 msgid "Enable after:"
 msgstr "生效阈值："
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:131
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr "<p>快速预渲染因下列选项的设置而被禁用：<ul>%1</ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:140
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:142
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38708,7 +38710,7 @@ msgstr ""
 "<p>快速预渲染因其阈值设定而被禁用。请右键单击此处以更改该阈值。<ul><li>笔刷大"
 "小：%1</li><li>阈值：%2</li></ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:157
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38718,13 +38720,13 @@ msgstr ""
 "<p>快速预渲染的显示效果可能与最终渲染结果有所差异。如果遇到问题可禁用以下选"
 "项：<ul>%1</ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:162
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
 msgstr "<p>快速预渲染可用</p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "(Instant Preview)*"
 msgstr "(快速预渲染标签页)*"
@@ -42576,17 +42578,17 @@ msgstr "克隆帧转换为独立帧"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "颜色：{n}%"
+msgstr "着色：{n}%"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
 #, kde-format
 msgid "Tint color for past frames"
-msgstr "过去帧的颜色"
+msgstr "过去帧的着色"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
 #, kde-format
 msgid "Tint color for future frames"
-msgstr "未来帧的颜色"
+msgstr "未来帧的着色"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, OnionSkinsDocker)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:23
@@ -42837,7 +42839,7 @@ msgstr "配置弹出面板笔刷编辑器"
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24
 #, kde-format
 msgid "Brush HUD configuration"
-msgstr "弹出面板笔刷选项"
+msgstr "笔刷选项编辑器配置"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
@@ -50743,7 +50745,7 @@ msgstr "正常  (带有透明度的图层)"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
 #, kde-format
 msgid "Tint  (opaque layers)"
-msgstr "底色  (不透明图层)"
+msgstr "着色 (不透明图层)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
@@ -54061,7 +54063,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:153
 #, kde-format
 msgid "Save ICC Profile"
-msgstr "嵌入 ICC 色彩空间特性文件"
+msgstr "嵌入 ICC 特性文件"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:143

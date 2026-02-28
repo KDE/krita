@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-27 00:41+0000\n"
+"POT-Creation-Date: 2026-02-28 00:41+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -20949,7 +20949,7 @@ msgstr "Oʻlchami"
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:70
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:187
 #: libs/ui/widgets/kis_selection_options.cc:202
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
@@ -21084,7 +21084,7 @@ msgstr "Tanlashni bekor qilish"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -21409,7 +21409,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "orqa fon"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Qatlam"
@@ -22203,12 +22203,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "Yangi &obʼekt qatlami"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1630
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -22216,18 +22216,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Guruh:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "Filterlar &toʻplami"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "O&bʼekt qatlami"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "Filterlar &toʻplami"
@@ -23908,8 +23908,8 @@ msgstr "Qatlamni &olib tashlash"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
@@ -31712,7 +31712,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:556
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, fuzzy, kde-format
 msgid "Instant Preview"
 msgstr "Oʻrnini almashtirishmoq"
@@ -33865,92 +33865,92 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Qatlam qulflangan yoki koʻrinmaydigan."
 
-#: libs/ui/kis_layer_manager.cc:267
+#: libs/ui/kis_layer_manager.cc:266
 #, fuzzy, kde-format
 msgid "Filter Layer Properties"
 msgstr "Qatlamning xossalari"
 
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:315
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "Qatlamning xossalari"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
+#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:350
+#: libs/ui/kis_layer_manager.cc:364
 #, fuzzy, kde-format
 msgid "Fill Layer Properties"
 msgstr "Qatlamning xossalari"
 
-#: libs/ui/kis_layer_manager.cc:407
+#: libs/ui/kis_layer_manager.cc:421
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "Filter"
 
-#: libs/ui/kis_layer_manager.cc:522
+#: libs/ui/kis_layer_manager.cc:536
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Joriy qatlam"
 
-#: libs/ui/kis_layer_manager.cc:542
+#: libs/ui/kis_layer_manager.cc:556
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Qatlamni rasm sifatida saqlash..."
 
-#: libs/ui/kis_layer_manager.cc:543
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:606
+#: libs/ui/kis_layer_manager.cc:620
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Joriy qatlam"
 
-#: libs/ui/kis_layer_manager.cc:738
+#: libs/ui/kis_layer_manager.cc:752
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "Filterlar"
 
-#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "Filterlar &toʻplami"
 
-#: libs/ui/kis_layer_manager.cc:813
+#: libs/ui/kis_layer_manager.cc:827
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Silliqlangan rasm"
 
-#: libs/ui/kis_layer_manager.cc:814
+#: libs/ui/kis_layer_manager.cc:828
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "Rasmda yashirin qatlamlar mavjud. Ular yoʻqoladi."
 
-#: libs/ui/kis_layer_manager.cc:892
+#: libs/ui/kis_layer_manager.cc:906
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "Qatlam qulflangan yoki koʻrinmaydigan."
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:928
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Qatlam qulflangan yoki koʻrinmaydigan."
 
-#: libs/ui/kis_layer_manager.cc:931
+#: libs/ui/kis_layer_manager.cc:945
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -33960,12 +33960,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:994
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:983
+#: libs/ui/kis_layer_manager.cc:997
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -38592,32 +38592,32 @@ msgstr "Qatlamni olib tashlash"
 msgid "Reset Filters"
 msgstr "Filterlar"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:30
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, fuzzy, kde-format
 #| msgid "Threshold:"
 msgctxt "@label:slider"
 msgid "Threshold:"
 msgstr "Chegara:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:32
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
 msgstr "Koʻrib chiqish: "
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:57
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:59
 #, fuzzy, kde-format
 msgid "Enable after:"
 msgstr "Qatlam effektlari"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:131
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:133
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr "Koʻrib chiqish: "
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:140
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:142
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38626,7 +38626,7 @@ msgid ""
 "li><li>Threshold: %2</li></ul></p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:157
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:159
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38634,13 +38634,13 @@ msgid ""
 "troubles try disabling the following options:<ul>%1</ul></p>"
 msgstr "Koʻrib chiqish: "
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:162
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
 msgstr "Koʻrib chiqish: "
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, fuzzy, kde-format
 msgid "(Instant Preview)*"
 msgstr "Oʻrnini almashtirishmoq"

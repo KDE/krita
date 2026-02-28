@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-27 00:41+0000\n"
+"POT-Creation-Date: 2026-02-28 00:41+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -22336,7 +22336,7 @@ msgstr "Suurus"
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:70
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:187
 #: libs/ui/widgets/kis_selection_options.cc:202
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
@@ -22469,7 +22469,7 @@ msgstr "Tühista valik"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Lisa kiht"
@@ -22801,7 +22801,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Taust"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Paint Layer"
@@ -23619,12 +23619,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
 #, kde-format
 msgid "Clone Layer"
 msgstr "Kloonikiht"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1630
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -23633,18 +23633,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Rühmita"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
 #, kde-format
 msgid "File Layer"
 msgstr "Failikiht"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektorkiht"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "Filter Layer"
 msgstr "Filtrikiht"
@@ -25490,8 +25490,8 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
@@ -33794,7 +33794,7 @@ msgstr "Puhvri genereerimise lubamine taustal"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:556
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "Instant Preview"
 msgstr "Kohene eelvaatlus"
@@ -36089,32 +36089,32 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Kiht on tühi "
 
-#: libs/ui/kis_layer_manager.cc:267
+#: libs/ui/kis_layer_manager.cc:266
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Filtrikihi omadused"
 
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:315
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Failikihi omadused"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
+#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
 #, kde-format
 msgid "No file name specified"
 msgstr "Failinime pole määratud"
 
-#: libs/ui/kis_layer_manager.cc:350
+#: libs/ui/kis_layer_manager.cc:364
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Täitekihi omadused"
 
-#: libs/ui/kis_layer_manager.cc:407
+#: libs/ui/kis_layer_manager.cc:421
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Kloonikihi muutmine"
 
-#: libs/ui/kis_layer_manager.cc:522
+#: libs/ui/kis_layer_manager.cc:536
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Convert group to &animated layer"
@@ -36122,12 +36122,12 @@ msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Teisenda rühm &animeeritud kihiks"
 
-#: libs/ui/kis_layer_manager.cc:542
+#: libs/ui/kis_layer_manager.cc:556
 #, kde-format
 msgid "Save layers to..."
 msgstr "Kihtide salvestamine ..."
 
-#: libs/ui/kis_layer_manager.cc:543
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -36136,37 +36136,37 @@ msgstr ""
 "Koha valimine, kuhu kiht salvestada. Uus failikiht hakkab seejärel osutama "
 "sellele asukohale."
 
-#: libs/ui/kis_layer_manager.cc:606
+#: libs/ui/kis_layer_manager.cc:620
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Teisendamine failikihiks"
 
-#: libs/ui/kis_layer_manager.cc:738
+#: libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Uus filtrikiht"
 
-#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Fill Layer"
 msgid "Fill Layer"
 msgstr "Täitekiht"
 
-#: libs/ui/kis_layer_manager.cc:813
+#: libs/ui/kis_layer_manager.cc:827
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Pildi ühendamine"
 
-#: libs/ui/kis_layer_manager.cc:814
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "Pilt sisaldab varjatud kihte, mis lähevad kaduma. Kas ühendada pilt?"
 
-#: libs/ui/kis_layer_manager.cc:892
+#: libs/ui/kis_layer_manager.cc:906
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager"
@@ -36175,14 +36175,14 @@ msgid_plural "Layers are locked"
 msgstr[0] "Kiht on lukustatud."
 msgstr[1] "Kiht on lukustatud."
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:928
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/kis_layer_manager.cc:931
+#: libs/ui/kis_layer_manager.cc:945
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -36192,12 +36192,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:994
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Nähtamatute rühmade teisendamine"
 
-#: libs/ui/kis_layer_manager.cc:983
+#: libs/ui/kis_layer_manager.cc:997
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Ainult tipptaseme rühmade eksport"
@@ -41314,25 +41314,25 @@ msgstr "Eemalda kiht"
 msgid "Reset Filters"
 msgstr "Filtrid"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:30
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, kde-format
 msgctxt "@label:slider"
 msgid "Threshold:"
 msgstr "Lävi:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:32
 #, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
 msgstr "Kohese eelvaatluse lävi:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:57
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:59
 #, fuzzy, kde-format
 #| msgid "Enable Effects"
 msgid "Enable after:"
 msgstr "Efektide lubamine"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:131
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -41341,7 +41341,7 @@ msgstr ""
 "<p>Kohene eelvaatlus on välja lülitatud järgmiste valikute tõttu:<ul>%1</"
 "ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:140
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:142
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -41353,7 +41353,7 @@ msgstr ""
 "lülitatud. Palun tee siin paremklõps läve muutmiseks<ul><li>Pintsli suurus "
 "%1</li><li>Lävi: %2</li></ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:157
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -41363,13 +41363,13 @@ msgstr ""
 "<p>Kohene eelvaatlus võib erineda lõpptulemusest. Probleemide korral püüa "
 "keelata järgmised valikud:<ul>%1</ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:162
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
 msgstr "<p>Kohene eelvaatlus on saadaval</p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "(Instant Preview)*"
 msgstr "(Kohene eelvaatlus)*"

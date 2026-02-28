@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-27 00:41+0000\n"
-"PO-Revision-Date: 2026-02-26 14:42+0100\n"
+"POT-Creation-Date: 2026-02-28 00:41+0000\n"
+"PO-Revision-Date: 2026-02-27 14:09+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -21025,7 +21025,7 @@ msgstr "Mida"
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:70
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:187
 #: libs/ui/widgets/kis_selection_options.cc:202
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
@@ -21158,7 +21158,7 @@ msgstr "Desselecciona"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Afegeix capa"
@@ -21468,7 +21468,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fons"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "Capa de pintura"
@@ -22233,30 +22233,30 @@ msgstr ""
 "mil·lisegon</b>. El format no pot representar això, i la durada del "
 "fotograma s'arrodonirà al mil·lisegon més proper."
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
 #, kde-format
 msgid "Clone Layer"
 msgstr "Capa clonada"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grup"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
 #, kde-format
 msgid "File Layer"
 msgstr "Capa de fitxer"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Capa vectorial"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "Filter Layer"
 msgstr "Capa de filtratge"
@@ -23944,8 +23944,8 @@ msgstr "Recursos locals"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
@@ -32113,7 +32113,7 @@ msgstr "Activa la generació de la memòria cau en segon pla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:556
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "Instant Preview"
 msgstr "Vista prèvia instantània"
@@ -32238,7 +32238,7 @@ msgstr "Selector de color:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
 #, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "Selector de Triangle sRGB"
+msgstr "Selector del triangle sRGB"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
@@ -32288,17 +32288,15 @@ msgstr "Ordena l'anell de l'historial de colors per:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
-#, fuzzy, kde-format
-#| msgid "sRGB Triangle Selector"
+#, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "Selector de Triangle sRGB"
+msgstr "Corregeix el gir del selector del triangle sRGB"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Rotation Angle:"
-msgstr "Gir:"
+msgstr "Angle de gir:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
@@ -34306,42 +34304,42 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "La capa està buida "
 
-#: libs/ui/kis_layer_manager.cc:267
+#: libs/ui/kis_layer_manager.cc:266
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Propietats de la capa de filtratge"
 
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:315
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Propietats de la capa de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
+#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
 #, kde-format
 msgid "No file name specified"
 msgstr "No s'ha indicat cap nom de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:350
+#: libs/ui/kis_layer_manager.cc:364
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Propietats de la capa d'emplenat"
 
-#: libs/ui/kis_layer_manager.cc:407
+#: libs/ui/kis_layer_manager.cc:421
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Canvia la capa clonada"
 
-#: libs/ui/kis_layer_manager.cc:522
+#: libs/ui/kis_layer_manager.cc:536
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Converteix un grup a una capa animada"
 
-#: libs/ui/kis_layer_manager.cc:542
+#: libs/ui/kis_layer_manager.cc:556
 #, kde-format
 msgid "Save layers to..."
 msgstr "Desa les capes a..."
 
-#: libs/ui/kis_layer_manager.cc:543
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34350,35 +34348,35 @@ msgstr ""
 "Tria la ubicació a on es desarà la capa. La capa de fitxer nova referenciarà "
 "aquesta ubicació."
 
-#: libs/ui/kis_layer_manager.cc:606
+#: libs/ui/kis_layer_manager.cc:620
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Converteix a una capa de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:738
+#: libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Capa de filtratge nova"
 
-#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Capa d'emplenat"
 
-#: libs/ui/kis_layer_manager.cc:813
+#: libs/ui/kis_layer_manager.cc:827
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Aplana la imatge"
 
-#: libs/ui/kis_layer_manager.cc:814
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "La imatge conté capes ocultes que es perdran. Voleu aplanar la imatge?"
 
-#: libs/ui/kis_layer_manager.cc:892
+#: libs/ui/kis_layer_manager.cc:906
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34386,13 +34384,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "La capa està bloquejada"
 msgstr[1] "Les capes estan bloquejades"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:928
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "La capa està bloquejada"
 
-#: libs/ui/kis_layer_manager.cc:931
+#: libs/ui/kis_layer_manager.cc:945
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34404,12 +34402,12 @@ msgstr ""
 "La capa no animada es fusiona amb el fotograma actual. Per a fusionar-la amb "
 "el clip sencer, creeu almenys un fotograma"
 
-#: libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:994
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Converteix els grups invisibles"
 
-#: libs/ui/kis_layer_manager.cc:983
+#: libs/ui/kis_layer_manager.cc:997
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exporta només els grups de primer nivell"
@@ -39384,24 +39382,24 @@ msgstr "Filtra per etiqueta de color..."
 msgid "Reset Filters"
 msgstr "Neteja els filtres"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:30
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, kde-format
 msgctxt "@label:slider"
 msgid "Threshold:"
 msgstr "Llindar:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:32
 #, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
 msgstr "Llindar de vista prèvia instantània:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:57
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:59
 #, kde-format
 msgid "Enable after:"
 msgstr "Activa després de:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:131
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39410,7 +39408,7 @@ msgstr ""
 "<p>El mode de vista prèvia instantània està desactivat per a les opcions "
 "següents:<ul>%1</ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:140
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:142
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39422,7 +39420,7 @@ msgstr ""
 "vista prèvia instantània. Feu clic aquí amb el botó dret per a canviar el "
 "llindar<ul><li>Mida del pinzell %1</li><li>Llindar: %2</li></ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:157
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39433,13 +39431,13 @@ msgstr ""
 "final. En cas de problemes intenteu desactivar les opcions següents:<ul>%1</"
 "ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:162
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
 msgstr "<p>El mode de vista prèvia instantània està disponible</p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "(Instant Preview)*"
 msgstr "(vista prèvia instantània)*"
@@ -53152,7 +53150,7 @@ msgstr "Mida de la finestra:"
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
 #, kde-format
 msgid "Reset Transparent"
-msgstr "Reinicia el transparent"
+msgstr "Reinicia la transparència"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format

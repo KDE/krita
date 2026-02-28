@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-27 00:41+0000\n"
-"PO-Revision-Date: 2026-02-23 22:11+0200\n"
+"POT-Creation-Date: 2026-02-28 00:41+0000\n"
+"PO-Revision-Date: 2026-02-27 10:39+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -20845,7 +20845,7 @@ msgstr "מקושר"
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:70
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:187
 #: libs/ui/widgets/kis_selection_options.cc:202
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
@@ -20980,7 +20980,7 @@ msgstr "בחירה"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:729 libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -21298,7 +21298,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "רקע"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:672
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&שכבה"
@@ -22092,30 +22092,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:701
+#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "שכבה חדשה"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:685
+#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1630
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "קבוצה:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1022
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "&לבן"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:714
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "&מזג את כל השכבות"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:738
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "&לבן"
@@ -23784,8 +23784,8 @@ msgstr "ה&סר שכבה"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:1030 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
@@ -25131,13 +25131,13 @@ msgstr "יצירת שכבה חדשה"
 #: libs/ui/animation/KisFFMpegWrapper.cpp:359
 #, kde-format
 msgid "FFMpeg Crashed"
-msgstr ""
+msgstr "FFMpeg קרס"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:692
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
-msgstr ""
+msgstr "נתוני הווידאו נטענים… %1 תמוניות נבחנו."
 
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, fuzzy, kde-format
@@ -25162,7 +25162,7 @@ msgstr ""
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "מפענח:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
@@ -25244,7 +25244,7 @@ msgstr "חזרה:"
 #: libs/ui/animation/video_export_options_dialog.ui:406
 #, kde-format
 msgid "Lossless"
-msgstr ""
+msgstr "ללא אובדן איכות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
@@ -31545,7 +31545,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:556
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, fuzzy, kde-format
 msgid "Instant Preview"
 msgstr "שינוי גודל תמונה"
@@ -33686,79 +33686,79 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "&תמונה"
 
-#: libs/ui/kis_layer_manager.cc:267
+#: libs/ui/kis_layer_manager.cc:266
 #, fuzzy, kde-format
 msgid "Filter Layer Properties"
 msgstr "מאפייני שכבה..."
 
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:315
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "מאפייני שכבה..."
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:1030
+#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
 #, kde-format
 msgid "No file name specified"
 msgstr "לא צוין שם קובץ"
 
-#: libs/ui/kis_layer_manager.cc:350
+#: libs/ui/kis_layer_manager.cc:364
 #, fuzzy, kde-format
 msgid "Fill Layer Properties"
 msgstr "מאפייני שכבה..."
 
-#: libs/ui/kis_layer_manager.cc:407
+#: libs/ui/kis_layer_manager.cc:421
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "&לבן"
 
-#: libs/ui/kis_layer_manager.cc:522
+#: libs/ui/kis_layer_manager.cc:536
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "העבר שכבה נוכחית אחורה"
 
-#: libs/ui/kis_layer_manager.cc:542
+#: libs/ui/kis_layer_manager.cc:556
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "שמירת שכבה בתור תמונה..."
 
-#: libs/ui/kis_layer_manager.cc:543
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:606
+#: libs/ui/kis_layer_manager.cc:620
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "העבר שכבה נוכחית אחורה"
 
-#: libs/ui/kis_layer_manager.cc:738
+#: libs/ui/kis_layer_manager.cc:752
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "&לבן"
 
-#: libs/ui/kis_layer_manager.cc:786 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "&לבן"
 
-#: libs/ui/kis_layer_manager.cc:813
+#: libs/ui/kis_layer_manager.cc:827
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "שכפל תמונה"
 
-#: libs/ui/kis_layer_manager.cc:814
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:892
+#: libs/ui/kis_layer_manager.cc:906
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -33768,13 +33768,13 @@ msgstr[1] "שכבות נעולות"
 msgstr[2] "שכבות נעולות"
 msgstr[3] "שכבות נעולות"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:928
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "&תמונה"
 
-#: libs/ui/kis_layer_manager.cc:931
+#: libs/ui/kis_layer_manager.cc:945
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -33784,12 +33784,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:994
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "המרת קבוצות בלתי נראות"
 
-#: libs/ui/kis_layer_manager.cc:983
+#: libs/ui/kis_layer_manager.cc:997
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -34851,7 +34851,7 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:89
 #, kde-format
 msgid "Start Krita in full-screen mode"
-msgstr ""
+msgstr "הפעלת Krita על כל המסך"
 
 #: libs/ui/KisApplicationArguments.cpp:91
 #, kde-format
@@ -34861,12 +34861,12 @@ msgstr "מעקף הגדרת הנק׳ לאינץ׳ של התצוגה"
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
 msgid "Export to the given filename and exit"
-msgstr ""
+msgstr "ייצוא לשם הקובץ שסופק ולצאת"
 
 #: libs/ui/KisApplicationArguments.cpp:96
 #, kde-format
 msgid "Export animation to the given filename and exit"
-msgstr ""
+msgstr "ייצוא הנפשה לשם הקובץ שסופק ולצאת"
 
 #: libs/ui/KisApplicationArguments.cpp:97
 #, fuzzy, kde-format
@@ -34876,7 +34876,7 @@ msgstr "העתק בחירה לשכבה חדשה"
 #: libs/ui/KisApplicationArguments.cpp:98
 #, kde-format
 msgid "File layer to be added to existing or new file"
-msgstr ""
+msgstr "שכבת קובץ להוספה לקובץ חדש או קיים"
 
 #: libs/ui/KisApplicationArguments.cpp:99
 #, kde-format
@@ -34916,6 +34916,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"בחירה בביטול, כל הקבצים שניתן לשחזר יישמרו.\n"
+"לחיצה על אישור תשחזר את הקבצים שנבחרו, אלו שלא נבחרו יישארו במקומם."
 
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 #, fuzzy
@@ -34926,7 +34928,7 @@ msgstr "יצירת מסמך"
 #: libs/ui/KisDocument.cpp:743
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
-msgstr ""
+msgstr "אי אפשר לכתוב אל %1. נא לשמור בשם אחר."
 
 #: libs/ui/KisDocument.cpp:793
 #, fuzzy, kde-format
@@ -34955,7 +34957,7 @@ msgstr "שמירת מסמך בשם"
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
-msgstr ""
+msgstr "לא ניתן להתחיל לשמור את %1. נא להמתין עד לסיום פעולת השמירה הנוכחית."
 
 #: libs/ui/KisDocument.cpp:853
 #, fuzzy, kde-format
@@ -34985,14 +34987,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 נשמר אבל באופן חלקי"
 
 #: libs/ui/KisDocument.cpp:1031
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
+msgstr "צצו כל מיני בעיות במהלך השמירה."
 
 #: libs/ui/KisDocument.cpp:1048
 #, fuzzy, kde-format
@@ -35013,7 +35015,7 @@ msgstr "מתבצעת שמירה אוטומטית…"
 #: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
-msgstr ""
+msgstr "שמירה אוטומטית מושהית: המסמך עסוק…"
 
 #: libs/ui/KisDocument.cpp:1632
 #, fuzzy, kde-format
@@ -35058,7 +35060,7 @@ msgstr "לא ניתן למצוא %1"
 #: libs/ui/KisDocument.cpp:2024
 #, kde-format
 msgid "There were problems opening %1."
-msgstr ""
+msgstr "התעוררו בעיות בעת פתיחת %1."
 
 #: libs/ui/KisDocument.cpp:2162
 #, fuzzy, kde-format
@@ -35076,7 +35078,7 @@ msgstr "רקע"
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
 msgid "Waiting for saving to complete..."
-msgstr ""
+msgstr "בהמתנה להשמרת השלימה…"
 
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 #, fuzzy
@@ -35087,33 +35089,33 @@ msgstr "אלפא"
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
-msgstr ""
+msgstr "אירעה שגיאה בלתי מוגדרת."
 
 #: libs/ui/KisImportExportErrorCode.cpp:24
 #: libs/ui/KisImportExportErrorCode.cpp:185
 #, kde-format
 msgid "The action has been completed successfully."
-msgstr ""
+msgstr "הפעולה הושלמה בהצלחה."
 
 #: libs/ui/KisImportExportErrorCode.cpp:26
 #, kde-format
 msgid "An error occurred when reading from the file."
-msgstr ""
+msgstr "אירעה שגיאה בעת קריאה מהקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:28
 #, kde-format
 msgid "An error occurred when writing to the file."
-msgstr ""
+msgstr "אירעה שגיאה בעת כתיבה לקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:30
 #, kde-format
 msgid "A fatal error occurred."
-msgstr ""
+msgstr "אירעה שגיאה מכריעה."
 
 #: libs/ui/KisImportExportErrorCode.cpp:32
 #, kde-format
 msgid "Out of resources (e.g. out of memory)."
-msgstr ""
+msgstr "המשאבים אזלו (למשל: נגמר הזיכרון)."
 
 #: libs/ui/KisImportExportErrorCode.cpp:34
 #, fuzzy, kde-format
@@ -35128,7 +35130,7 @@ msgstr "פעולה בוליאנית"
 #: libs/ui/KisImportExportErrorCode.cpp:38
 #, kde-format
 msgid "A timeout occurred."
-msgstr ""
+msgstr "הזמן שהוקצב לבקשה תם."
 
 #: libs/ui/KisImportExportErrorCode.cpp:42
 #, fuzzy, kde-format
@@ -35157,7 +35159,7 @@ msgstr "הקובץ %1 לא קיים."
 #: libs/ui/KisImportExportErrorCode.cpp:50
 #, kde-format
 msgid "Permission denied. Krita is not allowed to read or write to the file."
-msgstr ""
+msgstr "ההרשאה נדחתה. ל־Krita אסור לקרוא מהקובץ או לכתוב אליו."
 
 #: libs/ui/KisImportExportErrorCode.cpp:52
 #, fuzzy, kde-format
@@ -35189,7 +35191,7 @@ msgstr "הקובץ %1 לא קיים."
 #: libs/ui/KisImportExportErrorCode.cpp:150
 #, kde-format
 msgid "Permission denied: Krita is not allowed to read the file."
-msgstr ""
+msgstr "ההרשאה נדחתה: ל־Krita אסור לקרוא מהקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:152
 #, fuzzy, kde-format
@@ -35212,7 +35214,7 @@ msgstr "הקובץ %1 לא קיים."
 #: libs/ui/KisImportExportErrorCode.cpp:158
 #, kde-format
 msgid "Error occurred while reading from the file."
-msgstr ""
+msgstr "אירעה שגיאה במהלך קריאה מהקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:162
 #, fuzzy, kde-format
@@ -35223,27 +35225,27 @@ msgstr "הקובץ %1 לא קיים."
 #: libs/ui/KisImportExportErrorCode.cpp:164
 #, kde-format
 msgid "Permission denied: Krita is not allowed to write to the file."
-msgstr ""
+msgstr "ההרשאה נדחתה: ל־Krita אסור לכתוב לקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:166
 #, kde-format
 msgid "There is not enough disk space left to save the file."
-msgstr ""
+msgstr "אין מספיק מקום פנוי בכונן לשמירת הקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
 msgid "Error occurred while writing to the file."
-msgstr ""
+msgstr "אירעה שגיאה בעת כתיבה לקובץ."
 
 #: libs/ui/KisImportExportErrorCode.cpp:170
 #, kde-format
 msgid "Krita does not support this file format."
-msgstr ""
+msgstr "Krita לא תומכת בתסדיר הקובץ הזה."
 
 #: libs/ui/KisImportExportErrorCode.cpp:174
 #, kde-format
 msgid "The action was cancelled by the user."
-msgstr ""
+msgstr "הפעולה בוטלה על ידי המשתמש."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
 #: plugins/impex/libkra/kra_converter.cpp:388
@@ -35262,7 +35264,7 @@ msgstr "&תמונה"
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
 "another location."
-msgstr ""
+msgstr "%1 לא קיים לאחר הכתיבה. כדאי לנסות לשמור שוב בשם אחר, במקום אחר."
 
 #: libs/ui/KisImportExportFilter.cpp:170
 #, fuzzy, kde-format
@@ -35275,6 +35277,8 @@ msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
 "different name, in another location."
 msgstr ""
+"%1 קטן מ־10 בתים, סביר להניח שהוא פגום. כדאי לנסות לשמור שוב בשם אחר, במקום "
+"אחר."
 
 #: libs/ui/KisImportExportFilter.cpp:189
 #, kde-format
@@ -36110,7 +36114,7 @@ msgstr ""
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
-msgstr ""
+msgstr "אלמוני"
 
 #: libs/ui/KisWelcomePageWidget.cpp:155
 #, kde-format
@@ -36150,17 +36154,17 @@ msgstr "ייצוא השכבה"
 #: libs/ui/KisWelcomePageWidget.cpp:723
 #, kde-format
 msgid "New version of Krita is available."
-msgstr ""
+msgstr "יש גרסה חדשה של Krita."
 
 #: libs/ui/KisWelcomePageWidget.cpp:752
 #, kde-format
 msgid "An error occurred during the update"
-msgstr ""
+msgstr "אירעה שגיאה במהלך העדכון"
 
 #: libs/ui/KisWelcomePageWidget.cpp:758
 #, kde-format
 msgid "Restart is required."
-msgstr ""
+msgstr "נדרשת הפעלה מחדש."
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
@@ -36175,58 +36179,58 @@ msgstr "הדבקת טקסט"
 #: libs/ui/KoDocumentInfoDlg.cpp:170
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr ""
+msgstr "להשתמש ב־‚;’ (למשל: כלי משרד;KDE;‏Calligra)"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:296
 #, kde-format
 msgid "%1 week"
 msgid_plural "%1 weeks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שבוע"
+msgstr[1] "שבועיים"
+msgstr[2] "%1 שבועות"
+msgstr[3] "%1 שבועות"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:297 libs/ui/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "%1 day"
 msgid_plural "%1 days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "יום"
+msgstr[1] "יומיים"
+msgstr[2] "%1 ימים"
+msgstr[3] "%1 ימים"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:300 libs/ui/KoDocumentInfoDlg.cpp:302
 #, kde-format
 msgid "%1 hour"
 msgid_plural "%1 hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שעה"
+msgstr[1] "שעתיים"
+msgstr[2] "%1 שעות"
+msgstr[3] "%1 שעות"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:303 libs/ui/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "%1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "דקה"
+msgstr[1] "שתי דקות"
+msgstr[2] "%1 דקות"
+msgstr[3] "%1 דקות"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:306 libs/ui/KoDocumentInfoDlg.cpp:308
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] "שנייה"
-msgstr[1] "שנייה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שתי שניות"
+msgstr[2] "%1 שניות"
+msgstr[3] "%1 שניות"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:314
 #, kde-format
 msgctxt "major time unit and minor time unit"
 msgid "%1 and %2"
-msgstr ""
+msgstr "%1 ו%2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -36293,7 +36297,7 @@ msgstr "&מברשת"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:164
 #, kde-format
 msgid "&Technique:"
-msgstr ""
+msgstr "&טכניקה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbTechnique)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:95
@@ -36346,13 +36350,13 @@ msgstr ""
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:163
 #, kde-format
 msgid "Si&ze:"
-msgstr ""
+msgstr "&גודל:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:183
 #, kde-format
 msgid "So&ften:"
-msgstr ""
+msgstr "&ריכוך:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:206
@@ -36649,7 +36653,7 @@ msgstr "שינוי קנה מידה של שכבה..."
 #: libs/ui/layerstyles/wdgblendingoptions.ui:344
 #, kde-format
 msgid "255"
-msgstr ""
+msgstr "255"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:330
@@ -36701,7 +36705,7 @@ msgstr "מלבן"
 #: libs/ui/layerstyles/wdgdropshadow.ui:103
 #, kde-format
 msgid "Add noise to shadow"
-msgstr ""
+msgstr "הוספת רעש להצללה"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #. i18n: ectx: property (title), widget (QGroupBox, grpMain)
@@ -36715,7 +36719,7 @@ msgstr "חדות:"
 #: libs/ui/layerstyles/wdgdropshadow.ui:40
 #, kde-format
 msgid "Use to obscure the shadow when fill is transparent"
-msgstr ""
+msgstr "משמש לערפל את הצללית כשהמילוי שקוף למחצה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLayerKnocksOutDropShadow)
 #: libs/ui/layerstyles/wdgdropshadow.ui:43
@@ -36855,7 +36859,7 @@ msgstr "בחירה"
 #, kde-format
 msgctxt "Gradient type - Diamond"
 msgid "Diamond"
-msgstr ""
+msgstr "יהלום"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAlignWithLayer)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:166
@@ -37081,14 +37085,14 @@ msgstr "מיקום:"
 #, kde-format
 msgctxt "@item:inlistbox Layer Style: Stroke position"
 msgid "Outside"
-msgstr ""
+msgstr "בחוץ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPosition)
 #: libs/ui/layerstyles/WdgStroke.ui:75
 #, kde-format
 msgctxt "@item:inlistbox Layer Style: Stroke position"
 msgid "Inside"
-msgstr ""
+msgstr "בפנים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPosition)
 #: libs/ui/layerstyles/WdgStroke.ui:80
@@ -37164,7 +37168,7 @@ msgstr ""
 #: libs/ui/opengl/kis_opengl_image_textures.cpp:819
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
-msgstr ""
+msgstr "OpenColorIO כבוי: מרחב צבע התמונה לא נתמך"
 
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
@@ -37329,7 +37333,7 @@ msgstr "ב&רירת מחדל"
 #: libs/ui/toolbox/KoToolBox.cpp:356
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1×%2"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:26
 #, fuzzy, kde-format
@@ -37775,7 +37779,7 @@ msgstr "(ברירת מחדל)"
 #, kde-format
 msgctxt "Not Applicable, used where there's no colorants or gamma curve found"
 msgid "N/A"
-msgstr ""
+msgstr "לא זמין"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:156
 #, fuzzy, kde-format
@@ -38352,7 +38356,7 @@ msgstr "&מברשת"
 #, kde-format
 msgctxt "combo box: show all layers"
 msgid "All"
-msgstr ""
+msgstr "הכול"
 
 #: libs/ui/widgets/kis_color_filter_combo.cpp:225
 #, fuzzy, kde-format
@@ -38422,31 +38426,31 @@ msgstr "הסר שכבה"
 msgid "Reset Filters"
 msgstr "&לבן"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:30
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Threshold:"
 msgstr "סף ציור:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:32
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
 msgstr "שינוי גודל תמונה"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:57
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:59
 #, fuzzy, kde-format
 msgid "Enable after:"
 msgstr "אפק&טים"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:131
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:133
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr "שינוי גודל תמונה"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:140
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:142
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38455,7 +38459,7 @@ msgid ""
 "li><li>Threshold: %2</li></ul></p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:157
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:159
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38463,13 +38467,13 @@ msgid ""
 "troubles try disabling the following options:<ul>%1</ul></p>"
 msgstr "שינוי גודל תמונה"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:162
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
 msgstr "שינוי גודל תמונה"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, fuzzy, kde-format
 msgid "(Instant Preview)*"
 msgstr "שינוי גודל תמונה"
@@ -38729,7 +38733,7 @@ msgstr "זוויות:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
-msgstr ""
+msgstr "הבדל סימטרי (%1)"
 
 #: libs/ui/widgets/kis_tone_curve_widget.cpp:317
 #, fuzzy, kde-format
@@ -38755,7 +38759,7 @@ msgstr "מקושר"
 #: libs/ui/widgets/kis_transport_controls.cpp:54
 #, kde-format
 msgid "Play/Pause"
-msgstr ""
+msgstr "נגינה/השהיה"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:63
 #, fuzzy, kde-format
@@ -38797,7 +38801,7 @@ msgstr "הבא שכבה מעלה"
 #: libs/ui/widgets/kis_workspace_chooser.cpp:203
 #, kde-format
 msgid "File name already in use. Saving will overwrite the original Workspace."
-msgstr ""
+msgstr "שם הקובץ כבר בשימוש. שמירה תשכתב על סביבת העבודה המקורית."
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
@@ -38821,7 +38825,7 @@ msgstr "רקע"
 #, kde-format
 msgid ""
 "File name already in use. Saving will overwrite the original window layout."
-msgstr ""
+msgstr "שם הקובץ כבר בשימוש. שמירה תשכתב על פריסת החלון המקורית."
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:281
 #, fuzzy, kde-format
@@ -38840,21 +38844,21 @@ msgstr "&גובה:"
 #, kde-format
 msgctxt "Contrast enhancement method used in auto levels"
 msgid "Method:"
-msgstr ""
+msgstr "שיטה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShadowsAndLightsMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:70
 #, kde-format
 msgctxt "Use same black and white points for all the channels in auto levels"
 msgid "Adjust monochromatic contrast"
-msgstr ""
+msgstr "הוספת ניגודיות מונוכרומטית"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShadowsAndLightsMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:75
 #, kde-format
 msgctxt "Use different black and white points for each channel in auto levels"
 msgid "Adjust per channel contrast"
-msgstr ""
+msgstr "כוונון ניגודיות לפי ערוץ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
@@ -38907,7 +38911,7 @@ msgstr "מקושר"
 #, kde-format
 msgctxt "Midtones enhancement method used in auto levels"
 msgid "Method:"
-msgstr ""
+msgstr "שיטה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
@@ -39051,7 +39055,7 @@ msgstr "העבר שכבה נוכחית קדימה"
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
 msgid "Mask is disabled"
-msgstr ""
+msgstr "מסכה מושבתת"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -39224,7 +39228,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
 msgid "Rows:"
-msgstr ""
+msgstr "שורות:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblNumColumns)
@@ -41871,7 +41875,7 @@ msgstr "ניווט"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1106
 #, kde-format
 msgid "Hue: "
-msgstr ""
+msgstr "גוון: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroupBox_2)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1116
@@ -41926,7 +41930,7 @@ msgstr ""
 #, kde-format
 msgctxt "Value (Keep short!)"
 msgid "Val:"
-msgstr ""
+msgstr "ערך:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
 #, fuzzy, kde-format
@@ -43376,45 +43380,45 @@ msgstr "זוויות:"
 #. i18n: ectx: property (text), widget (QLabel, m_lblExposure)
 #: plugins/dockers/lut/wdglut.ui:139
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Exposure:"
-msgstr "ייצוא השכבה"
+msgstr "חשיפה:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblInputColorSpace)
 #: plugins/dockers/lut/wdglut.ui:152
-#, fuzzy, kde-format
+#, kde-format
 msgid "Input ColorSpace:"
-msgstr "&בוחר צבעים"
+msgstr "מרחב צבעי קלט:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblConfig)
 #: plugins/dockers/lut/wdglut.ui:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configuration:"
-msgstr "זוויות:"
+msgstr "הגדרות:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLut)
 #: plugins/dockers/lut/wdglut.ui:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "LUT file:"
-msgstr "מאפייני שכבה..."
+msgstr "קובץ LUT:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblView)
 #: plugins/dockers/lut/wdglut.ui:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "View:"
-msgstr "מקושר"
+msgstr "תצוגה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/lut/wdglut.ui:296
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Engine:"
-msgstr "מחליף צבעים"
+msgstr "מנוע צבעים:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:310
-#, fuzzy, kde-format
+#, kde-format
 msgid "Internal"
-msgstr "זוויות:"
+msgstr "פנימי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:315
@@ -43449,9 +43453,9 @@ msgid "Configure black and white points of the view"
 msgstr ""
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overview"
-msgstr "מאפייני שכבה..."
+msgstr "סקירה"
 
 #: plugins/dockers/overview/overviewdocker_page.cpp:159
 #, kde-format
@@ -43512,31 +43516,31 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnAdd)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add foreground color"
-msgstr "צבע &טקסט"
+msgstr "הוספת צבע חזית"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lock the current palette."
-msgstr "הסר שכבה נוכחית"
+msgstr "נעילת לוח הצבעים הנוכחי."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
-msgstr "מאפייני שכבה..."
+msgstr "ערכות מברשות"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Preset History"
-msgstr "מאפייני שכבה..."
+msgstr "היסטוריית ערכת מברשות"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Static Positions"
-msgstr "גל משולש"
+msgstr "מקומות קבועים"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:63
 #, fuzzy, kde-format
@@ -43549,14 +43553,14 @@ msgid "Bubble Up on Repeated Use"
 msgstr ""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:202
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "כפתור איפוס"
+msgstr "הגדרת מספר המברשות המופיעות"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:203
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "כפתור איפוס"
+msgstr "מספר המברשות המופיעות:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:305
 #, kde-format
@@ -43564,21 +43568,21 @@ msgid "Clear History"
 msgstr "פינוי ההיסטוריה"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "History Behavior:"
-msgstr "שנה גודל"
+msgstr "התנהגות היסטוריה:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:312
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr "כפתור איפוס"
+msgstr "הגדרת מספר המברשות המופיעות…"
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Recorder"
-msgstr "מלבן"
+msgstr "מקליט"
 
 #. i18n: context: iconText @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: text @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
@@ -43629,49 +43633,48 @@ msgid "Abort encoding the timelapse video?"
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:248
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
-msgstr "הגדרות"
+msgstr "FFmpeg מופעל…"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
 #: plugins/dockers/recorder/recorder_export.cpp:373
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא"
 
 #: plugins/dockers/recorder/recorder_export.cpp:388
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "אין תמוניות לייצוא"
 
 #: plugins/dockers/recorder/recorder_export.cpp:392
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
-msgstr "מלבן"
+msgstr "פרטי הקלטה"
 
 #: plugins/dockers/recorder/recorder_export.cpp:395
-#, fuzzy, kde-format
-#| msgid "Fax:"
+#, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
-msgstr "פקס:"
+msgstr "פיקסלים"
 
 #: plugins/dockers/recorder/recorder_export.cpp:397
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
-msgstr "&צבעים"
+msgstr "תמוניות"
 
 #: plugins/dockers/recorder/recorder_export.cpp:443
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "אין תמוניות לעיון."
 
 #: plugins/dockers/recorder/recorder_export.cpp:549
 #, kde-format
@@ -43691,9 +43694,9 @@ msgstr ""
 "האם ברצונך לכתוב עליו?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:618
-#, fuzzy, kde-format
+#, kde-format
 msgid "No frames to export."
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "אין תמוניות לייצוא."
 
 #: plugins/dockers/recorder/recorder_export.cpp:645
 #, kde-format
@@ -43701,9 +43704,9 @@ msgid "The timelapse video is being encoded..."
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:660
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export failed. FFmpeg message:"
-msgstr "ייצוא תמונה"
+msgstr "הייצוא נכשל. ההודעה מ־FFmpeg:"
 
 #: plugins/dockers/recorder/recorder_export.cpp:681
 #, kde-format
@@ -43730,9 +43733,9 @@ msgstr "ייצוא תמונה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseDirectory)
 #: plugins/dockers/recorder/recorder_export.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open record directory"
-msgstr "מלבן"
+msgstr "פתיחת תיקיית ההקלטה"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRealTimeCaptureNotion)
 #: plugins/dockers/recorder/recorder_export.ui:178
@@ -43779,9 +43782,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
 #: plugins/dockers/recorder/recorder_export.ui:320
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit video profile"
-msgstr "מאפייני שכבה..."
+msgstr "עריכת פרופיל וידאו"
 
 #. i18n: ectx: property (text), widget (QLineEdit, editFfmpegPath)
 #: plugins/dockers/recorder/recorder_export.ui:333
@@ -43803,9 +43806,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
 #: plugins/dockers/recorder/recorder_export.ui:390
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select a file location for the exported timelapse video"
-msgstr "מלבן"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:433
@@ -43817,9 +43820,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:439
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enable preview for:"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "הפעלת תצוגה מקדימה למשך:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
 #: plugins/dockers/recorder/recorder_export.ui:567
@@ -43829,9 +43832,9 @@ msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
 #: plugins/dockers/recorder/recorder_export.ui:589
-#, fuzzy, kde-format
+#, kde-format
 msgid " sec."
-msgstr "שנייה"
+msgstr " שנ׳"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
 #: plugins/dockers/recorder/recorder_export.ui:617
@@ -43841,9 +43844,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkResize)
 #: plugins/dockers/recorder/recorder_export.ui:654
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resize:"
-msgstr "שנה גודל"
+msgstr "שינוי גודל:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:693
@@ -44007,9 +44010,9 @@ msgstr "פינוי הקלטות"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProgress)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scanning..."
-msgstr "שינוי שם התמונה..."
+msgstr "מתבצעת סריקה…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
@@ -44044,43 +44047,43 @@ msgstr "ניהול הקלטות…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select the recordings directory..."
-msgstr "מלבן"
+msgstr "נא לבחור את תיקיית ההקלטות…"
 
 #. i18n: This value changes for RealtTimeCapture mode switched to on. It can alter the column width of the labels, if this value is the longest of all labels. Please ensure, that at least one other label has more characters than this one (by stuffing space characters after the colon of one label).
 #. i18n: ectx: property (text), widget (QLabel, labelRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Capture interval:"
-msgstr "&מברשת"
+msgstr "הפרש בלכידה:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelQuality)
 #: plugins/dockers/recorder/recorderdocker.ui:199
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Compression quality"
 msgid "Quality:"
-msgstr "אטימות:"
+msgstr "איכות:"
 
 #. i18n: Please do not remove the spaces after the label text. It ensures to fix the column width if the label text of `labelRate` is set to an other value for RealTimeCaptureMode switched on.
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:225
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:         "
-msgstr "כפתור איפוס"
+msgstr "רזולוציה:         "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:248
-#, fuzzy, kde-format
+#, kde-format
 msgid "Original"
-msgstr "אלכסוני"
+msgstr "מקור"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:253
-#, fuzzy, kde-format
+#, kde-format
 msgid "Half"
-msgstr "הדבקת בחירה"
+msgstr "חצי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:258
@@ -44090,10 +44093,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelFormat)
 #: plugins/dockers/recorder/recorderdocker.ui:266
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "File format for recorded frames (PNG/JPG)"
 msgid "Format:"
-msgstr "&לבן"
+msgstr "תסדיר:"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, sliderThreads)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinThreads)
@@ -44105,9 +44108,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Threads:"
-msgstr "סף ציור:"
+msgstr "תהליכונים:"
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -44149,27 +44152,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxAutoRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:369
-#, fuzzy, kde-format
+#, kde-format
 msgid "Record automatically"
-msgstr "גל משולש"
+msgstr "הקלטה אוטומטית"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:388
-#, fuzzy, kde-format
+#, kde-format
 msgid "Record"
-msgstr "מלבן"
+msgstr "הקלטה"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonExport)
 #: plugins/dockers/recorder/recorderdocker.ui:411
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export..."
-msgstr "ייצוא השכבה"
+msgstr "ייצוא…"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
-msgstr "אטימות:"
+msgstr "איכות:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:160
 #, kde-format
@@ -44181,10 +44184,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:168
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
-msgstr "מאפייני שכבה..."
+msgstr "דחיסה:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:169
 #, kde-format
@@ -44203,24 +44206,24 @@ msgid "Video FPS:"
 msgstr "יצירת שכבה חדשה"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
-msgstr "&מברשת"
+msgstr "הפרש בלכידה:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
-msgstr "אלכסוני"
+msgstr "מקור"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:248
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
 "frames when recording the canvas"
 msgid "Half"
-msgstr "הדבקת בחירה"
+msgstr "חצי"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:249
 #, kde-format
@@ -44231,10 +44234,10 @@ msgid "Quarter"
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
-msgstr "מקושר"
+msgstr "עצירה"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:275
 #, kde-format
@@ -44254,9 +44257,9 @@ msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:326
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recorder is paused"
-msgstr "מחיקת טקסט"
+msgstr "המקליט מושהה"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:350
 #, kde-format
@@ -44278,15 +44281,15 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:366
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the number of threads to be used for recording."
-msgstr "כלי בחירה"
+msgstr "הגדרת מספר התהליכונים שישמשו להקלטה."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:392
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
-msgstr "מלבן"
+msgstr "מקליט"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
@@ -44294,16 +44297,16 @@ msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:627
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select a Directory for Recordings"
-msgstr "כלי בחירה"
+msgstr "בחירת תיקיית הקלטות"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:748
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:754
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
-msgstr "מלבן"
+msgstr "מקליט"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
@@ -44337,9 +44340,9 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Small Color Selector"
-msgstr "הדבקת בחירה"
+msgstr "בורר צבעים קטן"
 
 #: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
 #, fuzzy, kde-format
@@ -44376,54 +44379,54 @@ msgid "HSY"
 msgstr ""
 
 #: plugins/dockers/specificcolorselector/specificcolorselector_dock.cc:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Specific Color Selector"
-msgstr "הדבקת בחירה"
+msgstr "בורר צבעים מסוימים"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, colorspacePopupButton)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set color space"
-msgstr "&בוחר צבעים"
+msgstr "הגדרת מרחב צבעים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "הסר שכבה נוכחית"
+msgstr "לנעול את מרחב הצבע הנוכחי של השכבה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use percentage"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "להשתמש באחוזים"
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Export storyboard dialog caption"
 msgid "Export Storyboard as PDF"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא סטוריבורד ב־PDF"
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Export storyboard dialog caption"
 msgid "Export Storyboard as SVG"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא סטוריבורד כ־SVG"
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Please enter a file name to export to."
-msgstr "שמירת מסמך בשם"
+msgstr "נא למלא שם קובץ לייצא אליו."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Please enter a directory to export to."
-msgstr "בחירה"
+msgstr "נא למלא תיקייה לייצא אליה."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "Please enter an existing directory."
-msgstr "מלבן"
+msgstr "נא למלא תיקייה קיימת."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
 #, kde-format
@@ -44453,36 +44456,32 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Storyboard Scene"
-msgstr "כתב תחתי"
+msgstr "הוספת סצנה לסטוריבורד"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:72
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Storyboard Scene"
-msgstr "הסר בחירה"
+msgstr "הסרת סצנה מסטוריבורד"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:101
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move Storyboard Scene"
-msgstr "מלבן"
+msgstr "העברת סצנה בסטוריבורד"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:155
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit Storyboard Child"
-msgstr "מלבן"
+msgstr "עריכת צאצא סטוריבורד"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:132
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:307
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:919
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
 msgid "s"
-msgstr "שנייה"
+msgstr "שנ׳"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:314
@@ -44493,42 +44492,42 @@ msgid "f"
 msgstr ""
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Storyboard Docker"
 msgid "Storyboard"
-msgstr "מלבן"
+msgstr "סטוריבורד"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Export storyboard as PDF"
 msgid "Export as PDF"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא כ־PDF"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:191
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Export storyboard as SVG"
 msgid "Export as SVG"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא כ־SVG"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Freeze keyframe positions and ignore storyboard adjustments"
 msgid "Freeze Keyframe Data"
-msgstr "הבא שכבה מעלה"
+msgstr "הקפאת נתוני תמונית מפתח"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:236
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Add new scene as the last storyboard"
 msgid "Add Scene"
-msgstr "כתב תחתי"
+msgstr "הוספת סצנה"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:252
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:305
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
-msgstr "הסר בחירה"
+msgstr "הסרת סצנה"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:431
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:440
@@ -44545,57 +44544,57 @@ msgid "scene "
 msgstr ""
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:293
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת סצנה אחרי"
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:295
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת סצנה לפני"
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Duplicate current scene from storyboard docker"
 msgid "Duplicate Scene"
-msgstr "שכפל תמונה"
+msgstr "שכפול סצנה"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Mode"
-msgstr "מצב:"
+msgstr "מצב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnColumnMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Column"
-msgstr "כחול"
+msgstr "עמודה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnRowMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:42
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Row"
-msgstr "העבר אחורה"
+msgstr "שורה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnGridMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Grid"
-msgstr "כחול"
+msgstr "רשת"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "View"
-msgstr "מקושר"
+msgstr "תצוגה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAllView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:70
@@ -44606,17 +44605,17 @@ msgstr "הכול"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnThumbnailsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "Thumbnails Only"
-msgstr "אלפא"
+msgstr "תמונות ממוזערות בלבד"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnCommentsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "Comments Only"
-msgstr "הערה"
+msgstr "הערות בלבד"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgExportStoryboard)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:20
@@ -44626,9 +44625,9 @@ msgstr "מלבן"
 
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Size:"
-msgstr "&תמונה"
+msgstr "גודל עמוד:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:51
@@ -44638,9 +44637,9 @@ msgstr "A0"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "A1"
-msgstr "%1%"
+msgstr "A1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:61
@@ -44668,9 +44667,9 @@ msgstr "A5"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "US Letter"
-msgstr "US Letter"
+msgstr "מכתב אמריקאי"
 
 #. i18n: ectx: property (text), widget (QLabel, pageOrientationLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:89
@@ -44680,9 +44679,9 @@ msgstr "עירוב:"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Board Layout:"
-msgstr "הגדרות עמוד"
+msgstr "פריסת לוח:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:130
@@ -44692,48 +44691,48 @@ msgstr "שורות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:135
-#, fuzzy, kde-format
+#, kde-format
 msgid "Columns"
-msgstr "כחול"
+msgstr "עמודות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "SVG Template"
-msgstr "זוויות:"
+msgstr "תבנית SVG"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "SVG Template Path:"
-msgstr "זוויות:"
+msgstr "נתיב תבנית SVG:"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
-#, fuzzy, kde-format
+#, kde-format
 msgid "Font Size:"
-msgstr "&תמונה"
+msgstr "גודל כתב:"
 
 #. i18n: ectx: property (text), widget (QLabel, exportPathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:286
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Path:"
-msgstr "ייבוא סגנונות"
+msgstr "נתיב ייצוא:"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnComment)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comments"
-msgstr "הערה"
+msgstr "הערות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
 #: plugins/python/channels2layers/channels2layers.py:1102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mode"
-msgstr "מצב:"
+msgstr "מצב"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, fuzzy, kde-format
@@ -44761,9 +44760,9 @@ msgid "Task sets"
 msgstr "מאפייני שכבה..."
 
 #: plugins/dockers/tasksetdocker/tasksetmodel.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Task"
-msgstr "מאפייני שכבה..."
+msgstr "משימה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, recordButton)
 #: plugins/dockers/tasksetdocker/wdgtasksetdocker.ui:40
@@ -44784,17 +44783,16 @@ msgid "Delete the taskset"
 msgstr "מחיקת טקסט"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "&תמונה"
+msgstr "גודל כתב (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "גובה:"
+msgstr "גובה ב־X ‏(ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
 #, fuzzy, kde-format
@@ -45423,7 +45421,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:button"
 msgid "Calculate"
-msgstr ""
+msgstr "חישוב"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:85
 #, kde-format
@@ -48843,13 +48841,13 @@ msgstr "לא ניתן לשמור את %1 ל־html"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
-msgstr ""
+msgstr "לא ניתן לטעון מודול pykrita מובנה"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:89
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
-msgstr ""
+msgstr "שגיאה בלתי צפויה באתחול תוסף ה־python."
 
 #. i18n: ectx: property (whatsThis), widget (QIconButton, actionIcon)
 #. i18n: ectx: property (whatsThis), widget (QIconButton, configPageIcon)
@@ -48958,7 +48956,7 @@ msgstr "גל משולש"
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:29
 #, kde-format
 msgid "An exception occurred while running the script."
-msgstr ""
+msgstr "אירעה שגיאה במהלך הרצת הסקריפט."
 
 #. i18n: ectx: property (text), widget (QLabel, exceptionLabel)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:42

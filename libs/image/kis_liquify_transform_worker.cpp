@@ -563,11 +563,18 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
 
     QList<QRectF> areasToCopy = GridIterationTools::cutOutSubgridFromBounds(correctSubGrid, m_d->srcBounds, m_d->gridSize, m_d->originalPoints);
     polygonOp.setCanMergeRects(false);
+    const qreal eps = 0.001;
     for (int i = 0; i < areasToCopy.length(); i++) {
-        polygonOp.fastCopyArea(imageToThumbTransform.map(QPolygonF(areasToCopy[i])));
+        QPolygonF transformed = imageToThumbTransform.map(QPolygonF(areasToCopy[i]));
+        if (KisAlgebra2D::isPolygonPixelAlignedRect(transformed, eps)) {
+            polygonOp.fastCopyArea(transformed.boundingRect().toRect());
+        } else {
+            polygonOp.operator()(transformed, transformed);
+        }
     }
     return dstImage;
 }
+
 
 void KisLiquifyTransformWorker::toXML(QDomElement *e) const
 {

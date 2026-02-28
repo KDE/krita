@@ -171,21 +171,14 @@ struct PaintDevicePolygonOp
     PaintDevicePolygonOp(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev)
         : m_srcDev(srcDev), m_dstDev(dstDev) {}
 
+    void fastCopyArea(QRect areaToCopy) {
+        fastCopyArea(areaToCopy, m_canMergeRects);
+    }
 
-    void fastCopyArea(QPolygonF areaToCopy) {
-        QRect boundRect = areaToCopy.boundingRect().toAlignedRect();
-        if (boundRect.isEmpty()) return;
-
-        bool isItRect = KisAlgebra2D::isPolygonPixelAlignedRect(areaToCopy, m_epsilon);
-
+    void fastCopyArea(QRect areaToCopy, bool lazy) {
 #ifdef DEBUG_PAINTING_POLYGONS
-        isItRect = false; // force to use the code below, to not have to rewrite it for a workaround for copyAreaOptimized
-#endif
-        if (isItRect) {
-            fastCopyArea(boundRect);
-            return;
-        }
 
+        QRect boundRect = areaToCopy;
         KisSequentialIterator dstIt(m_dstDev, boundRect);
         KisSequentialIterator srcIt(m_srcDev, boundRect);
 
@@ -195,24 +188,11 @@ struct PaintDevicePolygonOp
         // it should go straight to the rect area copying
 
         while (dstIt.nextPixel()  && srcIt.nextPixel()) {
-            if (areaToCopy.containsPoint(QPoint(dstIt.x(), dstIt.y()), Qt::OddEvenFill)) {
-                memcpy(dstIt.rawData(), srcIt.oldRawData(), m_dstDev->pixelSize());
-#ifdef DEBUG_PAINTING_POLYGONS
-                QColor color = m_debugColor;
-                color.setHsl(KisAlgebra2D::wrapValue(m_debugColor.hslHue() + 20, 0, 360), m_debugColor.hslSaturation(), m_debugColor.lightness());
-                m_dstDev->colorSpace()->fromQColor(color, dstIt.rawData());
-#endif
-            }
+            memcpy(dstIt.rawData(), srcIt.oldRawData(), m_dstDev->pixelSize());
+            QColor color = m_debugColor;
+            color.setHsl(KisAlgebra2D::wrapValue(m_debugColor.hslHue() + 20, 0, 360), m_debugColor.hslSaturation(), m_debugColor.lightness());
+            m_dstDev->colorSpace()->fromQColor(color, dstIt.rawData());
         }
-    }
-
-    void fastCopyArea(QRect areaToCopy) {
-        fastCopyArea(areaToCopy, m_canMergeRects);
-    }
-
-    void fastCopyArea(QRect areaToCopy, bool lazy) {
-#ifdef DEBUG_PAINTING_POLYGONS
-        fastCopyArea(QPolygon(areaToCopy));
         return;
 #endif
         if (lazy) {
@@ -367,49 +347,6 @@ struct QImagePolygonOp
           m_srcImageRect(m_srcImage.rect()),
           m_dstImageRect(m_dstImage.rect())
     {
-    }
-
-    void fastCopyArea(QPolygonF areaToCopy) {
-        QRect boundRect = areaToCopy.boundingRect().toAlignedRect();
-
-        if (boundRect.isEmpty()) return;
-
-        bool isItRect = KisAlgebra2D::isPolygonPixelAlignedRect(areaToCopy, m_epsilon);
-        if (isItRect) {
-            fastCopyArea(boundRect);
-            return;
-        }
-
-        // this can possibly be optimized with scanlining the polygon
-        // (use intersectLineConvexPolygon to get a line at every height)
-        // but it doesn't matter much because in the vast majority of cases
-        // it should go straight to the rect area copying
-
-        for (int y = boundRect.top(); y <= boundRect.bottom(); y++) {
-            for (int x = boundRect.left(); x <= boundRect.right(); x++) {
-                QPointF dstPoint = QPointF(x, y);
-                QPointF srcPoint = dstPoint;
-
-                if (areaToCopy.containsPoint(srcPoint, Qt::OddEvenFill)) {
-
-                    // about srcPoint/dstPoint hell please see a
-                    // comment in PaintDevicePolygonOp::operator() ()
-
-                    srcPoint -= m_dstImageOffset;
-                    dstPoint -= m_srcImageOffset;
-
-                    QPoint srcPointI = srcPoint.toPoint();
-                    QPoint dstPointI = dstPoint.toPoint();
-
-                    if (!m_dstImageRect.contains(srcPointI)) continue;
-                    if (!m_srcImageRect.contains(dstPointI)) continue;
-
-                    m_dstImage.setPixel(srcPointI, m_srcImage.pixel(dstPointI));
-                }
-
-            }
-        }
-
     }
 
     void fastCopyArea(QRect areaToCopy) {

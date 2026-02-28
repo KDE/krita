@@ -334,7 +334,7 @@ void KisGridInterpolationToolsTest::testQImagePolygonOpStructFastAreaCopy()
     QImage dstImage(srcImage.size(), srcImage.format());
 
     GridIterationTools::QImagePolygonOp op(srcImage, dstImage, QPointF(), QPointF(-100, 100));
-    op.fastCopyArea(QRectF(QPointF(), srcImage.size()));
+    op.fastCopyArea(QRect(QPoint(), srcImage.size()));
 
     //dstImage.save("fast_area_copy_result.png");
 }

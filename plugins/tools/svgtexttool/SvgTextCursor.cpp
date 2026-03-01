@@ -1911,6 +1911,13 @@ void SvgTextCursor::updateTypeSettingDecoration()
 
             for (auto it = parentInfos.begin(); it != parentInfos.end(); it++) {
                 const bool currentIsMin = (d->shape->posForIndex(it->logicalIndex) == minPos);
+                const bool currentIsMax = (d->shape->posForIndex(it->logicalIndex) == maxPos);
+
+                if ((currentIsMin && minPos == 0) || (currentIsMax && maxPos == endPos)) {
+                    toggleOffset = !toggleOffset;
+                    continue;
+                }
+
                 const QPointF finalPos = toggleOffset? it->finalPos + (it->advance - drawOffset): it->finalPos;
                 const QPointF advance = drawOffset;
 
@@ -1922,7 +1929,6 @@ void SvgTextCursor::updateTypeSettingDecoration()
                 }
 
                 {
-
                     if (currentIsMin && minPos == maxPos && !toggleOffset) {
                         toggleOffset = !toggleOffset;
                         continue;

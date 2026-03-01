@@ -36934,7 +36934,7 @@ msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
-"Afficher les nouvelles concernant Krita : ceci requière une connexion à "
+"Afficher les nouvelles concernant Krita : ceci requiert une connexion à "
 "Internet pour y trouver des informations à partir du site krita.org."
 
 #: libs/ui/KisWelcomePageWidget.cpp:160

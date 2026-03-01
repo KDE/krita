@@ -21457,7 +21457,7 @@ msgstr "图层色彩空间不匹配"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
 msgid "Anti-aliasing"
-msgstr "抗锯齿：边缘平滑"
+msgstr "抗锯齿"
 
 #: libs/image/kis_layer_properties_icons.cpp:128
 #, kde-format
@@ -26325,7 +26325,7 @@ msgstr "像素"
 #: libs/ui/canvas/kis_guides_manager.cpp:779
 #, kde-format
 msgid "Orthogonal"
-msgstr "正交直线"
+msgstr "正交"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:781
 #, kde-format
@@ -34555,7 +34555,7 @@ msgstr "缩放：%1 %"
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "© 1999–2026 The Krita Developers"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
@@ -38756,7 +38756,7 @@ msgstr "此引擎没有预览"
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
-msgstr "抗锯齿：边缘平滑"
+msgstr "抗锯齿"
 
 #: libs/ui/widgets/kis_selection_options.cc:184
 #, kde-format
@@ -43045,13 +43045,13 @@ msgstr "单元格大小："
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
 #, kde-format
 msgid "Vertical Style:"
-msgstr "垂直风格："
+msgstr "垂直线样式："
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
 #, kde-format
 msgid "Cell Spacing:"
-msgstr "网格间距："
+msgstr "单元格间距："
 
 #. i18n: ectx: property (text), widget (QLabel, rightAngleLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:197
@@ -43075,7 +43075,7 @@ msgstr "细分："
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
 #, kde-format
 msgid "Subdivision Style:"
-msgstr "细分风格："
+msgstr "细分线样式："
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
@@ -43216,7 +43216,7 @@ msgstr "平衡"
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "详情"
+msgstr "完整"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:397
 #, kde-format
@@ -66868,7 +66868,7 @@ msgstr "当前选区被视作采样边界"
 #, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
-msgstr "抗锯齿：边缘平滑"
+msgstr "抗锯齿"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format

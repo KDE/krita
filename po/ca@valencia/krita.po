@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 02:43+0000\n"
-"PO-Revision-Date: 2026-02-27 07:29+0100\n"
+"PO-Revision-Date: 2026-02-28 07:57+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -30309,7 +30309,7 @@ msgstr "Eines"
 #: libs/ui/forms/wdggeneralsettings.ui:985
 #, kde-format
 msgid "Tool Options Location (needs restart)"
-msgstr "Ubicació de les Opcions de l'eina (cal reiniciar)"
+msgstr "Ubicació de les «Opcions de l'eina» (cal reiniciar)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
 #: libs/ui/forms/wdggeneralsettings.ui:991
@@ -35105,7 +35105,7 @@ msgstr "Zoom: %1 %"
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "© 1999–2026 The Krita Developers"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
@@ -53070,7 +53070,7 @@ msgstr "Mida de la finestra:"
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
 #, kde-format
 msgid "Reset Transparent"
-msgstr "Reinicia el transparent"
+msgstr "Reinicia la transparència"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -54488,8 +54488,8 @@ msgid ""
 "not understand HDR."
 msgstr ""
 "La imatge es convertirà primer a un lineal Rec. 2020 i després es codificarà "
-"amb una corba Hybrid Log Gamma. Recomanat per a imatges en HDR on és "
-"possible que la pantalla no comprenga HDR."
+"amb una corba amb interval de registres híbrid. Recomanat per a imatges en "
+"HDR on és possible que la pantalla no comprenga HDR."
 
 #: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
@@ -54526,9 +54526,9 @@ msgid ""
 "The image will be linearized first, and then encoded with a Hybrid Log Gamma "
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
-"La imatge primer es linealitzarà i després es codificarà amb una corba "
-"Hybrid Log Gamma. Recomanat per a imatges destinades a pantalles que no "
-"poden entendre PQ"
+"La imatge primer es linealitzarà i després es codificarà amb una corba amb "
+"interval de registres híbrid. Recomanat per a imatges destinades a pantalles "
+"que no poden entendre PQ"
 
 #: plugins/impex/heif/HeifExport.cpp:574
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
@@ -60284,8 +60284,8 @@ msgid ""
 "Krita 1.6 freehand tool options.</p></html>"
 msgstr ""
 "<html>\n"
-"<p><b>Nota:</b> açò és el mateix que l'opció «incremental» en les Opcions de "
-"l'eina per a mà alçada de Krita 1.6.</p></html>"
+"<p><b>Nota:</b> açò és el mateix que l'opció «incremental» en les «Opcions "
+"de l'eina» per a mà alçada de Krita 1.6.</p></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:58

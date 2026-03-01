@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 02:43+0000\n"
-"PO-Revision-Date: 2026-02-24 12:32+0100\n"
+"PO-Revision-Date: 2026-02-28 12:10+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -35094,11 +35094,10 @@ msgid "Zoom: %1 %"
 msgstr "Zoomen: %1 %"
 
 #: libs/ui/KisApplication.cpp:245
-#, fuzzy, kde-format
-#| msgid "© 1999-%1, The Krita Team"
+#, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr "© 1999-%1 Het team van Krita"
+msgstr "© 1999-2026 De ontwikkelaars van Krita"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254

@@ -1389,6 +1389,8 @@ void SvgTextCursor::notifyMarkupChanged()
 {
     d->interface->emitSelectionChange();
     d->interface->emitCharacterSelectionChange();
+    updateCursor();
+    updateSelection();
     updateTypeSettingDecoration();
 }
 

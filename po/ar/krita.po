@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 00:41+0000\n"
-"PO-Revision-Date: 2026-02-25 21:38+0400\n"
+"PO-Revision-Date: 2026-02-28 12:39+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -31958,17 +31958,15 @@ msgstr "رتِّب حلقة سجل الألوان حسب:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
-#, fuzzy, kde-format
-#| msgid "sRGB Triangle Selector"
+#, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "محدد مثلث sRGB"
+msgstr "أصلح تدوير محدد مثلث sRGB"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Rotation Angle:"
-msgstr "التّدوير:"
+msgstr "زاوية التدوير:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
@@ -34848,13 +34846,13 @@ msgstr "مستوى التّقريب: %1 ٪"
 #, kde-format
 msgctxt "@title"
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "كريتا هو استديو فنون رقميّة بمزايا شاملة"
 
 #: libs/ui/KisApplication.cpp:245
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "© 1999–2026 ، مطورو برنامج كريتا"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254

@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 00:41+0000\n"
-"PO-Revision-Date: 2026-02-26 12:14+0100\n"
+"PO-Revision-Date: 2026-02-28 12:22+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -32233,17 +32233,15 @@ msgstr "Ordenar el anillo del historial de colores por:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
-#, fuzzy, kde-format
-#| msgid "sRGB Triangle Selector"
+#, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "Selector del triángulo sRGB"
+msgstr "Se ha corregido la rotación del selector del triángulo sRGB"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Rotation Angle:"
-msgstr "Rotación: "
+msgstr "Ángulo de rotación:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)

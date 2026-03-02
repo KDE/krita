@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 00:41+0000\n"
-"PO-Revision-Date: 2026-02-22 10:57+0100\n"
+"PO-Revision-Date: 2026-02-28 19:21+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -27669,31 +27669,28 @@ msgid "Auto (%1)"
 msgstr "Auto (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Corrente"
+msgstr "GLX (attuale)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
-#, fuzzy, kde-format
-#| msgid "GNX"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr "GNX"
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Corrente"
+msgstr "EGL (attuale)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27702,6 +27699,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>Se stai utilizzando Krita su X11 o XWayland e riscontri lentezza, prova "
+"ad alternare tra EGL e GLX</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -29344,12 +29343,13 @@ msgstr "Resa preferita (richiede il riavvio):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
 #: libs/ui/forms/wdgdisplaysettings.ui:111
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
+#, kde-format
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
-msgstr "Resa preferita (richiede il riavvio):"
+msgstr ""
+"Interfaccia OpenGL preferita\n"
+"(richiede riavvio):"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -32281,17 +32281,15 @@ msgstr "Ordina anello della cronologia dei colori per:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
-#, fuzzy, kde-format
-#| msgid "sRGB Triangle Selector"
+#, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "Selettore a triangolo sRGB"
+msgstr "Correggi rotazione del selettore a triangolo sRGB"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Rotation Angle:"
-msgstr "Rotazione:"
+msgstr "Angolo di rotazione:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
@@ -35178,14 +35176,13 @@ msgstr "Ingrandimento:  %1 %"
 #, kde-format
 msgctxt "@title"
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "Krita è uno studio d'arte digitale completo"
 
 #: libs/ui/KisApplication.cpp:245
-#, fuzzy, kde-format
-#| msgid "© 1999-%1, The Krita Team"
+#, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr "© 1999-%1, la squadra di Krita"
+msgstr "© 1999–2026 Gli sviluppatori di Krita"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254

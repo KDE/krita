@@ -44308,7 +44308,7 @@ msgstr "选择录像目录..."
 #: plugins/dockers/recorder/recorderdocker.ui:155
 #, kde-format
 msgid "Capture interval:"
-msgstr "捕获间隔时间："
+msgstr "截图间隔时间："
 
 #. i18n: ectx: property (text), widget (QLabel, labelQuality)
 #: plugins/dockers/recorder/recorderdocker.ui:199
@@ -44372,14 +44372,14 @@ msgid ""
 "Calculate the Capture Interval from the Video FPS export settings.\n"
 "Please handle with care, may cause performance issues."
 msgstr ""
-"基于导出设置中的视频每秒帧数计算捕获间隔时间。\n"
+"基于导出设置中的视频每秒帧数计算截图间隔时间。\n"
 "更改此设置可能造成性能下降，请谨慎操作。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRealTimeCaptureMode)
 #: plugins/dockers/recorder/recorderdocker.ui:348
 #, kde-format
 msgid "Real Time Capture mode"
-msgstr "实时捕获模式"
+msgstr "实时截图模式"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:356
@@ -44598,7 +44598,7 @@ msgid ""
 "Try to reduce the frame rate for the ffmpeg export or reduce the scaling "
 "filtering in the canvas acceleration settings."
 msgstr ""
-"低性能警告。录像程序无法在实时捕获模式下及时写入所有帧。\n"
+"低性能警告。录像程序无法在实时截图模式下及时写入所有帧。\n"
 "请尝试降低 FFmpeg 导出的输出帧速率，或者降低画布加速设置中的缩放算法。"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:762

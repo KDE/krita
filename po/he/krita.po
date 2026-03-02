@@ -42,14 +42,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 00:41+0000\n"
-"PO-Revision-Date: 2026-02-27 10:39+0200\n"
+"PO-Revision-Date: 2026-03-01 19:19+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.2\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -17052,7 +17052,7 @@ msgstr "רונית"
 #, kde-format
 msgctxt "@title"
 msgid "Tagalog"
-msgstr ""
+msgstr "טגלית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:66
 #, kde-format
@@ -17437,19 +17437,19 @@ msgstr "הגדרות"
 #, kde-format
 msgctxt "@title"
 msgid "Hiragana"
-msgstr ""
+msgstr "היראגאנה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:130
 #, kde-format
 msgctxt "@title"
 msgid "Katakana"
-msgstr ""
+msgstr "קאטאקאנה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:131
 #, kde-format
 msgctxt "@title"
 msgid "Bopomofo"
-msgstr ""
+msgstr "בופומופו"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:132
 #, kde-format
@@ -36805,9 +36805,9 @@ msgstr "כלי ציור"
 #: plugins/generators/gradient/KisGradientGenerator.h:33
 #: plugins/paintops/colorsmudge/KisColorSmudgeStandardOptionData.h:23
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gradient"
-msgstr "עירובים"
+msgstr "מדרג"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:56
@@ -53636,13 +53636,13 @@ msgstr "מימדים"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:132
 #, kde-format
 msgid "Height of image in pixels."
-msgstr ""
+msgstr "גובה התמונה בפיקסלים."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, widthInput)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:155
 #, kde-format
 msgid "Width of image in pixels."
-msgstr ""
+msgstr "רוחב התמונה בפיקסלים."
 
 #. i18n: ectx: property (text), widget (QLabel, bppDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:182
@@ -56349,7 +56349,7 @@ msgstr "ללא"
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
-msgstr ""
+msgstr "משובץ"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, fuzzy, kde-format
@@ -56372,7 +56372,7 @@ msgstr ""
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
-msgstr ""
+msgstr "קובצי ICC‏ (‎*.icc;‏ ‎*.icm)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
 #, fuzzy, kde-format
@@ -56440,7 +56440,7 @@ msgstr ""
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:771
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
-msgstr ""
+msgstr "קובצי ICC‏ (‎*.icc‏ ‎*.icm)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:783
 #, fuzzy, kde-format
@@ -57347,9 +57347,9 @@ msgid "Smudge mode:"
 msgstr "&מברשת"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smear alpha:"
-msgstr "&בוחר צבעים"
+msgstr "שקיפות מריחה:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
@@ -57375,15 +57375,15 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Overlay Option"
-msgstr "אפשרויות עירוב"
+msgstr "אפשרות שכבת על"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overlay Mode"
-msgstr "קו עליון"
+msgstr "מצב שכבת על"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:47
 #, kde-format
@@ -57399,29 +57399,29 @@ msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge Radius"
-msgstr "&מברשת"
+msgstr "רדיוס מריחה"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Width"
-msgstr "רוחב:"
+msgstr "עובי קו"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "History Size"
-msgstr "שנה גודל"
+msgstr "גודל היסטוריה"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Opacity"
-msgstr "אטימות"
+msgstr "אטימות קו"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:160
-#, fuzzy, kde-format
+#, kde-format
 msgid "Connection Line"
-msgstr "בחירה &רציפה"
+msgstr "קו חיבור"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
@@ -57429,40 +57429,40 @@ msgstr "בחירה &רציפה"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:32
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "0%"
-msgstr "%1%"
+msgstr "0%"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Brush settings curve value"
 msgid "Value"
-msgstr "כחול"
+msgstr "ערך"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
 #: plugins/paintops/sketch/KisSketchStandardOptionData.h:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line width"
-msgstr "רוחב:"
+msgstr "עובי קו"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curves opacity"
-msgstr "אטימות:"
+msgstr "אטימות עקומות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lineWidthLbl)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:13
 #: plugins/paintops/sketch/wdgsketchoptions.ui:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line width:"
-msgstr "רוחב:"
+msgstr "עובי קו:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "History size:"
-msgstr "שנה גודל"
+msgstr "גודל היסטוריה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:39
@@ -57479,15 +57479,15 @@ msgstr "בחירה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, smoothingCHBox)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smoothing"
-msgstr "עובי קו:"
+msgstr "החלקה"
 
 #: plugins/paintops/defaultpaintops/defaultpaintops_plugin.cc:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Pixel paintbrush"
 msgid "Pixel"
-msgstr "&תמונה"
+msgstr "פיקסל"
 
 #: plugins/paintops/defaultpaintops/defaultpaintops_plugin.cc:36
 #, fuzzy, kde-format
@@ -57503,9 +57503,9 @@ msgid "Healing"
 msgstr "ריווח:"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move Source"
-msgstr "מאפייני שכבה..."
+msgstr "העברת מקור"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:64
 #, kde-format
@@ -58529,9 +58529,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:586
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:591
-#, fuzzy, kde-format
+#, kde-format
 msgid "X Range:"
-msgstr "מלבן"
+msgstr "טווח ב־X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
@@ -58541,23 +58541,23 @@ msgstr "&בוחר צבעים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Filter as an effect"
 msgid "Filter:"
-msgstr "&לבן"
+msgstr "מסנן:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFilterOptions)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:62
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Filter as an effect"
 msgid "Filter Settings"
-msgstr "הגדרות"
+msgstr "הגדרות מסנן"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpIncremental)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Painting mode"
-msgstr "זוויות:"
+msgstr "מצב צביעה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBuildup)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:36
@@ -58608,9 +58608,9 @@ msgstr "&מברשת"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Details"
-msgstr "הגדרות"
+msgstr "פרטי מברשת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
@@ -58626,10 +58626,10 @@ msgstr "בחירה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
-msgstr "&מברשת"
+msgstr "מצב מברשת"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
@@ -58645,9 +58645,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text:"
-msgstr "תבניות"
+msgstr "טקסט:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, lineEdit)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:139
@@ -58663,15 +58663,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:174
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pipe mode"
-msgstr "שכבה חדשה"
+msgstr "מצב צינור"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Contrast: "
-msgstr "זוויות:"
+msgstr "ניגודיות: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
@@ -58681,15 +58681,15 @@ msgstr "יעד:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brightness: "
-msgstr "מקושר"
+msgstr "בהירות: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale: "
-msgstr "גוו&ני אפור"
+msgstr "קנה מידה: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -58699,9 +58699,9 @@ msgstr "מברשות"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDensity)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "Texturing Mode:"
-msgstr "בחירה"
+msgstr "מצב תוויית מרקם:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
@@ -58726,29 +58726,29 @@ msgstr "אלפא"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:242
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Offset:"
-msgstr "גל משולש"
+msgstr "היסט אנכי:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:265
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
-#, fuzzy, kde-format
+#, kde-format
 msgid "Random Offset"
-msgstr "סובב &90"
+msgstr "היסט אקראי"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:291
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Offset:"
-msgstr "גל משולש"
+msgstr "היסט אופקי:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invert Pattern"
-msgstr "ניווט"
+msgstr "היפוך תבנית"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoInvertOnErase)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
@@ -58758,15 +58758,15 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto Spacing"
-msgstr "ריווח:"
+msgstr "ריווח אוטומטי"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Tip"
-msgstr "מברשות"
+msgstr "חוד המברשת"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
 #, kde-format
@@ -58817,10 +58817,10 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
-msgstr "&מברשת"
+msgstr "אוטו׳"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
 #, fuzzy, kde-format
@@ -58830,17 +58830,19 @@ msgstr "בחירה"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Text Brush tip mode"
 msgid "Text"
-msgstr "תבניות"
+msgstr "טקסט"
 
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Nothing copied\n"
 " to Clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr ""
+"לא הועתק שום\n"
+" דבר ללוח הגזירים"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
 #, kde-format
@@ -58869,16 +58871,16 @@ msgid "Neutral point: "
 msgstr "יעד:"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
-msgstr "מקושר"
+msgstr "בהירות: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
-msgstr "זוויות:"
+msgstr "ניגודיות: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
 #, kde-format
@@ -58891,9 +58893,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Makes texture lighter or darker"
-msgstr "&בוחר צבעים"
+msgstr "להכהות או להבהיר את המרקם"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:40
 #, kde-format
@@ -58901,40 +58903,40 @@ msgid "Set gray value to be considered neutral for lightness mode"
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Lightness Map blend mode for brush texture"
 msgid "Lightness Map"
-msgstr "מקושר"
+msgstr "מפת בהירות"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Gradient Map blend mode for brush texture"
 msgid "Gradient Map"
-msgstr "עירובים"
+msgstr "מפת מדרגים"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Height blend mode for brush texture"
 msgid "Height"
-msgstr "גובה:"
+msgstr "גובה"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Linear Height blend mode for brush texture"
 msgid "Linear Height"
-msgstr "גובה:"
+msgstr "גובה קווי"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Height (Photoshop) blend mode for brush texture"
 msgid "Height (Photoshop)"
-msgstr "בודד"
+msgstr "גובה (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Linear Height (Photoshop) blend mode for brush texture"
 msgid "Linear Height (Photoshop)"
-msgstr "בודד"
+msgstr "גובה קווי (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
 #, fuzzy, kde-format
@@ -58960,19 +58962,19 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisAirbrushOptionWidget.cpp:55
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Airbrush"
-msgstr "&מברשת"
+msgstr "מברשת אוויר"
 
 #: plugins/paintops/libpaintop/KisColorOptionWidget.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color options"
-msgstr "אלפא"
+msgstr "אפשרויות צבע"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plain color"
-msgstr "&צבע"
+msgstr "צבע רגיל"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:18
 #, fuzzy, kde-format
@@ -58990,15 +58992,15 @@ msgid "Locked pattern"
 msgstr "השתמש בתבנית הנוכחית"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionWidget.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Color source"
 msgid "Source"
-msgstr "מאפייני שכבה..."
+msgstr "מקור"
 
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Strength: "
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "עוצמה: "
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:69
 #, kde-format
@@ -59011,9 +59013,9 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "0°"
-msgstr "&צבע"
+msgstr "0°"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
@@ -59036,29 +59038,29 @@ msgid "Fan Corners"
 msgstr "עיגול פינות"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Angle Offset"
-msgstr "היסט:"
+msgstr "היסט זווית"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slow"
-msgstr "הס&תר\\הצג שכבה"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Far"
-msgstr "שכבה"
+msgstr "רחוק"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Near"
-msgstr "תמונה חדשה"
+msgstr "קרוב"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
@@ -59067,15 +59069,15 @@ msgid "-60°"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "90°"
-msgstr "&צבע"
+msgstr "90°"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:37
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid " ms"
-msgstr "שנייה"
+msgstr " מ״ש"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
@@ -59095,52 +59097,52 @@ msgid "Fuzzy Stroke"
 msgstr "מקושר"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:13
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Speed"
-msgstr "חדות:"
+msgstr "מהירות"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fade"
-msgstr "מצב:"
+msgstr "עמעום"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:15
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Distance"
-msgstr "רוחב:"
+msgstr "מרחק"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Time"
-msgstr "ייצוא תמונה"
+msgstr "שעה"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:17
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Drawing angle"
-msgstr "מלבן"
+msgstr "זווית ציור"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Rotation"
-msgstr "סובב &90"
+msgstr "סיבוב"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Pressure"
-msgstr "עובי קו:"
+msgstr "לחץ"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "PressureIn"
-msgstr "עובי קו:"
+msgstr "לחץ כניסה"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:21
 #, fuzzy, kde-format
@@ -59155,28 +59157,28 @@ msgid "Y-Tilt"
 msgstr "מקושר"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt direction"
-msgstr "&בוחר צבעים"
+msgstr "כיוון הטיה"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt elevation"
-msgstr "בחירת מילוי"
+msgstr "עילוי הטיה"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Perspective"
-msgstr "כלי מ&חיקה"
+msgstr "נקודת מבט"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tangential pressure"
-msgstr "ירוק"
+msgstr "לחץ משיקי"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:47
 #, kde-format
@@ -59187,24 +59189,24 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blending Mode:"
-msgstr "בחירה"
+msgstr "מצב ערבול:"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionData.h:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror"
-msgstr "שכבה לתמונה"
+msgstr "שיקוף"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontally"
-msgstr "גל משולש"
+msgstr "אופקית"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertically"
-msgstr "גל משולש"
+msgstr "אנכית"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
 #, kde-format
@@ -59288,9 +59290,9 @@ msgid "Sharpness"
 msgstr "חדות:"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soften edge:"
-msgstr "עובי קו:"
+msgstr "ריכוך קצוות:"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
@@ -59316,9 +59318,9 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opaque"
-msgstr "בחירה"
+msgstr "אטום"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:27
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:85
@@ -59333,21 +59335,21 @@ msgid "180°"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hard"
-msgstr "&גובה:"
+msgstr "קשיח"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "רקע"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
-msgstr "צבע &טקסט"
+msgstr "חזית"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:82
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:93
@@ -59375,9 +59377,9 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "&לבן"
+msgstr "(0% הוא צבע פעיל)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -59396,68 +59398,68 @@ msgid "-100%"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Less saturation "
-msgstr "ניווט"
+msgstr "פחות רוויה "
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgid "More saturation"
-msgstr "ניווט"
+msgstr "יותר רוויה"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
-msgstr "מחליף צבעים"
+msgstr "ערך נמוך יותר"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Higher HSV brightness"
 msgid "Higher value"
-msgstr "מקושר"
+msgstr "ערך גבוה יותר"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ratio"
-msgstr "חזרה:"
+msgstr "יחס"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Softness"
-msgstr "עובי קו:"
+msgstr "רכות"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Darken"
-msgstr "חדות:"
+msgstr "החשכה"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Mixing of colors"
 msgid "Mix"
-msgstr "סובב &90"
+msgstr "ערבול"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:101
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of Brightness value in Color Smudge brush engine options"
 msgid "Value"
-msgstr "כחול"
+msgstr "ערך"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rate"
-msgstr "חזרה:"
+msgstr "קצב"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:117
-#, fuzzy, kde-format
+#, kde-format
 msgid "Strength"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "עוצמה"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:125
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lightness Strength"
-msgstr "מקושר"
+msgstr "עוצמת הארה"
 
 #: plugins/paintops/libpaintop/KisTextureOptionData.cpp:67
 #, kde-format
@@ -59469,20 +59471,20 @@ msgstr ""
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39
 #: plugins/paintops/libpaintop/sensors/SensorFadeConfiguration.ui:39
 #: plugins/paintops/libpaintop/sensors/SensorTimeConfiguration.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "repeat"
-msgstr "חזרה:"
+msgstr "חזרה"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
-msgstr "אטימות"
+msgstr "בסיסי"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y limit: "
-msgstr "יישור המספר:"
+msgstr "גבול ב־Y: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
 #, kde-format
@@ -59501,9 +59503,9 @@ msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Base Value: "
-msgstr "הבא שכבה מעלה"
+msgstr "ערך בסיסי: "
 
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, fuzzy, kde-format
@@ -59517,16 +59519,16 @@ msgid "Basic"
 msgstr "אטימות"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:192
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Color"
-msgstr "&צבע"
+msgstr "צבע"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:195
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Speed"
-msgstr "חדות:"
+msgstr "מהירות"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:198
 #, kde-format
@@ -59535,58 +59537,58 @@ msgid "Dabs"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Opacity"
-msgstr "אטימות:"
+msgstr "אטימות"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:204
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Tracking"
-msgstr "סובב &90"
+msgstr "מעקב"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Smudge"
-msgstr "&מברשת"
+msgstr "מריחה"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:210
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Stroke"
-msgstr "מקושר"
+msgstr "קו מתאר"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:213
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Custom"
-msgstr "מברשות"
+msgstr "התאמה אישית"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fine Speed"
-msgstr "חדות:"
+msgstr "מהירות עדינה"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gross Speed"
-msgstr "מברשות"
+msgstr "מהירות כוללת"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The duration of a brush stroke"
 msgid "Stroke"
-msgstr "מקושר"
+msgstr "קו מתאר"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionDirection)
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:22
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:243
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Drawing Angle"
 msgid "Direction"
-msgstr "&בוחר צבעים"
+msgstr "כיוון"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:23
 #, fuzzy, kde-format
@@ -59606,14 +59608,14 @@ msgid "Radius Logarithmic"
 msgstr "כלול אוטומטית"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hardness"
-msgstr "חדות:"
+msgstr "קשיחות"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Radius by Random"
-msgstr "רדיוס:"
+msgstr "רדיוס באקראי"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:39
 #, kde-format
@@ -59622,9 +59624,9 @@ msgid "Radius by Random, consider disabling Instant Preview"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anti Aliasing"
-msgstr "מאתחל..."
+msgstr "החלקת קצוות"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, fuzzy, kde-format
@@ -59652,19 +59654,19 @@ msgid "Pressure Gain"
 msgstr "עובי קו:"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Color H"
-msgstr "&לבן"
+msgstr "שינוי צבע גוון (H)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Color L"
-msgstr "&לבן"
+msgstr "שינוי צבע הארה (L)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Color V"
-msgstr "&לבן"
+msgstr "שינוי צבע ערך (V)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, fuzzy, kde-format
@@ -59677,9 +59679,9 @@ msgid "Change Color HSV S"
 msgstr "צבע:"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colorize"
-msgstr "&צבע"
+msgstr "צביעה"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
 #, fuzzy, kde-format
@@ -59768,9 +59770,9 @@ msgid "Tracking Noise"
 msgstr "סובב &90"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge"
-msgstr "&מברשת"
+msgstr "מריחה"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, fuzzy, kde-format
@@ -59825,14 +59827,14 @@ msgid "Radius Logarithmic:"
 msgstr "כלול אוטומטית"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Particles"
-msgstr "צייר עם תבנית"
+msgstr "חלקיקים"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opacity Weight"
-msgstr "אטימות:"
+msgstr "משקל אטימות"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:108
 #, fuzzy, kde-format
@@ -59845,49 +59847,49 @@ msgid "dy scale"
 msgstr "גוו&ני אפור"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gravity"
-msgstr "גוו&ני אפור"
+msgstr "כבידה"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Iterations"
-msgstr "&בוחר צבעים"
+msgstr "חזרות"
 
 #: plugins/paintops/particle/KisParticleOpOptionData.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Particle Brush (not supported)"
-msgstr "שכפל תמונה"
+msgstr "מברשת חלקיקים (לא נתמכת)"
 
 #: plugins/paintops/particle/particle_paintop_plugin.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Particle"
-msgstr "צייר עם תבנית"
+msgstr "חלקיק"
 
 #. i18n: ectx: property (text), widget (QLabel, particlesLbl)
 #: plugins/paintops/particle/wdgparticleoptions.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Particles:"
-msgstr "צייר עם תבנית"
+msgstr "חלקיקים:"
 
 #. i18n: ectx: property (text), widget (QLabel, opacity)
 #: plugins/paintops/particle/wdgparticleoptions.ui:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opacity weight:"
-msgstr "אטימות:"
+msgstr "משקל אטימות:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_5)
 #: plugins/paintops/particle/wdgparticleoptions.ui:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Iterations:"
-msgstr "&בוחר צבעים"
+msgstr "חזרות:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_2)
 #: plugins/paintops/particle/wdgparticleoptions.ui:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gravity:"
-msgstr "גוו&ני אפור"
+msgstr "כבידה:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_3)
 #: plugins/paintops/particle/wdgparticleoptions.ui:131
@@ -59919,15 +59921,15 @@ msgstr "היסט:"
 
 #: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:168
-#, fuzzy, kde-format
+#, kde-format
 msgid "Density"
-msgstr "&בוחר צבעים"
+msgstr "צפיפות"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:340
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sketch"
-msgstr "&מברשת"
+msgstr "איור"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:64
@@ -59937,38 +59939,38 @@ msgstr "היסט:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceDensityCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use distance density"
-msgstr "סובב &90"
+msgstr "להשתמש בצפיפות מרחק"
 
 #. i18n: ectx: property (text), widget (QCheckBox, simpleModeCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simple mode"
-msgstr "שכבה חדשה"
+msgstr "מצב רגיל"
 
 #. i18n: ectx: property (text), widget (QCheckBox, magnetifyCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magnetify"
-msgstr "אטימות"
+msgstr "מגנוט"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRGBCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
-#, fuzzy, kde-format
+#, kde-format
 msgid "Random RGB"
-msgstr "סובב &90"
+msgstr "RGB אקראי"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceOpacityCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:169
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance opacity"
-msgstr "סובב &90"
+msgstr "אטימות מרחק"
 
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Particle Count"
-msgstr "גל משולש"
+msgstr "כמות חלקיקים"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:64
 #, kde-format
@@ -59990,18 +59992,16 @@ msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
-#, fuzzy, kde-format
-#| msgid "Repeat:"
+#, kde-format
 msgid "Repeat: "
-msgstr "חזרה:"
+msgstr "חזרה: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:73
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:109
-#, fuzzy, kde-format
-#| msgid "Fax:"
+#, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
-msgstr "פקס:"
+msgstr "×"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:76
 #, kde-format
@@ -60024,9 +60024,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Standard deviation: "
-msgstr "כלי &עט"
+msgstr "סטיית תקן: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:88
 #, kde-format
@@ -60037,9 +60037,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clustering amount: "
-msgstr "זוויות:"
+msgstr "כמות צביריות: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
@@ -60072,30 +60072,30 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spray Area"
-msgstr "&מברשת"
+msgstr "אזור תרסיס"
 
 #: plugins/paintops/spray/KisSprayShapeDynamicsOptionWidget.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape dynamics"
-msgstr "חדות:"
+msgstr "דינמיקת צורה"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spray Shape"
-msgstr "&מברשת"
+msgstr "צורת תרסיס"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spray"
-msgstr "&מברשת"
+msgstr "תרסיס"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomSizeCHBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Random size"
-msgstr "סובב &90"
+msgstr "גודל אקראי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
@@ -60107,27 +60107,27 @@ msgstr "הגדרות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedRotation)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fixed rotation:"
-msgstr "סובב &90"
+msgstr "סיבוב קבוע:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRotation)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "Randomize rotation:"
-msgstr "סובב &90"
+msgstr "סיבוב אקראי:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, followCursor)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Follow cursor weight:"
-msgstr "מברשות"
+msgstr "כמו משקל הסמן:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, drawingAngle)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Angle weight:"
-msgstr "גובה:"
+msgstr "משקל זווית:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/spray/wdgsprayoptions.ui:33
@@ -60139,35 +60139,35 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the diameter of the spray area in the spray engine"
 msgid "Diameter:"
-msgstr "לוחות צבעים"
+msgstr "קוטר:"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the aspect ratio of the spray area in the spray engine"
 msgid "Aspect ratio:"
-msgstr "תבניות"
+msgstr "יחס גובה־רוחב:"
 
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the angle of the spray area in the spray engine"
 msgid "Angle:"
-msgstr "מלבן"
+msgstr "זווית:"
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:125
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the scale of the spray area in the spray engine"
 msgid "Scale:"
-msgstr "גוו&ני אפור"
+msgstr "קנה מידה:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the spacing of the spray area in the spray engine"
 msgid "Spacing:"
 msgstr "ריווח:"
@@ -60181,87 +60181,87 @@ msgstr "הסר בחירה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
 msgid "Particles"
-msgstr "צייר עם תבנית"
+msgstr "חלקיקים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
-msgstr "זוויות:"
+msgstr "כמות:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, countRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:203
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
 msgid "Count"
-msgstr "&מברשת"
+msgstr "כמות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the number of particles in "
 "terms of density relative to the spray area in the spray engine"
 msgid "Density"
-msgstr "&בוחר צבעים"
+msgstr "צפיפות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxAngularDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:237
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
 msgid "Angular"
-msgstr "מלבן"
+msgstr "זוויתי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, angularDistCombo)
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:262
 #: plugins/paintops/spray/wdgsprayoptions.ui:347
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Uniform distribution in spray engine"
 msgid "Uniform"
-msgstr "טוען..."
+msgstr "אחיד"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, angularDistCombo)
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:267
 #: plugins/paintops/spray/wdgsprayoptions.ui:362
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Custom curve based distribution in spray engine"
 msgid "Curve"
-msgstr "כלי מי&לוי"
+msgstr "עקומה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
 msgid "Radial"
-msgstr "סובב &90"
+msgstr "מעגלי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Gaussian distribution in spray engine"
 msgid "Gaussian"
-msgstr "כחול"
+msgstr "גאוסי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:357
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "תאריך"
+msgstr "צביר"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -60275,22 +60275,22 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the distribution of particles in the spray engine"
 msgid "Distribution:"
-msgstr "מחיקת טקסט"
+msgstr "פיזור:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, proportionalBox)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:158
-#, fuzzy, kde-format
+#, kde-format
 msgid "Proportional"
-msgstr "גל משולש"
+msgstr "יחסי"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:176
-#, fuzzy, kde-format
+#, kde-format
 msgid "Texture:"
-msgstr "תבניות"
+msgstr "מרקם:"
 
 #: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_plugin.cpp:29
 #, fuzzy, kde-format
@@ -60451,10 +60451,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Pen Rotation"
 msgid "Rotation"
-msgstr "סובב &90"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:260
@@ -60483,40 +60483,33 @@ msgid "Direction/Tilt Mix Value"
 msgstr "&בוחר צבעים"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:25
-#, fuzzy
 msgid "Assign Profile"
-msgstr "מאפייני שכבה..."
+msgstr "הקצאת פרופיל"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:26
-#, fuzzy
 msgid "There is no active document."
-msgstr "שמירת מסמך בשם"
+msgstr "אין מסמך פעיל."
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:59
-#, fuzzy
 msgid "Assign Profile to Image"
-msgstr "יישור אוטומטי"
+msgstr "הקצאת פרופיל לתמונה"
 
 #: plugins/python/channels2layers/channels2layers.py:84
 #: plugins/python/channels2layers/channels2layers.py:85
-#, fuzzy
 msgid "Channels to layers"
-msgstr "&לבן"
+msgstr "ערוצים לשכבות"
 
 #: plugins/python/channels2layers/channels2layers.py:93
-#, fuzzy
 msgid "RGB Colors"
-msgstr "&צבע"
+msgstr "צבעי RGB"
 
 #: plugins/python/channels2layers/channels2layers.py:94
-#, fuzzy
 msgid "CMY Colors"
-msgstr "&צבע"
+msgstr "צבעי CMY"
 
 #: plugins/python/channels2layers/channels2layers.py:95
-#, fuzzy
 msgid "CMYK Colors"
-msgstr "&צבע"
+msgstr "צבעי CMYK"
 
 #: plugins/python/channels2layers/channels2layers.py:96
 msgid "RGB Grayscale levels"
@@ -60556,29 +60549,25 @@ msgid "New layers color name"
 msgstr "הוס&פת תמונה בתור שכבה..."
 
 #: plugins/python/channels2layers/channels2layers.py:1084
-#, fuzzy
 msgid "Original layer"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שכבה מקורית"
 
 #: plugins/python/channels2layers/channels2layers.py:1143
-#, fuzzy
 msgctxt "the original layer"
 msgid "Original"
-msgstr "אלכסוני"
+msgstr "מקור"
 
 #: plugins/python/channels2layers/channels2layers.py:1156
 msgid "<i>Cyan</i>"
 msgstr ""
 
 #: plugins/python/channels2layers/channels2layers.py:1168
-#, fuzzy
 msgid "<i>Magenta</i>"
-msgstr "אטימות"
+msgstr "<i>ארגמן</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1180
-#, fuzzy
 msgid "<i>Yellow</i>"
-msgstr "זוויות:"
+msgstr "<i>צהוב</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1192
 msgid "<i>Black</i>"
@@ -60598,59 +60587,49 @@ msgstr ""
 #: plugins/python/colorspace/uicolorspace.py:70
 #: plugins/python/documenttools/uidocumenttools.py:50
 #: plugins/python/exportlayers/uiexportlayers.py:105
-#, fuzzy
-#| msgid "Document"
 msgid "Documents:"
-msgstr "מסמך"
+msgstr "מסמכים:"
 
 #: plugins/python/colorspace/uicolorspace.py:72
-#, fuzzy
 msgid "Color depth:"
-msgstr "&בוחר צבעים"
+msgstr "עומק צבע:"
 
 #: plugins/python/colorspace/uicolorspace.py:73
-#, fuzzy
 msgid "Color profile:"
-msgstr "מאפייני שכבה..."
+msgstr "פרופיל צבע:"
 
 #: plugins/python/colorspace/uicolorspace.py:140
-#, fuzzy
 msgid "The selected documents have been converted."
-msgstr "פתח מסמך חדש מתוך תבנית"
+msgstr "המסמכים הנבחרים הומרו."
 
 #: plugins/python/colorspace/uicolorspace.py:142
 #: plugins/python/documenttools/uidocumenttools.py:112
-#, fuzzy
 msgid "Select at least one document."
-msgstr "יצירת מסמך ריק"
+msgstr "יש לבחור מסמך אחד לפחות."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:37
-#, fuzzy
 msgid "Adjust Working File"
-msgstr "מצב צבעים"
+msgstr "כיוון קובץ העבודה"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:40
 msgid "Crop files before resize"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
-#, fuzzy
 msgid "Percentage"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "אחוזים"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "DPI"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
-#, fuzzy
 msgid "Maximum Width"
-msgstr "רוחב:"
+msgstr "רוחב מרבי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
-#, fuzzy
 msgid "Maximum Height"
-msgstr "ירוק בהיר"
+msgstr "גובה מרבי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:48
 msgid " DPI"
@@ -60661,20 +60640,17 @@ msgid "Method:"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:72
-#, fuzzy
 msgid "Percentage:"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "אחוזים:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:214
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:271
-#, fuzzy
 msgid "Export Settings"
-msgstr "הגדרות"
+msgstr "הגדרות ייצוא"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:227
-#, fuzzy
 msgid "Crop Settings"
-msgstr "הגדרות"
+msgstr "הגדרות חיתוך"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:230
 #, fuzzy
@@ -60749,14 +60725,12 @@ msgid "Panel Layer Key:"
 msgstr "&שכבה"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
-#, fuzzy
 msgid "Export to CBZ"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא ל־CBZ"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:278
-#, fuzzy
 msgid "Metadata to Add"
-msgstr "לוחות צבעים"
+msgstr "נתוני על להוספה"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:282
 msgid "CBZ"
@@ -60777,14 +60751,12 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:297
-#, fuzzy
 msgid "Add History Entry"
-msgstr "Script"
+msgstr "הוספת רשומת היסטוריה"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
-#, fuzzy
 msgid "Include translator's comments"
-msgstr "הבא שכבה מעלה"
+msgstr "לכלול את הערות התרגום"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
 msgid ""
@@ -60797,14 +60769,12 @@ msgid "ACBF UID:"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:306
-#, fuzzy
 msgid "Version history:"
-msgstr "גירסה"
+msgstr "היסטוריית גרסאות:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:309
-#, fuzzy
 msgid "Translator header:"
-msgstr "מלבן"
+msgstr "כותרת מתרגם/ת:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:313
 msgid "The people responsible for the generation of the CBZ/ACBF files."
@@ -60812,45 +60782,37 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
-#, fuzzy
 msgid "Nick Name"
-msgstr "שם:"
+msgstr "כינוי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
-#, fuzzy
 msgid "Given Name"
-msgstr "שם:"
+msgstr "שם פרטי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
-#, fuzzy
 msgid "Middle Name"
-msgstr "הבא שכבה מעלה"
+msgstr "שם אמצעי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
-#, fuzzy
 msgid "Family Name"
-msgstr "הבא שכבה מעלה"
+msgstr "שם משפחה"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:371
-#, fuzzy
-#| msgid "Author"
 msgid "Add Author"
-msgstr "מחבר"
+msgstr "הוספת יוצר/ת"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
-#, fuzzy
 msgid "Remove Author"
-msgstr "הסרת קבוצה"
+msgstr "הסרת יוצר/ת"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
-#, fuzzy
 msgid "Use font"
-msgstr "בחר גופן"
+msgstr "להשתמש בגופן"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -60863,9 +60825,9 @@ msgstr "בחר גופן"
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bold"
-msgstr "מודגש:"
+msgstr "מודגש"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
@@ -60878,57 +60840,49 @@ msgstr "מודגש:"
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
-#, fuzzy, kde-format
+#, kde-format
 msgid "Italic"
-msgstr "נטוי:"
+msgstr "נטוי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
-#, fuzzy
 msgid "Text Colors"
-msgstr "כלי מי&לוי"
+msgstr "צבעי טקסט"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:374
-#, fuzzy
 msgid "Regular Text"
-msgstr "מלבן"
+msgstr "טקסט רגיל"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:376
-#, fuzzy
 msgid "Inverted Text"
-msgstr "הזחה"
+msgstr "טקסט מהופך"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:391
 msgid "Document Info"
 msgstr "פרטי מסמך"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:392
-#, fuzzy
-#| msgid "Author"
 msgid "Author Info"
-msgstr "מחבר"
+msgstr "פרטי יוצר/ת"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:393
-#, fuzzy
 msgid "Style Sheet"
-msgstr "מקושר"
+msgstr "גיליון סגנון"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "ACBF"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
-#, fuzzy
 msgid "Export to EPUB"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא ל־EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "EPUB"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
-#, fuzzy
 msgid "Export to TIFF"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא ל־TIFF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:415
 msgid "TIFF"
@@ -60956,14 +60910,12 @@ msgid "Doe"
 msgstr "מצב:"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:138
-#, fuzzy
 msgid "Preparing export."
-msgstr "ייצוא השכבה"
+msgstr "הייצוא בהכנה."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:139
-#, fuzzy
 msgid "Exporting Comic..."
-msgstr "מיקום"
+msgstr "הקומיקס מיוצא…"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
@@ -60972,16 +60924,14 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:168
-#, fuzzy
 msgid "Saving out EPUB"
-msgstr "שמירת מסמך בשם"
+msgstr "EPUB נשמר"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 #: plugins/python/comics_project_management_tools/comics_exporter.py:207
 #: plugins/python/comics_project_management_tools/comics_exporter.py:366
-#, fuzzy
 msgid "Export not Possible"
-msgstr "מיקום"
+msgstr "לא ניתן לייצא"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
@@ -61016,9 +60966,8 @@ msgid "{pages} of {pagesTotal} done."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:238
-#, fuzzy
 msgid "Opening next page"
-msgstr "הוסף שורה חדשה"
+msgstr "העמוד הבא נפתח"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:246
 #, fuzzy
@@ -61045,30 +60994,24 @@ msgid "Packaging CBZ"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
-#| msgid "Selection"
 msgid "Science Fiction"
-msgstr "בחירה"
+msgstr "מדע בדיוני"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Fantasy"
-msgstr "אטימות"
+msgstr "פנטזיה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Adventure"
-msgstr "תבניות"
+msgstr "הרפתקה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Horror"
-msgstr "שכבה לתמונה"
+msgstr "אימה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Mystery"
-msgstr "תאריך"
+msgstr "תעלומה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Crime"
@@ -61079,24 +61022,20 @@ msgid "Military"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Real Life"
-msgstr "מימדים"
+msgstr "החיים עצמם"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
-#| msgid "Superscript"
 msgid "Superhero"
-msgstr "כתב עילי"
+msgstr "גיבורי על"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Humor"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Western"
-msgstr "תאריך"
+msgstr "מערבון"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Manga"
@@ -61107,62 +61046,52 @@ msgid "Politics"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
-#| msgid "Picture"
 msgid "Caricature"
-msgstr "תמונה"
+msgstr "קריקטורה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Sports"
-msgstr "ייצוא תמונה"
+msgstr "ספורט"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "History"
-msgstr "טוען..."
+msgstr "היסטוריה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Biography"
-msgstr "הוסף מעבר שורה"
+msgstr "ביוגרפיה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Education"
-msgstr "בחירה"
+msgstr "חינוך"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Computer"
-msgstr "מאפייני שכבה..."
+msgstr "מחשב"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Religion"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Romance"
-msgstr "העדפות"
+msgstr "רומנטיקה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Children"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Non Fiction"
-msgstr "הזז בחירה"
+msgstr "לא בדיוני"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Adult"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
-#, fuzzy
 msgid "Alternative"
-msgstr "כלי ציור"
+msgstr "חלופה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Artbook"
@@ -61174,9 +61103,8 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Adapter"
-msgstr "&פרק"
+msgstr "תיאום"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
@@ -61185,9 +61113,8 @@ msgid "Artist"
 msgstr "כלי מי&לוי"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#, fuzzy
 msgid "Penciller"
-msgstr "כלי אלי&פסה"
+msgstr "ציור בעיפרון"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Inker"
@@ -61195,9 +61122,8 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Colorist"
-msgstr "&צבע"
+msgstr "צביעה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #, fuzzy
@@ -61205,9 +61131,8 @@ msgid "Letterer"
 msgstr "US Letter"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#, fuzzy
 msgid "Cover Artist"
-msgstr "מאפיינים"
+msgstr "אומנות העטיפה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Photographer"
@@ -61215,14 +61140,12 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Editor"
 msgstr "עריכה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#, fuzzy
 msgid "Assistant Editor"
-msgstr "אליפסה"
+msgstr "סיוע בעריכה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
@@ -61231,14 +61154,12 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Translator"
-msgstr "מלבן"
+msgstr "תרגום"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:259
-#, fuzzy
 msgid "Comic Metadata"
-msgstr "לוחות צבעים"
+msgstr "נתוני על של קומיקס"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:271
 msgid "The proper title of the comic."
@@ -61280,42 +61201,36 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
-#, fuzzy
 msgid "Left to Right"
-msgstr "בודד"
+msgstr "משמאל לימין"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
-#, fuzzy
 msgid "Right to Left"
-msgstr "הזחה ימנית"
+msgstr "מימין לשמאל"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
-#, fuzzy
 msgid "Cover page:"
-msgstr "העמוד הבא"
+msgstr "עמוד עטיפה:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
-#, fuzzy
 msgid "Language:"
 msgstr "שפה:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
-#, fuzzy
 msgid "Reading direction:"
-msgstr "&בוחר צבעים"
+msgstr "כיוון קריאה:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Genre:"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
-#, fuzzy
 msgid "Characters:"
-msgstr "שרטרז"
+msgstr "תווים:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
 #, fuzzy
@@ -61323,23 +61238,20 @@ msgid "Format:"
 msgstr "&לבן"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
-#, fuzzy
 msgid "Rating:"
-msgstr "חזרה:"
+msgstr "דירוג:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
 msgid "Series:"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
-#, fuzzy
 msgid "Other:"
-msgstr "שכבה"
+msgstr "אחר:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:349
-#, fuzzy
 msgid "Work"
-msgstr "&בוחר צבעים"
+msgstr "עבודה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:354
 msgid ""
@@ -61415,75 +61327,61 @@ msgid "Publisher"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:117
-#, fuzzy
-#| msgid "Keywords:"
 msgid "No keywords"
-msgstr "מילות מפתח:"
+msgstr "אין מילות מפתח"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:131
 msgid "No last edit timestamp"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:151
-#, fuzzy
 msgid "No description"
-msgstr "תיאור:"
+msgstr "אין תיאור"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:196
-#, fuzzy
 msgid "Comics Manager"
-msgstr "מחליף צבעים"
+msgstr "מנהל קומיקס"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:253
-#, fuzzy
 msgid "New Project"
-msgstr "הפרק הנוכחי"
+msgstr "מיזם חדש"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:255
-#, fuzzy
 msgid "Open Project"
-msgstr "פ&תיחת מסמך אחרון"
+msgstr "פתיחת מיזם"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:267
-#, fuzzy
 msgid "Project Settings"
-msgstr "הגדרות"
+msgstr "הגדרות מיזם"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:269
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
-#, fuzzy
 msgid "Meta Data"
-msgstr "לוחות צבעים"
+msgstr "נתוני על"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
-#, fuzzy
 msgid "Add Page"
-msgstr "הוספת מרווח"
+msgstr "הוספת עמוד"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
-#, fuzzy
 msgid "Add Page from Template"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת עמוד מתבנית"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:291
-#, fuzzy
 msgid "Add Existing Pages"
-msgstr "הסר שכבה"
+msgstr "הוספת עמודים קיימים"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
-#, fuzzy
 msgid "Remove Page"
-msgstr "הסר שכבה"
+msgstr "הסרת עמוד"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
-#, fuzzy
 msgid "Batch Resize"
-msgstr "שנה גודל"
+msgstr "שינוי גודל במרוכז"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
-#, fuzzy
 msgid "View Page In Window"
-msgstr "&שכבה"
+msgstr "הצגת העמוד בחלון"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:300
 #, fuzzy
@@ -61502,14 +61400,12 @@ msgid "Scrape Text for Translation"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
-#, fuzzy
 msgid "Export Comic"
-msgstr "מיקום"
+msgstr "ייצוא קומיקס"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:329
-#, fuzzy
 msgid "Copy Location"
-msgstr "סובב &90"
+msgstr "העתקת המקום"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
 msgid ""
@@ -61522,9 +61418,8 @@ msgid "Please select the JSON comic config file."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
-#, fuzzy
 msgid "JSON files"
-msgstr "מאפייני שכבה..."
+msgstr "קובצי JSON"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid "Config cannot be used"
@@ -61538,16 +61433,14 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:386
-#, fuzzy
 msgid "Loading Pages..."
-msgstr "לוחות צבעים"
+msgstr "העמודים נטענים…"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
-#, fuzzy
 msgid "Krita files"
-msgstr "מאפייני שכבה..."
+msgstr "קובצי Krita"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 msgid "Which existing pages to add?"
@@ -61555,24 +61448,21 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:600
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:621
-#, fuzzy
 msgid "Where are the templates located?"
-msgstr "זוויות:"
+msgstr "איפה נמצאות התבניות?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:647
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
-#, fuzzy
 msgid "Where should the pages go?"
-msgstr "זוויות:"
+msgstr "לאן אמורים ללכת העמודים?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 msgid "Which image should be the basis for the new page?"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
-#, fuzzy
 msgid "Export success"
-msgstr "ייצוא השכבה"
+msgstr "הייצוא הצליח"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "The files have been written to the export folder."
@@ -61616,33 +61506,28 @@ msgid "Which folder?"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:61
-#, fuzzy
 msgid "Change Folder"
-msgstr "&לבן"
+msgstr "החלפת תיקייה"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:110
-#, fuzzy
 msgid "Comic Project Settings"
-msgstr "אישור שמירה"
+msgstr "הגדרות מיזם קומיקס"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where should the export go?"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#, fuzzy
 msgid "Where are the templates?"
-msgstr "זוויות:"
+msgstr "איפה התבניות?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
-#, fuzzy
 msgid "Where are the translations?"
-msgstr "כלי מ&חיקה"
+msgstr "איפה התרגומים?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
-#, fuzzy
 msgid "Where are the extra auto-completion keys located?"
-msgstr "כלי מ&חיקה"
+msgstr "איפה נמצאים מפתחות ההשלמה האוטומטית הנוספים?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
 msgid ""
@@ -61655,54 +61540,44 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
-#, fuzzy
 msgid "Project name:"
-msgstr "&לבן"
+msgstr "שם המיזם:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
-#, fuzzy
 msgid "Project concept:"
-msgstr "&לבן"
+msgstr "הרעיון למיזם:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
-#, fuzzy
 msgid "Pages folder:"
-msgstr "גודל דף"
+msgstr "תיקיית עמודים:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
-#, fuzzy
-#| msgid "Export Layer"
 msgid "Export folder:"
-msgstr "ייצוא השכבה"
+msgstr "תיקיית ייצוא:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
-#, fuzzy
 msgid "Template folder:"
-msgstr "מלבן"
+msgstr "תיקיית תבניות:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
-#, fuzzy
 msgid "Translation folder:"
-msgstr "מלבן"
+msgstr "תיקיית תרגומים:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
-#, fuzzy
 msgid "Default template:"
-msgstr "זוויות:"
+msgstr "תבנית ברירת מחדל:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:134
-#, fuzzy
 msgid "Extra keys folder:"
-msgstr "גודל דף"
+msgstr "תיקיית מפתחות נוספים:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:59
 msgid "Where should the comic project go?"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
-#, fuzzy
 msgid "Folder cannot be used"
-msgstr "הקובץ %1 לא קיים."
+msgstr "לא ניתן להשתמש בתיקייה"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid ""
@@ -61711,23 +61586,20 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
-#, fuzzy
 msgid "Comic Project Setup"
-msgstr "אישור שמירה"
+msgstr "הגדרת מיזם קומיקס"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
-#, fuzzy
 msgid "Basic Comic Project Settings"
-msgstr "אישור שמירה"
+msgstr "הגדרות מיזם קומיקס בסיסי"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:81
 msgid "A Project name. This can be different from the eventual title"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
-#, fuzzy
 msgid "Generate"
-msgstr "כללי"
+msgstr "יצירה"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
@@ -61756,9 +61628,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
-#, fuzzy
 msgid "pages"
-msgstr "כלי ה&דבקה"
+msgstr "עמודים"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid ""
@@ -61767,9 +61638,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
-#, fuzzy
 msgid "export"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
 msgid ""
@@ -61778,18 +61648,16 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
-#, fuzzy
 msgid "templates"
-msgstr "זוויות:"
+msgstr "תבניות"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "The name for the folder where the page templates are sought in."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:121
-#, fuzzy
 msgid "translations"
-msgstr "מלבן"
+msgstr "תרגומים"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 #, fuzzy
@@ -61797,75 +61665,62 @@ msgid "Comic concept:"
 msgstr "&לבן"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:125
-#, fuzzy
 msgid "Main language:"
-msgstr "שפה:"
+msgstr "השפה העיקרית:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Folder names and other."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
-#, fuzzy
 msgid "Project directory:"
-msgstr "מלבן"
+msgstr "תיקיית מיזם:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
-#, fuzzy
 msgid "Pages directory"
-msgstr "מלבן"
+msgstr "תיקיית עמודים"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
-#, fuzzy
 msgid "Export directory"
-msgstr "מלבן"
+msgstr "תיקיית ייצוא"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
-#, fuzzy
 msgid "Template directory"
-msgstr "מלבן"
+msgstr "תיקיית תבניות"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:142
-#, fuzzy
 msgid "Translation directory"
-msgstr "מלבן"
+msgstr "תיקיית תרגומים"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixels"
-msgstr "&תמונה"
+msgstr "פיקסלים"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:32
-#, fuzzy
-#| msgid "Centimeters (cm)"
 msgid "Centimeter"
-msgstr "סנטימטרים (ס\"מ)"
+msgstr "סנטימטר"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:33
-#, fuzzy
-#| msgid "Millimeters (mm)"
 msgid "millimeter"
-msgstr "מילימטרים (מ\"מ)"
+msgstr "מילימטר"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:81
-#, fuzzy
 msgid "Add new Template"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת תבנית חדשה"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:98
-#, fuzzy
 msgid "Import Templates"
-msgstr "ייצוא תמונה"
+msgstr "ייבוא תבניות"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Which files should be added to the template folder?"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
-#, fuzzy
 msgid "Create new Template"
-msgstr "זוויות:"
+msgstr "יצירת תבנית חדשה"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:147
 msgid ""
@@ -61876,9 +61731,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:167
-#, fuzzy
 msgid "Select background color"
-msgstr "שנייה"
+msgstr "בחירת צבע רקע"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:225
 msgid "Margins"
@@ -61889,14 +61743,12 @@ msgid "Bleeds"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:308
-#, fuzzy
 msgid "Background"
 msgstr "רקע"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:326
-#, fuzzy
 msgid "Creating template"
-msgstr "זוויות:"
+msgstr "יצירת תבנית"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Abridger"
@@ -62086,9 +61938,8 @@ msgid "Owner"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Patron"
-msgstr "מקושר"
+msgstr "מימון"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
@@ -62096,9 +61947,8 @@ msgid "Publishing director"
 msgstr "מלבן"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Printer"
-msgstr "&שכבה"
+msgstr "מדפסת"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Scenarist"
@@ -62163,10 +62013,8 @@ msgstr ""
 
 #: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
-#, fuzzy
-#| msgid "Document Information"
 msgid "Document Tools"
-msgstr "מידע מסמך"
+msgstr "כלי מסמך"
 
 #: plugins/python/documenttools/documenttools.py:19
 msgid "Plugin to manipulate properties of selected documents."
@@ -62184,9 +62032,8 @@ msgid "Negative degrees will rotate the image to the left"
 msgstr ""
 
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:29
-#, fuzzy
 msgid "Degrees:"
-msgstr "בחירה"
+msgstr "מעלות:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
@@ -62566,21 +62413,17 @@ msgid "Python Palette Docker"
 msgstr "יצירת מסמך"
 
 #: plugins/python/palette_docker/palette_docker.py:74
-#, fuzzy
 msgid "Set"
-msgstr "בחירה"
+msgstr "הגדרה"
 
 #: plugins/python/palette_docker/palette_docker.py:83
-#, fuzzy
-#| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "הוספת קבוצה"
 
 #: plugins/python/palette_docker/palette_docker.py:86
-#, fuzzy
 msgid "Remove Entry"
-msgstr "הסר בחירה"
+msgstr "הסרת רשומה"
 
 #: plugins/python/palette_docker/palette_docker.py:102
 #, fuzzy
@@ -62597,9 +62440,8 @@ msgid "Export as Inkscape SVG with Swatches"
 msgstr ""
 
 #: plugins/python/palette_docker/palette_docker.py:116
-#, fuzzy
 msgid "Sort Colors"
-msgstr "כלי מי&לוי"
+msgstr "מיון צבעים"
 
 #: plugins/python/palette_docker/palette_docker.py:226
 #, fuzzy
@@ -62613,9 +62455,8 @@ msgstr "לוחות צבעים"
 
 #: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:36
-#, fuzzy
 msgid "Export Successful"
-msgstr "ייצוא השכבה"
+msgstr "הייצוא הצליח"
 
 #: plugins/python/palette_docker/palette_exporter_gimppalette.py:33
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:38
@@ -62642,14 +62483,13 @@ msgid "Image Scale: {0}%"
 msgstr "גודל דף"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:331
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Page: {0}/{1}"
-msgstr "תמונה %1"
+msgstr "עמוד: {0}/{1}"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:467
-#, fuzzy
 msgid "Change Directory for Images"
-msgstr "שינוי סגנון תו"
+msgstr "החלפת תיקייה לתמונות"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
 #: plugins/python/photobash_images/photobash_images_docker.py:477
@@ -62660,9 +62500,9 @@ msgstr "העדפות"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter images by words..."
-msgstr "&לבן"
+msgstr "סינון תמונות לפי מילים…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
@@ -62676,24 +62516,24 @@ msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "מחליף צבעים"
+msgstr "מייבא תוספי Python"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from File..."
-msgstr "שכבה חדשה"
+msgstr "ייבוא תוסף Python מקובץ…"
 
 #. i18n: context: text @ Action (plugin_importer_web), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "שכבה חדשה"
+msgstr "ייבוא תוסף Python מהאינטרנט…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:143
 msgid "Desktop file"
@@ -62704,19 +62544,16 @@ msgid "No plugins found in archive"
 msgstr ""
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:35
-#, fuzzy
 msgid "Import Python Plugin from File..."
-msgstr "שכבה חדשה"
+msgstr "ייבוא תוסף Python מקובץ…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:40
-#, fuzzy
 msgid "Import Python Plugin from Web..."
-msgstr "שכבה חדשה"
+msgstr "ייבוא תוסף Python מהאינטרנט…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:47
-#, fuzzy
 msgid "Overwrite Plugin"
-msgstr "מאפייני שכבה..."
+msgstr "שכתוב תוסף"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:48
 #, python-format
@@ -62732,15 +62569,12 @@ msgid "Enable plugins now? (Requires restart)"
 msgstr "להפעיל תוספים כעת? (דורש הפעלה מחדש)"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:71
-#, fuzzy
 msgid "Activate Plugins?"
-msgstr "הסר ערוץ"
+msgstr "להפעיל תוספים?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:78
-#, fuzzy
-#| msgid "Error during autosave! Partition full?"
 msgid "Error during import:"
-msgstr "אירעה שגיאה במהלך השמירה האוטומטית. האם המחיצה מלאה?"
+msgstr "שגיאה במהלך ייבוא:"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:97
 msgid ""
@@ -62751,9 +62585,8 @@ msgstr ""
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:105
 #: plugins/python/plugin_importer/plugin_importer_extension.py:119
-#, fuzzy
 msgid "Import Plugin"
-msgstr "ייצוא תמונה"
+msgstr "ייבוא תוסף"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:121
 msgid "Zip Archives"
@@ -62764,9 +62597,8 @@ msgid "Quick Settings Docker"
 msgstr ""
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
-#, fuzzy
 msgid "Add Script"
-msgstr "כתב תחתי"
+msgstr "הוספת סקריפט"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 #, fuzzy
@@ -62774,9 +62606,9 @@ msgid "Script Docker"
 msgstr "כתב תחתי"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Script {0}"
-msgstr "כתב תחתי"
+msgstr "סקריפט {0}"
 
 #: plugins/python/scripter/debugcontroller.py:58
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
@@ -62990,9 +62822,8 @@ msgid "Activate Brush Preset 10"
 msgstr "מאפייני שכבה..."
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
-#, fuzzy
 msgid "Ten Brushes"
-msgstr "&מברשת"
+msgstr "עשר מברשות"
 
 #: plugins/python/tenbrushes/tenbrushes.py:35
 msgid "Assign ten brush presets to ten shortcuts."
@@ -63039,85 +62870,84 @@ msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
-msgstr "כתב תחתי"
+msgstr "עשרה סקריפטים"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:7
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 1"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 2"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 3"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:43
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 4"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 5"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 6"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:79
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 7"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 8"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 9"
 
 #. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 10"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27
-#, fuzzy
 msgid "Ten Scripts"
-msgstr "כתב תחתי"
+msgstr "עשרה סקריפטים"
 
 #: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."

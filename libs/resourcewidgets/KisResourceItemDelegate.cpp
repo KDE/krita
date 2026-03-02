@@ -12,6 +12,7 @@
 #include "KisResourceItemDelegate.h"
 #include "KisResourceModel.h"
 #include <KisResourceThumbnailCache.h>
+#include <KisResourceModelProvider.h>
 #include <KoIcon.h>
 
 KisResourceItemDelegate::KisResourceItemDelegate(QObject *parent)
@@ -27,9 +28,21 @@ void KisResourceItemDelegate::setShowText(bool showText)
     m_showText = showText;
 }
 
-void KisResourceItemDelegate::setIsWidget(bool isWidget)
+void KisResourceItemDelegate::setNeedIndexConversion(bool isWidget)
 {
     m_isWidget = isWidget;
+}
+
+QModelIndex KisResourceItemDelegate::convertToGlobalModelIndexIfNeeded(const QModelIndex &localIndex) const
+{
+    if (!m_isWidget) return localIndex;
+
+    const int resourceId = localIndex.data(Qt::UserRole + KisAllResourcesModel::Id).toInt();
+    const QString resourceType = localIndex.data(Qt::UserRole + KisAllResourcesModel::ResourceType).toString();
+
+    auto *model = KisResourceModelProvider::resourceModel(resourceType);
+    QModelIndex globalIndex = model->indexForResourceId(resourceId);
+    return globalIndex;
 }
 
 void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex &index) const
@@ -42,20 +55,8 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         QString resourceDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(paintRect.width() + 10, option.rect.y() + option.rect.height() - 10, resourceDisplayName);
 
-        if (m_isWidget) { // Bundle Creator selected list...
-            QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
-
-            QImage preview;
-            if (!icon.isNull()) {
-                QSize iconSize = option.decorationSize; // or specify a desired size
-                QPixmap pixmap = icon.pixmap(iconSize);
-                preview = pixmap.toImage();
-            }
-
-            painter->drawImage(paintRect.x(), paintRect.y(), preview);
-        } else {
-            m_thumbnailPainter.paint(painter, index, paintRect, option.palette, false, true);
-        }
+        const QModelIndex globalIndex = convertToGlobalModelIndexIfNeeded(index);
+        m_thumbnailPainter.paint(painter, globalIndex, paintRect, option.palette, false, true);
 
         if (option.state & QStyle::State_Selected) {
             painter->setCompositionMode(QPainter::CompositionMode_HardLight);
@@ -69,7 +70,8 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
             painter->drawRect(selectedBorder);
         }
     } else {
-        m_thumbnailPainter.paint(painter, index, option.rect, option.palette, option.state & QStyle::State_Selected, true);
+        const QModelIndex globalIndex = convertToGlobalModelIndexIfNeeded(index);
+        m_thumbnailPainter.paint(painter, globalIndex, option.rect, option.palette, option.state & QStyle::State_Selected, true);
     }
     painter->restore();
 }
@@ -77,5 +79,6 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
 QSize KisResourceItemDelegate::sizeHint(const QStyleOptionViewItem &optionItem, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     return optionItem.decorationSize;
 }

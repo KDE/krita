@@ -46,7 +46,7 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     m_ui->verticalLayout_2->insertWidget(1, m_resourceItemWidget);
 
     m_kisResourceItemDelegate = new KisResourceItemDelegate(this);
-    m_kisResourceItemDelegate->setIsWidget(true);
+    m_kisResourceItemDelegate->setNeedIndexConversion(true);
     m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
 
     connect(m_ui->btnRemoveSelected, SIGNAL(clicked(bool)), this, SLOT(slotRemoveSelected(bool)));
@@ -203,6 +203,7 @@ void PageResourceChooser::selectResource(QSortFilterProxyModel *model, const QMo
     QListWidgetItem *item = new QListWidgetItem(pixmap, name);
     item->setData(Qt::UserRole, id);
     item->setData(Qt::UserRole + KisAbstractResourceModel::Name, name);
+    item->setData(Qt::UserRole + KisAbstractResourceModel::ResourceType, model->data(idx, Qt::UserRole + KisAllResourcesModel::ResourceType).toString());
 
     m_resourceItemWidget->addItem(item);
 }

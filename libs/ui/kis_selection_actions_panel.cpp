@@ -399,6 +399,6 @@ bool KisSelectionActionsPanel::touchEventPos(const QTouchEvent *touchEvent, QPoi
 #endif
 }
 
-constexpr QPoint KisSelectionActionsPanel::transformHandleCoords(QPoint pos) {
+QPoint KisSelectionActionsPanel::transformHandleCoords(QPoint pos) {
     return d->m_dragHandle->position + pos;
 }

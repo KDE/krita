@@ -27,16 +27,15 @@ QImage KisResourceThumbnailPainter::getReadyThumbnail(const QModelIndex &index, 
     paint(&painter, index, QRect(QPoint(0, 0), size), palette, false, false);
     return thumbLabel;
 }
-
-void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& index, QRect rect, const QPalette& palette, bool selected, bool addMargin) const
+void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& globalIndex, QRect rect, const QPalette& palette, bool selected, bool addMargin) const
 {
     const qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
-    QImage thumbnail = KisResourceThumbnailCache::instance()->getImage(index);
+    QImage thumbnail = KisResourceThumbnailCache::instance()->getImage(globalIndex);
     thumbnail.setDevicePixelRatio(devicePixelRatioF);
 
-    const QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
-    const QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString();
+    const QString resourceType = globalIndex.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
+    const QString name = globalIndex.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString();
 
     painter->save();
 
@@ -57,7 +56,7 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
     if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect, innerRect.topLeft());
         if (!thumbnail.isNull()) {
-            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+            thumbnail = KisResourceThumbnailCache::instance()->getImage(globalIndex,
                                                                          innerRectSizeDPI,
                                                                          Qt::IgnoreAspectRatio,
                                                                          Qt::SmoothTransformation);
@@ -95,7 +94,7 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
             bool needsUpscaling = thumbnail.height() < innerRectSizeDPI.height()
                                 || thumbnail.width() < innerRectSizeDPI.width();
 
-            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+            thumbnail = KisResourceThumbnailCache::instance()->getImage(globalIndex,
                                                                         innerRectSizeDPI,
                                                                         Qt::KeepAspectRatio,
                                                                         needsUpscaling ? Qt::FastTransformation

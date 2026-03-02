@@ -26,7 +26,7 @@ public:
 
     //  (QPainter*, QModelIndex&, QRect, const QPalette&, bool)’
 
-    QImage getReadyThumbnail(const QModelIndex& index, QSize rect, const QPalette& palette) const;
+    QImage getReadyThumbnail(const QModelIndex& globalIndex, QSize rect, const QPalette& palette) const;
     void paint(QPainter *painter,
                const QModelIndex &index,
                QRect rect,

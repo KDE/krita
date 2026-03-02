@@ -24,9 +24,20 @@ public:
 
     void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const override;
     void setShowText(bool);
-    void setIsWidget(bool);
+
+    /**
+     * When index conversion is set, the delegate will request only
+     * KisAbstractResourceModel::{Id,ResourceType,Name} from the local index
+     * and will use this info to resolve the index in the global resources
+     * model. It is necessary for, e.g. KisResourceItemListWidget in the bundle
+     * creator
+     */
+    void setNeedIndexConversion(bool value);
 
     QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const override;
+
+private:
+    QModelIndex convertToGlobalModelIndexIfNeeded(const QModelIndex &localIndex) const;
 
 private:
     KoCheckerBoardPainter m_checkerPainter;

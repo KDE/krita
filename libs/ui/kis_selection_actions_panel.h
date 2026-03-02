@@ -59,7 +59,7 @@ private:
     // the screen on Android, so this returns false if this is a non-touch.
     bool touchEventPos(const QTouchEvent *touchEvent, QPoint &outPos);
 
-    constexpr QPoint transformHandleCoords(QPoint pos);
+    QPoint transformHandleCoords(QPoint pos);
 
     struct Private;
     QScopedPointer<Private> d;

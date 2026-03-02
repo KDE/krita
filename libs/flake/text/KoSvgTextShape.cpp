@@ -391,7 +391,7 @@ int KoSvgTextShape::nextIndex(int pos)
     if (d->cursorPos.isEmpty()) {
         return pos;
     }
-    int currentIndex = d->cursorPos.at(pos).index;
+    int currentIndex = d->cursorPos.at(qBound(0, pos, d->cursorPos.size())).index;
 
     for (int i = pos; i < d->cursorPos.size(); i++) {
         if (d->cursorPos.at(i).index > currentIndex) {
@@ -406,7 +406,7 @@ int KoSvgTextShape::previousIndex(int pos)
     if (d->cursorPos.isEmpty()) {
         return pos;
     }
-    int currentIndex = d->cursorPos.at(pos).index;
+    const int currentIndex = d->cursorPos.at(qBound(0, pos, d->cursorPos.size())).index;
 
     for (int i = pos; i >= 0; i--) {
         if (d->cursorPos.at(i).index < currentIndex) {

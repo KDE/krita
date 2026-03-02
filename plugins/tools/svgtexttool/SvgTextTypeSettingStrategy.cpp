@@ -106,8 +106,8 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
             length.value *= scale;
             props.setFontSize(length);
 
-            if (m_shape->textType() == KoSvgTextShape::PreformattedText || m_shape->textType() == KoSvgTextShape::PrePositionedText) {
-                // When we change font size, we need to correct the offset for the scaled advances.
+            if ((m_shape->textType() == KoSvgTextShape::PreformattedText || m_shape->textType() == KoSvgTextShape::PrePositionedText) && m_cursorPos != m_cursorAnchor) {
+                // When we change font size on a selection, we need to correct the offset for the scaled advances.
                 // Technically, we need to test against the laid out text to get the correct advance, but that's really complicated...
                 QPointF diff = QPointF();
 

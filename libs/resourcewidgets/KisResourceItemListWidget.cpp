@@ -34,6 +34,7 @@ KisResourceItemListWidget::KisResourceItemListWidget(QWidget *parent)
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setContextMenuPolicy(Qt::DefaultContextMenu);
     setViewMode(QListView::IconMode);
+    setMovement(QListView::Static);
     setGridSize(QSize(56, 56));
     setIconSize(QSize(56, 56));
     setResizeMode(QListWidget::Adjust);

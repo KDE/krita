@@ -1746,15 +1746,14 @@ bool KisResourceCacheDb::deleteStorage(QString location)
         }
 
         {
-            KisSqlQueryLoader loader("inline://delete_tags_for_storage",
-                                     "DELETE FROM tags \n"
-                                     "WHERE id IN (SELECT tags_storages.tag_id \n "
-                                     "             FROM tags_storages \n"
-                                     "             WHERE tags_storages.storage_id = \n"
-                                     "                   (SELECT storages.id\n"
-                                     "                    FROM   storages\n"
-                                     "                    WHERE  storages.location = :location)\n"
-                                     "            )",
+            KisSqlQueryLoader loader("inline://gather_tag_ids_to_delete",
+                                     "CREATE TEMPORARY TABLE tag_ids_to_delete\n"
+                                     "AS SELECT tags_storages.tag_id tag_id\n "
+                                     "   FROM tags_storages\n"
+                                     "   WHERE tags_storages.storage_id =\n"
+                                     "       (SELECT storages.id\n"
+                                     "        FROM   storages\n"
+                                     "        WHERE  storages.location = :location)\n",
                                      KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
@@ -1762,13 +1761,40 @@ bool KisResourceCacheDb::deleteStorage(QString location)
 
         {
             KisSqlQueryLoader loader("inline://delete_tags_storage_links_for_storage",
-                                     "DELETE FROM tags_storages \n"
-                                     "WHERE tags_storages.storage_id = \n"
-                                     "      (SELECT storages.id\n"
-                                     "       FROM   storages\n"
-                                     "       WHERE  storages.location = :location)",
+                                     "DELETE FROM tags_storages\n"
+                                     "WHERE tag_id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
                                      KisSqlQueryLoader::single_statement_mode);
-            loader.query().bindValue(":location", changeToEmptyIfNull(location));
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_tags_translations_for_storage",
+                                     "DELETE FROM tag_translations\n"
+                                     "WHERE tag_id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
+                                     KisSqlQueryLoader::single_statement_mode);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_resource_tags_for_storage",
+                                     "DELETE FROM resource_tags\n"
+                                     "WHERE tag_id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
+                                     KisSqlQueryLoader::single_statement_mode);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_tags_for_storage",
+                                     "DELETE FROM tags \n"
+                                     "WHERE id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
+                                     KisSqlQueryLoader::single_statement_mode);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://drop_tag_ids_to_delete",
+                                     "DROP TABLE temp.tag_ids_to_delete",
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.exec();
         }
 

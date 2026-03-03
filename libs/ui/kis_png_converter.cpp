@@ -565,7 +565,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     bool loadedImageIsHDR = false;
-    const KoColorProfile* profile = 0;
+    const KoColorProfile* profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), proflen);
@@ -593,14 +593,14 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
     else {
-        dbgFile << "no embedded profile, will use the default profile";
+        dbgFile << "no embedded profile, will use the default sRGB profile";
     }
 
     const QString colorSpaceId =
         KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
 
     // Check that the profile is used by the color space
-    if (profile 
+    if (profile
         && (!KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId) 
         ||  !(profile->isSuitableForOutput() || profile->isSuitableForInput()))) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;

@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-28 02:43+0000\n"
-"PO-Revision-Date: 2026-01-30 22:02+0100\n"
+"PO-Revision-Date: 2026-02-24 13:32+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -34695,7 +34695,7 @@ msgstr "Izberi prekrivno"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -69328,3 +69328,34 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
+
+#~ msgctxt "@item:inlistbox"
+#~ msgid "GLX (current)"
+#~ msgstr "GLX (trenutno)"
+
+#~ msgctxt "@item:inlistbox"
+#~ msgid "GLX"
+#~ msgstr "GLX"
+
+#~ msgctxt "@item:inlistbox"
+#~ msgid "EGL (current)"
+#~ msgstr "EGL (trenutno)"
+
+#~ msgctxt "@item:inlistbox"
+#~ msgid "EGL"
+#~ msgstr "EGL"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
+#~ "switching between EGL and GLX</p>"
+#~ msgstr ""
+#~ "<p>Če uporabljate Krito na X11 ali XWaylandu in opažate upočasnjeno "
+#~ "delovanje, poskusite preklopiti med EGL in GLX</p>"
+
+#~ msgid ""
+#~ "Preferred openGL interface\n"
+#~ "(needs restart):"
+#~ msgstr ""
+#~ "Želeni vmesnik openGL\n"
+#~ "(zahteva ponoven zagon):"

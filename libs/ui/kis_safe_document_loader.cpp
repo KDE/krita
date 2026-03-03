@@ -15,6 +15,7 @@
 #include <QUrl>
 
 #include <KoStore.h>
+#include <QTemporaryFile>
 
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
@@ -328,28 +329,68 @@ void KisSafeDocumentLoader::delayedLoadStart()
         m_d->doc.reset(KisPart::instance()->createTemporaryDocument());
         m_d->doc->setFileBatchMode(true);
 
+        auto loadPathNatively = [&doc = m_d->doc](const QString &path) -> bool {
+            const bool successfullyLoaded = doc->openPath(path, KisDocument::DontAddToRecent);
+            if (successfullyLoaded) {
+                // Wait for required updates, if any. BUG: 448256
+                KisLayerUtils::forceAllDelayedNodesUpdate(doc->image()->root());
+                doc->image()->waitForDone();
+            }
+            return successfullyLoaded;
+        };
+
         if (m_d->path.toLower().endsWith("ora") || m_d->path.toLower().endsWith("kra")) {
             QScopedPointer<KoStore> store(KoStore::createStore(m_d->temporaryPath, KoStore::Read));
             if (store && !store->bad()) {
                 if (store->open(QString("mergedimage.png"))) {
-                    QByteArray bytes = store->read(store->size());
+                    /**
+                     * TODO: Ideally we should modify our KisDocument code
+                     * to allow loading from a QIODevice, but currently it
+                     * supports loading from a local file only. That is why
+                     * we just extract the PNG into a temporary file and
+                     * load it separately.
+                     *
+                     * NOTE: we cannot use QImage for loading, since it strips
+                     * the color profile attached to the PNG file
+                     */
+                    QTemporaryFile temporaryFile(QDir::tempPath() + QLatin1String("/krita_merged_image_XXXXXX.png"));
+                    temporaryFile.open();
+
+                    QByteArray buffer(BUFSIZ, 0);
+                    qint64 totalWritten = 0;
+                    const qint64 expectedFileSize = store->size();
+
+                    while (true) {
+                        qint64 read = store->read(buffer.data(), buffer.size());
+                        if (read < 0) {
+                            warnKrita << "Failed to read from mergedimage.png for the file layer's projection";
+                            break;
+                        } else if (read == 0) {
+                            // End of file
+                            break;
+                        } else {
+                            // Successful read, try to write it.
+                            qint64 written = temporaryFile.write(buffer.constData(), read);
+                            if (written < 0) {
+                                // Write error.
+                                warnKrita << "Failed to wirte mergedimage.png into a temporary file for the file layer's projection"
+                                          << temporaryFile.fileName() << ":" << temporaryFile.error();
+                                break;
+                            }
+                            // We may not have written as much as we read, but we handle
+                            // that at the end.
+                            totalWritten += written;
+                        }
+                    }
+
+                    temporaryFile.close();
                     store->close();
-                    QImage mergedImage;
-                    mergedImage.loadFromData(bytes);
-                    Q_ASSERT(!mergedImage.isNull());
-                    KisImageSP image = new KisImage(0, mergedImage.width(), mergedImage.height(), KoColorSpaceRegistry::instance()->rgb8(), "");
 
-                    constexpr double DOTS_PER_METER_TO_DOTS_PER_INCH = 0.00035285815102328864;
-                    double xres = mergedImage.dotsPerMeterX()  * DOTS_PER_METER_TO_DOTS_PER_INCH;
-                    double yres = mergedImage.dotsPerMeterY() * DOTS_PER_METER_TO_DOTS_PER_INCH;
-
-                    image->setResolution(xres, yres);
-                    KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
-                    layer->paintDevice()->convertFromQImage(mergedImage, 0);
-                    image->addNode(layer, image->rootLayer());
-                    image->initialRefreshGraph();
-                    m_d->doc->setCurrentImage(image);
-                    successfullyLoaded = true;
+                    if (totalWritten == expectedFileSize) {
+                        successfullyLoaded = loadPathNatively(temporaryFile.fileName());
+                    } else {
+                        successfullyLoaded = false;
+                    }
                 }
                 else {
                     qWarning() << "delayedLoadStart: Could not open mergedimage.png";
@@ -360,14 +401,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
             }
         }
         else {
-            successfullyLoaded = m_d->doc->openPath(m_d->temporaryPath,
-                                                   KisDocument::DontAddToRecent);
-
-            if (successfullyLoaded) {
-                // Wait for required updates, if any. BUG: 448256
-                KisLayerUtils::forceAllDelayedNodesUpdate(m_d->doc->image()->root());
-                m_d->doc->image()->waitForDone();
-            }
+            successfullyLoaded = loadPathNatively(m_d->temporaryPath);
         }
     } else {
         dbgKrita << "File was modified externally. Restarting.";

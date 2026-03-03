@@ -83,70 +83,111 @@ void *KisDefaultBounds::sourceCookie() const
 }
 
 /******************************************************************/
-/*                  KisSelectionDefaultBounds                     */
+/*                  KisSelectionDefaultBoundsBase                 */
 /******************************************************************/
 
-struct Q_DECL_HIDDEN KisSelectionDefaultBounds::Private
+KisSelectionDefaultBoundsBase::KisSelectionDefaultBoundsBase()
 {
-    KisPaintDeviceWSP parentDevice;
-};
+}
 
-KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice)
-    : m_d(new Private())
+KisSelectionDefaultBoundsBase::~KisSelectionDefaultBoundsBase()
 {
-    m_d->parentDevice = parentDevice;
+}
+
+QRect KisSelectionDefaultBoundsBase::bounds() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ?
+                parentDevice->extent() | parentDevice->defaultBounds()->bounds() : QRect();
+}
+
+QRect KisSelectionDefaultBoundsBase::imageBorderRect() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ? parentDevice->defaultBounds()->bounds() : QRect();
+}
+
+bool KisSelectionDefaultBoundsBase::wrapAroundMode() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ? parentDevice->defaultBounds()->wrapAroundMode() : false;
+}
+
+WrapAroundAxis KisSelectionDefaultBoundsBase::wrapAroundModeAxis() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ? parentDevice->defaultBounds()->wrapAroundModeAxis() : WRAPAROUND_BOTH;
+}
+
+int KisSelectionDefaultBoundsBase::currentLevelOfDetail() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ? parentDevice->defaultBounds()->currentLevelOfDetail() : 0;
+}
+
+int KisSelectionDefaultBoundsBase::currentTime() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ? parentDevice->defaultBounds()->currentTime() : 0;
+}
+
+bool KisSelectionDefaultBoundsBase::externalFrameActive() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice ? parentDevice->defaultBounds()->externalFrameActive() : false;
+}
+
+void *KisSelectionDefaultBoundsBase::sourceCookie() const
+{
+    KisPaintDeviceSP parentDevice = this->parentPaintDevice();
+
+    return parentDevice.data();
+}
+
+/******************************************************************/
+/*                   KisSelectionDefaultBounds                    */
+/******************************************************************/
+
+KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice)
+    : m_paintDevice(parentPaintDevice)
+{
 }
 
 KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 {
-    delete m_d;
 }
 
-QRect KisSelectionDefaultBounds::bounds() const
+KisPaintDeviceSP KisSelectionDefaultBounds::parentPaintDevice() const
 {
-    return m_d->parentDevice ?
-                m_d->parentDevice->extent() | m_d->parentDevice->defaultBounds()->bounds() : QRect();
+    return m_paintDevice;
 }
 
-QRect KisSelectionDefaultBounds::imageBorderRect() const
+/******************************************************************/
+/*                   KisMaskDefaultBounds                         */
+/******************************************************************/
+
+
+KisMaskDefaultBounds::KisMaskDefaultBounds(KisNodeSP parentNode)
+    : m_parentNode(parentNode)
 {
-    return m_d->parentDevice ?
-                m_d->parentDevice->defaultBounds()->bounds() : QRect();
 }
 
-bool KisSelectionDefaultBounds::wrapAroundMode() const
+KisMaskDefaultBounds::~KisMaskDefaultBounds()
 {
-    return m_d->parentDevice ?
-        m_d->parentDevice->defaultBounds()->wrapAroundMode() : false;
 }
 
-WrapAroundAxis KisSelectionDefaultBounds::wrapAroundModeAxis() const
+KisPaintDeviceSP KisMaskDefaultBounds::parentPaintDevice() const
 {
-    return m_d->parentDevice ?
-        m_d->parentDevice->defaultBounds()->wrapAroundModeAxis() : WRAPAROUND_BOTH;
-}
+    KisNodeSP parentNode = m_parentNode;
 
-int KisSelectionDefaultBounds::currentLevelOfDetail() const
-{
-    return m_d->parentDevice ?
-        m_d->parentDevice->defaultBounds()->currentLevelOfDetail() : 0;
-}
-
-int KisSelectionDefaultBounds::currentTime() const
-{
-    return m_d->parentDevice ?
-        m_d->parentDevice->defaultBounds()->currentTime() : 0;
-}
-
-bool KisSelectionDefaultBounds::externalFrameActive() const
-{
-    return m_d->parentDevice ?
-                m_d->parentDevice->defaultBounds()->externalFrameActive() : false;
-}
-
-void *KisSelectionDefaultBounds::sourceCookie() const
-{
-    return m_d->parentDevice.data();
+    return parentNode ? parentNode->original() : nullptr;
 }
 
 /******************************************************************/

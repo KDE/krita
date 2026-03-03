@@ -36,6 +36,8 @@
 #include "KoShapeFactoryBase.h"
 #include "kis_assert.h"
 #include "kactioncollection.h"
+#include "kis_global.h"
+#include "kis_algebra_2d.h"
 
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
@@ -50,12 +52,19 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
 
     const QPoint originalWidgetPoint = parent->documentToWidget(widgetScrollPointDoc).toPoint();
 
-    QRectF mouseArea(widgetScrollPointDoc, QSizeF(10, 10));
-    mouseArea.setTopLeft(mouseArea.center());
+    const QPointF margin(10.0, 10.0);
+
+    const QPointF mouseAreaTopLeftWidget = parent->documentToWidget(widgetScrollPointDoc) - margin;
+    const QPointF mouseAreaBottomRightWidget = mouseAreaTopLeftWidget + 2 * margin;
+
+    const QPointF mouseAreaTopLeftDoc = parent->widgetToDocument(mouseAreaTopLeftWidget);
+    const QPointF mouseAreaBottomRightDoc = parent->widgetToDocument(mouseAreaBottomRightWidget);
+    QRectF mouseAreaDoc(mouseAreaTopLeftDoc, mouseAreaBottomRightDoc);
+
 
     const QPointF oldPreferredCenter = controller->preferredCenter();
 
-    controller->ensureVisibleDoc(mouseArea, true);
+    controller->ensureVisibleDoc(mouseAreaDoc, true);
 
     const QPointF newPreferredCenter = controller->preferredCenter();
 

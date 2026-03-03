@@ -1907,7 +1907,7 @@ VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& sha
 
     auto appendFrom = [] (QList<VPoint>& res, int start, int end, const VectorPath& shape) {
         start = qBound(0, start, shape.segmentsCount() - 1);
-        end = qBound(0, end, shape.segmentsCount() - 1);
+        end = qBound(0, end, shape.segmentsCount());
 
         for (int i = start; i < end; i++) {
             QList<VPoint> segment = shape.segmentAt(i);

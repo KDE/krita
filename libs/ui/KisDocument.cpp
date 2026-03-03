@@ -736,17 +736,64 @@ KisDocument *KisDocument::clone(bool addStorage)
 
 bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
-    QFileInfo filePathInfo(job.filePath);
+    // ANDROID NOTES (other comments in this file reference this one!)
+    //
+    // The Android file system doesn't work like on a real operating system.
+    // Instead of normal file paths, we get to deal with "content URIs", which
+    // can have various kinds of storage providers behind them. For example,
+    // there's a "normal" storage provider, a slightly less normal documents
+    // provider, a Google Drive provider and various kinds of third-party
+    // providers that are mostly just good at losing the data you give them.
+    // For example, we have reports of compression programs that provide a
+    // storage provider to write to ZIP or RAR archives or something. Except
+    // that they don't seem to work at all, they just accept the data with no
+    // error and throw it on the floor.
+    //
+    // The providers are particularly unreliable with regards to permissions,
+    // so calling "isWritable" will just always return false on some of them.
+    // This includes the default provider on some devices, which means checking
+    // whether a file is writable will mean that the user can't save anything!
+    // So, all the Android code skips over the writability check and assumes the
+    // files are writable. If they're not, we'll notice later anyway, by the
+    // fact that writing to them fails.
+    //
+    // Another issue is that it's only possible to overwrite files using File >
+    // Save. Using File > Save As or File > Export can't replace existing
+    // files. The reason for this is that we have to go through the operating
+    // system to request access to a file and the only things you can ask for
+    // is to open an existing file or to create a new file. Out of necessity,
+    // Save As and Export use the latter. If the user selects an existing file,
+    // the operating system "helpfully" appends a number to the path, *after*
+    // the file extension of course, because it hates the living. So that's
+    // another reason we can't go with the "safer" option of assuming that files
+    // aren't writable in some cases, since that would prevent the user from
+    // saving them normally and end up with a lot of "kiki.kra (2)".
+    //
+    // Also, when you request a file from the operating system, it always
+    // creates an empty file. That means checking whether a file exists will
+    // pretty much always succeed, so to know whether a file actually exists
+    // you have to check whether it isn't empty. Of course providers may fail to
+    // implement this correctly, but I'm not aware of any of them botching it
+    // that hard. Well, at least none of the ones that actually save files, as
+    // mentioned above some of them just seem to lose whatever you give them.
 
-    if (filePathInfo.exists() && !filePathInfo.isWritable()) {
+    QFileInfo filePathInfo(job.filePath);
+    bool fileExists = filePathInfo.exists();
+#ifdef Q_OS_ANDROID
+    if (fileExists) {
+        fileExists = filePathInfo.size() > 0;
+    }
+#else
+    if (fileExists && !filePathInfo.isWritable()) {
         slotCompleteSavingDocument(job, ImportExportCodes::NoAccessToWrite,
                                    i18n("%1 cannot be written to. Please save under a different name.", job.filePath),
                                    "");
         return false;
     }
+#endif
 
     KisConfig cfg(true);
-    if (cfg.backupFile() && filePathInfo.exists()) {
+    if (cfg.backupFile() && fileExists) {
 
         QString backupDir;
 
@@ -1056,8 +1103,14 @@ void KisDocument::Private::updateDocumentMetadataOnSaving(const QString &filePat
     q->setMimeType(mimeType);
     q->updateEditingTime(true);
 
+#ifdef Q_OS_ANDROID
+    // See the comment titled "ANDROID NOTES" in this file for an explanation of
+    // what this is about. (This is not that comment.)
+    q->setReadWrite(true);
+#else
     QFileInfo fi(filePath);
     q->setReadWrite(fi.isWritable());
+#endif
 
     if (!modifiedWhileSaving) {
         /**
@@ -1952,8 +2005,14 @@ bool KisDocument::openPath(const QString &_path, OpenFlags flags)
                 KisPart::instance()->addRecentURLToAllMainWindows(QUrl::fromLocalFile(_path));
             }
 
+#ifdef Q_OS_ANDROID
+            // See the comment titled "ANDROID NOTES" in this file for an
+            // explanation of what this is about. (This is not that comment.)
+            setReadWrite(true);
+#else
             QFileInfo fi(_path);
             setReadWrite(fi.isWritable());
+#endif
         }
 
         setRecovered(false);

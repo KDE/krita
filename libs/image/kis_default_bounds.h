@@ -46,11 +46,21 @@ private:
     Private * const m_d;
 };
 
-class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBoundsBase
+/**
+ * For a selection, the default bounds are defined not by the image, but
+ * by the device the selection is attached to, i.e. the selection with
+ * non-transparent default pixel should cover the entire parent paint
+ * device, not just the image bounds.
+ *
+ * KisSelectionDefaultBoundsBase is a base class for selection-targeted
+ * default bounds objects. The descendants can redefine how exactly "the
+ * parent paint device" is fetched.
+ */
+class KRITAIMAGE_EXPORT KisSelectionDefaultBoundsBase : public KisDefaultBoundsBase
 {
 public:
-    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice);
-    ~KisSelectionDefaultBounds() override;
+    KisSelectionDefaultBoundsBase();
+    ~KisSelectionDefaultBoundsBase() override;
 
     QRect bounds() const override;
     QRect imageBorderRect() const override;
@@ -61,13 +71,62 @@ public:
     bool externalFrameActive() const override;
     void * sourceCookie() const override;
 
-private:
-    Q_DISABLE_COPY(KisSelectionDefaultBounds)
+protected:
+    /**
+     * Return the actual paint device the selection is attached to
+     */
+    virtual KisPaintDeviceSP parentPaintDevice() const = 0;
 
-    struct Private;
-    Private * const m_d;
+private:
+    Q_DISABLE_COPY(KisSelectionDefaultBoundsBase)
 };
 
+/**
+ * KisSelectionDefaultBounds directly attaches a selection to a paint device
+ *
+ * This object is mostly used in immediate actions, like filter application,
+ * where we don't have to store the link to the paint device for a long time.
+ */
+class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisSelectionDefaultBoundsBase
+{
+public:
+    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice);
+    ~KisSelectionDefaultBounds() override;
+
+protected:
+    virtual KisPaintDeviceSP parentPaintDevice() const override;
+
+private:
+    Q_DISABLE_COPY(KisSelectionDefaultBounds)
+    KisPaintDeviceWSP m_paintDevice;
+};
+
+/**
+ * KisMaskDefaultBounds is used to attach a selection of a mask to the origin()
+ * of the parent layer. We cannot connect it directly to parent->origin(), because
+ * in some cases the origin() of the parent layer may change randomly
+ * (e.g. the origin() of a group layer may change due to the oblige child
+ * mechanism).
+ */
+class KRITAIMAGE_EXPORT KisMaskDefaultBounds : public KisSelectionDefaultBoundsBase
+{
+public:
+    KisMaskDefaultBounds(KisNodeSP parentNode);
+    ~KisMaskDefaultBounds() override;
+
+protected:
+    virtual KisPaintDeviceSP parentPaintDevice() const override;
+
+private:
+    Q_DISABLE_COPY(KisMaskDefaultBounds)
+    KisNodeWSP m_parentNode;
+};
+
+/**
+ * This is a stub default bounds object that returns null rect
+ * as the default bounds (in contrast to the infinite rect
+ * returned by the base class).
+ */
 class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds
 {
 public:

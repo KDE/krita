@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-28 02:43+0000\n"
+"POT-Creation-Date: 2026-03-04 02:39+0000\n"
 "PO-Revision-Date: 2026-03-01 19:19+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -21292,7 +21292,7 @@ msgstr "ייצוא תמונה"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2641 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2700 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -23789,9 +23789,9 @@ msgstr "ה&סר שכבה"
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
-#: libs/ui/KisApplication.cpp:1331 libs/ui/KisDocument.cpp:1007
-#: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
-#: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
+#: libs/ui/KisApplication.cpp:1331 libs/ui/KisDocument.cpp:1054
+#: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
+#: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
 #: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
 #: libs/ui/KisMainWindow.cpp:1197 libs/ui/KisMainWindow.cpp:1294
 #: libs/ui/KisMainWindow.cpp:2020 libs/ui/KisMainWindow.cpp:2029
@@ -34848,63 +34848,63 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "יצירת מסמך"
 
-#: libs/ui/KisDocument.cpp:743
+#: libs/ui/KisDocument.cpp:789
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "אי אפשר לכתוב אל %1. נא לשמור בשם אחר."
 
-#: libs/ui/KisDocument.cpp:793
+#: libs/ui/KisDocument.cpp:840
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "לא ניתן להוסיף שכבה לתמונה"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:857
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "לא ניתן להוסיף שכבה לתמונה"
 
-#: libs/ui/KisDocument.cpp:832
+#: libs/ui/KisDocument.cpp:879
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "שמירת מסמך בשם"
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:880
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "שמירת מסמך בשם"
 
-#: libs/ui/KisDocument.cpp:848
+#: libs/ui/KisDocument.cpp:895
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr "לא ניתן להתחיל לשמור את %1. נא להמתין עד לסיום פעולת השמירה הנוכחית."
 
-#: libs/ui/KisDocument.cpp:853
+#: libs/ui/KisDocument.cpp:900
 #, fuzzy, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "לא ניתן להוסיף שכבה לתמונה"
 
-#: libs/ui/KisDocument.cpp:858
+#: libs/ui/KisDocument.cpp:905
 #, fuzzy, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "לא ניתן להוסיף שכבה לתמונה"
 
-#: libs/ui/KisDocument.cpp:1001
+#: libs/ui/KisDocument.cpp:1048
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "אירעה שגיאה במהלך השמירה האוטומטית. האם המחיצה מלאה?"
 
-#: libs/ui/KisDocument.cpp:1008
+#: libs/ui/KisDocument.cpp:1055
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "לא ניתן להוסיף שכבה לתמונה"
 
-#: libs/ui/KisDocument.cpp:1025
+#: libs/ui/KisDocument.cpp:1072
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -34912,47 +34912,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 נשמר אבל באופן חלקי"
 
-#: libs/ui/KisDocument.cpp:1031
+#: libs/ui/KisDocument.cpp:1078
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "צצו כל מיני בעיות במהלך השמירה."
 
-#: libs/ui/KisDocument.cpp:1048
+#: libs/ui/KisDocument.cpp:1095
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "כלי מ&צולע"
 
-#: libs/ui/KisDocument.cpp:1475
+#: libs/ui/KisDocument.cpp:1528
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "מבצע שמירה אוטומטית..."
 
-#: libs/ui/KisDocument.cpp:1483
+#: libs/ui/KisDocument.cpp:1536
 #, kde-format
 msgid "Autosaving..."
 msgstr "מתבצעת שמירה אוטומטית…"
 
-#: libs/ui/KisDocument.cpp:1489
+#: libs/ui/KisDocument.cpp:1542
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "שמירה אוטומטית מושהית: המסמך עסוק…"
 
-#: libs/ui/KisDocument.cpp:1632
+#: libs/ui/KisDocument.cpp:1685
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "אירעה שגיאה במהלך השמירה האוטומטית. האם המחיצה מלאה?"
 
-#: libs/ui/KisDocument.cpp:1646
+#: libs/ui/KisDocument.cpp:1699
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "כלי מ&צולע"
 
-#: libs/ui/KisDocument.cpp:1903
+#: libs/ui/KisDocument.cpp:1956
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -34964,39 +34964,39 @@ msgstr ""
 "כתובת שגויה\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1969
+#: libs/ui/KisDocument.cpp:2028
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "הקובץ %1 לא קיים."
 
-#: libs/ui/KisDocument.cpp:1998
+#: libs/ui/KisDocument.cpp:2057
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "&פתיחת מסמך קיים"
 
-#: libs/ui/KisDocument.cpp:2013
+#: libs/ui/KisDocument.cpp:2072
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "לא ניתן למצוא %1"
 
-#: libs/ui/KisDocument.cpp:2024
+#: libs/ui/KisDocument.cpp:2083
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "התעוררו בעיות בעת פתיחת %1."
 
-#: libs/ui/KisDocument.cpp:2162
+#: libs/ui/KisDocument.cpp:2221
 #, fuzzy, kde-format
 msgid "Not Saved"
 msgstr "אינ&דקס"
 
-#: libs/ui/KisDocument.cpp:2648
+#: libs/ui/KisDocument.cpp:2707
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "רקע"
 
-#: libs/ui/KisDocument.cpp:2710
+#: libs/ui/KisDocument.cpp:2769
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

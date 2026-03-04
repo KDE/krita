@@ -18,6 +18,7 @@
 #include <kis_pointer_utils.h>
 #include <KoMD5Generator.h>
 #include <kis_assert.h>
+#include <KisMpl.h>
 
 
 namespace detail {
@@ -52,28 +53,28 @@ struct StoredResource
 class MemoryTagIterator : public KisResourceStorage::TagIterator
 {
 public:
-
-    MemoryTagIterator(QVector<KisTagSP> /*tags*/, const QString &resourceType)
-        : m_resourceType(resourceType)
+    MemoryTagIterator(const QVector<KisTagSP> &tags)
+        : m_it(tags)
     {
     }
 
     bool hasNext() const override
     {
-        return false;
+        return m_it.hasNext();
     }
 
     void next() override
     {
+        m_it.next();
     }
 
     KisTagSP tag() const override
     {
-        return nullptr;
+        return m_it.peekPrevious();
     }
 
 private:
-    QString m_resourceType;
+    QVectorIterator<KisTagSP> m_it;
 };
 
 
@@ -288,6 +289,35 @@ bool KisMemoryStorage::testingRemoveResource(const QString &url)
     return false;
 }
 
+bool KisMemoryStorage::testingAddTag(const QString &resourceType, KisTagSP tag)
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(resourceType == tag->resourceType());
+
+    QVector<KisTagSP> &typedTags = d->tags[resourceType];
+
+    auto existingIt = std::find_if(typedTags.begin(), typedTags.end(), kismpl::mem_equal_to(&KisTag::url, tag->url()));
+    if (existingIt != typedTags.end()) {
+        typedTags.erase(existingIt);
+    }
+
+    typedTags.append(tag);
+
+    return true;
+}
+
+bool KisMemoryStorage::testingRemoveTag(const QString &resourceType, const QString &tagUrl)
+{
+    QVector<KisTagSP> &typedTags = d->tags[resourceType];
+
+    auto existingIt = std::find_if(typedTags.begin(), typedTags.end(), kismpl::mem_equal_to(&KisTag::url, tagUrl));
+    if (existingIt != typedTags.end()) {
+        typedTags.erase(existingIt);
+        return true;
+    }
+
+    return false;
+}
+
 QString KisMemoryStorage::resourceMd5(const QString &url)
 {
     auto parsedUrl = detail::splitResourceUrl(url);
@@ -337,7 +367,7 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisMemoryStorage::resources
 
 QSharedPointer<KisResourceStorage::TagIterator> KisMemoryStorage::tags(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::TagIterator>(new MemoryTagIterator(d->tags[resourceType], resourceType));
+    return QSharedPointer<KisResourceStorage::TagIterator>(new MemoryTagIterator(d->tags[resourceType]));
 }
 
 void KisMemoryStorage::setMetaData(const QString &key, const QVariant &value)

@@ -18,7 +18,7 @@ private Q_SLOTS:
     void testAddResource();
     void testVersionSaveWithASubfolder();
     void testImportExportWithASubfolder();
-
+    void testTagIterator();
     void initTestCase();
 private:
 };

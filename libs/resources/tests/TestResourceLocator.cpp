@@ -24,6 +24,8 @@
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisMemoryStorage.h>
+#include <KisTagModel.h>
+#include <KisTagResourceModel.h>
 #include <KisResourceModel.h>
 #include <KisResourceTypes.h>
 
@@ -37,6 +39,7 @@
 #include <KisResourceMetaDataModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisSqlQueryLoader.h>
+
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -272,6 +275,111 @@ int countStorageRecordsForStorageId(int storageId)
     }
 }
 
+int countStorageRecordsInTagsStoragesForStorageId(int storageId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_storage_records_in_tags_records_for_storage_id",
+                                 "SELECT COUNT(*) FROM tags_storages WHERE storage_id = :storage_id",
+                                 KisSqlQueryLoader::single_statement_mode);
+        loader.query().bindValue(":storage_id", storageId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+int countTagRecordsInTags(int tagId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_tag_records_in_tags",
+                                 "SELECT COUNT(*) FROM tags WHERE id = :tag_id",
+                                 KisSqlQueryLoader::single_statement_mode);
+        loader.query().bindValue(":tag_id", tagId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+int countTagRecordsInTagTranslations(int tagId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_tag_records_in_tag_translations",
+                                 "SELECT COUNT(*) FROM tag_translations WHERE tag_id = :tag_id",
+                                 KisSqlQueryLoader::single_statement_mode);
+        loader.query().bindValue(":tag_id", tagId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+int countTagRecordsInResourceTags(int tagId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_tag_records_in_resource_tags",
+                                 "SELECT COUNT(*) FROM resource_tags WHERE tag_id = :tag_id",
+                                 KisSqlQueryLoader::single_statement_mode);
+        loader.query().bindValue(":tag_id", tagId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+int countTagRecordsInTagStorages(int tagId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_tag_records_in_tag_storages",
+                                 "SELECT COUNT(*) FROM tags_storages WHERE tag_id = :tag_id",
+                                 KisSqlQueryLoader::single_statement_mode);
+        loader.query().bindValue(":tag_id", tagId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
 
 enum MetaDataTestFlag
 {
@@ -472,6 +580,80 @@ void TestResourceLocator::testLoadResourceMetadataFromStorage()
     if (flags.testFlag(DeleteStorageNormally)) {
         QCOMPARE(model.rowCount(), initialRowCount);
     }
+}
+
+void TestResourceLocator::testLoadTagsFromStorage_data()
+{
+}
+
+void TestResourceLocator::testLoadTagsFromStorage()
+{
+    const QString &documentName("document");
+
+    KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
+    QVERIFY(documentStorage->valid());
+
+    KisMemoryStorage *memoryStorageBackend =
+        dynamic_cast<KisMemoryStorage *>(documentStorage->testingGetStoragePlugin());
+
+    QSharedPointer<DummyResource> resource(new DummyResource("metadata_test.kpp", ResourceType::PaintOpPresets));
+    resource->setSomething("123456789012345678901234567890");
+
+    // add a resource to the storage
+    documentStorage->addResource(resource);
+
+    {
+        // add a tag to the storage
+        KisTagSP tag(new KisTag());
+        tag->setName("Test Tag 1");
+        tag->setNames({{"ru", "Тестовый тег"}});
+        tag->setUrl("test_tag_url_1");
+        tag->setResourceType(ResourceType::PaintOpPresets);
+        tag->setDefaultResources({resource->filename()});
+        tag->setValid(true);
+        memoryStorageBackend->testingAddTag(ResourceType::PaintOpPresets, tag);
+    }
+
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    const int initialTagRowCount = tagModel.rowCount();
+
+    KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    const int initialTagResourceRowCount = tagResourceModel.rowCount();
+
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    const int initialResourceRowCount = resourceModel.rowCount();
+
+    m_locator->addStorage(documentName, documentStorage);
+
+    QVERIFY(m_locator->hasStorage(documentName));
+    QCOMPARE(resourceModel.rowCount(), initialResourceRowCount + 1);
+    QCOMPARE(tagModel.rowCount(), initialTagRowCount + 1);
+    QCOMPARE(tagResourceModel.rowCount(), initialTagResourceRowCount + 1);
+
+    const int documentStorageId = documentStorage->storageId();
+    QCOMPARE(countStorageRecordsForStorageId(documentStorageId), 1);
+    QCOMPARE(countStorageRecordsInTagsStoragesForStorageId(documentStorageId), 1);
+
+    KisTagSP loadedTag = tagModel.tagForUrl("test_tag_url_1");
+    QVERIFY(loadedTag);
+
+    const int testTagId = loadedTag->id();
+
+    QCOMPARE(countTagRecordsInTags(testTagId), 1);
+    QCOMPARE(countTagRecordsInTagTranslations(testTagId), 1);
+    QCOMPARE(countTagRecordsInResourceTags(testTagId), 1);
+    QCOMPARE(countTagRecordsInTagStorages(testTagId), 1);
+
+    m_locator->removeStorage(documentStorage->location());
+
+    QCOMPARE(countStorageRecordsForStorageId(documentStorageId), 0);
+    QCOMPARE(countStorageRecordsInTagsStoragesForStorageId(documentStorageId), 0);
+
+    QCOMPARE(countTagRecordsInTags(testTagId), 0);
+    QCOMPARE(countTagRecordsInTagTranslations(testTagId), 0);
+    QCOMPARE(countTagRecordsInResourceTags(testTagId), 0);
+    QCOMPARE(countTagRecordsInTagStorages(testTagId), 0);
+
 }
 
 void TestResourceLocator::testSyncVersions()

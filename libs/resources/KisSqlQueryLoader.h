@@ -194,6 +194,13 @@ public:
      */
     void exec();
 
+    /**
+     * Runs QSqlQuery::execBatch, only supported in single-statement mode.
+     * Bind values to the query using addBindValue with a QVariantList
+     * parameter beforehand, like you would with a bare QSqlQuery.
+     */
+    void execBatch();
+
 private:
     void init(const QString &fileName, QString entireScript, bool singleStatementMode);
 

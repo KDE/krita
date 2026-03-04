@@ -31,6 +31,12 @@ namespace PYKRITA
         Py_INCREF(Py_None);
         return Py_None;
     }
+
+    PyObject* qt_major_version(PyObject* /*self*/, PyObject* args)
+    {
+        Q_UNUSED(args);
+        return PyLong_FromLong(QT_VERSION_MAJOR);
+    }
 }                                                           // namespace PYKRITA
 
 namespace
@@ -41,6 +47,12 @@ namespace
             , &PYKRITA::debug
             , METH_VARARGS
             , "True KDE way to show debug info"
+        }
+        , {
+            "qt_major_version"
+            , &PYKRITA::qt_major_version
+            , METH_VARARGS
+            , "Qt major version number"
         }
         , { 0, 0, 0, 0 }
     };

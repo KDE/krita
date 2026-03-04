@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-28 02:43+0000\n"
+"POT-Creation-Date: 2026-03-04 02:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -7664,14 +7664,14 @@ msgstr "将包含多个子路径的对象拆分为多个对象"
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "转换文本为格式换行"
+msgstr "转换为：回车换行"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
 #, kde-format
 msgctxt "action"
 msgid "Preformatted"
-msgstr "格式换行"
+msgstr "回车换行"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
@@ -7681,22 +7681,22 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"文本不会自动换行，保留空格和新行。通过插入换行符来实现自动换行或人工换行的行"
-"的换行。"
+"文本不自动换行，保留原文的空格和换行符。自动换行或绝对定位换行的文本转换为此"
+"类型时将在原有换行的位置插入换行符，使得原本连续的行被分开。"
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "转换文本为行内自动换行"
+msgstr "转换为：自动换行"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
 #, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
-msgstr "行内自动换行"
+msgstr "自动换行"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
@@ -7705,21 +7705,23 @@ msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
-msgstr "文本按照固定行宽自动换行，保留空格和新行。新行不会被移除。"
+msgstr ""
+"文本按照固定行宽自动换行，保留空白符和换行符。转换为此类型时，原有的换行符不"
+"会被移除。"
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "转换文本为定位换行"
+msgstr "转换为：绝对定位换行"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
 #, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr "定位换行"
+msgstr "绝对定位换行"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
@@ -7729,15 +7731,15 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"使用 SVG 1.1 规范的字符变换功能来对每一行文本进行定位。空格和换行符会被折叠。"
-"此类型专门用于向后兼容 SVG 1.1 规范。"
+"使用 SVG 1.1 规范的字符变换功能来对每一行文本进行绝对定位。空白符和换行符会被"
+"折叠。此类型用于向下兼容 SVG 1.1 规范。"
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
 #, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "文本流动到此形状"
+msgstr "文本置入形状"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
@@ -7747,15 +7749,15 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
-"使第一条选中的文本在此形状内流动。如果文本已在其他形状中流动，则将此形状加入"
-"它的文本链。"
+"使选中的第一条文本置入形状中。如果文本已置入其他形状中，则将形状加入该文本"
+"链。"
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "从文本链减去此形状。"
+msgstr "从文本链中减去形状"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7763,7 +7765,7 @@ msgstr "从文本链减去此形状。"
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
-msgstr "使此形状成为被选中的第一条文本的减去形状区域的一部份。"
+msgstr "使形状成为被选中的第一条文本的减去形状区域的一部份。"
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7777,21 +7779,21 @@ msgstr "文本跟随路径"
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr "使选中的第一条文本沿着选中的第一条路径流动。"
+msgstr "使选中的第一条文本跟随选中的第一条路径编排。"
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "从文本链移除此子轮廓形状"
+msgstr "从文本链中移除形状"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "从文本链中移除此子轮廓形状并将它们添加到此图层。"
+msgstr "从文本链中移除形状并将它们添加到图层。"
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -21180,7 +21182,7 @@ msgstr "导入的图像"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2641 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2700 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -23640,9 +23642,9 @@ msgstr "本地资源"
 #: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
-#: libs/ui/KisApplication.cpp:1331 libs/ui/KisDocument.cpp:1007
-#: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
-#: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
+#: libs/ui/KisApplication.cpp:1331 libs/ui/KisDocument.cpp:1054
+#: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
+#: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
 #: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
 #: libs/ui/KisMainWindow.cpp:1197 libs/ui/KisMainWindow.cpp:1294
 #: libs/ui/KisMainWindow.cpp:2020 libs/ui/KisMainWindow.cpp:2029
@@ -32460,7 +32462,7 @@ msgstr "平滑算法(&F)："
 #: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:130
 #, kde-format
 msgid "Print Size"
-msgstr "以打印大小为准"
+msgstr "打印大小"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrintHeight)
 #: libs/ui/imagesize/wdg_imagesize.ui:167
@@ -34945,62 +34947,62 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "复制图像副本"
 
-#: libs/ui/KisDocument.cpp:743
+#: libs/ui/KisDocument.cpp:789
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "无法写入 %1 。请换一个文件名保存。"
 
-#: libs/ui/KisDocument.cpp:793
+#: libs/ui/KisDocument.cpp:840
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "创建备份文件失败"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:857
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "创建数字文件名序列的备份文件失败"
 
-#: libs/ui/KisDocument.cpp:832
+#: libs/ui/KisDocument.cpp:879
 #, kde-format
 msgid "Exporting Document..."
 msgstr "正在导出图像..."
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:880
 #, kde-format
 msgid "Saving Document..."
 msgstr "正在保存图像..."
 
-#: libs/ui/KisDocument.cpp:848
+#: libs/ui/KisDocument.cpp:895
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr "无法开始 %1 的保存操作。请在当前的保存操作结束后重试。"
 
-#: libs/ui/KisDocument.cpp:853
+#: libs/ui/KisDocument.cpp:900
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "无法开始 %1 的保存操作。图像正忙"
 
-#: libs/ui/KisDocument.cpp:858
+#: libs/ui/KisDocument.cpp:905
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "无法开始 %1 的保存操作。发生了未知错误"
 
-#: libs/ui/KisDocument.cpp:1001
+#: libs/ui/KisDocument.cpp:1048
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "保存 %1 时出错：%2"
 
-#: libs/ui/KisDocument.cpp:1008
+#: libs/ui/KisDocument.cpp:1055
 #, kde-format
 msgid "Could not save %1."
 msgstr "无法保存 %1。"
 
-#: libs/ui/KisDocument.cpp:1025
+#: libs/ui/KisDocument.cpp:1072
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -35008,45 +35010,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 已被保存，但不完整。"
 
-#: libs/ui/KisDocument.cpp:1031
+#: libs/ui/KisDocument.cpp:1078
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "保存时遇到了一些问题。"
 
-#: libs/ui/KisDocument.cpp:1048
+#: libs/ui/KisDocument.cpp:1095
 #, kde-format
 msgid "Finished saving %1"
 msgstr "已完成保存 %1"
 
-#: libs/ui/KisDocument.cpp:1475
+#: libs/ui/KisDocument.cpp:1528
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "正在自动保存... %1"
 
-#: libs/ui/KisDocument.cpp:1483
+#: libs/ui/KisDocument.cpp:1536
 #, kde-format
 msgid "Autosaving..."
 msgstr "正在自动保存..."
 
-#: libs/ui/KisDocument.cpp:1489
+#: libs/ui/KisDocument.cpp:1542
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "自动保存已推迟：图像正被占用..."
 
-#: libs/ui/KisDocument.cpp:1632
+#: libs/ui/KisDocument.cpp:1685
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "自动保存 %1 时出错：%2"
 
-#: libs/ui/KisDocument.cpp:1646
+#: libs/ui/KisDocument.cpp:1699
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "已完成自动保存 %1"
 
-#: libs/ui/KisDocument.cpp:1903
+#: libs/ui/KisDocument.cpp:1956
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -35055,38 +35057,38 @@ msgstr ""
 "路径格式错误\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1969
+#: libs/ui/KisDocument.cpp:2028
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "文件 %1 不存在。"
 
-#: libs/ui/KisDocument.cpp:1998
+#: libs/ui/KisDocument.cpp:2057
 #, kde-format
 msgid "Opening document"
 msgstr "正在打开图像"
 
-#: libs/ui/KisDocument.cpp:2013
+#: libs/ui/KisDocument.cpp:2072
 #, kde-format
 msgid "Could not open %1."
 msgstr "无法打开 %1。"
 
-#: libs/ui/KisDocument.cpp:2024
+#: libs/ui/KisDocument.cpp:2083
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "打开 %1 时遇到问题。"
 
-#: libs/ui/KisDocument.cpp:2162
+#: libs/ui/KisDocument.cpp:2221
 #, kde-format
 msgid "Not Saved"
 msgstr "未保存图像"
 
-#: libs/ui/KisDocument.cpp:2648
+#: libs/ui/KisDocument.cpp:2707
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "背景色填充"
 
-#: libs/ui/KisDocument.cpp:2710
+#: libs/ui/KisDocument.cpp:2769
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -39984,7 +39986,7 @@ msgstr "%1 (%2)"
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
-msgstr "以像素大小为准"
+msgstr "像素大小"
 
 #: libs/widgets/KoZoomWidget.cpp:137
 #, kde-format
@@ -39992,7 +39994,7 @@ msgid ""
 "Map the displayed canvas size between pixel size or print size\n"
 "Current Mapping: %1"
 msgstr ""
-"切换缩放模式：以像素大小为准 | 以打印大小为准\n"
+"切换画布缩放时基于像素大小还是打印大小\n"
 "当前缩放模式：%1"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtFileName)
@@ -45415,8 +45417,9 @@ msgctxt ""
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
 "right to left, rtl, direction, bidirectional, isolate, embed, override, "
-"congyoudaozuo, youdaozuo, wenbenfangxiang, fangxiang, shuangxiang, geli, "
-"qianru, fugai, 从右到左, 文本方向, 双向, 隔离, 嵌入, 覆盖"
+"congyoudaozuo, youdaozuo, wenbenfangxiang, fangxiang, shuangxiang, "
+"shuangxiangwenben, geli, qianru, fugai, 从右到左, 文本方向, 双向, 双向文本, "
+"隔离, 嵌入, 覆盖"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:107
 #, kde-format
@@ -45614,8 +45617,8 @@ msgctxt ""
 "insensitive"
 msgid "size, small, big, medium"
 msgstr ""
-"size, small, big, medium, daxiao, zitidaxiao, xiao, zhong, da, 大小, 字体大"
-"小, 小, 中, 大"
+"size, small, big, medium, zihao, daxiao, zitidaxiao, xiao, zhong, da, 字号, "
+"大小, 字体大小, 小, 中, 大"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, kde-format
@@ -45640,7 +45643,8 @@ msgctxt ""
 msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
 "size, small, big, medium, font-size-adjust, daxiao, xiao, zhong, da, "
-"zitichicuntiaozhengxishu, 大小, 小, 中, 大, 字体大小调整系数"
+"zitichicuntiaozhengxishu, zihaotiaozhengxishu, 大小, 小, 中, 大, 字体大小调整"
+"系数, 字号调整系数"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -46306,8 +46310,8 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
 msgstr ""
-"font-variant-position, superscript, subscript, weizhi, shangbiao, xiabiao, 位"
-"置, 上标, 下标"
+"font-variant-position, superscript, subscript, weizhi, zitibiantiweizhi, "
+"shangbiao, xiabiao, 位置, 字体变体位置, 上标, 下标"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
@@ -46572,7 +46576,7 @@ msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr "text-indent, wenbensuojin, 文本缩进"
+msgstr "text-indent, suojin, wenbensuojin, 缩进, 文本缩进"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, kde-format
@@ -46632,13 +46636,13 @@ msgstr "过滤..."
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
-msgstr "添加属性"
+msgstr "添加文本属性"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:352
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Add Property..."
-msgstr "添加属性..."
+msgstr "[+] 添加文本属性..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
 #, kde-format
@@ -46708,7 +46712,8 @@ msgctxt ""
 msgid "text-rendering, hinting, anti-aliasing"
 msgstr ""
 "text-rendering, hinting, anti-aliasing, wenbenxuanran, xuanran, "
-"zitilunkuoweitiao, kangjuchi, 文本渲染, 渲染, 字体轮廓微调, 抗锯齿"
+"zitilunkuoweitiao, kangjuchi, zitipinghua, chazhi, cixiangsuxuanran, 文本渲"
+"染, 渲染, 字体轮廓微调, 抗锯齿, 平滑, 插值, 次像素渲染"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -46844,8 +46849,9 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
 msgstr ""
-"text-decoration-position, underline, left, right, under, xiahuaxian, "
-"zuohuaxian, youhuaxian, 下划线, 左划线, 右划线"
+"text-decoration-position, underline, left, right, under, "
+"wenbenzhuangshiweizhi, xiahuaxian, zuohuaxian, youhuaxian, 文本装饰位置, 下划"
+"线, 左划线, 右划线"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
@@ -46888,8 +46894,10 @@ msgctxt ""
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
 msgstr ""
-"white-space, collapse, pre-formatted, kongbai, kongge, zhedie, "
-"geshihuanhang, 空白, 空格, 折叠, 格式换行"
+"white-space, collapse, pre-formatted, kongbai, kongbaifu, huanhangfu, "
+"kongge, zhedie, geshihuanhang, huiche, huichehuanhang, yupaiwenben, "
+"yupaihuanhang, 空白, 空白符, 换行符, 空格, 折叠, 格式换行, 回车, 回车换行, 预"
+"排文本, 预排换行"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -46992,14 +47000,14 @@ msgctxt ""
 "insensitive"
 msgid "word-spacing, tracking, white space,"
 msgstr ""
-"word-spacing, tracking, white space, zijianju, zifujianju, kongbai, 字间距, "
-"字符间距, 空白"
+"word-spacing, tracking, white space, zijianju, zifujianju, kongbai, "
+"kongbaifu, jianxi, 字间距, 字符间距, 空白, 空白符, 间隙"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Writing Mode"
-msgstr "书写模式"
+msgstr "书写方向"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, kde-format
@@ -47008,8 +47016,8 @@ msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
-"书写模式 (Writing Mode) 决定文本是水平流动还是垂直流动；在垂直流动时，控制文"
-"本块是从右向左还是从左向右排列。"
+"书写方向 (Writing Mode) 决定文本是横排还是竖排；竖排时则决定文本是从右到左还"
+"是从左到右排列。"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -47018,26 +47026,29 @@ msgctxt ""
 "insensitive"
 msgid "writing-mode, horizontal, vertical, top-to-bottom"
 msgstr ""
-"writing-mode, horizontal, vertical, top-to-bottom, shuxiemoshi, shuiping, "
-"chuizhi, youshangzhixia"
+"writing-mode, horizontal, vertical, top-to-bottom, shuxiefangxiang, "
+"shuxiemoshi, hengpai, shupai, shuiping, chuizhi, congzuodaoyou, "
+"congyoudaozuo, congyouxiangzuo, congzuoxiangyou, congshangdaoxia, 书写方向, "
+"书写模式, 横排, 竖排, 水平, 垂直, 从左到右, 从右到左, 从左向右, 从右向左, 从"
+"上到下"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Horizontal"
-msgstr "水平方向"
+msgstr "横排"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:78
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
-msgstr "垂直方向，从右向左"
+msgstr "竖排，从右到左"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
-msgstr "垂直方向，从左向右"
+msgstr "竖排，从左到右"
 
 #: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:222
 #, kde-format
@@ -65738,7 +65749,7 @@ msgstr "没有可用的字型。"
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "字形面板"
+msgstr "字形表"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
 #, kde-format
@@ -65764,7 +65775,7 @@ msgstr "移动文本"
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
-msgstr "SVG 文字工具更改"
+msgstr "SVG 文本工具更改"
 
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:20
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
@@ -65848,7 +65859,7 @@ msgstr "基线偏移"
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
 msgid "Text Tool"
-msgstr "文字工具"
+msgstr "文本工具"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
@@ -65916,7 +65927,7 @@ msgstr "移除字符变换"
 #, kde-format
 msgctxt "action"
 msgid "SVG Text Tool"
-msgstr "SVG 文字工具"
+msgstr "SVG 文本工具"
 
 #. i18n: context: text @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -65930,7 +65941,7 @@ msgstr "SVG 文字工具"
 #, kde-format
 msgctxt "action"
 msgid "Text Tool"
-msgstr "文字工具"
+msgstr "文本工具"
 
 #. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -65941,7 +65952,7 @@ msgstr "文字工具"
 #, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr "字形面板..."
+msgstr "字形表..."
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18
@@ -66354,19 +66365,19 @@ msgstr "Krita - 文本编辑器"
 #: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:21
 #, kde-format
 msgid "SVG Text Tool"
-msgstr "SVG 文字工具"
+msgstr "SVG 文本工具"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
 #, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr "新建文本的属性："
+msgstr "创建新文本所用属性..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "当前文本属性"
+msgstr "新文本使用当前文本属性"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
@@ -66379,20 +66390,20 @@ msgstr "使用文本属性面板中的当前属性来创建新文本。"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "选择样式预设"
+msgstr "新文本使用预设加载属性"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "打开文本属性"
+msgstr "打开/关闭文本属性面板"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
-msgstr "打开文本属性面板来编辑字体大小和样式等属性。"
+msgstr "打开或关闭用于编辑字体、大小和其他样式的文本属性面板。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, kde-format
@@ -66458,7 +66469,7 @@ msgstr "将当前选中的文本作为 SVG XML 进行编辑。"
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
-msgstr "字形面板"
+msgstr "字形表"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
 #, kde-format
@@ -66467,20 +66478,20 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
-"打开字形面板，您可以在其中访问字形的 OpenType 或 Unicode 替代变体以及字符映射"
+"打开字形表，您可以在其中访问字形的 OpenType 或 Unicode 替代变体以及字符映射"
 "表。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "排版模式"
+msgstr "转换文本类型..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
-msgstr "格式换行"
+msgstr "回车换行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
@@ -66496,7 +66507,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
-msgstr "行内自动换行"
+msgstr "自动换行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
 #, kde-format
@@ -66510,7 +66521,7 @@ msgstr "文本按照固定行宽自动换行，保留空格和新行。新行不
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr "定位换行"
+msgstr "绝对定位换行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format

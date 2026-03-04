@@ -832,7 +832,10 @@ void DefaultTool::setupActions()
         textTypeActions->addAction(action("text_type_preformatted"));
         textTypeActions->addAction(action("text_type_inline_wrap"));
         textTypeActions->addAction(action("text_type_pre_positioned"));
-        textTypeActions->setExclusive(true);
+        textTypeActions->setExclusive(false);
+        Q_FOREACH (QAction *a, textTypeActions->actions()) {
+            a->setCheckable(false);
+        }
     }
 
     m_textFlowSignalsMapper  = new KisSignalMapper(this);
@@ -2216,10 +2219,8 @@ void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes
         }
     }
     QActionGroup *group = action("text_type_preformatted")->actionGroup();
-    group->setEnabled(true);
-    group->setExclusive(false);
-    Q_FOREACH (QAction *a, group->actions()) {
-        a->setCheckable(false);
+    if (group) {
+        group->setEnabled(text);
     }
 
     action("text_type_preformatted")->setEnabled(enablePreformatted);

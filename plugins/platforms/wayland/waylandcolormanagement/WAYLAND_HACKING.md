@@ -112,3 +112,20 @@ QT_QPA_PLATFORM=wayland QT_WAYLAND_DISABLED_INTERFACES=zxdg_decoration_manager_v
 
 QT_QPA_PLATFORM=wayland QT_WAYLAND_DISABLED_INTERFACES=zxdg_decoration_manager_v1 QT_WAYLAND_DECORATION=bradient krita
 ```
+
+## How to test an extension, unsupported in your compositor
+
+If you want to test code related to an extension that your compositor doesn't support,
+you can bypass Krita's checks for the extension by passing the following environment variable:
+
+```bash
+KRITA_FORCE_WAYLAND_INTERFACES=*list of extension names*
+```
+
+For example to force Krita to do wayland color management on an unsupported compositor, you can pass:
+
+```bash
+KRITA_FORCE_WAYLAND_INTERFACES=wp_color_manager_v1
+```
+
+Note: The extension will **NOT** function properly if you do this.

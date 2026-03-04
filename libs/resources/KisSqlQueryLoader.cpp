@@ -120,3 +120,15 @@ void KisSqlQueryLoader::exec()
         }
     }
 }
+
+void KisSqlQueryLoader::execBatch()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_singleStatementMode);
+    if (!m_query.execBatch()) {
+        throw SQLException(
+            "Failed to batch execute sql from file",
+            m_fileName,
+            0,
+            m_query.lastError());
+    }
+}

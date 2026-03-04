@@ -1745,57 +1745,64 @@ bool KisResourceCacheDb::deleteStorage(QString location)
             loader.exec();
         }
 
+        // Gather tag ids to delete first, since we'll have to delete the tag
+        // storage from under us before deleting the tags themselves, at which
+        // point we won't be able to query them anymore. The original attempt to
+        // do this was to use a temporary table, but some of our models hold
+        // statements permanently in an active state in an exceedingly dubious
+        // attempt to cache them. Which means we can never drop any tables while
+        // there is an instance of those models in existence, even just creating
+        // and dropping an empty temporary table fails.
+        QVariantList tagIdsToDelete;
         {
             KisSqlQueryLoader loader("inline://gather_tag_ids_to_delete",
-                                     "CREATE TEMPORARY TABLE tag_ids_to_delete\n"
-                                     "AS SELECT tags_storages.tag_id tag_id\n "
-                                     "   FROM tags_storages\n"
-                                     "   WHERE tags_storages.storage_id =\n"
-                                     "       (SELECT storages.id\n"
-                                     "        FROM   storages\n"
-                                     "        WHERE  storages.location = :location)\n",
+                                     "SELECT tags_storages.tag_id tag_id\n "
+                                     "FROM tags_storages\n"
+                                     "WHERE tags_storages.storage_id =\n"
+                                     "    (SELECT storages.id\n"
+                                     "     FROM   storages\n"
+                                     "     WHERE  storages.location = :location)\n",
                                      KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
+            QSqlQuery &query = loader.query();
+            while (query.next()) {
+                tagIdsToDelete.append(query.value(0).toLongLong());
+            }
         }
 
-        {
-            KisSqlQueryLoader loader("inline://delete_tags_storage_links_for_storage",
-                                     "DELETE FROM tags_storages\n"
-                                     "WHERE tag_id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
-                                     KisSqlQueryLoader::single_statement_mode);
-            loader.exec();
-        }
+        if (!tagIdsToDelete.isEmpty()) {
+            {
+                KisSqlQueryLoader loader("inline://delete_tags_storage_links_for_storage",
+                                         "DELETE FROM tags_storages WHERE tag_id = ?",
+                                         KisSqlQueryLoader::single_statement_mode);
+                loader.query().addBindValue(tagIdsToDelete);
+                loader.execBatch();
+            }
 
-        {
-            KisSqlQueryLoader loader("inline://delete_tags_translations_for_storage",
-                                     "DELETE FROM tag_translations\n"
-                                     "WHERE tag_id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
-                                     KisSqlQueryLoader::single_statement_mode);
-            loader.exec();
-        }
+            {
+                KisSqlQueryLoader loader("inline://delete_tags_translations_for_storage",
+                                         "DELETE FROM tag_translations WHERE tag_id = ?",
+                                         KisSqlQueryLoader::single_statement_mode);
+                loader.query().addBindValue(tagIdsToDelete);
+                loader.execBatch();
+            }
 
-        {
-            KisSqlQueryLoader loader("inline://delete_resource_tags_for_storage",
-                                     "DELETE FROM resource_tags\n"
-                                     "WHERE tag_id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
-                                     KisSqlQueryLoader::single_statement_mode);
-            loader.exec();
-        }
+            {
+                KisSqlQueryLoader loader("inline://delete_resource_tags_for_storage",
+                                         "DELETE FROM resource_tags WHERE tag_id = ?",
+                                         KisSqlQueryLoader::single_statement_mode);
+                loader.query().addBindValue(tagIdsToDelete);
+                loader.execBatch();
+            }
 
-        {
-            KisSqlQueryLoader loader("inline://delete_tags_for_storage",
-                                     "DELETE FROM tags \n"
-                                     "WHERE id in (SELECT tag_id FROM temp.tag_ids_to_delete)",
-                                     KisSqlQueryLoader::single_statement_mode);
-            loader.exec();
-        }
-
-        {
-            KisSqlQueryLoader loader("inline://drop_tag_ids_to_delete",
-                                     "DROP TABLE temp.tag_ids_to_delete",
-                                     KisSqlQueryLoader::single_statement_mode);
-            loader.exec();
+            {
+                KisSqlQueryLoader loader("inline://delete_tags_for_storage",
+                                         "DELETE FROM tags WHERE id = ?",
+                                         KisSqlQueryLoader::single_statement_mode);
+                loader.query().addBindValue(tagIdsToDelete);
+                loader.execBatch();
+            }
         }
 
         {

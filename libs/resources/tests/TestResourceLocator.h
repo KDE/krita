@@ -30,6 +30,9 @@ private Q_SLOTS:
     void testLoadResourceMetadataFromStorage();
     void testLoadResourceMetadataFromStorage_data();
 
+    void testLoadTagsFromStorage();
+    void testLoadTagsFromStorage_data();
+
     void cleanupTestCase();
 
     void testSyncVersions();

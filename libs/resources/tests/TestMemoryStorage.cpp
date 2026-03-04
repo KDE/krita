@@ -111,7 +111,61 @@ void TestMemoryStorage::testImportExportWithASubfolder()
         buf.close();
         QVERIFY(buf.size() > 0);
     }
+}
 
+void TestMemoryStorage::testTagIterator()
+{
+    KisMemoryStorage memoryStorage;
+    KoResourceSP res1(new DummyResource("test1.gbr", ResourceType::Brushes));
+    memoryStorage.saveAsNewVersion(ResourceType::Brushes, res1);
+
+    {
+        KisTagSP tag(new KisTag());
+        tag->setName("Test Tag 1");
+        tag->setUrl("test_tag_url_1");
+        tag->setResourceType(ResourceType::Brushes);
+        tag->setDefaultResources({res1->filename()});
+        tag->setValid(true);
+
+        memoryStorage.testingAddTag(ResourceType::Brushes, tag);
+    }
+
+    {
+        KisTagSP tag(new KisTag());
+        tag->setName("Test Tag 2");
+        tag->setUrl("test_tag_url_2");
+        tag->setResourceType(ResourceType::Brushes);
+        tag->setDefaultResources({res1->filename()});
+        tag->setValid(true);
+
+        memoryStorage.testingAddTag(ResourceType::Brushes, tag);
+    }
+
+    {
+        const QStringList expectedUrls = {"test_tag_url_1", "test_tag_url_2"};
+        auto it = memoryStorage.tags(ResourceType::Brushes);
+        int numTags = 0;
+        while (it->hasNext()) {
+            it->next();
+            QCOMPARE(it->tag()->url(), expectedUrls[numTags]);
+            numTags++;
+        }
+        QCOMPARE(numTags, 2);
+    }
+
+    memoryStorage.testingRemoveTag(ResourceType::Brushes, "test_tag_url_1");
+
+    {
+        const QStringList expectedUrls = {"test_tag_url_2"};
+        auto it = memoryStorage.tags(ResourceType::Brushes);
+        int numTags = 0;
+        while (it->hasNext()) {
+            it->next();
+            QCOMPARE(it->tag()->url(), expectedUrls[numTags]);
+            numTags++;
+        }
+        QCOMPARE(numTags, 1);
+    }
 }
 
 SIMPLE_TEST_MAIN(TestMemoryStorage)

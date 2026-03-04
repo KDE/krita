@@ -86,6 +86,8 @@ private:
     friend class KisResourceLocator;
     friend class BundleTagIterator;
     friend class AbrTagIterator;
+    friend class TestMemoryStorage;
+    friend class TestResourceLocator;
 
     void setId(int id);
     void setActive(bool active);

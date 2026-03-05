@@ -59,6 +59,18 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     }
     updateLayoutDir();
 
+    const int orientUnchecked = cfg.readEntry<int>("orientation", Auto);
+    switch (orientUnchecked) {
+    case Horizontal:
+    case Vertical:
+    case Auto:
+        m_orientation = static_cast<Orientation>(orientUnchecked);
+        break;
+    default:
+        m_orientation = Auto;
+        break;
+    }
+
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),
@@ -82,12 +94,8 @@ void KoToolBoxDocker::setViewManager(KisViewManager *viewManager)
 void KoToolBoxDocker::resizeEvent(QResizeEvent *event)
 {
     QDockWidget::resizeEvent(event);
-    if (isFloating()) {
-        if (width() > height()) {
-            setToolBoxOrientation(Qt::Horizontal);
-        } else {
-            setToolBoxOrientation(Qt::Vertical);
-        }
+    if (m_orientation == Auto) {
+        setToolBoxOrientation(width() > height() ? Qt::Horizontal : Qt::Vertical);
     }
 }
 
@@ -95,10 +103,8 @@ void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)
 {
     m_dockArea = area;
     updateLayoutDir();
-    if (area == Qt::TopDockWidgetArea || area == Qt::BottomDockWidgetArea) {
-        setToolBoxOrientation(Qt::Horizontal);
-    } else {
-        setToolBoxOrientation(Qt::Vertical);
+    if (m_orientation == Auto) {
+        setToolBoxOrientation(width() > height() ? Qt::Horizontal : Qt::Vertical);
     }
 }
 
@@ -125,8 +131,26 @@ void KoToolBoxDocker::changeLayoutDir(Qt::LayoutDirection dir)
     updateLayoutDir();
 }
 
+void KoToolBoxDocker::changeOrientation(const Orientation orientation)
+{
+    if (m_orientation == orientation) {
+        return;
+    }
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KoToolBox");
+    cfg.writeEntry<int>("orientation", orientation);
+    m_orientation = orientation;
+    if (m_orientation == Auto) {
+        setToolBoxOrientation(width() > height() ? Qt::Horizontal : Qt::Vertical);
+    } else {
+        setToolBoxOrientation(static_cast<Qt::Orientation>(m_orientation));
+    }
+}
+
 void KoToolBoxDocker::setToolBoxOrientation(Qt::Orientation orientation)
 {
+    if (m_scrollArea->orientation() == orientation) {
+        return;
+    }
     if (orientation == Qt::Horizontal) {
         setFeatures(features() | QDockWidget::DockWidgetVerticalTitleBar);
         m_scrollArea->setOrientation(Qt::Horizontal);
@@ -181,6 +205,42 @@ void KoToolBoxDocker::contextMenuEvent(QContextMenuEvent *event)
             break;
         case Qt::RightToLeft:
             layoutRtl->setChecked(true);
+            break;
+        }
+
+        m_contextMenu->addSection(i18nc("Toolbox orientation", "Orientation"));
+        QActionGroup *orientActionGroup = new QActionGroup(m_contextMenu);
+
+        QAction *orientAuto = m_contextMenu->addAction(i18nc("@item:inmenu Toolbox orientation", "&Automatic"));
+        orientAuto->setActionGroup(orientActionGroup);
+        orientAuto->setCheckable(true);
+        connect(orientAuto, &QAction::triggered, this, [this]() {
+            changeOrientation(Auto);
+        });
+
+        QAction *orientHorizontal = m_contextMenu->addAction(i18nc("@item:inmenu Toolbox orientation", "&Horizontal"));
+        orientHorizontal->setActionGroup(orientActionGroup);
+        orientHorizontal->setCheckable(true);
+        connect(orientHorizontal, &QAction::triggered, this, [this]() {
+            changeOrientation(Horizontal);
+        });
+
+        QAction *orientVertical = m_contextMenu->addAction(i18nc("@item:inmenu Toolbox orientation", "&Vertical"));
+        orientVertical->setActionGroup(orientActionGroup);
+        orientVertical->setCheckable(true);
+        connect(orientVertical, &QAction::triggered, this, [this]() {
+            changeOrientation(Vertical);
+        });
+
+        switch (m_orientation) {
+        case Horizontal:
+            orientHorizontal->setChecked(true);
+            break;
+        case Vertical:
+            orientVertical->setChecked(true);
+            break;
+        case Auto:
+            orientAuto->setChecked(true);
             break;
         }
     }

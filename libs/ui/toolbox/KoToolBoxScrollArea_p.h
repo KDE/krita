@@ -66,9 +66,6 @@ public:
 
     void setOrientation(Qt::Orientation orientation)
     {
-        if (orientation == m_orientation) {
-            return;
-        }
         m_orientation = orientation;
         m_toolBox->setOrientation(orientation);
         layoutItems();

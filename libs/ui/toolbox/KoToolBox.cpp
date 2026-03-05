@@ -74,7 +74,6 @@ public:
     int iconSize {0};
     QMap<QAction*,int> contextIconSizes;
     QAction *defaultIconSizeAction {0};
-    Qt::Orientation orientation {Qt::Vertical};
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)
@@ -298,7 +297,6 @@ void KoToolBox::changeEvent(QEvent *event)
 
 void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
-    d->orientation = orientation;
     d->layout->setOrientation(orientation);
     QTimer::singleShot(0, this, SLOT(update()));
     Q_FOREACH (Section* section, d->sections) {

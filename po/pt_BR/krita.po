@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2026-02-27 07:39-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16584,7 +16584,7 @@ msgstr "Distribuir formas"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Agrupar formas"
@@ -16671,7 +16671,7 @@ msgid "Unclip Shapes"
 msgstr "Retirar recorte das formas"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Desagrupar formas"
@@ -37799,7 +37799,7 @@ msgstr "Ações de seleção"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65899,7 +65899,7 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr "Definir forma do fluxo como última"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -65907,22 +65907,22 @@ msgstr ""
 "O botão esquerdo do mouse roda em torno do centro e o botão direito em torno "
 "da posição selecionada."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Clique e arraste para inclinar a seleção."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Clique e arraste para dimensionar a seleção."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Clique e arraste para mover a seleção."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65930,74 +65930,74 @@ msgstr ""
 "Clique e arraste para dimensionar a seleção. Use o botão do meio para "
 "definir a posição selecionada."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Esta ferramenta funciona apenas em camadas de vetor. Você provavelmente quer "
 "a ferramenta mover."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Girar o Objeto 90º no sentido do relógio"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Rodar o Objeto 90º no sentido contrário ao relógio"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Girar o Objeto 180º"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Espelhar o Objeto Horizontalmente"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Espelhar o Objeto Verticalmente"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Redefinir transformações do objeto"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Unir Formas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Intersectar Formas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Subtrair Formas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Dividir Formas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Ações da forma vetorial"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, kde-format
 msgid "Logical Operations"
 msgstr "Operações Lógicas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, kde-format
 msgid "Text"
 msgstr "Texto"

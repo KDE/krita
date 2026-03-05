@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17539,7 +17539,7 @@ msgstr "모양 분배"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "모양 그룹"
@@ -17632,7 +17632,7 @@ msgid "Unclip Shapes"
 msgstr "모양 클립 해제"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "모양 그룹 해제"
@@ -39287,7 +39287,7 @@ msgstr "선택 작업"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -67769,7 +67769,7 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -67777,22 +67777,22 @@ msgstr ""
 "마우스 왼쪽 단추 클릭은 중앙을 중심으로 회전하고, 오른쪽 단추 클릭은 강조 표"
 "시된 위치를 중심으로 회전합니다."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "선택 영역을 기울이려면 클릭한 후 드래그하십시오."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "선택 영역의 크기를 변경하려면 클릭한 후 드래그하십시오."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "선택 영역을 이동하려면 클릭한 후 드래그하십시오."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -67800,44 +67800,44 @@ msgstr ""
 "선택 영역의 크기를 조절하려면 클릭하고 드래그하십시오. 가운데 단추로 클릭하"
 "면 위치를 강조 표시할 수 있습니다."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "이 도구는 벡터 레이어에서만 작동합니다. 이동 도구를 사용해야 할 수도 있습니"
 "다."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "객체 90° 시계 방향 회전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "객체 90° 반시계 방향 회전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "객체 180° 회전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "객체 좌우 반전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "객체 상하 반전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "객체 변형 초기화"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -67845,32 +67845,32 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "모양 클립 해제"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "모양 교차하기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "모양 빼기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "모양 분할하기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "벡터 모양 작업"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, kde-format
 msgid "Logical Operations"
 msgstr "논리 연산"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, fuzzy, kde-format
 #| msgctxt "Text label in SVG Text Tool"
 #| msgid "Text"

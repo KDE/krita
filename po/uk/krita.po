@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
-"PO-Revision-Date: 2026-02-27 16:29+0200\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
+"PO-Revision-Date: 2026-03-04 22:09+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16634,7 +16634,7 @@ msgstr ""
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr ""
@@ -16753,7 +16753,7 @@ msgstr ""
 "зняти фіксацію форм"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr ""
@@ -38220,7 +38220,7 @@ msgstr "Дії з позначеним"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -61616,7 +61616,7 @@ msgstr "Різкість"
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
 #, kde-format
 msgid "Soften edge:"
-msgstr "По&м’якшення краю:"
+msgstr "Пом’якшення краю:"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
@@ -66613,7 +66613,7 @@ msgstr ""
 "Встановити текст за формою як останній\n"
 "встановлення тексту за формою останнім"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -66621,22 +66621,22 @@ msgstr ""
 "Клацання лівою обертатиме навколо центра, клацання правою — навколо "
 "підсвіченої позиції."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Клацніть і перетягніть, щоб зсунути вибране."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Клацніть і перетягніть, щоб змінити розмір вибраного."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Клацніть і перетягніть, щоб пересунути вибране."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -66644,88 +66644,88 @@ msgstr ""
 "Клацніть і перетягніть, щоб змінити розмір вибраного. Клацання середньою "
 "встановлює підсвічену позицію."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Цей інструмент працює лише для векторних шарів. Ймовірно, вам потрібен "
 "інструмент пересування."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Обернути об'єкт на 90° за год. стрілкою"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Обернути об'єкт на 90° проти год. стрілки"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Обернути об'єкт на 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr ""
 "Віддзеркалити об'єкт горизонтально\n"
 "віддзеркалення об'єкта горизонтально"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr ""
 "Віддзеркалити об'єкт вертикально\n"
 "віддзеркалення об'єкта вертикально"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr ""
 "Скинути перетворення об'єктів\n"
 "скидання перетворення об'єктів"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr ""
 "Об'єднати форми\n"
 "об'єднання форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr ""
 "Перетнути форми\n"
 "перетин форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr ""
 "Відняти форми\n"
 "віднімання форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr ""
 "Розділити форми\n"
 "поділ форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Дії з векторними формами"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, kde-format
 msgid "Logical Operations"
 msgstr "Логічні операції"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, kde-format
 msgid "Text"
 msgstr "Текст"

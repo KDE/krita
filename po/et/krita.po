@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17767,7 +17767,7 @@ msgstr "Kujundite jaotamine"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Kujundite rühmitamine"
@@ -17860,7 +17860,7 @@ msgid "Unclip Shapes"
 msgstr "Tühista kujundite kärpimine"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Lõhu kujundite rühm"
@@ -39745,7 +39745,7 @@ msgstr "Valikutoimingud"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -68864,29 +68864,29 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 "Vasakklõps pöörab ümber keskpunkti, paremklõps ümber esile tõstetud asukoha."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klõpsa ja lohista valiku kallutamiseks."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Klõpsa ja lohista valiku suuruse muutmiseks."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Klõpsa ja lohista valiku liigutamiseks."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -68894,44 +68894,44 @@ msgstr ""
 "Klõpsa ja lohista valiku suuruse muutmiseks. Klõps hiire keskmise nupuga "
 "määrab esile tõstetud asukoha."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "See tööriist toimub ainult vektorkihtidel. Tõenäoliselt peaksid kasutama "
 "liigutamistööriista."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Objekti pööramine 90° päripäeva"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Objekti pööramine 90° vastupäeva"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Objekti pööramine 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Objekti peegeldamine rõhtsuunas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Objekti peegeldamine püstsuunas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Objekti teisenduste lähtestamine"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -68939,32 +68939,32 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Tühista kujundite kärpimine"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Kujundite lõikumine"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Kujundite lahutamine"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Kujundite jagamine"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektorkujundi toimingud"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, kde-format
 msgid "Logical Operations"
 msgstr "Loogikatehted"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Text"

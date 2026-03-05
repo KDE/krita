@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -16576,7 +16576,7 @@ msgstr "Fordel figurar"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Grupper figurar"
@@ -16664,7 +16664,7 @@ msgid "Unclip Shapes"
 msgstr "Fjern figurklipping"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Løys opp figurgruppe"
@@ -37510,7 +37510,7 @@ msgstr "Utvalshandlingar"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65276,7 +65276,7 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -65284,22 +65284,22 @@ msgstr ""
 "Venstreklikk for å rotera rundt midten, høgreklikk for å rotera rundt merkt "
 "posisjon."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Trykk og dra for å skråstilla utvalet."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Trykk og dra for å endra storleik på utvalet."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Trykk og dra for å flytta utvalet."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65307,74 +65307,74 @@ msgstr ""
 "Trykk og dra for å endra storleik på utvalet. Midtklikk for å velja merkt "
 "posisjon."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Dette verktøyet kan berre brukast på vektorlag. Du er truleg på jakt etter "
 "objektflyttingsverktøyet."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Drei objektet 90° til høgre"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Drei objektet 90° til venstre"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Drei objektet 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Spegla objektet vassrett"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Spegla objektet loddrett"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Nullstill transformasjonar av objektet"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Union av figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Snitt av figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Trekk frå figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Del opp figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Handlingar for vektorfigurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logiske operasjonar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, kde-format
 msgid "Text"
 msgstr ""

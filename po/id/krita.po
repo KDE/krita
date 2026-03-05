@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -16562,7 +16562,7 @@ msgstr "Distribusikan bentuk-bentuk"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Kelompokkan bentuk-bentuk"
@@ -16656,7 +16656,7 @@ msgid "Unclip Shapes"
 msgstr "Lepas-klip Bentuk-bentuk"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Lepas-kelompok bentuk-bentuk"
@@ -37902,7 +37902,7 @@ msgstr "Pilih Area Bidang Berdekatan"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65747,7 +65747,7 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -65755,22 +65755,22 @@ msgstr ""
 "Klik kiri merotasikan di sekitar tengah, klik kanan di sekitar posisi yang "
 "disorot."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klik dan seret untuk menggunting pemilihan."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Klik dan seret untuk mengubah ukuran pemilihan."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Klik dan seret untuk memindah pemilihan."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65778,14 +65778,14 @@ msgstr ""
 "Klik dan seret untuk mengubah ukuran pemilihan. Klik tengah untuk mengatur "
 "posisi yang disorot."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Alat ini hanya bekerja pada saat lapisan vektor. Barangkali Anda ingin "
 "pindah alat."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Rotate 90° CW"
@@ -65793,7 +65793,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Rotasikan 90° SJJ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Rotate 90° CCW"
@@ -65801,7 +65801,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Rotasikan 90° LAJJ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Rotate 180°"
@@ -65809,17 +65809,17 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Rotasikan 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Cerminkan Obyek Secara Horizontal"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Cerminkan Obyek Secara Vertikal"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Reset Transformations"
@@ -65827,7 +65827,7 @@ msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Set ulang Transformasi"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -65835,7 +65835,7 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Lepas-klip Bentuk-bentuk"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Subtract Shapes"
@@ -65843,30 +65843,30 @@ msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Bentuk Subtract"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Bentuk Subtract"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 #, fuzzy
 #| msgid "Spiral Shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Bentuk Spiral"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Logical Operations"
 msgstr "Opsi Alat"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, fuzzy, kde-format
 #| msgctxt "Text label in SVG Text Tool"
 #| msgid "Text"

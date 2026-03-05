@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -16734,7 +16734,7 @@ msgstr "Отстрани шаблон"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
@@ -16841,7 +16841,7 @@ msgid "Unclip Shapes"
 msgstr "Создади шаблон"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
@@ -37606,7 +37606,7 @@ msgstr "Одбери..."
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 msgid "Transform"
@@ -65304,110 +65304,110 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, fuzzy, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Не може да се отвори датотеката %1"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, fuzzy, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Не може да се отвори датотеката %1"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, fuzzy, kde-format
 msgid "Click and drag to move selection."
 msgstr "Не може да се отвори датотеката %1"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, fuzzy, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "Не може да се отвори датотеката %1"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Колони"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Колони"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Колони"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Хоризонтално"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Вертикално"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 #, fuzzy
 #| msgid "Document Information"
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Информации за документот"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Создади шаблон"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Внесете име"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Создади шаблон"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "&Додади група..."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, fuzzy, kde-format
 msgid "Vector Shape Actions"
 msgstr "Зачувај документ како"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "Одбери..."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "&Додади група..."

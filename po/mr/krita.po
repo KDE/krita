@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -16989,7 +16989,7 @@ msgstr "डावीकडे फिरवा"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "आकारांचा समूह करा"
@@ -17097,7 +17097,7 @@ msgid "Unclip Shapes"
 msgstr "आकार जोडा"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "आकारांचा समूह काढून टाका"
@@ -38334,7 +38334,7 @@ msgstr "निवडीची सजावट"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -66827,41 +66827,41 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, fuzzy, kde-format
 msgid "Click and drag to shear selection."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, fuzzy, kde-format
 #| msgid "Size Canvas to Size of Selection"
 msgid "Click and drag to resize selection."
 msgstr "निवडीच्या आकाराप्रमाणे कॅनव्हासचा आकार ठेवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, fuzzy, kde-format
 msgid "Click and drag to move selection."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, fuzzy, kde-format
 #| msgid "Size Canvas to Size of Selection"
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "निवडीच्या आकाराप्रमाणे कॅनव्हासचा आकार ठेवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -66869,7 +66869,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -66877,70 +66877,70 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "स्तर १८० अंशातून फिरवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "प्रतिमा आडवेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "प्रतिमा उभेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 #, fuzzy
 #| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "कॅनव्हासमधील बदल पुन्हा निश्चित करा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 #, fuzzy
 #| msgid "Add Shape"
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "आकार जोडा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "घनता"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "फटकाऱ्याचे आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 #, fuzzy
 #| msgid "Spray shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "फवाऱ्याचा आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "व्हेक्टर निवड"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Logical Operations"
 msgstr "क्रिया"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Text"

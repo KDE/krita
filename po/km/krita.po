@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-04 00:42+0000\n"
+"POT-Creation-Date: 2026-03-05 00:41+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -16788,7 +16788,7 @@ msgstr "រាង​សំប៉ែត "
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
@@ -16891,7 +16891,7 @@ msgid "Unclip Shapes"
 msgstr "រូបរាង​"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
@@ -37681,7 +37681,7 @@ msgstr "ជ្រើស​ការ​តុបតែង"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 msgid "Transform"
@@ -65539,39 +65539,39 @@ msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
 #, fuzzy, kde-format
 msgid "Click and drag to shear selection."
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
 #, fuzzy, kde-format
 msgid "Click and drag to resize selection."
 msgstr "ខ្សែកោង​ទំហំ​ទៅ​នឹង​ទំហំ​របស់​ស្រទាប់​បច្ចុប្បន្ន"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
 #, fuzzy, kde-format
 msgid "Click and drag to move selection."
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
 #, fuzzy, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "ខ្សែកោង​ទំហំ​ទៅ​នឹង​ទំហំ​របស់​ស្រទាប់​បច្ចុប្បន្ន"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image of 90° to the Left"
@@ -65579,7 +65579,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "បង្វិល​រូបភាព​ត្រឹម​ ៩០ ដឺក្រេ​ទៅ​ឆ្វេង"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image of 90° to the Left"
@@ -65587,65 +65587,65 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "បង្វិល​រូបភាព​ត្រឹម​ ៩០ ដឺក្រេ​ទៅ​ឆ្វេង"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "បង្វិល​ស្រទាប់​ត្រឹម​ ១៨០ ដឺក្រេ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "ការ​ឆ្លុះ​ផ្ដេក"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "ការ​ឆ្លុះ​បញ្ឈរ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "កំណត់​ការ​ប្លែង​ផ្ទាំង​​គំនូរឡើងវិញ​"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "រូបរាង​"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "ដង់ស៊ីតេ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "រាង​សំប៉ែត "
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "ជក់​បាញ់"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
 #, fuzzy, kde-format
 msgid "Vector Shape Actions"
 msgstr "ការជ្រើស​សណ្ឋាន​ពិសេស"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "ការី ៖"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Text"

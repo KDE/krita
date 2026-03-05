@@ -70,6 +70,9 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
         m_orientation = Auto;
         break;
     }
+    if (m_orientation != Auto) {
+        setToolBoxOrientation(static_cast<Qt::Orientation>(m_orientation));
+    }
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));

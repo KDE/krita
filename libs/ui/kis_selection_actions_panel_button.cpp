@@ -8,6 +8,7 @@
 
 #include "kis_icon_utils.h"
 #include <qapplication.h>
+#include <qevent.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
 
@@ -59,3 +60,15 @@ void KisSelectionActionsPanelButton::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 }
 
+// For whatever reason the children of the canvas don't interpret tabletPress/Release events as mouse press/release events
+// So we have to do this manually
+void KisSelectionActionsPanelButton::tabletEvent(QTabletEvent *e)
+{
+    if (e->type() == QEvent::TabletPress) {
+        QAbstractButton::mousePressEvent((QMouseEvent *)e);
+        e->accept();
+    } else if (e->type() == QEvent::TabletRelease) {
+        QAbstractButton::mouseReleaseEvent((QMouseEvent *)e);
+        e->accept();
+    }
+}

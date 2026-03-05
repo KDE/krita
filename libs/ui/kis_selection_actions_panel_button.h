@@ -17,6 +17,7 @@ class KisSelectionActionsPanelButton : public QAbstractButton {
     void draw(QPainter &painter);
 protected:
     void paintEvent(QPaintEvent *e) override;
+    void tabletEvent(QTabletEvent* e) override;
 };
 
 

@@ -59,8 +59,8 @@ private:
     KoToolBoxScrollArea *m_scrollArea;
     QMenu *m_contextMenu {nullptr};
     Qt::DockWidgetArea m_dockArea {Qt::NoDockWidgetArea};
-    Qt::LayoutDirection m_layoutDir;
-    Orientation m_orientation;
+    Qt::LayoutDirection m_layoutDir {Qt::LayoutDirectionAuto};
+    Orientation m_orientation {Auto};
 };
 
 #endif // _KO_TOOLBOX_DOCKER_H_

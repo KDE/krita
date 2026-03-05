@@ -312,6 +312,7 @@ bool recreateDatabaseForATest(KisResourceLocator *locator, const QString &srcLoc
     KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 
     KisResourceLocator::LocatorError r = locator->initialize(srcLocation);
+    KisResourceModelProvider::testingResetAllModels();
 
     if (!locator->errorMessages().isEmpty()) {
         qDebug() << locator->errorMessages();

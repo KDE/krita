@@ -25,6 +25,7 @@ KisSelectionActionsPanelHandle::KisSelectionActionsPanelHandle(int size, QWidget
     d->handle_icon = KisIconUtils::loadIcon("drag-handle");
     this->setCursor(d->default_cursor);
     setFixedSize(size, size);
+    setAttribute(Qt::WA_AcceptTouchEvents);
 }
 
 KisSelectionActionsPanelHandle::~KisSelectionActionsPanelHandle()

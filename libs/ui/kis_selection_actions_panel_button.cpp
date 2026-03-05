@@ -22,6 +22,7 @@ KisSelectionActionsPanelButton::KisSelectionActionsPanelButton(const QString& ic
     setToolTip(tooltip);
     setCursor(Qt::PointingHandCursor);
     setIconSize(QSize(size - ICON_SIZE_OFFSET, size - ICON_SIZE_OFFSET));
+    setAttribute(Qt::WA_AcceptTouchEvents);
 }
 
 KisSelectionActionsPanelButton::~KisSelectionActionsPanelButton()
@@ -71,4 +72,17 @@ void KisSelectionActionsPanelButton::tabletEvent(QTabletEvent *e)
         QAbstractButton::mouseReleaseEvent((QMouseEvent *)e);
         e->accept();
     }
+}
+
+bool KisSelectionActionsPanelButton::event(QEvent *e)
+{
+    //Manually handle the button being pressed on touch
+    if (e->type() == QEvent::TouchBegin) {
+        e->accept();
+        if (((QTouchEvent *)e)->points().count() == 1) {
+            this->animateClick();
+        }
+        return true;
+    }
+    return QAbstractButton::event(e);
 }

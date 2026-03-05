@@ -52,6 +52,7 @@ private:
     void updateLayoutDir();
     void changeLayoutDir(Qt::LayoutDirection);
     void changeOrientation(Orientation);
+    void changeCompact(bool);
 
 private:
     KoToolBox *m_toolBox;

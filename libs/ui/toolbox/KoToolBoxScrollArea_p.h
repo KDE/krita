@@ -71,6 +71,11 @@ public:
         layoutItems();
     }
 
+    void setCompact(bool state) {
+        m_toolBox->setCompact(state);
+        layoutItems();
+    }
+
     Qt::Orientation orientation() const
     {
         return m_orientation;

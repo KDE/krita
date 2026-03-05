@@ -146,6 +146,13 @@ void KoToolBoxDocker::changeOrientation(const Orientation orientation)
     }
 }
 
+void KoToolBoxDocker::changeCompact(const bool state)
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KoToolBox");
+    cfg.writeEntry<bool>("compact", state);
+    m_scrollArea->setCompact(state);
+}
+
 void KoToolBoxDocker::setToolBoxOrientation(Qt::Orientation orientation)
 {
     if (m_scrollArea->orientation() == orientation) {
@@ -169,6 +176,12 @@ void KoToolBoxDocker::contextMenuEvent(QContextMenuEvent *event)
 {
     if (!m_contextMenu) {
         m_contextMenu = new QMenu(this);
+
+        QAction *compact = m_contextMenu->addAction(i18n("Compact"));
+        compact->setCheckable(true);
+        compact->setChecked(m_toolBox->compact());
+        connect(compact, &QAction::triggered, this, &KoToolBoxDocker::changeCompact);
+
         m_contextMenu->addSection(i18n("Icon Size"));
         m_toolBox->setupIconSizeMenu(m_contextMenu);
 

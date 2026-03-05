@@ -20,7 +20,9 @@ class SectionLayout : public QLayout
 {
 public:
     explicit SectionLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical)
+        : QLayout(parent)
+        , m_orientation(Qt::Vertical)
+        , m_onset(0)
     {
     }
 
@@ -73,41 +75,33 @@ public:
 
     void setGeometry (const QRect &rect) override
     {
-        int x = 0;
-        int y = 0; const QSize &size = buttonSize();
-        if (m_orientation == Qt::Vertical) {
-            foreach (QWidgetItem* w, m_items) {
-                if (w->isEmpty())
-                    continue;
-                int realX;
-                if (parentWidget()->isLeftToRight()) {
-                    realX = x;
-                } else {
-                    realX = rect.width() - x - size.width();
-                }
-                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
-                x += size.width();
-                if (x + size.width() > rect.width()) {
-                    x = 0;
-                    y += size.height();
-                }
+        // the names of the variables assume a vertical orientation,
+        // but all calculations are done based on the real orientation
+        const bool isVertical = m_orientation == Qt::Vertical;
+        const bool isLeftToRight = parentWidget()->isLeftToRight();
+
+        const QSize &size = buttonSize();
+        const int maxWidth = isVertical ? rect.width() : rect.height();
+        const int iconWidth = isVertical ? size.width() : size.height();
+        const int iconHeight = isVertical ? size.height() : size.width();
+
+        int x = iconWidth * m_onset;
+        int y = 0;
+        foreach (QWidgetItem* w, m_items) {
+            if (w->isEmpty()) {
+                continue;
             }
-        } else {
-            foreach (QWidgetItem* w, m_items) {
-                if (w->isEmpty())
-                    continue;
-                int realX;
-                if (parentWidget()->isLeftToRight()) {
-                    realX = x;
-                } else {
-                    realX = rect.width() - x - size.width();
-                }
+            if (isVertical) {
+                const int realX = isLeftToRight ? x : rect.width() - x - size.width();
                 w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
-                y += size.height();
-                if (y + size.height() > rect.height()) {
-                    x += size.width();
-                    y = 0;
-                }
+            } else {
+                const int realX = isLeftToRight ? y : rect.width() - y - size.width();
+                w->widget()->setGeometry(QRect(realX, x, size.width(), size.height()));
+            }
+            x += iconWidth;
+            if (x + iconWidth > maxWidth) {
+                x = 0;
+                y += iconHeight;
             }
         }
     }
@@ -127,18 +121,28 @@ public:
         m_orientation = orientation;
     }
 
+    void setOnset(int onset)
+    {
+        m_onset = onset;
+    }
+
 private:
     QSize m_buttonSize;
     QMap<QAbstractButton*, int> m_priorities;
     QList<QWidgetItem*> m_items;
     Qt::Orientation m_orientation;
+    int m_onset;
 };
 
 class Section : public QWidget
 {
 public:
     enum SeparatorFlag {
-        SeparatorTop = 0x0001,/* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008
+        SeparatorNone      = 0,
+        SeparatorTop       = (1 << 0),
+        // SeparatorBottom = (1 << 1),
+        // SeparatorRight  = (1 << 2),
+        SeparatorLeft      = (1 << 3)
     };
     Q_DECLARE_FLAGS(Separators, SeparatorFlag)
     explicit Section(QWidget *parent = 0)
@@ -235,6 +239,11 @@ public:
         m_layout->setOrientation(orientation);
     }
 
+    void setOnset(int onset)
+    {
+        m_layout->setOnset(onset);
+    }
+
 
 protected:
 private:
@@ -251,6 +260,7 @@ public:
     explicit KoToolBoxLayout(QWidget *parent)
         : QLayout(parent)
         , m_orientation(Qt::Vertical)
+        , m_compact(false)
     {
         setSpacing(6);
     }
@@ -363,6 +373,19 @@ public:
         invalidate();
     }
 
+    void setCompact(bool state)
+    {
+        m_compact = state;
+        foreach (QWidgetItem *wi, m_sections) {
+            wi->widget()->layout()->invalidate();
+        }
+    }
+
+    bool compact()
+    {
+        return m_compact;
+    }
+
 private:
     int doLayout(const QRect &rect, bool notDryRun) const
     {
@@ -374,6 +397,7 @@ private:
         // the names of the variables assume a vertical orientation,
         // but all calculations are done based on the real orientation
         const bool isVertical = m_orientation == Qt::Vertical;
+        const bool isLeftToRight = parentWidget()->isLeftToRight();
 
         const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
 
@@ -382,10 +406,17 @@ private:
         const int iconWidth = qMax(1, isVertical ? iconSize.width() : iconSize.height());
         const int iconHeight = qMax(1, isVertical ? iconSize.height() : iconSize.width());
 
+        const Section::Separators separator = m_compact ?
+            Section::SeparatorNone
+        : isVertical ?
+            Section::SeparatorTop
+        :
+            Section::SeparatorLeft;
+
         const int maxColumns = qMax(1, (maxWidth / iconWidth));
 
-        int x = 0;
         int y = 0;
+        int offset = 0;
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
@@ -398,50 +429,76 @@ private:
                 continue;
             }
 
+            // in compact mode, the previous section's offset is this section's onset
+            const int onset = m_compact ? offset : 0;
+            const int usedColumns = onset + buttonCount;
+            offset = usedColumns % maxColumns;
+
             // rows needed for the buttons (calculation gets the ceiling value of the plain div)
-            const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
+            const int neededRowCount = ((usedColumns - 1) / maxColumns) + 1;
 
             if (firstSection) {
                 firstSection = false;
             } else {
-                // start on a new row, set separator
-                x = 0;
-                y += iconHeight + spacing();
-                if (notDryRun){
-                    const Section::Separators separator =
-                        isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
-                    section->setSeparator( separator );
+                if (m_compact) {
+                    // start on a new row if the current row is full
+                    y += (onset == 0) ? iconHeight : 0;
+                } else {
+                    // start on a new row, set separator
+                    y += iconHeight + spacing();
+                }
+                if (notDryRun) {
+                    section->setOnset(onset);
+                    section->setSeparator(separator);
                 }
             }
 
             if (notDryRun) {
-                const int usedColumns = qMin(buttonCount, maxColumns);
-                int narrowSide = usedColumns * iconWidth;
-                int longSide = neededRowCount * iconHeight;
+                const int onW = onset * iconWidth;
+                const int offW = offset * iconWidth;
+                const int width = maxColumns * iconWidth;
+                const int height = neededRowCount * iconHeight;
+
+                QRect geometry;
+                QRegion mask;
                 if (isVertical) {
-                    int realX;
-                    if (parentWidget()->isLeftToRight()) {
-                        realX = x;
+                    mask = QRegion(0, 0, width, height);
+                    if (isLeftToRight) {
+                        geometry = QRect(0, y, width, height);
+
+                        // mask onset and offset regions
+                        // so that they don't block mouse events to other sections
+                        mask -= QRegion(0, 0, onW, iconHeight);
+                        if (offset != 0) {
+                            mask -= QRegion(offW, height - iconHeight, width - offW, iconHeight);
+                        }
                     } else {
-                        realX = rect.width() - x - narrowSide;
+                        geometry = QRect(rect.width() - width, y, width, height);
+                        mask -= QRegion(width - onW, 0, onW, iconHeight);
+                        if (offset != 0) {
+                            mask -= QRegion(0, height - iconHeight, width - offW, iconHeight);
+                        }
                     }
-                    section->setGeometry(realX, y,
-                                         narrowSide, longSide);
                 } else {
-                    int realX;
-                    if (parentWidget()->isLeftToRight()) {
-                        realX = y;
+                    mask = QRegion(0, 0, height, width);
+                    if (isLeftToRight) {
+                        geometry = QRect(y, 0, height, width);
+                        mask -= QRegion(0, 0, iconHeight, onW);
+                        if (offset != 0) {
+                            mask -= QRegion(height - iconHeight, offW, iconHeight, width - offW);
+                        }
                     } else {
-                        realX = rect.width() - y - longSide;
+                        geometry = QRect(rect.width() - y - height, 0, height, width);
+                        mask -= QRegion(height - iconHeight, 0, iconHeight, onW);
+                        if (offset != 0) {
+                            mask -= QRegion(0, offW, iconHeight, width - offW);
+                        }
                     }
-                    section->setGeometry(realX, x,
-                                         longSide, narrowSide);
                 }
+                section->setGeometry(geometry);
+                section->setMask(mask);
             }
 
-            // advance by the icons in the last row
-            const int lastRowColumnCount = buttonCount - ((neededRowCount-1) * maxColumns);
-            x += (lastRowColumnCount * iconWidth) + spacing();
             // advance by all but the last used row
             y += (neededRowCount - 1) * iconHeight;
         }
@@ -452,6 +509,7 @@ private:
 
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
+    bool m_compact;
 };
 
 #endif

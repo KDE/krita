@@ -66,6 +66,9 @@ public Q_SLOTS:
     /// Set the orientation of the layout to @p orientation
     void setOrientation(Qt::Orientation orientation);
 
+    void setCompact(bool);
+    bool compact();
+
     void setFloating(bool v);
 
     KoToolBoxLayout *toolBoxLayout() const;

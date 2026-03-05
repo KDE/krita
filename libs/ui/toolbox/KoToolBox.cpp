@@ -110,6 +110,8 @@ KoToolBox::KoToolBox()
     // Update visibility of buttons
     setButtonsVisible(QList<QString>());
 
+    setCompact(cfg.readEntry<bool>("compact", false));
+
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)),
             this, SLOT(setActiveTool(KoCanvasController*)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
@@ -244,13 +246,16 @@ void KoToolBox::paintEvent(QPaintEvent *)
     QPainter painter(this);
 
     const QList<Section*> sections = d->sections.values();
-    QList<Section*>::const_iterator iterator = sections.begin();
     int halfSpacing = layout()->spacing();
     if (halfSpacing > 0) {
         halfSpacing /= 2;
     }
-    while(iterator != sections.end()) {
+    for(auto iterator = sections.begin(); iterator != sections.end(); ++iterator) {
         Section *section = *iterator;
+        if (section->separators() == Section::SeparatorNone) {
+            continue;
+        }
+
         QStyleOption styleoption;
         styleoption.palette = palette();
 
@@ -275,8 +280,6 @@ void KoToolBox::paintEvent(QPaintEvent *)
 
             style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &styleoption, &painter);
         }
-
-        ++iterator;
     }
 
     painter.end();
@@ -302,6 +305,16 @@ void KoToolBox::setOrientation(Qt::Orientation orientation)
     Q_FOREACH (Section* section, d->sections) {
         section->setOrientation(orientation);
     }
+}
+
+void KoToolBox::setCompact(bool state)
+{
+    d->layout->setCompact(state);
+}
+
+bool KoToolBox::compact()
+{
+    return d->layout->compact();
 }
 
 void KoToolBox::setFloating(bool v)

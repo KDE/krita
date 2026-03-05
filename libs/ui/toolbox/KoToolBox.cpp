@@ -312,9 +312,9 @@ void KoToolBox::setCompact(bool state)
     d->layout->setCompact(state);
 }
 
-bool KoToolBox::compact()
+bool KoToolBox::isCompact()
 {
-    return d->layout->compact();
+    return d->layout->isCompact();
 }
 
 void KoToolBox::setFloating(bool v)

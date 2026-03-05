@@ -381,7 +381,7 @@ public:
         }
     }
 
-    bool compact()
+    bool isCompact()
     {
         return m_compact;
     }

@@ -182,7 +182,7 @@ void KoToolBoxDocker::contextMenuEvent(QContextMenuEvent *event)
 
         QAction *compact = m_contextMenu->addAction(i18n("Compact"));
         compact->setCheckable(true);
-        compact->setChecked(m_toolBox->compact());
+        compact->setChecked(m_toolBox->isCompact());
         connect(compact, &QAction::triggered, this, &KoToolBoxDocker::changeCompact);
 
         m_contextMenu->addSection(i18n("Icon Size"));

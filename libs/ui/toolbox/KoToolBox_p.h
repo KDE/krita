@@ -67,7 +67,7 @@ public Q_SLOTS:
     void setOrientation(Qt::Orientation orientation);
 
     void setCompact(bool);
-    bool compact();
+    bool isCompact();
 
     void setFloating(bool v);
 

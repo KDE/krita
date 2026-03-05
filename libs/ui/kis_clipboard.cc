@@ -209,6 +209,10 @@ KisPaintDeviceSP KisClipboard::clipFromMimeData(const QMimeData *cbData,
     KisPaintDeviceSP clip = clipFromKritaSelection(cbData, imageBounds, clipRange);
 
     if (!clip) {
+        clip = clipFromKritaLayers(nullptr);
+    }
+
+    if (!clip) {
         clip = clipFromBoardContents(cbData, imageBounds, showPopup, overridePasteBehaviour, useClipboardFallback);
     }
 
@@ -328,11 +332,39 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const KoColorSpace *cs) const
             bounds |= node->exactBounds();
         }
 
+        // if no color space provided choose the most used one in the layer data
+        if (cs == nullptr) {
+            QHash<const KoColorSpace *, int> colorSpacesCount;
+
+            Q_FOREACH (KisNodeSP node, nodes) {
+                const KoColorSpace *colorSpace = node->colorSpace();
+                if (colorSpace != nullptr) {
+                    colorSpacesCount.insert(colorSpace, colorSpacesCount.value(colorSpace) + 1);
+                }
+            }
+
+            int max = 0;
+            for (auto it = colorSpacesCount.begin(); it != colorSpacesCount.end(); ++it) {
+                if (it.value() > max) {
+                    max = it.value();
+                    cs = it.key();
+                }
+            }
+
+            // fallback to rgb8 if no color space found
+            // It is likely that this will never be triggered, but it's probably best to handle this just in case
+            if (cs == nullptr) {
+                cs = KoColorSpaceRegistry::instance()->rgb8();
+            }
+        }
+
         KisImageSP tempImage = new KisImage(nullptr,
                                             bounds.width(),
                                             bounds.height(),
                                             cs,
                                             "ClipImage");
+
+        KisLayerUtils::filterMergeableNodes(nodes, false);
         for (KisNodeSP node : nodes) {
             tempImage->addNode(node, tempImage->root());
         }

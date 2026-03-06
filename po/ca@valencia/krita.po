@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-05 02:37+0000\n"
-"PO-Revision-Date: 2026-03-03 11:00+0100\n"
+"POT-Creation-Date: 2026-03-06 02:40+0000\n"
+"PO-Revision-Date: 2026-03-05 10:52+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23938,7 +23938,7 @@ msgstr "Recursos locals"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:759
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
@@ -27685,30 +27685,28 @@ msgid "Auto (%1)"
 msgstr "Automàtic (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Actual"
+msgstr "GLX (Actual)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr ""
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Actual"
+msgstr "EGL (Actual)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27717,6 +27715,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>Si esteu utilitzant Krita a X11 o XWayland i experimenteu lentitud, "
+"intenteu canviar entre EGL i GLX</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -29353,12 +29353,13 @@ msgstr "Renderitzador preferit (cal reiniciar):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
 #: libs/ui/forms/wdgdisplaysettings.ui:111
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
+#, kde-format
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
-msgstr "Renderitzador preferit (cal reiniciar):"
+msgstr ""
+"Interfície openGL preferida\n"
+"(cal reiniciar):"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -34095,7 +34096,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Canvia la capa de fitxer"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:760 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"

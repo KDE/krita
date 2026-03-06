@@ -78,11 +78,19 @@ bool KisSelectionActionsPanelButton::event(QEvent *e)
 {
     //Manually handle the button being pressed on touch
     if (e->type() == QEvent::TouchBegin) {
-        e->accept();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (((QTouchEvent *)e)->points().count() == 1) {
             this->animateClick();
+            e->accept();
+            return true;
         }
-        return true;
+#else
+        if (((QTouchEvent *)e)->touchPoints().count() == 1) {
+            this->animateClick();
+            e->accept();
+            return true;
+        }
+#endif
     }
     return QAbstractButton::event(e);
 }

@@ -49,6 +49,8 @@ private Q_SLOTS:
     void testIsInsideShape_data();
     void testIsInsideShape();
 
+
+    void testRemoveGutter_data();
     void testRemoveGutter();
     void testMergingPainterPaths();
 

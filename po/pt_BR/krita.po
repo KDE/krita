@@ -13,13 +13,14 @@
 # Barbara Tostes <barbaratostes@gmail.com>, 2018, 2019, 2020.
 # Thiago Masato Costa Sueto <herzenschein@gmail.com>, 2019.
 # SPDX-FileCopyrightText: 2023, 2025 Geraldo Simiao <geraldosimiao@fedoraproject.org>
+# SPDX-FileCopyrightText: 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-06 02:40+0000\n"
-"PO-Revision-Date: 2026-03-05 06:21-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"PO-Revision-Date: 2026-03-06 16:32-0300\n"
+"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -16088,7 +16089,7 @@ msgstr "Sobre o Krita"
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
-msgstr "Sobre o &KDE"
+msgstr "Sobre a &KDE"
 
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
@@ -40910,11 +40911,11 @@ msgid ""
 ">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
 "and the software we produce.</html>"
 msgstr ""
-"<html>O <b>KDE</b> é uma rede mundial de engenheiros de software, artistas, "
+"<html>A <b>KDE</b> é uma rede mundial de engenheiros de software, artistas, "
 "escritores, tradutores e facilitadores, comprometidos com o desenvolvimento "
 "de <a href=\"%1\">Software Livre</a>. Esta comunidade criou centenas de "
 "aplicativos de software livre como parte da plataforma, espaço de trabalho e "
-"aplicativos do KDE.<br /><br />O KDE é uma organização cooperativa na qual "
+"aplicativos da KDE.<br /><br />A KDE é uma organização cooperativa na qual "
 "nenhuma entidade única controla os esforços ou produtos do KDE em detrimento "
 "de outros. Todos são bem-vindos a participar e contribuir para o KDE, "
 "incluindo você.<br /><br />Para mais informações sobre a comunidade KDE e os "
@@ -40953,7 +40954,7 @@ msgid ""
 "what you need.</html>"
 msgstr ""
 "<html>Não é necessário ser um desenvolvedor de software para ser um membro "
-"da equipe do KDE. Você pode tornar-se um membro das equipes nacionais que "
+"da equipe da KDE. Você pode tornar-se um membro das equipes nacionais que "
 "traduzem as interfaces dos programas. Você pode fornecer gráficos, temas, "
 "sons e documentação atualizada. Você decide!<br /><br />Visite <a href="
 "\"%1\">%1</a> para obter informações sobre alguns projetos em que você possa "
@@ -41012,12 +41013,12 @@ msgstr "&Relatar bugs ou desejos"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
 msgid "&Join KDE"
-msgstr "&Junte-se ao KDE"
+msgstr "&Junte-se à KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
 msgid "&Support KDE"
-msgstr "&Apoiando o KDE"
+msgstr "&Apoiando a KDE"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101

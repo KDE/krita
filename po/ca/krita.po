@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-06 02:40+0000\n"
-"PO-Revision-Date: 2026-03-05 10:52+0100\n"
+"PO-Revision-Date: 2026-03-06 11:57+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -46044,14 +46044,15 @@ msgstr "Alinea al centre del quadre em ideogràfic."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Hanging"
+msgstr "Suspensió"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
-msgstr "Alinea al diacrític com es fa servir en els alfabets bràmics del nord."
+msgstr ""
+"Alinea al traç superior com es fa servir en els alfabets bràmics del nord."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -46611,7 +46612,7 @@ msgstr "No hi ha cap eix variable extra en aquesta lletra"
 #, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr "Puntuació Hanging"
+msgstr "Puntuació suspesa"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
 #, kde-format
@@ -46621,9 +46622,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
-"La puntuació Hanging permet l'obertura i el tancament de la puntuació "
-"«hanging», així com les comes. Aquesta implementació només implementa la "
-"puntuació «hanging» de l'estil asiàtic oriental."
+"La puntuació suspesa permet l'obertura i el tancament de la puntuació "
+"suspesa, així com les comes. Aquesta implementació només implementa la "
+"puntuació suspesa de l'estil asiàtic oriental."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -46631,13 +46632,13 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr "puntuació hanging, burasagari"
+msgstr "puntuació suspesa, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr "Primer Hang"
+msgstr "Primera suspensió"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -46649,19 +46650,19 @@ msgstr "Final de línia:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "No Hanging"
+msgstr "Sense suspensió"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr "Permet les comes «hanging»"
+msgstr "Permet les comes suspeses"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr "Força les comes «hanging»"
+msgstr "Força les comes suspeses"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
@@ -47447,7 +47448,7 @@ msgstr "sagnat de text, indentació"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Sagnat Hanging"
+msgstr "Sagnat de suspensió"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
@@ -67160,7 +67161,7 @@ msgstr "Ideogràfic"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "Hanging"
+msgstr "Suspensió"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format

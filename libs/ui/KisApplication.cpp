@@ -699,7 +699,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             &KisConfigNotifier::sigUseIgnoreHistoricTabletEventsWorkaroundChanged,
             this,
             setIgnoreHistoricTabletEventsWorkaround);
-    setIgnoreHistoricTabletEventsWorkaround(cfg.usePageUpDownMouseButtonEmulationWorkaround());
+    setIgnoreHistoricTabletEventsWorkaround(cfg.useIgnoreHistoricTabletEventsWorkaround());
 #endif
 
     // Create a new image, if needed

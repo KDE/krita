@@ -69,6 +69,7 @@ public:
     int priorityEventFilterSeqNo;
 
     bool touchStrokeStarted = false;
+    bool touchStrokeBlocked = false;
     bool popupWasActive = false;
     int lastPointCount = 0;
 

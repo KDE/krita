@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -37224,13 +37224,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filtri:"
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "&Përzgjidhni"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -37240,7 +37240,12 @@ msgstr ""
 msgid "Toolbox"
 msgstr "Vijat"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+msgid "Compact"
+msgstr "Përzgjedhje"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -37249,29 +37254,53 @@ msgstr "Vijat"
 msgid "Icon Size"
 msgstr "Duke printuar"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, fuzzy, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Shtresat"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "Teksti"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "Shtresat"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "&Përzgjidhni"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "Përzgjedhje"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "Teksti"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "Horizonti 1"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "Horizonti 1"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -73023,10 +73052,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Soft Proof Options"
 #~ msgstr "Ngopja"
-
-#, fuzzy
-#~ msgid "&Horizontal"
-#~ msgstr "Horizonti 1"
 
 #, fuzzy
 #~ msgctxt "action"

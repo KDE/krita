@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -37615,13 +37615,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "&Trắng"
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Mặc định"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -37631,7 +37631,13 @@ msgstr ""
 msgid "Toolbox"
 msgstr "&Công cụ"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+#| msgid "Company:"
+msgid "Compact"
+msgstr "Công ty:"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -37640,29 +37646,54 @@ msgstr "&Công cụ"
 msgid "Icon Size"
 msgstr "Đặt kiểu điểm"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, fuzzy, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Kiểu Trang"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "Chế độ tự động"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "Thẳng"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "Thụt phải"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "Định hướng"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "Chế độ tự động"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "Ngang:"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "Dọc"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
-"PO-Revision-Date: 2026-02-27 08:00+0300\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
+"PO-Revision-Date: 2026-03-06 11:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -36735,7 +36735,7 @@ msgstr "%1 ve %2"
 #: libs/ui/layerstyles/wdglayerstyles.ui:76
 #, kde-format
 msgid "Bevel and Emboss"
-msgstr "Eğ ve Kabart"
+msgstr "Pah ve Kabart"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
@@ -36761,13 +36761,13 @@ msgstr "Biç&em:"
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:50
 #, kde-format
 msgid "Outer Bevel"
-msgstr "Dış Eğim"
+msgstr "Dış Pah"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:55
 #, kde-format
 msgid "Inner Bevel"
-msgstr "İç Bükey"
+msgstr "İç Pah"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:60
@@ -37843,13 +37843,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Süz: “%1”"
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr "%1 × %2"
@@ -37859,7 +37859,13 @@ msgstr "%1 × %2"
 msgid "Toolbox"
 msgstr "Araç Kutusu"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+#| msgid "Company:"
+msgid "Compact"
+msgstr "Şirket:"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -37868,29 +37874,58 @@ msgstr "Araç Kutusu"
 msgid "Icon Size"
 msgstr "Simge Boyutu"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Yerleşim"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Kendiliğinden"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "&Soldan sağa"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "S&ağdan sola"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "Yönelim"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Toolbox layout direction"
+#| msgid "&Automatic"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "&Kendiliğinden"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+#| msgid "Horizontal"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "Yatay"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "&Dikey"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -40011,22 +40046,22 @@ msgstr "Pürüzsüzleştirme:"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
 msgid "Butt cap"
-msgstr "Uç uca kapak"
+msgstr "Geçmeli bitiş"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
 #, kde-format
 msgid "Round cap"
-msgstr "Yuvarlak kapak"
+msgstr "Yuvarlak bitiş"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
 #, kde-format
 msgid "Square cap"
-msgstr "Kare kapak"
+msgstr "Kare bitiş"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format
 msgid "Miter join"
-msgstr "Açısal birleştirme"
+msgstr "Köşe birleştirme"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
 #, kde-format
@@ -40036,7 +40071,7 @@ msgstr "Dairesel birleştirme"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
 #, kde-format
 msgid "Bevel join"
-msgstr "Konik birleştirme"
+msgstr "Pah birleştirme"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
 #, kde-format

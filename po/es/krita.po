@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
 "PO-Revision-Date: 2026-02-28 12:22+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -37982,13 +37982,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filtro «%1»"
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Predeterminado"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -37998,7 +37998,13 @@ msgstr "%1x%2"
 msgid "Toolbox"
 msgstr "Caja de herramientas"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+#| msgid "Company:"
+msgid "Compact"
+msgstr "Compañía:"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38007,29 +38013,58 @@ msgstr "Caja de herramientas"
 msgid "Icon Size"
 msgstr "Tamaño de los iconos"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Disposición"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Automática"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "De i&zquierda a derecha"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "De de&recha a izquierda"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "Orientación"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Toolbox layout direction"
+#| msgid "&Automatic"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "&Automática"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+#| msgid "Horizontal"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "Horizontal"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "&Vertical"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
 "PO-Revision-Date: 2026-01-04 16:33+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -38292,13 +38292,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "«%1» iragazkia"
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -38308,7 +38308,13 @@ msgstr "%1x%2"
 msgid "Toolbox"
 msgstr "Tresna-kutxa"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+#| msgid "Company:"
+msgid "Compact"
+msgstr "Konpainia:"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38317,29 +38323,58 @@ msgstr "Tresna-kutxa"
 msgid "Icon Size"
 msgstr "Ikonoen neurria"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Antolamendua"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Automatikoa"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "E&zkerretik eskuinera"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "E&skuinetik ezkerrera"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "Orientazioa"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Toolbox layout direction"
+#| msgid "&Automatic"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "&Automatikoa"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+#| msgid "Horizontal"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "Horizontala"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "&Bertikala"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -76337,11 +76372,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Soft Proof Options"
 #~ msgstr "Erakutsi dekorazioak"
-
-#, fuzzy
-#~| msgid "Horizontal"
-#~ msgid "&Horizontal"
-#~ msgstr "Horizontala"
 
 #~ msgid "Out of Gamut"
 #~ msgstr "Kolore-gamatik kanpo"

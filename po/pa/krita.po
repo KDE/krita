@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -40491,14 +40491,14 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, fuzzy, kde-format
 #| msgid "Remove points"
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -40509,7 +40509,13 @@ msgstr ""
 msgid "Toolbox"
 msgstr "ਟੂਲ"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Compact"
+msgstr "ਸਥਿਤੀ"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -40519,33 +40525,61 @@ msgstr "ਟੂਲ"
 msgid "Icon Size"
 msgstr "ਸਾਈਜ਼"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, fuzzy, kde-format
 #| msgid "Page Layout..."
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "ਸਫ਼ਾ ਲੇਆਉਟ..."
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, fuzzy, kde-format
 #| msgid "Show master shapes"
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, fuzzy, kde-format
 #| msgid "Straight"
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "ਸਿੱਧਾ ਉੱਤੇ"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "ਸਥਿਤੀ"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+#| msgid "Show master shapes"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "ਸਥਿਤੀ"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+#| msgid "Set border"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -80298,11 +80332,6 @@ msgstr ""
 #~| msgid "Tool Options"
 #~ msgid "Soft Proof Options"
 #~ msgstr "ਟੂਲ ਚੋਣਾਂ"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgid "&Horizontal"
-#~ msgstr "ਸਥਿਤੀ"
 
 #, fuzzy
 #~| msgid "Document"

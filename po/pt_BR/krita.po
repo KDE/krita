@@ -13,13 +13,14 @@
 # Barbara Tostes <barbaratostes@gmail.com>, 2018, 2019, 2020.
 # Thiago Masato Costa Sueto <herzenschein@gmail.com>, 2019.
 # SPDX-FileCopyrightText: 2023, 2025 Geraldo Simiao <geraldosimiao@fedoraproject.org>
+# SPDX-FileCopyrightText: 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 00:42+0000\n"
-"PO-Revision-Date: 2026-02-27 07:39-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"POT-Creation-Date: 2026-03-07 00:41+0000\n"
+"PO-Revision-Date: 2026-03-06 16:32-0300\n"
+"Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -16088,7 +16089,7 @@ msgstr "Sobre o Krita"
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
-msgstr "Sobre o &KDE"
+msgstr "Sobre a &KDE"
 
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
@@ -16098,7 +16099,7 @@ msgstr "Sobre o &KDE"
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
-msgstr "Sobre o KDE"
+msgstr "Sobre a KDE"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1950
@@ -37932,13 +37933,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filtro \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Padrão"
 
-#: libs/ui/toolbox/KoToolBox.cpp:356
+#: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -37948,7 +37949,13 @@ msgstr "%1x%2"
 msgid "Toolbox"
 msgstr "Caixa de ferramentas"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:148
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#, fuzzy, kde-format
+#| msgid "Company:"
+msgid "Compact"
+msgstr "Empresa:"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -37957,29 +37964,58 @@ msgstr "Caixa de ferramentas"
 msgid "Icon Size"
 msgstr "Tamanho do ícone"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:151
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Layout"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:154
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Automático"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:161
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "&Esquerda para direita"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:168
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "&Direita para esquerda"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgctxt "Toolbox orientation"
+msgid "Orientation"
+msgstr "Orientação"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Toolbox layout direction"
+#| msgid "&Automatic"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Automatic"
+msgstr "&Automático"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#, fuzzy, kde-format
+#| msgid "Horizontal"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Horizontal"
+msgstr "Horizontal"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgctxt "@item:inmenu Toolbox orientation"
+msgid "&Vertical"
+msgstr "&Vertical"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -40925,7 +40961,7 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format
 msgid "About KDE"
-msgstr "Sobre o KDE"
+msgstr "Sobre a KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:39
 #, kde-format
@@ -40945,11 +40981,11 @@ msgid ""
 ">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
 "and the software we produce.</html>"
 msgstr ""
-"<html>O <b>KDE</b> é uma rede mundial de engenheiros de software, artistas, "
+"<html>A <b>KDE</b> é uma rede mundial de engenheiros de software, artistas, "
 "escritores, tradutores e facilitadores, comprometidos com o desenvolvimento "
 "de <a href=\"%1\">Software Livre</a>. Esta comunidade criou centenas de "
 "aplicativos de software livre como parte da plataforma, espaço de trabalho e "
-"aplicativos do KDE.<br /><br />O KDE é uma organização cooperativa na qual "
+"aplicativos da KDE.<br /><br />A KDE é uma organização cooperativa na qual "
 "nenhuma entidade única controla os esforços ou produtos do KDE em detrimento "
 "de outros. Todos são bem-vindos a participar e contribuir para o KDE, "
 "incluindo você.<br /><br />Para mais informações sobre a comunidade KDE e os "
@@ -40988,7 +41024,7 @@ msgid ""
 "what you need.</html>"
 msgstr ""
 "<html>Não é necessário ser um desenvolvedor de software para ser um membro "
-"da equipe do KDE. Você pode tornar-se um membro das equipes nacionais que "
+"da equipe da KDE. Você pode tornar-se um membro das equipes nacionais que "
 "traduzem as interfaces dos programas. Você pode fornecer gráficos, temas, "
 "sons e documentação atualizada. Você decide!<br /><br />Visite <a href="
 "\"%1\">%1</a> para obter informações sobre alguns projetos em que você possa "
@@ -41047,12 +41083,12 @@ msgstr "&Relatar bugs ou desejos"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
 msgid "&Join KDE"
-msgstr "&Junte-se ao KDE"
+msgstr "&Junte-se à KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
 msgid "&Support KDE"
-msgstr "&Apoiando o KDE"
+msgstr "&Apoiando a KDE"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
@@ -76281,11 +76317,6 @@ msgstr ""
 
 #~ msgid "Advanced (needs restarting Krita)"
 #~ msgstr "Avançado (é necessário reiniciar o Krita)"
-
-#, fuzzy
-#~| msgid "Horizontal"
-#~ msgid "&Horizontal"
-#~ msgstr "Horizontal"
 
 #~ msgid "Out of Gamut"
 #~ msgstr "Fora do Intervalo"

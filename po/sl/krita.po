@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-07 00:41+0000\n"
-"PO-Revision-Date: 2026-02-24 13:32+0100\n"
+"PO-Revision-Date: 2026-03-07 10:02+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32109,17 +32109,15 @@ msgstr "Razvrsti obroč zgodovine barv po:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFixTriangleRotation)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
-#, fuzzy, kde-format
-#| msgid "sRGB Triangle Selector"
+#, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "Trikotni izbirnik sRGB"
+msgstr "Popravi sukanje trikotnega izbirnika sRGB"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Rotation Angle:"
-msgstr "Sukanje:"
+msgstr "Kot sukanja:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
@@ -34997,13 +34995,13 @@ msgstr "Povečava: %1 %"
 #, kde-format
 msgctxt "@title"
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "Krita je digitalni slikarski atelje s polno funkcionalnostjo"
 
 #: libs/ui/KisApplication.cpp:245
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "Avtorske pravice © 1999–2026 razvijalci Krite"
 
 #: libs/ui/KisApplication.cpp:443
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
@@ -37866,10 +37864,9 @@ msgid "Toolbox"
 msgstr "Orodjarna"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
-#, fuzzy, kde-format
-#| msgid "Company:"
+#, kde-format
 msgid "Compact"
-msgstr "Podjetje:"
+msgstr "Strnjeno"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
@@ -37905,30 +37902,25 @@ msgid "&Right-to-left"
 msgstr "Z &desne proti levi"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:227
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "Usmerjenost"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:230
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "S&amodejno"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:237
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
-msgstr "Vodoravno"
+msgstr "&Vodoravno"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:244
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "&Navpično"

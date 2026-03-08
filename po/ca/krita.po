@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-07 00:41+0000\n"
-"PO-Revision-Date: 2026-03-06 11:58+0100\n"
+"PO-Revision-Date: 2026-03-07 19:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -38061,10 +38061,9 @@ msgid "Toolbox"
 msgstr "Quadre d'eines"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
-#, fuzzy, kde-format
-#| msgid "Company:"
+#, kde-format
 msgid "Compact"
-msgstr "Empresa:"
+msgstr "Compacte"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
@@ -38100,30 +38099,25 @@ msgid "&Right-to-left"
 msgstr "De &dreta a esquerra"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:227
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "Orientació"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:230
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "&Automàtica"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:237
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
-msgstr "Horitzontal"
+msgstr "&Horitzontal"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:244
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "&Vertical"
@@ -46834,15 +46828,15 @@ msgstr "No es fan ajustos particulars a l'algorisme de salt de línia"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr "Flexible"
+msgstr "Laxe"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
-"Tot i que normalment defineix un algorisme més flexible, actualment és el "
-"mateix que automàtic."
+"Tot i que normalment defineix un algorisme més laxe, actualment és el mateix "
+"que automàtic."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format

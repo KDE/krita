@@ -7208,14 +7208,14 @@ msgstr "对象交互工具"
 #, kde-format
 msgctxt "action"
 msgid "Raise"
-msgstr "升高"
+msgstr "上升"
 
 #. i18n: context: text @ Action (object_order_raise), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:13
 #, kde-format
 msgctxt "action"
 msgid "&Raise"
-msgstr "升高(&R)"
+msgstr "上升(&R)"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_right), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_right), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7263,14 +7263,14 @@ msgstr "取消编组"
 #, kde-format
 msgctxt "action"
 msgid "Send to Back"
-msgstr "置于底层"
+msgstr "置于最下方"
 
 #. i18n: context: text @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:43
 #, kde-format
 msgctxt "action"
 msgid "Send to &Back"
-msgstr "置于底层(&B)"
+msgstr "置于最下方(&B)"
 
 #. i18n: context: iconText @ Action (object_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7281,14 +7281,14 @@ msgstr "置于底层(&B)"
 #, kde-format
 msgctxt "action"
 msgid "Bring to Front"
-msgstr "置于顶层"
+msgstr "置于最上方"
 
 #. i18n: context: text @ Action (object_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:53
 #, kde-format
 msgctxt "action"
 msgid "Bring to &Front"
-msgstr "置于顶层(&F)"
+msgstr "置于最上方(&F)"
 
 #. i18n: context: iconText @ Action (object_align_vertical_center), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_vertical_center), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7384,14 +7384,14 @@ msgstr "水平居中"
 #, kde-format
 msgctxt "action"
 msgid "Lower"
-msgstr "降低"
+msgstr "下降"
 
 #. i18n: context: text @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "&Lower"
-msgstr "降低(&L)"
+msgstr "下降(&L)"
 
 #. i18n: context: iconText @ Action (object_align_vertical_bottom), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_vertical_bottom), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7731,7 +7731,7 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"使用 SVG 1.1 规范的字符变换功能来对每一行文本进行绝对定位。空白符和换行符会被"
+"使用 SVG 1.1 规范的字符变形功能来对每一行文本进行绝对定位。空白符和换行符会被"
 "折叠。此类型用于向下兼容 SVG 1.1 规范。"
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7757,7 +7757,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "从文本链中减去形状"
+msgstr "从文本编排区域中减去形状"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7765,7 +7765,7 @@ msgstr "从文本链中减去形状"
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
-msgstr "使形状成为被选中的第一条文本的减去形状区域的一部份。"
+msgstr "将形状加入到被选中的第一条文本的减去区域。"
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7786,14 +7786,14 @@ msgstr "使选中的第一条文本跟随选中的第一条路径编排。"
 #, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "从文本链中移除形状"
+msgstr "从文本编排区域中移除形状"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "从文本链中移除形状并将它们添加到图层。"
+msgstr "从文本编排区域中移除形状并将它们添加到图层。"
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7804,14 +7804,14 @@ msgstr "从文本链中移除形状并将它们添加到图层。"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "切换文本流形状类型"
+msgstr "切换编排形状类型"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr "切换当前文本流形状模式 (内部/减去)"
+msgstr "切换当前编排形状的类型 (编排区域/减去区域)"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7843,7 +7843,7 @@ msgstr "在文本链中前移"
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr "在文本链中前移此形状。"
+msgstr "在文本链中向前移动此形状。"
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
@@ -7878,7 +7878,7 @@ msgstr "在文本链中后移。"
 #, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "在文本链中前置"
+msgstr "在文本链中置于最前"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -16690,7 +16690,7 @@ msgstr "适合视图高度"
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "样式示例"
+msgstr "示例文本"
 
 #: libs/flake/svg/SvgParser.cpp:1762
 #, kde-format
@@ -18747,7 +18747,7 @@ msgstr "%1 个字符变体。"
 #, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "访问所有替代字符形式"
+msgstr "访问所有替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
@@ -18759,7 +18759,7 @@ msgstr "访问所有可能的替代字符形式。"
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "根据上下文确定替代字符形式"
+msgstr "根据上下文确定替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
@@ -18811,7 +18811,7 @@ msgstr "将字符序列替换为专为排版效果而设计的连字形式。"
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr "行尾替代字符形式"
+msgstr "行尾替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
@@ -20121,7 +20121,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces all horizontal-script glyphs with rotated variants for vertical "
 "layout."
-msgstr "将所有横排文字的字符替换为适合竖排的旋转变体。"
+msgstr "将所有横排文本的字符替换为适合竖排的旋转变体。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
 #, kde-format
@@ -20147,7 +20147,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
 "end form."
-msgstr "在连写体文字中，将字符序列中的最后一个字符替换为其结尾形式。"
+msgstr "在连写体文本中，将字符序列中的最后一个字符替换为其结尾形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
 #, kde-format
@@ -20192,7 +20192,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
-msgstr "在连写体文字中，将字符序列中的第一个字符替换为其开头形式。"
+msgstr "在连写体文本中，将字符序列中的第一个字符替换为其开头形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
 #, kde-format
@@ -20200,7 +20200,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
-msgstr "在连写体文字中，将字符序列中的一个字符替换为其独立形式。"
+msgstr "在连写体文本中，将字符序列中的一个字符替换为其独立形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, kde-format
@@ -20238,7 +20238,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
-msgstr "在连写体文字中，将字符序列中的一个字符替换为其中间形式。"
+msgstr "在连写体文本中，将字符序列中的一个字符替换为其中间形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, kde-format
@@ -24051,7 +24051,7 @@ msgstr "字体系列"
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "样式预设"
+msgstr "文本样式预设"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -34702,7 +34702,7 @@ msgstr "字体系列"
 #: libs/ui/KisApplication.cpp:482
 #, kde-format
 msgid "Style Presets"
-msgstr "样式预设"
+msgstr "文本样式预设"
 
 #: libs/ui/KisApplication.cpp:494
 #, kde-format
@@ -37444,7 +37444,6 @@ msgstr "工具箱"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
 #, fuzzy, kde-format
-#| msgid "Company:"
 msgid "Compact"
 msgstr "公司："
 
@@ -37483,29 +37482,24 @@ msgstr "从右到左(&R)"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:227
 #, fuzzy, kde-format
-#| msgid "Orientation"
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "方向"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:230
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Automatic"
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "自动(&A)"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:237
 #, fuzzy, kde-format
-#| msgid "Horizontal"
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
 msgstr "垂直镜像"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:244
 #, fuzzy, kde-format
-#| msgid "&Vertical"
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "垂直(&V)"
@@ -38140,7 +38134,7 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://baike.baidu.com/item/YCbCr/10012133\">YCbCr </a></b>是一"
 "种用于视频编码的色彩模型。它基于人类对色彩的感知原理将色彩以亮度、红绿平衡以"
-"及黄蓝平衡三个参数进行编码。此模型中的色品是饱和度的一种特殊形式，其范围的饱"
+"及黄蓝平衡三个参数进行编码。此模型中的色度是饱和度的一种特殊形式，其范围的饱"
 "和端为红和蓝，不饱和端为绿和黄。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
@@ -39546,32 +39540,32 @@ msgstr "平滑方式："
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
 msgid "Butt cap"
-msgstr "平头端点"
+msgstr "平头"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
 #, kde-format
 msgid "Round cap"
-msgstr "圆头端点"
+msgstr "圆头"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
 #, kde-format
 msgid "Square cap"
-msgstr "方头端点"
+msgstr "方头"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format
 msgid "Miter join"
-msgstr "斜接连接"
+msgstr "尖拐角"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
 #, kde-format
 msgid "Round join"
-msgstr "圆角连接"
+msgstr "圆拐角"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
 #, kde-format
 msgid "Bevel join"
-msgstr "斜面连接"
+msgstr "斜拐角"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
 #, kde-format
@@ -41014,7 +41008,7 @@ msgstr "如果上一种语言中缺少合适的翻译，则使用此语言中的
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
-msgstr "显示文字"
+msgstr "显示文本"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:315
 #, kde-format
@@ -41055,7 +41049,7 @@ msgstr "底部"
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:331
 #, kde-format
 msgid "Text Position"
-msgstr "文字位置"
+msgstr "文本位置"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:333
 #, kde-format
@@ -41065,17 +41059,17 @@ msgstr "仅图标"
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, kde-format
 msgid "Text Only"
-msgstr "仅文字"
+msgstr "仅文本"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, kde-format
 msgid "Text Alongside Icons"
-msgstr "文字在图标一侧"
+msgstr "文本在图标一侧"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, kde-format
 msgid "Text Under Icons"
-msgstr "文字在图标下方"
+msgstr "文本在图标下方"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:359
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:380
@@ -41127,7 +41121,7 @@ msgstr "显示工具栏"
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:336
 #, kde-format
 msgid "No text"
-msgstr "没有文字"
+msgstr "没有文本"
 
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:34
 #, kde-format
@@ -43338,7 +43332,7 @@ msgstr "完整"
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "图层混合信息文字不透明度"
+msgstr "图层混合信息文本不透明度"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:415
 #, kde-format
@@ -43624,7 +43618,7 @@ msgstr "选择 OpenColorIO 配置"
 #: plugins/dockers/lut/lutdocker_dock.cpp:514
 #, kde-format
 msgid "Luminance"
-msgstr "光度"
+msgstr "亮度"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:515
 #, kde-format
@@ -45154,7 +45148,7 @@ msgstr "百分比 (%)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "编辑样式预设"
+msgstr "编辑文本样式预设"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -45419,7 +45413,7 @@ msgstr "下标"
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
-msgstr "标题："
+msgstr "名称："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, kde-format
@@ -45461,7 +45455,7 @@ msgstr "段落"
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr "样式为像素相对值"
+msgstr "样式数值以像素尺寸为准"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
@@ -45473,7 +45467,7 @@ msgid ""
 "documents."
 msgstr ""
 "默认情况下，样式以点 (points) 为单位存储，这意味着不同图像的打印分辨率会导致"
-"像素大小不同。你可以切换此选项以确保样式在不同图像中保持相同的像素大小。"
+"像素大小不同。你可以选中此项以确保样式在不同图像中保持相同的像素大小。"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, kde-format
@@ -45485,7 +45479,7 @@ msgstr "示例文本："
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
-msgstr "之前..."
+msgstr "前方文本..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, kde-format
@@ -45497,7 +45491,7 @@ msgstr "示例..."
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
-msgstr "...之后"
+msgstr "...后方文本"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
 #, kde-format
@@ -46726,19 +46720,19 @@ msgstr "预设"
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr "添加样式预设"
+msgstr "添加文本样式预设"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:148
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
-msgstr "编辑样式预设"
+msgstr "编辑文本样式预设"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:167
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "克隆样式预设"
+msgstr "克隆文本样式预设"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, kde-format
@@ -46768,7 +46762,7 @@ msgstr "配置"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
-msgstr "默认可见性："
+msgstr "默认显示状态："
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
@@ -46782,26 +46776,26 @@ msgstr "相关时显示"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr "设置时显示"
+msgstr "被设置过时显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Always Show"
-msgstr "总是显示"
+msgstr "始终显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:106
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr "遵循默认"
+msgstr "遵循默认配置"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Never Show"
-msgstr "从不显示"
+msgstr "始终隐藏"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:12
 #, kde-format
@@ -46815,7 +46809,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
 msgstr ""
-"文字渲染方式 (Text Rendering) 控制字体轮廓微调 (hinting) 和渲染样式的属性设"
+"文本渲染方式 (Text Rendering) 控制字体轮廓微调 (hinting) 和渲染样式的属性设"
 "置。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
@@ -46863,7 +46857,7 @@ msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
 "水平方向排版时使用轻度 (light) 字体轮廓微调；垂直方向排版时使用完整 (full) 字"
-"体轮廓微调，增强文字清晰度。"
+"体轮廓微调，可增强文本清晰度。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
@@ -47168,7 +47162,7 @@ msgstr "竖排，从左到右"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "新建样式预设"
+msgstr "新文本样式预设"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -51056,7 +51050,7 @@ msgstr "色相/饱和度/明度 (HSY)"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:79
 #, kde-format
 msgid "Blue Chroma/Red Chroma/Luma"
-msgstr "蓝色品/红色品/明度"
+msgstr "蓝色度/红色度/明度"
 
 #. i18n: ectx: property (text), widget (QLabel, hLabel)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:93
@@ -52465,12 +52459,12 @@ msgstr "弧形"
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:20
 #, kde-format
 msgid "Pie"
-msgstr "饼形"
+msgstr "扇形"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:21
 #, kde-format
 msgid "Chord"
-msgstr "弓形"
+msgstr "弦形"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:18
@@ -53800,7 +53794,7 @@ msgstr "品质："
 #: plugins/impex/heif/WdgHeifExport.ui:47
 #, kde-format
 msgid "Chroma:"
-msgstr "色品精度："
+msgstr "色度精度："
 
 #. i18n: ectx: property (title), widget (QGroupBox, conversionSettings)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -55127,7 +55121,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr "从亮度推测色品"
+msgstr "从亮度推测色度"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
@@ -56202,7 +56196,7 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
-"虽然文字形状可以保存到 PSD 文件，但只支持基本功能。高级功能，例如文本按路径排"
+"虽然文本形状可以保存到 PSD 文件，但只支持基本功能。高级功能，例如文本按路径排"
 "列和 OpenType 功能将不会被保存。"
 
 #: plugins/impex/psd/psd_loader.cpp:184
@@ -59322,7 +59316,7 @@ msgstr "--"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:108
 #, kde-format
 msgid "Text:"
-msgstr "文字："
+msgstr "文本："
 
 #. i18n: ectx: property (text), widget (QLineEdit, lineEdit)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:139
@@ -59533,7 +59527,7 @@ msgstr "图像笔尖"
 #, kde-format
 msgctxt "Text Brush tip mode"
 msgid "Text"
-msgstr "文字笔尖"
+msgstr "文本笔尖"
 
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
 #, kde-format
@@ -61428,7 +61422,7 @@ msgid ""
 "needs to contain the keyword to be recognized. Keywords should be comma "
 "separated."
 msgstr ""
-"这些是可被用于标记文字图层的关键词。每个图层只需包含这些关键词即可被识别。用"
+"这些是可被用于标记文本图层的关键词。每个图层只需包含这些关键词即可被识别。用"
 "半角逗号分隔不同关键词。"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:262
@@ -61442,7 +61436,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
 msgid "Text Layer Key:"
-msgstr "文字图层关键词："
+msgstr "文本图层关键词："
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:264
 msgid "Panel Layer Key:"
@@ -61575,15 +61569,15 @@ msgstr "斜体"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"
-msgstr "文字颜色"
+msgstr "文本颜色"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:374
 msgid "Regular Text"
-msgstr "常规文字"
+msgstr "常规文本"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:376
 msgid "Inverted Text"
-msgstr "反转文字"
+msgstr "反转文本"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:391
 msgid "Document Info"
@@ -62132,7 +62126,7 @@ msgstr "在图像信息中查找作者信息并将其添加到作者列表中。
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:303
 msgid "Scrape Text for Translation"
-msgstr "清除待译文字"
+msgstr "清除待译文本"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Export Comic"
@@ -62710,7 +62704,7 @@ msgstr "附属材料作者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added text"
-msgstr "附加文字作者"
+msgstr "附加文本作者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of introduction"
@@ -62931,7 +62925,7 @@ msgid ""
 "the dialog where a user can enable or disable Krita scripts. </p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>此文字将显示在用户进行启动或禁用 Krita 脚本操作的对话框"
+"<html><head/><body><p>此文本将显示在用户进行启动或禁用 Krita 脚本操作的对话框"
 "的“注释”一栏。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
@@ -63709,11 +63703,11 @@ msgstr "选择自定义图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 msgid "Enter a Tooltip:"
-msgstr "输入悬停提示文字"
+msgstr "输入悬停提示信息"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 msgid "Tooltip text"
-msgstr "悬停提示文字"
+msgstr "悬停提示信息"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 msgid "Select a tool:"
@@ -64800,7 +64794,7 @@ msgstr "文本跟随路径"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "从文本流减去形状。"
+msgstr "从文本编排区域中减去形状。"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
 msgctxt "(qtundo-format)"
@@ -66020,7 +66014,7 @@ msgstr "移除文本"
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "移除字符变换"
+msgstr "移除字符变形"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -66269,14 +66263,14 @@ msgstr "细体 (Light)"
 #, kde-format
 msgctxt "action"
 msgid "Text Editor Settings"
-msgstr "文字编辑器设置"
+msgstr "文本编辑器设置"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:193
 #, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
-msgstr "文字编辑器设置..."
+msgstr "文本编辑器设置..."
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66326,7 +66320,7 @@ msgstr "粘贴纯文本"
 #, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "不带样式粘贴文本。"
+msgstr "粘贴纯文本，不带样式。"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
@@ -66349,7 +66343,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
-msgstr "当文本排版模式处于活动状态时，将所选文本开头下移 1 像素"
+msgstr "当画布排版模式处于活动状态时，将所选文本开头下移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
@@ -66372,7 +66366,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
-msgstr "当文本排版模式处于活动状态时，将所选文本开头上移 1 像素"
+msgstr "当画布排版模式处于活动状态时，将所选文本开头上移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
@@ -66395,7 +66389,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
-msgstr "当文本排版模式处于活动状态时，将所选文本开头左移 1 像素"
+msgstr "当画布排版模式处于活动状态时，将所选文本开头左移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
@@ -66418,7 +66412,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
-msgstr "当文本排版模式处于活动状态时，将所选文本开头右移 1 像素"
+msgstr "当画布排版模式处于活动状态时，将所选文本开头右移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66429,14 +66423,14 @@ msgstr "当文本排版模式处于活动状态时，将所选文本开头右移
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "移除字符变换"
+msgstr "移除字符变形"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr "移除选中文本的字符变换。"
+msgstr "移除选中文本的字符变形。"
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66471,13 +66465,13 @@ msgstr "SVG 文本工具"
 #, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr "创建新文本所用属性..."
+msgstr "创建新文本时使用的属性..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "新文本使用当前文本属性"
+msgstr "使用当前文本属性创建新文本"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
@@ -66490,13 +66484,13 @@ msgstr "使用文本属性面板中的当前属性来创建新文本。"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "新文本使用预设加载属性"
+msgstr "使用文本样式预设创建新文本"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "打开/关闭文本属性面板"
+msgstr "打开文本属性面板"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
@@ -66509,19 +66503,19 @@ msgstr "打开或关闭用于编辑字体、大小和其他样式的文本属性
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
-msgstr "选项"
+msgstr "其他选项"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "使用视觉光标"
+msgstr "按视觉顺序移动双向文本中的光标"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr "对双向文本使用视觉顺序。"
+msgstr "在双向文本中按视觉顺序移动光标。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
@@ -66539,13 +66533,13 @@ msgstr "粘贴时总是粘贴富文本。"
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "文本排版模式"
+msgstr "画布排版模式"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "启用文本排版模式。"
+msgstr "启用画布排版模式。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
@@ -66630,7 +66624,7 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"使用 SVG 1.1 规范的字符变换功能来对每一行文本进行定位。空格和换行符会被折叠。"
+"使用 SVG 1.1 规范的字符变形功能来对每一行文本进行定位。空格和换行符会被折叠。"
 "此类型专门用于向后兼容 SVG 1.1 规范。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
@@ -68366,7 +68360,7 @@ msgctxt "%1 is name of a font family"
 msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
-msgstr "字体系列“%1”在本机缺失。此样式预设可能无法正常工作。"
+msgstr "字体系列“%1”在本机缺失。此文本样式预设可能无法正常工作。"
 
 #: qmlmodules/components/qml/ResourceView.qml:141
 #, kde-format

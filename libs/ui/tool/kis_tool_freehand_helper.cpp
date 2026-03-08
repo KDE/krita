@@ -78,10 +78,10 @@ struct KisToolFreehandHelper::Private
     KisPaintInformation previousPaintInformation;
     KisPaintInformation olderPaintInformation;
 
-    QPointF lastDrawnPixel;
-    QPointF waitingPixel;
+    QPoint lastDrawnPixel;
+    QPoint tentativePixel;
     bool hasLastDrawnPixel;
-    int pixelInLineCount;
+    bool hasTentativePixel;
 
     KisSmoothingOptionsSP smoothingOptions;
 
@@ -109,6 +109,25 @@ struct KisToolFreehandHelper::Private
     KisStabilizerDelayedPaintHelper stabilizerDelayedPaintHelper;
 
     qreal effectiveSmoothnessDistance(qreal speed) const;
+
+    bool isTentativePixel(const QPoint &currentPixelPos) const
+    {
+        return abs(currentPixelPos.x() - lastDrawnPixel.x()) <= 1 && abs(currentPixelPos.y() - lastDrawnPixel.y()) <= 1;
+    }
+
+    static QPoint toPixelPos(const QPointF &pos)
+    {
+        // Don't replace this with QPointF::toPoint, that rounds! Flooring is
+        // the correct operation here.
+        return QPoint(qFloor(pos.x()), qFloor(pos.y()));
+    }
+
+    static KisPaintInformation makePixelPaintInformation(const QPoint &pixelPos)
+    {
+        // Offset the position to the center of the pixel.
+        QPointF pos(qreal(pixelPos.x()) + 0.5, qreal(pixelPos.y()) + 0.5);
+        return KisPaintInformation(pos);
+    }
 };
 
 
@@ -324,9 +343,8 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     m_d->history.clear();
     m_d->distanceHistory.clear();
-    m_d->lastDrawnPixel = QPointF(-1.0, -1.0); 
     m_d->hasLastDrawnPixel = false;
-    m_d->pixelInLineCount = 0;
+    m_d->hasTentativePixel = false;
 
     if (airbrushing) {
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
@@ -492,9 +510,6 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      */
 
     KisPaintInformation lastUsedPaintInformation;
-    QPointF currentPixelPos = info.pos();
-    const float PIXEL_DISTANCE_THRESHOLD = 1.7;
-   
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
         && (m_d->smoothingOptions->smoothnessDistanceMin() > 0.0
@@ -625,39 +640,40 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::PIXEL_PERFECT) {
-        // initial case: No last drawn pixel or waiting pixel
-        if(!m_d->hasLastDrawnPixel) {
-            currentPixelPos = info.pos();
-            m_d->waitingPixel = currentPixelPos;
+        QPoint currentPixelPos = Private::toPixelPos(info.pos());
 
-            paintLine(m_d->previousPaintInformation, KisPaintInformation(m_d->waitingPixel));
-            m_d->lastDrawnPixel = m_d->waitingPixel;
+        // First pixel is always perfect.
+        if (!m_d->hasLastDrawnPixel) {
+            paintLine(Private::makePixelPaintInformation(currentPixelPos),
+                      Private::makePixelPaintInformation(currentPixelPos));
+            m_d->lastDrawnPixel = currentPixelPos;
             m_d->hasLastDrawnPixel = true;
-            m_d->pixelInLineCount = 1;
+            m_d->hasTentativePixel = false;
+
         } else {
-            if (abs(currentPixelPos.x() - m_d->lastDrawnPixel.x()) > PIXEL_DISTANCE_THRESHOLD || abs(currentPixelPos.y() - m_d->lastDrawnPixel.y()) > PIXEL_DISTANCE_THRESHOLD) {
-                m_d->pixelInLineCount = 1;
-                // current pixel is too far, draw the waiting pixel
-                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
-                m_d->pixelInLineCount += 2; 
-                m_d->lastDrawnPixel = m_d->waitingPixel;
-                m_d->waitingPixel = currentPixelPos;
-            } 
-            // check axis, if the currentpixel is in the same axis as the lastdrawnpixel, we can draw waiting pixel
-            if (m_d->pixelInLineCount >= 1 && (currentPixelPos.x() == m_d->lastDrawnPixel.x() || currentPixelPos.y() == m_d->lastDrawnPixel.y())) {
-                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
-                m_d->lastDrawnPixel = m_d->waitingPixel;
-                m_d->olderPaintInformation = m_d->previousPaintInformation;
-                m_d->pixelInLineCount++; 
+            // Check if we need to flush a currently stashed tentative pixel.
+            bool lastTentative = m_d->isTentativePixel(currentPixelPos);
+            if (m_d->hasTentativePixel && !lastTentative) {
+                paintLine(Private::makePixelPaintInformation(m_d->lastDrawnPixel),
+                          Private::makePixelPaintInformation(m_d->tentativePixel));
+                m_d->hasTentativePixel = false;
+                m_d->lastDrawnPixel = m_d->tentativePixel;
+                lastTentative = m_d->isTentativePixel(currentPixelPos);
             }
-            else{
-                //otherwise just change update waiting pixel without drawing it, this is the scenario where we just skip a corner and therefore we also reset pixelInLineCount
-                m_d->waitingPixel = currentPixelPos;
-                m_d->pixelInLineCount = 0;
-            } 
-            // Enable stroke timeout only when not airbrushing.
-            if (!m_d->airbrushingTimer.isActive()) {
-                m_d->strokeTimeoutTimer.start(100);
+
+            // If this pixel is too close to the previously drawn one, we mark
+            // it as tentative and wait for further movements to make sure we
+            // don't put it down in a place that generates a jag. If there is
+            // already a tentative pixel, it will be clobbered.
+            if (lastTentative) {
+                m_d->hasTentativePixel = true;
+                m_d->tentativePixel = currentPixelPos;
+            } else {
+                paintLine(Private::makePixelPaintInformation(m_d->lastDrawnPixel),
+                          Private::makePixelPaintInformation(currentPixelPos));
+                m_d->lastDrawnPixel = currentPixelPos;
+                // Don't need to fiddle with hasLastTentativePixel here, it can
+                // only ever be false here due to the previous condition.
             }
         }
     }

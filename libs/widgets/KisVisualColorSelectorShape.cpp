@@ -51,6 +51,9 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(KisVisualColorSelector 
         m_d->channelMask |= 1 << channel2;
     }
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // Color selectors don't have context menus. Setting this prevents any
+    // long-presses from delaying inputs, see KisLongPressEventFilter.cpp.
+    setContextMenuPolicy(Qt::PreventContextMenu);
 }
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()

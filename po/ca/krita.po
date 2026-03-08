@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-06 02:40+0000\n"
-"PO-Revision-Date: 2026-03-06 11:57+0100\n"
+"PO-Revision-Date: 2026-03-07 19:05+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -46764,15 +46764,15 @@ msgstr "No es fan ajustos particulars a l'algorisme de salt de línia"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr "Flexible"
+msgstr "Laxe"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
-"Tot i que normalment defineix un algorisme més flexible, actualment és el "
-"mateix que automàtic."
+"Tot i que normalment defineix un algorisme més laxe, actualment és el mateix "
+"que automàtic."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format

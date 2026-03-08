@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-06 02:40+0000\n"
-"PO-Revision-Date: 2026-03-06 18:03+0200\n"
+"PO-Revision-Date: 2026-03-07 08:30+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Lokalize 25.12.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -61245,9 +61245,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:391
-#, fuzzy
 msgid "Set Today"
-msgstr "Script"
+msgstr "הגדרה היום"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Sets the publish date to the current date."
@@ -61437,9 +61436,8 @@ msgid "The files have been written to the export folder."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:899
-#, fuzzy
 msgid "Resize all Pages"
-msgstr "מחיקת טקסט"
+msgstr "שינוי הגודל של כל העמודים"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, fuzzy
@@ -61628,9 +61626,8 @@ msgid "translations"
 msgstr "תרגומים"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
-#, fuzzy
 msgid "Comic concept:"
-msgstr "&לבן"
+msgstr "רעיון לקומיקס:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:125
 msgid "Main language:"
@@ -61731,9 +61728,8 @@ msgid "Actor"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Art director"
-msgstr "מלבן"
+msgstr "ניהול אומנותי"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
@@ -61776,9 +61772,8 @@ msgid "Author of dialog"
 msgstr "מחבר"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Binding designer"
-msgstr "הדפסה אחרונה"
+msgstr "עיצוב כריכה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookjacket designer"
@@ -61810,39 +61805,32 @@ msgid "Bookseller"
 msgstr "<ללא כותרת>"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Calligrapher"
-msgstr "הוסף מעבר שורה"
+msgstr "קליגרפיה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Censor"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Cover designer"
-msgstr "העמוד הבא"
+msgstr "עיצוב עטיפה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
-#| msgid "Top Right"
 msgid "Copyright holder"
-msgstr "למעלה מימין"
+msgstr "בעלות זכויות יוצרים"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Creator"
-msgstr "זוויות:"
+msgstr "יצירה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Contributor"
-msgstr "זוויות:"
+msgstr "תרומה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Curator"
-msgstr "זוויות:"
+msgstr "אצירה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Commentator for written text"
@@ -62374,14 +62362,12 @@ msgid "Remove Entry"
 msgstr "הסרת רשומה"
 
 #: plugins/python/palette_docker/palette_docker.py:102
-#, fuzzy
 msgid "Edit Palette Settings"
-msgstr "הגדרות"
+msgstr "עריכת הגדרות ערכת צבעים"
 
 #: plugins/python/palette_docker/palette_docker.py:108
-#, fuzzy
 msgid "Export as GIMP Palette File"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא כקובץ ערכת צבעים של GIMP"
 
 #: plugins/python/palette_docker/palette_docker.py:112
 msgid "Export as Inkscape SVG with Swatches"
@@ -62392,9 +62378,8 @@ msgid "Sort Colors"
 msgstr "מיון צבעים"
 
 #: plugins/python/palette_docker/palette_docker.py:226
-#, fuzzy
 msgid "Edit Palette Data"
-msgstr "לוחות צבעים"
+msgstr "עריכת נתוני ערכת צבעים"
 
 #: plugins/python/palette_docker/palette_docker.py:231
 #, fuzzy
@@ -62782,11 +62767,12 @@ msgid "Activate Brush Preset {num}"
 msgstr "הפעלת ערכת מברשות {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
-#, fuzzy
 msgid ""
 "{}\n"
 "selected"
-msgstr "בחירה"
+msgstr ""
+"{}\n"
+"נבחרו"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:30
 msgid ""
@@ -62901,39 +62887,35 @@ msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
 #: plugins/python/tenscripts/tenscripts.py:54
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Execute Script {num}"
-msgstr "יצירת מסמך"
+msgstr "הרצת סקריפט {num}"
 
 #: plugins/python/tenscripts/tenscripts.py:77
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Script {0} executed"
-msgstr "כתב תחתי"
+msgstr "הסקריפט {0} הופעל"
 
 #: plugins/python/tenscripts/uitenscripts.py:73
-#, fuzzy
 msgid "Selected path"
-msgstr "בחירה"
+msgstr "הנתיב הנבחר"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
-#, fuzzy
 msgid "Select the script"
-msgstr "הסר שכבה נוכחית"
+msgstr "בחירת הסקריפט"
 
 #: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
 msgid "Custom icon"
-msgstr "אפשרויות עירוב"
+msgstr "סמל מותאם אישית"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
 msgid "Tool icon"
-msgstr "&תבנית"
+msgstr "סמל כלי"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
@@ -63011,19 +62993,16 @@ msgid "Brush preset name"
 msgstr "מאפייני שכבה..."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
 msgid "Select the brush preset"
-msgstr "מאפייני שכבה..."
+msgstr "בחירת "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
-#, fuzzy
 msgid "Select foreground color:"
-msgstr "שנייה"
+msgstr "בחירת צבע חזית:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
-#, fuzzy
 msgid "Load current foreground color"
-msgstr "צבע &טקסט"
+msgstr "טעינת צבע החזית הנוכחי"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 msgid "Clear foreground color"
@@ -63034,44 +63013,36 @@ msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
-#, fuzzy
 msgid "Select background color:"
-msgstr "שנייה"
+msgstr "בחירת צבע רקע:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
-#, fuzzy
 msgid "Load current background color"
-msgstr "שנייה"
+msgstr "טעינת צבע הרקע הנוכחי"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 msgid "Clear background color"
 msgstr "איפוס צבע הרקע"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
-#, fuzzy
 msgid "Select a script file:"
-msgstr "הסר שכבה נוכחית"
+msgstr "בחירת קובץ סקריפט:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
-#, fuzzy
 msgid "Script path"
-msgstr "בחירה"
+msgstr "נתיב סקריפט"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
-#, fuzzy
 msgid "Buttons size:"
-msgstr "בחירה"
+msgstr "גודל כפתורים:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
-#, fuzzy
 msgid "Settings button position:"
-msgstr "מיקום"
+msgstr "מקום כפתורי הגדרות:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
-#, fuzzy
-#| msgid "Bottom"
 msgid "Bottom bar"
-msgstr "למטה"
+msgstr "סרגל תחתון"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
@@ -63080,14 +63051,12 @@ msgstr "מקושר"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
-#, fuzzy
 msgid "Color info: "
-msgstr "&צבע"
+msgstr "פרטי צבע: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
-#, fuzzy
 msgid "Script files "
-msgstr "מאפייני שכבה..."
+msgstr "קובצי סקריפטים"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:26
 #, fuzzy
@@ -63508,9 +63477,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:675
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:580
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset the options to their default values"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "איפוס כל האפשרויות לערכי ברירת המחדל שלהן"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:684
 #, kde-format
@@ -63815,9 +63784,9 @@ msgstr "מזג את השכבות ה&גלויות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample Current Layer"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "דגימת השכבה הנוכחית"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:170
@@ -63897,9 +63866,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Move current layer"
-msgstr "הסר שכבה נוכחית"
+msgstr "ה&עברת השכבה הנוכחית"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:61

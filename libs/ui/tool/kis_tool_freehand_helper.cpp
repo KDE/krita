@@ -76,7 +76,10 @@ struct KisToolFreehandHelper::Private
     KisStrokeId strokeId;
 
     KisPaintInformation previousPaintInformation;
+    // Used only by basic, weighted and pixel smoothing.
     KisPaintInformation olderPaintInformation;
+    // Used only by pixel smoothing.
+    KisPaintInformation tentativePaintInformation;
 
     QPoint lastDrawnPixel;
     QPoint tentativePixel;
@@ -122,11 +125,10 @@ struct KisToolFreehandHelper::Private
         return QPoint(qFloor(pos.x()), qFloor(pos.y()));
     }
 
-    static KisPaintInformation makePixelPaintInformation(const QPoint &pixelPos)
+    static void setPaintInfoPixelPos(KisPaintInformation &info, const QPoint &pixelPos)
     {
         // Offset the position to the center of the pixel.
-        QPointF pos(qreal(pixelPos.x()) + 0.5, qreal(pixelPos.y()) + 0.5);
-        return KisPaintInformation(pos);
+        info.setPos(QPointF(qreal(pixelPos.x()) + 0.5, qreal(pixelPos.y()) + 0.5));
     }
 };
 
@@ -644,20 +646,22 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
 
         // First pixel is always perfect.
         if (!m_d->hasLastDrawnPixel) {
-            paintLine(Private::makePixelPaintInformation(currentPixelPos),
-                      Private::makePixelPaintInformation(currentPixelPos));
+            Private::setPaintInfoPixelPos(info, currentPixelPos);
+            paintLine(info, info);
             m_d->lastDrawnPixel = currentPixelPos;
             m_d->hasLastDrawnPixel = true;
             m_d->hasTentativePixel = false;
+            m_d->olderPaintInformation = info;
 
         } else {
             // Check if we need to flush a currently stashed tentative pixel.
             bool lastTentative = m_d->isTentativePixel(currentPixelPos);
             if (m_d->hasTentativePixel && !lastTentative) {
-                paintLine(Private::makePixelPaintInformation(m_d->lastDrawnPixel),
-                          Private::makePixelPaintInformation(m_d->tentativePixel));
+                Private::setPaintInfoPixelPos(m_d->tentativePaintInformation, m_d->tentativePixel);
+                paintLine(m_d->olderPaintInformation, m_d->tentativePaintInformation);
                 m_d->hasTentativePixel = false;
                 m_d->lastDrawnPixel = m_d->tentativePixel;
+                m_d->olderPaintInformation = m_d->tentativePaintInformation;
                 lastTentative = m_d->isTentativePixel(currentPixelPos);
             }
 
@@ -668,10 +672,12 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             if (lastTentative) {
                 m_d->hasTentativePixel = true;
                 m_d->tentativePixel = currentPixelPos;
+                m_d->tentativePaintInformation = info;
             } else {
-                paintLine(Private::makePixelPaintInformation(m_d->lastDrawnPixel),
-                          Private::makePixelPaintInformation(currentPixelPos));
+                Private::setPaintInfoPixelPos(info, currentPixelPos);
+                paintLine(m_d->olderPaintInformation, info);
                 m_d->lastDrawnPixel = currentPixelPos;
+                m_d->olderPaintInformation = info;
                 // Don't need to fiddle with hasLastTentativePixel here, it can
                 // only ever be false here due to the previous condition.
             }

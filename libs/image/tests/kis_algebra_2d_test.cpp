@@ -1288,7 +1288,6 @@ QPainterPath makeSpecialShape(bool left)
 
 }
 
-
 QPainterPath fromPolygon(QPolygonF poly) {
     QPainterPath path;
     path.addPolygon(poly);
@@ -1300,10 +1299,13 @@ QPainterPath fromPolygon(QVector<QPointF> poly) {
     return fromPolygon(QPolygonF(poly));
 }
 
+QPainterPath fromPolygon(std::initializer_list<QPointF> poly) {
+    return fromPolygon(QPolygonF(poly));
+}
+
 QPolygonF toPolygon(const QPainterPath& path) {
     return path.toFillPolygon();
 }
-
 
 void testRemoveGutterOneCase(const QString testName, const QPainterPath& shape1, const QPainterPath& shape2, const QLineF& mouseLine, bool isSameShape = false, int expectedSize = -1, const QPainterPath &expectedPath = QPainterPath())
 {

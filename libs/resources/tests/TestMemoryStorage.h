@@ -16,6 +16,9 @@ private Q_SLOTS:
     void testStorage();
     void testStorageRetrieval();
     void testAddResource();
+    void testVersionSaveWithASubfolder();
+    void testImportExportWithASubfolder();
+
     void initTestCase();
 private:
 };

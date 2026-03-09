@@ -50,8 +50,8 @@ void KisSelectionActionsPanelButton::draw(QPainter &painter)
         painter.drawPath(path)  ;
     }
 
-    QPixmap map = this->icon().pixmap(iconSize());
-    painter.drawPixmap(rect.x() + ICON_SIZE_OFFSET / 2.0 , rect.y() + ICON_SIZE_OFFSET / 2.0, map);
+    int padding = ICON_SIZE_OFFSET / 2;
+    icon().paint(&painter, rect.marginsRemoved(QMargins(padding, padding, padding, padding)));
 }
 
 

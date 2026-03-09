@@ -806,7 +806,7 @@ void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
         if (node) {
             bool toggled =  m_d->view->actionCollection()->action("view_show_canvas_only")->isChecked();
             if (toggled) {
-                m_d->view->showFloatingMessage( activeLayer()->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);
+                m_d->view->showFloatingMessage( node->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);
             }
         }
     }
@@ -823,13 +823,6 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
     if (node == activeNode()) return;
 
     slotSomethingActivatedNodeImpl(node);
-
-    if (node) {
-        bool toggled =  m_d->view->actionCollection()->action("view_show_canvas_only")->isChecked();
-        if (toggled) {
-            m_d->view->showFloatingMessage( activeLayer()->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);
-        }
-    }
 }
 
 void KisNodeManager::slotUiActivatedNode(KisNodeSP node)

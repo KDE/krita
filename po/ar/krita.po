@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-07 00:41+0000\n"
-"PO-Revision-Date: 2026-02-28 12:39+0400\n"
+"PO-Revision-Date: 2026-03-08 09:38+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -10772,7 +10772,7 @@ msgstr "غَيِّر الوقت إلى الإطار التالي"
 #, kde-format
 msgctxt "action"
 msgid "Previous Keyframe"
-msgstr "الإطار الرئيسّ السّابق"
+msgstr "الإطار الرئيس السّابق"
 
 #. i18n: context: toolTip @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1934
@@ -10789,7 +10789,7 @@ msgstr "غَيِّر الوقت إلى إطار رئيس سابق"
 #, kde-format
 msgctxt "action"
 msgid "Next Keyframe"
-msgstr "الإطار الرئيسّ التّالي"
+msgstr "الإطار الرئيس التّالي"
 
 #. i18n: context: toolTip @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1946
@@ -11054,7 +11054,7 @@ msgstr "أزِل إطارات الرئيس وحرّك ذيل الحركة إلى
 #, kde-format
 msgctxt "action"
 msgid "Remove Keyframe"
-msgstr "إزالة الإطار الرئيسّ"
+msgstr "إزالة الإطار الرئيس"
 
 #. i18n: context: toolTip @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2169
@@ -37691,10 +37691,9 @@ msgid "Toolbox"
 msgstr "صندوق الأدوات"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
-#, fuzzy, kde-format
-#| msgid "Company:"
+#, kde-format
 msgid "Compact"
-msgstr "الشّركة:"
+msgstr "مُدمج"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
@@ -37730,30 +37729,25 @@ msgid "&Right-to-left"
 msgstr "&يمين إلى يسار"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:227
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "الاتّجاه"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:230
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "آ&ليّ"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:237
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
-msgstr "أفقيًّا"
+msgstr "أ&فقي"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:244
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "رأ&سيّ"
@@ -42673,12 +42667,12 @@ msgstr "أضف إطارات رئيسية قياسية"
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
-msgstr "ضبط الإطار الرئيسّ"
+msgstr "ضبط الإطار الرئيس"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Insert keyframe"
-msgstr "إدراج الإطار الرئيسّ"
+msgstr "إدراج الإطار الرئيس"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:249
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:723
@@ -42702,8 +42696,8 @@ msgstr "اضبط وضع الاستيفاء"
 msgctxt "(qtundo-format)"
 msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
-msgstr[0] "ضبط الإطار الرئيسّ"
-msgstr[1] "ضبط الإطار الرئيسّ"
+msgstr[0] "ضبط الإطار الرئيس"
+msgstr[1] "ضبط الإطار الرئيس"
 msgstr[2] "ضبط الإطارين الرئيسين"
 msgstr[3] "ضبط ال‍ %1 إطارات الرئيسة"
 msgstr[4] "ضبط ال‍ %1 إطارًا رئيسًا"
@@ -42911,8 +42905,8 @@ msgstr "أضف إطارًا رئيساً"
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
-msgstr[0] "أزل الإطار الرئيسّ"
-msgstr[1] "أزل الإطار الرئيسّ"
+msgstr[0] "أزل الإطار الرئيس"
+msgstr[1] "أزل الإطار الرئيس"
 msgstr[2] "أزل الإطارين الرئيسين"
 msgstr[3] "أزل الإطارات الرئيسة"
 msgstr[4] "أزل الإطارات الرئيسة"
@@ -42923,8 +42917,8 @@ msgstr[5] "أزل الإطارات الرئيسة"
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
-msgstr[0] "انقل الإطار الرئيسّ"
-msgstr[1] "انقل الإطار الرئيسّ"
+msgstr[0] "انقل الإطار الرئيس"
+msgstr[1] "انقل الإطار الرئيس"
 msgstr[2] "انقل الإطارين الرئيسين"
 msgstr[3] "انقل %1 إطارات رئيسة"
 msgstr[4] "انقل %1 إطارًا رئيسًا"

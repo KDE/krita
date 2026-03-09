@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-07 00:41+0000\n"
-"PO-Revision-Date: 2026-03-07 03:34+0100\n"
+"PO-Revision-Date: 2026-03-08 04:06+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7769,6 +7769,8 @@ msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
+"აქცევს ფორმებს პირველი მონიშნული ტექსტის გამოკლებული ფორმების არეების "
+"ნაწილად."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -21485,6 +21487,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"ფენის ფერის სივრცე გამოსახულების ფერის სივრცისგან განსხვავდება:\n"
+"%1 [%2],\n"
+"ოპერაციები, შეიძლება, ნელი იყოს"
 
 #: libs/image/kis_layer_utils.cpp:627
 #, kde-format
@@ -64104,6 +64109,8 @@ msgstr ""
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
 msgstr ""
+"აჩვენებს თითოეული არხის ფერის ინფორმაციას ქვემოთ პროცენტულობის სახით "
+"ბაიტების მაგიერ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:210
@@ -64171,6 +64178,7 @@ msgstr "&მიმდინარე ფენის გადაადგილ
 #, kde-format
 msgid "Move the first layer with visible content at the place where you click."
 msgstr ""
+"ხილული შემცველობის მქონე პირველი ფენის გადატანა ადგილზე, სადაც დააწკაპუნებთ."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:64
@@ -64203,6 +64211,8 @@ msgstr "მალსახმობის გააადგილება"
 #, kde-format
 msgid "When holding shift, move keyboard shortcuts scale up by this amount."
 msgstr ""
+"როცა Shift-ზე გიჭირავთ, გადატანის კლავიატურის მალსახმობები ამ რაოდენობით "
+"გაადიდებენ."
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:127

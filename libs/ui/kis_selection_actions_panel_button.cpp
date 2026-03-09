@@ -66,10 +66,22 @@ void KisSelectionActionsPanelButton::paintEvent(QPaintEvent *e)
 void KisSelectionActionsPanelButton::tabletEvent(QTabletEvent *e)
 {
     if (e->type() == QEvent::TabletPress) {
-        QAbstractButton::mousePressEvent((QMouseEvent *)e);
+        QMouseEvent mouseEvent(QEvent::MouseButtonPress,
+                               e->posF(),
+                               e->globalPosF(),
+                               e->button(),
+                               e->buttons(),
+                               e->modifiers());
+        QAbstractButton::mousePressEvent(&mouseEvent);
         e->accept();
     } else if (e->type() == QEvent::TabletRelease) {
-        QAbstractButton::mouseReleaseEvent((QMouseEvent *)e);
+        QMouseEvent mouseEvent(QEvent::MouseButtonRelease,
+                               e->posF(),
+                               e->globalPosF(),
+                               e->button(),
+                               e->buttons(),
+                               e->modifiers());
+        QAbstractButton::mouseReleaseEvent(&mouseEvent);
         e->accept();
     }
 }

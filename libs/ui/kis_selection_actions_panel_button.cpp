@@ -35,15 +35,9 @@ void KisSelectionActionsPanelButton::draw(QPainter &painter)
     QRect rect = geometry();
     //Draw an outline when the button is pressed
     if(this->isDown()) {
-        QColor bgColor = qApp->palette().window().color();
-        //Invert the background color
-        bgColor.setRed(255 - bgColor.red());
-        bgColor.setGreen(255 - bgColor.green());
-        bgColor.setBlue(255 - bgColor.blue());
-
         QPainterPath path;
         path.addRoundedRect(rect, 3, 3);
-        QPen pen = bgColor;
+        QPen pen = qApp->palette().highlight().color();
         pen.setWidth(2);
 
         painter.setPen(pen);

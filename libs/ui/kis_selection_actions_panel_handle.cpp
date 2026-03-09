@@ -46,19 +46,9 @@ void KisSelectionActionsPanelHandle::set_held(bool held)
 
 void KisSelectionActionsPanelHandle::draw(QPainter& painter)
 {
-    QPixmap map = d->handle_icon.pixmap(d->size);
-
     QRect rect = geometry();
-    //Adjust the rct a bit to fill the right side of the bar properly
-    rect.setY(rect.y()  - 4);
-    rect.setHeight(rect.height() + 4);
-    rect.setX(rect.x()  + 3);
-    rect.setWidth(rect.width() + 1);
-
-    QColor bgColor = Qt::darkGray;
-    painter.fillRect(rect, bgColor);
-
-    painter.fillRect(rect, bgColor);
+    // Adjust the rect a bit to fill the right side of the bar properly
+    painter.fillRect(rect.marginsAdded(QMargins(-3, 4, 1, 4)), Qt::darkGray);
     // Adjusting the icon location a bit to be properly centered
-    painter.drawPixmap(geometry().x() + 3, geometry().y(), map);
+    d->handle_icon.paint(&painter, QRect(rect.x() + 3, rect.y(), d->size, d->size));
 }

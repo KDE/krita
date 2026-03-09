@@ -112,7 +112,7 @@ public:
 
     KisSessionResourceSP currentSession;
     bool closingSession{false};
-    QScopedPointer<KisSessionManagerDialog> sessionManager;
+    QPointer<KisSessionManagerDialog> sessionManager;
 
     QMap<QUrl, QUrl> pendingAddRecentUrlMap;
 
@@ -626,7 +626,8 @@ KisInputManager* KisPart::currentInputManager()
 void KisPart::showSessionManager()
 {
     if (d->sessionManager.isNull()) {
-        d->sessionManager.reset(new KisSessionManagerDialog());
+        d->sessionManager = new KisSessionManagerDialog();
+        d->sessionManager->setAttribute(Qt::WA_DeleteOnClose);
     }
 
     d->sessionManager->show();

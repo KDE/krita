@@ -6,6 +6,7 @@
 
 #include "kis_selection_actions_panel_handle.h"
 #include "kis_icon_utils.h"
+#include <qapplication.h>
 
 struct KisSelectionActionsPanelHandle::Private
 {
@@ -47,8 +48,10 @@ void KisSelectionActionsPanelHandle::set_held(bool held)
 void KisSelectionActionsPanelHandle::draw(QPainter& painter)
 {
     QRect rect = geometry();
+
     // Adjust the rect a bit to fill the right side of the bar properly
-    painter.fillRect(rect.marginsAdded(QMargins(-3, 4, 1, 4)), Qt::darkGray);
+    painter.fillRect(rect.marginsAdded(QMargins(-3, 4, 1, 4)), qApp->palette().window().color());
+
     // Adjusting the icon location a bit to be properly centered
     d->handle_icon.paint(&painter, QRect(rect.x() + 3, rect.y(), d->size, d->size));
 }

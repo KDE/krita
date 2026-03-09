@@ -12,6 +12,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_icon_utils.h"
+#include "kis_painting_tweaks.h"
 #include "kis_selection.h"
 #include "kis_selection_actions_panel_button.h"
 #include "kis_selection_actions_panel_handle.h"
@@ -293,8 +294,17 @@ QPoint KisSelectionActionsPanel::initialDragHandlePosition() const
 void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
 {
     const int cornerRadius = 4;
-    QColor outlineColor = Qt::darkGray;
-    const QColor bgColor = qApp->palette().window().color();
+    QColor outlineColor = qApp->palette().window().color();
+
+    QColor bgColor = qApp->palette().window().color();
+
+    //Slightly lighten the color, to force `dragColor` to  move it in the lighter direction, without this it will always darken the color
+    if (!KisIconUtils::useDarkIcons()) {
+        bgColor = bgColor.lighter(120);
+    }
+
+    KisPaintingTweaks::dragColor(&bgColor,  outlineColor, 0.25);
+
     QColor bgColorTrans = bgColor;
     bgColorTrans.setAlpha(80);
     const int outline_width = 4;

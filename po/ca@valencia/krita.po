@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-06 02:40+0000\n"
-"PO-Revision-Date: 2026-03-05 10:52+0100\n"
+"PO-Revision-Date: 2026-03-07 19:05+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8688,7 +8688,7 @@ msgstr "Trieu un color des de la pantalla"
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Mostra de color de la pantalla"
+msgstr "Color de mostra de la pantalla"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321
@@ -33317,7 +33317,7 @@ msgstr "Mostra el color de fons des de la capa actual"
 #: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, kde-format
 msgid "Sample Foreground Color from Merged Image"
-msgstr "Mostra de color de primer pla des de la imatge fusionada"
+msgstr "Color de mostra de primer pla des de la imatge fusionada"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:41
 #, kde-format
@@ -34009,7 +34009,7 @@ msgstr "Canvia el pinzell predefinit previ"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Mostra de color"
+msgstr "Color de mostra"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:75
@@ -41187,7 +41187,7 @@ msgid ""
 "bugs.kde.org</a> where you will find a form to fill in. </p><p><b>Please "
 "paste the following information into the bug report!</b></p></qt>"
 msgstr ""
-"<qt><p>Primer llegiu <b><a href=\"https://docs.krita.org/en/"
+"<qt><p>Primer llegiu <b><a href=\"https://docs.krita.org/ca/"
 "untranslatable_pages/reporting_bugs.html\">esta guia</a></b> per a informar "
 "d'errors!</p><p>Per a enviar un informe d'error, cliqueu damunt del botó de "
 "davall. Açò obrirà una finestra del navegador web a <a href=\"https://bugs."
@@ -46043,14 +46043,15 @@ msgstr "Alinea al centre del quadro em ideogràfic."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Sagnat"
+msgstr "Suspensió"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
-msgstr "Alinea al diacrític com s'utilitza en els alfabets bràmics del nord."
+msgstr ""
+"Alinea al traç superior com s'utilitza en els alfabets bràmics del nord."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -46610,7 +46611,7 @@ msgstr "No hi ha cap eix variable extra en esta lletra"
 #, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr "Puntuació del sagnat"
+msgstr "Puntuació suspesa"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
 #, kde-format
@@ -46620,9 +46621,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
-"La puntuació del sagnat permet l'obertura i el tancament de la puntuació del "
-"sagnat, així com les comes. Esta implementació només implementa la puntuació "
-"del sagnat de l'estil asiàtic oriental."
+"La puntuació suspesa permet l'obertura i el tancament de la puntuació "
+"suspesa, així com les comes. Esta implementació només implementa la "
+"puntuació suspesa de l'estil asiàtic oriental."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -46630,13 +46631,13 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr "puntuació del sagnat, burasagari"
+msgstr "puntuació suspesa, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr "Primer sagnat"
+msgstr "Primera suspensió"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -46648,19 +46649,19 @@ msgstr "Final de línia:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Sense sagnat"
+msgstr "Sense suspensió"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr "Permet les comes amb sagnat"
+msgstr "Permet les comes suspeses"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr "Força les comes amb sagnat"
+msgstr "Força les comes suspeses"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
@@ -46762,15 +46763,15 @@ msgstr "No es fan ajustos particulars a l'algorisme de salt de línia"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr "Flexible"
+msgstr "Laxe"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
-"Tot i que normalment definix un algorisme més flexible, actualment és el "
-"mateix que automàtic."
+"Tot i que normalment definix un algorisme més laxe, actualment és el mateix "
+"que automàtic."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -47446,7 +47447,7 @@ msgstr "sagnat de text, indentació"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Sagnat Sagnat"
+msgstr "Sagnat de suspensió"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
@@ -51169,7 +51170,7 @@ msgid ""
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
 "Assegureu-vos que les accions corresponen al gest correcte a nivell del "
-"sistema. Estos es poden configurar a Paràmetres de S Pen -> Accions aire."
+"sistema. Estos es poden configurar a Paràmetres del S Pen -> Accions aire."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -51566,7 +51567,7 @@ msgstr "Llindar:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Mostra de color:"
+msgstr "Color de mostra:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -67170,7 +67171,7 @@ msgstr "Ideogràfic"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "Sagnat"
+msgstr "Suspensió"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format
@@ -68998,7 +68999,7 @@ msgstr "Eina de transformació (Transformació lliure)"
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Eina de transformació (Transformació de perspectiva)"
+msgstr "Eina de transformació (transformació en perspectiva)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
@@ -69472,7 +69473,7 @@ msgstr "Eina de selecció de formes"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Mostra de color"
+msgstr "Color de mostra"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76

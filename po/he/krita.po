@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-06 02:40+0000\n"
-"PO-Revision-Date: 2026-03-07 08:30+0200\n"
+"PO-Revision-Date: 2026-03-08 21:58+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -43754,7 +43754,7 @@ msgstr "עריכת פרופיל וידאו"
 #: plugins/dockers/recorder/recorder_export.ui:333
 #, kde-format
 msgid "ffmpeg"
-msgstr ""
+msgstr "ffmpeg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:378
@@ -43804,7 +43804,7 @@ msgstr " שנ׳"
 #: plugins/dockers/recorder/recorder_export.ui:617
 #, kde-format
 msgid "FFmpeg:"
-msgstr ""
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkResize)
 #: plugins/dockers/recorder/recorder_export.ui:654
@@ -43823,14 +43823,14 @@ msgstr "משך סרטון:"
 #, kde-format
 msgctxt "Caption: Video exporting finished"
 msgid "Done!"
-msgstr ""
+msgstr "בוצע!"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonWatchIt)
 #: plugins/dockers/recorder/recorder_export.ui:961
 #, kde-format
 msgctxt "Watch the video which is just created"
 msgid "Watch it!"
-msgstr ""
+msgstr "לצפות בזה!"
 
 #. i18n: ectx: property (text), widget (QLabel, labelWritten)
 #: plugins/dockers/recorder/recorder_export.ui:971
@@ -43903,7 +43903,7 @@ msgstr "הוספת משתנה:"
 #: plugins/dockers/recorder/recorder_profile_settings.ui:169
 #, kde-format
 msgid "FFMpeg arguments:"
-msgstr ""
+msgstr "ארגומנטים ל־FFMpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:196
@@ -45824,25 +45824,25 @@ msgstr "תמונה"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS78"
-msgstr ""
+msgstr "JIS78"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:102
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS83"
-msgstr ""
+msgstr "JIS83"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:103
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS90"
-msgstr ""
+msgstr "JIS90"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:104
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS04"
-msgstr ""
+msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
 #, fuzzy, kde-format
@@ -45880,7 +45880,7 @@ msgstr "גל משולש"
 #, kde-format
 msgctxt "@option:check"
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:12
 #, fuzzy, kde-format
@@ -46542,7 +46542,7 @@ msgstr "רוחב:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "קאנה בגודל מלא"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, fuzzy, kde-format
@@ -47243,7 +47243,7 @@ msgstr "הבא %1 נוכחי קדימה"
 #, kde-format
 msgctxt "Caption of the dialog with Krita's Android system log for bug reports"
 msgid "Krita Logcat Dump: please paste this information to the bug report"
-msgstr ""
+msgstr "פרטי היטל Logcat של Krita: נא להדביק את הפרטים האלה בדוח התקלה"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:68
 #, kde-format
@@ -47252,7 +47252,7 @@ msgctxt ""
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
-msgstr ""
+msgstr "פרטי ניהול צבע של Krita: נא להדביק את הפרטים האלה בדוח התקלה"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, fuzzy, kde-format
@@ -47271,13 +47271,13 @@ msgstr "הבא %1 נוכחי קדימה"
 msgctxt "Caption of the dialog with system information for bug reports"
 msgid ""
 "Krita System Information: please paste this information to the bug report"
-msgstr ""
+msgstr "פרטי מערכת של Krita: נא להדביק את הפרטים האלה בדוח התקלה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/buginfo/wdg_buginfo.ui:39
 #, kde-format
 msgid "Please add this information to a bug report:"
-msgstr ""
+msgstr "נא להוסיף את הפרטים האלה לדוח התקלה:"
 
 #: plugins/extensions/clonesarray/clonesarray.xmlgui:5
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:7
@@ -47587,7 +47587,7 @@ msgstr "גרסת Krita:"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "שדרוגי סכמה"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -47715,7 +47715,7 @@ msgstr "פיצול שכבה"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:29
 #, kde-format
 msgid "Put all new layers in a group layer"
-msgstr ""
+msgstr "להציב את כל השכבות החדשות בשכבת קבוצה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSeparateGroupLayers)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:39
@@ -48395,28 +48395,28 @@ msgstr "כלי &עט"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D55"
-msgstr ""
+msgstr "D55"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:690
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D65"
-msgstr ""
+msgstr "D65"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:695
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D75"
-msgstr ""
+msgstr "D75"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:700
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D50"
-msgstr ""
+msgstr "D50"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:705

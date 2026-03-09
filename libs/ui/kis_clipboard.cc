@@ -487,6 +487,19 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
 
     PasteFormatBehaviour choice = PASTE_FORMAT_ASK;
 
+    // On wayland opening a dialog invalidates the clipboard data so we cache all the data beforehand
+    const auto &urls = cbData->urls();
+
+    const QImage qimage = [&]() {
+        QImage qimage = getImageFromMimeData(cbData);
+
+        if (qimage.isNull() && useClipboardFallback) {
+            qimage = d->clipboard->image();
+        }
+
+        return qimage;
+    }();
+
     if (!source.first) {
         choice = askUserForSource(cbData).second;
     } else {
@@ -494,16 +507,6 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
     }
 
     if (choice == PASTE_FORMAT_CLIP) {
-        const QImage qimage = [&]() {
-            QImage qimage = getImageFromMimeData(cbData);
-
-            if (qimage.isNull() && useClipboardFallback) {
-                qimage = d->clipboard->image();
-            }
-
-            return qimage;
-        }();
-
         KIS_SAFE_ASSERT_RECOVER(!qimage.isNull())
         {
             warnKrita << "Clipboard was cleared before loading image";
@@ -552,7 +555,6 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             cfg.setPasteBehaviour(behaviour);
         }
     } else {
-        const auto &urls = cbData->urls();
         const auto url = std::find_if(urls.constBegin(), urls.constEnd(), [&](const QUrl &url) {
             if (choice == PASTE_FORMAT_DOWNLOAD) {
                 return !url.isLocalFile();

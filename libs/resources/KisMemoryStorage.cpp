@@ -19,6 +19,28 @@
 #include <kis_assert.h>
 
 
+namespace detail {
+
+    /**
+     * TODO: move this function into KisStorageVersioningHelper with fixing the
+     * versioning functions to handle subfolders as well
+     */
+    std::optional<std::pair<QString, QString>> splitResourceUrl(const QString &url)
+    {
+        if (!url.contains('/')) return std::nullopt;
+
+        QStringList parts = url.split('/', Qt::SkipEmptyParts);
+
+        if (parts.isEmpty()) return std::nullopt;
+
+        const QString resourceType = parts[0];
+        parts.removeFirst();
+        const QString resourceFilename = parts.join('/');
+        return std::make_pair(resourceType, resourceFilename);
+    }
+
+}
+
 struct StoredResource
 {
     QDateTime timestamp;
@@ -178,13 +200,9 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
 
 bool KisMemoryStorage::importResource(const QString &url, QIODevice *device)
 {
-
-    QStringList parts = url.split('/', Qt::SkipEmptyParts);
-
-    Q_ASSERT(parts.size() == 2);
-
-    const QString resourceType = parts[0];
-    const QString resourceFilename = parts[1];
+    auto parsedUrl = detail::splitResourceUrl(url);
+    if (!parsedUrl) return false;
+    auto [resourceType, resourceFilename] = *parsedUrl;
 
     // we cannot overwrite existing file by API convention
     if (d->resourcesNew.contains(resourceType) &&
@@ -205,11 +223,9 @@ bool KisMemoryStorage::importResource(const QString &url, QIODevice *device)
 
 bool KisMemoryStorage::exportResource(const QString &url, QIODevice *device)
 {
-    QStringList parts = url.split('/', Qt::SkipEmptyParts);
-    Q_ASSERT(parts.size() == 2);
-
-    const QString resourceType = parts[0];
-    const QString resourceFilename = parts[1];
+    auto parsedUrl = detail::splitResourceUrl(url);
+    if (!parsedUrl) return false;
+    auto [resourceType, resourceFilename] = *parsedUrl;
 
     if (!d->resourcesNew.contains(resourceType) ||
         !d->resourcesNew[resourceType].contains(resourceFilename)) {
@@ -260,12 +276,9 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
 
 bool KisMemoryStorage::testingRemoveResource(const QString &url)
 {
-    QStringList parts = url.split('/', Qt::SkipEmptyParts);
-
-    Q_ASSERT(parts.size() == 2);
-
-    const QString resourceType = parts[0];
-    const QString resourceFilename = parts[1];
+    auto parsedUrl = detail::splitResourceUrl(url);
+    if (!parsedUrl) return false;
+    auto [resourceType, resourceFilename] = *parsedUrl;
 
     if (d->resourcesNew.contains(resourceType)) {
         return d->resourcesNew[resourceType].remove(resourceFilename) > 0;
@@ -276,12 +289,9 @@ bool KisMemoryStorage::testingRemoveResource(const QString &url)
 
 QString KisMemoryStorage::resourceMd5(const QString &url)
 {
-    QStringList parts = url.split('/', Qt::SkipEmptyParts);
-
-    Q_ASSERT(parts.size() == 2);
-
-    const QString resourceType = parts[0];
-    const QString resourceFilename = parts[1];
+    auto parsedUrl = detail::splitResourceUrl(url);
+    if (!parsedUrl) return QString();
+    auto [resourceType, resourceFilename] = *parsedUrl;
 
     QString result;
 

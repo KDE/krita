@@ -364,7 +364,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             heifChroma = heif_chroma_monochrome;
         } else if (heifModel == heif_colorspace_YCbCr) {
             // we do not support importing YCrBr spaces directly
-            heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_undefined);
+            heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
             colorModel = RGBAColorModelID.id();
             heifModel = heifimage.get_colorspace();
             heifChroma = heifimage.get_chroma_format();

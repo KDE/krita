@@ -12,6 +12,7 @@
 #include <functional>
 
 #include <KConfigGroup>
+#include <KSharedConfig>
 #include <kstandardguiitem.h>
 
 #include "KoColorSpaceRegistry.h"
@@ -19,8 +20,8 @@
 #include <KisPaletteModel.h>
 #include <KisPaletteChooser.h>
 #include <kis_palette_view.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
+#include <KisResourceModel.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_signal_compressor.h"
 #include "KoColorDisplayRendererInterface.h"
@@ -103,17 +104,36 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
         QString paletteMd5 = cfg.readEntry("internal_selector_active_color_set_md5", QString());
         QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
-        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSetSP savedPal = rServer->resource(paletteMd5, "", paletteName);
-        if (savedPal) {
-            this->slotChangePalette(savedPal);
-        } else {
-            if (rServer->resourceCount()) {
-                savedPal = rServer->firstResource();
-                if (savedPal) {
-                    this->slotChangePalette(savedPal);
-                }
+
+        KoColorSetSP savedPal;
+
+         if (!paletteMd5.isEmpty() || !paletteName.isEmpty()) {
+            auto source = KisGlobalResourcesInterface::instance()->source<KoColorSet>(ResourceType::Palettes);
+            savedPal = source.bestMatch(paletteMd5, "", paletteName);
+        }
+
+        if (!savedPal) {
+            /**
+             * We cannot use bestMatch() for fetching "Default" palette,
+             * since bestMatch() is allowed ot fetch resources from the
+             * disabled storages/bundles.
+             */
+            KisResourceModel model(ResourceType::Palettes);
+            auto foundResources = model.resourcesForName("Default");
+            if (!foundResources.isEmpty()) {
+                savedPal = foundResources.first().dynamicCast<KoColorSet>();
             }
+        }
+
+        if (!savedPal) {
+            auto source = KisGlobalResourcesInterface::instance()->source<KoColorSet>(ResourceType::Palettes);
+            savedPal = source.fallbackResource();
+        }
+
+        if (savedPal) {
+            m_d->paletteChooser->setCurrentItem(savedPal);
+            // slotChangePalette() will be automatically called by the connection
+            // of m_d->paletteChooser
         }
 
         connect(m_ui->paletteBox, SIGNAL(sigColorSelected(KoColor)), this,

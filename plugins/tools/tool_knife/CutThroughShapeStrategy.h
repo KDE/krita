@@ -39,6 +39,9 @@ private:
     qreal gutterWidthInDocumentCoordinates(qreal lineAngle);
     qreal calculateLineAngle(QPointF start, QPointF end);
 
+    bool willShapeBeCutGeneral(KoShape* referenceShape, const QPainterPath &srcOutline, const QRectF &leftOppositeRect, const QRectF &rightOppositeRect, bool checkGapLineRect, const QRectF &gapLineRect);
+    bool willShapeBeCutPrecise(const QPainterPath& srcOutline, const QLineF gapLine, const QLineF& leftLine, const QLineF& rightLine, const QPolygonF& gapLinePolygon);
+
 
 private:
 

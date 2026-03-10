@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-06 02:40+0000\n"
+"POT-Creation-Date: 2026-03-10 02:44+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -22338,7 +22338,7 @@ msgid "Clone Layer"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1630
+#: libs/ui/kis_node_manager.cpp:1623
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22383,7 +22383,7 @@ msgid "Transform Mask"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1392
+#: libs/ui/kis_node_manager.cpp:1385
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24119,11 +24119,11 @@ msgstr "Sumber Daya Lokal"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:759
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:761
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1317
-#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1238
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
+#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1238
 #: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
 #: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
 #: libs/ui/KisApplication.cpp:1331 libs/ui/KisDocument.cpp:1054
@@ -24419,7 +24419,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:325
+#: libs/widgets/KisDlgInternalColorSelector.cpp:345
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
@@ -34096,7 +34096,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr ""
 
-#: libs/ui/kis_clipboard.cc:760 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:762 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34520,19 +34520,19 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Tempel ke dalam Lapisan Aktif"
 
-#: libs/ui/kis_node_manager.cpp:1030
+#: libs/ui/kis_node_manager.cpp:1023
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Onion skin memerlukan lapisan dengan latar belakang transparan."
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1050
 #, fuzzy
 #| msgid "Duplicate"
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplikat"
 
-#: libs/ui/kis_node_manager.cpp:1082
+#: libs/ui/kis_node_manager.cpp:1075
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Raise"
@@ -34540,7 +34540,7 @@ msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Naikkan"
 
-#: libs/ui/kis_node_manager.cpp:1091
+#: libs/ui/kis_node_manager.cpp:1084
 #, fuzzy
 #| msgctxt "action"
 #| msgid "&Lower"
@@ -34548,7 +34548,7 @@ msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "&Turunkan"
 
-#: libs/ui/kis_node_manager.cpp:1111
+#: libs/ui/kis_node_manager.cpp:1104
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Remove Guide"
@@ -34556,12 +34556,12 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Hapus Panduan"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1120
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Cerminkan Mask Secara Horizontal"
 
-#: libs/ui/kis_node_manager.cpp:1130
+#: libs/ui/kis_node_manager.cpp:1123
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34569,12 +34569,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Cerminkan Lapisan Secara Horizontal"
 msgstr[1] "Cerminkan %1 Lapisan Secara Horizontal"
 
-#: libs/ui/kis_node_manager.cpp:1141
+#: libs/ui/kis_node_manager.cpp:1134
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Cerminkan Mask Secara Vertikal"
 
-#: libs/ui/kis_node_manager.cpp:1144
+#: libs/ui/kis_node_manager.cpp:1137
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34582,42 +34582,42 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Cerminkan Lapisan Secara Vertikal"
 msgstr[1] "Cerminkan %1 Lapisan Secara Vertikal"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1145
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Cerminkan Semua Lapisan Secara Horizontal"
 
-#: libs/ui/kis_node_manager.cpp:1159
+#: libs/ui/kis_node_manager.cpp:1152
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Cerminkan Semua Lapisan Secara Vertikal"
 
-#: libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1284
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Ekspor \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1311
 #, fuzzy, kde-format
 #| msgctxt "Saving .kra file error message"
 #| msgid "Could not save merged image."
 msgid "Could not save the layer. %1"
 msgstr "Tidak bisa menyimpan gambar yang digabungkan."
 
-#: libs/ui/kis_node_manager.cpp:1336
+#: libs/ui/kis_node_manager.cpp:1329
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1353
 #, fuzzy, kde-format
 #| msgid "Export options:"
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Opsi ekspor:"
 
-#: libs/ui/kis_node_manager.cpp:1380
+#: libs/ui/kis_node_manager.cpp:1373
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -34627,21 +34627,21 @@ msgstr ""
 "Tidak bisa menyimpan\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1405
+#: libs/ui/kis_node_manager.cpp:1398
 #, fuzzy, kde-format
 #| msgid "%1 is not readable"
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "%1 bukan dapat dibaca"
 
-#: libs/ui/kis_node_manager.cpp:1406
+#: libs/ui/kis_node_manager.cpp:1399
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1437
+#: libs/ui/kis_node_manager.cpp:1430
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Split Alpha into a Mask"
@@ -34649,22 +34649,22 @@ msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Belah Alfa ke dalam sebuah Mask"
 
-#: libs/ui/kis_node_manager.cpp:1577
+#: libs/ui/kis_node_manager.cpp:1570
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Potong Simpul"
 
-#: libs/ui/kis_node_manager.cpp:1660
+#: libs/ui/kis_node_manager.cpp:1653
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Kelompok Cepat"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Kelompok Pengeklipan Cepat"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1671
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Quick Clipping Group"
@@ -34672,7 +34672,7 @@ msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Kelompok Pengeklipan Cepat"
 
-#: libs/ui/kis_node_manager.cpp:1679
+#: libs/ui/kis_node_manager.cpp:1672
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Paste Layer"
@@ -34680,17 +34680,17 @@ msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Tempel Lapisan"
 
-#: libs/ui/kis_node_manager.cpp:1706
+#: libs/ui/kis_node_manager.cpp:1699
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1709
+#: libs/ui/kis_node_manager.cpp:1702
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1717
+#: libs/ui/kis_node_manager.cpp:1710
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Nonkelompok Cepat"
@@ -40268,13 +40268,13 @@ msgctxt "Reset the angle to a predefined value"
 msgid "Reset angle"
 msgstr "Atur ulang sudut-pandang"
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:93
+#: libs/widgets/KisDlgInternalColorSelector.cpp:94
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
 #, kde-format
 msgid "Load a palette"
 msgstr "Muat sebuah palet"
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:145
+#: libs/widgets/KisDlgInternalColorSelector.cpp:165
 #, kde-format
 msgid ""
 "This is a hexcode input, for webcolors. It can only get colors in the sRGB "
@@ -40282,7 +40282,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:313
+#: libs/widgets/KisDlgInternalColorSelector.cpp:333
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
@@ -40294,7 +40294,7 @@ msgstr "HSV"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:316
+#: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
@@ -40308,7 +40308,7 @@ msgstr "HSL"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:319
+#: libs/widgets/KisDlgInternalColorSelector.cpp:339
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
@@ -40321,7 +40321,7 @@ msgstr "HSI"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:322
+#: libs/widgets/KisDlgInternalColorSelector.cpp:342
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53

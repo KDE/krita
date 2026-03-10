@@ -1913,6 +1913,9 @@ void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
 void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
 {
     setMementoImpl(memento);
+    if (d->bulkActionState) {
+        d->bulkActionState->layoutSetFromMemento = true;
+    }
     notifyCursorPosChanged(0, 0);
     notifyMarkupChanged();
 }
@@ -1925,7 +1928,15 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento, int pos, 
     const bool shapeOffsetAfter = (textProperties().hasProperty(KoSvgTextProperties::ShapeMarginId)
                                    || textProperties().hasProperty(KoSvgTextProperties::ShapePaddingId));
     if (shapeOffsetBefore || shapeOffsetAfter) {
-        d->updateTextWrappingAreas();
+        if (d->bulkActionState) {
+            d->bulkActionState->contourHasChanged = true;
+        } else {
+            d->updateTextWrappingAreas();
+        }
+    } else {
+        if (d->bulkActionState) {
+            d->bulkActionState->layoutSetFromMemento = true;
+        }
     }
     notifyCursorPosChanged(pos, anchor);
     notifyMarkupChanged();
@@ -2001,6 +2012,7 @@ QRectF KoSvgTextShape::endBulkAction()
             // updateTextWrappingAreas() already includes a call to relayout()
             relayout();
         }
+        // otherwise, it's an update from a memento.
 
         updateRect = d->bulkActionState->originalBoundingRect | boundingRect();
     }

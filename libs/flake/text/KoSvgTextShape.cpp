@@ -1916,6 +1916,7 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
     if (d->bulkActionState) {
         d->bulkActionState->layoutSetFromMemento = true;
     }
+    notifyChanged();
     notifyCursorPosChanged(0, 0);
     notifyMarkupChanged();
 }
@@ -1938,6 +1939,7 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento, int pos, 
             d->bulkActionState->layoutSetFromMemento = true;
         }
     }
+    notifyChanged();
     notifyCursorPosChanged(pos, anchor);
     notifyMarkupChanged();
 }

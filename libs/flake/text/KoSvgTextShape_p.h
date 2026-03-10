@@ -546,9 +546,10 @@ public:
         QRectF originalBoundingRect;
         bool contourHasChanged = false;
         bool layoutHasChanged = false;
+        bool layoutSetFromMemento = false;
 
         bool changed() const {
-            return contourHasChanged || layoutHasChanged;
+            return contourHasChanged || layoutHasChanged || layoutSetFromMemento;
         }
     };
 

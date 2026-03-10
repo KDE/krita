@@ -237,6 +237,7 @@ KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceProvider *res
             SLOT(selectPaintingColorSpace()));
 
     m_d->inputImageProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    m_d->paintingColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_d->setCurrentNode(0);
     setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
 }
@@ -387,7 +388,7 @@ void KisDisplayColorConverter::Private::selectPaintingColorSpace()
 
 const KoColorSpace* KisDisplayColorConverter::paintingColorSpace() const
 {
-    KIS_ASSERT_RECOVER(m_d->paintingColorSpace) {
+    KIS_SAFE_ASSERT_RECOVER(m_d->paintingColorSpace) {
         return KoColorSpaceRegistry::instance()->rgb8();
     }
 

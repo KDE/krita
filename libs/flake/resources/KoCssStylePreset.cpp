@@ -166,16 +166,9 @@ KoShape* KoCssStylePreset::generateSampleShape() const
 
     // Remove properties that cannot be edited.
     Q_FOREACH(KoSvgTextProperties::PropertyId p, modifiedProps.properties()) {
-        if (KoSvgTextProperties::propertyIsBlockOnly(p)) {
-            if (removeParagraph) {
-                modifiedProps.removeProperty(p);
-            }
-        } else {
-            if (!removeParagraph) {
-                modifiedProps.removeProperty(p);
-            }
+        if (KoSvgTextProperties::propertyIsBlockOnly(p) && removeParagraph) {
+            modifiedProps.removeProperty(p);
         }
-
     }
     // This one is added after removing, because otherwise, the type is removed...
     modifiedProps.setProperty(KoSvgTextProperties::KraTextStyleType, type);

@@ -180,6 +180,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QRectF gapLineRightRect = KisAlgebra2D::createRectFromCorners(rightLine);
     QRectF gapLineRect = gapLineLeftRect | gapLineRightRect; // will not be empty if the gutterWidth > 0
     bool checkGapLineRect = !gapLineRect.isEmpty();
+    QPolygonF gapLinePolygon = QPolygonF({leftLine.p1(), leftLine.p2(), rightLine.p2(), rightLine.p1(), leftLine.p1()});
 
 
     for (int i = 0; i < srcOutlines.size(); i++) {
@@ -222,7 +223,15 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                 || srcOutlines[i].contains(rightLine.p1()) || srcOutlines[i].contains(rightLine.p2());
         bool crossesGapLine = KisAlgebra2D::getLineSegmentCrossingLineIndexes(leftLine, srcOutlines[i]).count() > 0
                 || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutlines[i]).count() > 0;
-        if (!containsGapLinePoint && !crossesGapLine) {
+
+        bool containsPointWithinGap = false;
+        Q_FOREACH(QPointF p, srcOutlines[i].toFillPolygon()) {
+            if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
+                containsPointWithinGap = true;
+                break;
+            }
+        }
+        if (!containsGapLinePoint && !crossesGapLine && !containsPointWithinGap) {
 
             //qCritical() << "it doesn't cross the line!";
             if (wasSelected) {

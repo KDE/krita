@@ -503,7 +503,9 @@ void KoPointerEvent::copyQtPointerEvent(const QTouchEvent *event, QScopedPointer
 
 std::optional<QPointF> KoPointerEvent::fetchGlobalPositionFromPointerEvent(QEvent *event)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(event, std::nullopt);
+    if (event == nullptr) {
+        return std::nullopt;
+    }
 
     if (event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchEnd) {
         const QTouchEvent *touchEvent = static_cast<const QTouchEvent *>(event);

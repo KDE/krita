@@ -676,18 +676,7 @@ bool KisTool::nodeEditable()
 
     if (!nodeEditable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        QString message;
-        if (!node->visible() && node->userLocked()) {
-            message = i18n("Layer is locked and invisible.");
-        } else if (node->userLocked()) {
-            message = i18n("Layer is locked.");
-        } else if(!node->visible()) {
-            message = i18n("Layer is invisible.");
-        } else if (blockedNoIndirectPainting) {
-            message = i18n("Layer can be painted in Wash Mode only.");
-        } else {
-            message = i18n("Group not editable.");
-        }
+        QString message = KisToolUtils::nodeEditableMessage(node, blockedNoIndirectPainting);
         kiscanvas->viewManager()->showFloatingMessage(message, KisIconUtils::loadIcon("object-locked"));
     }
     return nodeEditable;

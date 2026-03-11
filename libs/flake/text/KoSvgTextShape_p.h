@@ -14,6 +14,7 @@
 #include "KoSvgTextContentElement.h"
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
+#include <KoInsets.h>
 
 #include "KoCssTextUtils.h"
 #include <KoShapeGroup.h>
@@ -687,7 +688,7 @@ public:
                     const KoSvgText::TextRendering rendering,
                     QPainterPath &chunk,
                     int &currentIndex);
-    KoShape* collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
+    KoShape* collectPaths(const KoSvgTextShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
     void paintDebug(QPainter &painter,
                     const QVector<CharacterResult> &result,
                     int &currentIndex);
@@ -1413,6 +1414,48 @@ public:
             }
             newTextPathName = QString("textPath"+QString::number(textPathNumber));
         }
+    }
+
+    /**
+     * @brief boundingBoxFromTree
+     * get the bounding box of the current textdata tree.
+     * We need the bounding box for a variety of things, primarily KoShape::boundingRect(),
+     * but also the calculation of the gradient painting rect.
+     * @param tree -- tree to perform this on.
+     * @param includeStrokeInset -- whether to include stroke insets.
+     * @return a bounding rect.
+     */
+    static QRectF boundingBoxFromTree(KisForest<KoSvgTextContentElement> tree, const KoSvgTextShape *rootShape, bool includeStrokeInset) {
+        QRectF result;
+        QList<KoShapeStrokeModelSP> parentStrokes;
+        for (auto it = tree.compositionBegin(); it != tree.compositionEnd(); it++) {
+            if (it.state() == KisForestDetail::Enter) {
+                if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                    parentStrokes.append(it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property);
+                }
+            } else {
+                KoShapeStrokeModelSP stroke = parentStrokes.size() > 0? parentStrokes.last(): nullptr;
+                QRectF bb = it->associatedOutline.boundingRect();
+                QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
+                for (int i = 0; i < decorations.values().size(); ++i) {
+                    bb |= decorations.values().at(i).boundingRect();
+                }
+                if (!bb.isEmpty()) {
+                    if (stroke && includeStrokeInset) {
+                        KoInsets insets;
+                        stroke->strokeInsets(rootShape, insets);
+                        result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+                    } else {
+                        result |= bb;
+                    }
+                }
+                if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                    // reset stroke to use parent stroke.
+                    parentStrokes.pop_back();
+                }
+            }
+        }
+        return result;
     }
 };
 

@@ -3,11 +3,11 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-#include "SvgTextPathInfoChangeCommand.h"
+#include "KoSvgTextPathInfoChangeCommand.h"
 #include "kis_command_ids.h"
 #include <KoShapeBulkActionLock.h>
 
-SvgTextPathInfoChangeCommand::SvgTextPathInfoChangeCommand(KoSvgTextShape *shape, int pos, KoSvgText::TextOnPathInfo textPathInfo, KUndo2Command *parent)
+KoSvgTextPathInfoChangeCommand::KoSvgTextPathInfoChangeCommand(KoSvgTextShape *shape, int pos, KoSvgText::TextOnPathInfo textPathInfo, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_textData(shape->getMemento())
@@ -17,7 +17,7 @@ SvgTextPathInfoChangeCommand::SvgTextPathInfoChangeCommand(KoSvgTextShape *shape
     setText(kundo2_i18n("Change Text On Path Properties"));
 }
 
-void SvgTextPathInfoChangeCommand::redo()
+void KoSvgTextPathInfoChangeCommand::redo()
 {
     KoShapeBulkActionLock lock(m_shape);
     KoSvgTextNodeIndex index = m_shape->topLevelNodeForPos(m_pos);
@@ -42,21 +42,21 @@ void SvgTextPathInfoChangeCommand::redo()
     m_shape->notifyCursorPosChanged(m_pos, m_pos);
 }
 
-void SvgTextPathInfoChangeCommand::undo()
+void KoSvgTextPathInfoChangeCommand::undo()
 {
     KoShapeBulkActionLock lock(m_shape);
     m_shape->setMemento(m_textData, m_pos, m_pos);
     KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
-int SvgTextPathInfoChangeCommand::id() const
+int KoSvgTextPathInfoChangeCommand::id() const
 {
     return KisCommandUtils::SvgTextPathInfoChangeCommandId;
 }
 
-bool SvgTextPathInfoChangeCommand::mergeWith(const KUndo2Command *other)
+bool KoSvgTextPathInfoChangeCommand::mergeWith(const KUndo2Command *other)
 {
-    const SvgTextPathInfoChangeCommand *command = dynamic_cast<const SvgTextPathInfoChangeCommand*>(other);
+    const KoSvgTextPathInfoChangeCommand *command = dynamic_cast<const KoSvgTextPathInfoChangeCommand*>(other);
 
     if (!command || command->m_shape != m_shape || m_pos != command->m_pos) {
         return false;

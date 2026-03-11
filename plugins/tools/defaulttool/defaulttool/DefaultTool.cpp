@@ -45,6 +45,7 @@
 #include <commands/KoSvgTextAddRemoveShapeCommands.h>
 #include <commands/KoSvgTextFlipShapeContourTypeCommand.h>
 #include <commands/KoSvgTextReorderShapeInsideCommand.h>
+#include <commands/KoSvgTextPathInfoChangeCommand.h>
 
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
@@ -626,7 +627,7 @@ void DefaultTool::slotPutTextOnPath()
    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Put Text On Path"));
 
    new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
-   if (textShape->textType() != KoSvgTextShape::InlineWrap) {
+   if (textShape->textType() != KoSvgTextShape::PreformattedText && textShape->textType() != KoSvgTextShape::PrePositionedText) {
        new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
    }
 
@@ -636,6 +637,22 @@ void DefaultTool::slotPutTextOnPath()
    /// they will also need to check if the cursor interaction makes sense.
    KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, true, true);
    new KoSvgTextSetTextPathOnRangeCommand(textShape, textPath, 0, textShape->posForIndex(textShape->plainText().size()), parentCommand);
+
+   /// We need to adjust the startOffset by the anchor/direction, because otherwise the text might be largely off the path.
+   /// This isn't a problem when using cursor to set it, as the cursor-pos can be the startOffset position.
+   KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(textShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+   if ((textShape->direction() == KoSvgText::DirectionRightToLeft && anchor == KoSvgText::AnchorStart)
+           || (textShape->direction() == KoSvgText::DirectionLeftToRight && anchor == KoSvgText::AnchorEnd)) {
+       KoSvgText::TextOnPathInfo info;
+       info.startOffset = 100.0;
+       info.startOffsetIsPercentage = true;
+       new KoSvgTextPathInfoChangeCommand(textShape, 0, info, parentCommand);
+   } else if (anchor == KoSvgText::AnchorMiddle) {
+       KoSvgText::TextOnPathInfo info;
+       info.startOffset = 50.0;
+       info.startOffsetIsPercentage = true;
+       new KoSvgTextPathInfoChangeCommand(textShape, 0, info, parentCommand);
+   }
 
    new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
 

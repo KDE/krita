@@ -210,10 +210,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     if (leftLine.length() == 0 || rightLine.length() == 0) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(gapLine.length() != 0 && gapLines[0].length() != 0 && gapLines[1].length() != 0 && "Original gap lines shouldn't be empty at this point");
-        // looks like *all* shapes need to be cut out
-
-        tool()->canvas()->shapeController()->removeShapes(m_allShapes, cmd.get());
-        tool()->canvas()->addCommand(cmd.release());
         return;
     }
 

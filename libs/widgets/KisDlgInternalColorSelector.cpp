@@ -260,15 +260,6 @@ void KisDlgInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendere
     }
 }
 
-KoColor KisDlgInternalColorSelector::getModalColorDialog(const KoColor color, QWidget* parent, QString caption)
-{
-    Config config = Config();
-    KisDlgInternalColorSelector dialog(parent, color, config, caption);
-    dialog.setPreviousColor(color);
-    dialog.exec();
-    return dialog.getCurrentColor();
-}
-
 KoColor KisDlgInternalColorSelector::getCurrentColor()
 {
     return m_d->currentColor;

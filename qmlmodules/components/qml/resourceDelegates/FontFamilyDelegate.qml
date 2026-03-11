@@ -217,8 +217,6 @@ ResourceDelegateBase {
         acceptedButtons: Qt.RightButton | Qt.LeftButton;
         anchors.fill: parent;
         hoverEnabled: true;
-        // Itemdelegate can also handle hovers, but we don't use those.
-        preventStealing: true;
         onClicked: {
             if (mouse.button === Qt.RightButton) {
                 resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.index);

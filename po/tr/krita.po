@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-10 02:44+0000\n"
-"PO-Revision-Date: 2026-03-06 11:32+0300\n"
+"POT-Creation-Date: 2026-03-11 02:43+0000\n"
+"PO-Revision-Date: 2026-03-10 14:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20485,30 +20485,30 @@ msgid "Character Variant %1"
 msgstr "Karakter Varyantı %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2620
+#: libs/flake/text/KoSvgTextShape.cpp:2634
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Yer Tutucu Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2599
+#: libs/flake/text/KoSvgTextShape.cpp:2613
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2601
-#: libs/flake/text/KoSvgTextShape.cpp:2609
+#: libs/flake/text/KoSvgTextShape.cpp:2615
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2607
+#: libs/flake/text/KoSvgTextShape.cpp:2621
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2630
+#: libs/flake/text/KoSvgTextShape.cpp:2644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -27550,30 +27550,28 @@ msgid "Auto (%1)"
 msgstr "Kendiliğinden (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Şimdiki"
+msgstr "GLX (Geçerli)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr ""
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Şimdiki"
+msgstr "EGL (Geçerli)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27582,6 +27580,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>Krita’yı X11 ve Wayland üzerinde kullanıyor ve yavaşlık gözlemliyorsanız "
+"EGL ve GLX arasında geçiş yapmayı deneyin.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -29214,12 +29214,13 @@ msgstr "Yeğlenen sunucu (yeniden başlatma gerektirir):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
 #: libs/ui/forms/wdgdisplaysettings.ui:111
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
+#, kde-format
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
-msgstr "Yeğlenen sunucu (yeniden başlatma gerektirir):"
+msgstr ""
+"Yeğlenen OpenGL arayüzü\n"
+"(yeniden başlatma gerekir):"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -33837,7 +33838,7 @@ msgid "Color Sampler"
 msgstr "Renk Örnekleyicisi"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Deselect"
 msgstr "Seçimi Kaldır"
@@ -34674,34 +34675,34 @@ msgstr ""
 "künyelemeniz ve künyeyi burada seçmeniz gerekiyor."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Invert Selection"
 msgstr "Seçimi Tersine Çevir"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "Seçimi Renkle Doldur"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, kde-format
 msgid "Clear Selection"
 msgstr "Seçimi Temizle"
 
-#: libs/ui/kis_selection_actions_panel.cpp:78
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "Yeni Katmana Kopyala"
 
-#: libs/ui/kis_selection_actions_panel.cpp:79
+#: libs/ui/kis_selection_actions_panel.cpp:80
 #, kde-format
 msgid "Crop to Selection"
 msgstr "Seçime Kırp"

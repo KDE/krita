@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-10 02:44+0000\n"
+"POT-Creation-Date: 2026-03-11 02:43+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -20790,32 +20790,32 @@ msgid "Character Variant %1"
 msgstr "Variante (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2620
+#: libs/flake/text/KoSvgTextShape.cpp:2634
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Radjouter tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2599
+#: libs/flake/text/KoSvgTextShape.cpp:2613
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2601
-#: libs/flake/text/KoSvgTextShape.cpp:2609
+#: libs/flake/text/KoSvgTextShape.cpp:2615
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Fôme tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2607
+#: libs/flake/text/KoSvgTextShape.cpp:2621
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2630
+#: libs/flake/text/KoSvgTextShape.cpp:2644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -34143,7 +34143,7 @@ msgid "Color Sampler"
 msgstr "Tchoezixheu di coleur"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "Distchoezi"
@@ -35009,34 +35009,34 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "Tchoezi ttafwait"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, fuzzy, kde-format
 msgid "Invert Selection"
 msgstr "Tchoezi å &rvier"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 msgid "Fill Selection with Color"
 msgstr "Tchoe&s di pådjes"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, fuzzy, kde-format
 msgid "Clear Selection"
 msgstr "Tchoes do tchmin"
 
-#: libs/ui/kis_selection_actions_panel.cpp:78
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, fuzzy, kde-format
 msgid "Copy To New Layer"
 msgstr "Côutche &hopea"
 
-#: libs/ui/kis_selection_actions_panel.cpp:79
+#: libs/ui/kis_selection_actions_panel.cpp:80
 #, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "Agrandi tchoes"

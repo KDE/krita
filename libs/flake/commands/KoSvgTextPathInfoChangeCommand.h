@@ -7,15 +7,15 @@
 #define SVGTEXTPATHINFOCHANGECOMMAND_H
 
 #include <kundo2command.h>
-#include "kritatoolsvgtext_export.h"
+#include "kritaflake_export.h"
 
 #include <KoSvgTextShape.h>
 #include <KoSvgText.h>
 
-class KRITATOOLSVGTEXT_EXPORT SvgTextPathInfoChangeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoSvgTextPathInfoChangeCommand : public KUndo2Command
 {
 public:
-    SvgTextPathInfoChangeCommand(KoSvgTextShape *shape, int pos, KoSvgText::TextOnPathInfo textPathInfo, KUndo2Command *parent = nullptr);
+    KoSvgTextPathInfoChangeCommand(KoSvgTextShape *shape, int pos, KoSvgText::TextOnPathInfo textPathInfo, KUndo2Command *parent = nullptr);
 
     void redo() override;
     void undo() override;

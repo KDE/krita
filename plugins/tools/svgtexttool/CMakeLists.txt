@@ -28,7 +28,6 @@ set (SvgTextTool_SRCS
     SvgTextChangeTransformsOnRange.cpp
     SvgTextTypeSettingStrategy.cpp
     SvgTextRemoveTransformsFromRange.cpp
-    SvgTextPathInfoChangeCommand.cpp
     SvgChangeTextPathInfoStrategy.cpp
     SvgTextOnPathDecorationHelper.cpp
     SvgChangeTextPaddingMarginStrategy.cpp

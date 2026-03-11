@@ -180,15 +180,17 @@ public:
      * property is inheritable according to SVG and this set does not define
      * it.
      */
-    void inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve = false);
+    void inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve = false, bool onlyFontAndLineHeight = false);
 
     /**
      * @brief resolveRelativeValues
      * resolve the font-relative values.
      * @param fontSize -- fontsize to resolve 'em' to.
-     * @param xHeight -- xHeight to resolve 'ex' to.
+     * @param onlyFontAndLineHeight -- only resolve fontsize and line height (if necessary).
+     * It can make sense to only want to resolve font and line-height is line-height is LH, because all other relative
+     * units are derived from these.
      */
-    void resolveRelativeValues(const KoSvgText::FontMetrics metrics = KoSvgText::FontMetrics(12.0, true), const qreal fontSize = 12.0);
+    void resolveRelativeValues(const KoSvgText::FontMetrics metrics = KoSvgText::FontMetrics(12.0, true), const qreal fontSize = 12.0, bool onlyFontAndLineHeight = false);
 
     /**
      * Return true if the property \p id is inherited from \p parentProperties.

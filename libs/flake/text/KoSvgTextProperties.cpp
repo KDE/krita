@@ -111,7 +111,7 @@ void KoSvgTextProperties::resetNonInheritableToDefault()
     }
 }
 
-void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve)
+void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve, bool onlyFontAndLineHeight)
 {
     auto it = parentProperties.m_d->properties.constBegin();
     for (; it != parentProperties.m_d->properties.constEnd(); ++it) {
@@ -121,11 +121,11 @@ void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentPropertie
     }
 
     if (resolve) {
-        resolveRelativeValues(parentProperties.metrics(), parentProperties.fontSize().value);
+        resolveRelativeValues(parentProperties.metrics(), parentProperties.fontSize().value, onlyFontAndLineHeight);
     }
 }
 
-void KoSvgTextProperties::resolveRelativeValues(const KoSvgText::FontMetrics metrics, const qreal fontSize)
+void KoSvgTextProperties::resolveRelativeValues(const KoSvgText::FontMetrics metrics, const qreal fontSize, bool onlyFontAndLineHeight)
 {
     // First resolve 'font-*' properties.
     // See https://www.w3.org/TR/css-values-4/#font-relative-lengths
@@ -136,14 +136,17 @@ void KoSvgTextProperties::resolveRelativeValues(const KoSvgText::FontMetrics met
     KoSvgText::LineHeightInfo lineHeight = this->propertyOrDefault(LineHeightId).value<KoSvgText::LineHeightInfo>();
     if (!lineHeight.isNormal && !lineHeight.isNumber) {
         if (lineHeight.length.unit == KoSvgText::CssLengthPercentage::Lh) {
-            lineHeight.length.convertToAbsolute(metrics, fontSize);
-        } else {
+            lineHeight.length.convertToAbsolute(metrics, fontSize, KoSvgText::CssLengthPercentage::Lh);
+        } else if (!onlyFontAndLineHeight) {
             lineHeight.length.convertToAbsolute(this->metrics(false), usedSize);
         }
         setProperty(LineHeightId, QVariant::fromValue(lineHeight));
     }
 
+    if (onlyFontAndLineHeight) return;
+
     const KoSvgText::FontMetrics usedMetrics = this->metrics();
+
 
     for (auto it = this->m_d->properties.begin(); it != this->m_d->properties.end(); it++) {
 

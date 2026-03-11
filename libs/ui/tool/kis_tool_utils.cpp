@@ -435,4 +435,24 @@ namespace KisToolUtils {
         m_tool->action("movetool-move-left-more")->setEnabled(value);
         m_tool->action("movetool-move-right-more")->setEnabled(value);
     }
+
+    QString nodeEditableMessage(KisNodeSP node, bool blockedNoIndirectPainting)
+    {
+        QString message;
+        if (!node->isEditable(true) || blockedNoIndirectPainting) {
+            if (!node->visible() && node->userLocked()) {
+                message = i18n("Layer is locked and invisible.");
+            } else if (node->userLocked()) {
+                message = i18n("Layer is locked.");
+            } else if(!node->visible()) {
+                message = i18n("Layer is invisible.");
+            } else if (blockedNoIndirectPainting) {
+                message = i18n("Layer can be painted in Wash Mode only.");
+            } else {
+                message = i18n("Group not editable.");
+            }
+        }
+        return message;
+    }
+
 }

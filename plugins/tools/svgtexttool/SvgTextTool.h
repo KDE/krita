@@ -105,6 +105,13 @@ private:
 
     void addMappedAction(KisSignalMapper* mapper, const QString &actionName, const int value, QActionGroup *group = nullptr);
 
+    /**
+     * @brief nodeEditable
+     * @see nodeEditable in KisTool.
+     * @return whether the current Node is editable. If not, it'll display an oncanvas message.
+     */
+    bool nodeEditable();
+
 private Q_SLOTS:
 
     void showEditor();

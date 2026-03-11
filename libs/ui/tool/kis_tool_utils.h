@@ -63,6 +63,14 @@ KisNodeList KRITAUI_EXPORT findNodes(KisNodeSP node, const QPoint &point, bool w
                                      bool includeGroups = true, bool editableOnly = true);
 
 /**
+ * @brief nodeEditableMessage
+ * @param node -- active node.
+ * @param blockedNoIndirectPainting -- whether editing is blocked due no-indirect painting being possible.
+ * @return the message for why the node is not editable. Will return empty if it is editable after all.
+ */
+QString KRITAUI_EXPORT nodeEditableMessage(KisNodeSP node, bool blockedNoIndirectPainting = false);
+
+/**
  * @brief shapeHoverInfoCrossLayer
  * get hover info of shapes on all layers.
  *

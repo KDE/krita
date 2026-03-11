@@ -81,8 +81,10 @@ public:
     /// Return the profiles in the context.
     QHash<QString, const KoColorProfile*> profiles();
 
-    /// These are the text properties, completely resolved, ensuring that everything is inherited and the sizes are converted to pt.
-    KoSvgTextProperties resolvedProperties() const;
+    /// These are the text properties, completely resolved,
+    /// ensuring that everything is inherited and the sizes are converted to pt.
+    /// @param onlyFontAndLineHeight -- whether to only resolve font and lineheight.
+    KoSvgTextProperties resolvedProperties(bool onlyFontAndLineHeight = false) const;
 
     bool isRootContext() const;
 

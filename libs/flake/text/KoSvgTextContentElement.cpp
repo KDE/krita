@@ -165,7 +165,7 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
-    KoSvgTextProperties props = rootNode? context.resolvedProperties(): gc->textProperties;
+    KoSvgTextProperties props = rootNode? context.resolvedProperties(true): gc->textProperties;
 
 
     QVector<KoSvgTextProperties::PropertyId> generic = {KoSvgTextProperties::FillId,

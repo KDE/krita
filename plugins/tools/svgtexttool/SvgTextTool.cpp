@@ -634,6 +634,20 @@ void SvgTextTool::slotUpdateTypeSettingMode()
     slotTextTypeUpdated();
 }
 
+bool SvgTextTool::nodeEditable()
+{
+    KisNodeSP node = canvas()->resourceManager()->resource(KoCanvasResource::CurrentKritaNode).value<KisNodeWSP>();
+    if (!node->isEditable(true)) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        if (kiscanvas) {
+            QString message = KisToolUtils::nodeEditableMessage(node);
+            kiscanvas->viewManager()->showFloatingMessage(message, KisIconUtils::loadIcon("object-locked"));
+        }
+        return false;
+    }
+    return true;
+}
+
 QRectF SvgTextTool::decorationsRect() const
 {
     QRectF rect;
@@ -765,6 +779,11 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
     // the tool's state is updated properly to handle the press.
     if (event->isTouchEvent()) {
         mouseMoveEvent(event);
+    }
+
+    if (!nodeEditable()) {
+        event->accept();
+        return;
     }
 
     KoSvgTextShape *selectedShape = this->selectedShape();

@@ -609,6 +609,9 @@ void KisPaletteEditor::slotPaletteChanged()
 {
     Q_ASSERT(m_d->model);
     clearStagedChanges();
+
+    const KoColorSetSP colorSet = m_d->model->colorSet();
+    m_d->modifiedPaletteInfo.storageLocation = colorSet ? colorSet->storageLocation() : "";
 }
 
 QString KisPaletteEditor::newGroupName() const

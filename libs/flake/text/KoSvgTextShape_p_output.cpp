@@ -343,13 +343,15 @@ KoShapeStrokeModelSP transformStrokeBgToNewBounds(KoShapeStrokeModelSP stroke, c
         QBrush b = s->lineBrush();
         if (b.gradient()) {
             QRectF nb = newBounds;
+            QRectF ob = oldBounds;
             if (calcInsets) {
                 KoInsets insets;
                 s->strokeInsets(nullptr, insets);
                 nb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+                ob.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
             }
 
-            QRectF relative = KisAlgebra2D::absoluteToRelative(oldBounds, nb);
+            QRectF relative = KisAlgebra2D::absoluteToRelative(ob, nb);
             KoShapeStrokeSP newStroke(new KoShapeStroke(*s.data()));
             QTransform newTf = QTransform::fromTranslate(relative.x(), relative.y());
             newTf.scale(relative.width(), relative.height());
@@ -363,7 +365,7 @@ KoShapeStrokeModelSP transformStrokeBgToNewBounds(KoShapeStrokeModelSP stroke, c
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 KoShape *
-KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
+KoSvgTextShape::Private::collectPaths(const KoSvgTextShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
 {
 
     QList<KoShape *> shapes;
@@ -389,6 +391,8 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
     KoShapeStrokeModelSP stroke = rootShape->stroke();
     QSharedPointer<KoShapeBackground> background = rootShape->background();
     QVector<KoShape::PaintOrder> paintOrder = rootShape->paintOrder();
+
+    const QRectF rootOutline = Private::boundingBoxFromTree(textData, rootShape, false);
 
     bool currentNodeInheritsBg = false;
     bool currentNodeInheritsStroke = false;
@@ -421,7 +425,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
                 shape->setBackground(transformBackgroundToBounds(decorationColor,
-                                                                 rootShape->outlineRect(),
+                                                                 rootOutline,
                                                                  shape->outlineRect()));
                 shape->setStroke(stroke);
                 shape->setZIndex(shapes.size());
@@ -437,10 +441,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             if (textDecorations.contains(KoSvgText::DecorationOverline)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline));
                 shape->setBackground(transformBackgroundToBounds(decorationColor,
-                                                                 rootShape->outlineRect(),
+                                                                 rootOutline,
                                                                  shape->outlineRect()));
                 shape->setStroke(transformStrokeBgToNewBounds(stroke,
-                                                              rootShape->outlineRect(),
+                                                              rootOutline,
                                                               shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);
@@ -526,11 +530,11 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                 }
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(chunk);
                 shape->setBackground(transformBackgroundToBounds(background,
-                                                                 rootShape->outlineRect(),
+                                                                 rootOutline,
                                                                  shape->outlineRect()));
 
                 shape->setStroke(transformStrokeBgToNewBounds(stroke,
-                                                              rootShape->outlineRect().adjusted(-insets.left, -insets.top, insets.right, insets.bottom),
+                                                              rootOutline,
                                                               shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);
@@ -555,10 +559,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough));
                 shape->setBackground(transformBackgroundToBounds(decorationColor,
-                                                                 rootShape->outlineRect(),
+                                                                 rootOutline,
                                                                  shape->outlineRect()));
                 shape->setStroke(transformStrokeBgToNewBounds(stroke,
-                                                              rootShape->outlineRect(),
+                                                              rootOutline,
                                                               shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);

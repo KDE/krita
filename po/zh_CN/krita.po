@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-10 00:41+0000\n"
+"POT-Creation-Date: 2026-03-11 00:43+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -20324,30 +20324,30 @@ msgid "Character Variant %1"
 msgstr "字符变体 %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2620
+#: libs/flake/text/KoSvgTextShape.cpp:2634
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "请用您的文本替换此段文本。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2599
+#: libs/flake/text/KoSvgTextShape.cpp:2613
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2601
-#: libs/flake/text/KoSvgTextShape.cpp:2609
+#: libs/flake/text/KoSvgTextShape.cpp:2615
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文本形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2607
+#: libs/flake/text/KoSvgTextShape.cpp:2621
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2630
+#: libs/flake/text/KoSvgTextShape.cpp:2644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -33507,7 +33507,7 @@ msgid "Color Sampler"
 msgstr "拾色器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Deselect"
 msgstr "取消选择"
@@ -34334,34 +34334,34 @@ msgstr ""
 "指定标签，然后在此处选中该预设所在的标签。"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "选择全部"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Invert Selection"
 msgstr "反向选择"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "填充颜色到选区"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, kde-format
 msgid "Clear Selection"
 msgstr "清除选区内容"
 
-#: libs/ui/kis_selection_actions_panel.cpp:78
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "复制到新图层"
 
-#: libs/ui/kis_selection_actions_panel.cpp:79
+#: libs/ui/kis_selection_actions_panel.cpp:80
 #, kde-format
 msgid "Crop to Selection"
 msgstr "裁剪到选区"
@@ -45100,25 +45100,25 @@ msgstr "字体大小 (em)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "x 字高 (ex)"
+msgstr "x 高度 (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "大写字高 (cap)"
+msgstr "大写字母高度 (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "比例字宽 (ch)"
+msgstr "比例字符宽度 (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr "表意字宽 (ic)"
+msgstr "表意文字宽度 (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format

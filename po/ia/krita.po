@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-10 00:41+0000\n"
+"POT-Creation-Date: 2026-03-11 00:43+0000\n"
 "PO-Revision-Date: 2026-02-18 18:55+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -20894,32 +20894,32 @@ msgid "Character Variant %1"
 msgstr "Variante (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2620
+#: libs/flake/text/KoSvgTextShape.cpp:2634
 #, fuzzy, kde-format
 #| msgid "Find Text"
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Trova texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2599
+#: libs/flake/text/KoSvgTextShape.cpp:2613
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2601
-#: libs/flake/text/KoSvgTextShape.cpp:2609
+#: libs/flake/text/KoSvgTextShape.cpp:2615
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, fuzzy, kde-format
 #| msgid "ArtisticTextShape"
 msgid "SVG Text Shape"
 msgstr "ArtisticTextShape (Forma de texto artistic)"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2607
+#: libs/flake/text/KoSvgTextShape.cpp:2621
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2630
+#: libs/flake/text/KoSvgTextShape.cpp:2644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -34240,7 +34240,7 @@ msgid "Color Sampler"
 msgstr "Specimen de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Deselect"
 msgstr "De-selectiona"
@@ -35130,36 +35130,36 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Selige toto"
 
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Invert Selection"
 msgstr "Inverte selection"
 
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 msgid "Fill Selection with Color"
 msgstr "Selige opac"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:78
 #, kde-format
 msgid "Clear Selection"
 msgstr "Netta selection"
 
-#: libs/ui/kis_selection_actions_panel.cpp:78
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy Layer"
 msgid "Copy To New Layer"
 msgstr "Copia strato (layer)"
 
-#: libs/ui/kis_selection_actions_panel.cpp:79
+#: libs/ui/kis_selection_actions_panel.cpp:80
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"

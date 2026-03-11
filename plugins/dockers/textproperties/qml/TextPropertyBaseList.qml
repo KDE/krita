@@ -444,4 +444,9 @@ ColumnLayout {
         }
 
     }
+
+    Item {
+        id: bottomPadding;
+        height: Math.floor(spacing/2);
+    }
 }

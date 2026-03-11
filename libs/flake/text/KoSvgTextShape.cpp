@@ -2051,7 +2051,7 @@ void KoSvgTextShape::paint(QPainter &painter) const
     int currentIndex = 0;
     if (!d->result.isEmpty()) {
         QPainterPath rootBounds;
-        rootBounds.addRect(this->outline().boundingRect());
+        rootBounds.addRect(Private::boundingBoxFromTree(d->textData, this, false));
         d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationUnderline, textRendering);
         d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationOverline, textRendering);
         d->paintPaths(painter, rootBounds, this, d->result, textRendering, chunk, currentIndex);
@@ -2100,36 +2100,7 @@ QRectF KoSvgTextShape::boundingRect() const
             return shapesRect;
         }
     }
-    QRectF result;
-
-    QList<KoShapeStrokeModelSP> parentStrokes;
-    for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
-        if (it.state() == KisForestDetail::Enter) {
-            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-                parentStrokes.append(it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property);
-            }
-        } else {
-            KoShapeStrokeModelSP stroke = parentStrokes.size() > 0? parentStrokes.last(): nullptr;
-            QRectF bb = it->associatedOutline.boundingRect();
-            QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
-            for (int i = 0; i < decorations.values().size(); ++i) {
-                bb |= decorations.values().at(i).boundingRect();
-            }
-            if (!bb.isEmpty()) {
-                if (stroke) {
-                    KoInsets insets;
-                    stroke->strokeInsets(this, insets);
-                    result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
-                } else {
-                    result |= bb;
-                }
-            }
-            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-                // reset stroke to use parent stroke.
-                parentStrokes.pop_back();
-            }
-        }
-    }
+    QRectF result = Private::boundingBoxFromTree(d->textData, this, true);
 
     return (this->absoluteTransformation().mapRect(result) | shapesRect);
 }

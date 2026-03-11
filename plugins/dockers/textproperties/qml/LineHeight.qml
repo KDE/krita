@@ -14,6 +14,7 @@ TextPropertyBase {
     propertyTitle: i18nc("@label", "Line Height");
     propertyName: "line-height";
     propertyType: TextPropertyConfigModel.Character;
+    visibilityState: TextPropertyConfigModel.AlwaysVisible;
     toolTip: i18nc("@info:tooltip",
                    "Line height controls the line height used for the range of text.");
     searchTerms: i18nc("comma separated search terms for the line-height property, matching is case-insensitive",

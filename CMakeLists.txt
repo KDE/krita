@@ -354,6 +354,24 @@ endif()
 
 add_feature_info("ASAN address sanitizer" ADDRESS_SANITIZER_ENABLED "crash Krita if it violates address access rules (-DECM_ENABLE_SANITIZERS=address)")
 
+# We don't want people to accidentally build unstable Krita versions if they
+# didn't mean to do so. This serves as an extra confirmation. You will get
+# errors during the configure step if you enable an unstable option.
+set(ALLOW_UNSTABLE "" CACHE STRING
+    "Semicolon-separated set of features that make Krita unstable, but you want to build with them anyway")
+string(TOUPPER "${ALLOW_UNSTABLE}" ALLOW_UNSTABLE)
+add_feature_info("Unstable features allowed" ON "${ALLOW_UNSTABLE}")
+
+if(BUILD_WITH_QT6 AND NOT "QT6" IN_LIST ALLOW_UNSTABLE)
+    message(FATAL_ERROR
+        "Building Krita with Qt6 is unstable. You will get a pre-alpha "
+        "quality version of the application. Please don't package this "
+        "and ship it as a stable version of the software.\n"
+        "If you want to continue regardless, pass:\n"
+        "    -DALLOW_UNSTABLE_FEATURES=QT6"
+    )
+endif()
+
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
 if ("${BRANDING}" STREQUAL "")
     if (DEFINED KRITA_STABLE)

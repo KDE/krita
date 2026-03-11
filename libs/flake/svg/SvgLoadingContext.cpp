@@ -281,14 +281,14 @@ QHash<QString, const KoColorProfile *> SvgLoadingContext::profiles()
     return d->profiles;
 }
 
-KoSvgTextProperties SvgLoadingContext::resolvedProperties() const
+KoSvgTextProperties SvgLoadingContext::resolvedProperties(bool onlyFontAndLineHeight) const
 {
     KoSvgTextProperties props;
     for (auto it = d->gcStack.begin(); it != d->gcStack.end(); it++) {
         SvgGraphicsContext *gc = *it;
         KoSvgTextProperties props2 = gc->textProperties;
         props.resetNonInheritableToDefault();
-        props2.inheritFrom(props, true);
+        props2.inheritFrom(props, true, onlyFontAndLineHeight);
         props = props2;
     }
     return props;

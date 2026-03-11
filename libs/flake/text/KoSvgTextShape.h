@@ -565,6 +565,13 @@ public:
     KoSvgText::WritingMode writingMode() const;
 
     /**
+     * @brief direction
+     * Whether the text is left to right or right to left.
+     * @return the paragraph-direction of this text.
+     */
+    KoSvgText::Direction direction() const;
+
+    /**
      * @brief singleNode
      * Sometimes it is useful to know whether there's only a single text node
      * for UX purposes.

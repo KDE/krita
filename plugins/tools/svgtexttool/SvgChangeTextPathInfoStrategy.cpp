@@ -5,7 +5,7 @@
  */
 #include "SvgChangeTextPathInfoStrategy.h"
 
-#include "SvgTextPathInfoChangeCommand.h"
+#include "KoSvgTextPathInfoChangeCommand.h"
 #include <KoPathSegment.h>
 #include <KoPathShape.h>
 #include <KoToolBase.h>
@@ -84,14 +84,14 @@ KUndo2Command *SvgChangeTextPathInfoStrategy::createCommand()
         info.startOffset = length - info.startOffset;
     }
 
-    KUndo2Command *cmd = new SvgTextPathInfoChangeCommand(m_shape, m_textCursorPos, info);
+    KUndo2Command *cmd = new KoSvgTextPathInfoChangeCommand(m_shape, m_textCursorPos, info);
     cmd->setText(kundo2_i18n("Change Text On Path Position"));
     return cmd;
 }
 
 void SvgChangeTextPathInfoStrategy::cancelInteraction()
 {
-    KUndo2Command *cmd = new SvgTextPathInfoChangeCommand(m_shape, m_textCursorPos, m_oldInfo);
+    KUndo2Command *cmd = new KoSvgTextPathInfoChangeCommand(m_shape, m_textCursorPos, m_oldInfo);
     if (cmd) {
         cmd->undo();
     }

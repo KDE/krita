@@ -22,7 +22,7 @@
 #include "commands/KoKeepShapesSelectedCommand.h"
 #include "commands/KoShapeMoveCommand.h"
 #include "commands/KoSvgTextAddRemoveShapeCommands.h"
-#include "SvgTextPathInfoChangeCommand.h"
+#include "KoSvgTextPathInfoChangeCommand.h"
 #include "kis_global.h"
 #include "kundo2command.h"
 
@@ -178,8 +178,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
                 info.startOffset += s.length();
                 qDebug() << info.startOffset << s.length();
             }
-            qDebug() << "setting path at..." << info.startOffset << segments.size();
-            new SvgTextPathInfoChangeCommand(textShape, 2, info, parentCommand);
+            new KoSvgTextPathInfoChangeCommand(textShape, 2, info, parentCommand);
         } else {
             new KoSvgTextAddShapeCommand(textShape, m_flowShape, true, parentCommand);
         }

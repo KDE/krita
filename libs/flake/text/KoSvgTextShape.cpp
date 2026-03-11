@@ -1623,6 +1623,11 @@ KoSvgText::WritingMode KoSvgTextShape::writingMode() const
     return KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 }
 
+KoSvgText::Direction KoSvgTextShape::direction() const
+{
+    return KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+}
+
 bool KoSvgTextShape::singleNode() const
 {
     if (d->textData.empty()) return false;

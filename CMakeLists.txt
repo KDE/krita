@@ -386,6 +386,12 @@ if ("${BRANDING}" STREQUAL "")
         set(BRANDING "Next")
     endif ()
 endif()
+
+# Qt6 isn't stable, don't make it look like it is.
+if(BRANDING STREQUAL "default" AND BUILD_WITH_QT6)
+    set(BRANDING "Beta")
+endif()
+
 message(STATUS "Branding selected: ${BRANDING}")
 
 include(MacroJPEG)

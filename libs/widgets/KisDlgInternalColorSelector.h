@@ -81,17 +81,6 @@ public:
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
     /**
-     * @brief getModalColorDialog
-     * Execute this dialog modally. The function returns
-     * the KoColor you want.
-     * @param color - The current color. Make sure this is in the color space you want your
-     * end color to be in.
-     * @param parent parent widget.
-     * @param caption the dialog caption.
-     */
-    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = 0, QString caption = QString());
-
-    /**
      * @brief getCurrentColor
      * @return gives currently active color;
      */

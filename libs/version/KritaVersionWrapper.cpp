@@ -24,7 +24,8 @@ QString KritaVersionWrapper::versionString(bool checkGit)
 
 bool KritaVersionWrapper::isDevelopersBuild()
 {
-#ifdef KRITA_STABLE
+    // Qt6 is not considered stable yet, don't present it as such.
+#if defined(KRITA_STABLE) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return false;
 #else
     return true;

@@ -573,9 +573,10 @@ void DefaultTool::slotAddShapesToFlow()
 
     Q_FOREACH(KoShape *shape, selectedShapes) {
         KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+        KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
         if (text && !textShape) {
             textShape = text;
-        } else if (dynamic_cast<KoPathShape*>(shape)) {
+        } else if (path && path->isClosedSubpath(0)) {
             shapes.append(shape);
         }
     }
@@ -674,9 +675,10 @@ void DefaultTool::slotSubtractShapesFromFlow()
 
     Q_FOREACH(KoShape *shape, selectedShapes) {
         KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+        KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
         if (text && !textShape) {
             textShape = text;
-        } else if (dynamic_cast<KoPathShape*>(shape)) {
+        } else if (path && path->isClosedSubpath(0)) {
             shapes.append(shape);
         }
     }
@@ -2153,6 +2155,7 @@ void DefaultTool::updateActions()
     /* Handling the text actions */
     bool textShape = false;
     bool otherShapes = false;
+    bool filledShapes = false;
     bool shapesInside = false;
     KoSvgTextShape *currentTextShapeGroup = tryFetchCurrentShapeManagerOwnerTextShape();
     const bool editFlowShapes = bool(currentTextShapeGroup);
@@ -2162,6 +2165,8 @@ void DefaultTool::updateActions()
             textShape = true;
         } else {
             otherShapes = true;
+            KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
+            filledShapes = filledShapes? filledShapes: (path && path->isClosedSubpath(0));
             if (editFlowShapes) {
                 if (!shapesInside && currentTextShapeGroup->shapesInside().contains(shape)) {
                     shapesInside = true;
@@ -2171,9 +2176,10 @@ void DefaultTool::updateActions()
         if (textShape && otherShapes) break;
     }
     const bool editContours = textShape && otherShapes;
+    const bool editFilledContours = textShape && filledShapes;
 
-    action("add_shape_to_flow_area")->setEnabled(editContours);
-    action("subtract_shape_from_flow_area")->setEnabled(editContours);
+    action("add_shape_to_flow_area")->setEnabled(editFilledContours);
+    action("subtract_shape_from_flow_area")->setEnabled(editFilledContours);
     action("put_text_on_path")->setEnabled(editContours);
     action("remove_shapes_from_text_flow")->setEnabled(editFlowShapes);
     action("flow_shape_type_toggle")->setEnabled(editFlowShapes);

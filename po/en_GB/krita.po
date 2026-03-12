@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-11 00:43+0000\n"
+"POT-Creation-Date: 2026-03-12 00:41+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -16653,7 +16653,7 @@ msgstr "Distribute shapes"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1608
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Group shapes"
@@ -16740,7 +16740,7 @@ msgid "Unclip Shapes"
 msgstr "Unclip Shapes"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1636
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Ungroup shapes"
@@ -16762,6 +16762,14 @@ msgstr "Remove subpath"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
 msgstr "Convert Image Type"
+
+#: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Properties"
+msgstr "Change Text Properties"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -20825,30 +20833,30 @@ msgid "Character Variant %1"
 msgstr "Variant (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2634
+#: libs/flake/text/KoSvgTextShape.cpp:2610
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Placeholder Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2613
+#: libs/flake/text/KoSvgTextShape.cpp:2589
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2615
-#: libs/flake/text/KoSvgTextShape.cpp:2623
+#: libs/flake/text/KoSvgTextShape.cpp:2591
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Text Shape"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
+#: libs/flake/text/KoSvgTextShape.cpp:2597
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2644
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24491,7 +24499,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:345
+#: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
@@ -34500,7 +34508,7 @@ msgstr "Apply Filter Again: %1"
 msgid "Import Image"
 msgstr "Import Image"
 
-#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:92
+#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:100
 #, kde-format
 msgid "Select a Color"
 msgstr "Select a Colour"
@@ -36687,7 +36695,7 @@ msgstr "Spot colour:"
 msgid "Swatch Group:"
 msgstr "Swatch Group:"
 
-#: libs/ui/KisPaletteEditor.cpp:617 libs/ui/KisPaletteEditor.cpp:620
+#: libs/ui/KisPaletteEditor.cpp:620 libs/ui/KisPaletteEditor.cpp:623
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -36885,17 +36893,17 @@ msgstr "Use This Template"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "You cannot drag and drop colours on the selected layer type."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:444
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Layer is locked and invisible."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:446
 #, kde-format
 msgid "Layer is locked."
 msgstr "Layer is locked."
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:448
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Layer is invisible."
@@ -38126,7 +38134,7 @@ msgstr "Selection Actions"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2268
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -38137,17 +38145,7 @@ msgstr "Transform"
 msgid "No options"
 msgstr "No options"
 
-#: libs/ui/tool/kis_tool.cc:687
-#, kde-format
-msgid "Layer can be painted in Wash Mode only."
-msgstr "Layer can be painted in Wash Mode only."
-
-#: libs/ui/tool/kis_tool.cc:689
-#, kde-format
-msgid "Group not editable."
-msgstr "Group not editable."
-
-#: libs/ui/tool/kis_tool.cc:704
+#: libs/ui/tool/kis_tool.cc:693
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Local selection is locked."
@@ -38216,6 +38214,16 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Clear"
+
+#: libs/ui/tool/kis_tool_utils.cpp:450
+#, kde-format
+msgid "Layer can be painted in Wash Mode only."
+msgstr "Layer can be painted in Wash Mode only."
+
+#: libs/ui/tool/kis_tool_utils.cpp:452
+#, kde-format
+msgid "Group not editable."
+msgstr "Group not editable."
 
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:581
 #, kde-format
@@ -40271,22 +40279,22 @@ msgstr ""
 "krita.org/en/general_concepts/colors/color_managed_workflow.html\">More "
 "information</a></p></body></html>"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:428
+#: libs/ui/widgets/KoDualColorButton.cpp:465
 #, kde-format
 msgid "Foreground color selector"
 msgstr "Foreground colour selector"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:431
+#: libs/ui/widgets/KoDualColorButton.cpp:468
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "Set foreground and background colours to black and white"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:436
+#: libs/ui/widgets/KoDualColorButton.cpp:473
 #, kde-format
 msgid "Swap foreground and background colors"
 msgstr "Swap foreground and background colours"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:439
+#: libs/ui/widgets/KoDualColorButton.cpp:476
 #, kde-format
 msgid "Background color selector"
 msgstr "Background colour selector"
@@ -40677,7 +40685,7 @@ msgstr ""
 "space."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:333
+#: libs/widgets/KisDlgInternalColorSelector.cpp:324
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
@@ -40689,7 +40697,7 @@ msgstr "HSV"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:336
+#: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
@@ -40703,7 +40711,7 @@ msgstr "HSL"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:339
+#: libs/widgets/KisDlgInternalColorSelector.cpp:330
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
@@ -40716,7 +40724,7 @@ msgstr "HSI"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:342
+#: libs/widgets/KisDlgInternalColorSelector.cpp:333
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
@@ -47114,13 +47122,13 @@ msgctxt "@label"
 msgid "Line Height"
 msgstr "Line Height"
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:18
+#: plugins/dockers/textproperties/qml/LineHeight.qml:19
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:20
+#: plugins/dockers/textproperties/qml/LineHeight.qml:21
 #, kde-format
 msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
@@ -47128,7 +47136,7 @@ msgctxt ""
 msgid "line-height, line-spacing"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:133
+#: plugins/dockers/textproperties/qml/LineHeight.qml:134
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "@option:check"
@@ -66221,7 +66229,7 @@ msgstr "Interval X:"
 msgid "Interval Y:"
 msgstr "Interval Y:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Add shapes to group"
@@ -66229,14 +66237,14 @@ msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
 msgstr "Add shapes to group"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
 #, fuzzy
 #| msgid "Text On Path"
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
 msgstr "Text On Path"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:688
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Subtract Shapes"
@@ -66244,26 +66252,26 @@ msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
 msgstr "Subtract Shapes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:721
 #, fuzzy
 #| msgid "Remove Shape Collection"
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
 msgstr "Remove Shape Collection"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
 #, fuzzy
 #| msgid "Rotate Node"
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
 msgstr "Rotate Node"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:768
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:770
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Decrease Flow"
@@ -66271,7 +66279,7 @@ msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
 msgstr "Decrease Flow"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:772
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Increase Flow"
@@ -66279,77 +66287,77 @@ msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
 msgstr "Increase Flow"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:774
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1045
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 "Left click rotates around centre, right click around highlighted position."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1048
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Click and drag to shear selection."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1053
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Click and drag to resize selection."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1088
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Click and drag to move selection."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1092
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1168
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "This tool only works on vector layers. You probably want the move tool."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1670
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Rotate Object 90° CW"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1674
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Rotate Object 90° ACW"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1678
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Rotate Object 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1682
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Mirror Object Horizontally"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1686
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Mirror Object Vertically"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1690
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Reset Object Transformations"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1764
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -66357,32 +66365,32 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Unclip Shapes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1778
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Intersect Shapes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1788
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Subtract Shapes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1833
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Split Shapes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2265
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vector Shape Actions"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2284
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logical Operations"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2314
 #, fuzzy, kde-format
 #| msgctxt "Text label in SVG Text Tool"
 #| msgid "Text"
@@ -67503,14 +67511,6 @@ msgstr "Insert Rich Text"
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Change Text Properties"
-
-#: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
-msgctxt "(qtundo-format)"
-msgid "Change Text On Path Properties"
 msgstr "Change Text Properties"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
@@ -69960,7 +69960,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Colourise Mask Editing Tool"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""

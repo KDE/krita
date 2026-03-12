@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-11 00:43+0000\n"
+"POT-Creation-Date: 2026-03-12 00:41+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -16795,7 +16795,7 @@ msgstr "आकार वितरित करव"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1608
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
@@ -16899,7 +16899,7 @@ msgid "Unclip Shapes"
 msgstr "दीर्घवक्र आकार"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1636
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
@@ -16922,6 +16922,12 @@ msgstr "उपपथ मेटाव"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
 msgstr "फोटू किसिम बदलव"
+
+#: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Properties"
+msgstr "नवा परत गुन"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -20684,32 +20690,32 @@ msgid "Character Variant %1"
 msgstr "प्रतिसत: (&P)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2634
+#: libs/flake/text/KoSvgTextShape.cpp:2610
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2613
+#: libs/flake/text/KoSvgTextShape.cpp:2589
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2615
-#: libs/flake/text/KoSvgTextShape.cpp:2623
+#: libs/flake/text/KoSvgTextShape.cpp:2591
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "पाठ आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
+#: libs/flake/text/KoSvgTextShape.cpp:2597
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2644
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24425,7 +24431,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:345
+#: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
@@ -34192,7 +34198,7 @@ msgstr "फिल्टर फिर से लगाव: %1"
 msgid "Import Image"
 msgstr "फोटू आयात करव"
 
-#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:92
+#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:100
 #, fuzzy, kde-format
 msgid "Select a Color"
 msgstr "चयन मोड:"
@@ -36303,7 +36309,7 @@ msgstr "स्टाप रंग:"
 msgid "Swatch Group:"
 msgstr "समूह नाम भरव:"
 
-#: libs/ui/KisPaletteEditor.cpp:617 libs/ui/KisPaletteEditor.cpp:620
+#: libs/ui/KisPaletteEditor.cpp:620 libs/ui/KisPaletteEditor.cpp:623
 #, fuzzy, kde-format
 #| msgid "New program %1"
 msgctxt "Default new group name"
@@ -36501,17 +36507,17 @@ msgstr "ये टैम्प्लेट के उपयोग करव"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:444
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "परत आकार"
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:446
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "परत आकार"
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:448
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "परत आकार"
@@ -37723,7 +37729,7 @@ msgstr "चयन डेकोरेसन"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2268
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 msgid "Transform"
@@ -37734,17 +37740,7 @@ msgstr "रूपांतरन"
 msgid "No options"
 msgstr "विकल्प"
 
-#: libs/ui/tool/kis_tool.cc:687
-#, kde-format
-msgid "Layer can be painted in Wash Mode only."
-msgstr ""
-
-#: libs/ui/tool/kis_tool.cc:689
-#, fuzzy, kde-format
-msgid "Group not editable."
-msgstr "परत आकार"
-
-#: libs/ui/tool/kis_tool.cc:704
+#: libs/ui/tool/kis_tool.cc:693
 #, fuzzy, kde-format
 msgid "Local selection is locked."
 msgstr "स्केल चयन"
@@ -37807,6 +37803,16 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "साफ करव"
+
+#: libs/ui/tool/kis_tool_utils.cpp:450
+#, kde-format
+msgid "Layer can be painted in Wash Mode only."
+msgstr ""
+
+#: libs/ui/tool/kis_tool_utils.cpp:452
+#, fuzzy, kde-format
+msgid "Group not editable."
+msgstr "परत आकार"
 
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:581
 #, kde-format
@@ -39692,23 +39698,23 @@ msgid ""
 "information</a></p></body></html>"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:428
+#: libs/ui/widgets/KoDualColorButton.cpp:465
 #, fuzzy, kde-format
 #| msgid "Small Color Selector"
 msgid "Foreground color selector"
 msgstr "छोटा रंग चुनइया"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:431
+#: libs/ui/widgets/KoDualColorButton.cpp:468
 #, fuzzy, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "आगू तरफ के रंग"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:436
+#: libs/ui/widgets/KoDualColorButton.cpp:473
 #, fuzzy, kde-format
 msgid "Swap foreground and background colors"
 msgstr "आगू तरफ के रंग"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:439
+#: libs/ui/widgets/KoDualColorButton.cpp:476
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Background color selector"
@@ -40118,7 +40124,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:333
+#: libs/widgets/KisDlgInternalColorSelector.cpp:324
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
@@ -40130,7 +40136,7 @@ msgstr "एचएसवी सीडबल्यू"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:336
+#: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
@@ -40144,7 +40150,7 @@ msgstr "एचएसवी सीडबल्यू"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:339
+#: libs/widgets/KisDlgInternalColorSelector.cpp:330
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
@@ -40157,7 +40163,7 @@ msgstr "एचएसवी सीडबल्यू"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:342
+#: libs/widgets/KisDlgInternalColorSelector.cpp:333
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
@@ -46441,13 +46447,13 @@ msgctxt "@label"
 msgid "Line Height"
 msgstr "छापा ऊँचाईः"
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:18
+#: plugins/dockers/textproperties/qml/LineHeight.qml:19
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:20
+#: plugins/dockers/textproperties/qml/LineHeight.qml:21
 #, kde-format
 msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
@@ -46455,7 +46461,7 @@ msgctxt ""
 msgid "line-height, line-spacing"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:133
+#: plugins/dockers/textproperties/qml/LineHeight.qml:134
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "@option:check"
@@ -65590,168 +65596,168 @@ msgstr "इंटीग्रल चरन:"
 msgid "Interval Y:"
 msgstr "इंटीग्रल चरन:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
 #, fuzzy
 #| msgid "Add Group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
 msgstr "समूह जोड़व"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
 msgstr "पाठ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:688
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
 msgstr "स्मीयरी ब्रस"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:721
 #, fuzzy
 #| msgid "Remove Shape Collection"
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
 msgstr "आकार संग्रह मेटाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
 #, fuzzy
 #| msgid "Rotate Node"
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
 msgstr "नोड घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:768
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:770
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
 msgstr "हासिया घटाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:772
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
 msgstr "हासिया बढ़ाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:774
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1045
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1048
 #, fuzzy, kde-format
 msgid "Click and drag to shear selection."
 msgstr "फोटू मं परत जोड़े नइ जा सकिस."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1053
 #, fuzzy, kde-format
 msgid "Click and drag to resize selection."
 msgstr "फोटू के आकार ल अभी हाल के परत के आकार के अनुसार बदलव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1088
 #, fuzzy, kde-format
 msgid "Click and drag to move selection."
 msgstr "फोटू मं परत जोड़े नइ जा सकिस."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1092
 #, fuzzy, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "फोटू के आकार ल अभी हाल के परत के आकार के अनुसार बदलव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1168
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1670
 #, fuzzy
 #| msgid "Rotate Image"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "फोटू घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1674
 #, fuzzy
 #| msgid "Rotate Image"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "फोटू घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1678
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "परत ल घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1682
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "मास्क ल आड़े मं प्रतिबिम्ब बनाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1686
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "मास्क ल खड़े मं प्रतिबिम्ब बनाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1690
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "पर्सपेक्टिव ट्रांसफारम"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1764
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "दीर्घवक्र आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1778
 #, fuzzy
 #| msgid "Intersect"
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "प्रतिक्छेदन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1788
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "स्मीयरी ब्रस"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1833
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "सर्पिल आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2265
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "सदिस चयन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2284
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "बूलिए आपरेसन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2314
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Text"
@@ -66872,12 +66878,6 @@ msgstr "पाठ"
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "नवा परत गुन"
-
-#: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Text On Path Properties"
 msgstr "नवा परत गुन"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
@@ -69285,7 +69285,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "अनुपात"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""

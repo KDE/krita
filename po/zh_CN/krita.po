@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-11 02:43+0000\n"
+"POT-Creation-Date: 2026-03-12 02:35+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16513,7 +16513,7 @@ msgstr "分布形状"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1589
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1608
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "编组形状"
@@ -16600,7 +16600,7 @@ msgid "Unclip Shapes"
 msgstr "取消剪贴形状"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1617
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1636
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "取消编组形状"
@@ -16619,6 +16619,11 @@ msgstr "移除子路径"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
 msgstr "转换文本类型"
+
+#: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Properties"
+msgstr "更改文本跟随路径属性"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -19057,7 +19062,7 @@ msgstr "将可变样式字体中的字符替换为适合当前变体的形式。
 #, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "视觉大小"
+msgstr "光学尺寸"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -20324,30 +20329,30 @@ msgid "Character Variant %1"
 msgstr "字符变体 %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2634
+#: libs/flake/text/KoSvgTextShape.cpp:2610
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "请用您的文本替换此段文本。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2613
+#: libs/flake/text/KoSvgTextShape.cpp:2589
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2615
-#: libs/flake/text/KoSvgTextShape.cpp:2623
+#: libs/flake/text/KoSvgTextShape.cpp:2591
+#: libs/flake/text/KoSvgTextShape.cpp:2599
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文本形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
+#: libs/flake/text/KoSvgTextShape.cpp:2597
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2644
+#: libs/flake/text/KoSvgTextShape.cpp:2620
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23924,7 +23929,7 @@ msgstr "缺少某些资源："
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:345
+#: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
@@ -33708,7 +33713,7 @@ msgstr "再次应用滤镜：%1"
 msgid "Import Image"
 msgstr "导入图像"
 
-#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:92
+#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:100
 #, kde-format
 msgid "Select a Color"
 msgstr "选择颜色"
@@ -35847,7 +35852,7 @@ msgstr "专色："
 msgid "Swatch Group:"
 msgstr "色块组："
 
-#: libs/ui/KisPaletteEditor.cpp:617 libs/ui/KisPaletteEditor.cpp:620
+#: libs/ui/KisPaletteEditor.cpp:620 libs/ui/KisPaletteEditor.cpp:623
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -36043,17 +36048,17 @@ msgstr "加载此模板"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "您不能在所选图层类型上拖放颜色。"
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:444
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "图层已锁定且不可见。"
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:446
 #, kde-format
 msgid "Layer is locked."
 msgstr "图层已锁定。"
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:448
 #, kde-format
 msgid "Layer is invisible."
 msgstr "图层不可见。"
@@ -37263,7 +37268,7 @@ msgstr "选区操作"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2245
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2268
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -37274,17 +37279,7 @@ msgstr "变形"
 msgid "No options"
 msgstr "无选项"
 
-#: libs/ui/tool/kis_tool.cc:687
-#, kde-format
-msgid "Layer can be painted in Wash Mode only."
-msgstr "此图层只能在冲染模式下进行绘制。"
-
-#: libs/ui/tool/kis_tool.cc:689
-#, kde-format
-msgid "Group not editable."
-msgstr "图层组不可编辑。"
-
-#: libs/ui/tool/kis_tool.cc:704
+#: libs/ui/tool/kis_tool.cc:693
 #, kde-format
 msgid "Local selection is locked."
 msgstr "局部选区蒙版已锁定。"
@@ -37349,6 +37344,16 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "清除"
+
+#: libs/ui/tool/kis_tool_utils.cpp:450
+#, kde-format
+msgid "Layer can be painted in Wash Mode only."
+msgstr "此图层只能在冲染模式下进行绘制。"
+
+#: libs/ui/tool/kis_tool_utils.cpp:452
+#, kde-format
+msgid "Group not editable."
+msgstr "图层组不可编辑。"
 
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:581
 #, kde-format
@@ -39293,22 +39298,22 @@ msgstr ""
 "zh_CN/general_concepts/colors/color_managed_workflow.html\">点击了解详情</"
 "a></p></body></html>"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:428
+#: libs/ui/widgets/KoDualColorButton.cpp:465
 #, kde-format
 msgid "Foreground color selector"
 msgstr "前景色拾色器"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:431
+#: libs/ui/widgets/KoDualColorButton.cpp:468
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "前景/背景色设置为黑白"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:436
+#: libs/ui/widgets/KoDualColorButton.cpp:473
 #, kde-format
 msgid "Swap foreground and background colors"
 msgstr "前景/背景色对换"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:439
+#: libs/ui/widgets/KoDualColorButton.cpp:476
 #, kde-format
 msgid "Background color selector"
 msgstr "背景色拾色器"
@@ -39695,7 +39700,7 @@ msgid ""
 msgstr "输入 Web 颜色的十六进制码。只能使用 sRGB 空间中的颜色。"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:333
+#: libs/widgets/KisDlgInternalColorSelector.cpp:324
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
@@ -39707,7 +39712,7 @@ msgstr "HSV"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:336
+#: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
@@ -39721,7 +39726,7 @@ msgstr "HSL"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:339
+#: libs/widgets/KisDlgInternalColorSelector.cpp:330
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
@@ -39734,7 +39739,7 @@ msgstr "HSI"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:342
+#: libs/widgets/KisDlgInternalColorSelector.cpp:333
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
@@ -45090,7 +45095,7 @@ msgstr "编辑文本样式预设"
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "视觉大小"
+msgstr "光学尺寸"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
 #, kde-format
@@ -45589,8 +45594,8 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
-"字体系列允许您管理应用于当前文本的字体列表。第一个字体是主要使用的字体，而其"
-"后的每个字体系列则作为备选字体。"
+"字体系列 (font family) 属性用于选择应用于当前文本的一系列字体。列表中的第一个"
+"字体是主要使用的字体，而列表中的后续字体系列则可用作备选字体。"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -45599,8 +45604,9 @@ msgctxt ""
 "insensitive"
 msgid "font-family, typeface, font, fallback"
 msgstr ""
-"font-family, typeface, font, fallback, ziti, zitijiazu, zitixilie, "
-"beiyongziti, 字体, 字体系列, 字体家族, 备用字体"
+"font-family, typeface, font, fallback, ziti, zitijiazu, zitixilie, beiyong, "
+"beixuan, beiyongziti, beixuanziti, 字体, 字体系列, 字体家族, 备用, 备选, 备用"
+"字体, 备选字体"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
@@ -45652,7 +45658,7 @@ msgstr "字体大小"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr "字体大小用于设置字符的大小。"
+msgstr "字体大小 (font size) 用于设置字符的大小。"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -45668,7 +45674,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size Adjust"
-msgstr "字体大小调整系数"
+msgstr "字体大小调整"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:17
 #, kde-format
@@ -45676,8 +45682,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
-"字体大小调整系数 (Font Size Adjust) 通过设置一个比例值，强制要求当前字体的 x "
-"字高 (x-height) 必须匹配该比例，以保持不同字体的视觉大小一致性。"
+"字体大小调整 (Font Size Adjust) 设置的是一个比例值，当前字体的 x 高度 (x-"
+"height) 必须符合该比例，从而确保不同字体混排时能在视觉上统一。"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -45687,8 +45693,8 @@ msgctxt ""
 msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
 "size, small, big, medium, font-size-adjust, daxiao, xiao, zhong, da, "
-"zitichicuntiaozhengxishu, zihaotiaozhengxishu, 大小, 小, 中, 大, 字体大小调整"
-"系数, 字号调整系数"
+"zitichicuntiaozheng, zihaotiaozheng, zitichicuntiaozheng, 大小, 小, 中, 大, "
+"字体大小调整, 字号调整系数, 字体尺寸调整"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -45726,22 +45732,23 @@ msgid ""
 "weight, bold, optical-size, variation"
 msgstr ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
-"weight, bold, optical-size, variation, zizhong, kuandu, yangshi, xieti, "
-"weixieti, zitiyangshi, zitilashen, jiacu, cuti, guangxuedaxiao, bianzhong, "
-"bianliang, 字重, 宽度, 样式, 斜体, 伪斜体, 字体样式, 字体拉伸, 加粗, 粗体, 光"
-"学大小, 变种, 变量"
+"weight, bold, optical-size, variation, cuxi, zizhong, kuandu, yangshi, "
+"xieti, weixieti, qingxie, xiedu, zitiyangshi, zitilashen, jiacu, cuti, "
+"guangxuechicun, bianzhong, bianliang, bianti, kebian, 粗细, 字重, 宽度, 样"
+"式, 斜体, 伪斜体, 倾斜, 斜度, 字体样式, 字体拉伸, 加粗, 粗体, 光学尺寸, 变"
+"种, 变量, 变体, 可变"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
-msgstr "字重："
+msgstr "粗细："
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:302
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr "合成粗体"
+msgstr "允许合成粗体"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, kde-format
@@ -45753,7 +45760,7 @@ msgstr "宽度："
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr "斜度："
+msgstr "倾斜："
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
 #, kde-format
@@ -45777,13 +45784,13 @@ msgstr "°"
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr "合成斜度"
+msgstr "允许合成斜体"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
 #, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
-msgstr "光学大小"
+msgstr "光学尺寸"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
@@ -45911,7 +45918,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Line Break"
-msgstr "换行规则"
+msgstr "换行"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
 #, kde-format
@@ -45991,13 +45998,13 @@ msgctxt "@label"
 msgid "Line Height"
 msgstr "行高"
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:18
+#: plugins/dockers/textproperties/qml/LineHeight.qml:19
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr "行高 (Line Height) 用于控制所选范围内文本的行高。"
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:20
+#: plugins/dockers/textproperties/qml/LineHeight.qml:21
 #, kde-format
 msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
@@ -46006,7 +46013,7 @@ msgid "line-height, line-spacing"
 msgstr ""
 "line-height, line-spacing, hanggao, hangju, hangjianju, 行高,  行距, 行间距"
 
-#: plugins/dockers/textproperties/qml/LineHeight.qml:133
+#: plugins/dockers/textproperties/qml/LineHeight.qml:134
 #, kde-format
 msgctxt "@option:check"
 msgid "Normal"
@@ -46210,7 +46217,7 @@ msgstr "字形：连字"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
-msgstr "启用或禁用连字和上下文替代字形。"
+msgstr "启用或禁用连字和上下文连字的替代字形。"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -46223,7 +46230,8 @@ msgid ""
 msgstr ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts, lianzi, biaozhunlianzi, kexuanlianzi, "
-"lishilianzi, shangxiawentidai, 连字, 标准连字, 可选连字, 历史连字, 上下文替代"
+"lishilianzi, shangxiawenlianzi, tidaizixing, shangxiawenlianzitidaizixing, 连"
+"字, 标准连字, 可选连字, 历史连字, 上下文连字, 替代字形, 上下文连字替代字形,"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -46247,7 +46255,7 @@ msgstr "历史连字"
 #, kde-format
 msgctxt "@option:check"
 msgid "Contextual"
-msgstr "上下文替代"
+msgstr "上下文连字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:12
 #, kde-format
@@ -46339,7 +46347,7 @@ msgstr "斜线零"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Position"
-msgstr "字形：位置"
+msgstr "字形：定位"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:16
 #, kde-format
@@ -47027,7 +47035,7 @@ msgstr "保持全部"
 #, kde-format
 msgctxt "@title:group"
 msgid "Word Spacing"
-msgstr "字间距"
+msgstr "单词间距"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:18
 #, kde-format
@@ -47035,7 +47043,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
-msgstr "字间距控制分词字符的大小，例如空格字符。"
+msgstr "单词间距控制分词字符的大小，例如空格字符。"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -47044,8 +47052,8 @@ msgctxt ""
 "insensitive"
 msgid "word-spacing, tracking, white space,"
 msgstr ""
-"word-spacing, tracking, white space, zijianju, zifujianju, kongbai, "
-"kongbaifu, jianxi, 字间距, 字符间距, 空白, 空白符, 间隙"
+"word-spacing, tracking, white space, dancijianju, zifujianju, kongbai, "
+"kongbaifu, kongge, jianxi, 单词间距, 字符间距, 空白, 空白符, 空格, 间隙"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -64731,144 +64739,144 @@ msgstr "间隔 X："
 msgid "Interval Y:"
 msgstr "间隔 Y："
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
 msgstr "添加形状到文本流。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
 msgstr "文本跟随路径"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:688
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
 msgstr "从文本编排区域中减去形状。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
 msgstr "从文本流移除子轮廓形状。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
 msgstr "切换文本流形状类型"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:768
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
 msgstr "设置文本流形状为第一个"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:770
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
 msgstr "降低文本流形状索引"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:772
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
 msgstr "提高文本流形状索引"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:774
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr "设置文本流形状为最后一个"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1045
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "左键点击绕中心旋转，右键点击绕高亮显示的位置旋转。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1029
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1048
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "点击并拖动以斜切选区。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1034
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1053
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "点击并拖动以调整选区大小。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1069
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1088
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "点击并拖动以移动选区。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1073
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1092
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "点击并拖动以调整选区大小。中键点击以设定高亮显示的位置。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1149
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1168
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "此工具只适用于矢量图层。要移动颜料图层，请使用移动工具。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1651
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1670
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "旋转对象 (顺时针 90°)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1655
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1674
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "旋转对象 (逆时针 90°)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1659
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1678
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "旋转对象 (180°)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1663
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1682
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "翻转对象 (水平)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1667
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1686
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "翻转对象 (垂直)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1671
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1690
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "重置对象变形"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1764
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "形状并集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1778
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "形状交集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1769
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1788
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "形状差集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1814
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1833
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "形状拆分"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2242
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2265
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "矢量形状操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2261
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2284
 #, kde-format
 msgid "Logical Operations"
 msgstr "布尔逻辑操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2291
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2314
 #, kde-format
 msgid "Text"
 msgstr "文本"
@@ -65950,11 +65958,6 @@ msgstr "插入富文本"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "更改文本属性"
-
-#: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-msgctxt "(qtundo-format)"
-msgid "Change Text On Path Properties"
-msgstr "更改文本跟随路径属性"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -68304,7 +68307,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "漫画格子框编辑工具"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""

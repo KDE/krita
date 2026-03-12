@@ -35,4 +35,10 @@ TextInputWithSelectionRange {
         const endPos = text.endsWith(suffix) ? text.length - suffix.length : text.length;
         contentsText = text.slice(startPos, endPos);
     }
+
+    function selectContents() {
+        const startPos = text.startsWith(prefix) ? prefix.length : 0;
+        const endPos = text.endsWith(suffix) ? text.length - suffix.length : text.length;
+        select(startPos, endPos);
+    }
 }

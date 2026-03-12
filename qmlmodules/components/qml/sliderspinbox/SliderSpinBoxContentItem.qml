@@ -240,7 +240,7 @@ FocusScope {
             if (root.parentSpinBox) {
                 root.parentSpinBox.editable = true;
             }
-            parseSpinBoxContentItem.textInput.selectAll();
+            parseSpinBoxContentItem.textInput.selectContents();
             parseSpinBoxContentItem.textInput.forceActiveFocus(Qt.OtherFocusReason);
             root.valueBeforeEditing = root.value;
         }
@@ -249,7 +249,7 @@ FocusScope {
             if (root.parentSpinBox) {
                 root.parentSpinBox.editable = true;
             }
-            parseSpinBoxContentItem.textInput.selectAll();
+            parseSpinBoxContentItem.textInput.selectContents();
             parseSpinBoxContentItem.textInput.forceActiveFocus(Qt.OtherFocusReason);
             root.valueBeforeEditing = root.value;
             parseSpinBoxContentItem.textInput.contentsText = v;

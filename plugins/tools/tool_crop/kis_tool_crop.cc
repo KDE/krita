@@ -662,6 +662,11 @@ void KisToolCrop::setAllowGrow(bool g)
     m_finalRect.setCropRect(image()->bounds());
     configGroup.writeEntry("allowGrow", g);
 
+    // Do a dummy move for the crop area to snap back to the canvas if grow is no longer allowed
+    if (!g) {
+        m_finalRect.moveHandle(KisConstrainedRect::HandleType::Inside, QPoint(0, 0), m_finalRect.rect());
+    }
+
     Q_EMIT canGrowChanged(g);
 }
 

@@ -233,6 +233,21 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
+    // Setting the application info via KAboutData makes translations stop
+    // working on Android. No clue why, KAboutData also just sets the same
+    // information and the values end up being the same. But the reason we do
+    // this is because of DrKonqi, who only exists on KDE, so there's no point
+    // in taking this detour elsewhere. Since it only has a negative effect on
+    // Android and works fine on other systems, only that's excluded here.
+#ifdef Q_OS_ANDROID
+    setApplicationDisplayName("Krita");
+    setApplicationName("krita");
+    // Note: Qt docs suggest we set this, but if we do, we get resource paths of the form of krita/krita, which is weird.
+    //    setOrganizationName("krita");
+    setOrganizationDomain("krita.org");
+    QString version = KritaVersionWrapper::versionString(true);
+    setApplicationVersion(version);
+#else
     {
         /// Initialize application info, it will be used by both, Qt and
         /// DrKonqi of the host system
@@ -255,6 +270,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
             this->setOrganizationName("");
         }
     }
+#endif
 
 #ifndef Q_OS_MACOS
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));

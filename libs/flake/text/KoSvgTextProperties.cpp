@@ -220,6 +220,12 @@ void KoSvgTextProperties::scaleAbsoluteValues(const double scaleInline, const do
                 length.value *= scaleInline;
             }
             it.value() = QVariant::fromValue(length);
+        } if (it.value().canConvert<KoSvgText::AutoLengthPercentage>()) {
+            KoSvgText::AutoLengthPercentage info = it.value().value<KoSvgText::AutoLengthPercentage>();
+            if (info.isAuto) continue;
+            if (info.length.unit != absoluteUnit) continue;
+            info.length.value *= scaleInline;
+            it.value() = QVariant::fromValue(info);
         } else if (it.value().canConvert<KoSvgText::LineHeightInfo>()) {
             KoSvgText::LineHeightInfo info = it.value().value<KoSvgText::LineHeightInfo>();
             if (info.length.unit != absoluteUnit) continue;

@@ -2126,18 +2126,40 @@ void KoSvgTextShape::setSize(const QSizeF &size)
 
     if (d->internalShapes().isEmpty()) {
         /**
-         * We don't have any contours, just scale (and distort) the text,
-         * as if "Scale Styles" were activated
+         * We don't have any contours, just scale the text properties,
+         * using the value of x or y that is furthest from 1.0.
          */
 
-        const qreal scaleX = size.width() / oldSize.width();
-        const qreal scaleY = size.height() / oldSize.height();
+        /*const QPointF pos = position();
 
-        this->scale(scaleX, scaleY);
-        // TODO: use scaling function for kosvgtextproperties when styles presets are merged.
+        const qreal scaleFinal = qAbs(scaleX-1.0) > qAbs(scaleY-1.0)? scaleX: scaleY;
+        for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+            it->properties.scaleAbsoluteValues(scaleFinal, scaleFinal);
+        }
+
         notifyChanged();
-        shapeChangedPriv(ScaleChanged);
+        shapeChangedPriv(ContentChanged);
+
+        setPosition(pos);*/
+
+        const QPointF stillPoint = this->absoluteTransformation().map(oRect.center());
+        const bool useGlobalMode = false;
+        const bool usePostScaling = true;
+        KoFlake::resizeShapeCommon(this,
+                                   scaleX,
+                                   scaleY,
+                                   stillPoint,
+                                   useGlobalMode,
+                                   usePostScaling,
+                                   QTransform());
+        const QSizeF realNewSize = outlineRect().size();
+        KoShape::setSize(realNewSize);
+
     } else {
+        /**
+         * No scaling whatsoever for text-on-path.
+         * TODO: figure out some useful behaviour here.
+         */
         if (!d->textPaths.isEmpty()) return;
 
         const bool allInternalShapeAreTranslatedOnly = [this] () {

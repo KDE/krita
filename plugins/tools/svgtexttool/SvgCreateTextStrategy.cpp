@@ -80,7 +80,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     const double lineHeight = m_minSizeInline.width();
     const KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 
-    bool unwrappedText = m_modifiers.testFlag(Qt::ControlModifier);
+    bool unwrappedText = m_modifiers.testFlag(Qt::ControlModifier) || m_flowShape;
     if (rectangle.width() < m_minSizeInline.width() && rectangle.height() < m_minSizeInline.height()) {
         unwrappedText = true;
     }
@@ -89,6 +89,9 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
         val.isAuto = false;
         val.customValue = writingMode == KoSvgText::HorizontalTB? rectangle.width(): rectangle.height();
         properties.setProperty(KoSvgTextProperties::InlineSizeId, QVariant::fromValue(val));
+    } else {
+        // We explicitely remove the inline size, because it could've been inside the properties by a different method.
+        properties.removeProperty(KoSvgTextProperties::InlineSizeId);
     }
     if (writingMode != KoSvgText::HorizontalTB) {
         properties.setProperty(KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationUpright);

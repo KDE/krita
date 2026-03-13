@@ -30,6 +30,6 @@
         <file>sql/delete_resource_tags_for_storage_indirect.sql</file>
         <file>sql/delete_versioned_resources_for_storage_direct.sql</file>
         <file>sql/delete_resource_metadata_for_storage.sql</file>
-        
+        <file>sql/storage_tags_ref_count.sql</file>
     </qresource>
 </RCC>

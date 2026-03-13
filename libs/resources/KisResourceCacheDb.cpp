@@ -506,6 +506,43 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
+std::pair<QVector<int>,QVector<int>> KisResourceCacheDb::tagsForStorage(const QString &resourceType, const QString &storageLocation)
+{
+    try {
+        KisSqlQueryLoader loader(":/sql/storage_tags_ref_count.sql", KisSqlQueryLoader::single_statement_mode);
+        loader.query().bindValue(":resource_type", resourceType);
+        loader.query().bindValue(":location", changeToEmptyIfNull(storageLocation));
+        loader.exec();
+
+        QVector<int> uniqueTags;
+        QVector<int> sharedTags;
+
+        while (loader.query().next()) {
+            if (loader.query().value("ref_count").toInt() > 1) {
+                sharedTags << loader.query().value("tag_id").toInt();
+            } else {
+                uniqueTags << loader.query().value("tag_id").toInt();
+            }
+        }
+
+        return {uniqueTags, sharedTags};
+
+    } catch (const KisSqlQueryLoader::FileException &e) {
+        qWarning().noquote() << "ERROR: deleteStorage:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       error:" << e.fileErrorString;
+        return {};
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: deleteStorage:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return {};
+    }
+
+    return {};
+}
+
 QVector<int> KisResourceCacheDb::resourcesForStorage(const QString &resourceType, const QString &storageLocation)
 {
     QVector<int> result;
@@ -1405,7 +1442,6 @@ bool KisResourceCacheDb::linkTagToStorage(const QString &url, const QString &res
 
 bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, KisTagSP tag)
 {
-
     if (hasTag(tag->url(), resourceType)) {
         // Check whether this storage is already registered for this tag
         QSqlQuery q;
@@ -1418,6 +1454,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
                        "AND    tags.resource_type_id = (SELECT id\n"
                        "                                FROM   resource_types\n"
                        "                                WHERE  name = :resource_type)\n"
+                       "AND    storages.location = :storage_location\n"
                        "AND    tags.url = :url"))
         {
             qWarning() << "Could not prepare select tags from tags_storages query" << q.lastError();
@@ -1425,6 +1462,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
 
         q.bindValue(":url", tag->url());
         q.bindValue(":resource_type", resourceType);
+        q.bindValue(":storage_location", changeToEmptyIfNull(KisResourceLocator::instance()->makeStorageLocationRelative(storageLocation)));
 
         if (!q.exec()) {
             qWarning() << "Could not execute tags_storages query" << q.boundValues() << q.lastError();
@@ -1753,38 +1791,31 @@ bool KisResourceCacheDb::deleteStorage(QString location)
         // attempt to cache them. Which means we can never drop any tables while
         // there is an instance of those models in existence, even just creating
         // and dropping an empty temporary table fails.
-        QVariantList tagIdsToDelete;
+        QVariantList uniqueTagIdsToDelete;
         {
-            KisSqlQueryLoader loader("inline://gather_tag_ids_to_delete",
-                                     "SELECT tags_storages.tag_id tag_id\n "
-                                     "FROM tags_storages\n"
-                                     "WHERE tags_storages.storage_id =\n"
-                                     "    (SELECT storages.id\n"
-                                     "     FROM   storages\n"
-                                     "     WHERE  storages.location = :location)\n",
-                                     KisSqlQueryLoader::single_statement_mode);
-            loader.query().bindValue(":location", changeToEmptyIfNull(location));
-            loader.exec();
-            QSqlQuery &query = loader.query();
-            while (query.next()) {
-                tagIdsToDelete.append(query.value(0).toLongLong());
-            }
+            auto [unique, shared] = tagsForStorage(ResourceType::PaintOpPresets, location);
+            std::copy(unique.begin(), unique.end(), std::back_inserter(uniqueTagIdsToDelete));
         }
 
-        if (!tagIdsToDelete.isEmpty()) {
-            {
+        {
                 KisSqlQueryLoader loader("inline://delete_tags_storage_links_for_storage",
-                                         "DELETE FROM tags_storages WHERE tag_id = ?",
+                                         "WITH storage_id_query AS (\n"
+                                         "    SELECT storages.id\n"
+                                         "    FROM storages\n"
+                                         "    WHERE storages.location = :location)\n"
+                                         "DELETE FROM tags_storages\n"
+                                         "WHERE storage_id IN storage_id_query\n",
                                          KisSqlQueryLoader::single_statement_mode);
-                loader.query().addBindValue(tagIdsToDelete);
-                loader.execBatch();
-            }
+                loader.query().bindValue(":location", changeToEmptyIfNull(location));
+                loader.exec();
+        }
 
+        if (!uniqueTagIdsToDelete.isEmpty()) {
             {
                 KisSqlQueryLoader loader("inline://delete_tags_translations_for_storage",
                                          "DELETE FROM tag_translations WHERE tag_id = ?",
                                          KisSqlQueryLoader::single_statement_mode);
-                loader.query().addBindValue(tagIdsToDelete);
+                loader.query().addBindValue(uniqueTagIdsToDelete);
                 loader.execBatch();
             }
 
@@ -1792,7 +1823,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
                 KisSqlQueryLoader loader("inline://delete_resource_tags_for_storage",
                                          "DELETE FROM resource_tags WHERE tag_id = ?",
                                          KisSqlQueryLoader::single_statement_mode);
-                loader.query().addBindValue(tagIdsToDelete);
+                loader.query().addBindValue(uniqueTagIdsToDelete);
                 loader.execBatch();
             }
 
@@ -1800,7 +1831,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
                 KisSqlQueryLoader loader("inline://delete_tags_for_storage",
                                          "DELETE FROM tags WHERE id = ?",
                                          KisSqlQueryLoader::single_statement_mode);
-                loader.query().addBindValue(tagIdsToDelete);
+                loader.query().addBindValue(uniqueTagIdsToDelete);
                 loader.execBatch();
             }
         }

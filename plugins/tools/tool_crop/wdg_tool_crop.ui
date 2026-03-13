@@ -116,6 +116,9 @@
            <property name="suffix">
             <string> px</string>
            </property>
+           <property name="minimum">
+            <number>-30000</number>
+           </property>
            <property name="maximum">
             <number>30000</number>
            </property>
@@ -140,6 +143,9 @@
            </property>
            <property name="suffix">
             <string> px</string>
+           </property>
+           <property name="minimum">
+            <number>-30000</number>
            </property>
            <property name="maximum">
             <number>30000</number>

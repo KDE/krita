@@ -48,6 +48,7 @@ public:
 private:
     friend class TestMemoryStorage;
     friend class TestResourceLocator;
+    friend class TestStorageWrapper;
     bool testingRemoveResource(const QString &url);
     bool testingAddTag(const QString &resourceType, KisTagSP tag);
     bool testingRemoveTag(const QString &resourceType, const QString &tagUrl);

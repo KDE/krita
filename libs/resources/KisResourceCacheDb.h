@@ -92,6 +92,17 @@ private:
      */
     static bool registerResourceType(const QString &resourceType);
 
+    /**
+     * Returns a list of tags related to the storage
+     *
+     * The first item of the pair represents the tags that are linked to
+     * this very storage uniquely. The second item of the pair lists the
+     * tags that are shared with other storages.
+     */
+    static std::pair<QVector<int>,QVector<int>> tagsForStorage(const QString &resourceType, const QString &storageLocation);
+    /**
+     * Returns a list of resources owned by the storage
+     */
     static QVector<int> resourcesForStorage(const QString &resourceType, const QString &storageLocation);
     static int resourceIdForResource(const QString &resourceFileName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);

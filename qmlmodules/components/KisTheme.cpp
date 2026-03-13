@@ -38,6 +38,34 @@ auto getShade = [](KColorScheme::ShadeRole id) { return lager::lenses::getset(
 };
 }
 
+const KisThemeConfig *KisThemeConfig::instance()
+{
+    static const KisThemeConfig *kts;
+    if (!kts) {
+        kts = new KisThemeConfig;
+    }
+    return kts;
+}
+
+void KisThemeConfig::slotSetFilename(const QString &filename)
+{
+    if (filename != m_filename) {
+        m_filename = filename;
+        m_config = KSharedConfig::openConfig(m_filename);
+        Q_EMIT themeChanged();
+    }
+}
+
+KisThemeConfig::KisThemeConfig(QObject *parent)
+    : QObject(parent)
+    , m_filename(qApp->property("KDE_COLOR_SCHEME_PATH").toString())
+    , m_config(KSharedConfig::openConfig(m_filename))
+{
+    connect(KisConfigNotifier::instance(),
+            &KisConfigNotifier::signalColorThemeChanged,
+            this,
+            &KisThemeConfig::slotSetFilename);
+}
 
 KisThemeColorGroup::KisThemeColorGroup(KColorScheme::ColorSet _set, QObject *parent)
     : QObject(parent)
@@ -78,9 +106,8 @@ KisThemeColorGroup::~KisThemeColorGroup()
 {
 }
 
-void KisThemeColorGroup::updateColorScheme(const QString filename)
+void KisThemeColorGroup::updateColorScheme(const KSharedConfigPtr &config)
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig(filename);
     m_active = KColorScheme(QPalette::Active, m_set, config);
     m_inactive = KColorScheme(QPalette::Inactive, m_set, config);
     m_disabled = KColorScheme(QPalette::Disabled, m_set, config);
@@ -119,7 +146,7 @@ KisTheme::KisTheme(QObject *parent)
     , selectionModel(KisThemeColorGroup(KColorScheme::Selection, this))
     , tooltipModel(KisThemeColorGroup(KColorScheme::Tooltip, this))
 {
-    connect(KisConfigNotifier::instance(), SIGNAL(signalColorThemeChanged(QString)), this, SLOT(slotUpdateThemes()));
+    connect(KisThemeConfig::instance(), &KisThemeConfig::themeChanged, this, &KisTheme::slotUpdateThemes);
 
     connect(&viewModel, SIGNAL(schemeChanged()), this, SIGNAL(viewChanged()));
     connect(&windowModel, SIGNAL(schemeChanged()), this, SIGNAL(windowChanged()));
@@ -156,13 +183,12 @@ KisThemeColorGroup *KisTheme::tooltip()
 
 void KisTheme::slotUpdateThemes()
 {
-    const QString filename = qApp->property("KDE_COLOR_SCHEME_PATH").toString();
-
-    viewModel.updateColorScheme(filename);
-    windowModel.updateColorScheme(filename);
-    buttonModel.updateColorScheme(filename);
-    selectionModel.updateColorScheme(filename);
-    tooltipModel.updateColorScheme(filename);
+    const KSharedConfigPtr &config = KisThemeConfig::instance()->config();
+    viewModel.updateColorScheme(config);
+    windowModel.updateColorScheme(config);
+    buttonModel.updateColorScheme(config);
+    selectionModel.updateColorScheme(config);
+    tooltipModel.updateColorScheme(config);
 }
 
 

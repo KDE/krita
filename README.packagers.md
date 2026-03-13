@@ -49,7 +49,7 @@ in Krita MR !581 [^10].
 
 From a source code point of view, our fork is based on top of the latest
 version’s tarball. Each tarball’s contents are committed to the `main`
-branch of the `amyspark/gmic` GitHub repository [^11]. For every covered
+branch of the `vanyossi/gmic` GitHub repository [^11]. For every covered
 release, there is a branch that in turn overlays our own plugin
 implementation, along with additional fixes that ensure that G’MIC-Qt
 doesn’t attempt to overwrite the internal state of the host application;
@@ -68,12 +68,9 @@ depends on Krita as a build *and* runtime dependency.
 Getting the source code
 -----------------------
 
-The patched version’s tarballs are GPG signed and available at the
-Releases section of the GitHub repository [^13]. Alternatively, the
-tarballs (though not the signatures) are also mirrored at our
-dependencies stash at files.kde.org [^14]. The tarballs are signed with
-the GPG key which is available at my GitHub profile. Its fingerprint is
-`4894424D2412FEE5176732A3FC00108CFD9DBF1E`.
+The patched version’s tarballs are available at the Releases section of
+the GitHub repository [^13]. Alternatively, the tarballs are also
+mirrored at our dependencies stash at files.kde.org [^14].
 
 Building Krita’s G’MIC-Qt library
 ---------------------------------
@@ -157,13 +154,13 @@ hardening we apply to the build.
 
 [^10]: <https://invent.kde.org/graphics/krita/-/merge_requests/581>
 
-[^11]: <https://github.com/amyspark/gmic>
+[^11]: <https://github.com/vanyossi/gmic>
 
 [^12]: An older version of what’s
     <https://github.com/c-koi/gmic-qt/blob/master/src/Host/GmicQtHost.h>
     nowadays.
 
-[^13]: <https://github.com/amyspark/gmic/releases>
+[^13]: <https://github.com/vanyossi/gmic/releases>
 
 [^14]: <https://files.kde.org/krita/build/dependencies/>
 

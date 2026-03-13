@@ -76,7 +76,7 @@ public:
     /**
      * @brief purge purges the local resource cache
      */
-    void purge(const QString &storageLocation);
+    void purge(const QString &storageLocation, const QVector<int> &removedTagIds);
 
     /**
      * @brief addStorage Adds a new resource storage to the database. The storage is

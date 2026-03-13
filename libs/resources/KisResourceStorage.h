@@ -274,6 +274,7 @@ private:
     friend class KisResourceLocator;
     friend class KisResourceCacheDb;
     friend class TestResourceLocator;
+    friend class TestStorageWrapper;
 
     KisStoragePlugin* testingGetStoragePlugin();
 

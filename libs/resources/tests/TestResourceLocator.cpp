@@ -594,9 +594,9 @@ void TestResourceLocator::testLoadTagsFromStorage_data()
 {
     QTest::addColumn<TagDeletionType>("tagDeletionType");
 
-    QTest::newRow("storage_explicit_delete") << TagDeletionType(StorageExplicitDelete);
-    QTest::newRow("delete_all_temporary") << TagDeletionType(StorageDeleteAllTemporary);
-    QTest::newRow("delete_tag_and_resync") << TagDeletionType(StorageDeleteTagAndResync);
+    QTest::newRow("storage_explicit_delete") << StorageExplicitDelete;
+    QTest::newRow("delete_all_temporary") << StorageDeleteAllTemporary;
+    QTest::newRow("delete_tag_and_resync") << StorageDeleteTagAndResync;
 }
 
 void TestResourceLocator::testLoadTagsFromStorage()
@@ -683,6 +683,312 @@ void TestResourceLocator::testLoadTagsFromStorage()
         QCOMPARE(countTagRecordsInTagTranslations(testTagId), 0);
         QCOMPARE(countTagRecordsInResourceTags(testTagId), 0);
         QCOMPARE(countTagRecordsInTagStorages(testTagId), 0);
+    }
+}
+
+class TestStorageWrapper {
+public:
+
+    const int storageIndex = 0;
+    const int resourceIndex = 0;
+    const int tagIndex = 0;
+    KisResourceStorageSP storage;
+
+    QString storageLocation() const {
+        return QString("document_%1").arg(storageIndex);
+    }
+    QString tagUrl() const {
+        return QString("test_tag_url_%1").arg(tagIndex);
+    }
+
+    QString resourceType() const {
+        return ResourceType::PaintOpPresets;
+    }
+
+    QString resourceName() const {
+        return QString("metadata_test_%1.kpp").arg(resourceIndex);
+    }
+
+    KisMemoryStorage* memoryStorageBackend() const {
+        return dynamic_cast<KisMemoryStorage *>(storage->testingGetStoragePlugin());
+    }
+
+    TestStorageWrapper(int storageIndexArg, int resourceIndexArg, int tagIndexTag)
+        : storageIndex(storageIndexArg)
+        , resourceIndex(resourceIndexArg)
+        , tagIndex(tagIndexTag)
+    {
+        storage = QSharedPointer<KisResourceStorage>::create(storageLocation());
+        QVERIFY(storage->valid());
+
+        KisMemoryStorage *memoryStorageBackend =
+            dynamic_cast<KisMemoryStorage *>(storage->testingGetStoragePlugin());
+
+        QSharedPointer<DummyResource> resource(new DummyResource(resourceName(), resourceType()));
+        resource->setSomething(QString("123456789012345678901234567890_%1").arg(resourceIndex));
+
+        // add a resource to the storage
+        storage->addResource(resource);
+
+        {
+            // add a tag to the storage
+            KisTagSP tag(new KisTag());
+            tag->setName(QString("Test Tag %1").arg(tagIndex));
+            tag->setNames({{"ru", QString("Тестовый тег %1").arg(tagIndex)}});
+            tag->setUrl(tagUrl());
+            tag->setResourceType(resourceType());
+            tag->setDefaultResources({resource->filename()});
+            tag->setValid(true);
+            memoryStorageBackend->testingAddTag(ResourceType::PaintOpPresets, tag);
+        }
+    }
+};
+
+void TestResourceLocator::testTagsForStorageUnique()
+{
+    TestStorageWrapper storageWrapper1(/* storage */ 1, /* resource */ 1, /* tag */ 1);
+    TestStorageWrapper storageWrapper2(/* storage */ 2, /* resource */ 2, /* tag */ 2);
+
+    m_locator->addStorage(storageWrapper1.storageLocation(), storageWrapper1.storage);
+    m_locator->addStorage(storageWrapper2.storageLocation(), storageWrapper2.storage);
+
+    QVERIFY(m_locator->hasStorage(storageWrapper1.storageLocation()));
+    QVERIFY(m_locator->hasStorage(storageWrapper2.storageLocation()));
+
+    {
+        KisTagModel tagModel(ResourceType::PaintOpPresets);
+        KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+        QVERIFY(tag1);
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(storageWrapper1.resourceType(), storageWrapper1.storageLocation());
+        QCOMPARE(unique, {tag1->id()});
+        QCOMPARE(shared, {});
+    }
+
+    {
+        KisTagModel tagModel(ResourceType::PaintOpPresets);
+        KisTagSP tag2 = tagModel.tagForUrl(storageWrapper2.tagUrl());
+        QVERIFY(tag2);
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(storageWrapper2.resourceType(), storageWrapper2.storageLocation());
+        QCOMPARE(unique, {tag2->id()});
+        QCOMPARE(shared, {});
+    }
+
+    {
+        // unrelated resource type returns nothing
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(ResourceType::Brushes, storageWrapper1.storageLocation());
+        QCOMPARE(unique, {});
+        QCOMPARE(shared, {});
+    }
+}
+void TestResourceLocator::testTagsForStorageShared()
+{
+    TestStorageWrapper storageWrapper1(/* storage */ 1, /* resource */ 1, /* tag */ 1);
+    TestStorageWrapper storageWrapper2(/* storage */ 2, /* resource */ 2, /* tag */ 1);
+
+    m_locator->addStorage(storageWrapper1.storageLocation(), storageWrapper1.storage);
+    m_locator->addStorage(storageWrapper2.storageLocation(), storageWrapper2.storage);
+
+    QVERIFY(m_locator->hasStorage(storageWrapper1.storageLocation()));
+    QVERIFY(m_locator->hasStorage(storageWrapper2.storageLocation()));
+
+    {
+        KisTagModel tagModel(ResourceType::PaintOpPresets);
+        KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+        QVERIFY(tag1);
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(storageWrapper1.resourceType(), storageWrapper1.storageLocation());
+        QCOMPARE(unique, {});
+        QCOMPARE(shared, {tag1->id()});
+    }
+
+    {
+        KisTagModel tagModel(ResourceType::PaintOpPresets);
+        KisTagSP tag2 = tagModel.tagForUrl(storageWrapper2.tagUrl());
+        QVERIFY(tag2);
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(storageWrapper2.resourceType(), storageWrapper2.storageLocation());
+        QCOMPARE(unique, {});
+        QCOMPARE(shared, {tag2->id()});
+    }
+
+    {
+        // unrelated resource type returns nothing
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(ResourceType::Brushes, storageWrapper1.storageLocation());
+        QCOMPARE(unique, {});
+        QCOMPARE(shared, {});
+    }
+
+    m_locator->removeStorage(storageWrapper2.storageLocation());
+
+    {
+        KisTagModel tagModel(ResourceType::PaintOpPresets);
+        KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+        QVERIFY(tag1);
+        auto [unique, shared] = KisResourceCacheDb::tagsForStorage(storageWrapper1.resourceType(), storageWrapper1.storageLocation());
+        QCOMPARE(unique, {tag1->id()});
+        QCOMPARE(shared, {});
+    }
+}
+
+void TestResourceLocator::testDeleteStorageWithCrossLinkedTags()
+{
+    // TODO: rename TagDeletionType -> StorageDeletionType
+    const TagDeletionType tagDeletionType = StorageExplicitDelete;
+
+    TestStorageWrapper storageWrapper1(/* storage */ 1, /* resource */ 1, /* tag */ 1);
+    TestStorageWrapper storageWrapper2(/* storage */ 2, /* resource */ 2, /* tag */ 2);
+
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+
+    m_locator->addStorage(storageWrapper1.storageLocation(), storageWrapper1.storage);
+    m_locator->addStorage(storageWrapper2.storageLocation(), storageWrapper2.storage);
+
+    QVERIFY(m_locator->hasStorage(storageWrapper1.storageLocation()));
+    QVERIFY(m_locator->hasStorage(storageWrapper2.storageLocation()));
+
+    // now use tag from storageWrapper1 for a resource in storageWrapper2
+
+    KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+    QVERIFY(tag1);
+
+    KoResourceSP resource2 = m_locator->resource(storageWrapper2.storageLocation(),  storageWrapper2.resourceType(), storageWrapper2.resourceName());
+    QVERIFY(resource2);
+
+    tagResourceModel.tagResources(tag1, {resource2->resourceId()});
+
+    QCOMPARE(countTagRecordsInTags(tag1->id()), 1);
+    QCOMPARE(countTagRecordsInTagTranslations(tag1->id()), 1);
+    QCOMPARE(countTagRecordsInResourceTags(tag1->id()), 2); // two resources are tagged with this tag
+    QCOMPARE(countTagRecordsInTagStorages(tag1->id()), 1); // one storage is linked as the source of this tag
+
+    tagResourceModel.setResourcesFilter({resource2});
+    QCOMPARE(tagResourceModel.rowCount(), 2);
+
+    // now remove the storage
+
+    if (tagDeletionType == StorageExplicitDelete || tagDeletionType == StorageDeleteAllTemporary) {
+        const int deletedStorageId = storageWrapper1.storage->storageId();
+        const int deletedTagId = [&]() {
+            KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+            KIS_ASSERT(tag1);
+            return tag1->id();
+        }();
+
+        if (tagDeletionType == StorageExplicitDelete) {
+            m_locator->removeStorage(storageWrapper1.storageLocation());
+        } else if (tagDeletionType == StorageDeleteAllTemporary) {
+            KisResourceCacheDb::deleteTemporaryResources();
+        }
+
+        QCOMPARE(countStorageRecordsForStorageId(deletedStorageId), 0);
+        QCOMPARE(countStorageRecordsInTagsStoragesForStorageId(deletedStorageId), 0);
+
+        QCOMPARE(countTagRecordsInTags(deletedTagId), 0);
+        QCOMPARE(countTagRecordsInTagTranslations(deletedTagId), 0);
+        QCOMPARE(countTagRecordsInResourceTags(deletedTagId), 0);
+        QCOMPARE(countTagRecordsInTagStorages(deletedTagId), 0);
+
+        {
+            KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+            QVERIFY(!tag1);
+        }
+
+        {
+            KisTagSP tag2 = tagModel.tagForUrl(storageWrapper2.tagUrl());
+            QVERIFY(tag2);
+        }
+
+        // the model is automatically updated
+        QCOMPARE(tagResourceModel.rowCount(), 1);
+    }
+}
+
+void TestResourceLocator::testDeleteStorageWithSharedTags()
+{
+    // TODO: rename TagDeletionType -> StorageDeletionType
+    const TagDeletionType tagDeletionType = StorageExplicitDelete;
+
+    // the two storages provide the same tag!
+    TestStorageWrapper storageWrapper1(/* storage */ 1, /* resource */ 1, /* tag */ 1);
+    TestStorageWrapper storageWrapper2(/* storage */ 2, /* resource */ 2, /* tag */ 1);
+
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+
+    m_locator->addStorage(storageWrapper1.storageLocation(), storageWrapper1.storage);
+    m_locator->addStorage(storageWrapper2.storageLocation(), storageWrapper2.storage);
+
+    QVERIFY(m_locator->hasStorage(storageWrapper1.storageLocation()));
+    QVERIFY(m_locator->hasStorage(storageWrapper2.storageLocation()));
+
+    KisTagSP tag1 = tagModel.tagForUrl(storageWrapper1.tagUrl());
+    QVERIFY(tag1);
+
+    QCOMPARE(countTagRecordsInTags(tag1->id()), 1);
+    QCOMPARE(countTagRecordsInTagTranslations(tag1->id()), 1);
+    QCOMPARE(countTagRecordsInResourceTags(tag1->id()), 2); // two resources are tagged with this tag
+    QCOMPARE(countTagRecordsInTagStorages(tag1->id()), 2); // two storages are linked as the source of this tag
+
+    {
+        KoResourceSP resource2 = m_locator->resource(storageWrapper2.storageLocation(),
+                                                     storageWrapper2.resourceType(),
+                                                     storageWrapper2.resourceName());
+        QVERIFY(resource2);
+
+        tagResourceModel.setTagsFilter(QVector<KisTagSP>{});
+        tagResourceModel.setResourcesFilter({resource2});
+        QCOMPARE(tagResourceModel.rowCount(), 1);
+    }
+
+    {
+        KoResourceSP resource1 = m_locator->resource(storageWrapper2.storageLocation(),
+                                                     storageWrapper2.resourceType(),
+                                                     storageWrapper2.resourceName());
+        QVERIFY(resource1);
+
+        tagResourceModel.setTagsFilter(QVector<KisTagSP>{});
+        tagResourceModel.setResourcesFilter({resource1});
+        QCOMPARE(tagResourceModel.rowCount(), 1);
+    }
+
+    {
+        tagResourceModel.setTagsFilter({tag1});
+        tagResourceModel.setResourcesFilter(QVector<KoResourceSP>{});
+        QCOMPARE(tagResourceModel.rowCount(), 2);
+    }
+
+    // now remove the storage
+
+    if (tagDeletionType == StorageExplicitDelete || tagDeletionType == StorageDeleteAllTemporary) {
+        const int deletedStorageId = storageWrapper1.storage->storageId();
+
+        if (tagDeletionType == StorageExplicitDelete) {
+            m_locator->removeStorage(storageWrapper1.storageLocation());
+        } else if (tagDeletionType == StorageDeleteAllTemporary) {
+            KisResourceCacheDb::deleteTemporaryResources();
+        }
+
+        QCOMPARE(countStorageRecordsForStorageId(deletedStorageId), 0);
+        QCOMPARE(countStorageRecordsInTagsStoragesForStorageId(deletedStorageId), 0);
+
+        KisTagSP tag2 = tagModel.tagForUrl(storageWrapper2.tagUrl());
+        QVERIFY(tag2);
+
+        QCOMPARE(countTagRecordsInTags(tag2->id()), 1);
+        QCOMPARE(countTagRecordsInTagTranslations(tag2->id()), 1);
+        QCOMPARE(countTagRecordsInResourceTags(tag2->id()), 1);
+        QCOMPARE(countTagRecordsInTagStorages(tag2->id()), 1);
+
+        {
+            KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+            KoResourceSP resource2 = m_locator->resource(storageWrapper2.storageLocation(),
+                                                         storageWrapper2.resourceType(),
+                                                         storageWrapper2.resourceName());
+            QVERIFY(resource2);
+
+            tagResourceModel.setTagsFilter(QVector<KisTagSP>{});
+            tagResourceModel.setResourcesFilter({resource2});
+            QCOMPARE(tagResourceModel.rowCount(), 1);
+        }
     }
 }
 

@@ -822,12 +822,20 @@ void KisResourceLocator::setMetaDataForStorage(const QString &storageLocation, Q
     }
 }
 
-void KisResourceLocator::purge(const QString &storageLocation)
+void KisResourceLocator::purge(const QString &storageLocation, const QVector<int> &removedTagIds)
 {
     Q_FOREACH(const auto key, d->resourceCache.keys()) {
         if (key.first == storageLocation) {
             d->resourceCache.remove(key);
             KisResourceThumbnailCache::instance()->remove(key);
+        }
+    }
+
+    for (auto it = d->tagCache.begin(); it != d->tagCache.end();) {
+        if (removedTagIds.contains(it.value()->id())) {
+            it = d->tagCache.erase(it);
+        } else {
+            ++it;
         }
     }
 }
@@ -897,11 +905,22 @@ bool KisResourceLocator::removeStorage(const QString &storageLocation)
         }
     }
 
+    QVector<std::pair<QString, QVector<int>>> removedTags;
+    QVector<int> allRemovedTagIds;
+    Q_FOREACH(const QString &type, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        auto [uniqueTags, sharedTags] = KisResourceCacheDb::tagsForStorage(type, storageLocation);
+        removedTags << std::make_pair(type, uniqueTags);
+        allRemovedTagIds << uniqueTags;
+    }
+
     Q_FOREACH (const auto &typedResources, removedResources) {
         Q_EMIT beginExternalResourceRemove(typedResources.first, typedResources.second);
     }
 
-    purge(storageLocation);
+    // TODO: add model notification about removed tags
+    Q_UNUSED(removedTags);
+
+    purge(storageLocation, allRemovedTagIds);
 
     KisResourceStorageSP storage = d->storages.take(storageLocation);
 

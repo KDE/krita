@@ -16,6 +16,32 @@
 #else
 #include <KColorScheme>
 #endif
+
+class KisThemeConfig : public QObject
+{
+    Q_OBJECT
+    Q_DISABLE_COPY_MOVE(KisThemeConfig)
+public:
+    static const KisThemeConfig *instance();
+
+    const KSharedConfigPtr &config() const
+    {
+        return m_config;
+    }
+
+Q_SIGNALS:
+    void themeChanged();
+
+private Q_SLOTS:
+    void slotSetFilename(const QString &filename);
+
+private:
+    explicit KisThemeConfig(QObject *parent = nullptr);
+
+    QString m_filename;
+    KSharedConfigPtr m_config;
+};
+
 class KisThemeColorGroup : public QObject
 {
     Q_OBJECT
@@ -65,7 +91,7 @@ public:
     LAGER_QT_READER(QColor, darkShadeColor);
     LAGER_QT_READER(QColor, shadowShadeColor);
 
-    void updateColorScheme(const QString filename);
+    void updateColorScheme(const KSharedConfigPtr &config);
     void setState(int newState);
     int state();
 private Q_SLOTS:

@@ -45077,7 +45077,7 @@ msgstr "空格宽度 (Sp)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "行单位 (Ln)"
+msgstr "行高单位 (ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
 #, kde-format
@@ -45902,7 +45902,7 @@ msgstr "字符间距"
 msgctxt "@info:tooltip"
 msgid ""
 "Letter spacing controls the spacing between visible clusters of characters."
-msgstr "字距调整控制可见字符组之间的间距。"
+msgstr "字距调整 (Letter spacing) 属性控制可见字符组之间的间距。"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:20
 #, kde-format
@@ -45918,7 +45918,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Line Break"
-msgstr "换行"
+msgstr "换行规则"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
 #, kde-format
@@ -45927,7 +45927,7 @@ msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
-"换行 (Link Break) 规则属性用于选择换行算法的严格程度，主要应用于中日韩 (CJK) "
+"换行规则 (Link Break) 属性用于选择换行算法的严格程度，主要应用于中日韩 (CJK) "
 "文本排版，需预先设置语言属性。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
@@ -45944,7 +45944,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
-msgstr "不对换行算法作任何特殊调整"
+msgstr "自动 (auto)，不对换行算法作任何特殊调整"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
@@ -45956,7 +45956,9 @@ msgstr "宽松"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
-msgstr "通常表示更宽松的算法，目前的实际行为与自动相同。"
+msgstr ""
+"宽松 (loose)，本应使用更宽松的算法，但在 Krita 中尚未实现，目前的实际行为与自"
+"动相同。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -45977,7 +45979,7 @@ msgstr "严格"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr "禁止在日语的小假名 (如ゃ、ゅ、ょ) 前进行软换行。"
+msgstr "严格 (strict)，禁止在日语的小假名 (如ゃ、ゅ、ょ) 前进行软换行。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
@@ -45990,7 +45992,7 @@ msgstr "任意位置"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr "软换行可在任意字素 (grapheme) 的边界发生。"
+msgstr "任意位置 (anywhere)，软换行可在任意字素 (grapheme) 的边界发生。"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
@@ -46535,7 +46537,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
 "text."
-msgstr "文本装饰 (Text Decoration) 允许绘制下划线、上划线和删除线。"
+msgstr "文本装饰 (Text Decoration) 用于为文本绘制下划线、上划线和删除线。"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -46551,7 +46553,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Line:"
-msgstr "线形："
+msgstr "线条类型："
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:177
 #, kde-format
@@ -46830,7 +46832,7 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
-"文本变换 (Text Transform) 用于描述字符的转换功能，例如将字母转为大写或切换半"
+"文本转换 (Text Transform) 用于描述字符的转换功能，例如将字母转为大写或切换半"
 "角/全角形式。"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
@@ -46844,7 +46846,7 @@ msgid ""
 msgstr ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana, wenbenbianhuan, shouzimudaxie, quandaxie, quanxiaoxie, quanjiao, "
-"quanchicunjiaming, 文本变换, 首字母大写, 全大写, 全小写, 全角, 全尺寸假名"
+"quanjiaojiaming, 文本变换, 首字母大写, 全大写, 全小写, 全角, 全角假名"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
@@ -46880,7 +46882,7 @@ msgstr "全角"
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr "全尺寸假名"
+msgstr "全角假名"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, kde-format
@@ -46915,13 +46917,13 @@ msgstr "下划线"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Left"
-msgstr "垂直排版左划线"
+msgstr "竖排左划线"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:110
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Right"
-msgstr "垂直排版右划线"
+msgstr "竖排右划线"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
 #, kde-format
@@ -46985,7 +46987,7 @@ msgstr "合并空白保留换行"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Word Break"
-msgstr "单词换行"
+msgstr "单词换行规则"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:16
 #, kde-format
@@ -46995,8 +46997,9 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
-"单词换行 (Word Break) 属性用于精细调整换行行为，通过切换是否仅允许在单词之间"
-"断行还是允许在字符之间断行来实现，适用于韩语或埃塞俄比亚语等非拉丁语言场景。"
+"单词换行规则 (Word Break) 属性用于精细调整换行行为，通过切换是否仅允许在单词"
+"之间断行还是允许在字符之间断行来实现，适用于韩语或埃塞俄比亚语等非拉丁语言场"
+"景。"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -47004,32 +47007,36 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr "word-break, line breaking, dancihuanhang, huanhang, 单词换行, 换行"
+msgstr ""
+"word-break, line breaking, dancihuanhang, dancihuanhangguize, huanhang, 单词"
+"换行, 单词换行规则, 换行"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No additional adjustments are made to the regular line break algorithm."
-msgstr "不进行额外调整，使用默认的换行算法规则。"
+msgstr "不进行额外调整，使用默认的换行规则算法。"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr "中断全部"
+msgstr "禁止单词内部换行"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
-msgstr "软换行只允许在单词内部发生，通常由空格分隔。"
+msgstr ""
+"禁止单词内部换行 (keep-all)，仅允许在分词符号 (如空格) 处换行，禁止在单词内部"
+"断开换行。"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr "保持全部"
+msgstr "允许任意位置换行"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
@@ -47043,7 +47050,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
-msgstr "单词间距控制分词字符的大小，例如空格字符。"
+msgstr "允许在任意字符间换行 (包括单词内部)，忽略单词边界。"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -65967,7 +65974,7 @@ msgstr "移除文本"
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "移除字符变形"
+msgstr "移除字符转换"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -66376,14 +66383,14 @@ msgstr "当画布排版模式处于活动状态时，将所选文本开头右移
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "移除字符变形"
+msgstr "移除字符转换"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr "移除选中文本的字符变形。"
+msgstr "移除选中文本的字符转换。"
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66577,7 +66584,7 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"使用 SVG 1.1 规范的字符变形功能来对每一行文本进行定位。空格和换行符会被折叠。"
+"使用 SVG 1.1 规范的字符转换功能来对每一行文本进行定位。空格和换行符会被折叠。"
 "此类型专门用于向后兼容 SVG 1.1 规范。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320

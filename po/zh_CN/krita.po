@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-12 02:35+0000\n"
+"POT-Creation-Date: 2026-03-14 02:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16228,8 +16228,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: krita/main.cc:737 libs/ui/KisApplication.cpp:531
-#: libs/ui/KisApplication.cpp:843
+#: krita/main.cc:737 libs/ui/KisApplication.cpp:547
+#: libs/ui/KisApplication.cpp:859
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -18752,31 +18752,31 @@ msgstr "%1 个字符变体。"
 #, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "访问所有替代形式"
+msgstr "访问所有替代字形"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
 msgctxt "@tooltip"
 msgid "Access any possible substitutions."
-msgstr "访问所有可能的替代字符形式。"
+msgstr "访问所有可能的替代字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "根据上下文确定替代形式"
+msgstr "上下文替代"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr "根据字符在文本中的上下文替换字符形式。"
+msgstr "根据字符在文本中的上下文替换字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Ligatures"
-msgstr "根据上下文确定连字形式"
+msgstr "上下文连字"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
 #, kde-format
@@ -18784,58 +18784,58 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
-msgstr "根据字符序列在文本中的上下文将其替换为连字形式。"
+msgstr "根据字符序列在文本中的上下文将其替换为连字字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr "根据上下文确定花体字形式"
+msgstr "上下文花饰"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
-msgstr "根据字符在文本中的上下文将其替换为花体字形式。"
+msgstr "根据字符在文本中的上下文将其替换为花体字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr "独立连字"
+msgstr "可选连字"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
-msgstr "将字符序列替换为专为排版效果而设计的连字形式。"
+msgstr "将字符序列替换为专为排版效果而设计的连字字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr "行尾替代形式"
+msgstr "行尾替代"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr "将字符替换为其行尾形式。"
+msgstr "将字符替换为其行尾字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
 #, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "历史形式"
+msgstr "历史字形"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their historical forms."
-msgstr "将字符替换为其历史形式。"
+msgstr "将字符替换为其历史字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
 #, kde-format
@@ -18849,13 +18849,13 @@ msgstr "将字符序列替换为历史曾用，但如今少用的连字形式。
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr "对齐专用替代形式"
+msgstr "两端对齐替代"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
-msgstr "将字符替换为用于对齐的替代形式"
+msgstr "将字形替换为用于两端对齐的替代字形"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
 #, kde-format
@@ -18867,37 +18867,37 @@ msgstr "标准连字"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr "将字符序列替换为常用连字形式。"
+msgstr "将字形序列替换为常用的标准连字字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr "左顶格"
+msgstr "左边界"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the left side."
-msgstr "将字符调整为左侧没有空白的形式。"
+msgstr " 调整行首字形的光学左边界，确保不存在空白。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
 #, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "本地化形式"
+msgstr "本地化字形"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
-msgstr "将字符替换为特定语言的形式。"
+msgstr "将字形替换为特定语言的字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
 #, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr "视觉顶格"
+msgstr "光学边界"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18905,19 +18905,19 @@ msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
 "Krita."
-msgstr "调整字符，使其按照视觉边界对齐。在 Krita 中不起作用。"
+msgstr "调整字形的光学边界，用于优化文本块的视觉对齐，特别是边缘对齐。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
 #, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr "装饰"
+msgstr "装饰字形"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ornaments for decorative purposes."
-msgstr "用装饰性图案替换字体以作装饰之用。"
+msgstr "将字形替换为装饰性的花饰字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
 #, kde-format
@@ -18929,25 +18929,25 @@ msgstr "随机替换"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with random alternates."
-msgstr "将字符替换为随机的替代形式。"
+msgstr "将字形替换为随机的替代字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
 #, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr "右顶格"
+msgstr "右边界"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the right side."
-msgstr "将字符调整为右侧没有空白的形式。"
+msgstr " 调整行尾字形的光学右边界，确保不存在空白。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "其他替代形式"
+msgstr "风格替代"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18955,25 +18955,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with stylistic alternates that do not fit in other "
 "categories."
-msgstr "将字符替换为无法被归类到其他类别下的替代形式。"
+msgstr "将字形替换为无法被归类到其他类别下的替代字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr "花体字"
+msgstr "花体"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr "将字符替换为花体字替代形式。"
+msgstr "将字形替换为花体替代字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
 #, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr "字符组合/分解"
+msgstr "字形组合/分解"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
 #, kde-format
@@ -18982,26 +18982,26 @@ msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
-"这将组合或分解字素，以便生成的字符在之后能重新组合。通常用于处理变音符号。"
+"这将组合或分解字素，以便生成的字形在之后能重新组合。通常用于处理变音符号。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
 #, kde-format
 msgctxt "@title"
 msgid "Kerning"
-msgstr "字偶间距调整"
+msgstr "字距调整"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls kerning on the font."
-msgstr "控制字体的字偶间距"
+msgstr "控制字体的字距调整。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
 #, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr "标记字符位置"
+msgstr "标记定位"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -19009,7 +19009,7 @@ msgctxt "@tooltip"
 msgid ""
 "This controls the positioning of mark glyphs on base glyphs. Commonly used "
 "for diacritics."
-msgstr "控制标记字符在基字符上的位置。通常用于变音符号。"
+msgstr "控制标记符号相对于基础字形的位置。通常用于变音符号。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
 #, kde-format
@@ -19017,20 +19017,20 @@ msgctxt "@tooltip"
 msgid ""
 "This controls the positioning of mark glyphs onto other mark glyphs. "
 "Commonly used for diacritics."
-msgstr "控制标记字符在其他标记字符上的位置。通常用于变音符号。"
+msgstr "控制标记字符相对于其他标记字符的位置。通常用于变音符号。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr "必需根据上下文确定替代形式"
+msgstr "必需上下文替代"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
-msgstr "根据上下文将字符替换为替代形式，这是此字体正常工作的必要条件。"
+msgstr "根据上下文将字形替换为其替代字形，这是此字体正常工作的必要条件。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
@@ -19042,13 +19042,13 @@ msgstr "必需连字"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs with required ligatures."
-msgstr "将字符序列替换为必需连字形式。"
+msgstr "将字形序列替换为必需连字字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
 #, kde-format
 msgctxt "@title"
 msgid "Required Variation Alternates"
-msgstr "必须替代变体"
+msgstr "必需变体替代"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:124
 #, kde-format
@@ -19056,7 +19056,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in a variable font with ones suited for the current "
 "variation."
-msgstr "将可变样式字体中的字符替换为适合当前变体的形式。"
+msgstr "将可变样式字体中的字形替换为适合当前变体的字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
 #, kde-format
@@ -19070,37 +19070,39 @@ msgctxt "@tooltip"
 msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
-msgstr "指定字体在当前大小下的适用程度。在 Krita 中不起作用。"
+msgstr ""
+"允许字体根据其应用的字号大小，自动选择或调整最合适字形设计的功能。在 Krita 中"
+"不起作用。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "竖排字偶间距调整"
+msgstr "竖排字距调整"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls vertical kerning on the font."
-msgstr "控制字体的竖排字偶间距"
+msgstr "控制字体的竖排字距调整。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
 #, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "替代分数形式"
+msgstr "层叠分数"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
-msgstr "将用斜线分隔的数字替换为斜式分数形式。"
+msgstr "将斜式分数替换为层叠分数。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
 #, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "分母形式"
+msgstr "分母"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -19108,7 +19110,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces figures with forms that are suited to represent the denominator in "
 "a fraction."
-msgstr "将数字替换为适合表示分数分母的形式。"
+msgstr "将选中的数字替换为专门设计的“分母”字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:145
 #, kde-format
@@ -19128,19 +19130,19 @@ msgstr "将诸如 i 和 j 等带点字母替换为无点形式，以便用于数
 #, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "平体重音形式"
+msgstr "扁平化重音符"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
-msgstr "将大写字母上的重音符号替换为平体形式。"
+msgstr "将大写字母上的重音符号替换为扁平化的音标字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
 #, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "分数形式"
+msgstr "斜式分数"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -19159,7 +19161,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "齐线数字"
+msgstr "等高数字"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -19167,38 +19169,40 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces oldstyle figures with lining figures, which harmonize well with "
 "uppercase letters."
-msgstr "将不齐线数字替换为齐线数字，以提高与大写字母的兼容性。"
+msgstr ""
+"将不齐线的旧体数字替换为等高数字，像一排大写字母一样整齐地排列在基线上，与大"
+"写字母混排时更和谐。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr "数学希腊字母"
+msgstr "数学专用希腊字母"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
-msgstr "将正常希腊字母替换为用于数学的形式。"
+msgstr "将正常希腊字母替换为专门为数学排版设计的变体。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr "替代记号形式"
+msgstr "替代圈注形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures and letters with notational forms, like encircled."
-msgstr "将数字和字母替换为记号形式，比如带圈的形式。"
+msgstr "将数字和字母替换为带装饰性边框的注释形式，比如带圆圈的数字。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
 #, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "分子形式"
+msgstr "分子"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -19206,13 +19210,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces figures with forms that are suited to represent the numerator in a "
 "fraction."
-msgstr "将数字替换为适合表示分数分子的形式。"
+msgstr "将选中的数字替换为专门设计的、用于构成任意分数的“分子”字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "不齐线数字"
+msgstr "旧体数字"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19220,37 +19224,39 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces lining figures with oldstyle figures, which harmonize well with "
 "lowercase letters."
-msgstr "将齐线数字替换为不齐线数字，以提高与小写字母的兼容性。"
+msgstr ""
+"将齐线的等高数字替换为不齐线的旧体数字，具有升部和降部，更有韵律。与小写字母"
+"混排时更和谐。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
 #, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr "序数形式"
+msgstr "序数词形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces letters that follow figures with their ordinal forms."
-msgstr "将数字后面的字母替换为其序数形式。"
+msgstr "将序数词数字的后缀字母替换为专门设计的、与数字搭配的序数词形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "比例数字"
+msgstr "比例宽度数字"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces tabular figures with proportional figures."
-msgstr "将等宽数字替换为比例数字。"
+msgstr "将等宽数字替换为比例宽度数字。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:185
 #, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr "科学下标形式"
+msgstr "科学记数法下标"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19258,19 +19264,19 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with forms that are suited for displaying the number in "
 "chemical formulas."
-msgstr "将字符替换为适合在化学公式中显示数字的形式。"
+msgstr "将字形替换为适合在化学式和某些数学记数中显示数字的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr "数学公式替代形式"
+msgstr "数学脚本样式变体"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for super- and subscripts."
-msgstr "将字符替换为更适合上标和下标的形式。"
+msgstr "将字形替换为更适合不同脚本层级中上标和下标的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
 #, kde-format
@@ -19282,7 +19288,7 @@ msgstr "下标"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for subscript."
-msgstr "将字符替换为更适合下标的形式。"
+msgstr "将字形替换为专门设计的下标形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
 #, kde-format
@@ -19294,7 +19300,7 @@ msgstr "上标"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for superscript."
-msgstr "将字符替换为更适合上标的形式。"
+msgstr "将字形替换为专门设计的上标形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
 #, kde-format
@@ -19306,13 +19312,13 @@ msgstr "等宽数字"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces proportional figures with tabular figures."
-msgstr "将比例数字替换为等宽数字。"
+msgstr "将比例宽度数字替换为等宽数字。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
-msgstr "带斜杠零"
+msgstr "带斜线零"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
 #, kde-format
@@ -19321,14 +19327,14 @@ msgid ""
 "Replaces the number zero with one that has a slash in the middle, which can "
 "help prevent confusion with similar glyphs like the letter 'O'."
 msgstr ""
-"将数字零替换为中间带有一条斜线的零，这有助于避免与类似形状的字符 (如字母“O”) "
-"混淆。"
+"将默认的数字零替换为中间带有一条斜线的零，这有助于避免与类似形状的字符 (如字"
+"母“O”) 混淆。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Case-Sensitive Forms"
-msgstr "区分大小写形式"
+msgstr "大写环境适应"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
 #, kde-format
@@ -19336,25 +19342,25 @@ msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
-msgstr "调整字符使其与仅由大写字母或齐线数字组成的文本更好地配合。"
+msgstr "调整字形使其与仅由大写字母或等高数字组成的文本更加和谐。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
 #, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr "全大写字符间距"
+msgstr "大写字母间距"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts inter-glyph spacing for all-capital text."
-msgstr "调整全大写文本的字符间距。"
+msgstr "调整优化全大写文本的字符间距，提高可读性和视觉美感。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals From Capitals"
-msgstr "大写字母转为特小型大写"
+msgstr "大写转微型大写"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
 #, kde-format
@@ -19363,26 +19369,26 @@ msgid ""
 "Replaces uppercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
-"将大写字母替换为特小型大写字母形式，这种形式比小型大写字母形式更接近字体的 x "
-"高度。"
+"将标准的大写字母转换为微型大写字母，这种形式比小型大写字母更小，通常严格等于"
+"字体的 x 高度。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals From Capitals"
-msgstr "大写字母转为小型大写"
+msgstr "从大写字母生成小型大写"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uppercase letters with small capital forms."
-msgstr "将大写字母替换为小型大写字母形式。"
+msgstr "将标准的大写字母转换为小型大写字母。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
-msgstr "小写字母转为特小型大写"
+msgstr "微型大写字母"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:228
 #, kde-format
@@ -19391,44 +19397,46 @@ msgid ""
 "Replaces lowercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
-"将小写字母替换为特小型大写字母形式，这种形式比小型大写字母形式更接近字体的 x "
-"高度。"
+"将小写字母替换为微型大写字母。这种形式比小型大写字母形式更更小，通常严格等于"
+"字体的 x 高度。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr "小写字母转为小型大写字母"
+msgstr "小型大写字母"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces lowercase letters with small capital forms."
-msgstr "将小写字母替换为小型大写字母形式。"
+msgstr "将小写字母替换为小型大写字母。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
 #, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "标题"
+msgstr "标题专用字形"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternate forms suited for header text."
-msgstr "将字符替换为适合标题文本的替代形式。"
+msgstr "将字形替换为专为大字号标题设计的字形变体。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
 #, kde-format
 msgctxt "@title"
 msgid "Unicase"
-msgstr "单一大小写"
+msgstr "统一大小写"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces both upper and lowercase glyphs with unicase glyphs."
-msgstr "将大写和小写字符均替换为单一大小写字符。"
+msgstr ""
+"将大写和小写字形替换为统一大小写字形，原本的小写字母会保留其形态，而原本的大"
+"写字母则会被替换为形态类似大写、但高度与小写字母齐平的字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:245
 #, kde-format
@@ -23644,10 +23652,10 @@ msgstr "本地资源"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1238
-#: libs/ui/KisApplication.cpp:1241 libs/ui/KisApplication.cpp:1257
-#: libs/ui/KisApplication.cpp:1289 libs/ui/KisApplication.cpp:1303
-#: libs/ui/KisApplication.cpp:1331 libs/ui/KisDocument.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1254
+#: libs/ui/KisApplication.cpp:1257 libs/ui/KisApplication.cpp:1273
+#: libs/ui/KisApplication.cpp:1305 libs/ui/KisApplication.cpp:1319
+#: libs/ui/KisApplication.cpp:1347 libs/ui/KisDocument.cpp:1054
 #: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
 #: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
 #: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
@@ -32119,7 +32127,7 @@ msgid "HSV CCW"
 msgstr "HSV 逆时针色相"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:470
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:486
 #, kde-format
 msgid "Sessions"
 msgstr "会话管理"
@@ -33626,7 +33634,7 @@ msgstr "打开背景色拾色器(&O)"
 msgid "&Docker Box"
 msgstr "面板框(&D)"
 
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:466
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:482
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33640,8 +33648,8 @@ msgstr "图案"
 msgid "Custom Pattern"
 msgstr "自定义图案"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:451
-#: libs/ui/KisApplication.cpp:452
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:467
+#: libs/ui/KisApplication.cpp:468
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34602,26 +34610,26 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "缩放：%1 %"
 
-#: libs/ui/KisApplication.cpp:245
+#: libs/ui/KisApplication.cpp:260
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 The Krita Developers"
 
-#: libs/ui/KisApplication.cpp:443
+#: libs/ui/KisApplication.cpp:459
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "笔刷预设"
 
-#: libs/ui/KisApplication.cpp:446 libs/ui/KisApplication.cpp:447
-#: libs/ui/KisApplication.cpp:448 libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:462 libs/ui/KisApplication.cpp:463
+#: libs/ui/KisApplication.cpp:464 libs/ui/KisApplication.cpp:465
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "笔尖图像"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:470
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34629,7 +34637,7 @@ msgstr "笔尖图像"
 msgid "Palettes"
 msgstr "色板"
 
-#: libs/ui/KisApplication.cpp:467 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:483 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34637,44 +34645,44 @@ msgstr "色板"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:484
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "矢量图形库"
 
-#: libs/ui/KisApplication.cpp:469 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:485 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "窗口布局"
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:487
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域蒙版"
 
-#: libs/ui/KisApplication.cpp:473
+#: libs/ui/KisApplication.cpp:489
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr 脚本"
 
-#: libs/ui/KisApplication.cpp:478
+#: libs/ui/KisApplication.cpp:494
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "图层样式"
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:497
 #, kde-format
 msgid "Font Families"
 msgstr "字体系列"
 
-#: libs/ui/KisApplication.cpp:482
+#: libs/ui/KisApplication.cpp:498
 #, kde-format
 msgid "Style Presets"
 msgstr "文本样式预设"
 
-#: libs/ui/KisApplication.cpp:494
+#: libs/ui/KisApplication.cpp:510
 #, kde-format
 msgid ""
 "%1\n"
@@ -34685,13 +34693,13 @@ msgstr ""
 "\n"
 "Krita 将会立即退出。"
 
-#: libs/ui/KisApplication.cpp:494 libs/ui/KisApplication.cpp:500
+#: libs/ui/KisApplication.cpp:510 libs/ui/KisApplication.cpp:516
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita：发生严重错误"
 
-#: libs/ui/KisApplication.cpp:500
+#: libs/ui/KisApplication.cpp:516
 #, kde-format
 msgid ""
 "\n"
@@ -34702,7 +34710,7 @@ msgstr ""
 "\n"
 "Krita 将会立即退出。"
 
-#: libs/ui/KisApplication.cpp:532
+#: libs/ui/KisApplication.cpp:548
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34713,65 +34721,65 @@ msgstr ""
 "这将导致程序性能低下，或引发其他问题。\n"
 "请下载并安装 64 位版本的 Krita。"
 
-#: libs/ui/KisApplication.cpp:549
+#: libs/ui/KisApplication.cpp:565
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "正在初始化全局参数..."
 
-#: libs/ui/KisApplication.cpp:581
+#: libs/ui/KisApplication.cpp:597
 #, kde-format
 msgid "Adding resource types..."
 msgstr "正在添加资源类型…"
 
-#: libs/ui/KisApplication.cpp:585
+#: libs/ui/KisApplication.cpp:601
 #, kde-format
 msgid "Loading plugins..."
 msgstr "正在加载插件..."
 
-#: libs/ui/KisApplication.cpp:591
+#: libs/ui/KisApplication.cpp:607
 #, kde-format
 msgid "Loading resources..."
 msgstr "正在加载资源..."
 
-#: libs/ui/KisApplication.cpp:600
+#: libs/ui/KisApplication.cpp:616
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "正在加载主窗口..."
 
-#: libs/ui/KisApplication.cpp:632
+#: libs/ui/KisApplication.cpp:648
 #, kde-format
 msgid "Launching..."
 msgstr "正在启动..."
 
-#: libs/ui/KisApplication.cpp:735
+#: libs/ui/KisApplication.cpp:751
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "无法找到 MIME 类型，请尝试使用 -mimetype 选项"
 
-#: libs/ui/KisApplication.cpp:796
+#: libs/ui/KisApplication.cpp:812
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "动画帧导出失败。"
 
-#: libs/ui/KisApplication.cpp:824 libs/ui/KisApplication.cpp:1097
+#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:1113
 #, kde-format
 msgid "File layer"
 msgstr "文件图层"
 
-#: libs/ui/KisApplication.cpp:832 libs/ui/KisApplication.cpp:837
-#: libs/ui/KisApplication.cpp:1091 libs/ui/KisApplication.cpp:1105
-#: libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:848 libs/ui/KisApplication.cpp:853
+#: libs/ui/KisApplication.cpp:1107 libs/ui/KisApplication.cpp:1121
+#: libs/ui/KisApplication.cpp:1126
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:833 libs/ui/KisApplication.cpp:1106
+#: libs/ui/KisApplication.cpp:849 libs/ui/KisApplication.cpp:1122
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "无法将 %1 添加为文件图层: 该文件不存在。"
 
-#: libs/ui/KisApplication.cpp:838
+#: libs/ui/KisApplication.cpp:854
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34790,7 +34798,7 @@ msgstr ""
 "如果您想要将文件图层添加到某个已经在运行的 Krita 实例，请检查是否在设置 (菜单"
 "栏 -> 设置 -> 配置 Krita -> 常规 -> 窗口) 中勾选了“只允许一个 Krita 实例”。"
 
-#: libs/ui/KisApplication.cpp:844
+#: libs/ui/KisApplication.cpp:860
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34800,32 +34808,32 @@ msgstr ""
 "无法添加文件图层：没有已打开的图像。\n"
 "您可以使用 --new-image 参数新建一个图像，也可以打开一个已有图像。"
 
-#: libs/ui/KisApplication.cpp:1092
+#: libs/ui/KisApplication.cpp:1108
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "无法打开图像 %1"
 
-#: libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1127
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "无法添加文件图层：没有已打开的图像。"
 
-#: libs/ui/KisApplication.cpp:1239
+#: libs/ui/KisApplication.cpp:1255
 #, kde-format
 msgid "No template found for: %1"
 msgstr "没有找到适用于 %1 的模板"
 
-#: libs/ui/KisApplication.cpp:1242
+#: libs/ui/KisApplication.cpp:1258
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "适用于 %1 的模板过多"
 
-#: libs/ui/KisApplication.cpp:1258
+#: libs/ui/KisApplication.cpp:1274
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "模板 %1 加载失败。"
 
-#: libs/ui/KisApplication.cpp:1290
+#: libs/ui/KisApplication.cpp:1306
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34840,7 +34848,7 @@ msgstr ""
 "\n"
 "请重新启动 Krita 使更改生效。"
 
-#: libs/ui/KisApplication.cpp:1304
+#: libs/ui/KisApplication.cpp:1320
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34851,7 +34859,7 @@ msgstr ""
 "\n"
 "请确保没有其他程序正在使用该文件，然后重试。"
 
-#: libs/ui/KisApplication.cpp:1332
+#: libs/ui/KisApplication.cpp:1348
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "您想要清除设置文件吗？"
@@ -45595,7 +45603,7 @@ msgid ""
 "font family after that is used for fallback."
 msgstr ""
 "字体系列 (font family) 属性用于选择应用于当前文本的一系列字体。列表中的第一个"
-"字体是主要使用的字体，而列表中的后续字体系列则可用作备选字体。"
+"字体是主要字体，而列表中的后续字体系列则可用作备选字体。"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -45627,7 +45635,7 @@ msgstr "添加备选字体"
 #, kde-format
 msgctxt "@label"
 msgid "Font Kerning"
-msgstr "字距微调"
+msgstr "字距调整"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, kde-format
@@ -45636,7 +45644,7 @@ msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
-"开启/关闭字距微调。字距微调功可以根据字体设置对特定字形组合进行间距调整。"
+"开启/关闭字距调整。字距调整功可以根据字体设置对特定字形组合进行间距调整。"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -45644,9 +45652,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr ""
-"font-kerning, tracking, zijuweitiao, aioujianjutiaozheng, 字距微调, 字偶间距"
-"调整"
+msgstr "font-kerning, tracking, zijutiaozheng, 字距调整"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -45911,8 +45917,8 @@ msgctxt ""
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
 msgstr ""
-"letter-spacing, tracking, kerning, zifujianju, zijutiaozheng, zijuweitiao, 字"
-"符间距, 字距调整, 字距微调"
+"letter-spacing, tracking, kerning, zifujianju, zijutiaozheng, 字符间距, 字距"
+"调整"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -46063,7 +46069,7 @@ msgstr "搜索..."
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr "字形：大写字母"
+msgstr "字形：大写"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
@@ -46079,8 +46085,8 @@ msgctxt ""
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
 "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals, "
-"xiaoxingdaxiezimu, xiaohaodaxiezimu, danxingzimu, biaotidaxiezimu, "
-"daxiezimu, 小型大写字母, 小号大写字母, 单形字母, 标题大写字母, 大写字母"
+"xiaoxingdaxiezimu, weixingdaxiezimu, tongyidaxiaoxie, biaotizhuanyongzixing, "
+"daxie, 小型大写字母, 微型大写字母, 统一大小写, 标题专用字形, 大写"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
@@ -46098,25 +46104,25 @@ msgstr "全部小型大写字母"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
-msgstr "小号大写字母"
+msgstr "微型大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Petite Caps"
-msgstr "全部小号大写字母"
+msgstr "全部微型大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:82
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Unicase"
-msgstr "单形字母"
+msgstr "统一大小写"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
-msgstr "标题大写字母"
+msgstr "标题专用字形"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:12
 #, kde-format
@@ -46269,7 +46275,7 @@ msgstr "字形：数字"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr "启用文本中的数字相关字形形式。"
+msgstr "在文本上启用与数字相关的字形形式。"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -46281,8 +46287,8 @@ msgid ""
 "zero, fractions"
 msgstr ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
-"zero, fractions, shuzi, jiushishuzi, denggaoshuzi, xushubiaoji, xiexianling, "
-"fenshu, 数字, 旧式数字, 等高数字, 序数标记, 斜线零, 分数"
+"zero, fractions, shuzi, jiutishuzi, denggaoshuzi, xushucixingshi, "
+"daixiexianling, fenshu, 数字, 旧体数字, 等高数字, 序数词形式, 带斜线零, 分数"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -46301,7 +46307,7 @@ msgstr "等高数字"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr "旧式数字"
+msgstr "旧体数字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
 #, kde-format
@@ -46313,7 +46319,7 @@ msgstr "间距："
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Tabular"
-msgstr "表格数字"
+msgstr "等宽数字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
 #, kde-format
@@ -46325,25 +46331,25 @@ msgstr "分数："
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Diagonal"
-msgstr "斜线分数"
+msgstr "斜式分数"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:157
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Stacked"
-msgstr "堆叠分数"
+msgstr "层叠分数"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:173
 #, kde-format
 msgctxt "@option:check"
 msgid "Ordinals"
-msgstr "序数标记"
+msgstr "序数词形式"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Slashed Zero"
-msgstr "斜线零"
+msgstr "带斜线零"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
 #, kde-format
@@ -46355,7 +46361,7 @@ msgstr "字形：定位"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr "启用文本的上标和下标。"
+msgstr "对文本启用上标和下标。"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -46715,14 +46721,14 @@ msgstr "默认显示状态："
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Relevant"
-msgstr "相关时显示"
+msgstr "有设置或被继承时显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:47
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:108
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr "被设置过时显示"
+msgstr "有设置时显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -66244,7 +66250,7 @@ msgstr "文本编辑器设置..."
 #, kde-format
 msgctxt "action"
 msgid "Kerning"
-msgstr "字距微调"
+msgstr "字距调整"
 
 #. i18n: context: iconText @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)

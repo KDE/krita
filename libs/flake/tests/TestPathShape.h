@@ -37,6 +37,9 @@ private Q_SLOTS:
     void closeMerge();
 
     void koPathPointDataLess();
+
+    void createFromPainterPath_data();
+    void createFromPainterPath();
 };
 
 #endif // TESTPATHSHAPE_H

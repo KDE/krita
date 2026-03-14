@@ -1237,19 +1237,30 @@ KoPathShape * KoPathShape::createShapeFromPainterPath(const QPainterPath &path)
     KoPathShape * shape = new KoPathShape();
 
     int elementCount = path.elementCount();
+    QPointF lastTeleportedToPoint = QPointF();
     for (int i = 0; i < elementCount; i++) {
         QPainterPath::Element element = path.elementAt(i);
+        bool nextIsMove = (i == elementCount - 1) || (path.elementAt(i + 1).isMoveTo());
+        bool merge = nextIsMove && KisAlgebra2D::fuzzyPointCompare(lastTeleportedToPoint, QPointF(element.x, element.y));
+
         switch (element.type) {
         case QPainterPath::MoveToElement:
             shape->moveTo(QPointF(element.x, element.y));
+            lastTeleportedToPoint = QPointF(element.x, element.y);
             break;
         case QPainterPath::LineToElement:
             shape->lineTo(QPointF(element.x, element.y));
+            if (merge) {
+                shape->closeMerge();
+            }
             break;
         case QPainterPath::CurveToElement:
             shape->curveTo(QPointF(element.x, element.y),
                            QPointF(path.elementAt(i + 1).x, path.elementAt(i + 1).y),
                            QPointF(path.elementAt(i + 2).x, path.elementAt(i + 2).y));
+            if (merge) {
+                shape->closeMerge();
+            }
             break;
         default:
             continue;

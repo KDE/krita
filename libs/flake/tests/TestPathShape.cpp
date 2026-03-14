@@ -12,6 +12,7 @@
 #include "KoPathSegment.h"
 
 #include <simpletest.h>
+Q_DECLARE_METATYPE(QPainterPath)
 
 void TestPathShape::close()
 {
@@ -768,5 +769,44 @@ void TestPathShape::closeMerge()
 
     QVERIFY(path.outline() == ppath);
 }
+
+
+
+void TestPathShape::createFromPainterPath_data()
+{
+    QTest::addColumn<QPainterPath>("path");
+    QTest::addColumn<QString>("expected");
+
+    //QTest::addRow() << path << expected;
+    QPainterPath path;
+    path.addPolygon(QPolygonF({QPointF(10, 10), QPointF(100, 10), QPointF(100, 200), QPointF(10, 200)}));
+    QTest::addRow("no last point") << path << "M10 10L100 10L100 200L10 200";
+
+    QPainterPath path2;
+    path2.addPolygon(QPolygonF({QPointF(10, 10), QPointF(100, 10), QPointF(100, 200), QPointF(10, 200), QPointF(10, 10)}));
+    QTest::addRow("last point exists") << path2 << "M10 10L100 10L100 200L10 200Z";
+
+    QPainterPath path3;
+    path3.lineTo(QPointF(100, 0));
+    path3.lineTo(QPointF(100, 200));
+    path3.lineTo(QPointF(0, 200));
+    path3.lineTo(QPointF(0, 0));
+
+    QTest::addRow("no MoveTo point in the beginning (in theory, at least)") << path3 << "M0 0L100 0L100 200L0 200Z";
+}
+
+
+void TestPathShape::createFromPainterPath()
+{
+    QFETCH(QPainterPath, path);
+    QFETCH(QString, expected);
+
+    QScopedPointer<KoPathShape> result(KoPathShape::createShapeFromPainterPath(path));
+
+    QCOMPARE(result->outline(), path);
+    QCOMPARE(result->toString(), expected);
+}
+
+
 
 SIMPLE_TEST_MAIN(TestPathShape)

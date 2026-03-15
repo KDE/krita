@@ -33,6 +33,8 @@
 #include <QTranslator>
 #include <QImageReader>
 
+#include <kaboutdata.h>
+
 #include <KisApplication.h>
 #include <KisMainWindow.h>
 #include <KisSupportedArchitectures.h>
@@ -43,6 +45,7 @@
 #include <kis_debug.h>
 #include <kis_image_config.h>
 #include <opengl/kis_opengl.h>
+#include "KritaVersionWrapper.h"
 
 #include "KisApplicationArguments.h"
 #include "KisDocument.h"
@@ -649,6 +652,25 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
     dbgLocale << "Available translations" << KLocalizedString::availableApplicationTranslations();
     dbgLocale << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
 
+    /// Initialize application info, it will be used by both, Qt and
+    /// DrKonqi of the host system
+    KAboutData aboutData("krita",
+                            i18n("Krita"),
+                            KritaVersionWrapper::versionString(true),
+                            i18n("Krita is the full-featured digital art studio"),
+                            KAboutLicense::GPL,
+                            i18nc("@info:credit", "© 1999–2026 The Krita Developers"));
+    aboutData.setHomepage(QStringLiteral("https://krita.org"));
+    aboutData.setOrganizationDomain("krita.org");
+
+    // this call sets corresponding fields of QApplication as well
+    KAboutData::setApplicationData(aboutData);
+
+    // Note: Qt docs suggest we set organization name, but if we do, we get resource
+    // paths of the form of krita/krita, which is weird.
+    KIS_SAFE_ASSERT_RECOVER(app.organizationName().isEmpty()) {
+        app.setOrganizationName("");
+    }
 
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());

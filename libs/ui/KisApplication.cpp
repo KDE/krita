@@ -44,7 +44,6 @@
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kaboutdata.h>
 
 #include <KoDockRegistry.h>
 #include <KoToolRegistry.h>
@@ -84,7 +83,6 @@
 #include "KisViewManager.h"
 #include <KisUsageLogger.h>
 
-#include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
 #include <KisResourceCacheDb.h>
@@ -232,45 +230,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #endif
 
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
-
-    // Setting the application info via KAboutData makes translations stop
-    // working on Android. No clue why, KAboutData also just sets the same
-    // information and the values end up being the same. But the reason we do
-    // this is because of DrKonqi, who only exists on KDE, so there's no point
-    // in taking this detour elsewhere. Since it only has a negative effect on
-    // Android and works fine on other systems, only that's excluded here.
-#ifdef Q_OS_ANDROID
-    setApplicationDisplayName("Krita");
-    setApplicationName("krita");
-    // Note: Qt docs suggest we set this, but if we do, we get resource paths of the form of krita/krita, which is weird.
-    //    setOrganizationName("krita");
-    setOrganizationDomain("krita.org");
-    QString version = KritaVersionWrapper::versionString(true);
-    setApplicationVersion(version);
-#else
-    {
-        /// Initialize application info, it will be used by both, Qt and
-        /// DrKonqi of the host system
-
-        KAboutData aboutData("krita",
-                             "Krita",
-                             KritaVersionWrapper::versionString(true),
-                             "", // TODO: "short description" needs new string exception
-                             KAboutLicense::GPL,
-                             i18nc("@info:credit", "© 1999–2026 The Krita Developers"));
-        aboutData.setHomepage(QStringLiteral("https://krita.org"));
-        aboutData.setOrganizationDomain("krita.org");
-
-        // this call sets corresponding fields of QApplication as well
-        KAboutData::setApplicationData(aboutData);
-
-        // Note: Qt docs suggest we set organization name, but if we do, we get resource
-        // paths of the form of krita/krita, which is weird.
-        KIS_SAFE_ASSERT_RECOVER(this->organizationName().isEmpty()) {
-            this->setOrganizationName("");
-        }
-    }
-#endif
 
 #ifndef Q_OS_MACOS
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));

@@ -85,6 +85,62 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
 
 }
 
+
+bool CutThroughShapeStrategy::willShapeBeCutGeneral(KoShape* referenceShape, const QPainterPath& srcOutline, const QRectF& leftOppositeRect, const QRectF& rightOppositeRect, bool checkGapLineRect, const QRectF& gapLineRect)
+{
+    if (dynamic_cast<KoSvgTextShape*>(referenceShape)) {
+        // skip all text
+        return false;
+    }
+
+    if ((srcOutline.boundingRect() & leftOppositeRect).isEmpty()
+            || (srcOutline.boundingRect() & rightOppositeRect).isEmpty()) {
+        // there is nothing on one side
+        // everything is on the other, far away from the gap line
+        // it just makes it a bit faster when there is a whole lot of shapes
+
+        return false;
+    }
+
+    if (checkGapLineRect && (srcOutline.boundingRect() & gapLineRect).isEmpty()) {
+        // the gap lines can't cross the shape since their bounding rects don't cross it
+        return false;
+    }
+
+    return true;
+}
+
+bool CutThroughShapeStrategy::willShapeBeCutPrecise(const QPainterPath& srcOutline, const QLineF gapLine, const QLineF& leftLine, const QLineF& rightLine, const QPolygonF& gapLinePolygon)
+{
+    bool containsGapLinePointStart = srcOutline.contains(gapLine.p1());
+    bool containsGapLinePointEnd = srcOutline.contains(gapLine.p2());
+
+    // if should skip if there is exactly one gap line point inside the shape
+    bool exactlyOneGapLinePointInside = (containsGapLinePointStart != containsGapLinePointEnd);
+    bool bothGapLinePointsInside = containsGapLinePointStart && containsGapLinePointEnd;
+
+    if (exactlyOneGapLinePointInside) {
+        return false;
+    }
+
+    bool crossesGapLine = KisAlgebra2D::getLineSegmentCrossingLineIndexes(leftLine, srcOutline).count() > 0
+            || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutline).count() > 0;
+
+
+    bool containsPointWithinGap = false;
+    Q_FOREACH(QPointF p, srcOutline.toFillPolygon()) {
+        if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
+            containsPointWithinGap = true;
+            break;
+        }
+    }
+
+    if (!bothGapLinePointsInside && !crossesGapLine && !containsPointWithinGap) {
+        return false;
+    }
+    return true;
+}
+
 void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     tool()->canvas()->updateCanvas(m_previousLineDirtyRect);
@@ -189,70 +245,15 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         KoShape* referenceShape = m_allShapes[i];
         bool wasSelected = m_selectedShapes.contains(referenceShape);
 
+        bool skipThisShape = !willShapeBeCutGeneral(referenceShape, srcOutlines[i], leftOpposite.boundingRect(), rightOpposite.boundingRect(), checkGapLineRect, gapLineRect);
+        skipThisShape = skipThisShape || !willShapeBeCutPrecise(srcOutlines[i], gapLine, leftLine, rightLine, gapLinePolygon);
 
-        if (dynamic_cast<KoSvgTextShape*>(referenceShape)) {
-            // skip all text
+        if (skipThisShape) {
             if (wasSelected) {
                 newSelectedShapes << referenceShape;
             }
             continue;
         }
-
-        if ((srcOutlines[i].boundingRect() & leftOpposite.boundingRect()).isEmpty()
-                || (srcOutlines[i].boundingRect() & rightOpposite.boundingRect()).isEmpty()) {
-            // there is nothing on one side
-            // everything is on the other, far away from the gap line
-            // it just makes it a bit faster when there is a whole lot of shapes
-
-            if (wasSelected) {
-                newSelectedShapes << referenceShape;
-            }
-            continue;
-        }
-
-
-        if (checkGapLineRect && (srcOutlines[i].boundingRect() & gapLineRect).isEmpty()) {
-            // the gap lines can't cross the shape since their bounding rects don't cross it
-            if (wasSelected) {
-                newSelectedShapes << referenceShape;
-            }
-            continue;
-        }
-
-        bool containsGapLinePointStart = srcOutlines[i].contains(gapLine.p1());
-        bool containsGapLinePointEnd = srcOutlines[i].contains(gapLine.p2());
-
-        // if should skip if there is exactly one gap line point inside the shape
-        bool exactlyOneGapLinePointInside = (containsGapLinePointStart != containsGapLinePointEnd);
-        bool bothGapLinePointsInside = containsGapLinePointStart && containsGapLinePointEnd;
-
-        if (exactlyOneGapLinePointInside) {
-            if (wasSelected) {
-                newSelectedShapes << referenceShape;
-            }
-            continue;
-        }
-
-        bool crossesGapLine = KisAlgebra2D::getLineSegmentCrossingLineIndexes(leftLine, srcOutlines[i]).count() > 0
-                || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutlines[i]).count() > 0;
-
-        bool containsPointWithinGap = false;
-        Q_FOREACH(QPointF p, srcOutlines[i].toFillPolygon()) {
-            if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
-                containsPointWithinGap = true;
-                break;
-            }
-        }
-        if (!bothGapLinePointsInside && !crossesGapLine && !containsPointWithinGap) {
-
-            //qCritical() << "it doesn't cross the line!";
-            if (wasSelected) {
-                newSelectedShapes << referenceShape;
-            }
-            continue;
-        }
-
-
 
         affectedShapes++;
 

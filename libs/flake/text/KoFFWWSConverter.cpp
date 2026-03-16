@@ -362,6 +362,14 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
     fontFamily.fontFamily = face->family_name;
     fontFamily.fontStyle = face->style_name;
     fontFamily.lastModified = QFileInfo(fontFamily.fileName).lastModified();
+    if (!fontFamily.lastModified.isValid()) {
+        QDateTime time = QFileInfo(fontFamily.fileName).birthTime();
+        if (time.isValid()) {
+            fontFamily.lastModified = time;
+        } else {
+            fontFamily.lastModified = QDateTime::fromMSecsSinceEpoch(0);
+        }
+    }
     FontFamilyNode typographicFamily;
     FontFamilyNode wwsFamily;
     bool isWWSFamilyWithoutName = false; ///< This indicates that the family follows WWS without having a specified WWS name.

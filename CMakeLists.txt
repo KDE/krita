@@ -368,7 +368,7 @@ if(BUILD_WITH_QT6 AND NOT "QT6" IN_LIST ALLOW_UNSTABLE)
         "quality version of the application. Please don't package this "
         "and ship it as a stable version of the software.\n"
         "If you want to continue regardless, pass:\n"
-        "    -DALLOW_UNSTABLE_FEATURES=QT6"
+        "    -DALLOW_UNSTABLE=QT6"
     )
 endif()
 

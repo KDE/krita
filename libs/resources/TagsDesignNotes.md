@@ -6,7 +6,7 @@
 
 1) Tags from the folder storage may be saved into the _folder_ storage by the user manually. In this case we should keep all deleted tags in the database to prevent them from appearing in the GUI again and again after restart.
 
-1) Tags are **not** automatically promoted to a "local" tag on resource assignment. I.e. a tag **belong** to the storages it comes from.
+1) [current behavior] Tags are **not** automatically promoted to a "local" tag on resource assignment. I.e. a tag **belongs** to the storages it comes from.
 
 1) `tags_storages` table registers "where the tag comes from", so that we could cleanup now-unused tags of the removed storages. There is no one-to-one relation between tags and storages. One tag can come from multiple storages.
 
@@ -76,3 +76,4 @@
 1) Cleanup/promote orphaned tags on migration
 2) Cleanup for orphaned storage-tag records on migration
 3) Cleanup for orphaned tag-resource records on migration
+4) Fix storage removal via deleteTemporaryStorages() function (currently tags are not present in temporary memory storages, but nothing in the code blocks that)

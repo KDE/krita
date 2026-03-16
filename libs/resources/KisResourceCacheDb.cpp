@@ -1783,14 +1783,18 @@ bool KisResourceCacheDb::deleteStorage(QString location)
             loader.exec();
         }
 
-        // Gather tag ids to delete first, since we'll have to delete the tag
-        // storage from under us before deleting the tags themselves, at which
-        // point we won't be able to query them anymore. The original attempt to
-        // do this was to use a temporary table, but some of our models hold
-        // statements permanently in an active state in an exceedingly dubious
-        // attempt to cache them. Which means we can never drop any tables while
-        // there is an instance of those models in existence, even just creating
-        // and dropping an empty temporary table fails.
+        /**
+         * Remove only the storage-unique tags
+         *
+         * We should first get the list of storage-unique tags, and then remove
+         * **all** the links between this storage and (any) tags, including the
+         * shared ones. The unique tags will be removed, but shared will only
+         * decrease their reference counter.
+         *
+         * NOTE: we cannot use temporary tables here, since our models may
+         * have queries open at the moment, which means we will not be able
+         * to remove these temporary tables
+         */
         QVariantList uniqueTagIdsToDelete;
         {
             auto [unique, shared] = tagsForStorage(ResourceType::PaintOpPresets, location);

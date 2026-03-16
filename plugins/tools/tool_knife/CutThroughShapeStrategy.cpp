@@ -176,8 +176,10 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     QTransform booleanWorkaroundTransformInverted = booleanWorkaroundTransform.inverted();
 
-    QRectF gapLineLeftRect = KisAlgebra2D::createRectFromCorners(leftLine);
+    QRectF gapLineLeftRect = KisAlgebra2D::createRectFromCorners(leftLine); // warning! can be empty for perfectly horizontal/vertical lines
     QRectF gapLineRightRect = KisAlgebra2D::createRectFromCorners(rightLine);
+    QRectF gapLineRect = gapLineLeftRect | gapLineRightRect; // will not be empty if the gutterWidth > 0
+    bool checkGapLineRect = !gapLineRect.isEmpty();
 
 
     for (int i = 0; i < srcOutlines.size(); i++) {
@@ -206,9 +208,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             continue;
         }
 
-        if ((srcOutlines[i].boundingRect() & gapLineLeftRect).isEmpty()
-                || (srcOutlines[i].boundingRect() & gapLineRightRect).isEmpty()) {
-            // the gap lines can't cross the shape since their bounding rects don't cross
+
+        if (checkGapLineRect && (srcOutlines[i].boundingRect() & gapLineRect).isEmpty()) {
+            // the gap lines can't cross the shape since their bounding rects don't cross it
             if (wasSelected) {
                 newSelectedShapes << referenceShape;
             }

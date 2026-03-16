@@ -655,9 +655,9 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
     /// Initialize application info, it will be used by both, Qt and
     /// DrKonqi of the host system
     KAboutData aboutData("krita",
-                            i18n("Krita"),
+                            "Krita",
                             KritaVersionWrapper::versionString(true),
-                            i18n("Krita is the full-featured digital art studio"),
+                            "", // TODO: "short description" needs new string exception
                             KAboutLicense::GPL,
                             i18nc("@info:credit", "© 1999–2026 The Krita Developers"));
     aboutData.setHomepage(QStringLiteral("https://krita.org"));

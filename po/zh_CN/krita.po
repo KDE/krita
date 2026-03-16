@@ -7851,7 +7851,7 @@ msgstr "在文本链中向前移动此形状。"
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr "在文本链中前移。"
+msgstr "在文本链中前移"
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
@@ -7872,7 +7872,7 @@ msgstr "在文本链中向后移动此形状。"
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr "在文本链中后移。"
+msgstr "在文本链中后移"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
@@ -46764,7 +46764,7 @@ msgstr "始终隐藏"
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Rendering"
-msgstr "文本渲染"
+msgstr "文本渲染方式"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, kde-format
@@ -46772,7 +46772,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
 msgstr ""
-"文本渲染 (Text Rendering) 控制字体轮廓微调 (hinting) 和渲染样式的属性设置。"
+"文本渲染方式 (Text Rendering) 控制字体轮廓微调 (hinting) 和渲染样式的属性设"
+"置。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format

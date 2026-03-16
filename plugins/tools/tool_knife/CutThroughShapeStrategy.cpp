@@ -219,9 +219,20 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             continue;
         }
 
-        // either one of the points is inside the path, or the line crosses one of the segments
-        bool containsGapLinePoint = srcOutlines[i].contains(leftLine.p1()) || srcOutlines[i].contains(leftLine.p2())
-                || srcOutlines[i].contains(rightLine.p1()) || srcOutlines[i].contains(rightLine.p2());
+        bool containsGapLinePointStart = srcOutlines[i].contains(gapLine.p1());
+        bool containsGapLinePointEnd = srcOutlines[i].contains(gapLine.p2());
+
+        // if should skip if there is exactly one gap line point inside the shape
+        bool exactlyOneGapLinePointInside = (containsGapLinePointStart != containsGapLinePointEnd);
+        bool bothGapLinePointsInside = containsGapLinePointStart && containsGapLinePointEnd;
+
+        if (exactlyOneGapLinePointInside) {
+            if (wasSelected) {
+                newSelectedShapes << referenceShape;
+            }
+            continue;
+        }
+
         bool crossesGapLine = KisAlgebra2D::getLineSegmentCrossingLineIndexes(leftLine, srcOutlines[i]).count() > 0
                 || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutlines[i]).count() > 0;
 
@@ -232,7 +243,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                 break;
             }
         }
-        if (!containsGapLinePoint && !crossesGapLine && !containsPointWithinGap) {
+        if (!bothGapLinePointsInside && !crossesGapLine && !containsPointWithinGap) {
 
             //qCritical() << "it doesn't cross the line!";
             if (wasSelected) {

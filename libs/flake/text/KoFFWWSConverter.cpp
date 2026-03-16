@@ -192,6 +192,7 @@ QStringList FontFamilyNode::debugInfo() const
     const QString fullname = localizedFullName.empty()? "": localizedFullName.values().first();
     QStringList debug = {QString("\'%1\' \'%2\', style: %3, type:%4, full name: %5").arg(fontFamily, fontStyle, style).arg(type).arg(fullname)};
     debug.append(QString("Index: %1, File: %2").arg(fileIndex).arg(fileName));
+    debug.append(QString("Last Modified: %1").arg(lastModified.toString(Qt::ISODateWithMs)));
     for (int i=0; i< axes.size(); i++) {
         KoSvgText::FontFamilyAxis axis = axes.value(axes.keys().at(i));
         debug.append(axis.debugInfo());
@@ -363,7 +364,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
     fontFamily.lastModified = QFileInfo(fontFamily.fileName).lastModified();
     FontFamilyNode typographicFamily;
     FontFamilyNode wwsFamily;
-    bool isWWSFamilyWithoutName = false;
+    bool isWWSFamilyWithoutName = false; ///< This indicates that the family follows WWS without having a specified WWS name.
 
     if (!FT_IS_SFNT(face.data())) {
         fontFamily.type = FT_IS_SCALABLE(face.data())? KoSvgText::Type1FontType: KoSvgText::BDFFontType;
@@ -580,7 +581,20 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         if (it != d->fontFamilyCollection.childEnd()) {
 
             if (isWWSFamilyWithoutName) {
-                wwsFamily.fontFamily = fontFamily.fontFamily;
+                /**
+                 * When isWWSFamilyWithoutName is active, we need to assume that...
+                 *
+                 * 1. The font is indicating it follows a WWS format only.
+                 * 2. The font has no wws family name.
+                 * 3. Probably this means that the font family is the
+                 *    typographic family, unless the typographic family is the
+                 *    exact same as the RIBBI family.
+                 */
+                if (!typographicFamily.fontFamily.isEmpty() && typographicFamily.fontFamily != fontFamily.fontFamily) {
+                    wwsFamily.fontFamily = typographicFamily.fontFamily;
+                } else {
+                    wwsFamily.fontFamily = fontFamily.fontFamily;
+                }
             }
             if (!wwsFamily.fontFamily.isEmpty()) {
                 // sort into wws family
@@ -620,7 +634,11 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         } else {
             auto typographic = d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), typographicFamily);
             if (isWWSFamilyWithoutName) {
-                wwsFamily.fontFamily = fontFamily.fontFamily;
+                if (!typographicFamily.fontFamily.isEmpty() && typographicFamily.fontFamily != fontFamily.fontFamily) {
+                    wwsFamily.fontFamily = typographicFamily.fontFamily;
+                } else {
+                    wwsFamily.fontFamily = fontFamily.fontFamily;
+                }
             }
             if (!wwsFamily.fontFamily.isEmpty()) {
                 auto wwsNew = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);

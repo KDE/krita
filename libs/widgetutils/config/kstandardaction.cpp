@@ -97,16 +97,16 @@ QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
         case Preferences:
         case AboutApp:
         case HelpContents: {
-            QString appDisplayName = QGuiApplication::applicationDisplayName();
-            if (appDisplayName.isEmpty()) {
-                appDisplayName = QCoreApplication::applicationName();
-            }
-            sLabel = i18n(pInfo->psLabel, appDisplayName);
+            // in Krita we have the application name baked into the translation
+            // string, so just fetch it directly
+            sLabel = i18nc("action", pInfo->psLabel);
         }
         break;
         default:
-            sLabel = i18n(pInfo->psLabel);
+            sLabel = i18nc("action", pInfo->psLabel);
         }
+
+
 
         if (QApplication::isRightToLeft()) {
             switch (id) {

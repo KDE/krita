@@ -146,18 +146,18 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     KisAlgebra2D::cropLineToRect(leftLineLong, outlineRectBiggerInt, true, true);
     KisAlgebra2D::cropLineToRect(rightLineLong, outlineRectBiggerInt, true, true);
 
-    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes"));
+    QScopedPointer<KUndo2Command> cmd = QScopedPointer<KUndo2Command>(new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes")));
 
 
-    new KoKeepShapesSelectedCommand(m_selectedShapes, {}, kisCanvas->selectedShapesProxy(), false, cmd);
+    new KoKeepShapesSelectedCommand(m_selectedShapes, {}, kisCanvas->selectedShapesProxy(), false, cmd.data());
 
 
     if (leftLine.length() == 0 || rightLine.length() == 0) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(gapLine.length() != 0 && gapLines[0].length() != 0 && gapLines[1].length() != 0 && "Original gap lines shouldn't be empty at this point");
         // looks like *all* shapes need to be cut out
 
-        tool()->canvas()->shapeController()->removeShapes(m_allShapes, cmd);
-        tool()->canvas()->addCommand(cmd);
+        tool()->canvas()->shapeController()->removeShapes(m_allShapes, cmd.data());
+        tool()->canvas()->addCommand(cmd.take());
         return;
     }
 
@@ -265,7 +265,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             // this is needed because Qt linearize curves; this allows for a
             // "sane" linearization instead of a very blocky appearance
             path = booleanWorkaroundTransformInverted.map(path);
-            KoPathShape* shape = KoPathShape::createShapeFromPainterPath(path);
+            QScopedPointer<KoPathShape> shape = QScopedPointer<KoPathShape>(KoPathShape::createShapeFromPainterPath(path));
 
             if (shape->boundingRect().isEmpty()) {
                 continue;
@@ -276,12 +276,12 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             shape->setZIndex(referenceShape->zIndex());
 
             KoShapeContainer *parent = referenceShape->parent();
-            tool()->canvas()->shapeController()->addShapeDirect(shape, parent, cmd);
 
             if (wasSelected) {
-                newSelectedShapes << shape;
+                newSelectedShapes << shape.data();
             }
 
+            tool()->canvas()->shapeController()->addShapeDirect(shape.take(), parent, cmd.data());
 
         }
 
@@ -292,12 +292,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
     if (affectedShapes > 0) {
-
-        tool()->canvas()->shapeController()->removeShapes(shapesToRemove, cmd);
-        new KoKeepShapesSelectedCommand({}, newSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
-        tool()->canvas()->addCommand(cmd);
-    } else {
-        delete cmd;
+        tool()->canvas()->shapeController()->removeShapes(shapesToRemove, cmd.data());
+        new KoKeepShapesSelectedCommand({}, newSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd.data());
+        tool()->canvas()->addCommand(cmd.take());
     }
 
 

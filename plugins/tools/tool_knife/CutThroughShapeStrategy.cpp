@@ -182,6 +182,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     bool checkGapLineRect = !gapLineRect.isEmpty();
     QPolygonF gapLinePolygon = QPolygonF({leftLine.p1(), leftLine.p2(), rightLine.p2(), rightLine.p1(), leftLine.p1()});
 
+    int affectedShapes = 0;
 
     for (int i = 0; i < srcOutlines.size(); i++) {
 
@@ -242,6 +243,8 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
 
+        affectedShapes++;
+
 
         QPainterPath leftPath = srcOutlines[i] & left;
         QPainterPath rightPath = srcOutlines[i] & right;
@@ -288,11 +291,14 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     }
 
-    tool()->canvas()->shapeController()->removeShapes(shapesToRemove, cmd);
-    new KoKeepShapesSelectedCommand({}, newSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
+    if (affectedShapes > 0) {
 
-
-    tool()->canvas()->addCommand(cmd);
+        tool()->canvas()->shapeController()->removeShapes(shapesToRemove, cmd);
+        new KoKeepShapesSelectedCommand({}, newSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
+        tool()->canvas()->addCommand(cmd);
+    } else {
+        delete cmd;
+    }
 
 
 

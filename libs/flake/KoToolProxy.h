@@ -185,7 +185,7 @@ protected:
     virtual QPointF widgetToDocument(const QPointF &widgetPoint) const = 0;
     virtual QPointF documentToWidget(const QPointF &documentPoint) const = 0;
     KoCanvasBase* canvas() const;
-
+    int multiClickCount() const;
 
 private:
     Q_PRIVATE_SLOT(d, void timeout())

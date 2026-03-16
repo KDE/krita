@@ -145,6 +145,11 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
+int KoToolProxy::multiClickCount() const
+{
+    return d->multiClickCount;
+}
+
 void KoToolProxy::countMultiClick(KoPointerEvent *ev, int eventType)
 {
     QPointF globalPoint = ev->globalPos();

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-14 02:39+0000\n"
-"PO-Revision-Date: 2026-02-01 11:00+0100\n"
+"PO-Revision-Date: 2026-03-14 17:31+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7846,11 +7846,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Forme texte"
+msgstr "Texte de flux dans une forme"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
@@ -7860,6 +7859,9 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"Faire en sorte que le premier texte sélectionné se déplace dans la forme. "
+"S’il y avait déjà des formes dans lesquelles il se déplaçait, il ajoutera la "
+"forme à la chaîne."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
@@ -7870,17 +7872,13 @@ msgstr "Soustraire la forme de la chaine de texte"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
-"Imposer au sélecteur de couleurs de ne sélectionner que les couleurs dans la "
-"palette actuellement sélectionnée."
+"Faire en sorte que les formes fassent partie des zones de forme soustraites "
+"du premier texte sélectionné."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7891,16 +7889,12 @@ msgstr "Placer le texte sur le tracé"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
 msgstr ""
-"Imposer au sélecteur de couleurs de ne sélectionner que les couleurs dans la "
-"palette actuellement sélectionnée."
+"Faire en sorte que le premier texte sélectionné se déplace vers le premier "
+"emplacement sélectionné."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
@@ -7922,12 +7916,10 @@ msgstr "Supprimez des formes de la chaine de texte et ajoutez-les au calque."
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "(Dés)Activer le canal alpha du calque"
+msgstr "Activer / Désactiver le type de forme du flux"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
@@ -7955,6 +7947,8 @@ msgstr "Définir la forme du flux en dernier"
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
+"Faire en sorte que ceci déplace la forme vers la dernière position dans la "
+"chaîne de texte, comme utilisé par la disposition de texte."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
@@ -7975,7 +7969,7 @@ msgstr "Déplacez cette forme plus tôt dans la chaîne de texte."
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Déplacer la forme plus tôt dans la chaîne."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
@@ -7996,7 +7990,7 @@ msgstr "Déplacez cette forme plus tard dans la chaîne de texte."
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Déplacer la forme plus tard dans la chaîne."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
@@ -8012,6 +8006,8 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
+"Faire en sorte que ceci déplace la forme en premier dans la chaîne de texte "
+"comme utilisée par la disposition du texte."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
@@ -15148,7 +15144,7 @@ msgstr "Découper à la taille de l'image"
 #, kde-format
 msgctxt "action"
 msgid "Purge Unused Image Data"
-msgstr ""
+msgstr "Purger les données d'images inutilisées"
 
 #. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1199
@@ -27811,31 +27807,28 @@ msgid "Auto (%1)"
 msgstr "Auto (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Courant"
+msgstr "GLX (Courant)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
-#, fuzzy, kde-format
-#| msgid "GNX"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr "GNX"
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Courant"
+msgstr "EGL (Courant)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27844,6 +27837,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>Si vous utilisez Krita sous X11 ou XWayland et que vous constatiez des "
+"lenteurs, veuillez essayer de passer sous EGL ou GLX</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -29501,12 +29496,13 @@ msgstr "Moteur de rendu préféré (redémarrage nécessaire) :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
 #: libs/ui/forms/wdgdisplaysettings.ui:111
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
+#, kde-format
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
-msgstr "Moteur de rendu préféré (redémarrage nécessaire) :"
+msgstr ""
+"Interface préféré OpenGL\n"
+"(Nécessite un redémarrage) :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -30404,6 +30400,9 @@ msgid ""
 "Dynamically adjust outline to match the effective size of the brush. (For "
 "example, as brush size changes due to pen pressure.)"
 msgstr ""
+"Ajustez dynamiquement le contour pour qu'il corresponde à la taille réelle "
+"de la brosse. (Par exemple, lorsque la taille de la brosse change en raison "
+"de la pression du stylet.)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -33008,6 +33007,9 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Traiter les touches « Page vers le haut / Page vers le bas » comme les "
+"boutons droit / central de la souris (Solution de contournement pour les "
+"stylets de Xiaomi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -33016,6 +33018,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Ignorer l'historique de position de la tablette (Solution de contournement "
+"pour les lignes irrégulières avec les stylets de Xiaomi)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214
@@ -35092,8 +35096,7 @@ msgid "Select Opaque"
 msgstr "Sélection Opaque"
 
 #: libs/ui/kis_splash_screen.cpp:110
-#, fuzzy, kde-format
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
@@ -35263,6 +35266,15 @@ msgid ""
 "\t\tImage->Purge Unused Image Data action.\n"
 "Slow layers: "
 msgstr ""
+"\n"
+"\n"
+"AVERTISSEMENT : certains calques ont mis trop de temps à calculer leurs "
+"vignettes.\n"
+" \t\tElles ont été basculées en mode miniatures de faible qualité. \n"
+"\t\tVeuillez essayez de purger les données d'image inutilisées avec "
+"l'action\n"
+"\t\t« Image / Purger les données d'image inutilisées ». \n"
+"Calques lents :"
 
 #: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
@@ -35313,11 +35325,10 @@ msgid "Zoom: %1 %"
 msgstr "Zoom : %1 %"
 
 #: libs/ui/KisApplication.cpp:260
-#, fuzzy, kde-format
-#| msgid "© 1999-%1, The Krita Team"
+#, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr "© 1999-%1, L'équipe Krita"
+msgstr "© 1999 - 2026, L'équipe de développement de Krita"
 
 #: libs/ui/KisApplication.cpp:459
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
@@ -46231,11 +46242,7 @@ msgid "Alignment Baseline"
 msgstr "Référence d'alignement"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controlling how this range of text is aligned "
-#| "to the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
@@ -46632,11 +46639,7 @@ msgid "Dominant Baseline"
 msgstr "Référence dominante"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Dominant Baseline specifies how stretches of text of different sizes are "
-#| "aligned, it is also the default for Alignment Baseline."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -46723,18 +46726,14 @@ msgid "Font Kerning"
 msgstr "Crénage de la police"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
-"Activez ou désactivez le crénage des polices. Le crénage de police permet "
-"d'ajuster l'espacement par glyphe."
+"Activez ou désactivez le crénage des fontes. Le crénage de fonte permet "
+"d'activer l'espacement par glyphe, comme défini par la fonte."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -47018,18 +47017,14 @@ msgid "Line Break"
 msgstr "Retour à la ligne"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Line Break allows choosing a strictness for the line breaking algorithm. "
-#| "Mostly used for CJK scripts, requires language being set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
-"Le paramètre « Retour à la ligne » permet de sélectionner une règle fixe "
-"pour l'algorithme de saut de ligne. Principalement utilisé pour les scripts "
+"Le paramètre « Saut à la ligne » permet de sélectionner une règle fixe pour "
+"l'algorithme de saut de ligne. Principalement utilisé pour les scripts "
 "« CJK », il nécessite que la langue soit définie."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
@@ -47522,9 +47517,7 @@ msgid "Text Align"
 msgstr "Alignement du texte"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr ""
@@ -47640,11 +47633,7 @@ msgid "Text Decoration"
 msgstr "Décoration de texte"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Decoration allows drawing underlines, overlines and striking through "
-#| "text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
@@ -47728,18 +47717,14 @@ msgid "Text Indent"
 msgstr "Indentation de texte"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Indent allows setting indentation at the line start. Only works when "
-#| "the text is wrapping."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
 "Le paramètre « Indentation de texte » permet de définir l'indentation au "
-"début de la ligne. Ne fonctionne que lorsque le texte revient à la ligne."
+"début de la ligne. Ne fonctionne que si le texte revient à la ligne."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -47867,10 +47852,7 @@ msgid "Text Rendering"
 msgstr "Rendu de texte"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Rendering controls the hinting and rendering style for the property"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
@@ -47944,21 +47926,16 @@ msgid "Text Transform"
 msgstr "Transformation de texte"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Transform allows transforming the given range of characters, for "
-#| "example, by setting them uppercase, or switching out half-width forms for "
-#| "full-width forms."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
-"La fonction « Transformation de texte » vous permet de transformer la plage "
-"donnée de caractères, par exemple, en les mettant en majuscules ou en "
-"basculant les formes demi-largeur vers des formes pleine largeur."
+"La fonction « Transformation de texte » vous permet de transformer "
+"l'intervalle donné de caractères, par exemple, en les mettant en majuscules "
+"ou en basculant les formes en demi-largeur vers des formes en pleine largeur."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -48186,19 +48163,14 @@ msgid "Writing Mode"
 msgstr "Mode d'écriture"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Writing Mode sets whether the text flows horizontally or vertically, and "
-#| "in the latter case, whether the block flows right to left or left to "
-#| "right."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
-"Le mode « Écriture » définit si le texte s'écoule horizontalement ou "
-"verticalement et, dans ce dernier cas, si le bloc se poursuite de droite à "
+"Le mode « Écriture » définit si le texte se déplace horizontalement ou "
+"verticalement et, dans ce dernier cas, si le bloc se déplace de droite à "
 "gauche ou de gauche à droite."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
@@ -66447,16 +66419,14 @@ msgid "Remove shapes from text flow."
 msgstr "Supprimer les formes du flux de texte."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
-#, fuzzy
-#| msgid "Toggle Rotate Mode"
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr "Changer le mode de rotation"
+msgstr "Activer / Désactiver le type de forme du flux"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:768
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Définir la forme du flux en premier"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:770
 msgctxt "(qtundo-format)"
@@ -68818,24 +68788,21 @@ msgstr "Englober et remplir"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"
-msgstr ""
+msgstr "Outil de couteau : coupure à travers les formes"
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "This tool only works on vector layers. You probably want the move tool."
+#, kde-format
 msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
 msgstr ""
-"Cet outil ne peut être utilisé que sur un calque vectoriel. Vous cherchiez "
-"peut-être l'outil Déplacer."
+"Cet outil ne fonctionne que sur des calques vectoriels. Vous voulez "
+"probablement créer un calque vectoriel et une première forme de démarrage."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Masque de coloration"
+msgstr "Outil d’édition du panneau pour les bandes dessinées"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -68871,16 +68838,14 @@ msgstr "Spécial"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The display brightness in nits. By default this is "
-#| "set to 1000 for converting to display linear.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>La luminosité d'affichage en « nits ». Par défaut, "
-"elle a pour une valeur de 1000 vers un affichage linéaire.</p></body></html>"
+"<html><head/><body><p>Cet outil ne fonctionne que sur un calque vectoriel. </"
+"p>Veuillez créer le premier panneau en utilisant n’importe quel outil de "
+"forme sur un calque vectoriel.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
@@ -68921,7 +68886,7 @@ msgstr "Diagonal :"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
-msgstr ""
+msgstr "Outil de couteau : suppression d'une gouttière"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
 msgctxt "(qtundo-format)"
@@ -69197,28 +69162,23 @@ msgid "Transform Tool Actions"
 msgstr "Actions des outils de transformation"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:934
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "Impossible transformer un calque vide "
+msgstr "Impossible de transformer des calques verrouillés"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:940
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "Impossible transformer un calque vide "
+msgstr "Impossible transformer des calques masqués"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:946
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "Impossible transformer un calque vide "
+msgstr ""
+"Impossible d'utiliser l'outil de transformation sur cet ensemble de calques"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:962
 #, kde-format
@@ -70088,11 +70048,10 @@ msgstr "Images de référence"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Masque de coloration"
+msgstr "Outil d’édition du panneau pour les bandes dessinées"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
 #, kde-format

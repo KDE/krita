@@ -175,13 +175,13 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
     switch (state) {
     case BEGIN:
         if (action == KisTool::Primary) {
-            if (event->type() == QEvent::MouseButtonDblClick) {
+            if (multiClickCount() == 2) {
                 activeTool->beginPrimaryDoubleClickAction(&ev);
             } else {
                 activeTool->beginPrimaryAction(&ev);
             }
         } else {
-            if (event->type() == QEvent::MouseButtonDblClick) {
+            if (multiClickCount() == 2) {
                 activeTool->beginAlternateDoubleClickAction(&ev, KisTool::actionToAlternateAction(action));
             } else {
                 activeTool->beginAlternateAction(&ev, KisTool::actionToAlternateAction(action));

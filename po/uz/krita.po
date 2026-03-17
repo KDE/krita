@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-14 02:39+0000\n"
+"POT-Creation-Date: 2026-03-17 02:39+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -16379,14 +16379,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Ranglar boʻshligʻi"
 
-#: krita/main.cc:737 libs/ui/KisApplication.cpp:547
-#: libs/ui/KisApplication.cpp:859
+#: krita/main.cc:662
+#, fuzzy, kde-format
+msgctxt "@info:credit"
+msgid "© 1999–2026 The Krita Developers"
+msgstr "(C) 1999-2006, Krita jamoasi.\n"
+
+#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: libs/ui/KisApplication.cpp:818
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Diqqat!"
 
-#: krita/main.cc:738
+#: krita/main.cc:760
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -21015,9 +21021,9 @@ msgstr "Oʻlchami"
 #: plugins/tools/basictools/wdgcolorsampler.ui:192
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:142
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:250
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:275
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:145
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:256
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:281
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
@@ -21911,7 +21917,7 @@ msgstr "Ekspozitsiya:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:43
 #: libs/ui/imagesize/imagesize.xmlgui:9
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:410
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:416
 #, kde-format
 msgid "Layer"
 msgstr "Qatlam"
@@ -23916,10 +23922,10 @@ msgstr "Qatlamni &olib tashlash"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1254
-#: libs/ui/KisApplication.cpp:1257 libs/ui/KisApplication.cpp:1273
-#: libs/ui/KisApplication.cpp:1305 libs/ui/KisApplication.cpp:1319
-#: libs/ui/KisApplication.cpp:1347 libs/ui/KisDocument.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1213
+#: libs/ui/KisApplication.cpp:1216 libs/ui/KisApplication.cpp:1232
+#: libs/ui/KisApplication.cpp:1264 libs/ui/KisApplication.cpp:1278
+#: libs/ui/KisApplication.cpp:1306 libs/ui/KisDocument.cpp:1054
 #: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
 #: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
 #: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
@@ -23994,64 +24000,64 @@ msgstr "Saqlash uchun faylni yaratib boʻlmadi"
 msgid "2. The resource location at %1 is not writable."
 msgstr "Saqlash uchun faylni yaratib boʻlmadi"
 
-#: libs/resources/KisResourceLocator.cpp:865
+#: libs/resources/KisResourceLocator.cpp:873
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/resources/KisResourceLocator.cpp:909
-#: libs/resources/KisResourceLocator.cpp:1262
+#: libs/resources/KisResourceLocator.cpp:928
+#: libs/resources/KisResourceLocator.cpp:1281
 #, fuzzy, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/resources/KisResourceLocator.cpp:1018
+#: libs/resources/KisResourceLocator.cpp:1037
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/resources/KisResourceLocator.cpp:1026
+#: libs/resources/KisResourceLocator.cpp:1045
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1033
+#: libs/resources/KisResourceLocator.cpp:1052
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Saqlash uchun faylni yaratib boʻlmadi"
 
-#: libs/resources/KisResourceLocator.cpp:1046
-#: libs/resources/KisResourceLocator.cpp:1062
+#: libs/resources/KisResourceLocator.cpp:1065
+#: libs/resources/KisResourceLocator.cpp:1081
 #, fuzzy, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/resources/KisResourceLocator.cpp:1058
+#: libs/resources/KisResourceLocator.cpp:1077
 #, fuzzy, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Moslash..."
 
-#: libs/resources/KisResourceLocator.cpp:1086
+#: libs/resources/KisResourceLocator.cpp:1105
 #, fuzzy, kde-format
 msgid "Temporary Resources"
 msgstr "Hujjatni import qilish"
 
-#: libs/resources/KisResourceLocator.cpp:1092
+#: libs/resources/KisResourceLocator.cpp:1111
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 msgid "Font Storage"
 msgstr "Bosib chiqarish oʻlchami"
 
-#: libs/resources/KisResourceLocator.cpp:1211
+#: libs/resources/KisResourceLocator.cpp:1230
 #, fuzzy, kde-format
 msgid "Synchronizing the resources."
 msgstr "&Manbalar"
 
-#: libs/resources/KisResourceLocator.cpp:1224
-#: libs/resources/KisResourceLocator.cpp:1232
+#: libs/resources/KisResourceLocator.cpp:1243
+#: libs/resources/KisResourceLocator.cpp:1251
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
@@ -24108,7 +24114,7 @@ msgstr "Yulduz vositasi"
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:55
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:90
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:400
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:406
 #, kde-format
 msgid "Image"
 msgstr "Rasm"
@@ -26240,7 +26246,7 @@ msgstr "Yangi hujjatlarda ochish"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:38
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:44
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:323
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:329
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
 #, kde-format
 msgid "Width:"
@@ -26278,7 +26284,7 @@ msgstr "Eni:"
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:191
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:39
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:45
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:225
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:231
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
 msgid "Height:"
@@ -26466,7 +26472,7 @@ msgstr "Versiya"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
 #: plugins/impex/webp/kis_wdg_options_webp.ui:451
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:441
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:447
 #, kde-format
 msgid "None"
 msgstr "Yoʻq"
@@ -27102,7 +27108,7 @@ msgstr "Bitta kichik qadam..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:222
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:461
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:467
 #, fuzzy, kde-format
 msgid "Crosshair"
 msgstr "Boʻsh joy:"
@@ -32005,8 +32011,8 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
 #: libs/ui/forms/wdgrectangleconstraints.ui:56
 #: plugins/dockers/recorder/recorder_export.ui:472
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:272
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:320
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:278
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:326
 #, fuzzy, kde-format
 msgid "Width"
 msgstr "Eni:"
@@ -32022,8 +32028,8 @@ msgstr "Eni:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleHeight)
 #: libs/ui/forms/wdgrectangleconstraints.ui:95
 #: plugins/dockers/recorder/recorder_export.ui:510
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:222
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:247
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:228
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:253
 #, fuzzy, kde-format
 msgid "Height"
 msgstr "Uzunasi:"
@@ -32039,7 +32045,7 @@ msgstr "Uzunasi:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, doubleRatio)
 #: libs/ui/forms/wdgrectangleconstraints.ui:134
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:297
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:303
 #, fuzzy, kde-format
 msgid "Aspect ratio"
 msgstr " soniya"
@@ -32213,7 +32219,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:486
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:445
 #, fuzzy, kde-format
 msgid "Sessions"
 msgstr "&Pikselli oʻlcham"
@@ -33721,7 +33727,7 @@ msgstr "Orqa fon rangi"
 msgid "&Docker Box"
 msgstr "Qulflangan"
 
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:482
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:441
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33735,8 +33741,8 @@ msgstr "Namunalar"
 msgid "Custom Pattern"
 msgstr "Noananaviy namuna"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:467
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:426
+#: libs/ui/KisApplication.cpp:427
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34684,27 +34690,21 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Kattalashtirish %1%"
 
-#: libs/ui/KisApplication.cpp:260
-#, fuzzy, kde-format
-msgctxt "@info:credit"
-msgid "© 1999–2026 The Krita Developers"
-msgstr "(C) 1999-2006, Krita jamoasi.\n"
-
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:418
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, fuzzy, kde-format
 msgid "Brush presets"
 msgstr "Bosim:"
 
-#: libs/ui/KisApplication.cpp:462 libs/ui/KisApplication.cpp:463
-#: libs/ui/KisApplication.cpp:464 libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:421 libs/ui/KisApplication.cpp:422
+#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush tips"
 msgstr "Boʻyoqning oʻlchami"
 
-#: libs/ui/KisApplication.cpp:470
+#: libs/ui/KisApplication.cpp:429
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34712,7 +34712,7 @@ msgstr "Boʻyoqning oʻlchami"
 msgid "Palettes"
 msgstr "Palitralar"
 
-#: libs/ui/KisApplication.cpp:483 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:442 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34720,46 +34720,46 @@ msgstr "Palitralar"
 msgid "Workspaces"
 msgstr "Ranglar boʻshligʻi"
 
-#: libs/ui/KisApplication.cpp:484
+#: libs/ui/KisApplication.cpp:443
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "O&bʼekt qatlami"
 
-#: libs/ui/KisApplication.cpp:485 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "Tomchining oʻlchami"
 
-#: libs/ui/KisApplication.cpp:487
+#: libs/ui/KisApplication.cpp:446
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Yaratish"
 
-#: libs/ui/KisApplication.cpp:489
+#: libs/ui/KisApplication.cpp:448
 #, fuzzy, kde-format
 msgid "SeExpr Scripts"
 msgstr "Satrma-satr"
 
-#: libs/ui/KisApplication.cpp:494
+#: libs/ui/KisApplication.cpp:453
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Qatlamning oʻlchami"
 
-#: libs/ui/KisApplication.cpp:497
+#: libs/ui/KisApplication.cpp:456
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Shrift oilasi"
 
-#: libs/ui/KisApplication.cpp:498
+#: libs/ui/KisApplication.cpp:457
 #, fuzzy, kde-format
 #| msgid "Pressure:"
 msgid "Style Presets"
 msgstr "Bosim:"
 
-#: libs/ui/KisApplication.cpp:510
+#: libs/ui/KisApplication.cpp:469
 #, kde-format
 msgid ""
 "%1\n"
@@ -34767,13 +34767,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:510 libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:469 libs/ui/KisApplication.cpp:475
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Matnni kiriting:"
 
-#: libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:475
 #, kde-format
 msgid ""
 "\n"
@@ -34781,7 +34781,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:548
+#: libs/ui/KisApplication.cpp:507
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34789,65 +34789,65 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:565
+#: libs/ui/KisApplication.cpp:524
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "&Manbalar"
 
-#: libs/ui/KisApplication.cpp:597
+#: libs/ui/KisApplication.cpp:556
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Manbalar"
 
-#: libs/ui/KisApplication.cpp:601
+#: libs/ui/KisApplication.cpp:560
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Nuqta boʻyogʻi"
 
-#: libs/ui/KisApplication.cpp:607
+#: libs/ui/KisApplication.cpp:566
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Qatlamni &olib tashlash"
 
-#: libs/ui/KisApplication.cpp:616
+#: libs/ui/KisApplication.cpp:575
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Gradient"
 
-#: libs/ui/KisApplication.cpp:648
+#: libs/ui/KisApplication.cpp:607
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "Qatlamni rasm sifatida saqlash..."
 
-#: libs/ui/KisApplication.cpp:751
+#: libs/ui/KisApplication.cpp:710
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:812
+#: libs/ui/KisApplication.cpp:771
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Yangi qatlam yaratish"
 
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:1113
+#: libs/ui/KisApplication.cpp:799 libs/ui/KisApplication.cpp:1072
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "Filterlar &toʻplami"
 
-#: libs/ui/KisApplication.cpp:848 libs/ui/KisApplication.cpp:853
-#: libs/ui/KisApplication.cpp:1107 libs/ui/KisApplication.cpp:1121
-#: libs/ui/KisApplication.cpp:1126
+#: libs/ui/KisApplication.cpp:807 libs/ui/KisApplication.cpp:812
+#: libs/ui/KisApplication.cpp:1066 libs/ui/KisApplication.cpp:1080
+#: libs/ui/KisApplication.cpp:1085
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Diqqat!"
 
-#: libs/ui/KisApplication.cpp:849 libs/ui/KisApplication.cpp:1122
+#: libs/ui/KisApplication.cpp:808 libs/ui/KisApplication.cpp:1081
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:813
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34860,7 +34860,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:819
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34868,32 +34868,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1108
+#: libs/ui/KisApplication.cpp:1067
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/ui/KisApplication.cpp:1127
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1255
+#: libs/ui/KisApplication.cpp:1214
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "%1 uchun moslamalar mavjud emas."
 
-#: libs/ui/KisApplication.cpp:1258
+#: libs/ui/KisApplication.cpp:1217
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "%1 uchun juda koʻp namuna topildi."
 
-#: libs/ui/KisApplication.cpp:1274
+#: libs/ui/KisApplication.cpp:1233
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "&Hammasini tanlash"
 
-#: libs/ui/KisApplication.cpp:1306
+#: libs/ui/KisApplication.cpp:1265
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34903,7 +34903,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1320
+#: libs/ui/KisApplication.cpp:1279
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34911,7 +34911,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1348
+#: libs/ui/KisApplication.cpp:1307
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -58465,7 +58465,7 @@ msgstr "Uskuna:"
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:180
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:310
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:316
 #, fuzzy, kde-format
 msgid "Ratio:"
 msgstr "Amal:"
@@ -66585,7 +66585,7 @@ msgstr "Markaz:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolGrow)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:116
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:155
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:161
 #, fuzzy, kde-format
 msgctxt "Grow as in crop tool"
 msgid "Grow"
@@ -66612,14 +66612,14 @@ msgstr "Burish"
 msgid "Crop Tool Actions"
 msgstr "Hech narsa tanlanmagan"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:721
+#: plugins/tools/tool_crop/kis_tool_crop.cc:726
 #, kde-format
 msgid ""
 "X: %1\n"
 "Y: %2"
 msgstr ""
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:726
+#: plugins/tools/tool_crop/kis_tool_crop.cc:731
 #, fuzzy, kde-format
 msgid ""
 "Width: %1\n"
@@ -66658,7 +66658,7 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QLabel, label_vertiPos)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intY)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:76
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:139
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #, fuzzy, kde-format
 msgid "Vertical Position"
 msgstr "Uskuna:"
@@ -66686,73 +66686,73 @@ msgid "&X:"
 msgstr "X:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolGrow)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:152
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:158
 #, kde-format
 msgid "Allow growing the image by dragging outside bounds of the image"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockWidthButton)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:333
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:339
 #, fuzzy, kde-format
 msgid "Lock the width"
 msgstr "Piksel eni"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockHeightButton)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:346
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:352
 #, fuzzy, kde-format
 msgid "Lock the height"
 msgstr "Oʻng:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockRatioButton)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:359
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:365
 #, fuzzy, kde-format
 msgid "Lock the aspect ratio"
 msgstr " soniya"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:405
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:411
 #, fuzzy, kde-format
 msgid "Canvas"
 msgstr "Kranlar"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:415
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:421
 #, fuzzy, kde-format
 msgid "Frame"
 msgstr "Yaratish"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnCrop)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:423
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:429
 #, fuzzy, kde-format
 msgid "&Crop"
 msgstr "Kursor"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:430
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:436
 #, fuzzy, kde-format
 msgid "Applies to:"
 msgstr "Fayl:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:446
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:452
 #, kde-format
 msgid "Thirds"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:451
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:457
 #, kde-format
 msgid "Fifths"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:456
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:462
 #, kde-format
 msgid "Passport photo"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:469
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:475
 #, fuzzy, kde-format
 msgid "Decoration:"
 msgstr "Toʻyintirish"
@@ -67000,7 +67000,7 @@ msgstr "Orqa fon rangi"
 msgid "Enclose and Fill Tool"
 msgstr "Qatlamni koʻchirish"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

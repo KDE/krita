@@ -126,6 +126,30 @@ struct KisWindowLayoutResource::Private
                 mainWindow->show();
             }
         }
+        
+        QVector<QPointer<KisMainWindow>> windowsToMigrate;
+
+        Q_FOREACH(KisMainWindow *mainWindow, currentWindows) {
+            bool keep = false;
+            Q_FOREACH(const Window &window, windows) {
+                if (window.windowId == mainWindow->id()) {
+                    keep = true;
+                    break;
+                }
+            }
+
+            if (!keep) {
+                windowsToMigrate.append(mainWindow);
+
+                // Set the window hidden to prevent "show image in all windows" feature from opening new views on it
+                // while we migrate views onto the remaining windows
+                if (mainWindow->isVisible()) {
+                    mainWindow->hide();
+                }
+            }
+        }
+        
+        migrateViewsFromClosingWindows(windowsToMigrate);
     }
 
     void closeUnneededWindows(QList<QPointer<KisMainWindow>> &currentWindows) {
@@ -141,20 +165,8 @@ struct KisWindowLayoutResource::Private
             }
 
             if (!keep) {
-                windowsToClose.append(mainWindow);
-
-                // Set the window hidden to prevent "show image in all windows" feature from opening new views on it
-                // while we migrate views onto the remaining windows
-                if (mainWindow->isVisible()) {
-                    mainWindow->hide();
-                }
+                mainWindow->close();
             }
-        }
-
-        migrateViewsFromClosingWindows(windowsToClose);
-
-        Q_FOREACH(QPointer<KisMainWindow> mainWindow, windowsToClose) {
-            mainWindow->close();
         }
     }
 
@@ -248,8 +260,9 @@ void KisWindowLayoutResource::applyLayout()
     layoutManager->setLastUsedLayout(this);
 
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
+    bool createWindows = d->windows.isEmpty();
 
-    if (d->windows.isEmpty()) {
+    if (createWindows) {
         // No windows defined (e.g. fresh new session). Leave things as they are, but make sure there's at least one visible main window
         if (kisPart->mainwindowCount() == 0) {
             kisPart->createMainWindow();
@@ -258,7 +271,6 @@ void KisWindowLayoutResource::applyLayout()
         }
     } else {
         d->openNecessaryWindows(currentWindows);
-        d->closeUnneededWindows(currentWindows);
     }
 
     // Wait for the windows to finish opening / closing before applying saved geometry.
@@ -300,6 +312,9 @@ void KisWindowLayoutResource::applyLayout()
 
     layoutManager->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
     layoutManager->setPrimaryWorkspaceFollowsFocus(d->primaryWorkspaceFollowsFocus, d->primaryWindow);
+    if (!createWindows) {
+        d->closeUnneededWindows(currentWindows);
+    }
 }
 
 bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const

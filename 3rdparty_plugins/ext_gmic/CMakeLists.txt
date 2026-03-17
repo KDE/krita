@@ -2,8 +2,8 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_gmic
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/vanyossi/gmic/releases/download/v3.7.2.1/gmic-3.7.2.1.tar.gz
-    URL_HASH SHA256=cca31e83b8b5e4b83338a788314dfdba5af9fc6ea5a237f90ed437e417f94b9c
+    URL https://github.com/vanyossi/gmic/releases/download/v3.7.2.2/gmic-3.7.2.2.tar.gz
+    URL_HASH SHA256=96f318a43e1cb081880dc67cef6651c13ccf952fc56c79c8343ce43d48a3d3f5
 
     SOURCE_SUBDIR gmic-qt
 

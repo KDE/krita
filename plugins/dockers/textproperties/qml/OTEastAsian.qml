@@ -123,7 +123,7 @@ TextPropertyBase {
             model: [
                 { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.EastAsiantNormalWidth},
                 { text: i18nc("@label:inlistbox", "Full width"), value: KoSvgText.EastAsianFullWidth},
-                { text: i18nc("@label:inlistbox", "Proportional"), value: KoSvgText.EastAsianProportionalWidth}
+                { text: i18nc("@label:inlistbox, east-asian proportional width", "Proportional"), value: KoSvgText.EastAsianProportionalWidth}
             ]
             Layout.fillWidth: true;
             textRole: "text";

@@ -133,7 +133,7 @@ TextPropertyBase {
         ComboBox {
             model: [
                 { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.NumericFigureSpacingNormal},
-                { text: i18nc("@label:inlistbox", "Proportional"), value: KoSvgText.NumericFigureSpacingProportional},
+                { text: i18nc("@label:inlistbox, proportional width numbers", "Proportional"), value: KoSvgText.NumericFigureSpacingProportional},
                 { text: i18nc("@label:inlistbox", "Tabular"), value: KoSvgText.NumericFigureSpacingTabular}
             ]
             Layout.fillWidth: true;

@@ -364,9 +364,8 @@ add_feature_info("Unstable features allowed" ON "${ALLOW_UNSTABLE}")
 
 if(BUILD_WITH_QT6 AND NOT "QT6" IN_LIST ALLOW_UNSTABLE)
     message(FATAL_ERROR
-        "Building Krita with Qt6 is unstable. You will get a pre-alpha "
-        "quality version of the application. Please don't package this "
-        "and ship it as a stable version of the software.\n"
+        "Building Krita with Qt6 is not yet production-ready. Please don't "
+        "package this and ship it as a stable version of the software.\n"
         "If you want to continue regardless, pass:\n"
         "    -DALLOW_UNSTABLE=QT6"
     )

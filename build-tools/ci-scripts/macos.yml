@@ -95,6 +95,7 @@
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6
     # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
     KDECI_ONLY_BUILD: True
 
@@ -140,3 +141,4 @@ macos-release-qt6:
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6

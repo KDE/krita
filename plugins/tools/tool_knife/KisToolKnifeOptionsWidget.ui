@@ -43,6 +43,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="thickGapWidthRadioButton">
+        <property name="toolTip">
+         <string>Thick gap width</string>
+        </property>
         <property name="text">
          <string>Thick gap:</string>
         </property>
@@ -58,6 +61,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Thick gap width</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -81,6 +87,9 @@
       </item>
       <item row="2" column="0">
        <widget class="QRadioButton" name="thinGapWidthRadioButton">
+        <property name="toolTip">
+         <string>Thin gap width</string>
+        </property>
         <property name="text">
          <string>Thin gap:</string>
         </property>
@@ -93,6 +102,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Thin gap width</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -116,6 +128,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QRadioButton" name="specialGapWidthRadioButton">
+        <property name="toolTip">
+         <string>Special gap width</string>
+        </property>
         <property name="text">
          <string>Special gap:</string>
         </property>
@@ -128,6 +143,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Special gap width</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -151,6 +169,9 @@
       </item>
       <item row="4" column="0">
        <widget class="QRadioButton" name="automaticGapWidthRadioButton">
+        <property name="toolTip">
+         <string>Choose the width automatically, based on the angle</string>
+        </property>
         <property name="text">
          <string>Automatic</string>
         </property>
@@ -158,6 +179,9 @@
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="horizontalLabel">
+        <property name="toolTip">
+         <string>Horizontal gaps type:</string>
+        </property>
         <property name="text">
          <string>Horizontal:</string>
         </property>
@@ -165,6 +189,9 @@
       </item>
       <item row="5" column="1">
        <widget class="QComboBox" name="automaticHorizontalCombobox">
+        <property name="toolTip">
+         <string>Horizontal gaps type:</string>
+        </property>
         <property name="currentText">
          <string/>
         </property>
@@ -172,6 +199,9 @@
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="verticalLabel">
+        <property name="toolTip">
+         <string>Vertical gaps type:</string>
+        </property>
         <property name="text">
          <string>Vertical:</string>
         </property>
@@ -179,6 +209,9 @@
       </item>
       <item row="6" column="1">
        <widget class="QComboBox" name="automaticVerticalCombobox">
+        <property name="toolTip">
+         <string>Vertical gaps type:</string>
+        </property>
         <property name="currentText">
          <string/>
         </property>
@@ -186,16 +219,26 @@
       </item>
       <item row="7" column="0">
        <widget class="QLabel" name="diagonalLabel">
+        <property name="toolTip">
+         <string>Diagonal gaps type:</string>
+        </property>
         <property name="text">
          <string>Diagonal:</string>
         </property>
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QComboBox" name="automaticDiagonalCombobox"/>
+       <widget class="QComboBox" name="automaticDiagonalCombobox">
+        <property name="toolTip">
+         <string>Diagonal gaps type:</string>
+        </property>
+       </widget>
       </item>
       <item row="8" column="0">
        <widget class="QLabel" name="angleLabel">
+        <property name="toolTip">
+         <string>Diagonal type angle threshold:</string>
+        </property>
         <property name="text">
          <string>Angle:</string>
         </property>
@@ -203,6 +246,9 @@
       </item>
       <item row="8" column="1">
        <widget class="KisDoubleSliderSpinBox" name="gutterWidthAngleSpinBox">
+        <property name="toolTip">
+         <string>Diagonal type angle threshold:</string>
+        </property>
         <property name="prefix">
          <string/>
         </property>

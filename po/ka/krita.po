@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-14 02:39+0000\n"
+"POT-Creation-Date: 2026-03-17 02:39+0000\n"
 "PO-Revision-Date: 2026-03-01 05:32+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -16237,14 +16237,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "სამუშაო სივრცეები"
 
-#: krita/main.cc:737 libs/ui/KisApplication.cpp:547
-#: libs/ui/KisApplication.cpp:859
+#: krita/main.cc:662
+#, kde-format
+msgctxt "@info:credit"
+msgid "© 1999–2026 The Krita Developers"
+msgstr ""
+
+#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: გაფრთხილება"
 
-#: krita/main.cc:738
+#: krita/main.cc:760
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20815,9 +20821,9 @@ msgstr "ზომა"
 #: plugins/tools/basictools/wdgcolorsampler.ui:192
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:142
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:250
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:275
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:145
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:256
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:281
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
@@ -21646,7 +21652,7 @@ msgstr "პასუხის დრო:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:43
 #: libs/ui/imagesize/imagesize.xmlgui:9
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:410
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:416
 #, kde-format
 msgid "Layer"
 msgstr "ფენა"
@@ -23621,10 +23627,10 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1254
-#: libs/ui/KisApplication.cpp:1257 libs/ui/KisApplication.cpp:1273
-#: libs/ui/KisApplication.cpp:1305 libs/ui/KisApplication.cpp:1319
-#: libs/ui/KisApplication.cpp:1347 libs/ui/KisDocument.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1213
+#: libs/ui/KisApplication.cpp:1216 libs/ui/KisApplication.cpp:1232
+#: libs/ui/KisApplication.cpp:1264 libs/ui/KisApplication.cpp:1278
+#: libs/ui/KisApplication.cpp:1306 libs/ui/KisDocument.cpp:1054
 #: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
 #: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
 #: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
@@ -23699,63 +23705,63 @@ msgstr "1. ვერ შევქმენი რესურსის მდე
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. რესურსი მდებარეობაზე %1 ჩაწერადი არაა."
 
-#: libs/resources/KisResourceLocator.cpp:865
+#: libs/resources/KisResourceLocator.cpp:873
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1-ის მონაცემთა ბაზაში ჩამატება შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:909
-#: libs/resources/KisResourceLocator.cpp:1262
+#: libs/resources/KisResourceLocator.cpp:928
+#: libs/resources/KisResourceLocator.cpp:1281
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "მონაცემთა ბაზიდან საცავის %1 წაშლა შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:1018
+#: libs/resources/KisResourceLocator.cpp:1037
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 "განახლებული ფონტის რეესტრის მონაცემთა ბაზასთან სინქრონიზაცია შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:1026
+#: libs/resources/KisResourceLocator.cpp:1045
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita პირველადაა გაშვებული. ინიციალიზაციას რაღაც დრო დასჭირდება."
 
-#: libs/resources/KisResourceLocator.cpp:1033
+#: libs/resources/KisResourceLocator.cpp:1052
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. ვერ შევქმენი რესურსის მდებარეობა მისამართზე %1."
 
-#: libs/resources/KisResourceLocator.cpp:1046
-#: libs/resources/KisResourceLocator.cpp:1062
+#: libs/resources/KisResourceLocator.cpp:1065
+#: libs/resources/KisResourceLocator.cpp:1081
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "რესურსი %1-ის %2-ში კოპირება შეუძლებელია"
 
-#: libs/resources/KisResourceLocator.cpp:1058
+#: libs/resources/KisResourceLocator.cpp:1077
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "მიმდინარეობს რესურსების დაყენება პაკეტიდან %1."
 
-#: libs/resources/KisResourceLocator.cpp:1086
+#: libs/resources/KisResourceLocator.cpp:1105
 #, kde-format
 msgid "Temporary Resources"
 msgstr "დროებითი რესურსები"
 
-#: libs/resources/KisResourceLocator.cpp:1092
+#: libs/resources/KisResourceLocator.cpp:1111
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "ფონტის საცავი"
 
-#: libs/resources/KisResourceLocator.cpp:1211
+#: libs/resources/KisResourceLocator.cpp:1230
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr "რესურსების სინქრონიზაცია."
 
-#: libs/resources/KisResourceLocator.cpp:1224
-#: libs/resources/KisResourceLocator.cpp:1232
+#: libs/resources/KisResourceLocator.cpp:1243
+#: libs/resources/KisResourceLocator.cpp:1251
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1-ის მონაცემთა ბაზასთან სინქრონიზაცია შეუძლებელია"
@@ -23810,7 +23816,7 @@ msgstr "მინიშნება"
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:55
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:90
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:400
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:406
 #, kde-format
 msgid "Image"
 msgstr "გამოსახულება"
@@ -25949,7 +25955,7 @@ msgstr "დოკუმენტი"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:38
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:44
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:323
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:329
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
 #, kde-format
 msgid "Width:"
@@ -25987,7 +25993,7 @@ msgstr "სიგანე:"
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:191
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:39
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:45
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:225
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:231
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
 msgid "Height:"
@@ -26171,7 +26177,7 @@ msgstr "FFMpeg-ის ვერსია:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
 #: plugins/impex/webp/kis_wdg_options_webp.ui:451
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:441
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:447
 #, kde-format
 msgid "None"
 msgstr "არაფერი"
@@ -26827,7 +26833,7 @@ msgstr "პატარა წრე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:222
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:461
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:467
 #, kde-format
 msgid "Crosshair"
 msgstr "გადახაზული"
@@ -31757,8 +31763,8 @@ msgstr "გაფრთხილებისთვის გამოყენ�
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
 #: libs/ui/forms/wdgrectangleconstraints.ui:56
 #: plugins/dockers/recorder/recorder_export.ui:472
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:272
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:320
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:278
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:326
 #, kde-format
 msgid "Width"
 msgstr "სიგანე"
@@ -31774,8 +31780,8 @@ msgstr "სიგანე: "
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleHeight)
 #: libs/ui/forms/wdgrectangleconstraints.ui:95
 #: plugins/dockers/recorder/recorder_export.ui:510
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:222
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:247
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:228
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:253
 #, kde-format
 msgid "Height"
 msgstr "სიმაღლე"
@@ -31790,7 +31796,7 @@ msgstr "სიმაღლე: "
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, doubleRatio)
 #: libs/ui/forms/wdgrectangleconstraints.ui:134
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:297
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:303
 #, kde-format
 msgid "Aspect ratio"
 msgstr "თანაფარდობა"
@@ -31960,7 +31966,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:486
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:445
 #, kde-format
 msgid "Sessions"
 msgstr "სესიები"
@@ -33462,7 +33468,7 @@ msgstr "&ფონის ფერის ამრჩევის გახს�
 msgid "&Docker Box"
 msgstr "&მიმაგრების ჩარჩო"
 
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:482
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:441
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33476,8 +33482,8 @@ msgstr "შაბლონები"
 msgid "Custom Pattern"
 msgstr "მორგებული ნიმუში"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:467
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:426
+#: libs/ui/KisApplication.cpp:427
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34438,26 +34444,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "გადიდება: %1 %"
 
-#: libs/ui/KisApplication.cpp:260
-#, kde-format
-msgctxt "@info:credit"
-msgid "© 1999–2026 The Krita Developers"
-msgstr ""
-
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:418
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "ფუნჯის პრესეტები"
 
-#: libs/ui/KisApplication.cpp:462 libs/ui/KisApplication.cpp:463
-#: libs/ui/KisApplication.cpp:464 libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:421 libs/ui/KisApplication.cpp:422
+#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "ფუნჯის წვეროები"
 
-#: libs/ui/KisApplication.cpp:470
+#: libs/ui/KisApplication.cpp:429
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34465,7 +34465,7 @@ msgstr "ფუნჯის წვეროები"
 msgid "Palettes"
 msgstr "პალიტრები"
 
-#: libs/ui/KisApplication.cpp:483 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:442 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34473,44 +34473,44 @@ msgstr "პალიტრები"
 msgid "Workspaces"
 msgstr "სამუშაო სივრცეები"
 
-#: libs/ui/KisApplication.cpp:484
+#: libs/ui/KisApplication.cpp:443
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG სიმბოლოების ბიბლიოთეკები"
 
-#: libs/ui/KisApplication.cpp:485 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "ფანრის განლაგებები"
 
-#: libs/ui/KisApplication.cpp:487
+#: libs/ui/KisApplication.cpp:446
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:489
+#: libs/ui/KisApplication.cpp:448
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr-ის სკრიპტები"
 
-#: libs/ui/KisApplication.cpp:494
+#: libs/ui/KisApplication.cpp:453
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "ფენის სტილები"
 
-#: libs/ui/KisApplication.cpp:497
+#: libs/ui/KisApplication.cpp:456
 #, kde-format
 msgid "Font Families"
 msgstr "ფონტის ოჯახები"
 
-#: libs/ui/KisApplication.cpp:498
+#: libs/ui/KisApplication.cpp:457
 #, kde-format
 msgid "Style Presets"
 msgstr "სტილის პრესეტები"
 
-#: libs/ui/KisApplication.cpp:510
+#: libs/ui/KisApplication.cpp:469
 #, kde-format
 msgid ""
 "%1\n"
@@ -34521,13 +34521,13 @@ msgstr ""
 "\n"
 "Krita მუშაობას დაასრულებს."
 
-#: libs/ui/KisApplication.cpp:510 libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:469 libs/ui/KisApplication.cpp:475
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: ფატალური შეცდომა"
 
-#: libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:475
 #, kde-format
 msgid ""
 "\n"
@@ -34538,7 +34538,7 @@ msgstr ""
 "\n"
 "Krita მუშაობას დაასრულებს."
 
-#: libs/ui/KisApplication.cpp:548
+#: libs/ui/KisApplication.cpp:507
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34549,65 +34549,65 @@ msgstr ""
 "ეს რეკომენდებული არააა.\n"
 "გადმოწერეთ და დააყენეთ x64 ვარიანტი."
 
-#: libs/ui/KisApplication.cpp:565
+#: libs/ui/KisApplication.cpp:524
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "გლობალების ინიციალიზაცია..."
 
-#: libs/ui/KisApplication.cpp:597
+#: libs/ui/KisApplication.cpp:556
 #, kde-format
 msgid "Adding resource types..."
 msgstr "რესურსის ტიპების დამატება..."
 
-#: libs/ui/KisApplication.cpp:601
+#: libs/ui/KisApplication.cpp:560
 #, kde-format
 msgid "Loading plugins..."
 msgstr "დამატებების ჩატვირთვა..."
 
-#: libs/ui/KisApplication.cpp:607
+#: libs/ui/KisApplication.cpp:566
 #, kde-format
 msgid "Loading resources..."
 msgstr "რესურსების ჩატვირთვა..."
 
-#: libs/ui/KisApplication.cpp:616
+#: libs/ui/KisApplication.cpp:575
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "მთავარი ფანჯრის ჩატვირთვა..."
 
-#: libs/ui/KisApplication.cpp:648
+#: libs/ui/KisApplication.cpp:607
 #, kde-format
 msgid "Launching..."
 msgstr "გაშვება..."
 
-#: libs/ui/KisApplication.cpp:751
+#: libs/ui/KisApplication.cpp:710
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME ტიპი აღმოჩენილი არაა. სცადეთ პარამეტრი -mimetype"
 
-#: libs/ui/KisApplication.cpp:812
+#: libs/ui/KisApplication.cpp:771
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "ანიმაციის კადრების რენდერი ჩავარდა!"
 
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:1113
+#: libs/ui/KisApplication.cpp:799 libs/ui/KisApplication.cpp:1072
 #, kde-format
 msgid "File layer"
 msgstr "ფაილის ფენა"
 
-#: libs/ui/KisApplication.cpp:848 libs/ui/KisApplication.cpp:853
-#: libs/ui/KisApplication.cpp:1107 libs/ui/KisApplication.cpp:1121
-#: libs/ui/KisApplication.cpp:1126
+#: libs/ui/KisApplication.cpp:807 libs/ui/KisApplication.cpp:812
+#: libs/ui/KisApplication.cpp:1066 libs/ui/KisApplication.cpp:1080
+#: libs/ui/KisApplication.cpp:1085
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: გაფრთხილება"
 
-#: libs/ui/KisApplication.cpp:849 libs/ui/KisApplication.cpp:1122
+#: libs/ui/KisApplication.cpp:808 libs/ui/KisApplication.cpp:1081
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1-ის ფაილის ფენად დამატება შეუძლებელია: ფაილი არ არსებობს."
 
-#: libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:813
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34620,7 +34620,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:819
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34628,32 +34628,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1108
+#: libs/ui/KisApplication.cpp:1067
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "გახსნის შეცდომა ფაილისთვის %1"
 
-#: libs/ui/KisApplication.cpp:1127
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "ფაილის ფენის დამატება შეუძლებელია: ღია დოკუმენტის გარეშე."
 
-#: libs/ui/KisApplication.cpp:1255
+#: libs/ui/KisApplication.cpp:1214
 #, kde-format
 msgid "No template found for: %1"
 msgstr "%1-სთვის შაბლონი ვერ ვიპოვე"
 
-#: libs/ui/KisApplication.cpp:1258
+#: libs/ui/KisApplication.cpp:1217
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "ნაპოვნია მეტისმეტად ბევრი შაბლონი %1-სთვის"
 
-#: libs/ui/KisApplication.cpp:1274
+#: libs/ui/KisApplication.cpp:1233
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "შაბლონის ('%1') ჩატვირთვის შეცდომა."
 
-#: libs/ui/KisApplication.cpp:1306
+#: libs/ui/KisApplication.cpp:1265
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34668,7 +34668,7 @@ msgstr ""
 "\n"
 "ცვლილებების ძალაში შესასვლელად გადატვირტეთ Krita."
 
-#: libs/ui/KisApplication.cpp:1320
+#: libs/ui/KisApplication.cpp:1279
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34679,7 +34679,7 @@ msgstr ""
 "\n"
 "დარწმუნდით, რომ ფაილს სხვა პროგრამა არ იყენებს და თავიდან სცადეთ."
 
-#: libs/ui/KisApplication.cpp:1348
+#: libs/ui/KisApplication.cpp:1307
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "მართლა გნებავთ პარამეტრების ფაილის გასუფთავება?"
@@ -58421,7 +58421,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:180
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:310
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:316
 #, kde-format
 msgid "Ratio:"
 msgstr "პროპორციები:"
@@ -66204,7 +66204,7 @@ msgstr "ცენტრში"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolGrow)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:116
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:155
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:161
 #, kde-format
 msgctxt "Grow as in crop tool"
 msgid "Grow"
@@ -66230,7 +66230,7 @@ msgstr "კოეციფიენტის ჩაკეტვა"
 msgid "Crop Tool Actions"
 msgstr "ამოჭრის ხელსაწყოს ქმედებები"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:721
+#: plugins/tools/tool_crop/kis_tool_crop.cc:726
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -66239,7 +66239,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:726
+#: plugins/tools/tool_crop/kis_tool_crop.cc:731
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -66280,7 +66280,7 @@ msgstr "ზომის შეცვლა ცენტრის ფიქსი
 #. i18n: ectx: property (toolTip), widget (QLabel, label_vertiPos)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intY)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:76
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:139
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #, kde-format
 msgid "Vertical Position"
 msgstr "ვერტიკალური მდებარეობა"
@@ -66306,73 +66306,73 @@ msgid "&X:"
 msgstr "&X:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolGrow)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:152
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:158
 #, kde-format
 msgid "Allow growing the image by dragging outside bounds of the image"
 msgstr "გამოსახულების ზრდის დაშვება გამოსახულების გარე ზღვრების გადათრევით"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockWidthButton)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:333
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:339
 #, kde-format
 msgid "Lock the width"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockHeightButton)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:346
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:352
 #, kde-format
 msgid "Lock the height"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockRatioButton)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:359
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:365
 #, kde-format
 msgid "Lock the aspect ratio"
 msgstr "გადიდების კოეფიციენტის დაბლოკვა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:405
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:411
 #, kde-format
 msgid "Canvas"
 msgstr "ტილო"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:415
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:421
 #, kde-format
 msgid "Frame"
 msgstr "კადრი"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnCrop)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:423
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:429
 #, kde-format
 msgid "&Crop"
 msgstr "&ამოჭრა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:430
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:436
 #, kde-format
 msgid "Applies to:"
 msgstr "ეხება:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:446
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:452
 #, kde-format
 msgid "Thirds"
 msgstr "მესამედებზე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:451
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:457
 #, kde-format
 msgid "Fifths"
 msgstr "მეხუთედებზე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:456
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:462
 #, kde-format
 msgid "Passport photo"
 msgstr "პასპორტის სურათი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:469
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:475
 #, kde-format
 msgid "Decoration:"
 msgstr "დეკორაცია:"
@@ -66617,7 +66617,7 @@ msgstr "ნებისმიერი, შემოსაზღვრული 
 msgid "Enclose and Fill Tool"
 msgstr "გარშემორტყმისა და შევსების ხელსაწყო"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:149
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

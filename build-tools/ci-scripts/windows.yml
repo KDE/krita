@@ -56,6 +56,7 @@
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6
 
 windows-build-qt5:
   extends:
@@ -89,6 +90,7 @@ windows-build-qt6-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6
 
 
 # TODO: disable for now, we need to update to clang-21 to support ASAN on Win11
@@ -142,3 +144,4 @@ windows-release-qt6:
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6

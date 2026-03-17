@@ -60,6 +60,7 @@
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6
 
 linux-build-qt5:
   extends:
@@ -91,6 +92,7 @@ linux-build-qt6-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6
 
 linux-qt5-debug-weekly:
   extends:
@@ -156,3 +158,4 @@ linux-release-qt6:
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
       -DBUILD_WITH_QT6=ON
+      -DALLOW_UNSTABLE=QT6

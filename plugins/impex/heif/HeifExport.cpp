@@ -73,8 +73,15 @@ KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &
     return cfg;
 }
 
-KisConfigWidget *HeifExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisConfigWidget *HeifExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &to) const
 {
+    /// LibHeif 1.20.2 crashes when encoding lossless with x265, see https://bugs.kde.org/show_bug.cgi?id=517241
+    if (to != "image/avif") {
+        KisWdgOptionsHeif *wdg = new KisWdgOptionsHeif(parent);
+        wdg->chkLossless->setChecked(false);
+        wdg->chkLossless->setDisabled(true);
+        return wdg;
+    }
     return new KisWdgOptionsHeif(parent);
 }
 
@@ -208,7 +215,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     cs = image->colorSpace();
 
     int quality = configuration->getInt("quality", 50);
-    bool lossless = configuration->getBool("lossless", false);
+    /// LibHeif 1.20.2 crashes when encoding lossless with x265, see https://bugs.kde.org/show_bug.cgi?id=517241
+    bool lossless = (mimeType() == "image/avif")? configuration->getBool("lossless", false): false;
     bool hasAlpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
     float hlgGamma = configuration->getFloat("HLGgamma", 1.2f);
     float hlgNominalPeak = configuration->getFloat("HLGnominalPeak", 1000.0f);

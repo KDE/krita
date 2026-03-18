@@ -624,9 +624,12 @@
     <!-- Note: website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the
                last actual release -->
+    <release date="2026-03-25" version="5.3.0">
+      <url>https://krita.org/en/posts/2026/krita-5.3.0-released/</url>
+    </release>
     <release date="2026-01-28" version="5.2.15">
       <url>https://krita.org/en/posts/2026/krita-5.2.15-released/</url>
-      <description>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</description>
+<description>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</description>
       <description xml:lang="ar">هذا الإصدار مخصص لإصلاح العلات مع عدد من إصلاحات الانهيار وحلول بديلة لتحسين الاستخدام مع Xiaomi Pad</description>
       <description xml:lang="ca">Una versió de correcció d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</description>
       <description xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</description>

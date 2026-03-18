@@ -271,6 +271,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     result = booleanWorkaroundTransform.inverted().map(result);
     KoPathShape* resultShape = KoPathShape::createShapeFromPainterPath(result);
+    resultShape->closeMerge();
 
     if (resultShape->boundingRect().isEmpty()) {
         return;

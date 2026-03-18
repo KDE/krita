@@ -278,6 +278,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             // "sane" linearization instead of a very blocky appearance
             path = booleanWorkaroundTransformInverted.map(path);
             QScopedPointer<KoPathShape> shape = QScopedPointer<KoPathShape>(KoPathShape::createShapeFromPainterPath(path));
+            shape->closeMerge();
 
             if (shape->boundingRect().isEmpty()) {
                 continue;

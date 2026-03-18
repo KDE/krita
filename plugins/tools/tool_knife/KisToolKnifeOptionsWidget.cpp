@@ -297,6 +297,9 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
     m_d->buttonModeAddGutter->setIconSize(QSize(16, 16));
     m_d->buttonModeRemoveGutter->setIconSize(QSize(16, 16));
 
+    m_d->buttonModeAddGutter->setToolTip(i18nc("Tooltip for the button in the Knife Tool for the mode to add gutters/cut through shapes", "Cutting mode: Cuts through shapes to create gutters of specified width."));
+    m_d->buttonModeRemoveGutter->setToolTip(i18nc("Tooltip for the button in the Knife Tool for the mode to remove gutters/merge shapes", "Merging mode: Removes the gutter between shapes."));
+
     //m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
     //m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
 

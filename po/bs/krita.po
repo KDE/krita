@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:41+0000\n"
+"POT-Creation-Date: 2026-03-18 00:42+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -21619,9 +21619,9 @@ msgstr "Veličina"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:101
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:136
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:72
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:113
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:154
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -24738,7 +24738,7 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
-#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
@@ -33217,7 +33217,7 @@ msgstr "Rotacija:"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:256
 #, fuzzy, kde-format
 #| msgid "°"
 msgid "°"
@@ -48259,10 +48259,9 @@ msgid "Full width"
 msgstr "Širina"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#: plugins/dockers/textproperties/qml/OTNumeric.qml:136
 #, fuzzy, kde-format
 #| msgid "Proportional"
-msgctxt "@label:inlistbox"
+msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Proporcionalno"
 
@@ -48371,6 +48370,13 @@ msgstr "Veličina sloja"
 msgctxt "@label:listbox"
 msgid "Spacing:"
 msgstr "Razmak:"
+
+#: plugins/dockers/textproperties/qml/OTNumeric.qml:136
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@label:inlistbox, proportional width numbers"
+msgid "Proportional"
+msgstr "Proporcionalno"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:137
 #, kde-format
@@ -53011,7 +53017,7 @@ msgstr "Poluprečnik:"
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
 #: plugins/tools/basictools/kis_tool_measure.cc:48
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:100
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:200
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:243
 #, kde-format
 msgid "Angle:"
 msgstr "Ugao:"
@@ -61443,7 +61449,7 @@ msgstr "Utišavanje"
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalFade)
 #. i18n: ectx: property (text), widget (QLabel, horizontalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:162
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:186
 #, kde-format
 msgid "Horizontal:"
 msgstr "Vodoravno:"
@@ -61451,7 +61457,7 @@ msgstr "Vodoravno:"
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalFade)
 #. i18n: ectx: property (text), widget (QLabel, verticalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:254
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:206
 #, kde-format
 msgid "Vertical:"
 msgstr "Uspravno:"
@@ -65300,7 +65306,7 @@ msgid "Translation directory"
 msgstr "Izaberite direktorij"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format
 msgid "Pixels"
 msgstr "Piksela"
@@ -70566,15 +70572,31 @@ msgstr ""
 msgid "Comic Panel Editing Tool"
 msgstr "Koraci gradijenta"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
+"through shapes"
+msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to remove gutters/"
+"merge shapes"
+msgid "Merging mode: Removes the gutter between shapes."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, fuzzy, kde-format
 #| msgid "Millimeters (mm)"
 msgid "Millimeters"
 msgstr "Milimetara (mm)"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
 #, fuzzy, kde-format
 #| msgid "Thickness"
 msgctxt ""
@@ -70582,9 +70604,9 @@ msgctxt ""
 msgid "Thick"
 msgstr "Debljina"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
 #, fuzzy, kde-format
 #| msgid "Thinning:"
 msgctxt ""
@@ -70592,9 +70614,9 @@ msgctxt ""
 msgid "Thin"
 msgstr "Istanjivanje:"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:322
 #, fuzzy, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
@@ -70616,38 +70638,105 @@ msgstr "<html><head/><body><p>Opis akcije</p></body></html>"
 msgid "Unit of width:"
 msgstr "Početna širina:"
 
-#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
+#, fuzzy, kde-format
+#| msgid "Thickness:"
+msgid "Thick gap width"
+msgstr "Debljina:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
 #, fuzzy, kde-format
 #| msgid "Thickness:"
 msgid "Thick gap:"
 msgstr "Debljina:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
+#, fuzzy, kde-format
+#| msgid "Thinning:"
+msgid "Thin gap width"
+msgstr "Istanjivanje:"
+
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
 #, fuzzy, kde-format
 #| msgid "Thinning:"
 msgid "Thin gap:"
 msgstr "Istanjivanje:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
+#, fuzzy, kde-format
+msgid "Special gap width"
+msgstr "&Neprozirnost:"
+
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
 #, fuzzy, kde-format
 msgid "Special gap:"
 msgstr "&Neprozirnost:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
+#, kde-format
+msgid "Choose the width automatically, based on the angle"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
 #, fuzzy, kde-format
 msgid "Automatic"
 msgstr "Automatski"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, horizontalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
+#, fuzzy, kde-format
+#| msgid "Horizontal Wave"
+msgid "Horizontal gaps type:"
+msgstr "Vodoravni talas"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
+#, fuzzy, kde-format
+#| msgid "Vertical Scale"
+msgid "Vertical gaps type:"
+msgstr "Uspravna skala"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
+#, fuzzy, kde-format
+#| msgid "Emboss Diagonal"
+msgid "Diagonal gaps type:"
+msgstr "Reljef dijagonalno"
+
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
 #, fuzzy, kde-format
 #| msgid "Emboss Diagonal"
 msgid "Diagonal:"
 msgstr "Reljef dijagonalno"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, angleLabel)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
+#, fuzzy, kde-format
+msgid "Diagonal type angle threshold:"
+msgstr "Režim prikaza"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
@@ -71945,6 +72034,12 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Proportional"
+#~ msgctxt "@label:inlistbox"
+#~ msgid "Proportional"
+#~ msgstr "Proporcionalno"
 
 #, fuzzy
 #~| msgid "Remove from this tag"

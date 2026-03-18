@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:41+0000\n"
+"POT-Creation-Date: 2026-03-18 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16238,11 +16238,9 @@ msgid "Krita"
 msgstr "Krita"
 
 #: krita/main.cc:660
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Krita is the full-featured digital art studio"
+#, kde-format
 msgid "Krita is the full-featured digital art studio"
-msgstr "Krita 是一款功能齐全的数字绘画工作室软件"
+msgstr ""
 
 #: krita/main.cc:662
 #, kde-format
@@ -20859,9 +20857,9 @@ msgstr "大小"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:101
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:136
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:72
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:113
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:154
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -23697,7 +23695,7 @@ msgstr "本地资源"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
-#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
@@ -29068,7 +29066,7 @@ msgstr "使用纹理缓冲"
 #: libs/ui/forms/wdgdisplaysettings.ui:261
 #, kde-format
 msgid "HDR Settings"
-msgstr "HDR 选项"
+msgstr "HDR 设置"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:267
@@ -31839,7 +31837,7 @@ msgstr "旋转角度："
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:256
 #, kde-format
 msgid "°"
 msgstr "°"
@@ -41233,7 +41231,7 @@ msgstr "自定义颜色"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, kde-format
 msgid "Control Widget Options"
-msgstr "辅助尺的控制按钮"
+msgstr "辅助尺控制按钮"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -46279,11 +46277,11 @@ msgid "Full width"
 msgstr "全角"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, kde-format
-msgctxt "@label:inlistbox"
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
-msgstr "比例宽度"
+msgstr "使用比例数值"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:141
 #, kde-format
@@ -46390,6 +46388,13 @@ msgstr "旧体数字"
 msgctxt "@label:listbox"
 msgid "Spacing:"
 msgstr "间距："
+
+#: plugins/dockers/textproperties/qml/OTNumeric.qml:136
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@label:inlistbox, proportional width numbers"
+msgid "Proportional"
+msgstr "使用比例数值"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:137
 #, kde-format
@@ -50716,7 +50721,7 @@ msgstr "半径："
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
 #: plugins/tools/basictools/kis_tool_measure.cc:48
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:100
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:200
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:243
 #, kde-format
 msgid "Angle:"
 msgstr "角度："
@@ -51836,7 +51841,7 @@ msgstr "随机噪点"
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:21
 #, kde-format
 msgid "Level:"
-msgstr "色阶："
+msgstr "级别："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
@@ -58983,7 +58988,7 @@ msgstr "硬度"
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalFade)
 #. i18n: ectx: property (text), widget (QLabel, horizontalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:162
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:186
 #, kde-format
 msgid "Horizontal:"
 msgstr "水平："
@@ -58991,7 +58996,7 @@ msgstr "水平："
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalFade)
 #. i18n: ectx: property (text), widget (QLabel, verticalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:254
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:206
 #, kde-format
 msgid "Vertical:"
 msgstr "垂直："
@@ -62459,7 +62464,7 @@ msgid "Translation directory"
 msgstr "翻译目录"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format
 msgid "Pixels"
 msgstr "像素"
@@ -64046,7 +64051,7 @@ msgstr "扩展：{n}%"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -64163,7 +64168,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "自动闭合小于此值的轮廓缺口"
+msgstr "自动闭合小于此值的间隙"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:659
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
@@ -64221,7 +64226,7 @@ msgstr "在合并带有特定颜色标签的图层中找到的区域里包含活
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "不填充不同区域"
+msgstr "不填充其他区域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
@@ -65508,7 +65513,7 @@ msgstr "设置在建立新选区时是否将活动选区的轮廓视作选区边
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -66987,7 +66992,7 @@ msgstr "扩展：{n}%"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
@@ -67162,32 +67167,48 @@ msgstr ""
 msgid "Comic Panel Editing Tool"
 msgstr "漫画格子框编辑工具"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
+"through shapes"
+msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to remove gutters/"
+"merge shapes"
+msgid "Merging mode: Removes the gutter between shapes."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
 msgid "Millimeters"
 msgstr "毫米"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
 #, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
 msgstr "宽"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
 #, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
 msgstr "窄"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:322
 #, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
@@ -67210,35 +67231,105 @@ msgstr ""
 msgid "Unit of width:"
 msgstr "宽度单位："
 
-#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
+#, fuzzy, kde-format
+#| msgid "Thick gap:"
+msgid "Thick gap width"
+msgstr "宽间隙："
+
+#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
 #, kde-format
 msgid "Thick gap:"
 msgstr "宽间隙："
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
+#, fuzzy, kde-format
+#| msgid "Thin gap:"
+msgid "Thin gap width"
+msgstr "窄间隙："
+
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
 #, kde-format
 msgid "Thin gap:"
 msgstr "窄间隙："
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
+#, fuzzy, kde-format
+#| msgid "Special gap:"
+msgid "Special gap width"
+msgstr "特殊间隙："
+
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
 #, kde-format
 msgid "Special gap:"
 msgstr "特殊间隙："
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
+#, kde-format
+msgid "Choose the width automatically, based on the angle"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
 #, kde-format
 msgid "Automatic"
 msgstr "自动"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, horizontalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
+#, fuzzy, kde-format
+#| msgid "Horizontal Wave"
+msgid "Horizontal gaps type:"
+msgstr "水平波浪"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
+#, fuzzy, kde-format
+#| msgid "Vertical Style:"
+msgid "Vertical gaps type:"
+msgstr "垂直线样式："
+
+#. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
+#, fuzzy, kde-format
+#| msgid "Diagonal:"
+msgid "Diagonal gaps type:"
+msgstr "斜线："
+
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
 #, kde-format
 msgid "Diagonal:"
 msgstr "斜线："
+
+#. i18n: ectx: property (toolTip), widget (QLabel, angleLabel)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Instant preview threshold:"
+msgid "Diagonal type angle threshold:"
+msgstr "快速预渲染阈值："
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
 msgctxt "(qtundo-format)"
@@ -67271,7 +67362,7 @@ msgstr "请在线稿包含大面积实心色块时勾选此项，并将数值设
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
 msgid "Gap close hint: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
 #, kde-format
@@ -67279,7 +67370,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The mask will try to close non-closed contours if the gap is smaller than "
 "\"Gap close hint\" value"
-msgstr "只要围住某个区域的轮廓的缺口宽度不超过此值，均将其视作闭合区域。"
+msgstr "只要某个区域轮廓的间隙宽度不超过此值，均将其视作闭合区域。"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
 #, kde-format
@@ -68449,3 +68540,7 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
+
+#~ msgctxt "@label:inlistbox"
+#~ msgid "Proportional"
+#~ msgstr "比例宽度"

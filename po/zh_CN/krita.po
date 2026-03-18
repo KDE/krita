@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 02:39+0000\n"
+"POT-Creation-Date: 2026-03-18 02:47+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23682,7 +23682,7 @@ msgstr "本地资源"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
-#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
@@ -29060,7 +29060,7 @@ msgstr "使用纹理缓冲"
 #: libs/ui/forms/wdgdisplaysettings.ui:261
 #, kde-format
 msgid "HDR Settings"
-msgstr "HDR 选项"
+msgstr "HDR 设置"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:267
@@ -41168,7 +41168,7 @@ msgstr "自定义颜色"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, kde-format
 msgid "Control Widget Options"
-msgstr "辅助尺的控制按钮"
+msgstr "辅助尺控制按钮"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -51771,7 +51771,7 @@ msgstr "随机噪点"
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:21
 #, kde-format
 msgid "Level:"
-msgstr "色阶："
+msgstr "级别："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
@@ -63995,7 +63995,7 @@ msgstr "扩展：{n}%"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -64112,7 +64112,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "自动闭合小于此值的轮廓缺口"
+msgstr "自动闭合小于此值的间隙"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:659
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
@@ -64170,7 +64170,7 @@ msgstr "在合并带有特定颜色标签的图层中找到的区域里包含活
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "不填充不同区域"
+msgstr "不填充其他区域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
@@ -65457,7 +65457,7 @@ msgstr "设置在建立新选区时是否将活动选区的轮廓视作选区边
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -66936,7 +66936,7 @@ msgstr "扩展：{n}%"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
@@ -67220,7 +67220,7 @@ msgstr "请在线稿包含大面积实心色块时勾选此项，并将数值设
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
 msgid "Gap close hint: "
-msgstr "缺口自动闭合上限："
+msgstr "自动闭合间隙："
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
 #, kde-format
@@ -67228,7 +67228,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The mask will try to close non-closed contours if the gap is smaller than "
 "\"Gap close hint\" value"
-msgstr "只要围住某个区域的轮廓的缺口宽度不超过此值，均将其视作闭合区域。"
+msgstr "只要某个区域轮廓的间隙宽度不超过此值，均将其视作闭合区域。"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
 #, kde-format

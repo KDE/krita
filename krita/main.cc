@@ -920,14 +920,18 @@ void installEcmTranslations(KisApplication &app)
     // Load translations created using the ECMPoQmTools module.
     // This function is based on the code in:
     // https://invent.kde.org/frameworks/extra-cmake-modules/-/blob/master/modules/ECMQmLoader.cpp.in
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    const QString catalogVersion = "5";
+#else
+    const QString catalogVersion = "6";
+#endif
     QStringList ecmCatalogs = {
-        QStringLiteral("kcompletion5_qt"),
-        QStringLiteral("kconfig5_qt"),
-        QStringLiteral("kcoreaddons5_qt"),
-        QStringLiteral("kitemviews5_qt"),
-        QStringLiteral("kwidgetsaddons5_qt"),
-        QStringLiteral("kwindowsystem5_qt"),
+        QStringLiteral("kcompletion%1_qt").arg(catalogVersion),
+        QStringLiteral("kconfig%1_qt").arg(catalogVersion),
+        QStringLiteral("kcoreaddons%1_qt").arg(catalogVersion),
+        QStringLiteral("kitemviews%1_qt").arg(catalogVersion),
+        QStringLiteral("kwidgetsaddons%1_qt").arg(catalogVersion),
+        QStringLiteral("kwindowsystem%1_qt").arg(catalogVersion),
         QStringLiteral("seexpr2_qt"),
     };
 

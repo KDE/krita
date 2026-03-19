@@ -153,6 +153,9 @@ public:
     qreal colorSamplerPreviewCircleThickness(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleThickness(qreal thickness);
 
+    qreal colorSamplerZoomPreviewScale(bool defaultValue = false) const;
+    void setColorSamplerZoomPreviewScale(qreal scale);
+
     bool colorSamplerPreviewCircleOutlineEnabled(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleOutlineEnabled(bool enabled);
 

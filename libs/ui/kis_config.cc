@@ -569,6 +569,19 @@ void KisConfig::setColorSamplerPreviewCircleThickness(qreal thickness)
     m_cfg.writeEntry("colorSamplerPreviewCircleThickness", thickness);
 }
 
+
+qreal KisConfig::colorSamplerZoomPreviewScale(bool defaultValue) const {
+    qreal def = 200;
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerZoomPreviewScale", def);
+    }
+    return def;
+}
+
+void KisConfig::setColorSamplerZoomPreviewScale(qreal scale) {
+    m_cfg.writeEntry("colorSamplerZoomPreviewScale", scale);
+}
+
 bool KisConfig::colorSamplerPreviewCircleOutlineEnabled(bool defaultValue) const
 {
     bool def = true;

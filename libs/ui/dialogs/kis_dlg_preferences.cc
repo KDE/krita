@@ -329,6 +329,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_chkColorSamplerPreviewExtraCircles->setChecked(cfg.colorSamplerPreviewCircleExtraCirclesEnabled());
 
+    m_ssbColorSamplerZoomPreviewScale->setRange(100, 500);
+    m_ssbColorSamplerZoomPreviewScale->setSingleStep(25);
+    m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale());
+
 
     KisSpinBoxI18nHelper::setText(m_ssbColorSamplerPreviewThickness, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
@@ -788,6 +792,7 @@ void GeneralTab::setDefault()
     m_ssbColorSamplerPreviewThickness->setValue(cfg.colorSamplerPreviewCircleThickness(true));
     m_nmbColorSamplerPreviewSize->setValue(cfg.colorSamplerPreviewCircleDiameter(true));
     m_chkColorSamplerPreviewOutlineEnabled->setChecked(cfg.colorSamplerPreviewCircleOutlineEnabled(true));
+    m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale(true));
 
 
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
@@ -971,6 +976,10 @@ bool GeneralTab::colorSamplerPreviewCircleExtraCirclesEnabled() const
     return m_chkColorSamplerPreviewExtraCircles->isChecked();
 }
 
+qreal GeneralTab::colorSamplerZoomPreviewScale() const
+{
+    return m_ssbColorSamplerZoomPreviewScale->value();
+}
 
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
 {
@@ -3062,6 +3071,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setColorSamplerPreviewCircleThickness(m_general->colorSamplerPreviewCircleThickness());
         cfg.setColorSamplerPreviewCircleOutlineEnabled(m_general->colorSamplerPreviewCircleOutlineEnabled());
         cfg.setColorSamplerPreviewCircleExtraCirclesEnabled(m_general->colorSamplerPreviewCircleExtraCirclesEnabled());
+        cfg.setColorSamplerZoomPreviewScale(m_general->colorSamplerZoomPreviewScale());
 
         cfg.setShowRootLayer(m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());

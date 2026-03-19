@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1699</width>
-    <height>663</height>
+    <width>1573</width>
+    <height>665</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>3</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -973,6 +973,12 @@
        </item>
        <item row="5" column="0" colspan="2">
         <widget class="QFrame" name="m_frmColorSamplerCircleSettings">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -980,16 +986,6 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QFormLayout" name="m_frmColorSamplerCircleSettingsLayout">
-          <item row="1" column="0">
-           <widget class="QLabel" name="m_lblColorSamplerPreviewSize">
-            <property name="text">
-             <string>Diameter:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="KisSliderSpinBox" name="m_nmbColorSamplerPreviewSize"/>
-          </item>
           <item row="0" column="0" colspan="2">
            <widget class="KisColorSamplerPreviewPreview" name="m_lblColorSamplerPreviewSizePreview">
             <property name="sizePolicy">
@@ -1006,6 +1002,16 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="m_lblColorSamplerPreviewSize">
+            <property name="text">
+             <string>Diameter:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="KisSliderSpinBox" name="m_nmbColorSamplerPreviewSize"/>
+          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="m_lblColorSamplerPreviewThickness">
             <property name="text">
@@ -1016,17 +1022,40 @@
           <item row="2" column="1">
            <widget class="KisDoubleSliderSpinBox" name="m_ssbColorSamplerPreviewThickness"/>
           </item>
-          <item row="3" column="1">
+          <item row="3" column="0">
+           <widget class="QLabel" name="m_lblZoomPreviewScale">
+            <property name="text">
+             <string>Zoom Preview Scale:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
            <widget class="QCheckBox" name="m_chkColorSamplerPreviewOutlineEnabled">
             <property name="text">
              <string>Enable Outline</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QCheckBox" name="m_chkColorSamplerPreviewExtraCircles">
             <property name="text">
              <string>Extra Comparison Space</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="KisSliderSpinBox" name="m_ssbColorSamplerZoomPreviewScale">
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="minimum">
+             <number>100</number>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+            <property name="singleStep">
+             <number>25</number>
             </property>
            </widget>
           </item>
@@ -1341,8 +1370,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1675</width>
-            <height>624</height>
+            <width>1552</width>
+            <height>786</height>
            </rect>
           </property>
           <property name="sizePolicy">

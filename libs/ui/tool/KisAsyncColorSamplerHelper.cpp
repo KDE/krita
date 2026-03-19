@@ -68,8 +68,8 @@ struct KisAsyncColorSamplerHelper::Private
     qreal circlePreviewThickness {0.12};
     bool circlePreviewOutlineEnabled {true};
     bool circlePreviewExtraCircles {true};
+    qreal circleZoomPreviewScale {2};
     QRectF previewDocRect;
-    QPointF docPoint;
     QPainterPath cacheInnerPath;
 
     QColor currentColor;
@@ -220,6 +220,7 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
     m_d->circlePreviewThickness = cfg.colorSamplerPreviewCircleThickness()/100.0; // saved in percentages
     m_d->circlePreviewOutlineEnabled = cfg.colorSamplerPreviewCircleOutlineEnabled();
     m_d->circlePreviewExtraCircles = cfg.colorSamplerPreviewCircleExtraCirclesEnabled();
+    m_d->circleZoomPreviewScale = cfg.colorSamplerZoomPreviewScale()/100.0; // saved in percentages
 
     m_d->activationDelayTimer.start();
 }
@@ -344,7 +345,6 @@ void KisAsyncColorSamplerHelper::endAction()
 
 QRectF KisAsyncColorSamplerHelper::colorPreviewDocRect(const QPointF &docPoint)
 {
-    m_d->docPoint = docPoint;
     if (!m_d->showPreview) return QRectF();
 
     KisConfig cfg(true);
@@ -536,22 +536,68 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         }
     }
 
+    // When sampler leave the canvas, cache won't update so always need to clear the center
+    // TODO: Check why zoom still show after leaving canvas
+    cachePainter.setPen(Qt::NoPen);
+    cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
+    cachePainter.drawPath(tf.map(m_d->cacheInnerPath));
+
+    QRectF sampleDocRectF = m_d->previewDocRect;
+    sampleDocRectF.setHeight(sampleDocRectF.height() / m_d->circleZoomPreviewScale);
+    sampleDocRectF.setWidth(sampleDocRectF.width() / m_d->circleZoomPreviewScale);
+    sampleDocRectF.moveCenter(m_d->previewDocRect.center());
+    QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF);
+
     dbgUI << "View rect: " << viewRectF;
-    QRectF docRectF = m_d->converter().viewToDocument(viewRectF);
-    QRectF docSampleRectF = QRectF(m_d->docPoint.x() - docRectF.width()/4, m_d->docPoint.y() - docRectF.height()/4, docRectF.width()/2, docRectF.height()/2);
-    QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(docSampleRectF);
-    dbgUI << "Doc point: " << m_d->docPoint;
-    dbgUI << "Doc view rect: " << docRectF;
-    dbgUI << "Canvas point: " << canvasSampleRectF.topLeft();
-    // Copy a piece of canvas image with size = (cacheRect document size) / (zoom preview scale)
-    QImage cacheCanvasImage = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
+    dbgUI << "Preview doc rect: " << m_d->previewDocRect;
+    dbgUI << "Sample doc rect: " << sampleDocRectF;
+    dbgUI << "Canvas sample rect: " << canvasSampleRectF;
+    dbgUI << "Sample doc point: " << sampleDocRectF.center();
+
+    QImage cacheCanvasImage;
+    bool sampledRefImage = false;
+
+    // Check if doc coord is on canvas or reference image
+    KisDocument *doc = m_d->canvas->viewManager()->document();
+    if (doc) {
+        KisReferenceImagesLayerSP refLayer = doc->referenceImagesLayer();
+        if (refLayer) {
+            for(int i=0;i<refLayer->referenceImages().count();i++) {
+                KisReferenceImage *refImage = refLayer->referenceImages().at(i);
+                QPolygonF outline = refImage->outline().toFillPolygon().translated(refImage->position());
+                if (outline.containsPoint(sampleDocRectF.center(), Qt::OddEvenFill)) {
+                    dbgUI << "Sampling on reference image no " << i;
+                    // TODO: Figure out how to convert shape coordinate to pixel coordinate
+                    // Just need to divide by scale. How to find the scale though
+                    QImage image = refImage->getImage();
+                    QRectF refRectF = refImage->documentToShape(sampleDocRectF);
+                    dbgUI << "Shape coordinate: " << refRectF;
+                    QPointF topLeft = refRectF.topLeft();
+                    topLeft.setX(topLeft.x() * image.width());
+                    topLeft.setY(topLeft.y() * image.height());
+                    QPointF bottomRight = refRectF.bottomRight();
+                    bottomRight.setX(bottomRight.x() * image.width());
+                    bottomRight.setY(bottomRight.y() * image.height());
+
+                    dbgUI << "Shape pixel coordinate: " << QRectF(topLeft, bottomRight);
+
+                    cacheCanvasImage = refImage->getImage().copy(QRectF(topLeft, bottomRight).toRect());
+                    sampledRefImage = true;
+                }
+            }
+        }
+    }
+
+    if (!sampledRefImage)
+        // Copy a piece of canvas image with size = (previewDocRect size) / (zoom preview scale)
+        cacheCanvasImage = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
 
     cachePainter.setClipPath(tf.map(m_d->cacheInnerPath));
     cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-    // QtDoc: Note: The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
+    // QtDoc: The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
     // Since the piece of canvas is (zoom preview scale) times smaller than cacheRect
-    // Draw image will scale it up that many times, thus achieving the zoom effect
+    // drawImage will scale it up that many times, thus achieving the zoom effect
     cachePainter.drawImage(cacheRect, cacheCanvasImage);
 
     cachePainter.setClipPath(QPainterPath(), Qt::NoClip);

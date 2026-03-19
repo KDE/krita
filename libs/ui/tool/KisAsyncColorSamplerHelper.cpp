@@ -570,14 +570,17 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
                     // TODO: Figure out how to convert shape coordinate to pixel coordinate
                     // Just need to divide by scale. How to find the scale though
                     QImage image = refImage->getImage();
+                    qreal xScale = refImage->boundingRect().width() / image.width();
+                    qreal yScale = refImage->boundingRect().height() / image.height();
                     QRectF refRectF = refImage->documentToShape(sampleDocRectF);
                     dbgUI << "Shape coordinate: " << refRectF;
+                    dbgUI << "Image scaling: " << refImage->transformation().m11();
                     QPointF topLeft = refRectF.topLeft();
-                    topLeft.setX(topLeft.x() * image.width());
-                    topLeft.setY(topLeft.y() * image.height());
+                    topLeft.setX(topLeft.x() / xScale);
+                    topLeft.setY(topLeft.y() / yScale);
                     QPointF bottomRight = refRectF.bottomRight();
-                    bottomRight.setX(bottomRight.x() * image.width());
-                    bottomRight.setY(bottomRight.y() * image.height());
+                    bottomRight.setX(bottomRight.x() / xScale);
+                    bottomRight.setY(bottomRight.y() / yScale);
 
                     dbgUI << "Shape pixel coordinate: " << QRectF(topLeft, bottomRight);
 

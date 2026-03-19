@@ -644,8 +644,22 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
 #ifdef Q_OS_ANDROID
     KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 #endif
-    // Enable debugging translations from undeployed apps
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    /**
+     * In Qt5 version of Krita we used to patch ki18n to look for translations
+     * in QStandardPaths::AppLocalDataLocation and then manually move them
+     * into this location in the AppImage creation script. It meant that
+     * translations wouldn't work for undeployed builds, e.g. the one in
+     * the docker, where the translations were automatically installed
+     * into the default location, i.e. krita.appdir/usr/share/locale.
+     *
+     * In Qt6 we dropped this patch over ki18n and it now searches
+     * translations in the correct location, i.e.
+     * in QStandardPaths::GenericDataLocation.
+     */
     KLocalizedString::addDomainLocaleDir("krita", QDir(root + "share/locale").absolutePath());
+#endif
 
     KLocalizedString::setApplicationDomain("krita");
 

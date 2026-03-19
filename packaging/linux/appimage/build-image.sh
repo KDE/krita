@@ -32,6 +32,9 @@ export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/$TRIPL
 export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
+
+export QT_VERSION_MAJOR=$(echo $($DEPS_INSTALL_PREFIX/bin/qtpaths --qt-version) | cut -d. -f1)
+
 # https://docs.python.org/3.10/using/cmdline.html#envvar-PYTHONHOME
 if [ -d $DEPS_INSTALL_PREFIX/sip ] ; then
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
@@ -149,13 +152,24 @@ cd $BUILD_PREFIX
 #
 
 # Step 0: place the translations where ki18n and Qt look for them
-if [ -d $APPDIR/usr/share/locale ] ; then
-    rsync -prul $APPDIR/usr/share/locale $APPDIR/usr/share/krita
-    rm -rf $APPDIR/usr/share/locale
+#
+# In Qt5 version of Krita we used to patch ki18n to locate the translations
+# in QStandardPaths::AppLocalDataLocation, hence all the translations had to
+# be moved into the Krita-local directory. In Qt6 we dropped this patch, so
+# all the translations are now searched in QStandardPaths::GenericDataLocation
+
+if [ "$QT_VERSION_MAJOR" = "5" ] ; then
+    if [ -d $APPDIR/usr/share/locale ] ; then
+        rsync -prul $APPDIR/usr/share/locale $APPDIR/usr/share/krita
+        rm -rf $APPDIR/usr/share/locale
+    fi
+    rsync -prul $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
+else
+    rsync -prul $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/
 fi
 
 # Step 1: Copy over all necessary resources required by dependencies or libraries that are missed by linuxdeployqt
-cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
+
 if [ -d $DEPS_INSTALL_PREFIX/share/kf5 ]; then
     cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 else

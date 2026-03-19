@@ -70,7 +70,7 @@ struct KisAsyncColorSamplerHelper::Private
     bool circlePreviewExtraCircles {true};
     QRectF previewDocRect;
     QPointF docPoint;
-    QImage cacheCanvasImage;
+    QPainterPath cacheInnerPath;
 
     QColor currentColor;
     QColor baseColor;
@@ -455,38 +455,39 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         canvasRotationAngle = -canvasRotationAngle;
     }
 
+    QPainter cachePainter(&m_d->cache);
+    cachePainter.setRenderHint(QPainter::Antialiasing);
+
+    QColor backgroundColor = colorWithAlpha(m_d->backgroundColor, OPACITY_OPAQUE_U8 / 2 + 1);
+    qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
+    QPen pen = QPen(backgroundColor, penWidth);
+    if (m_d->circlePreviewOutlineEnabled) {
+        cachePainter.setPen(pen);
+    } else {
+        cachePainter.setPen(Qt::NoPen);
+    }
+
+    QRectF cacheRect = m_d->cache.rect();
+
+    // The color sampler preview is an outline and those rotate along
+    // with the canvas. That's undesirable for the sampler preview
+    // though, so we calculate the transformation to counter the rotation here
+    QPointF cacheCenter = cacheRect.center();
+    QTransform tf;
+    tf.translate(cacheCenter.x(), cacheCenter.y());
+    tf.rotate(-canvasRotationAngle);
+    tf.translate(-cacheCenter.x(), -cacheCenter.y());
+
     bool needsDualColor = currentColor != baseColor;
-    if (true || needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
+    if (needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
         m_d->cacheRotation = canvasRotationAngle;
 
-        QPainter cachePainter(&m_d->cache);
-        cachePainter.setRenderHint(QPainter::Antialiasing);
-
-        QColor backgroundColor = colorWithAlpha(m_d->backgroundColor, OPACITY_OPAQUE_U8 / 2 + 1);
-        qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
-        QPen pen = QPen(backgroundColor, penWidth);
-        if (m_d->circlePreviewOutlineEnabled) {
-            cachePainter.setPen(pen);
-        } else {
-            cachePainter.setPen(Qt::NoPen);
-        }
-
-        QRectF cacheRect = m_d->cache.rect();
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
-
-        QTransform tf;
-
-        QPointF cacheCenter = cacheRect.center();
-        tf.translate(cacheCenter.x(), cacheCenter.y());
-        tf.rotate(-canvasRotationAngle);
-        tf.translate(-cacheCenter.x(), -cacheCenter.y());
-
 
         if (needsDualColor) {
             // The color sampler preview is an outline and those rotate along
             // with the canvas. That's undesirable for the sampler preview
             // though, so we un-rotate its contents here accordingly.
-
 
             QPainterPath clipPath;
             clipPath.addPolygon(tf.map(QPolygonF(QRectF(0, 0, cacheRect.width(), cacheRect.height() / 2.0 + 1.0))));
@@ -520,6 +521,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         QPainterPath innerPath;
         innerPath.addPath(innerEllipse);
 
+        m_d->cacheInnerPath = innerPath;
 
         if (m_d->circlePreviewThickness < 0.5 && m_d->circlePreviewExtraCircles) {
             qreal extraMargin = 0.1*m_d->circlePreviewThickness*innerRect.width(); // looks better
@@ -532,37 +534,36 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 
             innerPath = innerPath.intersected(innerEllipse);
         }
-
-        // cachePainter.setPen(Qt::NoPen);
-        // cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
-        // cachePainter.drawPath(tf.map(innerPath));
-
-        if (true) {
-            dbgUI << "View rect: " << viewRectF;
-            QRectF docRectF = m_d->converter().viewToDocument(viewRectF);
-            QRectF docSampleRectF = QRectF(m_d->docPoint.x() - docRectF.width()/4, m_d->docPoint.y() - docRectF.height()/4, docRectF.width()/2, docRectF.height()/2);
-            QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(docSampleRectF);
-            dbgUI << "Doc point: " << m_d->docPoint;
-            dbgUI << "Doc view rect: " << docRectF;
-            dbgUI << "Canvas point: " << canvasSampleRectF.topLeft();
-
-            m_d->cacheCanvasImage = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
-
-            cachePainter.setClipPath(tf.map(innerPath));
-            // cachePainter.setBrush(Qt::GlobalColor::cyan);
-            cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-            cachePainter.drawImage(cacheRect, m_d->cacheCanvasImage);
-
-            cachePainter.setClipPath(QPainterPath(), Qt::NoClip);
-        }
-
-        if (m_d->circlePreviewOutlineEnabled) {
-            cachePainter.setBrush(Qt::transparent);
-            cachePainter.setPen(pen);
-            cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-            cachePainter.drawPath(tf.map(innerPath));
-        }
     }
+
+    dbgUI << "View rect: " << viewRectF;
+    QRectF docRectF = m_d->converter().viewToDocument(viewRectF);
+    QRectF docSampleRectF = QRectF(m_d->docPoint.x() - docRectF.width()/4, m_d->docPoint.y() - docRectF.height()/4, docRectF.width()/2, docRectF.height()/2);
+    QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(docSampleRectF);
+    dbgUI << "Doc point: " << m_d->docPoint;
+    dbgUI << "Doc view rect: " << docRectF;
+    dbgUI << "Canvas point: " << canvasSampleRectF.topLeft();
+    // Copy a piece of canvas image with size = (cacheRect document size) / (zoom preview scale)
+    QImage cacheCanvasImage = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
+
+    cachePainter.setClipPath(tf.map(m_d->cacheInnerPath));
+    cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+    // QtDoc: Note: The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
+    // Since the piece of canvas is (zoom preview scale) times smaller than cacheRect
+    // Draw image will scale it up that many times, thus achieving the zoom effect
+    cachePainter.drawImage(cacheRect, cacheCanvasImage);
+
+    cachePainter.setClipPath(QPainterPath(), Qt::NoClip);
+
+    // Draw inner circle outline if enabled
+    if (m_d->circlePreviewOutlineEnabled) {
+        cachePainter.setBrush(Qt::transparent);
+        cachePainter.setPen(pen);
+        cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        cachePainter.drawPath(tf.map(m_d->cacheInnerPath));
+    }
+
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);
 
     gc.restore();

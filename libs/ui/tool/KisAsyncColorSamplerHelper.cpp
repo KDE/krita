@@ -69,6 +69,8 @@ struct KisAsyncColorSamplerHelper::Private
     bool circlePreviewOutlineEnabled {true};
     bool circlePreviewExtraCircles {true};
     QRectF previewDocRect;
+    QPointF docPoint;
+    QImage cacheCanvasImage;
 
     QColor currentColor;
     QColor baseColor;
@@ -342,6 +344,7 @@ void KisAsyncColorSamplerHelper::endAction()
 
 QRectF KisAsyncColorSamplerHelper::colorPreviewDocRect(const QPointF &docPoint)
 {
+    m_d->docPoint = docPoint;
     if (!m_d->showPreview) return QRectF();
 
     KisConfig cfg(true);
@@ -436,8 +439,6 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         return;
     }
 
-
-
     gc.save();
 
     qreal dpr = gc.device()->devicePixelRatioF();
@@ -455,7 +456,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     }
 
     bool needsDualColor = currentColor != baseColor;
-    if (needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
+    if (true || needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
         m_d->cacheRotation = canvasRotationAngle;
 
         QPainter cachePainter(&m_d->cache);
@@ -532,9 +533,28 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
             innerPath = innerPath.intersected(innerEllipse);
         }
 
-        cachePainter.setPen(Qt::NoPen);
-        cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
-        cachePainter.drawPath(tf.map(innerPath));
+        // cachePainter.setPen(Qt::NoPen);
+        // cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
+        // cachePainter.drawPath(tf.map(innerPath));
+
+        if (true) {
+            dbgUI << "View rect: " << viewRectF;
+            QRectF docRectF = m_d->converter().viewToDocument(viewRectF);
+            QRectF docSampleRectF = QRectF(m_d->docPoint.x() - docRectF.width()/4, m_d->docPoint.y() - docRectF.height()/4, docRectF.width()/2, docRectF.height()/2);
+            QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(docSampleRectF);
+            dbgUI << "Doc point: " << m_d->docPoint;
+            dbgUI << "Doc view rect: " << docRectF;
+            dbgUI << "Canvas point: " << canvasSampleRectF.topLeft();
+
+            m_d->cacheCanvasImage = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
+
+            cachePainter.setClipPath(tf.map(innerPath));
+            // cachePainter.setBrush(Qt::GlobalColor::cyan);
+            cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            cachePainter.drawImage(cacheRect, m_d->cacheCanvasImage);
+
+            cachePainter.setClipPath(QPainterPath(), Qt::NoClip);
+        }
 
         if (m_d->circlePreviewOutlineEnabled) {
             cachePainter.setBrush(Qt::transparent);

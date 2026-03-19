@@ -645,7 +645,7 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
     KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 #endif
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || defined Q_OS_WIN || defined Q_OS_MACOS
     /**
      * In Qt5 version of Krita we used to patch ki18n to look for translations
      * in QStandardPaths::AppLocalDataLocation and then manually move them
@@ -657,6 +657,9 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
      * In Qt6 we dropped this patch over ki18n and it now searches
      * translations in the correct location, i.e.
      * in QStandardPaths::GenericDataLocation.
+     *
+     * On MacOS and Windows we should still be able to fetch translations
+     * without deploying the entire package
      */
     KLocalizedString::addDomainLocaleDir("krita", QDir(root + "share/locale").absolutePath());
 #endif

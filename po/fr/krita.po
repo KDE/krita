@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 02:47+0000\n"
-"PO-Revision-Date: 2026-03-14 17:31+0100\n"
+"POT-Creation-Date: 2026-03-19 02:45+0000\n"
+"PO-Revision-Date: 2026-03-17 18:42+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -727,7 +727,7 @@ msgstr "16 Texture de bois"
 #, kde-format
 msgctxt "./krita/data/patterns/17_texture-melt.png"
 msgid "17 texture-melt"
-msgstr "17 Fonte de la texture"
+msgstr "17 fondu de texture"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3114,7 +3114,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr "17 Fonte de la texture"
+msgstr "17 fondu de texture"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5123,7 +5123,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr "17 Fonte de la texture"
+msgstr "17 fondu de texture"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7788,7 +7788,7 @@ msgid ""
 msgstr ""
 "Le texte ne sera pas renvoyé automatiquement à la ligne. Mais, les espaces "
 "et les nouvelles lignes seront préservés. Un saut de ligne est inséré afin "
-"que les lignes avec retour automatique  ou avec positionnement restent "
+"que les lignes avec retour automatique ou avec positionnement restent "
 "séparées."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7860,7 +7860,7 @@ msgid ""
 "was flowing into, will add the shape to the chain."
 msgstr ""
 "Faire en sorte que le premier texte sélectionné se déplace dans la forme. "
-"S’il y avait déjà des formes dans lesquelles il se déplaçait, il ajoutera la "
+"S'il y avait déjà des formes dans lesquelles il se déplaçait, il ajoutera la "
 "forme à la chaîne."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
@@ -17826,7 +17826,7 @@ msgstr "Zone à usage privé"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs"
-msgstr "Idéogrammes avec compatibilité  «CJK »"
+msgstr "Idéogrammes avec compatibilité « CJK »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:175
 #, kde-format
@@ -18804,7 +18804,7 @@ msgstr "Émoticônes"
 #, kde-format
 msgctxt "@title"
 msgid "Ornamental Dingbats"
-msgstr "Fonte « Dingbats » ornementales"
+msgstr "Police « Dingbats » ornementales"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:338
 #, kde-format
@@ -19111,8 +19111,8 @@ msgid ""
 "Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
 "Krita."
 msgstr ""
-"Ajuste les glyphes afin qu'ils s'alignent grâce à leurs limites visuelles."
-"N'a aucun effet dans Krita."
+"Ajuste les glyphes afin qu'ils s'alignent grâce à leurs limites visuelles. "
+"Cela n'a aucun effet dans Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
 #, kde-format
@@ -20005,7 +20005,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr "Formulaires d’expert"
+msgstr "Formulaires d'expert"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
@@ -21194,9 +21194,9 @@ msgstr "Taille"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:101
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:136
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:72
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:113
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:154
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -25623,7 +25623,7 @@ msgstr ""
 "activée et que la version de FFMpeg soit supérieure au moins à 4.2+. Si "
 "votre sortie « GIF » montre des signes de déchirement de l'écran, la version "
 "4.4+ de FFMpeg est fortement recommandée.</span></p><p><span style=\" font-"
-"style:italic ;\">Remarque 2 : Le format GIF ne prend en charge que la "
+"style:italic ;\">Remarque 2 : le format GIF ne prend en charge que la "
 "transparence à 100 % ou la transparence à 0 %. La transparence partielle est "
 "</span><span style=\" font-style:italic ; text-decoration : underline ;"
 "\">non</span><span style=\" font-style:italic ;\"> prise en charge. Si vous "
@@ -27597,9 +27597,9 @@ msgstr ""
 "performance sur certains systems. </p<p>Si la gestion des couleurs est "
 "désactivée, Krita effectuera le rendu du canevas dans la surface de la "
 "fenêtre principale, considérée comme espace « sRGB ». Cela conduira à deux "
-"limitations :<ol>   <li>Le gamut de couleurs sera limité à « sRGB »,</li>    "
-"<li>Le mode de vérification des couleurs sera limité à « Utiliser la "
-"configuration globale pour l’affichage », c’est-à-dire que l’épreuvage blanc "
+"limitations :<ol><li>Le gamut de couleurs sera limité à « sRGB »,</li>"
+"\t<li>Le mode de vérification des couleurs sera limité à « Utiliser la "
+"configuration globale pour l'affichage », c'est-à-dire que l'épreuvage blanc "
 "sur papier deviendra impossible</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1333
@@ -30407,8 +30407,8 @@ msgid ""
 "example, as brush size changes due to pen pressure.)"
 msgstr ""
 "Ajustez dynamiquement le contour pour qu'il corresponde à la taille réelle "
-"de la brosse. (Par exemple, lorsque la taille de la brosse change en raison "
-"de la pression du stylet.)"
+"de la brosse (Par exemple, lorsque la taille de la brosse change en raison "
+"de la pression du stylet)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -32559,10 +32559,10 @@ msgid ""
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Permet une adaptation chromatique pour une intention "
-"de rendu absolu. En effet, cela montrera à quoi ressembleraient les couleurs "
-"si l'image était imprimée sur un papier et affichée sur l'écran comme seule "
-"source de lumière. Il s'agit d'un comportement standard pour un flux de "
-"travail « ICC v4 ».</p></body></html>"
+"de rendu absolu. En effet, cela affichera à quoi ressembleraient les "
+"couleurs si l'image était imprimée sur un papier et affichée sur l'écran "
+"comme seule source de lumière. Il s'agit d'un comportement standard pour un "
+"flux de travail « ICC v4 ».</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
@@ -46136,7 +46136,7 @@ msgstr "Supprimer cet ensemble de tâches"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Taille de la fonte (em)"
+msgstr "Taille de la police (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
 #, kde-format
@@ -46732,8 +46732,8 @@ msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
-"Activez ou désactivez le crénage des fontes. Le crénage de fonte permet "
-"d'activer l'espacement par glyphe, comme défini par la fonte."
+"Activez ou désactivez le crénage des polices. Le crénage d'une police permet "
+"d'activer l'espacement par glyphe, comme défini par la police."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46741,7 +46741,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr "crénelage-fonte, révision"
+msgstr "crénelage-police, révision"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -46784,7 +46784,7 @@ msgctxt ""
 "comma separated search terms for the fontsize adjust property, matching is "
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
-msgstr "taille, petit, grand, moyen, ajustement-taille-fonte"
+msgstr "taille, petit, grand, moyen, ajustement-taille-police"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -46825,8 +46825,8 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
-"poids, largeur, style, italique, oblique, style de fonte, extensibilité de "
-"fonte, épaisseur de fonte, gras, taille optique, variation"
+"poids, largeur, style, italique, oblique, style de police, extensibilité de "
+"police, épaisseur de police, gras, taille optique, variation"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
@@ -47178,7 +47178,7 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
-"fonte-variante-capitales, petites capitales, petite caps, Unicase, Titrage, "
+"police-variante-capitales, petites capitales, petite caps, Unicase, Titrage, "
 "Capitales"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
@@ -47221,7 +47221,7 @@ msgstr "Titrage en capitales"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr "Glyphes : Asie de l'Est"
+msgstr "Glyphes : pour l'Asie de l'Est"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
@@ -47333,7 +47333,7 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
-"fonte-variante-ligatures, commun-ligatures, ligatures-facultatives, "
+"police-variante-ligatures, commun-ligatures, ligatures-facultatives, "
 "ligatures-historiques, alternatives-contextuelles"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
@@ -47464,7 +47464,7 @@ msgctxt ""
 "comma separated search terms for the font-variant-position property, "
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
-msgstr "fonte-variante-position, exposant, indice"
+msgstr "police-variante-position, exposant, indice"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
@@ -47508,7 +47508,7 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr "Taille de l’onglet"
+msgstr "Taille de l'onglet"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
@@ -48123,7 +48123,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
 msgstr ""
-"Les coupures douces  ne seront autorisées qu'à l'intérieur des mots, "
+"Les coupures douces ne seront autorisées qu'à l'intérieur des mots, "
 "généralement délimitées par des espaces."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
@@ -51780,7 +51780,7 @@ msgstr "Rayon : "
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
 #: plugins/tools/basictools/kis_tool_measure.cc:48
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:100
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:200
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:243
 #, kde-format
 msgid "Angle:"
 msgstr "Angle :"
@@ -55735,13 +55735,13 @@ msgid ""
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-size:18pt; text-decoration : "
-"underline;\">Avancé</span></p><p>L’option « Par défaut (Choix par "
-"l'encodeur) » est courant. Cela signifie que l’encodeur sélectionne "
+"underline;\">Avancé</span></p><p>L'option « Par défaut (Choix par "
+"l'encodeur) » est courant. Cela signifie que l'encodeur sélectionne "
 "automatiquement la configuration optimale reposant sur votre choix du "
 "compromis qualité / vitesse. Cette option est recommandé pour la plupart des "
 "utilisateurs. </p><p><span style=\" font-size:14pt; text-decoration: "
-"underline;\"> Configuration de l’encodeur :</span></p><p>Paramètres généraux "
-"s’appliquant à l’ensemble du processus d’encodage « JPEG XL », quel que soit "
+"underline;\"> Configuration de l'encodeur :</span></p><p>Paramètres généraux "
+"s'appliquant à l'ensemble du processus d'encodage « JPEG XL », quel que soit "
 "la méthode de compression est utilisée. </p><p><span style=\" font-"
 "size:14pt; text-décoration : underline;\">Configuration de VarDCT :</span></"
 "p><p>Variable Discrete Cosine Transform (Optimisé pour le contenu "
@@ -56294,8 +56294,8 @@ msgid ""
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Détermine l’ordre dans lequel les tuiles d’image sont "
-"encodées. L'option « Centrer d’abord' » privilégie le centre de l’image pour "
+"<html><head/><body><p>Détermine l'ordre dans lequel les tuiles d'image sont "
+"encodées. L'option « Centrer d'abord » privilégie le centre de l'image pour "
 "un chargement progressif. Ceci est utile pour le contenu Internet.</p></"
 "body></html>"
 
@@ -56374,7 +56374,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Permet le chargement progressif en utilisant la "
 "quantification pour compresser les détails fins. Conduit à des tailles plus "
-"réduites de fichiers, mais nécessite un temps d’encodage plus long.</p></"
+"réduites de fichiers, mais nécessite un temps d'encodage plus long.</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
@@ -56450,7 +56450,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Contrôle la façon dont la correspondance des valeurs "
 "de couleurs est faite sur l'ensemble de l'image. L'option « Tout » utilise "
-"la  totalité de l'intervalle. Des pourcentages plus faibles créent une "
+"la totalité de l'intervalle. Des pourcentages plus faibles créent une "
 "compression plus efficace pour les images ayant des gammes limitées de "
 "couleurs.</p></body></html>"
 
@@ -57481,7 +57481,7 @@ msgid ""
 msgstr ""
 "Bien que les formes de texte puissent être enregistrées au format « PSD », "
 "seules les fonctionnalités basiques sont prises en charge. Les "
-"fonctionnalités avancées, telles que « Texte sur le tracé » et  « OpenType » "
+"fonctionnalités avancées, telles que « Texte sur le tracé » et « OpenType » "
 "ne seront pas enregistrées."
 
 #: plugins/impex/psd/psd_loader.cpp:184
@@ -57503,7 +57503,7 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
-"Des objets de texte ont été trouvés. Souhaitez-vous les charger en tant que "
+"Des objets de texte ont été trouvés. Voulez-vous les charger en tant que "
 "formes de texte modifiables ? Sinon, ils seront chargés en tant que données "
 "de pixels, qui seront visuellement plus précises que le fichier d'origine."
 
@@ -60375,7 +60375,7 @@ msgstr "Fondu"
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalFade)
 #. i18n: ectx: property (text), widget (QLabel, horizontalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:162
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:186
 #, kde-format
 msgid "Horizontal:"
 msgstr "Horizontale :"
@@ -60383,7 +60383,7 @@ msgstr "Horizontale :"
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalFade)
 #. i18n: ectx: property (text), widget (QLabel, verticalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:254
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:206
 #, kde-format
 msgid "Vertical:"
 msgstr "Verticale :"
@@ -61171,7 +61171,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:256
 #, kde-format
 msgid "°"
 msgstr "°"
@@ -63969,7 +63969,7 @@ msgid "Translation directory"
 msgstr "Dossier de traduction"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format
 msgid "Pixels"
 msgstr "Pixels"
@@ -65098,7 +65098,7 @@ msgstr ""
 #: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr ""
-"Afficher un message contextuel sur le canevas lors de l’activation du "
+"Afficher un message contextuel sur le canevas lors de l'activation du "
 "préréglage de la brosse"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
@@ -66436,7 +66436,7 @@ msgstr "Diminuer l'indice de forme du flux"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:772
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Augmenter l’indice de forme du flux"
+msgstr "Augmenter l'indice de forme du flux"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:774
 msgctxt "(qtundo-format)"
@@ -67536,7 +67536,7 @@ msgstr "Texte en haut"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
-msgstr "Taille de fonte"
+msgstr "Taille de police"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #, kde-format
@@ -68257,7 +68257,7 @@ msgid ""
 msgstr ""
 "Le texte ne sera pas renvoyé automatiquement à la ligne mais les espaces et "
 "les nouvelles lignes seront préservés. Un saut de ligne est inséré afin que "
-"les lignes avec retour automatique  ou avec positionnement restent séparées."
+"les lignes avec retour automatique ou avec positionnement restent séparées."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, kde-format
@@ -68802,34 +68802,50 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Outil d’édition du panneau pour les bandes dessinées"
+msgstr "Outil d'édition du panneau pour les bandes dessinées"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
+"through shapes"
+msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to remove gutters/"
+"merge shapes"
+msgid "Merging mode: Removes the gutter between shapes."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
 msgid "Millimeters"
 msgstr "Millimètres"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
 #, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
 msgstr "Épais"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
 #, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
 msgstr "Fin"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:322
 #, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
@@ -68844,7 +68860,7 @@ msgid ""
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Cet outil ne fonctionne que sur un calque vectoriel. </"
-"p>Veuillez créer le premier panneau en utilisant n’importe quel outil de "
+"p>Veuillez créer le premier panneau en utilisant n'importe quel outil de "
 "forme sur un calque vectoriel.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -68853,37 +68869,106 @@ msgstr ""
 msgid "Unit of width:"
 msgstr "unité de largeur :"
 
-#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
+#, fuzzy, kde-format
+#| msgid "Thick gap:"
+msgid "Thick gap width"
+msgstr "Espacement épais :"
+
+#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
 #, kde-format
 msgid "Thick gap:"
 msgstr "Espacement épais :"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
+#, fuzzy, kde-format
+#| msgid "Thin gap:"
+msgid "Thin gap width"
+msgstr "Espacement fin :"
+
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
 #, kde-format
 msgid "Thin gap:"
 msgstr "Espacement fin :"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
+#, fuzzy, kde-format
+#| msgid "Special gap:"
+msgid "Special gap width"
+msgstr "Espacement spécial :"
+
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
 #, kde-format
 msgid "Special gap:"
 msgstr "Espacement spécial :"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
+#, kde-format
+msgid "Choose the width automatically, based on the angle"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
 #, kde-format
 msgid "Automatic"
 msgstr "Automatique"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, horizontalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
+#, fuzzy, kde-format
+#| msgid "Horizontal Wave"
+msgid "Horizontal gaps type:"
+msgstr "Onde horizontale"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
+#, fuzzy, kde-format
+#| msgid "Vertical Style:"
+msgid "Vertical gaps type:"
+msgstr "Style vertical :"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
+#, fuzzy, kde-format
+#| msgid "Diagonal:"
+msgid "Diagonal gaps type:"
+msgstr "Diagonal :"
+
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
 #, kde-format
 msgid "Diagonal:"
 msgstr "Diagonal :"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#. i18n: ectx: property (toolTip), widget (QLabel, angleLabel)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
+#, fuzzy, kde-format
+#| msgid "Local contrast threshold:"
+msgid "Diagonal type angle threshold:"
+msgstr "Seuil de contraste local :"
+
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "Outil de couteau : suppression d'une gouttière"
@@ -70051,7 +70136,7 @@ msgstr "Images de référence"
 #, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Outil d’édition du panneau pour les bandes dessinées"
+msgstr "Outil d'édition du panneau pour les bandes dessinées"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
 #, kde-format
@@ -113804,9 +113889,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Revoir la taille de l'image importée pour la faire correspondre à la "
 #~ "taille actuelle"
-
-#~ msgid "Local contrast threshold:"
-#~ msgstr "Seuil de contraste local :"
 
 #~ msgid "Prescale:"
 #~ msgstr "Première mise à l'échelle :"

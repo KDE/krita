@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 02:47+0000\n"
+"POT-Creation-Date: 2026-03-19 02:45+0000\n"
 "PO-Revision-Date: 2026-03-11 21:18+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -21031,9 +21031,9 @@ msgstr "Méret"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:101
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:136
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:72
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:113
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:154
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -51296,7 +51296,7 @@ msgstr "Sugár:"
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
 #: plugins/tools/basictools/kis_tool_measure.cc:48
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:100
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:200
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:243
 #, kde-format
 msgid "Angle:"
 msgstr "Szög:"
@@ -59766,7 +59766,7 @@ msgstr "Halványulás"
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalFade)
 #. i18n: ectx: property (text), widget (QLabel, horizontalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:162
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:186
 #, kde-format
 msgid "Horizontal:"
 msgstr "Vízszintes:"
@@ -59774,7 +59774,7 @@ msgstr "Vízszintes:"
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalFade)
 #. i18n: ectx: property (text), widget (QLabel, verticalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:254
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:206
 #, kde-format
 msgid "Vertical:"
 msgstr "Függőleges:"
@@ -60556,7 +60556,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:256
 #, kde-format
 msgid "°"
 msgstr "°"
@@ -63319,7 +63319,7 @@ msgid "Translation directory"
 msgstr "Fordítási könyvtár"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format
 msgid "Pixels"
 msgstr "Képpont"
@@ -68117,32 +68117,48 @@ msgstr ""
 msgid "Comic Panel Editing Tool"
 msgstr "Képregénypanel-szerkesztő eszköz"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
+"through shapes"
+msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to remove gutters/"
+"merge shapes"
+msgid "Merging mode: Removes the gutter between shapes."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
 msgid "Millimeters"
 msgstr "Milliméter"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
 #, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
 msgstr "Vastag"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
 #, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
 msgstr "Vékony"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:322
 #, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
@@ -68166,37 +68182,106 @@ msgstr ""
 msgid "Unit of width:"
 msgstr "Szélesség egysége:"
 
-#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
+#, fuzzy, kde-format
+#| msgid "Thick gap:"
+msgid "Thick gap width"
+msgstr "Vastag rés:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
 #, kde-format
 msgid "Thick gap:"
 msgstr "Vastag rés:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
+#, fuzzy, kde-format
+#| msgid "Thin gap:"
+msgid "Thin gap width"
+msgstr "Vékony rés:"
+
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
 #, kde-format
 msgid "Thin gap:"
 msgstr "Vékony rés:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
+#, fuzzy, kde-format
+#| msgid "Special gap:"
+msgid "Special gap width"
+msgstr "Speciális rés:"
+
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
 #, kde-format
 msgid "Special gap:"
 msgstr "Speciális rés:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
+#, kde-format
+msgid "Choose the width automatically, based on the angle"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
 #, kde-format
 msgid "Automatic"
 msgstr "Automatikus"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, horizontalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
+#, fuzzy, kde-format
+#| msgid "Horizontal Wave"
+msgid "Horizontal gaps type:"
+msgstr "Vízszintes hullám"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
+#, fuzzy, kde-format
+#| msgid "Vertical Style:"
+msgid "Vertical gaps type:"
+msgstr "Függőleges stílus:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
+#, fuzzy, kde-format
+#| msgid "Diagonal:"
+msgid "Diagonal gaps type:"
+msgstr "Átlós:"
+
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
 #, kde-format
 msgid "Diagonal:"
 msgstr "Átlós:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#. i18n: ectx: property (toolTip), widget (QLabel, angleLabel)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
+#, fuzzy, kde-format
+#| msgid "Local contrast threshold:"
+msgid "Diagonal type angle threshold:"
+msgstr "Helyi kontraszt küszöbérték:"
+
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "Kés eszköz: margó eltávolítása"
@@ -104091,9 +104176,6 @@ msgstr ""
 
 #~ msgid "Resize current size to size of the imported image"
 #~ msgstr "Átméretezés az importált kép méretére"
-
-#~ msgid "Local contrast threshold:"
-#~ msgstr "Helyi kontraszt küszöbérték:"
 
 #~ msgid "Prescale:"
 #~ msgstr "Előskálázás:"

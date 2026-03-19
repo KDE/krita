@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 02:47+0000\n"
+"POT-Creation-Date: 2026-03-19 02:45+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -20905,9 +20905,9 @@ msgstr "Памер"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:101
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:136
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:72
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:113
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:154
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -50117,7 +50117,7 @@ msgstr "Радыўс"
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
 #: plugins/tools/basictools/kis_tool_measure.cc:48
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:100
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:200
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:243
 #, fuzzy, kde-format
 msgid "Angle:"
 msgstr "Кут"
@@ -58088,7 +58088,7 @@ msgstr "Плыўнасць"
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalFade)
 #. i18n: ectx: property (text), widget (QLabel, horizontalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:162
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:186
 #, fuzzy, kde-format
 msgid "Horizontal:"
 msgstr "Гарызонт 1"
@@ -58096,7 +58096,7 @@ msgstr "Гарызонт 1"
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalFade)
 #. i18n: ectx: property (text), widget (QLabel, verticalLabel)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:254
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:206
 #, fuzzy, kde-format
 msgid "Vertical:"
 msgstr "Вяршыні:"
@@ -58817,7 +58817,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:210
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:256
 #, fuzzy, kde-format
 msgid "°"
 msgstr "°"
@@ -61630,7 +61630,7 @@ msgid "Translation directory"
 msgstr "Прастакутнае вылучэнне"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:304
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, fuzzy, kde-format
 msgid "Pixels"
 msgstr "Пікселізацыя"
@@ -66496,33 +66496,49 @@ msgstr ""
 msgid "Comic Panel Editing Tool"
 msgstr "Градыенты"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
+"through shapes"
+msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
+#, kde-format
+msgctxt ""
+"Tooltip for the button in the Knife Tool for the mode to remove gutters/"
+"merge shapes"
+msgid "Merging mode: Removes the gutter between shapes."
+msgstr ""
+
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, fuzzy, kde-format
 #| msgid "Millimeters (mm)"
 msgid "Millimeters"
 msgstr "Міліметры (мм)"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
 #, fuzzy, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
 msgstr "Выкарыстанне кэша:"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
 #, fuzzy, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
 msgstr "Наставіць колеры"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:322
 #, fuzzy, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
@@ -66543,37 +66559,99 @@ msgstr ""
 msgid "Unit of width:"
 msgstr "Шырыня экраннай кропкі"
 
-#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
+#, fuzzy, kde-format
+msgid "Thick gap width"
+msgstr "Выкарыстанне кэша:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
 #, fuzzy, kde-format
 msgid "Thick gap:"
 msgstr "Выкарыстанне кэша:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
+#, fuzzy, kde-format
+msgid "Thin gap width"
+msgstr "Наставіць колеры"
+
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
 #, fuzzy, kde-format
 msgid "Thin gap:"
 msgstr "Наставіць колеры"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
+#, fuzzy, kde-format
+msgid "Special gap width"
+msgstr "Пр&азрыстасць:"
+
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
 #, fuzzy, kde-format
 msgid "Special gap:"
 msgstr "Пр&азрыстасць:"
 
+#. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
+#, kde-format
+msgid "Choose the width automatically, based on the angle"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
 #, fuzzy, kde-format
 msgid "Automatic"
 msgstr "Аўтапэнзаль"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, horizontalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
+#, fuzzy, kde-format
+msgid "Horizontal gaps type:"
+msgstr "Гарызонт 1"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
+#, fuzzy, kde-format
+msgid "Vertical gaps type:"
+msgstr "Вяршыні:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
+#. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
+#, fuzzy, kde-format
+msgid "Diagonal gaps type:"
+msgstr "Па дыяганалі"
+
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
 #, fuzzy, kde-format
 msgid "Diagonal:"
 msgstr "Па дыяганалі"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#. i18n: ectx: property (toolTip), widget (QLabel, angleLabel)
+#. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
+#, fuzzy, kde-format
+msgid "Diagonal type angle threshold:"
+msgstr "Парог згладжвання:"
+
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""
@@ -92952,10 +93030,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create HDR Layer"
 #~ msgstr "Стварыць новы пласт"
-
-#, fuzzy
-#~ msgid "Local contrast threshold:"
-#~ msgstr "Парог згладжвання:"
 
 #, fuzzy
 #~ msgid "Prescale:"

@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
-"PO-Revision-Date: 2026-03-17 12:01+0100\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"PO-Revision-Date: 2026-03-18 17:09+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -47064,8 +47064,7 @@ msgid "Full width"
 msgstr "Volledige breedte"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Proportioneel"
@@ -47174,8 +47173,7 @@ msgid "Spacing:"
 msgstr "Spatiëring:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "Proportioneel"
@@ -68442,6 +68440,8 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"Snijmodus: Snijdt door vormen om tussenruimten met een specifieke breedte te "
+"creëren."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
 #, kde-format
@@ -68449,7 +68449,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "Mengmodus: verwijdert de tussenruimte tussen vormen."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
@@ -68504,10 +68504,9 @@ msgstr "Eenheid van breedte:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Dik gat:"
+msgstr "Breedte van dikke tussenruimte:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -68519,10 +68518,9 @@ msgstr "Dik gat:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "Dun gat:"
+msgstr "Breedte van dunne tussenruimte:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -68534,10 +68532,9 @@ msgstr "Dun gat:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "Speciaal gat:"
+msgstr "Breedte van speciale tussenruimte:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -68549,7 +68546,7 @@ msgstr "Speciaal gat:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "Kies de breedte automatisch, gebaseerd op de hoek"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -68561,28 +68558,25 @@ msgstr "Automatisch"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Horizontale golf"
+msgstr "Horizontale type tussenruimte"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Verticale stijl:"
+msgstr "Verticale type tussenruimte:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Diagonaal:"
+msgstr "Diagonale type tussenruimte:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -68594,12 +68588,11 @@ msgstr "Diagonaal:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Local contrast threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Lokale contrastdrempel:"
+msgstr "Diagonaal type drempel van hoek:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "Meshulpmiddel: een goot verwijderen"

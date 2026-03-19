@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -70738,7 +70738,7 @@ msgstr "Reljef dijagonalno"
 msgid "Diagonal type angle threshold:"
 msgstr "Režim prikaza"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

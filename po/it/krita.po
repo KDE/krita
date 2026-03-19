@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2026-03-07 16:37+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -68676,7 +68676,7 @@ msgstr "Diagonale:"
 msgid "Diagonal type angle threshold:"
 msgstr "Soglia locale di contrasto:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "Strumento Coltello: rimuovi spazio tra colonne"

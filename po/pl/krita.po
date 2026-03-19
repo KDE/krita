@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2025-11-14 09:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -69091,7 +69091,7 @@ msgstr "Wytłoczenie skośne"
 msgid "Diagonal type angle threshold:"
 msgstr "Lokalny próg kontrastu:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

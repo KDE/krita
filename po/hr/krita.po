@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -66849,7 +66849,7 @@ msgstr "Dijagonalno"
 msgid "Diagonal type angle threshold:"
 msgstr "Prag"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

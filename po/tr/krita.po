@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
-"PO-Revision-Date: 2026-03-17 13:57+0300\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"PO-Revision-Date: 2026-03-18 15:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20249,7 +20249,7 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for vertical "
 "layout."
 msgstr ""
-"Japonca yazıtiplerindeki standart Kana'yı dikey yerleşim için uygun "
+"Japonca yazıtiplerindeki standart Kana’yı dikey yerleşim için uygun "
 "olanlarla değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:459
@@ -28140,7 +28140,7 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
-"Renk yönetimi yapılandırmasında ayarlanmış sunum amacını, siyah nokta "
+"Renk yönetimi yapılandırmasında ayarlanmış sunma amacını, siyah nokta "
 "telafisini ve uyumunu kullanın."
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:97
@@ -28699,14 +28699,14 @@ msgstr "&Profiller:"
 #: libs/ui/forms/wdgapplyprofile.ui:88
 #, kde-format
 msgid "Rendering intent determines the bias in the color conversion."
-msgstr "Sunum amacı, renk dönüşümünde sapmayı belirler."
+msgstr "Sunma amacı, renk dönüşümünde sapmayı belirler."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, grpRenderIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:91 libs/ui/forms/wdgproofingoptions.ui:23
 #, kde-format
 msgid "Rendering Intent"
-msgstr "Sunum Amacı"
+msgstr "Sunma Amacı"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:97
@@ -28873,7 +28873,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:114
 #, kde-format
 msgid "Use Blackpoint Compensation"
-msgstr "Siyah nokta karşılaması kullan"
+msgstr "Siyah nokta telafisi kullan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:124
@@ -28916,7 +28916,7 @@ msgstr "Ayarlanmış ekranınız için icm profili"
 #: libs/ui/forms/wdgcolorsettings.ui:191
 #, kde-format
 msgid "&Rendering intent:"
-msgstr "&Sunum amacı:"
+msgstr "&Sunma amacı:"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:213
@@ -29049,7 +29049,7 @@ msgstr "Renk Uzayı Dönüştürme"
 #: libs/ui/forms/wdgconvertcolorspace.ui:40
 #, kde-format
 msgid "&Rendering Intent"
-msgstr "&Sunum Amacı"
+msgstr "&Sunma Amacı"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgconvertcolorspace.ui:46
@@ -29144,7 +29144,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid "Use Blackpoint &Compensation"
-msgstr "Siyah nokta &karşılaması kullan"
+msgstr "Siyah nokta &telafisi kullan"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgconvertcolorspace.ui:140
@@ -32236,7 +32236,7 @@ msgid ""
 "between the darkest values. With blackpoint compensation, black is black.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Siyah Nokta telafisi, kaynak aygıtın en koyu rengini "
+"<html><head/><body><p>Siyah nokta telafisi, kaynak aygıtın en koyu rengini "
 "hedef aygıtın en koyu rengiyle eşleştirir. Siyah Nokta Telafisi olmayan "
 "bağıl renkölçüm, en karanlık değerler arasındaki farkı gösterecektir. Siyah "
 "nokta telafisi ile siyah siyahtır.</p></body></html>"
@@ -32259,7 +32259,7 @@ msgstr "Görüntü kipi:"
 #: libs/ui/forms/wdgproofingoptions.ui:79
 #, kde-format
 msgid "Rendering Intent:"
-msgstr "Sunum amacı:"
+msgstr "Sunma amacı:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:96
@@ -32280,7 +32280,7 @@ msgstr ""
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr "Mutlak niyet kromatik uyarlaması"
+msgstr "Mutlak amaç kromatik uyarlaması"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -40312,7 +40312,7 @@ msgstr "HSI"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:94
 #, kde-format
 msgid "HSY'"
-msgstr "HSY'"
+msgstr "HSY’"
 
 #: libs/widgets/KisPaletteChooser.cpp:30
 #, kde-format
@@ -42359,7 +42359,7 @@ msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
 "values are set to 'rec 709'."
 msgstr ""
-"Luma (Y'), ayarlanabilir katsayıları ile ağırlıklandırılır. Öntanımlı "
+"Luma (Y’), ayarlanabilir katsayıları ile ağırlıklandırılır. Öntanımlı "
 "değerler “rec 709” olarak ayarlanmıştır."
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:36
@@ -42421,21 +42421,21 @@ msgstr "Luma Katsayıları"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:238
 #, kde-format
 msgid "Red':"
-msgstr "Kırmızı':"
+msgstr "Kırmızı’:"
 
 #. i18n: ectx: property (text), widget (QLabel, greenlabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:148
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:145
 #, kde-format
 msgid "Green':"
-msgstr "Yeşil':"
+msgstr "Yeşil’:"
 
 #. i18n: ectx: property (text), widget (QLabel, bluelabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:162
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:158
 #, kde-format
 msgid "Blue':"
-msgstr "Mavi':"
+msgstr "Mavi’:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spLumaGamma)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, SP_Gamma)
@@ -46809,8 +46809,7 @@ msgid "Full width"
 msgstr "Tam genişlik"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Orantılı"
@@ -46920,8 +46919,7 @@ msgid "Spacing:"
 msgstr "Boşluk:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "Orantılı"
@@ -68061,6 +68059,7 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"Kesme kipi: Belirtilen genişlikte oluklar oluşturmak için şekilleri keser."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
 #, kde-format
@@ -68068,7 +68067,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "Birleştirme kipi: Şekiller arasındaki olukları kaldırır."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
@@ -68123,10 +68122,9 @@ msgstr "Genişlik birimi:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Kalın boşluk:"
+msgstr "Kalın boşluk genişliği"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -68138,10 +68136,9 @@ msgstr "Kalın boşluk:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "İnce boşluk:"
+msgstr "İnce boşluk genişliği"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -68153,10 +68150,9 @@ msgstr "İnce boşluk:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "Özel boşluk:"
+msgstr "Özel boşluk genişliği"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -68168,7 +68164,7 @@ msgstr "Özel boşluk:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "Açıya göre, boşluğu kendiliğinden seç"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -68180,28 +68176,25 @@ msgstr "Kendiliğinden"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Yatay Dalga"
+msgstr "Yatay boşluk türü:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Dikey biçem:"
+msgstr "Dikey boşluk türü:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Köşegenel:"
+msgstr "Köşegenel boşluk türü:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -68213,13 +68206,11 @@ msgstr "Köşegenel:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Instant preview threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Anında önizleme eşiği:"
+msgstr "Köşegenel tür açısı eşiği:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "Bıçak Aracı: Bir Oluğu Kaldır"

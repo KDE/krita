@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
-"PO-Revision-Date: 2026-03-14 16:42+0200\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"PO-Revision-Date: 2026-03-18 18:15+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -9305,10 +9305,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:797 krita/krita.action:799 krita/krita.action:800
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Selection Mode: Add"
-msgstr "בחירה"
+msgstr "מצב בחירה: הוספה"
 
 #. i18n: context: text @ Action (selection_tool_mode_subtract), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_subtract), Actions (Painting), ActionCollection (Krita)
@@ -9317,10 +9317,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (selection_tool_mode_subtract), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (selection_tool_mode_subtract), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:807 krita/krita.action:809 krita/krita.action:810
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Selection Mode: Subtract"
-msgstr "בחירה"
+msgstr "מצב בחירה: חיסור"
 
 #. i18n: context: text @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
@@ -9329,10 +9329,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:817 krita/krita.action:819 krita/krita.action:820
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Selection Mode: Intersect"
-msgstr "בחירה"
+msgstr "מצב בחירה: הצטלבות"
 
 #. i18n: context: text @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
@@ -9341,10 +9341,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:827 krita/krita.action:829 krita/krita.action:830
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Selection Mode: Replace"
-msgstr "בחירה"
+msgstr "מצב בחירה: החלפה"
 
 #. i18n: context: text @ Action (set_weighted_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_weighted_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9353,10 +9353,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (set_weighted_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_weighted_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:837 krita/krita.action:839 krita/krita.action:840
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Weighted"
-msgstr "עובי קו:"
+msgstr ""
 
 #. i18n: context: text @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9365,10 +9365,10 @@ msgstr "עובי קו:"
 #. i18n: context: toolTip @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Disabled"
-msgstr "הגדרות"
+msgstr "החלקת מברשת: כבויה"
 
 #. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9377,10 +9377,10 @@ msgstr "הגדרות"
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:857 krita/krita.action:859 krita/krita.action:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "הגדרות"
+msgstr "החלקת מברשת: פיקסל"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9389,10 +9389,10 @@ msgstr "הגדרות"
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:867 krita/krita.action:869 krita/krita.action:870
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "כחול"
+msgstr "החלקת מברשת: מייצב"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9401,10 +9401,10 @@ msgstr "כחול"
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:877 krita/krita.action:879 krita/krita.action:880
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Decrease Brush Size"
-msgstr "מברשות"
+msgstr "הקטנת גודל המברשת"
 
 #. i18n: context: text @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9413,10 +9413,10 @@ msgstr "מברשות"
 #. i18n: context: toolTip @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:889 krita/krita.action:891 krita/krita.action:892
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Basic"
-msgstr "הגדרות"
+msgstr "החלקת מברשת: בסיסית"
 
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9425,10 +9425,10 @@ msgstr "הגדרות"
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:899 krita/krita.action:901 krita/krita.action:902
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Increase Brush Size"
-msgstr "&מברשת"
+msgstr "הגדלת גודל המברשת"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9437,10 +9437,10 @@ msgstr "&מברשת"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:911 krita/krita.action:913 krita/krita.action:914
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "ה&סר שכבה"
+msgstr "סיבוב קצה המברשת עם כיוון השעון"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9461,10 +9461,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:935 krita/krita.action:937 krita/krita.action:938
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "ה&סר שכבה"
+msgstr "סיבוב קצה המברשת נגד כיוון השעון"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9473,10 +9473,10 @@ msgstr "ה&סר שכבה"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:947 krita/krita.action:949 krita/krita.action:950
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "ה&סר שכבה"
+msgstr "סיבוב קצה המברשת נגד כיוון השעון (מדויק)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -9502,10 +9502,10 @@ msgstr "אליפסה"
 #. i18n: context: toolTip @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:969 krita/krita.action:971 krita/krita.action:972
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Undo Polygon Selection Points"
-msgstr "בחירה מצ&ולעת"
+msgstr "הסגת נקודות בחירה מצולעות"
 
 #. i18n: context: text @ Action (fill_selection_foreground_color_opacity), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (fill_selection_foreground_color_opacity), Actions (EditFill), ActionCollection (Menu)
@@ -9522,10 +9522,10 @@ msgstr "בחירה מצ&ולעת"
 #: krita/krita.action:979 krita/krita.action:981 krita/krita.action:982
 #: krita/kritamenu.action:498 krita/kritamenu.action:500
 #: krita/kritamenu.action:501
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fill with Foreground Color (Opacity)"
-msgstr "מלא עם צבע הקידמה"
+msgstr "מילוי בצבע חזית (אטימות)"
 
 #. i18n: context: text @ Action (fill_selection_background_color_opacity), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (fill_selection_background_color_opacity), Actions (EditFill), ActionCollection (Menu)
@@ -9542,10 +9542,10 @@ msgstr "מלא עם צבע הקידמה"
 #: krita/krita.action:991 krita/krita.action:993 krita/krita.action:994
 #: krita/kritamenu.action:510 krita/kritamenu.action:512
 #: krita/kritamenu.action:513
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fill with Background Color (Opacity)"
-msgstr "מלא עם צבע הקידמה"
+msgstr "מילוי בצבע רקע (אטימות)"
 
 #. i18n: context: text @ Action (fill_selection_pattern_opacity), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (fill_selection_pattern_opacity), Actions (EditFill), ActionCollection (Menu)
@@ -9562,34 +9562,34 @@ msgstr "מלא עם צבע הקידמה"
 #: krita/krita.action:1003 krita/krita.action:1005 krita/krita.action:1006
 #: krita/kritamenu.action:522 krita/kritamenu.action:524
 #: krita/kritamenu.action:525
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fill with Pattern (Opacity)"
-msgstr "מלא בתבנית"
+msgstr "מילוי בתבנית (אטימות)"
 
 #. i18n: context: text @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1015
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert &to Shape"
-msgstr "העבר שכבה נוכחית אחורה"
+msgstr "המרה ל&צורה"
 
 #. i18n: context: toolTip @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1017 krita/krita.action:1018
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert to Shape"
-msgstr "העבר שכבה נוכחית אחורה"
+msgstr "המרה לצורה"
 
 #. i18n: context: text @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1027
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Show Global Selection Mask"
-msgstr "בחירה"
+msgstr "הצגת מסכת בחירה מ&קיפה"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1029
@@ -9602,10 +9602,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1030
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Global Selection Mask"
-msgstr "בחירה"
+msgstr "הצגת מסכת בחירה מקיפה"
 
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
@@ -9640,10 +9640,10 @@ msgstr "בחירה"
 #: plugins/filters/palettize/palettize.action:4
 #: plugins/filters/propagatecolors/propagatecolors.action:4
 #: plugins/filters/threshold/threshold.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Filter as an effect"
 msgid "Filters"
-msgstr "&לבן"
+msgstr "מסננים"
 
 #. i18n: context: text @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1042
@@ -9742,10 +9742,10 @@ msgstr "חדות:"
 #. i18n: context: toolTip @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1104 krita/krita.action:1105
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Sharpen"
-msgstr "חדות:"
+msgstr "חידוד"
 
 #. i18n: context: text @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1114
@@ -9759,10 +9759,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1116 krita/krita.action:1117
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Burn"
-msgstr "כחול"
+msgstr "צריבה"
 
 #. i18n: context: text @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1126
@@ -9834,20 +9834,20 @@ msgstr "טוען..."
 
 #. i18n: context: text @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1174
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Levels..."
-msgstr "רמה"
+msgstr "&רמות…"
 
 #. i18n: context: toolTip @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1176 krita/krita.action:1177
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Levels"
-msgstr "רמה"
+msgstr "רמות"
 
 #. i18n: context: text @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1186
@@ -9868,54 +9868,54 @@ msgstr "מקושר"
 
 #. i18n: context: text @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1198
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Wave..."
-msgstr "שם"
+msgstr "&גל…"
 
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1200 krita/krita.action:1201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Wave"
-msgstr "מצב:"
+msgstr "גל"
 
 #. i18n: context: text @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1210
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
-msgstr "כחול"
+msgstr "טשטוש &תנועה…"
 
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1212 krita/krita.action:1213
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Motion Blur"
-msgstr "כחול"
+msgstr "טשטוש תנועה"
 
 #. i18n: context: text @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1222
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Invert"
-msgstr "הזחה"
+msgstr "הי&פוך"
 
 #. i18n: context: toolTip @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1224 krita/krita.action:1225
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Invert"
-msgstr "הזחה"
+msgstr "היפוך"
 
 #. i18n: context: text @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1234
@@ -9987,10 +9987,10 @@ msgstr "הזז בחירה"
 
 #. i18n: context: text @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1282
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Blur..."
-msgstr "כחול"
+msgstr "&טשטוש…"
 
 #. i18n: context: text @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
@@ -10004,27 +10004,27 @@ msgstr "כחול"
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
 #: krita/kritamenu.action:1659 krita/kritamenu.action:1660
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Blur"
-msgstr "כחול"
+msgstr "טשטוש"
 
 #. i18n: context: text @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1294
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Raindrops..."
-msgstr "סובב &90"
+msgstr "&טיפות גשם…"
 
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1296 krita/krita.action:1297
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Raindrops"
-msgstr "סובב &90"
+msgstr "טיפות גשם"
 
 #. i18n: context: text @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1306
@@ -10045,37 +10045,37 @@ msgstr "הזז בחירה"
 
 #. i18n: context: text @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1318
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Random Noise..."
-msgstr "סובב &90"
+msgstr "רעש &אקראי…"
 
 #. i18n: context: toolTip @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1320 krita/krita.action:1321
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Random Noise"
-msgstr "סובב &90"
+msgstr "רעש אקראי"
 
 #. i18n: context: text @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1330
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Colo&r Balance..."
-msgstr "מחליף צבעים"
+msgstr "אי&זון צבע…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1332 krita/krita.action:1333
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Color Balance"
-msgstr "מחליף צבעים"
+msgstr "איזון צבע"
 
 #. i18n: context: text @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1342
@@ -10113,20 +10113,20 @@ msgstr "ניווט"
 
 #. i18n: context: text @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1366
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Color &Transfer..."
-msgstr "מחליף צבעים"
+msgstr "ה&עברת צבעים…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1368 krita/krita.action:1369
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Color Transfer"
-msgstr "מחליף צבעים"
+msgstr "העברת צבעים"
 
 #. i18n: context: text @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1378
@@ -10147,20 +10147,20 @@ msgstr "גל משולש"
 
 #. i18n: context: text @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1390
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Lens Blur..."
-msgstr "כחול"
+msgstr "טשטוש &עדשה…"
 
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1392 krita/krita.action:1393
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Lens Blur"
-msgstr "&שכבה"
+msgstr "טשטוש עדשה"
 
 #. i18n: context: text @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1402
@@ -10242,25 +10242,24 @@ msgstr "זוויות:"
 #. i18n: context: toolTip @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1452 krita/krita.action:1453
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Auto Contrast"
-msgstr "זוויות:"
+msgstr "ניגודיות אוטומטית"
 
 #. i18n: context: text @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1462
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Round Corners..."
-msgstr "מחליף צבעים"
+msgstr "עיגול &פינות…"
 
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1464 krita/krita.action:1465
-#, fuzzy, kde-format
-#| msgid "Round Corners"
+#, kde-format
 msgctxt "action"
 msgid "Round Corners"
 msgstr "עיגול פינות"
@@ -10415,10 +10414,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1573 krita/krita.action:1575 krita/krita.action:1576
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Next Blending Mode"
-msgstr "בחירה"
+msgstr "מצב הערבול הבא"
 
 #. i18n: context: text @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10427,10 +10426,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1583 krita/krita.action:1585 krita/krita.action:1586
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Previous Blending Mode"
-msgstr "בחירה"
+msgstr "מצב הערבול הקודם"
 
 #. i18n: context: text @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10439,10 +10438,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1593 krita/krita.action:1595 krita/krita.action:1596
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Normal Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול רגיל"
 
 #. i18n: context: text @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10451,10 +10450,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1605 krita/krita.action:1607 krita/krita.action:1608
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Dissolve Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול התמוססות"
 
 #. i18n: context: text @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10463,10 +10462,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1617 krita/krita.action:1619 krita/krita.action:1620
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Behind Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול מאחורה"
 
 #. i18n: context: text @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10475,10 +10474,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1629 krita/krita.action:1631 krita/krita.action:1632
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Clear Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול ברור"
 
 #. i18n: context: text @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10487,10 +10486,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1641 krita/krita.action:1643 krita/krita.action:1644
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Darken Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול הכהיה"
 
 #. i18n: context: text @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10499,10 +10498,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1653 krita/krita.action:1655 krita/krita.action:1656
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Multiply Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול הכפלה"
 
 #. i18n: context: text @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10511,10 +10510,10 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1665 krita/krita.action:1667 krita/krita.action:1668
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Color Burn Blending Mode"
-msgstr "בחירה"
+msgstr "בחירת מצב ערבול הבהרת צבע"
 
 #. i18n: context: text @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10824,34 +10823,34 @@ msgstr "החלפת הזמן לתמונית המפתח הבאה"
 #. i18n: context: text @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1956 krita/krita.action:1959
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Previous Matching Keyframe"
-msgstr "&לבן"
+msgstr "תמונית המפתח התואמת הקודמת"
 
 #. i18n: context: toolTip @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1958
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Change time to previous keyframe of the same color"
-msgstr "&צבע רקע"
+msgstr "החלפת הזמן לתמונית המפתח הקודמת באותו הצבע"
 
 #. i18n: context: text @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1968 krita/krita.action:1971
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Next Matching Keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "תמונית המפתח התואמת הבאה"
 
 #. i18n: context: toolTip @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1970
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Change time to next keyframe of the same color"
-msgstr "&צבע רקע"
+msgstr "החלפת הזמן לתמונית המפתח הבאה באותו הצבע"
 
 #. i18n: context: text @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
@@ -11010,10 +11009,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2119
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Keyframe Left"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת תמונית מפתח משמאל"
 
 #. i18n: context: toolTip @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2121
@@ -11026,10 +11025,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2131
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Keyframe Right"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת תמונית מפתח מימין"
 
 #. i18n: context: toolTip @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2133
@@ -11042,10 +11041,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2143
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Multiple Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת כמה תמוניות מפתח"
 
 #. i18n: context: toolTip @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2145
@@ -11056,10 +11055,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2155
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Frame and Pull"
-msgstr "הסר שכבה"
+msgstr "הסרת תמונית ומשיכה"
 
 #. i18n: context: toolTip @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2157
@@ -11070,10 +11069,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2167
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "הסרת תמונית מפתח"
 
 #. i18n: context: toolTip @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2169
@@ -11084,10 +11083,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Column Left"
-msgstr "הוסף טור"
+msgstr "הוספת עמודה משמאל"
 
 #. i18n: context: toolTip @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2181
@@ -11100,10 +11099,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2191
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Column Right"
-msgstr "הוסף טור"
+msgstr "הוספת עמודה מימין"
 
 #. i18n: context: toolTip @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2193
@@ -11116,10 +11115,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2203
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Multiple Columns"
-msgstr "הוסף טור"
+msgstr "הוספת כמה עמודות"
 
 #. i18n: context: toolTip @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2205
@@ -11130,10 +11129,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (remove_columns_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2215
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Column and Pull"
-msgstr "הסר בחירה"
+msgstr "הסרת עמודה ומשיכה"
 
 #. i18n: context: toolTip @ Action (remove_columns_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2217
@@ -11144,10 +11143,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2227
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Column"
-msgstr "הסר בחירה"
+msgstr "הסרת עמודה"
 
 #. i18n: context: toolTip @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2229
@@ -11340,31 +11339,31 @@ msgstr ""
 
 #. i18n: context: text @ Action (copy_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2395
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "העתקת תמוניות מפתח"
 
 #. i18n: context: toolTip @ Action (copy_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2397
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy frames to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "העתקת תמוניות ללוח הגזירים"
 
 #. i18n: context: text @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2407
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Clone Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "שכפול תמוניות מפתח"
 
 #. i18n: context: toolTip @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2409
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Clone frames to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "שכפול תמוניות ללוח הגזירים"
 
 #. i18n: context: text @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2419
@@ -11382,87 +11381,87 @@ msgstr ""
 
 #. i18n: context: text @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2431
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Cut Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "גזירת תמוניות מפתח"
 
 #. i18n: context: toolTip @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2433
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Cut frames to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "גזירת תמוניות ללוח הגזירים"
 
 #. i18n: context: text @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2443
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "הדבקת תמוניות מפתח"
 
 #. i18n: context: toolTip @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2445
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste frames from clipboard"
-msgstr "זוויות:"
+msgstr "הדבקת תמוניות מלוח הגזירים"
 
 #. i18n: context: text @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2455
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy Columns"
-msgstr "כחול"
+msgstr "העתקת עמודות"
 
 #. i18n: context: toolTip @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2457
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy columns to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "העתקת עמודות ללוח הגזירים"
 
 #. i18n: context: text @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2467
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Cut Columns"
-msgstr "כחול"
+msgstr "גזירת עמודות"
 
 #. i18n: context: toolTip @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2469
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Cut columns to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "גזירת עמודות ללוח הגזירים"
 
 #. i18n: context: text @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2479
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste Columns"
-msgstr "כחול"
+msgstr "הדבקת עמודות"
 
 #. i18n: context: toolTip @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2481
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste columns from clipboard"
-msgstr "זוויות:"
+msgstr "הדבקת עמודות מלוח הגזירים"
 
 #. i18n: context: text @ Action (set_start_time), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2491
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Set Start Time"
-msgstr "בחירה"
+msgstr "הגדרת זמן התחלה"
 
 #. i18n: context: text @ Action (set_end_time), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2503
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Set End Time"
-msgstr "בחר גופן"
+msgstr "הגדרת זמן סיום"
 
 #. i18n: context: text @ Action (update_playback_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2515
@@ -11473,7 +11472,7 @@ msgstr "עדכון טווח נגינה"
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Layers"
 msgstr "שכבות"
@@ -11485,10 +11484,10 @@ msgstr "שכבות"
 #. i18n: context: toolTip @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2530 krita/krita.action:2532 krita/krita.action:2533
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate next layer"
-msgstr "הסר שכבה"
+msgstr "הפעלת השכבה הבאה"
 
 #. i18n: context: text @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2542
@@ -11502,10 +11501,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2544 krita/krita.action:2545
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer"
-msgstr "הסר שכבה"
+msgstr "הפעלת השכבה האחאית הבאה"
 
 #. i18n: context: text @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
@@ -11514,10 +11513,10 @@ msgstr "הסר שכבה"
 #. i18n: context: toolTip @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2554 krita/krita.action:2556 krita/krita.action:2557
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate previous layer"
-msgstr "הסר שכבה"
+msgstr "הפעלת השכבה הקודמת"
 
 #. i18n: context: text @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2566
@@ -11531,10 +11530,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2568 krita/krita.action:2569
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer"
-msgstr "הסר שכבה"
+msgstr "הפעלת השכבה האחאית הקודמת"
 
 #. i18n: context: text @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
@@ -11543,74 +11542,73 @@ msgstr "הסר שכבה"
 #. i18n: context: toolTip @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2578 krita/krita.action:2580 krita/krita.action:2581
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate previously selected layer"
-msgstr "הסר שכבה"
+msgstr "הפעלת השכבה האחרונה שנבחרה"
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2590
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &Group Layer"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "הוספת שכבת &קבוצה"
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2592
-#, fuzzy, kde-format
-#| msgid "Add Group"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Group Layer"
-msgstr "הוספת קבוצה"
+msgstr "הוספת שכבת קבוצה חדשה"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2593
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Group Layer"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שכבת קבוצה"
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2602
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &Clone Layer"
-msgstr "שכבה חדשה"
+msgstr "הוספת שכבת ש&כפול"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2604
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add a new Clone Layer"
-msgstr "&לבן"
+msgstr "הוספת שכבת שכפול חדשה"
 
 #. i18n: context: iconText @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2605
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Clone Layer"
-msgstr "שכבה חדשה"
+msgstr "שכבת שכפול"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2614
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr "&מזג את כל השכבות"
+msgstr "הוספת שכבת ו&קטור"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2616
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
-msgstr "&מזג את כל השכבות"
+msgstr "הוספת שכבת וקטור חדשה"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2617
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Vector Layer"
-msgstr "&מזג את כל השכבות"
+msgstr "שכבת וקטור"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2626
@@ -66559,7 +66557,7 @@ msgstr "אלכסוני:"
 msgid "Diagonal type angle threshold:"
 msgstr "שינוי גודל תמונה"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr ""

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
-"PO-Revision-Date: 2026-03-17 10:25+0100\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"PO-Revision-Date: 2026-03-18 11:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -14359,7 +14359,7 @@ msgstr "Mode de vista prèvia instantània"
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr "Provatura suau"
+msgstr "Prova en pantalla"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -14369,7 +14369,7 @@ msgstr "Provatura suau"
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr "Activa la provatura suau"
+msgstr "Activa la prova en pantalla"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:722
@@ -14389,8 +14389,8 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
-"Activa els avisos per als colors fora de la gamma provada, cal que la "
-"provatura suau estiga activada."
+"Activa els avisos per als colors fora de la gamma provada, cal que la prova "
+"en pantalla estiga activada."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -29085,7 +29085,7 @@ msgstr "Importa un perfil"
 #: libs/ui/forms/wdgcolorsettings.ui:268
 #, kde-format
 msgid "Soft Proofing"
-msgstr "Provatura suau"
+msgstr "Prova en pantalla"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorsettings.ui:274
@@ -30982,13 +30982,13 @@ msgstr "Convertix l'espai de color de les capes de la imatge"
 #: libs/ui/forms/wdgimageproperties.ui:272
 #, kde-format
 msgid "Softproofing"
-msgstr "Provatura suau"
+msgstr "Prova en pantalla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProofing)
 #: libs/ui/forms/wdgimageproperties.ui:278
 #, kde-format
 msgid "Store Softproofing configuration in the image"
-msgstr "Emmagatzema la configuració de la provatura suau en la imatge"
+msgstr "Emmagatzema la configuració de la prova en pantalla en la imatge"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgimageproperties.ui:302
@@ -36703,17 +36703,17 @@ msgstr "Recuperat"
 #: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
-msgstr "La provatura suau no funciona amb coma flotant."
+msgstr "La prova en pantalla no funciona amb coma flotant."
 
 #: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
-msgstr "S'ha activat la provatura suau."
+msgstr "S'ha activat la prova en pantalla."
 
 #: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
-msgstr "S'ha desactivat la provatura suau."
+msgstr "S'ha desactivat la prova en pantalla."
 
 #: libs/ui/KisView.cpp:1370
 #, kde-format
@@ -36728,7 +36728,7 @@ msgstr "S'han activat els avisos de gamma."
 #: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
-msgstr "Però la provatura suau encara està desactivada."
+msgstr "Però la prova en pantalla encara està desactivada."
 
 #: libs/ui/KisView.cpp:1381
 #, kde-format
@@ -47082,8 +47082,7 @@ msgid "Full width"
 msgstr "Amplària total"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Proporcional"
@@ -47192,8 +47191,7 @@ msgid "Spacing:"
 msgstr "Espaiat:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "Proporcional"
@@ -51245,7 +51243,7 @@ msgid ""
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
 "Assegureu-vos que les accions corresponen al gest correcte a nivell del "
-"sistema. Estos es poden configurar a Paràmetres del S Pen -> Accions aire."
+"sistema. Estos es poden configurar a Paràmetres de S-Pen -> Accions aire."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -56846,7 +56844,7 @@ msgstr "No s'ha pogut guardar el perfil de la imatge."
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr "No s'ha pogut guardar el perfil de color de la provatura suau."
+msgstr "No s'ha pogut guardar el perfil de color de la prova en pantalla."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:616
 #, kde-format
@@ -67866,7 +67864,7 @@ msgstr "Mode «Configureu el tipus»"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Activa el mode de configuració del tipus."
+msgstr "Activa el mode «Configureu el tipus»."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
@@ -68475,6 +68473,8 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"Mode de retall: retalla a través de formes per a crear corondells d'una "
+"amplària especificada."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
 #, kde-format
@@ -68482,7 +68482,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "Mode de fusió: elimina el corondell entre formes."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
@@ -68537,10 +68537,9 @@ msgstr "Unitats d'amplària:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Separació gruixuda:"
+msgstr "Amplària de separació gruixuda"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -68552,10 +68551,9 @@ msgstr "Separació gruixuda:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "Separació prima:"
+msgstr "Amplària de separació prima"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -68567,10 +68565,9 @@ msgstr "Separació prima:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "Separació especial:"
+msgstr "Amplària de separació especial"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -68582,7 +68579,7 @@ msgstr "Separació especial:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "Tria l'amplària automàticament, en funció de l'angle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -68594,28 +68591,25 @@ msgstr "Automàtic"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Ona horitzontal"
+msgstr "Tipus de separacions horitzontals:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Estil vertical:"
+msgstr "Tipus de separacions verticals:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Diagonal:"
+msgstr "Tipus de separacions diagonals:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -68627,13 +68621,11 @@ msgstr "Diagonal:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Instant preview threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Llindar de vista prèvia instantània:"
+msgstr "Llindar de l'angle de tipus de separació:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "Eina de ganivet: elimina un corondell"
@@ -69866,7 +69858,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgctxt "@label:inlistbox"
-#~ msgid "Proportional"
-#~ msgstr "Proporcional"

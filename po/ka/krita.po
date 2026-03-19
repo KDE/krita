@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-18 00:42+0000\n"
-"PO-Revision-Date: 2026-03-17 07:27+0100\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"PO-Revision-Date: 2026-03-18 03:08+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7816,7 +7816,7 @@ msgstr "დინების ფორმის ტიპის გადარ
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "მიმდინარე დინების მოხაზულობის გადართვა შიდა, ან გამოკლების რეჟიმზე"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7835,6 +7835,8 @@ msgstr "დინების მოხაზულობის ბოლოდ 
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
+"ამ დინების მოხაზულობის უკანასკნელზე დაყენება ტექსტურ ჯაჭვში, როგორც ის "
+"ტექსტის განლაგების მიერ გამოიყენება."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
@@ -7892,6 +7894,8 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
+"ამ დინების მოხაზულობის პირველზე დაყენება ტექსტურ ჯაჭვში, როგორც ის ტექსტის "
+"განლაგების მიერ გამოიყენება."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
@@ -21901,6 +21905,8 @@ msgid ""
 "This image has <b>animated layers</b>. Animation cannot be saved to this "
 "format."
 msgstr ""
+"ეს გამოსახულება <b>ანიმირებულ ფენებს</b> შეიცავს. ანიმაციას ამ ფორმატში ვერ "
+"შეინახავთ."
 
 #: libs/impex/CheckImageSize.h:27 libs/impex/ImageSizeCheck.h:26
 #, kde-format
@@ -21909,6 +21915,8 @@ msgid ""
 "This image is larger than <b>%1 x %2</b>. Images this size cannot be saved "
 "to this format."
 msgstr ""
+"ეს გამოსახულება <b>%1 x %2</b>-ზე დიდია. ამ ზომის გამოსახულებას ამ ფორმატში "
+"ვერ შეინახავთ."
 
 #: libs/impex/ColorModelCheck.h:31
 #, kde-format
@@ -21917,6 +21925,8 @@ msgid ""
 "The color model <b>%1</b> or channel depth <b>%2</b> cannot be saved to this "
 "format. Your image will be converted."
 msgstr ""
+"ფერის მოდელი <b>%1</b> ან არხის სიღრმე <b>%2</b> ამ ფორმატში შენახული ვერ "
+"იქნება. მოხდება თქვენი გამოსახულების გადაყვანა."
 
 #: libs/impex/ColorModelHomogenousCheck.h:112
 #, kde-format
@@ -21925,6 +21935,8 @@ msgid ""
 "Your image contains layers with a color model that is different from the "
 "image. The layers will be converted."
 msgstr ""
+"თქვენი გამოსახულება შეიცავს ფენებს ფერის მოდელით, რომელიც გამოსახულებისგან "
+"განსხვავებულია. მოხდება ფენების გადაყვანა."
 
 #: libs/impex/ColorModelPerLayerCheck.h:116
 #, kde-format
@@ -21940,6 +21952,7 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>compositions</b>. The compositions will not be saved."
 msgstr ""
+"გამოსახულება შეიცავს <b>კომპოზიციებს</b>. კომპოზიციების შენახვა არ მოხდება."
 
 #: libs/impex/ExifCheck.h:28
 #, kde-format
@@ -21947,6 +21960,8 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>Exif</b> metadata. The metadata will not be saved."
 msgstr ""
+"გამოსახულება <b>Exif</b> მეტამონაცემებს შეიცავს. მეტამონაცემების შენახვა არ "
+"მოხდება."
 
 #: libs/impex/ExifCheck.h:75
 #, kde-format
@@ -45959,8 +45974,7 @@ msgid "Full width"
 msgstr "სრული სიგანე"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "პროპორციული"
@@ -46071,8 +46085,7 @@ msgid "Spacing:"
 msgstr "დაშორება:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "პროპორციული"
@@ -66792,10 +66805,9 @@ msgstr "სიგანის ერთეული:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "სქელი დაშორება:"
+msgstr "სქელი დაშორების სიგანე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -66807,10 +66819,9 @@ msgstr "სქელი დაშორება:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "თხელი დაშორება:"
+msgstr "თხელი დაშორების სიგანე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -66822,10 +66833,9 @@ msgstr "თხელი დაშორება:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "სპეციალური დაშორება:"
+msgstr "სპეციალური დაშორების სიგანე"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -66837,7 +66847,7 @@ msgstr "სპეციალური დაშორება:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "სიგანის ავტომატურად, კუთხეზე დამოკიდებულებით არჩევა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -66849,28 +66859,25 @@ msgstr "ავტომატური"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "ჰორიზონტალური ტალღა"
+msgstr "ჰორიზონტალური დაშორების ტიპი:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "ვერტიკალური სტილი:"
+msgstr "ვერტიკალური დაშორების ტიპი:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "დიაგონალური:"
+msgstr "დიაგონალური დაშორების ტიპი:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -66882,13 +66889,11 @@ msgstr "დიაგონალური:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Instant preview threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "მყისი მინიატურის ზღვარი:"
+msgstr "დიაგონალის ტიპის კუთხის ზღვარი:"
 
-#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:279
+#: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
 msgstr "დანის ხელსაწყო: ღარის მოცილება"

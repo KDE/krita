@@ -616,7 +616,7 @@ QMimeData *KisAnimTimelineFramesModel::mimeDataExtended(const QModelIndexList &i
     stream << int(uuidDataRoot.size());
     stream.writeRawData(uuidDataRoot.data(), uuidDataRoot.size());
 
-    stream << indexes.size();
+    stream << int(indexes.size());
     stream << baseRow << baseColumn;
 
     Q_FOREACH (const QModelIndex &index, indexes) {

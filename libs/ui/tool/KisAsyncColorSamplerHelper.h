@@ -15,6 +15,7 @@
 #include "kis_types.h"
 
 class QPainter;
+class QPainterPath;
 class KoViewConverter;
 class KisStrokesFacade;
 class KisCanvas2;
@@ -79,6 +80,9 @@ private:
     void activatePreview();
     void paintRectangle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
     void paintCircle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
+
+    void paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip);
+    void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip);
 
     struct Private;
     QScopedPointer<Private> m_d;

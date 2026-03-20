@@ -521,8 +521,6 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         QPainterPath innerPath;
         innerPath.addPath(innerEllipse);
 
-        m_d->cacheCircleInnerClip = innerPath;
-
         if (m_d->circlePreviewThickness < 0.5 && m_d->circlePreviewExtraCircles) {
             qreal extraMargin = 0.1*m_d->circlePreviewThickness*innerRect.width(); // looks better
             QPointF leftCenter = QPointF(innerRect.left() - extraMargin, innerRect.top() + innerRect.height()/2.0);
@@ -534,24 +532,33 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 
             innerPath = innerPath.intersected(innerEllipse);
         }
+
+        m_d->cacheCircleInnerClip = innerPath;
+
+        // Draw inner circle outline if enabled
+        if (m_d->circlePreviewOutlineEnabled) {
+            cachePainter.setBrush(Qt::transparent);
+            cachePainter.setPen(pen);
+            cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
+        }
     }
 
-    // When sampler leave the canvas, cache won't update so always need to clear the center
-    // TODO: Check why zoom still show after leaving canvas
+    // Always need to clear the center because canvas preview is set to DestinationOver
     cachePainter.setPen(Qt::NoPen);
+    // If the cached block don't run, no brush is set. So set it
+    cachePainter.setBrush(Qt::transparent);
     cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
     cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
 
-    bool didDrawRefImage = false;
+    if (m_d->circleZoomPreviewScale > 1) {
+        QRectF sampleDocRectF = m_d->previewDocRect;
+        sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
+        sampleDocRectF.moveCenter(m_d->previewDocRect.center());
 
-    paintCircleCanvasPreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
+        paintCircleReferenceImagePreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
-    // Draw inner circle outline if enabled
-    if (m_d->circlePreviewOutlineEnabled) {
-        cachePainter.setBrush(Qt::transparent);
-        cachePainter.setPen(pen);
-        cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
+        paintCircleCanvasPreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
     }
 
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);
@@ -559,21 +566,12 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     gc.restore();
 }
 
-void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip) {
-    QRectF sampleDocRectF = m_d->previewDocRect;
-    sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
-    sampleDocRectF.moveCenter(m_d->previewDocRect.center());
-
+void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF);
-
-    dbgUI << "Preview doc rect: " << m_d->previewDocRect;
-    dbgUI << "Sample doc rect: " << sampleDocRectF;
-    dbgUI << "Canvas sample rect: " << canvasSampleRectF;
-    dbgUI << "Sample doc point: " << sampleDocRectF.center();
 
     // Copy a piece of canvas image with size = (previewDocRect size) / (zoom preview scale)
     QImage canvasPreview = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
-    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    gc.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 
     gc.setClipPath(clip);
 
@@ -585,47 +583,43 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     gc.setClipPath(QPainterPath(), Qt::NoClip);
 }
 
-void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip) {
-    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    // Check if doc coord is on canvas or reference image
+// TODO: Fix no opacity, saturation. Broken rotation, reference image order
+void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     KisDocument *doc = m_d->canvas->viewManager()->document();
     if (!doc) return;
     KisReferenceImagesLayerSP refLayer = doc->referenceImagesLayer();
     if (!refLayer) return;
 
-    QRectF sampleDocRectF = m_d->previewDocRect;
-    sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
-    sampleDocRectF.moveCenter(m_d->previewDocRect.center());
+    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    gc.setClipPath(clip);
 
-    for(int i=0;i<refLayer->referenceImages().count();i++) {
-        KisReferenceImage *refImage = refLayer->referenceImages().at(i);
-        QPolygonF outline = refImage->outline().toFillPolygon().translated(refImage->position());
-        if (!outline.containsPoint(sampleDocRectF.center(), Qt::OddEvenFill)) continue;
+    Q_FOREACH(KisReferenceImage *refImage, refLayer->referenceImages()) {
+        // Check if sampleRect intersect with reference image
+        QTransform refTf = refImage->absoluteTransformation();
+        QPolygonF outline = refTf.map(refImage->outlineRect());
+        if (!outline.intersects(QPolygonF(sampleDocRectF))) continue;
 
-        dbgUI << "Sampling on reference image no " << i;
+        dbgUI << "Hit test: " << refImage->hitTest(sampleDocRectF.center());
+        dbgUI << "Outline: " << outline;
+        dbgUI << "Intersected";
 
         QImage image = refImage->getImage();
+        // TODO: Check if assuming this is correct or not
+        image.convertTo(QImage::Format_ARGB32);
+
+        QRectF sampleRefRectF = refImage->documentToShape(sampleDocRectF);
+
         qreal xScale = refImage->boundingRect().width() / image.width();
         qreal yScale = refImage->boundingRect().height() / image.height();
-        QRectF refRectF = refImage->documentToShape(sampleDocRectF);
+        sampleRefRectF.setTopLeft(QPointF(sampleRefRectF.topLeft().x() / xScale, sampleRefRectF.topLeft().y() / yScale));
+        sampleRefRectF.setBottomRight(QPointF(sampleRefRectF.bottomRight().x() / xScale, sampleRefRectF.bottomRight().y() / yScale));
 
-        dbgUI << "Shape coordinate: " << refRectF;
-        dbgUI << "Image scaling: " << refImage->transformation().m11();
-
-        QPointF topLeft = refRectF.topLeft();
-        topLeft.setX(topLeft.x() / xScale);
-        topLeft.setY(topLeft.y() / yScale);
-        QPointF bottomRight = refRectF.bottomRight();
-        bottomRight.setX(bottomRight.x() / xScale);
-        bottomRight.setY(bottomRight.y() / yScale);
-
-        dbgUI << "Shape pixel coordinate: " << QRectF(topLeft, bottomRight);
-
-        QImage refPreview = refImage->getImage().copy(QRectF(topLeft, bottomRight).toRect());
-        refPreview.convertTo(QImage::Format_ARGB32);
+        QImage refPreview = image.copy(sampleRefRectF.toRect());
 
         gc.drawImage(viewRectF, refPreview);
     }
+
+    gc.setClipPath(QPainterPath(), Qt::NoClip);
 }
 
 void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)

@@ -81,8 +81,9 @@ private:
     void paintRectangle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
     void paintCircle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
 
-    void paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip);
-    void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip);
+    void paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip);
+    // Return true if at least one reference image preview was drawn
+    void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip);
 
     struct Private;
     QScopedPointer<Private> m_d;

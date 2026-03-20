@@ -79,7 +79,7 @@ class Mutator(Extension):
         '''
         Adds an "action" to the Krita menus, which connects to the mutate function.
         '''
-        action = window.createAction("mutate", "Mutate", "tools/scripting")
+        action = window.createAction("mutate", i18n("Mutate"), "tools/scripting")
         action.triggered.connect(self.mutate)
     
     

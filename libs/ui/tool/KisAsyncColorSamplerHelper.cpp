@@ -482,6 +482,15 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     if (needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
         m_d->cacheRotation = canvasRotationAngle;
 
+        QColor backgroundColor = colorWithAlpha(qApp->palette().color(QPalette::Base), OPACITY_OPAQUE_U8 / 2 + 1);
+        qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
+        QPen pen = QPen(backgroundColor, penWidth);
+        if (m_d->circlePreviewOutlineEnabled) {
+            cachePainter.setPen(pen);
+        } else {
+            cachePainter.setPen(Qt::NoPen);
+        }
+
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
 
         if (needsDualColor) {
@@ -544,11 +553,17 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         }
     }
 
-    // Always need to clear the center because canvas preview is set to DestinationOver
+    // Clear the center if no zoom
+    // Or fill with an opaque color to hide normal view when zooming at edge of canvas
     cachePainter.setPen(Qt::NoPen);
     // If the cached block don't run, no brush is set. So set it
-    cachePainter.setBrush(Qt::transparent);
-    cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
+    cachePainter.setBrush(qApp->palette().color(QPalette::ColorRole::Base));
+    if (m_d->circleZoomPreviewScale > 1){
+        cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    }
+    else {
+        cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
+    }
     cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
 
     if (m_d->circleZoomPreviewScale > 1) {
@@ -556,9 +571,9 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
         sampleDocRectF.moveCenter(m_d->previewDocRect.center());
 
-        paintCircleReferenceImagePreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
-
         paintCircleCanvasPreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
+
+        paintCircleReferenceImagePreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
     }
 
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);
@@ -571,7 +586,7 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
 
     // Copy a piece of canvas image with size = (previewDocRect size) / (zoom preview scale)
     QImage canvasPreview = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
-    gc.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
     gc.setClipPath(clip);
 

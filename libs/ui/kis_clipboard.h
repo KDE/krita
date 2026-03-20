@@ -75,6 +75,10 @@ public:
     QPair<bool, PasteFormatBehaviour> askUserForSource(const QMimeData *data,
                                                        bool useClipboardFallback = false) const;
 
+    //A function to allow for caching the clipboard data
+    QPair<bool, PasteFormatBehaviour> askUserForSourceWithData(QImage qimage,
+                                                               const QList<QUrl> urls,
+                                                               bool useClipboardFallback = false) const;
     /**
      * Get the contents of the specified mimedata buffer in the form of a paint device.
      */
@@ -95,6 +99,18 @@ public:
                           QPair<bool, PasteFormatBehaviour> source = {
                               false,
                               PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
+
+    //A function to allow for caching the clipboard data
+    KisPaintDeviceSP clipFromBoardContentsWithData(
+        QImage image,
+        const QList<QUrl> urls,
+        const QRect &imageBounds,
+        bool showPopup,
+        int overridePasteBehaviour = -1,
+        bool useClipboardFallback = false,
+        QPair<bool, PasteFormatBehaviour> source = {false, PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
+
+    QImage getImageWithFallback(const QMimeData *cbData, bool useClipboardFallback = false) const;
 
     bool hasClip() const;
 

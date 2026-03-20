@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-19 00:42+0000\n"
-"PO-Revision-Date: 2026-03-18 15:38+0300\n"
+"PO-Revision-Date: 2026-03-19 17:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19148,7 +19148,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Optik Boyut"
+msgstr "Optik Büyüklük"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -22532,7 +22532,7 @@ msgstr "Kişisel bilgiyi kaldır: Çizer, konum…"
 #: libs/metadata/kis_meta_data_filter_p.cc:84
 #, kde-format
 msgid "Tool information"
-msgstr "Araç bilgileri"
+msgstr "Araç bilgisi"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:89
 #, kde-format
@@ -33662,7 +33662,7 @@ msgstr "Tablet Olay Günlükleme Devre Dışı Bırakıldı"
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
 msgid "Tool Invocation"
-msgstr "Araç Başlatma"
+msgstr "Araç Çağır"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:39
 #, kde-format
@@ -33670,7 +33670,7 @@ msgid ""
 "The <i>Tool Invocation</i> action invokes the current tool, for example, "
 "using the brush tool, it will start painting."
 msgstr ""
-"<i>Araç Başlat</i> eylemi, geçerli aracı başlatır; örneğin, fırça aracını "
+"<i>Araç Çağır</i> eylemi, geçerli aracı başlatır; örneğin, fırça aracını "
 "kullanmak boyamayı başlatır."
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
@@ -33737,7 +33737,7 @@ msgstr "Serbest Seçim Aracını Etkinleştir"
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
 msgid "Activate with Other Color"
-msgstr "Diğer Renkle Etkinleştir"
+msgstr "Başka Renkle Etkinleştir"
 
 #: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
@@ -45667,7 +45667,7 @@ msgstr "Görev kümesini sil"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Yazıtipi boyutu (em)"
+msgstr "Yazıtipi puntosu (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
 #, kde-format
@@ -45685,13 +45685,13 @@ msgstr "BÜYÜK harf yüksekliği (cap)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Orantısal genişlik (ch)"
+msgstr "Orantısal karakter ilerlemesi (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr "İdeografik ilerleme (ic)"
+msgstr "İdeografik karakter ilerlemesi (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
@@ -46254,9 +46254,9 @@ msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
-"Karakter aralıklandırmasını açın/kapatın. Karakter aralıklandırması, "
-"yazıtipi tarafından belirlenen biçimde, glif başına boşluk ayarını olanaklı "
-"kılar."
+"Yazıtipi aralıklandırmasını açın veya kapatın. Yazıtipi aralıklandırması, "
+"yazıtipine göre her karakter için ayrı ayrı aralık ayarlamalarına olanak "
+"tanır."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46270,7 +46270,7 @@ msgstr "font-kerning, tracking"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size"
-msgstr "Yazıtipi puntosu"
+msgstr "Punto"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:19
 #, kde-format
@@ -50682,7 +50682,7 @@ msgstr "Silinen özkaynakları göster"
 #: plugins/extensions/resourcemanager/wdgside.ui:118
 #, kde-format
 msgid "Choose Save Location"
-msgstr "Kaydetme Konumu Seç"
+msgstr "Kaydetme Konumunu Seç"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, kde-format

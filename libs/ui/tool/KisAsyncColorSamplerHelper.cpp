@@ -17,6 +17,7 @@
 
 #include "KoCanvasResourcesIds.h"
 #include "KoCanvasResourceProvider.h"
+#include "KoShapeManager.h"
 #include "KoViewConverter.h"
 #include "KoIcon.h"
 #include "kis_cursor.h"
@@ -566,6 +567,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     }
     cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
 
+    // Draw zoom preview
     if (m_d->circleZoomPreviewScale > 1) {
         QRectF sampleDocRectF = m_d->previewDocRect;
         sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
@@ -591,14 +593,15 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     gc.setClipPath(clip);
 
     // QtDoc: The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
-    // Since the piece of canvas is (zoom preview scale) times smaller than cacheRect
+    // Since the piece of canvas is (zoomPreviewScale) times smaller than cacheRect
     // drawImage will scale it up that many times, thus achieving the zoom effect
     gc.drawImage(viewRectF, canvasPreview);
 
     gc.setClipPath(QPainterPath(), Qt::NoClip);
 }
 
-// TODO: Fix no opacity, saturation. Broken rotation, reference image order
+// TODO: Fix incorrect preview position, weird wrapping stuff at edge of rotated ref image
+// Won't show opacity because the color sampled doesn't respect opacity either
 void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     KisDocument *doc = m_d->canvas->viewManager()->document();
     if (!doc) return;
@@ -608,30 +611,38 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     gc.setClipPath(clip);
 
-    Q_FOREACH(KisReferenceImage *refImage, refLayer->referenceImages()) {
+    // TODO: Perhaps use KoShapeManager->shapeAt(QRect)?
+    QVector<KisReferenceImage*> refList = refLayer->referenceImages();
+    // Sort by zIndex to show correct order
+    std::sort(refList.begin(), refList.end(), [](KisReferenceImage *a, KisReferenceImage *b){
+        return a->zIndex() < b->zIndex();
+    });
+    Q_FOREACH(KisReferenceImage *refImage, refList) {
         // Check if sampleRect intersect with reference image
         QTransform refTf = refImage->absoluteTransformation();
         QPolygonF outline = refTf.map(refImage->outlineRect());
         if (!outline.intersects(QPolygonF(sampleDocRectF))) continue;
 
-        dbgUI << "Hit test: " << refImage->hitTest(sampleDocRectF.center());
-        dbgUI << "Outline: " << outline;
-        dbgUI << "Intersected";
-
-        QImage image = refImage->getImage();
-        // TODO: Check if assuming this is correct or not
-        image.convertTo(QImage::Format_ARGB32);
-
         QRectF sampleRefRectF = refImage->documentToShape(sampleDocRectF);
 
-        qreal xScale = refImage->boundingRect().width() / image.width();
-        qreal yScale = refImage->boundingRect().height() / image.height();
-        sampleRefRectF.setTopLeft(QPointF(sampleRefRectF.topLeft().x() / xScale, sampleRefRectF.topLeft().y() / yScale));
-        sampleRefRectF.setBottomRight(QPointF(sampleRefRectF.bottomRight().x() / xScale, sampleRefRectF.bottomRight().y() / yScale));
+        // TODO: Check if rounding like this actually OK. Probably not!
+        // This probably cause the ever so slighly off position
+        QPixmap refPixmap(refImage->size().toSize());
+        QPainter refPainter(&refPixmap);
+        refPainter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+        refImage->paint(refPainter);
 
-        QImage refPreview = image.copy(sampleRefRectF.toRect());
+        // Rotate the painter, draw, rotate back is seemingly easier than
+        // trying to rotate the pixmap and having to deal with sourceRect
+        gc.translate(viewRectF.center());
+        gc.rotate(refImage->rotation());
+        gc.translate(-viewRectF.center());
 
-        gc.drawImage(viewRectF, refPreview);
+        gc.drawPixmap(viewRectF, refPixmap, sampleRefRectF);
+
+        gc.translate(viewRectF.center());
+        gc.rotate(-refImage->rotation());
+        gc.translate(-viewRectF.center());
     }
 
     gc.setClipPath(QPainterPath(), Qt::NoClip);

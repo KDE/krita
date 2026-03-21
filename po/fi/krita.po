@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-03-21 00:42+0000\n"
 "PO-Revision-Date: 2026-01-19 18:02+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17301,32 +17301,32 @@ msgstr "Työtilat"
 # pmap: =:elat=Kritasta:
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:658 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:660
+#: krita/main.cc:677
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr ""
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, fuzzy, kde-format
 #| msgid "© 1999-%1, The Krita Team"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–%1 Krita-työryhmä"
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varoitus"
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -66380,6 +66380,12 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "Pyöritä"
 
+#: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
+#, fuzzy
+#| msgid "Rotate"
+msgid "Mutate"
+msgstr "Pyöritä"
+
 #: plugins/python/mutator/mutator.py:127
 #, fuzzy
 #| msgid "Getting Started"
@@ -66469,12 +66475,6 @@ msgstr ""
 #| msgid "Rotation:"
 msgid "Value Mutation: "
 msgstr "Kierto:"
-
-#: plugins/python/mutator/mutator.py:237
-#, fuzzy
-#| msgid "Rotate"
-msgid "Mutate"
-msgstr "Pyöritä"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""

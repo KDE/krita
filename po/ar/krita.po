@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-03-21 00:42+0000\n"
 "PO-Revision-Date: 2026-03-08 09:38+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -16251,33 +16251,33 @@ msgstr "مساحات العمل"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:658 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "كريتا"
 
-#: krita/main.cc:660
+#: krita/main.cc:677
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Krita is the full-featured digital art studio"
 msgid "Krita is the full-featured digital art studio"
 msgstr "كريتا هو استديو فنون رقميّة بمزايا شاملة"
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 ، مطورو برنامج كريتا"
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "كريتا: تحذير"
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -63466,6 +63466,10 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "طفر"
 
+#: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
+msgid "Mutate"
+msgstr "طفر"
+
 #: plugins/python/mutator/mutator.py:127
 msgid "Settings mutated!"
 msgstr "طفرت الإعدادات!"
@@ -63542,10 +63546,6 @@ msgstr ""
 #: plugins/python/mutator/mutator.py:227
 msgid "Value Mutation: "
 msgstr "طفرة القيمة:"
-
-#: plugins/python/mutator/mutator.py:237
-msgid "Mutate"
-msgstr "طفر"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""

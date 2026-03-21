@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
-"PO-Revision-Date: 2026-03-18 16:06+0100\n"
+"POT-Creation-Date: 2026-03-21 00:42+0000\n"
+"PO-Revision-Date: 2026-03-20 12:19+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16276,31 +16276,31 @@ msgstr "Delovne površine"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:658 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:660
+#: krita/main.cc:677
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr "Krita je digitalni slikarski atelje s polno funkcionalnostjo"
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "Avtorske pravice © 1999–2026 razvijalci Krite"
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: opozorilo"
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -63912,6 +63912,10 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "Mutiraj"
 
+#: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
+msgid "Mutate"
+msgstr "Mutiraj"
+
 #: plugins/python/mutator/mutator.py:127
 msgid "Settings mutated!"
 msgstr "Nastavitve so mutirale!"
@@ -63998,10 +64002,6 @@ msgstr ""
 #: plugins/python/mutator/mutator.py:227
 msgid "Value Mutation: "
 msgstr "Mutacija vrednosti: "
-
-#: plugins/python/mutator/mutator.py:237
-msgid "Mutate"
-msgstr "Mutiraj"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""
@@ -68191,7 +68191,7 @@ msgstr "Enota širine:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
 #, kde-format
 msgid "Thick gap width"
-msgstr "Vrzel pri debeli"
+msgstr "Širina vrzeli pri debeli"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -68205,7 +68205,7 @@ msgstr "Vrzel pri debeli:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
 #, kde-format
 msgid "Thin gap width"
-msgstr "Vrzel pri tanki"
+msgstr "Širina vrzeli pri tanki"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -68219,7 +68219,7 @@ msgstr "Vrzel pri tanki:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
 #, kde-format
 msgid "Special gap width"
-msgstr "Vrzel pri posebni"
+msgstr "Širina vrzeli pri posebni"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135

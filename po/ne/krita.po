@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-03-21 00:42+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -16459,32 +16459,32 @@ msgstr "रङस्थान"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:658 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "क्रिता"
 
-#: krita/main.cc:660
+#: krita/main.cc:677
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr ""
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, fuzzy, kde-format
 #| msgid "(c) 1999-2007 The Krita team.\n"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "(c) 1999-2006 क्रिता समूह ।\n"
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "चेतावनी !"
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -63515,6 +63515,11 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "घुमाउनुहोस्"
 
+#: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
+#, fuzzy
+msgid "Mutate"
+msgstr "घुमाउनुहोस्"
+
 #: plugins/python/mutator/mutator.py:127
 #, fuzzy
 msgid "Settings mutated!"
@@ -63599,11 +63604,6 @@ msgstr ""
 #| msgid "Rotation"
 msgid "Value Mutation: "
 msgstr "परिक्रमण"
-
-#: plugins/python/mutator/mutator.py:237
-#, fuzzy
-msgid "Mutate"
-msgstr "घुमाउनुहोस्"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""

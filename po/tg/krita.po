@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-03-21 00:42+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -16329,31 +16329,31 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:658 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr ""
 
-#: krita/main.cc:660
+#: krita/main.cc:677
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr ""
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr ""
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr ""
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -62934,6 +62934,12 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "Илму маърифат"
 
+#: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
+#, fuzzy
+#| msgid "Education"
+msgid "Mutate"
+msgstr "Илму маърифат"
+
 #: plugins/python/mutator/mutator.py:127
 msgid "Settings mutated!"
 msgstr ""
@@ -63019,12 +63025,6 @@ msgstr ""
 #: plugins/python/mutator/mutator.py:227
 msgid "Value Mutation: "
 msgstr ""
-
-#: plugins/python/mutator/mutator.py:237
-#, fuzzy
-#| msgid "Education"
-msgid "Mutate"
-msgstr "Илму маърифат"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""

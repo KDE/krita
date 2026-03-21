@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-03-21 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -11647,7 +11647,7 @@ msgstr "文件图层"
 #, kde-format
 msgctxt "action"
 msgid "Add &Transparency Mask"
-msgstr "新建透明度蒙版(&T)"
+msgstr "添加透明度蒙版(&T)"
 
 #. i18n: context: toolTip @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2664
@@ -11668,7 +11668,7 @@ msgstr "透明度蒙版"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
-msgstr "新建滤镜蒙版(&F)..."
+msgstr "添加滤镜蒙版(&F)..."
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
@@ -11696,7 +11696,7 @@ msgstr "添加颜色叠加蒙版(&O)"
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "添加新的快速颜色叠加滤镜蒙版"
+msgstr "添加一个快速颜色叠加滤镜蒙版"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2689
@@ -11710,7 +11710,7 @@ msgstr "快速颜色叠加蒙版"
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
-msgstr "新建智能填色蒙版(&C)"
+msgstr "添加智能填色蒙版(&C)"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2700
@@ -11731,7 +11731,7 @@ msgstr "智能填色蒙版"
 #, kde-format
 msgctxt "action"
 msgid "Add &Transform Mask"
-msgstr "新建变形蒙版(&T)"
+msgstr "添加变形蒙版(&T)"
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2712
@@ -11752,7 +11752,7 @@ msgstr "变形蒙版"
 #, kde-format
 msgctxt "action"
 msgid "Add &Local Selection"
-msgstr "新建局部选区蒙版(&L)"
+msgstr "添加局部选区蒙版(&L)"
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2724
@@ -16231,31 +16231,31 @@ msgstr "工作区"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:658 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:660
+#: krita/main.cc:677
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "Krita 是一款功能齐全的数字绘画工作室软件"
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 The Krita Developers"
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -22490,7 +22490,7 @@ msgstr "在透明度色彩空间中发生未定义操作"
 #: libs/pigment/colorspaces/KoLabColorSpace.h:66
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr "L*a*b* (16 位整数/通道，无色彩管理)"
+msgstr "L*a*b* (16 位整数/通道，不进行色彩管理)"
 
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:32
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:27
@@ -22528,13 +22528,13 @@ msgstr "b 分量"
 #: libs/pigment/colorspaces/KoRgbU16ColorSpace.h:55
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr "RGB (16 位整数/通道，无色彩管理)"
+msgstr "RGB (16 位整数/通道，不进行色彩管理)"
 
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.h:55
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr "RGB (8 位整数/通道，无色彩管理)"
+msgstr "RGB (8 位整数/通道，不进行色彩管理)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
@@ -27900,7 +27900,7 @@ msgstr "使用全局显示设置"
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr "模拟纸张的黑白"
+msgstr "模拟纸张白点和黑点"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:94
 #, kde-format
@@ -27922,7 +27922,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
-msgstr "模拟纸张显示效果，使用绝对色度并禁用屏幕白点适应和黑点补偿。"
+msgstr "通过使用绝对色度并禁用白点适应和黑点补偿来模拟纸张的显示效果。"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:98
 #, kde-format
@@ -31945,15 +31945,15 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>启用绝对模式再现意图下的色彩适应功能。这将把图像的颜色"
-"呈现为图像被打印在纸上，并且仅以显示器的白光作为光源来观看时的效果。这是 ICC "
-"v4 工作流程的标准行为。</p></body></html>"
+"<html><head/><body><p>启用绝对色度意图颜色适应功能。这将把图像的颜色呈现为图"
+"像被打印在纸上，并且仅以显示器的白光作为光源来观看时的效果。这是 ICC v4 工作"
+"流程的标准行为。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr "绝对模式渲染意图色彩适应"
+msgstr "绝对色度意图颜色适应"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -32301,13 +32301,13 @@ msgstr "全局压感曲线"
 #: libs/ui/forms/wdgtabletsettings.ui:61
 #, kde-format
 msgid "Low Pressure"
-msgstr "<< 笔压轻"
+msgstr "压力小"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgtabletsettings.ui:87
 #, kde-format
 msgid "High Pressure"
-msgstr "笔压重 >>"
+msgstr "压力大"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgtabletsettings.ui:98
@@ -33939,12 +33939,12 @@ msgstr "添加变形蒙版"
 #: libs/ui/kis_mask_manager.cc:307
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "添加快速颜色叠加"
+msgstr "添加快速颜色叠加蒙版"
 
 #: libs/ui/kis_mask_manager.cc:311
 #, kde-format
 msgid "Color Overlay Mask"
-msgstr "颜色叠加蒙板"
+msgstr "颜色叠加蒙版"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -38132,7 +38132,7 @@ msgid ""
 "TRC is assumed to be the L* TRC."
 msgstr ""
 "<b><a href=\"https://baike.baidu.com/item/Lab颜色模型/3944053\">L*a*b</a></"
-"b> 的 <b>L</b> 代表亮度， <b>a</b> 和 <b>b</b> 表示色彩通道。<br/>L*a*b 是为"
+"b> 的 <b>L</b> 代表亮度， <b>a</b> 和 <b>b</b> 表示颜色通道。<br/>L*a*b 是为"
 "色彩校对而设计的特殊色彩模型。它基于人类对色彩的感知原理将色彩以亮度、红绿平"
 "衡以及黄蓝平衡三个参数进行编码。虽然此模型便于色彩校对，但 Krita 大多数的混合"
 "模式所使用的算法<b>不能</b>在此模型下正常工作。<br/>因为类似的原因 Krita 在 "
@@ -38204,10 +38204,10 @@ msgid ""
 msgstr ""
 "<b>16 位浮点</b>：也被称为半精度浮点，这是电影特效 (VFX) 行业的标准图像格式。"
 "16 位通道是编辑线性阶调响应曲线 (TRC) 广色域图像的理想选择，也可用于高精度颜"
-"色混合作业。浮点通道是场景光参考图像 (HDR) 的必备条件。16 位通道图像占用的内"
-"存和磁盘空间是其他规格相同的 8 位图像的两倍，对处理器资源的需求也高出许多。我"
-"们建议在使用此位深的图像时留意内存的占用情况，如计算机运行过慢则应用回 8 位整"
-"数通道。"
+"色混合作业。浮点通道是场景参考 (HDR) 图像的必备条件。16 位通道图像占用的内存"
+"和磁盘空间是其他规格相同的 8 位图像的两倍，对处理器资源的需求也高出许多。我们"
+"建议在使用此位深的图像时留意内存的占用情况，如计算机运行过慢则应用回 8 位整数"
+"通道。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
@@ -38223,10 +38223,10 @@ msgid ""
 "otherwise use 8 bit if your computer slows down."
 msgstr ""
 "<b>32 位浮点</b>：也被称为单精度浮点。32 位通道是编辑线性阶调响应曲线 (TRC) "
-"广色域图像的理想选择，也可用于高精度颜色混合作业。浮点通道是场景光参考图像 "
-"(HDR) 的必备条件。32 位通道图像占用的内存和磁盘空间是其他规格相同的 8 位图像"
-"的四倍，对处理器资源的需求也高出许多。我们建议在使用此位深的图像时留意内存的"
-"占用情况，如计算机运行过慢则应用回 8 位整数通道。"
+"广色域图像的理想选择，也可用于高精度颜色混合作业。浮点通道是场景参考 (HDR) 图"
+"像的必备条件。32 位通道图像占用的内存和磁盘空间是其他规格相同的 8 位图像的四"
+"倍，对处理器资源的需求也高出许多。我们建议在使用此位深的图像时留意内存的占用"
+"情况，如计算机运行过慢则应用回 8 位整数通道。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
@@ -39337,7 +39337,7 @@ msgstr "配置可用面板"
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr "此面板已在 %1 中打开。关闭 %1 后将在此显示此面板。"
+msgstr "此面板已在%1中打开。关闭%1后将重新显示面板内容。"
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
 #, kde-format
@@ -43434,7 +43434,7 @@ msgstr "图层不透明度"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
 #, kde-format
 msgid "Add new layer or mask"
-msgstr "新增图层或蒙版"
+msgstr "新建图层或添加蒙版"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
@@ -46277,8 +46277,7 @@ msgid "Full width"
 msgstr "全角"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "使用比例数值"
@@ -46390,8 +46389,7 @@ msgid "Spacing:"
 msgstr "间距："
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "使用比例数值"
@@ -50294,13 +50292,13 @@ msgstr "分离为彩色图层而不是灰阶"
 msgid ""
 "Activate only the current channel for the new node, deactivate all other "
 "channels."
-msgstr "分离后图层的活动色彩通道将和当前活动通道一致，关闭其他所有通道。"
+msgstr "分离后图层的活动颜色通道将和当前活动通道一致，关闭其他所有通道。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkActivateCurrentChannel)
 #: plugins/extensions/separate_channels/wdg_separations.ui:140
 #, kde-format
 msgid "Activate the current channel"
-msgstr "分离后图层的活动色彩通道与当前一致"
+msgstr "分离后图层的活动颜色通道与当前一致"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgShearImage)
 #: plugins/extensions/shearimage/dlg_shearimage.cc:20
@@ -51554,7 +51552,7 @@ msgstr "前景色："
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
 msgid "Independent Channels"
-msgstr "独立色彩通道"
+msgstr "独立颜色通道"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
@@ -53036,7 +53034,7 @@ msgctxt ""
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "每 {n} 次水平重复"
+msgstr[0] "每 {n} 次水平循环"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -53048,7 +53046,7 @@ msgctxt ""
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "每 {n} 次垂直重复"
+msgstr[0] "每 {n} 次垂直循环"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -53092,7 +53090,7 @@ msgstr "旋转"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
 #, kde-format
 msgid "Align to Pixel Grid:"
-msgstr "对齐像素网格："
+msgstr "对齐到像素网格："
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -54877,7 +54875,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
-msgstr "色彩通道重采样"
+msgstr "颜色通道重采样"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:442
@@ -54887,7 +54885,7 @@ msgid ""
 "downsampled before compression, and upsampled to original size in the "
 "decoder."
 msgstr ""
-"设置重采样选项。如果启用此选项，图像的色彩通道将在压缩前进行降采样，并在解码"
+"设置重采样选项。如果启用此选项，图像的颜色通道将在压缩前进行降采样，并在解码"
 "器中升采样到原来的大小。"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
@@ -61261,7 +61259,7 @@ msgstr "图像色彩特性文件分配对话框"
 #: plugins/python/channels2layers/channels2layers.py:84
 #: plugins/python/channels2layers/channels2layers.py:85
 msgid "Channels to layers"
-msgstr "色彩通道转换为图层"
+msgstr "颜色通道转换为图层"
 
 #: plugins/python/channels2layers/channels2layers.py:93
 msgid "RGB Colors"
@@ -63039,6 +63037,10 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "随机调整"
 
+#: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
+msgid "Mutate"
+msgstr "随机调整"
+
 #: plugins/python/mutator/mutator.py:127
 msgid "Settings mutated!"
 msgstr "设置已随机变化"
@@ -63112,10 +63114,6 @@ msgstr "控制随机变化对 Krita 全局前景色明度影响的程度。"
 #: plugins/python/mutator/mutator.py:227
 msgid "Value Mutation: "
 msgstr "明度变化："
-
-#: plugins/python/mutator/mutator.py:237
-msgid "Mutate"
-msgstr "随机调整"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""
@@ -67173,7 +67171,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
-msgstr ""
+msgstr "切割模式：将矢量形状切成两半并创建指定宽度的间隙。"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
 #, kde-format
@@ -67181,7 +67179,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "合并模式：移除形状之间的间隙。"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
@@ -67235,10 +67233,9 @@ msgstr "宽度单位："
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "宽间隙："
+msgstr "宽间隙宽度"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -67250,10 +67247,9 @@ msgstr "宽间隙："
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "窄间隙："
+msgstr "窄间隙宽度"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -67265,10 +67261,9 @@ msgstr "窄间隙："
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "特殊间隙："
+msgstr "特殊间隙宽度"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -67280,7 +67275,7 @@ msgstr "特殊间隙："
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "按照切割线的角度自动选择合适的间隙宽度预设。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -67292,28 +67287,25 @@ msgstr "自动"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "水平波浪"
+msgstr "水平间隙类型："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "垂直线样式："
+msgstr "垂直间隙类型："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "斜线："
+msgstr "斜线间隙类型："
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -67325,11 +67317,9 @@ msgstr "斜线："
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Instant preview threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "快速预渲染阈值："
+msgstr "斜线间隙角度阈值："
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
@@ -68540,7 +68530,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgctxt "@label:inlistbox"
-#~ msgid "Proportional"
-#~ msgstr "比例宽度"

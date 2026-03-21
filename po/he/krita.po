@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 02:45+0000\n"
-"PO-Revision-Date: 2026-03-18 18:15+0200\n"
+"POT-Creation-Date: 2026-03-21 02:41+0000\n"
+"PO-Revision-Date: 2026-03-20 08:30+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -13356,31 +13356,31 @@ msgstr "יצירת שכבה חדשה"
 
 #. i18n: context: iconText @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "New"
-msgstr "שם"
+msgstr "חדש"
 
 #. i18n: context: text @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "&פתיחה…"
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open an existing document"
-msgstr "&פתיחת מסמך קיים"
+msgstr "פתיחת מסמך קיים"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open"
-msgstr "&פתח"
+msgstr "פתיחה"
 
 #. i18n: context: text @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:31
@@ -13405,41 +13405,41 @@ msgstr "פ&תיחת מסמך אחרון"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Save"
-msgstr "מצב:"
+msgstr "&שמירה"
 
 #. i18n: context: toolTip @ Action (file_save), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_save), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (file_save), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:45 krita/kritamenu.action:46
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save"
-msgstr "מצב:"
+msgstr "שמירה"
 
 #. i18n: context: text @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr "שם"
+msgstr "שמירה &בשם…"
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save document under a new name"
-msgstr "שמירת מסמך בשם"
+msgstr "שמירת מסמך בשם חדש"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save As"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שמירה בשם"
 
 #. i18n: context: text @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:67
@@ -13450,10 +13450,10 @@ msgstr "הפעלות…"
 
 #. i18n: context: toolTip @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:69
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr "&תמונה"
+msgstr "פתיחת מנהל הפעלות"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
@@ -13464,27 +13464,27 @@ msgstr "הפעלות"
 
 #. i18n: context: text @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "&פתיחת מסמך קיים"
+msgstr "&פתיחת מסמך קיים כמסמך ללא שם…"
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:82 krita/kritamenu.action:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open existing Document as Untitled Document"
-msgstr "&פתיחת מסמך קיים"
+msgstr "פתיחת מסמך קיים כמסמך ללא שם"
 
 #. i18n: context: text @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "E&xport..."
-msgstr "ייצוא השכבה"
+msgstr "יי&צוא…"
 
 #. i18n: context: toolTip @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_export_file), Actions (File), ActionCollection (Menu)
@@ -13494,41 +13494,41 @@ msgstr "ייצוא השכבה"
 #. i18n: context: iconText @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:94 krita/kritamenu.action:95
 #: krita/kritamenu.action:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Export"
-msgstr "ייצוא השכבה"
+msgstr "ייצוא"
 
 #. i18n: context: text @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:104
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Export Advanced..."
-msgstr "בחירה"
+msgstr "ייצוא מתקדם…"
 
 #. i18n: context: toolTip @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Advanced Export"
-msgstr "בחירה"
+msgstr "ייצוא מתקדם"
 
 #. i18n: context: text @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:117
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Import animation frames..."
-msgstr "מיקום"
+msgstr "ייבוא תמוניות הנפשה…"
 
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:119 krita/kritamenu.action:120
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Import animation frames"
-msgstr "מיקום"
+msgstr "ייבוא תמוניות הנפשה"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
@@ -13549,10 +13549,10 @@ msgstr "ייבוא הנפשת וידאו"
 
 #. i18n: context: text @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr "עירוב:"
+msgstr "&תיצוג הנפשה…"
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
@@ -13566,24 +13566,24 @@ msgstr ""
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:144 krita/kritamenu.action:156
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Render Animation"
-msgstr "עירוב:"
+msgstr "תיצוג הנפשה"
 
 #. i18n: context: text @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:153
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Render Animation Again"
-msgstr "עירוב:"
+msgstr "&תיצוג הנפשה שוב"
 
 #. i18n: context: toolTip @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:155
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Render Animation Again"
-msgstr "עירוב:"
+msgstr "תיצוג הנפשה שוב"
 
 #. i18n: context: text @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:165
@@ -13621,37 +13621,37 @@ msgstr "ציור"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Create Template From Image..."
-msgstr "שינוי שם התמונה..."
+msgstr "י&צירת תבנית מתמונה…"
 
 #. i18n: context: toolTip @ Action (create_template), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_template), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (create_template), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:191 krita/kritamenu.action:192
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Create Template From Image"
-msgstr "שינוי שם התמונה..."
+msgstr "יצירת תבנית מתמונה"
 
 #. i18n: context: text @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Create Copy &From Current Image"
-msgstr "שינוי שם התמונה..."
+msgstr "יצירת &עותק מהתמונה הנוכחית"
 
 #. i18n: context: toolTip @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:203 krita/kritamenu.action:204
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Create Copy From Current Image"
-msgstr "שינוי שם התמונה..."
+msgstr "יצירת עותק מהתמונה הנוכחית"
 
 #. i18n: context: text @ Action (file_documentinfo), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:213
@@ -13689,20 +13689,20 @@ msgstr "לסגור הכול"
 
 #. i18n: context: text @ Action (file_close), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:237
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "C&lose"
-msgstr "&צבע"
+msgstr "&סגירה"
 
 #. i18n: context: toolTip @ Action (file_close), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_close), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (file_close), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_close), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:239 krita/kritamenu.action:240
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Close"
-msgstr "&צבע"
+msgstr "סגירה"
 
 #. i18n: context: text @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:249
@@ -13713,10 +13713,10 @@ msgstr "י&ציאה"
 
 #. i18n: context: toolTip @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:251
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Quit application"
-msgstr "שכפל תמונה"
+msgstr "יציאה מהיישום"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
@@ -13727,44 +13727,44 @@ msgstr "יציאה"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Edit"
-msgstr "הוסף תבנית"
+msgstr "עריכה"
 
 #. i18n: context: text @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:265 krita/kritamenu.action:268
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Undo"
-msgstr "בטל: %1"
+msgstr "הסגה"
 
 #. i18n: context: toolTip @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:267
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Undo last action"
-msgstr "שכפל תמונה"
+msgstr "הסגת הפעולה האחרונה"
 
 #. i18n: context: text @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:277 krita/kritamenu.action:280
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Redo"
-msgstr "אדום"
+msgstr "ביצוע מחדש"
 
 #. i18n: context: toolTip @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:279
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Redo last undone action"
-msgstr "יצירת שכבה חדשה"
+msgstr "ביצוע הפעולה האחרונה שהוסגה מחדש"
 
 #. i18n: context: text @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:289
@@ -13775,38 +13775,38 @@ msgstr "ג&זירה"
 
 #. i18n: context: toolTip @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:291
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Cut selection to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "גזירת הבחירה ללוח הגזירים"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Cut"
-msgstr "&מברשת"
+msgstr "גזירה"
 
 #. i18n: context: text @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:301
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Copy"
-msgstr "ירוק"
+msgstr "ה&עתקה"
 
 #. i18n: context: toolTip @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:303
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy selection to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "העתקת הבחירה ללוח הגזירים"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy"
-msgstr "חברה"
+msgstr "העתקה"
 
 #. i18n: context: text @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:313
@@ -13878,41 +13878,41 @@ msgstr "העתקת סגנון שכבה מהמפרק הנוכחי"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Paste"
-msgstr "כלי ה&דבקה"
+msgstr "ה&דבקה"
 
 #. i18n: context: toolTip @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:363
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste clipboard content"
-msgstr "זוויות:"
+msgstr "הדבקת תוכן לוח הגזירים"
 
 #. i18n: context: iconText @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:364
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste"
-msgstr "תאריך"
+msgstr "הדבקה"
 
 #. i18n: context: text @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:373
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste at Cursor"
-msgstr "צייר עם תבנית"
+msgstr "הדבקה במקום של הסמן"
 
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:375 krita/kritamenu.action:376
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste at cursor"
-msgstr "צייר עם תבנית"
+msgstr "הדבקה במקום של הסמן"
 
 #. i18n: context: text @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
@@ -13922,10 +13922,10 @@ msgstr "צייר עם תבנית"
 #. i18n: context: iconText @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:385 krita/kritamenu.action:387
 #: krita/kritamenu.action:388
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste into Active Layer"
-msgstr "&לבן"
+msgstr "הדבקה לשכבה הפעילה"
 
 #. i18n: context: text @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:397
@@ -13952,44 +13952,44 @@ msgstr "הדבקה לתמונה חדשה"
 #. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:409 krita/kritamenu.action:411
 #: krita/kritamenu.action:412
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
-msgstr "יצירת תבנית"
+msgstr "הדבקת סגנון צורה"
 
 #. i18n: context: text @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:421
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "שינוי שם התמונה"
+msgstr "הדבקה כתמונת &סימוכין"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:423 krita/kritamenu.action:424
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "שינוי שם התמונה"
+msgstr "הדבקה כתמונת סימוכין"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:433 krita/kritamenu.action:436
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr "יצירת תבנית"
+msgstr "הדבקת סגנון שכבה"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr "אין אפשרות ליצור את הקובץ לשמירה"
+msgstr "הדבקת סגנון שכבה למפרק הנוכחי"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
@@ -14168,10 +14168,10 @@ msgstr "הבא"
 #. i18n: context: iconText @ Action (windows_previous), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:602 krita/kritamenu.action:604
 #: krita/kritamenu.action:605
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Previous"
-msgstr "&לבן"
+msgstr "הקודם"
 
 #. i18n: context: text @ Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:613
@@ -14290,10 +14290,10 @@ msgstr "גל משולש"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "גל משולש"
+msgstr "גלישה אנכית"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -14399,89 +14399,89 @@ msgstr "בחירה"
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "בחירה"
+msgstr "תקריב של 100%"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom &In"
-msgstr "&תבנית"
+msgstr "הת&קרבות"
 
 #. i18n: context: toolTip @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:776
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr "&תבנית"
+msgstr "התקרבות"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:786
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom &Out"
-msgstr "כל&י התקרבות"
+msgstr "הת&רחקות"
 
 #. i18n: context: toolTip @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:788
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom Out"
-msgstr "כל&י התקרבות"
+msgstr "התרחקות"
 
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "העמוד הבא"
+msgstr "התאמה לתצוגה"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "משטח ציור"
+msgstr "התאמת משטח הציור לתצוגה"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "רוחב:"
+msgstr "התאמה לרוחב התצוגה"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "רוחב:"
+msgstr "התאמת משטח הציור לרוחב תצוגה"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "העמוד הבא"
+msgstr "התאמה לגובה התצוגה"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "העמוד הבא"
+msgstr "התאמת משטח הציור לגובה התצוגה"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14498,37 +14498,37 @@ msgstr "העמוד הבא"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr "שינוי שם התמונה"
+msgstr "סיבוב משטח הציור ימי&נה"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:840 krita/kritamenu.action:841
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr "שינוי שם התמונה"
+msgstr "סיבוב משטח הציור ימינה"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr "שינוי שם התמונה"
+msgstr "סיבוב משטח הציור &שמאלה"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:852 krita/kritamenu.action:853
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr "שינוי שם התמונה"
+msgstr "סיבוב משטח הציור שמאלה"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14538,27 +14538,27 @@ msgstr "שינוי שם התמונה"
 #. i18n: context: iconText @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:862 krita/kritamenu.action:864
 #: krita/kritamenu.action:865
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr "סובב &90"
+msgstr "איפוס סיבוב משטח הציור"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "חזרה:"
+msgstr "איפוס התצוגה"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "איפוס התקריב, הסיבוב וההיפוך למצבי ברירת המחדל שלהם."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -14579,10 +14579,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show &Rulers"
-msgstr "כחול"
+msgstr "הצגת &סרגלים"
 
 #. i18n: context: whatsThis @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:895
@@ -14599,10 +14599,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:896 krita/kritamenu.action:897
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Rulers"
-msgstr "כחול"
+msgstr "הצגת סרגלים"
 
 #. i18n: context: text @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
@@ -14631,72 +14631,72 @@ msgstr ""
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:918 krita/kritamenu.action:921
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Guides"
-msgstr "כחול"
+msgstr "הצגת קווים מנחים"
 
 #. i18n: context: toolTip @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:920
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show or hide guides"
-msgstr "כחול"
+msgstr "הצגת או הסתרת קווים מנחים"
 
 #. i18n: context: text @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:930 krita/kritamenu.action:933
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Lock Guides"
-msgstr "כחול"
+msgstr "נעילת קווים מנחים"
 
 #. i18n: context: toolTip @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:932
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Lock or unlock guides"
-msgstr "כחול"
+msgstr "נעילת או שחרור קווים מנחים"
 
 #. i18n: context: text @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:942 krita/kritamenu.action:945
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Snap to Guides"
-msgstr "אישור שמירה"
+msgstr "הצמדה לקווים המנחים"
 
 #. i18n: context: toolTip @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:944
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Snap cursor to guides position"
-msgstr "אישור שמירה"
+msgstr "הצמדת הסמן למקום של הקווים המנחים"
 
 #. i18n: context: text @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:954
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Status &Bar"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "הצגת סרגל מ&צב"
 
 #. i18n: context: toolTip @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:956
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr "כחול"
+msgstr "הצגה או הסתרה של סרגל המצב"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Status Bar"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "הצגת סרגל מצב"
 
 #. i18n: context: text @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)
@@ -14706,27 +14706,27 @@ msgstr "שינוי קנה מידה של שכבה..."
 #. i18n: context: iconText @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:966 krita/kritamenu.action:968
 #: krita/kritamenu.action:969
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Pixel Grid"
-msgstr "&תמונה"
+msgstr "הצגת רשת פיקסלים"
 
 #. i18n: context: text @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:978
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show &Grid"
-msgstr "כחול"
+msgstr "הצגת &רשת"
 
 #. i18n: context: toolTip @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:980 krita/kritamenu.action:981
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Grid"
-msgstr "כחול"
+msgstr "הצגת רשת"
 
 #. i18n: context: text @ Action (view_snap_to_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_grid), Actions (View), ActionCollection (Menu)
@@ -14736,10 +14736,10 @@ msgstr "כחול"
 #. i18n: context: iconText @ Action (view_snap_to_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:990 krita/kritamenu.action:992
 #: krita/kritamenu.action:993
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Snap To Grid"
-msgstr "כחול"
+msgstr "הצמדה לרשת"
 
 #. i18n: context: text @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
@@ -14749,10 +14749,10 @@ msgstr "כחול"
 #. i18n: context: iconText @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1001 krita/kritamenu.action:1003
 #: krita/kritamenu.action:1004
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Snap Options Popup"
-msgstr "אלפא"
+msgstr "הצגת חלונית אפשרויות הצמדה"
 
 #. i18n: context: text @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
@@ -14762,10 +14762,10 @@ msgstr "אלפא"
 #. i18n: context: iconText @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1013 krita/kritamenu.action:1015
 #: krita/kritamenu.action:1016
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Snap Orthogonal"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "הצמדה במאונך"
 
 #. i18n: context: text @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
@@ -14911,27 +14911,27 @@ msgstr "שינוי שם התמונה"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Image"
-msgstr "&תמונה"
+msgstr "תמונה"
 
 #. i18n: context: text @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1149
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Image Properties"
 msgid "&Properties..."
-msgstr "מאפייני שכבה..."
+msgstr "מ&אפיינים…"
 
 #. i18n: context: toolTip @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1151 krita/kritamenu.action:1152
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Image Properties"
 msgid "Properties"
-msgstr "מאפייני שכבה..."
+msgstr "מאפיינים"
 
 #. i18n: context: text @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1161
@@ -14956,20 +14956,20 @@ msgstr "&צבע רקע"
 
 #. i18n: context: text @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1173
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr "הוס&פת תמונה בתור שכבה..."
+msgstr "המ&רת מרחב צבע של תמונה…"
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1175 krita/kritamenu.action:1176
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert Image Color Space"
-msgstr "הוס&פת תמונה בתור שכבה..."
+msgstr "המרת מרחב צבע של תמונה"
 
 #. i18n: context: text @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1185
@@ -16259,20 +16259,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "&בוחר צבעים"
 
-#: krita/main.cc:662
+#: krita/main.cc:679
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 מפתחי Krita"
 
-#: krita/main.cc:759 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita"
 
-#: krita/main.cc:760
+#: krita/main.cc:777
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

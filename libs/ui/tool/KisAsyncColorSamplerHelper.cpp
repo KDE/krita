@@ -584,6 +584,8 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 }
 
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
+    gc.save();
+
     QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF);
 
     // Copy a piece of canvas image with size = (previewDocRect size) / (zoom preview scale)
@@ -597,16 +599,17 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     // drawImage will scale it up that many times, thus achieving the zoom effect
     gc.drawImage(viewRectF, canvasPreview);
 
-    gc.setClipPath(QPainterPath(), Qt::NoClip);
+    gc.restore();
 }
 
-// TODO: Fix color sampler run away when REALLY zoomed in
 // Won't show opacity because the color sampled doesn't respect opacity either
 void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     KisDocument *doc = m_d->canvas->viewManager()->document();
     if (!doc) return;
     KisReferenceImagesLayerSP refLayer = doc->referenceImagesLayer();
     if (!refLayer) return;
+
+    gc.save();
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     gc.setClipPath(clip);
@@ -644,7 +647,7 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         gc.translate(-viewRectF.center());
     }
 
-    gc.setClipPath(QPainterPath(), Qt::NoClip);
+    gc.restore();
 }
 
 void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)

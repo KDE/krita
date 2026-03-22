@@ -586,10 +586,10 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     gc.save();
 
-    QRectF canvasSampleRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF);
+    QRectF sampleCanvasRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF);
 
     // Copy a piece of canvas image with size = (previewDocRect size) / (zoom preview scale)
-    QImage canvasPreview = m_d->canvas->image()->convertToQImage(canvasSampleRectF.toRect(), nullptr);
+    QImage canvasPreview = m_d->canvas->image()->convertToQImage(sampleCanvasRectF.toRect(), nullptr);
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
     gc.setClipPath(clip);
@@ -636,6 +636,8 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         QRectF sampleRefRectF = QRectF(sampleRefPointF, QSizeF(shapeRectF.width() / xScale, shapeRectF.height() / yScale));
         sampleRefRectF.moveCenter(sampleRefPointF);
 
+        // Rotate the painter, draw, rotate back is seemingly easier than
+        // trying to rotate the image and the shenanighens that follow
         gc.translate(viewRectF.center());
         gc.rotate(refImage->rotation());
         gc.translate(-viewRectF.center());

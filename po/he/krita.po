@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 02:41+0000\n"
-"PO-Revision-Date: 2026-03-20 08:30+0200\n"
+"PO-Revision-Date: 2026-03-21 16:23+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -742,7 +742,7 @@ msgstr "קווי מבוך"
 #, kde-format
 msgctxt "./krita/data/patterns/Rough_Paper.png"
 msgid "Rough Paper"
-msgstr ""
+msgstr "נייר גס"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -767,7 +767,7 @@ msgstr "&תמונה"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr ""
+msgstr "א) מוחק עגול"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -1035,13 +1035,13 @@ msgstr "בלוני מילים"
 #, kde-format
 msgctxt "./krita/data/symbols/pepper_carrot_speech_bubbles.svg"
 msgid "Pepper & Carrot Speech Bubbles"
-msgstr ""
+msgstr "בועיות שיח של פפר וקארוט"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/symbols/pepper_carrot_speech_bubbles_backup.svg"
 msgid "Pepper & Carrot Speech Bubbles"
-msgstr ""
+msgstr "בועיות שיח של פפר וקארוט"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1402,63 +1402,63 @@ msgstr "שינוי קנה מידה של שכבה..."
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_01.gbr"
 msgid "M_01"
-msgstr ""
+msgstr "מ_01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_02.gbr"
 msgid "M_02"
-msgstr ""
+msgstr "מ_02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_03.gbr"
 msgid "M_03"
-msgstr ""
+msgstr "מ_03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_04.gbr"
 msgid "M_04"
-msgstr ""
+msgstr "מ_04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_05.gbr"
 msgid "M_05"
-msgstr ""
+msgstr "מ_05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_06.gbr"
 msgid "M_06"
-msgstr ""
+msgstr "מ_06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_07.gbr"
 msgid "M_07"
-msgstr ""
+msgstr "מ_07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_08.gbr"
 msgid "M_08"
-msgstr ""
+msgstr "מ_08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_09.gbr"
 msgid "M_09"
-msgstr ""
+msgstr "מ_09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1472,35 +1472,35 @@ msgstr "כחול"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Bulb.gbr"
 msgid "M_Bulb"
-msgstr ""
+msgstr "מ_נורה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Cage.gbr"
 msgid "M_Cage"
-msgstr ""
+msgstr "מ_כלוב"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Pipe_1.gbr"
 msgid "M_Pipe_1"
-msgstr ""
+msgstr "מ_צינור_1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Pipe_2.gbr"
 msgid "M_Pipe_2"
-msgstr ""
+msgstr "מ_צינור_2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Pipe_3.gbr"
 msgid "M_Pipe_3"
-msgstr ""
+msgstr "מ_צינור_3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2872,7 +2872,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
 "kws"
 msgid "Big Vector"
-msgstr ""
+msgstr "וקטור גדול"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -3901,7 +3901,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Airbrush_Soft.kpp"
 msgid "b) Airbrush Soft"
-msgstr "ב) מברשת אוויר רכה"
+msgstr "ב) מכחול אוויר רך"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4063,7 +4063,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-7_Brush_Rough.kpp"
 msgid "d) Ink-7 Brush Rough"
-msgstr "ד) דיו-7 מברשת גסה"
+msgstr "ד) דיו-7 מכחול גס"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4427,12 +4427,12 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Color.kpp"
 msgid "l) Adjust Color"
-msgstr "&מברשת"
+msgstr "ל) התאמת צבעים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4454,12 +4454,12 @@ msgstr "רוחב שורה מותאם אישית"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Multiply.kpp"
 msgid "l) Adjust Multiply"
-msgstr "מברשות"
+msgstr "ל) התאמת הכפלה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -6214,11 +6214,11 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/LJF_smoke_c.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/LJF_smoke_c.gih"
 msgid "Smoke Pipebrush"
-msgstr "&מברשת"
+msgstr "מנקה מקטרות עישון"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/LJF_Water_Brush_02.gih:1
@@ -6292,12 +6292,12 @@ msgstr "מימדים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/P_Graphite_Pencil_grain.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "P_Graphite_Pencil_grain.gih"
 msgid "GIMP Brush Pipe"
-msgstr "מברשות"
+msgstr "צינור מכחול GIMP"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/P_Graphite_Pencil_grainb.gih:1
@@ -6766,11 +6766,11 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/brick.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/brick.gih"
 msgid "GIMP Brush Pipe"
-msgstr "מברשות"
+msgstr "צינור מכחול GIMP"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bristles_circle_random.gih:1
@@ -6828,11 +6828,11 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/fairy-dust.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/fairy-dust.gih"
 msgid "GIMP Brush Pipe"
-msgstr "מברשות"
+msgstr "צינור מכחול GIMP"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/floor.gih:1
@@ -7786,10 +7786,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "&מברשת"
+msgstr "חיסור צורה משרשרת טקסט"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -8457,10 +8457,10 @@ msgstr "אלפא"
 #. i18n: context: toolTip @ Action (show_brush_editor), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_brush_editor), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:135 krita/krita.action:137 krita/krita.action:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show Brush Editor"
-msgstr "מברשות"
+msgstr "הצגת עורך מכחולים"
 
 #. i18n: context: text @ Action (show_brush_presets), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_brush_presets), Actions (General), ActionCollection (Krita)
@@ -31878,7 +31878,7 @@ msgstr "Script"
 #: libs/ui/forms/wdgsavebrushpreset.ui:35
 #, kde-format
 msgid "Brush Name:"
-msgstr "שם מברשת:"
+msgstr "שם מכחול:"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:57
@@ -31925,7 +31925,7 @@ msgstr ""
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:133
 #, kde-format
 msgid "Clear Thumbnail"
-msgstr "פינוי תמונה ממוזערת"
+msgstr "איפוס תמונה ממוזערת"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, stopLeftLabel)
@@ -33428,7 +33428,7 @@ msgstr "זוויות:"
 #: libs/ui/kis_canvas_controls_manager.cpp:292
 #, kde-format
 msgid "Brush Opacity: %1%"
-msgstr "אטימות מברשת: %1%"
+msgstr "אטימות מכחול: %1%"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:324
 #, fuzzy, kde-format
@@ -34049,7 +34049,7 @@ msgstr "הגדרות כלי"
 #: libs/ui/kis_paintop_box.cc:120
 #, kde-format
 msgid "Edit brush settings"
-msgstr "עריכת הגדרות מברשת"
+msgstr "עריכת הגדרות מכחול"
 
 #: libs/ui/kis_paintop_box.cc:127
 #, fuzzy, kde-format
@@ -37144,7 +37144,7 @@ msgstr "הדבקת בחירה"
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
-msgstr "כלי המברשת לא יכול לצבוע על השכבה הזאת. נא לבחור שכבת צבע או מסכה."
+msgstr "כלי המכחול לא יכול לצבוע על השכבה הזאת. נא לבחור שכבת צבע או מסכה."
 
 #: libs/ui/tool/kis_tool_freehand.cc:220
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
@@ -43456,12 +43456,12 @@ msgstr "נעילת לוח הצבעים הנוכחי."
 #, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
-msgstr "ערכות מברשות"
+msgstr "ערכות מכחולים"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:49
 #, kde-format
 msgid "Brush Preset History"
-msgstr "היסטוריית ערכת מברשות"
+msgstr "היסטוריית ערכת מכחולים"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:61
 #, kde-format
@@ -43481,12 +43481,12 @@ msgstr ""
 #: plugins/dockers/presethistory/presethistory_dock.cpp:202
 #, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "הגדרת מספר המברשות המופיעות"
+msgstr "הגדרת מספר המכחולים המופיעים"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:203
 #, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "מספר המברשות המופיעות:"
+msgstr "מספר המכחולים המופיעים:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:305
 #, kde-format
@@ -43501,7 +43501,7 @@ msgstr "התנהגות היסטוריה:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:312
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr "הגדרת מספר המברשות המופיעות…"
+msgstr "הגדרת מספר המכחולים המופיעים…"
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -48523,10 +48523,10 @@ msgstr "שם:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_26)
 #: plugins/extensions/metadataeditor/editors/exif.ui:854
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: misc (model name or model number)"
 msgid "Model:"
-msgstr "מצב:"
+msgstr "דגם:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_27)
 #: plugins/extensions/metadataeditor/editors/exif.ui:867
@@ -48601,49 +48601,49 @@ msgid "Exif"
 msgstr "Exif"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:174
-#, fuzzy, kde-format
+#, kde-format
 msgid "List"
-msgstr "&שכבה"
+msgstr "רשימה"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date"
-msgstr "חזרה:"
+msgstr "תאריך"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number"
-msgstr "שם:"
+msgstr "מספר"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "String"
-msgstr "תבניות"
+msgstr "מחרוזת"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Variant (%1)"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "הגוון (%1)"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ordered array"
-msgstr "כלי ציור"
+msgstr "מערך מסודר"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unordered array"
-msgstr "כלי ציור"
+msgstr "מערך לא מסודר"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alternative array"
-msgstr "כלי ציור"
+msgstr "מערך חלופי"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Language array"
-msgstr "שפה:"
+msgstr "מערך שפות"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:74
 #, fuzzy, kde-format
@@ -48668,43 +48668,43 @@ msgid "Border Selection"
 msgstr "הזז בחירה"
 
 #: plugins/extensions/modify_selection/dlg_feather_selection.cc:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Feather Selection"
-msgstr "בחירה"
+msgstr "בחירת נוצא"
 
 #: plugins/extensions/modify_selection/dlg_grow_selection.cc:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grow Selection"
-msgstr "הזז בחירה"
+msgstr "תפיחת בחירה"
 
 #: plugins/extensions/modify_selection/dlg_shrink_selection.cc:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shrink Selection"
-msgstr "עגן בחירה"
+msgstr "צמצום בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Border width:"
-msgstr "רוחב:"
+msgstr "עובי מסגרת:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_feather_selection.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Feather radius:"
-msgstr "&בוחר צבעים"
+msgstr "רדיוס נוצה:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_grow_selection.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grow by"
-msgstr "כחול"
+msgstr "תפיחה ב־"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shrink by"
-msgstr "חדות:"
+msgstr "צמצום ב־"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbShrinkFromImageBorder)
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:127
@@ -48752,16 +48752,15 @@ msgstr ""
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot load Python library"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "לא ניתן לטעון את ספריית ה־Python"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
-#, fuzzy, kde-format
-#| msgid "Cannot save %1 to html"
+#, kde-format
 msgid "Cannot set Python paths"
-msgstr "לא ניתן לשמור את %1 ל־html"
+msgstr "לא ניתן להגדיר נתיבי Python"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:86
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
@@ -48796,9 +48795,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/extensions/pykrita/plugin/info.ui:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Menu Item:"
-msgstr "סובב &90"
+msgstr "פריט תפריט"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, text)
 #. i18n: ectx: property (whatsThis), widget (QLabel, name)
@@ -48808,7 +48807,7 @@ msgstr "סובב &90"
 msgid ""
 "The text associated with the action (used as the menu item label, etc), or "
 "None."
-msgstr ""
+msgstr "הטקסט שמשויך עם הפעולה (משמש כתווית פריט התפריט וכו׳) או ריק."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, menu)
 #: plugins/extensions/pykrita/plugin/info.ui:88
@@ -48836,21 +48835,21 @@ msgstr "סובב &90"
 #: plugins/extensions/pykrita/plugin/info.ui:121
 #: plugins/extensions/pykrita/plugin/info.ui:188
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:220
-#, fuzzy, kde-format
+#, kde-format
 msgid "Icon:"
-msgstr "הוספת טקסט"
+msgstr "סמל:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/info.ui:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "Action:"
-msgstr "בחירה"
+msgstr "פעולה:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab3)
 #: plugins/extensions/pykrita/plugin/info.ui:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configuration Pages"
-msgstr "זוויות:"
+msgstr "עמודי הגדרות"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, fullName)
 #: plugins/extensions/pykrita/plugin/info.ui:171
@@ -48862,21 +48861,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/pykrita/plugin/info.ui:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page:"
-msgstr "העמוד הבא"
+msgstr "עמוד:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, topics)
 #: plugins/extensions/pykrita/plugin/info.ui:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select a Plugin or Built-in Module"
-msgstr "בחירה"
+msgstr "נא לבחור תוסף או מודול מובנה"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ExceptHookDialog)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Script error"
-msgstr "גל משולש"
+msgstr "שגיאת סקריפט"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:29
@@ -48886,15 +48885,15 @@ msgstr "אירעה שגיאה במהלך הרצת הסקריפט."
 
 #. i18n: ectx: property (text), widget (QLabel, exceptionLabel)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Exception"
-msgstr "בחירה"
+msgstr "חריגה"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, ScriptEditor)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Script Editor"
-msgstr "מברשות"
+msgstr "עורך סקריפטים"
 
 #. i18n: ectx: property (title), widget (QMenu, menu_New)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
@@ -48914,7 +48913,7 @@ msgstr "ה&רצה"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:66
 #, kde-format
 msgid "Ctrl+W"
-msgstr ""
+msgstr "Ctrl+W"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:71
@@ -48926,7 +48925,7 @@ msgstr "י&ציאה"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:79
 #, kde-format
 msgid "Ctrl+R"
-msgstr ""
+msgstr "Ctrl+R"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:84
@@ -48938,7 +48937,7 @@ msgstr "הרצת סקריפט במ&סוף"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:87
 #, kde-format
 msgid "Ctrl+C"
-msgstr ""
+msgstr "Ctrl+C"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:92
@@ -48950,13 +48949,13 @@ msgstr "Python"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:95
 #, kde-format
 msgid "Ctrl+N"
-msgstr ""
+msgstr "Ctrl+N"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "QtScript"
-msgstr "כתב תחתי"
+msgstr "QtScript"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:108
@@ -48966,27 +48965,27 @@ msgstr "איפוס המסוף"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save &As"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שמירה &בשם"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save the script"
-msgstr "הסר שכבה נוכחית"
+msgstr "שמירת הסקריפט"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:119
 #, kde-format
 msgid "Ctrl+A"
-msgstr ""
+msgstr "Ctrl+A"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Open"
-msgstr "&פתח"
+msgstr "&פתיחה"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:127
@@ -48998,7 +48997,7 @@ msgstr "פתיחת סקריפט"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:130
 #, kde-format
 msgid "Ctrl+O"
-msgstr ""
+msgstr "Ctrl+O"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:138
@@ -49014,7 +49013,7 @@ msgstr "שמירת הסקריפט הנוכחי"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:212
 #, kde-format
 msgid "Ctrl+S"
-msgstr ""
+msgstr "Ctrl+S"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/manager.ui:21
@@ -49023,12 +49022,14 @@ msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-weight:600;\">מסר:</span> יש "
+"להפעיל את Krita מחדש כדי להפעיל או לכבות תוספים.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
 #, kde-format
 msgid "Error: The Python engine could not be initialized"
-msgstr ""
+msgstr "שגיאה: לא ניתן לאתחל את מנוע ה־Python"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:75
@@ -49039,6 +49040,10 @@ msgid ""
 "style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
 "School</span></a>!</p></body></html>"
 msgstr ""
+"<html><head/><body><p>כדי ללמוד לכתוב סקריפטים של Krita scripts, אפשר לגשת "
+"אל <a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:#2980b9;\">בית הספר לסקריפטים של Krita</"
+"span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:59
 #, kde-format
@@ -49049,7 +49054,7 @@ msgstr "מנהל תוספי Python"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
-msgstr ""
+msgstr "לא ניתן למצוא את המודול <application>%1</application> שצוין"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
 #, kde-format
@@ -49078,7 +49083,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
-msgstr ""
+msgstr "<p><application>%1</application>: תבנית גרסת המודול מפתיעה"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format
@@ -49087,13 +49092,15 @@ msgid ""
 "<p><application>%1</application>: No suitable version found. Required "
 "version %2 %3, but found %4</p>"
 msgstr ""
+"<p><application>%1</application>: לא נמצאה גרסה מתאימה. נדרשת גרסה %2 %3, "
+"אבל נמצאה %4</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
-msgstr ""
+msgstr "<p>כשל בטעינת המודול <application>%1</application>:</p><pre>%2</pre>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
 #, kde-format
@@ -49127,12 +49134,12 @@ msgstr "מסנן G'MIC"
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
 msgid "The GMic plugin is not installed or could not be loaded."
-msgstr ""
+msgstr "תוקף ה־GMic לא מותקן או שלא ניתן לטעון אותו."
 
 #: plugins/extensions/qmic/QMic.cpp:79
 #, kde-format
 msgid "Krita cannot launch the gmic-qt plugin. No bundled library found."
-msgstr ""
+msgstr "Krita לא יכולה לטעון את התוסף gmic-qt. לא נמצאה ספרייה מאוגדת."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:132
 #, kde-format
@@ -49193,13 +49200,11 @@ msgid "Could not load bundle %1."
 msgstr "לא ניתן לטעון את המאגד %1."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "There is already a bundle with this name installed. Do you want to overwrite "
 "it?"
-msgstr ""
-"כבר קיים מסמך בשם זה.\n"
-"האם ברצונך לכתוב עליו?"
+msgstr "כבר מותקן מאגד בשם הזה. לשכתב אותו?"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:276
 #, kde-format
@@ -49285,6 +49290,7 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
+"יותר ממשאב אחד חולקים את אותו שם הקובץ ‚%1’. נא לייצא אותם במאגדים נפרדים."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
 #, kde-format
@@ -49319,13 +49325,13 @@ msgstr "לא ניתן לפתוח את ‚%1’ לשמירה."
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:56
 #, kde-format
 msgid "Brushes"
-msgstr "מברשות"
+msgstr "מכחולים"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:62
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:57
 #, kde-format
 msgid "Brush Presets"
-msgstr "ערכות מברשות"
+msgstr "ערכות מכחולים"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:37
 #, kde-format
@@ -49378,7 +49384,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the PNG "
 "files belong to: brush tips or patterns"
 msgid "What resource do you want to import these PNG files as?"
-msgstr ""
+msgstr "בתור איזה משאב לייבא את קובצי ה־PNG האלה?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:37
 #, kde-format
@@ -49386,7 +49392,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the SVG "
 "files belong to: brush tips or patterns or symbols"
 msgid "What resource do you want to import these SVG files as?"
-msgstr ""
+msgstr "בתור איזה משאב לייבא את קובצי ה־SVG האלה?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:40
 #, kde-format
@@ -49394,7 +49400,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the files of "
 "type %1 belongs to; % will be rather untranslatable noun (a mimetype)"
 msgid "What resource do you want to import these %1 files as?"
-msgstr ""
+msgstr "בתור איזה משאב לייבא את קובצי ה־%1 האלה?"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
@@ -49417,7 +49423,7 @@ msgstr "שמירה אל:"
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 #, kde-format
 msgid "Summary:"
-msgstr ""
+msgstr "תקציר:"
 
 #. i18n: ectx: property (text), widget (QLabel, bundleName)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:46
@@ -49453,7 +49459,7 @@ msgstr "אתר:"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:175
 #, kde-format
 msgid "http://"
-msgstr ""
+msgstr "http://"
 
 #. i18n: ectx: property (text), widget (QLabel, license)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -49468,7 +49474,7 @@ msgstr "רישיון:"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:294
 #, kde-format
 msgid "(256 x 256)"
-msgstr ""
+msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
@@ -49479,7 +49485,7 @@ msgstr "הסרת הנבחרים"
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
 msgid "Import of some files failed"
-msgstr ""
+msgstr "הייבוא של חלק מהקבצים נכשל"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:54
 #, kde-format
@@ -49793,7 +49799,7 @@ msgstr ""
 #: plugins/extensions/separate_channels/wdg_separations.ui:130
 #, kde-format
 msgid "Output to color, not grayscale"
-msgstr ""
+msgstr "פלט לצבע, לא לגווני אפור"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkActivateCurrentChannel)
 #: plugins/extensions/separate_channels/wdg_separations.ui:137
@@ -50378,9 +50384,9 @@ msgid "&Color Balance..."
 msgstr "מחליף צבעים"
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.h:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Balance"
-msgstr "מחליף צבעים"
+msgstr "איזון צבעים"
 
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:326
 #, fuzzy, kde-format
@@ -50491,7 +50497,7 @@ msgstr "בהירות"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:75
 #, kde-format
 msgid "Reset Shadows  "
-msgstr "איפוס הצללה  "
+msgstr "איפוס הצללות  "
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, label_18)
@@ -50531,9 +50537,9 @@ msgstr "שינוי רישיות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupType)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Desaturation method:"
-msgstr "ניווט"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLightness)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:51
@@ -50557,7 +50563,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
 #, kde-format
 msgid "&Average"
-msgstr ""
+msgstr "ממו&צע"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMin)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:82
@@ -50573,9 +50579,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, typeLabel)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Type:"
-msgstr "תאריך"
+msgstr "&סוג:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64
@@ -50652,16 +50658,16 @@ msgstr "         פלט:"
 #. i18n: ectx: property (text), widget (QCheckBox, chkLogarithmic)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:330
 #: plugins/filters/threshold/wdg_threshold.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Logarithmic"
-msgstr "כלול אוטומטית"
+msgstr "לוגריתמי"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:359
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channel:"
-msgstr "ערוצים"
+msgstr "ערוץ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDriverChannel)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:385
@@ -50678,20 +50684,20 @@ msgstr "הסר ערוץ"
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:7
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:9
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "&לבן"
+msgstr "מסנן גובה למפה רגילה"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Height to Normal Map..."
-msgstr "&לבן"
+msgstr "&גובה למפה רגילה…"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Height to Normal Map"
-msgstr "&לבן"
+msgstr "גובה למפה רגילה"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:20
 #, kde-format
@@ -50702,7 +50708,7 @@ msgstr ""
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
 #, kde-format
 msgid "Prewitt"
-msgstr ""
+msgstr "פרוויט"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
@@ -50723,9 +50729,9 @@ msgid "XYZ"
 msgstr ""
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Sharpen"
-msgstr "חדות:"
+msgstr "&חידוד"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:62
 #, fuzzy, kde-format
@@ -50734,42 +50740,42 @@ msgstr "ה&סר שכבה"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:76
 #: plugins/filters/convolutionfilters/convolutionfilters.h:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Emboss (Laplacian)"
-msgstr "אלכסוני הפוך"
+msgstr "הבלטה (לפלסיאן)"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:91
 #: plugins/filters/convolutionfilters/convolutionfilters.h:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Emboss in All Directions"
-msgstr "הדבקת בחירה"
+msgstr "הבלטה בכל הכיוונים"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Emboss Horizontal && Vertical"
-msgstr "גל משולש"
+msgstr "הבלטה אופקית ואנכית"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:121
 #: plugins/filters/convolutionfilters/convolutionfilters.h:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Emboss Vertical Only"
-msgstr "גל משולש"
+msgstr "הבלטה אנכית בלבד"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:136
 #: plugins/filters/convolutionfilters/convolutionfilters.h:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Emboss Horizontal Only"
-msgstr "גל משולש"
+msgstr "הבלטה אופקית בלבד"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Top Edge Detection"
-msgstr "הזז בחירה"
+msgstr "זיהוי קצה עליון"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sharpen"
-msgstr "חדות:"
+msgstr "חידוד"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:33
 #, fuzzy, kde-format
@@ -50787,56 +50793,54 @@ msgid "Emboss Diagonal"
 msgstr "אלכסוני הפוך"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dodge..."
-msgstr "מצב:"
+msgstr ""
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Burn..."
-msgstr "כחול"
+msgstr "צריבה…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Edge Detection..."
-msgstr "הזז בחירה"
+msgstr "&זיהוי קצוות…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edge Detection"
-msgstr "הזז בחירה"
+msgstr "זיהוי קצוות"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "All sides"
-msgstr "טוען..."
+msgstr "כל הצדדים"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:22
-#, fuzzy, kde-format
-#| msgid "Top Left"
+#, kde-format
 msgid "Top Edge"
-msgstr "למעלה משמאל"
+msgstr "קצה עליון"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:23
-#, fuzzy, kde-format
-#| msgid "Bottom Left"
+#, kde-format
 msgid "Bottom Edge"
-msgstr "למטה משמאל"
+msgstr "קצה תחתון"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right Edge"
-msgstr "ימין:"
+msgstr "קצה ימני"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left Edge"
-msgstr "שמאל:"
+msgstr "קצה שמאלי"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Direction in Radians"
-msgstr "&בוחר צבעים"
+msgstr "כיוון ברדיאנים"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbOutput)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:21
@@ -50862,21 +50866,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransparent)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply result to alpha channel"
-msgstr "הוסף ערוץ"
+msgstr "החלת התוצאה לערוץ שקיפות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula:"
-msgstr "&לבן"
+msgstr "נוסחה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:74
 #, kde-format
 msgid "Output:"
-msgstr ""
+msgstr "פלט:"
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:43
 #, kde-format
@@ -50884,10 +50888,10 @@ msgid "&Emboss with Variable Depth..."
 msgstr ""
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Emboss depth"
 msgid "Depth"
-msgstr "חזרה:"
+msgstr "עומק"
 
 #: plugins/filters/embossfilter/kis_emboss_filter.h:27
 #, kde-format
@@ -50895,25 +50899,25 @@ msgid "Emboss with Variable Depth"
 msgstr ""
 
 #: plugins/filters/example/example.h:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invert"
-msgstr "הזחה"
+msgstr "היפוך"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Color Transfer..."
-msgstr "מחליף צבעים"
+msgstr "העברת &צבע…"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.h:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Transfer"
-msgstr "מחליף צבעים"
+msgstr "העברת צבע"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/filters/fastcolortransfer/wdgfastcolortransfer.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reference image:"
-msgstr "שינוי שם התמונה"
+msgstr "תמונת סימוכין:"
 
 #. i18n: context: text @ Action (krita_filter_gaussianhighpass), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussianhighpass), Actions (Filters), ActionCollection (Krita)
@@ -50958,38 +50962,38 @@ msgid "Gradient Map Filter"
 msgstr "עירובים"
 
 #: plugins/filters/gradientmap/KisGradientMapFilter.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Gradient Map..."
-msgstr "עירובים"
+msgstr "&מפת מדרגים…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gradient Map"
-msgstr "עירובים"
+msgstr "מפת מדרגים"
 
 #: plugins/filters/gradientmap/KisGradientMapFilterConfiguration.h:69
 #: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:173
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Default gradient name for the gradient generator"
 msgid "Unnamed"
-msgstr "מקושר"
+msgstr "ללא שם"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGradientColors)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:36
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gradient Colors"
-msgstr "עירובים"
+msgstr "צבעי מדרג"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorMode)
 #. i18n: ectx: property (text), widget (QLabel, colorModeLabel)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:87
 #: plugins/filters/palettize/palettize.ui:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Mode"
-msgstr "צבעים"
+msgstr "מצב צבע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxColorMode)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:109
@@ -51037,43 +51041,42 @@ msgstr "כללי"
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostProcessing)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:656
-#, fuzzy, kde-format
+#, kde-format
 msgid "Postprocessing"
-msgstr "מימדים"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, hardnessLbl)
 #. i18n: ectx: property (text), widget (QLabel, labelHardness)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:113
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hardness:"
-msgstr "חדות:"
+msgstr "קשיחות:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelInvert)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invert:"
-msgstr "הזחה"
+msgstr "היפוך:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForeground)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:144
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:685
-#, fuzzy, kde-format
+#, kde-format
 msgid "Foreground:"
-msgstr "צבע &טקסט"
+msgstr "חזית:"
 
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Independent Channels"
-msgstr "מלבן"
+msgstr "ערוצים עצמאיים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:67
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mode:"
 msgstr "מצב:"
 
@@ -51095,14 +51098,14 @@ msgstr "הדבקת בחירה"
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:44
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:40
 #: plugins/filters/threshold/threshold.h:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Threshold"
-msgstr "סף ציור:"
+msgstr "סף"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Window size"
-msgstr "&תמונה"
+msgstr "גודל חלון"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.h:30
 #, fuzzy, kde-format
@@ -51131,22 +51134,22 @@ msgid "Base"
 msgstr "השתמש בתבנית הנוכחית"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Color palette shade"
 msgid "Bright"
-msgstr "מקושר"
+msgstr "זוהר"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Color palette shade"
 msgid "Light"
-msgstr "גובה:"
+msgstr "אור"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Color palette shade"
 msgid "Shadow"
-msgstr "חדות:"
+msgstr "צל"
 
 #: plugins/filters/indexcolors/indexcolors.h:34
 #, fuzzy, kde-format
@@ -51171,9 +51174,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, diagCheck)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Diagonal Gradients"
-msgstr "עירובים"
+msgstr "מדרגים אלכסוניים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gradientStepsBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:82
@@ -51210,9 +51213,9 @@ msgstr "&צבע"
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other"
-msgstr "שכבה"
+msgstr "אחר"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:306
@@ -51230,56 +51233,55 @@ msgstr ""
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:621
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:672
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Auto Levels"
-msgstr "רמה"
+msgstr "רמות אוטומטיות"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgThreshold)
 #. i18n: ectx: property (windowTitle), widget (QWidget, LevelsConfigWidget)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:18
 #: plugins/filters/levelfilter/KisLevelsFilter.h:30
 #: plugins/filters/threshold/wdg_threshold.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Levels"
-msgstr "רמה"
+msgstr "רמות"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLightnessMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modify lightness only"
-msgstr "מקושר"
+msgstr "שינוי הבהירות בלבד"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
 #, kde-format
 msgid "Modify all channels independently"
-msgstr ""
+msgstr "שינוי כל הערוצים באופן עצמאי"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAll)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Reset channel"
-msgstr "מלבן"
+msgstr "איפוס ערוץ"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:130
 #, kde-format
 msgid "<b>Input Levels</b>"
-msgstr ""
+msgstr "<b>רמות הקלט</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLinearHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:158
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show linear histogram"
-msgstr "הדבקת בחירה"
+msgstr "הצגת היסטוגרמה קווית"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLogarithmicHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show logarithmic histogram"
-msgstr "הדבקת בחירה"
+msgstr "הצגת היסטוגרמה לוגריתמית"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToFit)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:201
@@ -51295,73 +51297,73 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply auto levels to this channel"
-msgstr "הוסף ערוץ"
+msgstr "החלת רמות אוטומטיות על הערוץ הזה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetInputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset input levels"
-msgstr "&לבן"
+msgstr "איפוס רמות הקלט"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:404
 #, kde-format
 msgid "<b>Output Levels</b>"
-msgstr ""
+msgstr "<b>רמות הפלט</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetOutputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:427
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset output levels"
-msgstr "בחר מסנן:"
+msgstr "איפוס רמות הפלט"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3_2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:524
-#, fuzzy, kde-format
+#, kde-format
 msgid "<b>All Channels</b>"
-msgstr "ערוצים"
+msgstr "<b>כל הערוצים</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevelsAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:575
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply auto levels to all the channels"
-msgstr "הוסף ערוץ"
+msgstr "החלת רמות אוטומטיות על כל הערוצים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset all channels"
-msgstr "ערוצים"
+msgstr "איפוס כל הערוצים"
 
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Levels..."
-msgstr "רמה"
+msgstr "&רמות…"
 
 #: plugins/filters/noisefilter/noisefilter.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Random Noise..."
-msgstr "סובב &90"
+msgstr "רעש &אקראי…"
 
 #: plugins/filters/noisefilter/noisefilter.h:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Random Noise"
-msgstr "סובב &90"
+msgstr "רעש אקראי"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:33
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Level:"
-msgstr "רמה"
+msgstr "רמה:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grayscale"
-msgstr "גוו&ני אפור"
+msgstr "גווני אפור"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, fuzzy, kde-format
@@ -51397,9 +51399,9 @@ msgstr "אטימות:"
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:92
 #: plugins/paintops/particle/KisParticleOpOptionWidget.cpp:58
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush size"
-msgstr "מברשות"
+msgstr "גודל מכחול"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:206
 #, fuzzy, kde-format
@@ -51408,9 +51410,9 @@ msgid "Smooth"
 msgstr "עובי קו:"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.h:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Oilpaint"
-msgstr "אטימות:"
+msgstr "צבע שמן"
 
 #. i18n: context: text @ Action (krita_filter_palettize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_palettize), Actions (Filters), ActionCollection (Krita)
@@ -51437,11 +51439,10 @@ msgid "Clip:"
 msgstr "העתק בחירה לשכבה חדשה"
 
 #: plugins/filters/palettize/palettize.cpp:124
-#, fuzzy, kde-format
-#| msgid "Index"
+#, kde-format
 msgctxt "Index as in Index Color"
 msgid "Index:"
-msgstr "אינדקס"
+msgstr "מפתח:"
 
 #: plugins/filters/palettize/palettize.cpp:190
 #, fuzzy, kde-format
@@ -51501,9 +51502,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalSettings)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "General settings"
-msgstr "הגדרות"
+msgstr "הגדרות כלליות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, materialParametersGroupBox)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:76
@@ -51549,26 +51550,26 @@ msgstr "&גובה:"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:334
 #, kde-format
 msgid "Heightmap channel:"
-msgstr ""
+msgstr "ערוץ מפת גבהים:"
 
 #. i18n: Whether or not this filter should only use a given channel or use all channels and treat them as a normal map
 #. i18n: ectx: property (text), widget (QCheckBox, useNormalMap)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:386
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use Normal map"
-msgstr "&לבן"
+msgstr "להשתמש במפה רגילה"
 
 #. i18n: ectx: attribute (title), widget (QWidget, lightSources)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:397
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Sources"
-msgstr "גובה:"
+msgstr "מקורות אור"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox4)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:424
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Source &4"
-msgstr "גובה:"
+msgstr "מקור אור &4"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, azimuthLabel4)
 #. i18n: ectx: property (toolTip), widget (QLabel, azimuthLabel2)
@@ -51623,21 +51624,21 @@ msgstr "כפתור איפוס"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox2)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:526
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Source &2"
-msgstr "גובה:"
+msgstr "מקור אור &2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox1)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:622
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Source &1"
-msgstr "גובה:"
+msgstr "מקור אור &1"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox3)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:724
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Source &3"
-msgstr "גובה:"
+msgstr "מקור אור &3"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:45
 #, fuzzy, kde-format
@@ -51728,33 +51729,33 @@ msgstr "שימור"
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
 msgid "Expand the colors in a rectangular-like way"
-msgstr ""
+msgstr "הרחבת הצבעים באופן דמוי מרובע"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
 #, kde-format
 msgid "Expand the colors in a diamond-like way"
-msgstr ""
+msgstr "הרחבת הצבעים באופן דמוי יהלום"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
 #, kde-format
 msgid "Expand the colors in a octagonal-like way"
-msgstr ""
+msgstr "הרחבת הצבעים באופן דמוי מתומן"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
 #, kde-format
 msgid "Expand the colors all the way until all transparent regions are filled"
-msgstr ""
+msgstr "הרחבת הצבעים עד הסוף עד שכל האזורים השקופים מלאים"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
 #, kde-format
 msgid "Expand the colors only until a specific distance"
-msgstr ""
+msgstr "הרחבת הצבעים רק עד למרחק מסוים"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
 #, kde-format
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
-msgstr ""
+msgstr "בחירת המרחק המרבי להתרחבות כאשר המצב המגביל פעיל"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
@@ -51810,39 +51811,39 @@ msgid "Propagate Colors Filter"
 msgstr "כלי ציור"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Raindrops..."
-msgstr "סובב &90"
+msgstr "&טיפות גשם…"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drop size"
-msgstr "&תמונה"
+msgstr "גודל טיפה"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of drops"
-msgstr "כפתור איפוס"
+msgstr "מספר טיפות"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:384
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fish eyes"
-msgstr "אלפא"
+msgstr "עיני דג"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.h:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Raindrops"
-msgstr "סובב &90"
+msgstr "טיפות גשם"
 
 #: plugins/filters/randompickfilter/randompickfilter.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Random Pick..."
-msgstr "סובב &90"
+msgstr "&בחירה אקראית…"
 
 #: plugins/filters/randompickfilter/randompickfilter.h:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Random Pick"
-msgstr "סובב &90"
+msgstr "בחירה אקראית"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
@@ -51852,9 +51853,9 @@ msgstr "גודל החלון:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset Transparent"
-msgstr "מצבע הקידמה לשקוף"
+msgstr "איפוס שקיפות"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -51862,9 +51863,9 @@ msgid "&Round Corners..."
 msgstr "&עיגול פינות…"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Radius"
-msgstr "סובב &90"
+msgstr "רדיוס"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.h:27
 #, kde-format
@@ -51872,19 +51873,19 @@ msgid "Round Corners"
 msgstr "עיגול פינות"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Small Tiles..."
-msgstr "טוען..."
+msgstr "אריחים &קטנים…"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of tiles"
-msgstr "מספר משפטים"
+msgstr "מספר אריחים"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.h:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Small Tiles"
-msgstr "טוען..."
+msgstr "אריחים קטנים"
 
 #. i18n: context: text @ Action (krita_filter_threshold), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_threshold), Actions (Filters), ActionCollection (Krita)
@@ -51895,32 +51896,32 @@ msgstr "טוען..."
 #: plugins/filters/threshold/threshold.action:7
 #: plugins/filters/threshold/threshold.action:9
 #: plugins/filters/threshold/threshold.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Threshold Filter"
-msgstr "סף ציור:"
+msgstr "מסנן סף"
 
 #: plugins/filters/threshold/threshold.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Threshold..."
-msgstr "סף ציור:"
+msgstr "&סף…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/threshold/wdg_threshold.ui:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Threshold &level:"
-msgstr "סף ציור:"
+msgstr "&רמת סף:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Unsharp Mask..."
-msgstr "שינוי שם התמונה..."
+msgstr "מ&סכת אי־חדות…"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:76
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unsharp Mask"
-msgstr "אלפא"
+msgstr "מסכת אי־חדות"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/unsharp/wdgunsharp.ui:56
@@ -51931,9 +51932,9 @@ msgstr "כמות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/unsharp/wdgunsharp.ui:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lightness Only:"
-msgstr "מקושר"
+msgstr "בהירות בלבד:"
 
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
@@ -51955,25 +51956,25 @@ msgstr "גל אופקי"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:70
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:199
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wavelength:"
-msgstr "גובה:"
+msgstr "אורך גל:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_3)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:93
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:212
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shift:"
-msgstr "&לבן"
+msgstr "הזחה:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2_2)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:116
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:225
-#, fuzzy, kde-format
+#, kde-format
 msgid "Amplitude:"
-msgstr "&לבן"
+msgstr "משרעת:"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbHShape)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbVShape)
@@ -51981,50 +51982,49 @@ msgstr "&לבן"
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:264
 #, kde-format
 msgid "Sinusoidal"
-msgstr ""
+msgstr "סינוסואידי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, Vertical_wave)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Wave"
-msgstr "גל משולש"
+msgstr "גל אנכי"
 
 #: plugins/flake/imageshape/ImageShapeFactory.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image shape"
-msgstr "&תמונה"
+msgstr "צורת תמונה"
 
 #: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
-msgstr ""
+msgstr "צורה שמציגה תמונה (PNG/JPG/TIFF)"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
-msgstr "שינוי משפחת תווים"
+msgstr "החלפת אליפסה"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Arc"
-msgstr "תכול"
+msgstr "קשת"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pie"
-msgstr "שעה"
+msgstr "עוגה"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:21
 #, kde-format
 msgid "Chord"
-msgstr ""
+msgstr "מיתר"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ellipse Shape"
-msgstr "גלי"
+msgstr "צורת אליפסה"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:49
@@ -52034,20 +52034,20 @@ msgstr "זווית התחלה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "End angle:"
-msgstr "מלבן"
+msgstr "זווית סיום:"
 
 #. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Close ellipse"
-msgstr "&צבע"
+msgstr "סגירת אליפסה"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "An ellipse"
-msgstr "כלי אלי&פסה"
+msgstr "אליפסה"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 #, fuzzy
@@ -52074,31 +52074,30 @@ msgid "Corner radius y:"
 msgstr "&בוחר צבעים"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "A rectangle"
-msgstr "מלבן"
+msgstr "מרובע"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
-msgstr "&לבן"
+msgstr "החלפת מערבולת"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clockwise"
-msgstr "מאתחל..."
+msgstr "עם כיוון השעון"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anticlockwise"
-msgstr "מאתחל..."
+msgstr "נגד כיוון השעון"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spiral Shape"
-msgstr "&מברשת"
+msgstr "צורת מערבולת"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:34
@@ -52108,31 +52107,30 @@ msgstr "מצב:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Direction:"
-msgstr "&בוחר צבעים"
+msgstr "כיוון:"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeFactory.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spiral"
-msgstr "&מברשת"
+msgstr "מערבולת"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeFactory.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "A spiral shape"
-msgstr "&מברשת"
+msgstr "צורה של מערבולת"
 
 #: plugins/flake/pathshapes/star/StarShapeConfigCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change star"
-msgstr "שינוי משפחת תווים"
+msgstr "החלפת כוכב"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
 #: plugins/flake/pathshapes/star/StarShapeConfigWidget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Star shape"
-msgstr "מחיקת טקסט"
+msgstr "צורת כוכב"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/flake/pathshapes/star/StarShapeConfigWidget.ui:24
@@ -52256,14 +52254,14 @@ msgstr ""
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
-msgstr "ספירלי"
+msgstr "מערבולת"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
 #: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
-msgstr "ספירלי הפוך"
+msgstr "מערבולת הפוכה"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
 #: plugins/tools/basictools/kis_tool_gradient.cc:252
@@ -53095,7 +53093,7 @@ msgstr "יצירת מסכה מצבע"
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
 #, kde-format
 msgid "Brush Style"
-msgstr "סגנון מברשת"
+msgstr "סגנון מכחול"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
@@ -54467,10 +54465,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr "&מברשת"
+msgstr "אוטו׳"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
@@ -56992,9 +56990,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:574
-#, fuzzy, kde-format
+#, kde-format
 msgid "Partitions"
-msgstr "&מברשת"
+msgstr "מחיצות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitionLimit)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitionLimit)
@@ -57169,16 +57167,16 @@ msgid "Iptc"
 msgstr ""
 
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Smudge"
-msgstr "&מברשת"
+msgstr "מריחת צבע"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSmudgeMode)
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:41
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge Mode"
-msgstr "&מברשת"
+msgstr "מצב מריחה"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
@@ -57254,14 +57252,14 @@ msgstr ""
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionData.h:39
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge Length"
-msgstr "&מברשת"
+msgstr "אורך מריחה"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge mode:"
-msgstr "&מברשת"
+msgstr "מצב מריחה:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
 #, kde-format
@@ -57859,7 +57857,7 @@ msgstr "מיקום"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:37
 #, kde-format
 msgid "Brush Shape"
-msgstr "צורת מברשת"
+msgstr "צורת מכחול"
 
 #. i18n: ectx: property (text), widget (QRadioButton, oneDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:53
@@ -57877,7 +57875,7 @@ msgstr ""
 #: plugins/paintops/hairy/wdghairyeoptions.ui:101
 #, kde-format
 msgid "Brush Settings"
-msgstr "הגדרות מברשת"
+msgstr "הגדרות מכחול"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mousePressureCBox)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:134
@@ -58518,15 +58516,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current Brush Tip"
-msgstr "&מברשת"
+msgstr "חוד המכחול הנוכחי"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
 #, kde-format
 msgid "Brush Details"
-msgstr "פרטי מברשת"
+msgstr "פרטי מכחול"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
@@ -58545,7 +58543,7 @@ msgstr "בחירה"
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
-msgstr "מצב מברשת"
+msgstr "מצב מכחול"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
@@ -58682,7 +58680,7 @@ msgstr "ריווח אוטומטי"
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
-msgstr "חוד המברשת"
+msgstr "חוד המכחול"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
 #, kde-format
@@ -58880,7 +58878,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
 #, kde-format
 msgid "Airbrush"
-msgstr "מברשת אוויר"
+msgstr "מכחול אוויר"
 
 #: plugins/paintops/libpaintop/KisColorOptionWidget.cpp:52
 #, kde-format
@@ -59680,9 +59678,9 @@ msgid "Opaque Linearize"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opaque Multiply"
-msgstr "מברשות"
+msgstr "הכפלה אטומה"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
@@ -59710,14 +59708,14 @@ msgid "Smudge Radius Log"
 msgstr "&מברשת"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "&מברשת"
+msgstr "מכפיל אורך מריחה"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "&מברשת"
+msgstr "דלי מריחה"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
@@ -59790,7 +59788,7 @@ msgstr "חזרות"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Particle Brush (not supported)"
-msgstr "מברשת חלקיקים (לא נתמכת)"
+msgstr "מכחול חלקיקים (לא נתמכת)"
 
 #: plugins/paintops/particle/particle_paintop_plugin.cpp:30
 #, kde-format
@@ -62643,81 +62641,81 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Ten Brushes"
-msgstr "עשר מברשות"
+msgstr "עשרה מכחולים"
 
 #. i18n: context: text @ Action (activate_preset_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:21
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 1"
-msgstr "הפעלת ערכת מברשות 1"
+msgstr "הפעלת ערכת מכחולים 1"
 
 #. i18n: context: text @ Action (activate_preset_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:34
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 2"
-msgstr "הפעלת ערכת מברשות 2"
+msgstr "הפעלת ערכת מכחולים 2"
 
 #. i18n: context: text @ Action (activate_preset_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:47
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 3"
-msgstr "הפעלת ערכת מברשות 3"
+msgstr "הפעלת ערכת מכחולים 3"
 
 #. i18n: context: text @ Action (activate_preset_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:60
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 4"
-msgstr "הפעלת ערכת מברשות 4"
+msgstr "הפעלת ערכת מכחולים 4"
 
 #. i18n: context: text @ Action (activate_preset_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:73
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 5"
-msgstr "הפעלת ערכת מברשות 4"
+msgstr "הפעלת ערכת מכחולים 5"
 
 #. i18n: context: text @ Action (activate_preset_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:86
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 6"
-msgstr "הפעלת ערכת מברשות 6"
+msgstr "הפעלת ערכת מכחולים 6"
 
 #. i18n: context: text @ Action (activate_preset_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:99
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 7"
-msgstr "הפעלת ערכת מברשות 7"
+msgstr "הפעלת ערכת מכחולים 7"
 
 #. i18n: context: text @ Action (activate_preset_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:112
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 8"
-msgstr "הפעלת ערכת מברשות 8"
+msgstr "הפעלת ערכת מכחולים 8"
 
 #. i18n: context: text @ Action (activate_preset_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:125
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 9"
-msgstr "הפעלת ערכת מברשות 9"
+msgstr "הפעלת ערכת מכחולים 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 10"
-msgstr "הפעלת ערכת מברשות 10"
+msgstr "הפעלת ערכת מכחולים 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
-msgstr "עשר מברשות"
+msgstr "עשרה מכחולים"
 
 #: plugins/python/tenbrushes/tenbrushes.py:35
 msgid "Assign ten brush presets to ten shortcuts."
@@ -62726,7 +62724,7 @@ msgstr ""
 #: plugins/python/tenbrushes/tenbrushes.py:93
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
-msgstr "הפעלת ערכת מברשות {num}"
+msgstr "הפעלת ערכת מכחולים {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
@@ -62956,7 +62954,7 @@ msgstr "מאפייני שכבה..."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 msgid "Select the brush preset"
-msgstr "בחירת "
+msgstr "בחירת ערכת המכחולים"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 msgid "Select foreground color:"
@@ -63031,10 +63029,9 @@ msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
-msgstr "בחירה"
+msgstr "משיכת מכחול ביד חופשית"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:216
 #, fuzzy, kde-format
@@ -63057,17 +63054,16 @@ msgid "Distance at Min Speed:"
 msgstr "רוחב:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:415
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "ללא"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:416
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
-msgstr "אטימות"
+msgstr "בסיסי"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:417
 #, fuzzy, kde-format
@@ -63076,10 +63072,10 @@ msgid "Weighted"
 msgstr "גובה:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:418
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
-msgstr "גוו&ני אפור"
+msgstr "מייצב"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:419
 #, kde-format
@@ -63090,7 +63086,7 @@ msgstr "פיקסל"
 #: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Brush Smoothing:"
-msgstr "החלקת מברשת:"
+msgstr "החלקת מכחול:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:486
 #, kde-format
@@ -63189,7 +63185,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_brush.h:146
 #, kde-format
 msgid "Freehand Brush Tool"
-msgstr "כלי מברשת יד חופשית"
+msgstr "כלי מכחול יד חופשית"
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
@@ -63213,10 +63209,9 @@ msgid "You cannot use this tool with the selected layer type"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:252
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
-msgstr "אינ&דקס"
+msgstr "מילוי בהצפה"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:551
 #, fuzzy, kde-format
@@ -63228,9 +63223,9 @@ msgstr "גוו&ני אפור"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use custom blending options"
-msgstr "&מברשת"
+msgstr "להשתמש באפשרות ערבול מותאמת אישית"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:570
 #, kde-format
@@ -63584,7 +63579,7 @@ msgstr "כלי הזזה"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
-msgstr "קו ריבוי מברשות"
+msgstr "קו ריבוי מכחולים"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:449
 #, kde-format
@@ -63626,7 +63621,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_multihand.h:99
 #, kde-format
 msgid "Multibrush Tool"
-msgstr "כלי ריבוי מברשות"
+msgstr "כלי ריבוי מכחולים"
 
 #: plugins/tools/basictools/kis_tool_pan.cpp:81
 #, kde-format
@@ -63943,13 +63938,13 @@ msgstr "הצגת נקודות ציון על משטח הציור"
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
 #, kde-format
 msgid "Brushes:"
-msgstr "מברשות:"
+msgstr "מכחולים:"
 
 #. i18n: ectx: property (text), widget (QLabel, subbrushLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:74
 #, kde-format
 msgid "Subbrushes:"
-msgstr "תת־מברשות:"
+msgstr "תת־מכחולים:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87
@@ -64808,11 +64803,11 @@ msgid "Spread: {n}%"
 msgstr "אטימות:"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "עירוב:"
+msgstr "היקף בחירה"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
@@ -66088,7 +66083,7 @@ msgstr "קישוט:"
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Dynamic Brush Stroke"
-msgstr "קו מתאר מברשת דינמית"
+msgstr "קו מתאר מכחול דינמי"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
 #, kde-format
@@ -66108,7 +66103,7 @@ msgstr "טווח רוחב:"
 #: plugins/tools/tool_dyna/kis_tool_dyna.h:139
 #, kde-format
 msgid "Dynamic Brush Tool"
-msgstr "כלי מברשת דינמית"
+msgstr "כלי מכחול דינמי"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66337,9 +66332,9 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "עירובים"
+msgstr "כלי עריכת לוח קומיקס"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
 #, kde-format
@@ -66407,10 +66402,9 @@ msgstr "יחידת רוחב:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "מרווח עבה:"
+msgstr "עובי פער עבה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -66422,10 +66416,9 @@ msgstr "מרווח עבה:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "מרווח צר:"
+msgstr "עובי פער צר"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -66437,10 +66430,9 @@ msgstr "מרווח צר:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "מרווח מיוחד:"
+msgstr "רוחב פער מיוחד"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -66464,27 +66456,25 @@ msgstr "אוטומטי"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "גל אופקי"
+msgstr "סוג פערים אופקיים:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "גל משולש"
+msgstr "סוג פערים אנכיים:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "אלכסוני:"
+msgstr "סוג פערים אלכסוניים:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -66496,9 +66486,9 @@ msgstr "אלכסוני:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "שינוי גודל תמונה"
+msgstr "סף זויות סוג אלכסוני:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
@@ -67375,7 +67365,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Dynamic Brush Tool"
-msgstr "כלי מברשת דינמית"
+msgstr "כלי מכחול דינמי"
 
 #. i18n: context: text @ Action (KritaShape/KisToolRectangle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolRectangle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67401,7 +67391,7 @@ msgstr "כלי מרובעים"
 #, kde-format
 msgctxt "action"
 msgid "Multibrush Tool"
-msgstr "כלי ריבוי מברשות"
+msgstr "כלי ריבוי מכחולים"
 
 #. i18n: context: text @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67526,7 +67516,7 @@ msgstr "כלי אליפסות"
 #, kde-format
 msgctxt "action"
 msgid "Freehand Brush Tool"
-msgstr "כלי מברשת יד חופשית"
+msgstr "כלי מכחול יד חופשית"
 
 #. i18n: context: text @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)

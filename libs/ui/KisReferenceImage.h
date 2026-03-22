@@ -76,6 +76,9 @@ public:
 
     KoColor getPixel(QPointF position);
 
+    QPoint documentToPixel(const QPointF &docPoint);
+    QColor getPixel(QPointF position);
+
     void saveXml(QDomDocument &document, QDomElement &parentElement, int id);
     bool saveImage(KoStore *store) const;
 
@@ -83,6 +86,7 @@ public:
     bool loadImage(KoStore *store);
 
     QImage getImage();
+    QImage getCachedImage();
 
 private:
     struct Private;

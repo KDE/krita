@@ -99,12 +99,14 @@ struct KisReferenceImage::Private : public QSharedData
 #else
         image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
 #endif
+        // It should be ok to covert to ARGB as it's saved as PNG anyways?
+        image.convertTo(QImage::Format_ARGB32);
 
         return (!image.isNull());
     }
 
     bool loadFromQImage(const QImage &img) {
-        image = img;
+        image = img.convertToFormat(QImage::Format_ARGB32);
         return !image.isNull();
     }
 
@@ -348,17 +350,28 @@ void KisReferenceImage::setFilename(const QString &filename)
     d->externalFilename = filename;
 }
 
+<<<<<<< HEAD
 KoColor KisReferenceImage::getPixel(QPointF position)
+=======
+QPoint KisReferenceImage::documentToPixel(const QPointF &docPoint)
+{
+    QSizeF shapeSize = size();
+    QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
+
+    QTransform transform = absoluteTransformation().inverted() * scale;
+    QPointF localPosition = docPoint * transform;
+
+    return localPosition.toPoint();
+}
+
+QColor KisReferenceImage::getPixel(QPointF position)
+>>>>>>> 208309fd88 (Fix rotation. Fix zoom inaccuracies by switching to full size QImage instead of small scale mimap)
 {
     KoColor transparent;
     transparent.setOpacity(0.0);
     if (transparency() == 1.0) return transparent;
 
-    const QSizeF shapeSize = size();
-    const QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
-
-    const QTransform transform = absoluteTransformation().inverted() * scale;
-    const QPointF localPosition = position * transform;
+    const QPointF localPosition = documentToPixel(position);
 
     if (d->cachedImage.isNull()) {
         d->updateCache();
@@ -482,6 +495,13 @@ bool KisReferenceImage::loadImage(KoStore *store)
 QImage KisReferenceImage::getImage()
 {
     return d->image;
+}
+
+QImage KisReferenceImage::getCachedImage()
+{
+    if (d->cachedImage.isNull()) d->updateCache();
+
+    return d->cachedImage;
 }
 
 KoShape *KisReferenceImage::cloneShape() const

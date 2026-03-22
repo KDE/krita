@@ -600,7 +600,7 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     gc.setClipPath(QPainterPath(), Qt::NoClip);
 }
 
-// TODO: Fix incorrect preview position, weird wrapping stuff at edge of rotated ref image
+// TODO: Fix color sampler run away when REALLY zoomed in
 // Won't show opacity because the color sampled doesn't respect opacity either
 void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     KisDocument *doc = m_d->canvas->viewManager()->document();
@@ -619,26 +619,25 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
     });
     Q_FOREACH(KisReferenceImage *refImage, refList) {
         // Check if sampleRect intersect with reference image
-        QTransform refTf = refImage->absoluteTransformation();
-        QPolygonF outline = refTf.map(refImage->outlineRect());
+        QPolygonF outline = refImage->absoluteTransformation().map(refImage->outlineRect());
         if (!outline.intersects(QPolygonF(sampleDocRectF))) continue;
 
-        QRectF sampleRefRectF = refImage->documentToShape(sampleDocRectF);
+        QImage image = refImage->getCachedImage();
+        // image.convertTo(QImage::Format_ARGB32); Do this in KisReferenceImage to avoid having to copy? and convert
 
-        // TODO: Check if rounding like this actually OK. Probably not!
-        // This probably cause the ever so slighly off position
-        QPixmap refPixmap(refImage->size().toSize());
-        QPainter refPainter(&refPixmap);
-        refPainter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-        refImage->paint(refPainter);
+        QPointF sampleRefPointF = refImage->documentToPixel(sampleDocRectF.center());
+        QRectF shapeRectF = refImage->documentToShape(sampleDocRectF);
+        qreal xScale = refImage->boundingRect().width() / image.width();
+        qreal yScale = refImage->boundingRect().height() / image.height();
 
-        // Rotate the painter, draw, rotate back is seemingly easier than
-        // trying to rotate the pixmap and having to deal with sourceRect
+        QRectF sampleRefRectF = QRectF(sampleRefPointF, QSizeF(shapeRectF.width() / xScale, shapeRectF.height() / yScale));
+        sampleRefRectF.moveCenter(sampleRefPointF);
+
         gc.translate(viewRectF.center());
         gc.rotate(refImage->rotation());
         gc.translate(-viewRectF.center());
 
-        gc.drawPixmap(viewRectF, refPixmap, sampleRefRectF);
+        gc.drawImage(viewRectF, image.copy(sampleRefRectF.toRect()));
 
         gc.translate(viewRectF.center());
         gc.rotate(-refImage->rotation());

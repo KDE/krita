@@ -625,7 +625,7 @@
     <!-- Note: website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the
                last actual release -->
-    <release date="2026-03-25" version="5.3.0">
+    <release date="2026-03-24" version="5.3.0">
       <url>https://krita.org/en/posts/2026/krita-5.3.0-released/</url>
       <description>A new major release featuring the new on-canvas text tool, gap-closing features, selection toolboar and the new knife tool</description>
       <artifacts>

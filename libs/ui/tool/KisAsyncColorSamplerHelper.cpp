@@ -570,6 +570,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     // Draw zoom preview
     if (m_d->circleZoomPreviewScale > 1) {
         QRectF sampleDocRectF = m_d->previewDocRect;
+        // Sample a rect with size that is (zoomPreviewScale) times smaller than (previewDocRect size)
         sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
         sampleDocRectF.moveCenter(m_d->previewDocRect.center());
 
@@ -586,10 +587,12 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     gc.save();
 
-    QRectF sampleCanvasRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF);
+    QRect sampleCanvasRect = m_d->canvas->image()->documentToPixel(sampleDocRectF).toRect();
+    // In case zoom and scale is both so large that sample size becomes 0
+    if (sampleCanvasRect.isEmpty()) sampleCanvasRect.setSize(QSize(1, 1));
 
-    // Copy a piece of canvas image with size = (previewDocRect size) / (zoom preview scale)
-    QImage canvasPreview = m_d->canvas->image()->convertToQImage(sampleCanvasRectF.toRect(), nullptr);
+
+    QImage canvasPreview = m_d->canvas->image()->convertToQImage(sampleCanvasRect, nullptr);
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
     gc.setClipPath(clip);
@@ -631,12 +634,15 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         // image.convertTo(QImage::Format_ARGB32); Do this in KisReferenceImage to avoid having to copy? and convert
 
         QPointF sampleRefPointF = refImage->documentToPixel(sampleDocRectF.center());
-        QRectF shapeRectF = refImage->documentToShape(sampleDocRectF);
+
         qreal xScale = refImage->boundingRect().width() / image.width();
         qreal yScale = refImage->boundingRect().height() / image.height();
 
-        QRectF sampleRefRectF = QRectF(sampleRefPointF, QSizeF(shapeRectF.width() / xScale, shapeRectF.height() / yScale));
+        QRectF sampleRefRectF = QRectF(sampleRefPointF, QSizeF(sampleDocRectF.width() / xScale, sampleDocRectF.height() / yScale));
         sampleRefRectF.moveCenter(sampleRefPointF);
+
+        QRect sampleRefRect = sampleRefRectF.toRect();
+        if (sampleRefRect.isEmpty()) sampleRefRect.setSize(QSize(1, 1));
 
         // Rotate the painter, draw, rotate back is seemingly easier than
         // trying to rotate the image and the shenanighens that follow
@@ -644,7 +650,7 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         gc.rotate(refImage->rotation());
         gc.translate(-viewRectF.center());
 
-        gc.drawImage(viewRectF, image, sampleRefRectF.toRect());
+        gc.drawImage(viewRectF, image, sampleRefRect);
 
         gc.restore();
     }

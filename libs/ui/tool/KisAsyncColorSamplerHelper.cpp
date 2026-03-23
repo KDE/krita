@@ -625,6 +625,8 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         QPolygonF outline = refImage->absoluteTransformation().map(refImage->outlineRect());
         if (!outline.intersects(QPolygonF(sampleDocRectF))) continue;
 
+        gc.save();
+
         QImage image = refImage->getCachedImage();
         // image.convertTo(QImage::Format_ARGB32); Do this in KisReferenceImage to avoid having to copy? and convert
 
@@ -642,11 +644,9 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         gc.rotate(refImage->rotation());
         gc.translate(-viewRectF.center());
 
-        gc.drawImage(viewRectF, image.copy(sampleRefRectF.toRect()));
+        gc.drawImage(viewRectF, image, sampleRefRectF.toRect());
 
-        gc.translate(viewRectF.center());
-        gc.rotate(-refImage->rotation());
-        gc.translate(-viewRectF.center());
+        gc.restore();
     }
 
     gc.restore();

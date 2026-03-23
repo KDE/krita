@@ -571,7 +571,7 @@ void KisConfig::setColorSamplerPreviewCircleThickness(qreal thickness)
 
 
 qreal KisConfig::colorSamplerZoomPreviewScale(bool defaultValue) const {
-    qreal def = 200;
+    qreal def = 500;
     if (!defaultValue) {
         return m_cfg.readEntry("colorSamplerZoomPreviewScale", def);
     }

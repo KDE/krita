@@ -329,7 +329,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_chkColorSamplerPreviewExtraCircles->setChecked(cfg.colorSamplerPreviewCircleExtraCirclesEnabled());
 
-    m_ssbColorSamplerZoomPreviewScale->setRange(100, 500);
+    m_ssbColorSamplerZoomPreviewScale->setRange(100, 1000);
     m_ssbColorSamplerZoomPreviewScale->setSingleStep(25);
     m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale());
 

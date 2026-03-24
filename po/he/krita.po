@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 02:41+0000\n"
-"PO-Revision-Date: 2026-03-21 16:23+0200\n"
+"PO-Revision-Date: 2026-03-23 16:46+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -47247,29 +47247,29 @@ msgstr "נא להוסיף את הפרטים האלה לדוח התקלה:"
 #: plugins/extensions/offsetimage/offsetimage.xmlgui:10
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:17
 #: plugins/extensions/shearimage/shearimage.xmlgui:7
-#, fuzzy, kde-format
+#, kde-format
 msgid "La&yer"
-msgstr "שכבה"
+msgstr "ש&כבה"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Clones Array"
-msgstr "שכבה חדשה"
+msgstr "יצירת מערך כפולים"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "+ Array of %1"
-msgstr "ירוק"
+msgstr "+ מערך של %1"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:226
-#, fuzzy, kde-format
+#, kde-format
 msgid "- Array of %1"
-msgstr "ירוק"
+msgstr "- מערך של %1"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:239
 #, kde-format
 msgid "Clone %1, %2"
-msgstr ""
+msgstr "שכפול %1, %2"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgRotateImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgClonesArray)
@@ -47279,48 +47279,48 @@ msgstr ""
 #: plugins/extensions/rotateimage/dlg_rotateimage.cc:21
 #: plugins/extensions/rotateimage/rotateimage.cc:91
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate Image"
-msgstr "שינוי שם התמונה"
+msgstr "סיבוב תמונה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "- Elements"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "- רכיבים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "+ Elements"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "+ רכיבים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "X offset"
-msgstr "היסט על ציר X:"
+msgstr "היסט ב־X"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:80
 #, fuzzy, kde-format
 msgid "Y offset"
-msgstr "היסט על ציר Y:"
+msgstr "היסט ב־X"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance"
-msgstr "רוחב:"
+msgstr "מרחק"
 
 #. i18n: ectx: property (text), widget (QCheckBox, columnPreference)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Preference"
-msgstr "העדפות"
+msgstr "העדפת עמודות"
 
 #: plugins/extensions/colorrange/colorrange.xmlgui:4
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select"
 msgstr "בחירה"
 
@@ -47328,51 +47328,50 @@ msgstr "בחירה"
 #: plugins/extensions/colorrange/dlg_colorrange.cc:48
 #: plugins/extensions/colorrange/dlg_colorrange.cc:56
 #: plugins/extensions/colorrange/wdg_colorrange.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Range"
-msgstr "מחליף צבעים"
+msgstr "טווח צבעים"
 
 #: plugins/extensions/colorrange/dlg_colorrange.cc:243
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Color Range Selection"
-msgstr "הדבקת בחירה"
+msgstr "בחירת טווח צבעים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reds"
-msgstr "אדום"
+msgstr "אדומים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Yellows"
-msgstr "זוויות:"
+msgstr "צהובים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Greens"
-msgstr "ירוק"
+msgstr "ירוקים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cyans"
-msgstr "משטח ציור"
+msgstr "ציאנים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blues"
-msgstr "כחול"
+msgstr "כחולים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magentas"
-msgstr "אטימות"
+msgstr "אדומים לילכיים"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonHighlights)
 #. i18n: ectx: property (text), widget (QLabel, label_16)
@@ -47380,9 +47379,9 @@ msgstr "אטימות"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:57
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:315
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Highlights"
-msgstr "&גובה:"
+msgstr "הדגשות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonMidtones)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -47400,50 +47399,50 @@ msgstr "מקושר"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:67
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:55
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shadows"
-msgstr "חדות:"
+msgstr "הצללות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:75
 #: plugins/filters/example/example.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Invert"
-msgstr "הזחה"
+msgstr "הי&פוך"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fuzziness"
-msgstr "מקושר"
+msgstr "ערפול"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAdd)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Add to current selection"
-msgstr "הזז בחירה"
+msgstr "הוספה לבחירה ה&נוכחית"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSubtract)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subtract fro&m current selection"
-msgstr "הזז בחירה"
+msgstr "&חיסור מהבחירה הנוכחית"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeselect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Deselect"
-msgstr "בחירה"
+msgstr "&ביטול בחירה"
 
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert All Layers From %1"
-msgstr "העבר שכבה נוכחית אחורה"
+msgstr "המרת כל השכבות מתוך %1"
 
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert Current Layer From %1"
-msgstr "העבר שכבה נוכחית אחורה"
+msgstr "המרת השכבה הנוכחית מתוך %1"
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -47464,12 +47463,12 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Resources Cache Database"
-msgstr ""
+msgstr "מסד נתוני מטמון משאבים"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:35
 #, kde-format
 msgid "Resources Cache Database Explorer"
-msgstr ""
+msgstr "סייר מסד נתוני מטמון משאבים"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #, kde-format
@@ -47485,9 +47484,9 @@ msgstr "שם קובץ"
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:135
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comment"
-msgstr "הערה : "
+msgstr "הערה"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:113
 #, kde-format
@@ -47735,9 +47734,9 @@ msgstr "פיצול לשכבות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split Into Local Selection Masks"
-msgstr "בחירה"
+msgstr "פיצול למסכות בחירה מקומיות"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:129
@@ -47750,77 +47749,77 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Creator name:"
-msgstr "הבא שכבה מעלה"
+msgstr "שם יוצר או יוצרת:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:34
 #, kde-format
 msgid "Publisher:"
-msgstr ""
+msgstr "הפצה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rights:"
-msgstr "גובה:"
+msgstr "זכויות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date:"
-msgstr "חזרה:"
+msgstr "תאריך:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/extensions/metadataeditor/editors/exif.ui:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF"
 msgid "Exposure"
-msgstr "ייצוא השכבה"
+msgstr "חשיפה"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/metadataeditor/editors/exif.ui:37
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Brightness &value:"
-msgstr "מקושר"
+msgstr "ערך &בהירות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/exif.ui:50
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "&ISO:"
-msgstr ""
+msgstr "&ISO:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #: plugins/extensions/metadataeditor/editors/exif.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure &time:"
-msgstr "ייצוא השכבה"
+msgstr "&זמן חשיפה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/metadataeditor/editors/exif.ui:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "E&xposure mode:"
-msgstr "מצב צבעים"
+msgstr "מצב &חשיפה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto"
-msgstr "&מברשת"
+msgstr "אוטו׳"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:102
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Manual"
-msgstr "אטימות"
+msgstr "ידני"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:107
@@ -47831,87 +47830,87 @@ msgstr "זוויות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: plugins/extensions/metadataeditor/editors/exif.ui:115
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure pro&gram:"
-msgstr "ייצוא השכבה"
+msgstr "תוכנית &חשיפה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:126
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Not defined"
-msgstr "אינ&דקס"
+msgstr "לא מוגדרת"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:131
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Manual"
-msgstr "אטימות"
+msgstr "ידנית"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:136
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Normal program"
-msgstr "יצירת שכבה חדשה"
+msgstr "תוכנית רגילה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Aperture priority"
-msgstr "תבניות"
+msgstr "עדיפות מפתח"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Shutter priority"
-msgstr "תבניות"
+msgstr "עדיפות צמצם"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:151
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Creative program"
-msgstr "יצירת שכבה חדשה"
+msgstr "תוכנית יצירתית"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:156
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Action program"
-msgstr "יצירת שכבה חדשה"
+msgstr "תוכנית פעולה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Portrait mode"
-msgstr "זוויות:"
+msgstr "מצב לאורך"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:166
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Landscape mode"
-msgstr "גוו&ני אפור"
+msgstr "מצב לרוחב"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/metadataeditor/editors/exif.ui:174
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure index:"
-msgstr "ייצוא השכבה"
+msgstr "מפתח חשיפה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: plugins/extensions/metadataeditor/editors/exif.ui:187
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure bias:"
-msgstr "ייצוא תמונה"
+msgstr "הטיית חשיפה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/metadataeditor/editors/exif.ui:200
@@ -47922,24 +47921,24 @@ msgstr "תבניות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/metadataeditor/editors/exif.ui:213
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Shutter speed:"
-msgstr "ירוק"
+msgstr "מהירות צמצם:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_25)
 #: plugins/extensions/metadataeditor/editors/exif.ui:226
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "&F Number:"
-msgstr "שם:"
+msgstr "מ&ספר F:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: plugins/extensions/metadataeditor/editors/exif.ui:240
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF"
 msgid "Lens"
-msgstr "&שכבה"
+msgstr "עדשה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/metadataeditor/editors/exif.ui:246
@@ -47964,10 +47963,10 @@ msgstr "תבניות"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: plugins/extensions/metadataeditor/editors/exif.ui:306
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF"
 msgid "Autofocus"
-msgstr "&מברשת"
+msgstr "מיקוד אוטומטי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: plugins/extensions/metadataeditor/editors/exif.ui:312
@@ -47978,17 +47977,17 @@ msgstr "רוחב:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/extensions/metadataeditor/editors/exif.ui:325
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: autofocus"
 msgid "Meterin&g mode:"
-msgstr "בחירה"
+msgstr "מצב מ&דידה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:336
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Unknown"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "לא ידוע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:341
@@ -48006,10 +48005,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:351
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Spot"
-msgstr "&לבן"
+msgstr "נקודה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:356
@@ -48020,17 +48019,17 @@ msgstr "&מברשת"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:361
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Pattern"
-msgstr "תבניות"
+msgstr "תבנית"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:366
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Partial"
-msgstr "גל משולש"
+msgstr "חלקי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:371
@@ -48048,10 +48047,10 @@ msgstr "רוחב:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:390
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Unknown"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "לא ידוע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:395
@@ -48125,45 +48124,45 @@ msgstr "&בוחר צבעים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: plugins/extensions/metadataeditor/editors/exif.ui:461
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Mode:"
 msgstr "מצב:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:472
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Unknown"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "לא ידוע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:477
 #, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Compulsory flash fired"
-msgstr ""
+msgstr "מבזק הופעל בכפייה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:482
 #, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Compulsory flash suppression"
-msgstr ""
+msgstr "דיכוי מבזק בכפייה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:487
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Auto mode"
-msgstr "&מברשת"
+msgstr "מצב אוטו׳"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashFunction)
 #: plugins/extensions/metadataeditor/editors/exif.ui:495
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Function"
-msgstr "בחירה"
+msgstr "פונקציה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashRedEyeMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:502
@@ -48231,24 +48230,24 @@ msgstr "הזז בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: plugins/extensions/metadataeditor/editors/exif.ui:574
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "L&ight source:"
-msgstr "גובה:"
+msgstr "מקור &אור:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:585
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Unknown"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "לא ידוע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:590
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Daylight"
-msgstr "גובה:"
+msgstr "אור יום"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:595
@@ -48277,31 +48276,31 @@ msgstr "מבזק"
 #: plugins/extensions/metadataeditor/editors/exif.ui:620
 #: plugins/extensions/metadataeditor/editors/exif.ui:625
 #: plugins/extensions/metadataeditor/editors/exif.ui:665
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Undefined"
-msgstr "אינ&דקס"
+msgstr "לא מוגדר"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:630
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Fine weather"
-msgstr "שכבה"
+msgstr "מזג אוויר נאה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:635
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cloudy weather"
-msgstr "שכבה"
+msgstr "מזג אוויר מעונן"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:640
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Shade"
-msgstr "חדות:"
+msgstr "הצללה"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:645
@@ -48315,42 +48314,42 @@ msgstr "פלורוסנט אור יום (D5700 - 7100K)"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Day white fluorescent (N4600 - 5400K)"
-msgstr ""
+msgstr "פלורוסנט לבן נייטרלי (N4600 - 5400K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:655
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cool white fluorescent (W3900 - 4500K)"
-msgstr ""
+msgstr "פלורוסנט לבן קר (W3900 - 4500K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:660
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "White fluorescent (WW 3200 - 3700K)"
-msgstr ""
+msgstr "פלורוסנט לבן-חם (WW 3200 - 3700K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:670
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light A"
-msgstr "כלי &עט"
+msgstr "אור רגיל א׳"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:675
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light B"
-msgstr "כלי &עט"
+msgstr "אור רגיל ב׳"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:680
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light C"
-msgstr "כלי &עט"
+msgstr "אור רגיל ג׳"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:685
@@ -48473,8 +48472,7 @@ msgstr "מברשות"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: plugins/extensions/metadataeditor/editors/exif.ui:801
-#, fuzzy, kde-format
-#| msgid "Misc"
+#, kde-format
 msgctxt "EXIF"
 msgid "Misc"
 msgstr "שונות"
@@ -48495,17 +48493,17 @@ msgstr "כלי &עט"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:823
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of landscapes)"
 msgid "Landscape"
-msgstr "גוו&ני אפור"
+msgstr "לרוחב"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:828
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of people)"
 msgid "Portrait"
-msgstr "זוויות:"
+msgstr "לאורך"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:833

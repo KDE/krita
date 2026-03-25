@@ -18,11 +18,11 @@ struct Q_DECL_HIDDEN KisLiquifyTransformWorker::Private
     Private(const QRect &_srcBounds,
             KoUpdater *_progress,
             int _pixelPrecision)
-        : srcBounds(_srcBounds),
-          progress(_progress),
-          pixelPrecision(_pixelPrecision)
+        : srcBounds(_srcBounds)
         , originalPointsContainer(_srcBounds)
         , transformedPointsContainer(_srcBounds)
+        , progress(_progress)
+        , pixelPrecision(_pixelPrecision)
     {
     }
 

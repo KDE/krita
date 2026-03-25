@@ -13,8 +13,8 @@
 
 struct Private {
     Private(KisCanvas2* c)
-        : displayedFrame(-1)
-        , intendedFrame(0)
+        : intendedFrame(0)
+        , displayedFrame(-1)
         , canvas(c) {}
 
     int intendedFrame;

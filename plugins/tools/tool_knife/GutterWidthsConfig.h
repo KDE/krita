@@ -28,11 +28,11 @@ public:
 
     const KoUnit baseUnit;
 
+    const qreal resolution;
     const qreal horizontal;
     const qreal vertical;
     const qreal diagonal;
     const qreal angleDegrees;
-    const qreal resolution;
 
 
 };

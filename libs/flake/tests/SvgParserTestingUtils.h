@@ -24,8 +24,8 @@
 struct SvgTester
 {
     SvgTester (const QString &data)
-        : m_parser(new SvgParser(&resourceManager)),
-          doc(SvgParser::createDocumentFromSvg(data))
+        : doc(SvgParser::createDocumentFromSvg(data)),
+          m_parser(new SvgParser(&resourceManager))
     {
         root = doc.documentElement();
 

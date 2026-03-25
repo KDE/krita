@@ -325,10 +325,10 @@ public:
         , importExportManager(new KisImportExportManager(_q))
         , autoSaveTimer(new QTimer(_q))
         , undoStack(new UndoStack(_q))
-        , colorHistory(rhs.colorHistory)
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
+        , colorHistory(rhs.colorHistory)
     {
         copyFromImpl(rhs, _q, CONSTRUCT);
         connect(&imageIdleWatcher, SIGNAL(startedIdleMode()), q, SLOT(slotPerformIdleRoutines()));

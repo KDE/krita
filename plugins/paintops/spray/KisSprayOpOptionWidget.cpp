@@ -207,7 +207,7 @@ KisSprayOpOptionWidget::KisSprayOpOptionWidget(lager::cursor<KisSprayOpOptionDat
     
     // enable widgets for the angular distribution
     slotSetupAngularDistributionWidget(widget, m_d->model.angularDistributionType() == KisSprayOpOptionData::ParticleDistribution_Uniform ? 0 : 1);
-    connect(&m_d->model, &KisSprayOpOptionModel::angularDistributionTypeChanged, widget, [this, widget] (int index) {
+    connect(&m_d->model, &KisSprayOpOptionModel::angularDistributionTypeChanged, widget, [widget] (int index) {
 		slotSetupAngularDistributionWidget(widget, index);
 	});
     
@@ -220,7 +220,7 @@ KisSprayOpOptionWidget::KisSprayOpOptionWidget(lager::cursor<KisSprayOpOptionDat
     
     // enable widgets for radial distribution
     slotSetupRadialDistributionWidget(widget, (int)m_d->model.radialDistributionType());
-    connect(&m_d->model, &KisSprayOpOptionModel::radialDistributionTypeChanged, widget, [this, widget] (int index) {
+    connect(&m_d->model, &KisSprayOpOptionModel::radialDistributionTypeChanged, widget, [widget] (int index) {
 		slotSetupRadialDistributionWidget(widget, index);
 	});
 	

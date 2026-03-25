@@ -112,8 +112,6 @@ void TestColorConversionSystem::testAlphaConnectionPaths()
 {
     const KoColorSpace *alpha8 = KoColorSpaceRegistry::instance()->alpha8();
 
-    using Path = KoColorConversionSystem::Path;
-    using Vertex = KoColorConversionSystem::Vertex;
     using NodeKey = KoColorConversionSystem::NodeKey;
 
     std::vector<NodeKey> expectedPath;
@@ -335,8 +333,6 @@ void TestColorConversionSystem::testAlphaU16Conversions()
 
 void TestColorConversionSystem::testGrayAConnectionPaths()
 {
-    using Path = KoColorConversionSystem::Path;
-    using Vertex = KoColorConversionSystem::Vertex;
     using NodeKey = KoColorConversionSystem::NodeKey;
 
     std::vector<NodeKey> expectedPath;

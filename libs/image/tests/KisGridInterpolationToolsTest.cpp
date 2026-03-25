@@ -236,8 +236,8 @@ void KisGridInterpolationToolsTest::testCalculateCorrectSubGrid_data()
 
     QTest::addRow("tiny change") << QRect(0, 0, 8, 8) << 8 << QRectF(2.1, 2.1, 0.6, 0.6) << QSize(1, 1) << QRect(0, 0, 1, 1);
 
-    QTest::addRow("from liquify mask unit test") << QRect(QPoint(1024,775), QSize(1483,254)) << pixelPrecision << QRectF(QPointF(1006.38,336.751), QSize(1688.41,691.249)) << QSize(187, 34) << QRect(0, 0, 187, 34);
-    QTest::addRow("from liquify mask unit test - simplified") << QRect(QPoint(1024,7), QSize(1483,14)) << pixelPrecision << QRectF(QPointF(1006.38,6), QSize(1688.41,15)) << QSize(187, 4) << QRect(0, 0, 187, 4);
+    QTest::addRow("from liquify mask unit test") << QRect(QPoint(1024,775), QSize(1483,254)) << pixelPrecision << QRectF(QPointF(1006.38,336.751), QSizeF(1688.41,691.249)) << QSize(187, 34) << QRect(0, 0, 187, 34);
+    QTest::addRow("from liquify mask unit test - simplified") << QRect(QPoint(1024,7), QSize(1483,14)) << pixelPrecision << QRectF(QPointF(1006.38,6), QSizeF(1688.41,15)) << QSize(187, 4) << QRect(0, 0, 187, 4);
 
 }
 

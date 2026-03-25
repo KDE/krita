@@ -226,6 +226,10 @@ void KisResourceItemListView::resizeEvent(QResizeEvent *event)
     }
     case ListViewMode::Detail: {
         setItemSize(m_d->requestedItemSize);
+        break;
+    }
+    case ListViewMode::IconGrid: {
+        break;
     }
     }
     scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);

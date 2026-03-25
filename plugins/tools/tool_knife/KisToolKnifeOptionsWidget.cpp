@@ -35,7 +35,7 @@ struct KisToolKnifeOptionsWidget::Private {
     Ui_KisToolKnifeOptionsWidget *ui {nullptr};
     KoGroupButton* buttonModeAddGutter {nullptr};
     KoGroupButton* buttonModeRemoveGutter {nullptr};
-    KoGroupButton* buttonModeMoveGutterEndPoint {nullptr};
+    //KoGroupButton* buttonModeMoveGutterEndPoint {nullptr};
     qreal resolution {1.0};
 
     QString toolId {""};
@@ -175,8 +175,8 @@ struct KisToolKnifeOptionsWidget::Private {
             return KisToolKnifeOptionsWidget::AddGutter;
         } else if (buttonModeRemoveGutter && buttonModeRemoveGutter->isChecked()) {
             return KisToolKnifeOptionsWidget::RemoveGutter;
-        } else if (buttonModeMoveGutterEndPoint && buttonModeMoveGutterEndPoint->isChecked()) {
-            return KisToolKnifeOptionsWidget::MoveGutterEndPoint;
+        //} else if (buttonModeMoveGutterEndPoint && buttonModeMoveGutterEndPoint->isChecked()) {
+        //    return KisToolKnifeOptionsWidget::MoveGutterEndPoint;
         } else {
             // default
             return KisToolKnifeOptionsWidget::AddGutter;
@@ -381,10 +381,10 @@ void KisToolKnifeOptionsWidget::modeChanged()
     switch(mode) {
         case AddGutter:
             m_d->ui->gapOptionsWidget->setEnabled(true);
-        break;
+            break;
         case RemoveGutter:
             m_d->ui->gapOptionsWidget->setEnabled(false);
-        break;
+            break;
 
     }
 }

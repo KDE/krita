@@ -37,7 +37,7 @@ public:
     enum ToolMode {
         AddGutter,
         RemoveGutter,
-        MoveGutterEndPoint,
+        //MoveGutterEndPoint,
     };
 
     GutterWidthsConfig getCurrentWidthsConfig();

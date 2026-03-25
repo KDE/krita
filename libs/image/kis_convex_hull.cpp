@@ -76,18 +76,6 @@ namespace boost
 
 namespace {
 
-inline QPolygon::iterator range_begin(QPolygon& p)
-{return QPolygon::iterator(p.begin());}
-
-inline QPolygon::const_iterator range_begin(const QPolygon& p)
-{return QPolygon::const_iterator(p.begin());}
-
-inline QPolygon::iterator range_end(QPolygon& p)
-{return QPolygon::iterator(p.end());}
-
-inline QPolygon::const_iterator range_end(const QPolygon& p)
-{return QPolygon::const_iterator(p.end());}
-
 QPolygon convexHull(const QVector<QPoint> &points)
 {
     QPolygon hull;

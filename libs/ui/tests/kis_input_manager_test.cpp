@@ -63,9 +63,9 @@ struct TestingAction : public KisAbstractInputAction
     TestingAction() : KisAbstractInputAction("TestingAction"), m_isHighResolution(false) { reset(); }
     ~TestingAction() {}
 
-    void begin(int shortcut, QEvent *event) { m_beginIndex = shortcut; m_beginNonNull = event;}
-    void end(QEvent *event) { m_ended = true; m_endNonNull = event; }
-    void inputEvent(QEvent* event) { Q_UNUSED(event); m_gotInput = true; }
+    void begin(int shortcut, QEvent *event) override { m_beginIndex = shortcut; m_beginNonNull = event;}
+    void end(QEvent *event) override { m_ended = true; m_endNonNull = event; }
+    void inputEvent(QEvent* event) override { Q_UNUSED(event); m_gotInput = true; }
 
     void reset() {
         m_beginIndex = -1;

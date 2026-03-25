@@ -45,7 +45,7 @@ protected Q_SLOTS:
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event)  override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
 

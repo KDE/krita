@@ -631,7 +631,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
     dbgFile << "Writing layer section";
 
     globalInfoSection.txt2Data = KisTxt2Utils::defaultTxt2();
-    int textCount = 0;
+    //int textCount = 0;
 
     // Build the whole layer structure
     QList<FlattenedNode> nodes;
@@ -766,7 +766,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             }
                             dbgFile << convert.warnings();
                             textData.engineData = KisTxt2Utils::tyShFromTxt2(globalInfoSection.txt2Data, FlaketoPixels.mapRect(textData.boundingBox), textData.textIndex);
-                            textCount += 1;
+                            //textCount += 1;
                             if (!text->shapesInside().isEmpty()) {
                                 textData.bounds = text->outlineRect().normalized();
                             }

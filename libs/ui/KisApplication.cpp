@@ -628,7 +628,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
             d->mainWindow = kisPart->createMainWindow();
         }
     }
-    short int numberOfOpenDocuments = 0; // number of documents open
 
     // Check for autosave files that can be restored, if we're not running a batch run (test)
     if (!d->batchRun) {
@@ -708,9 +707,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 if (d->batchRun) {
                     continue;
                 }
-                if (createNewDocFromTemplate(fileName, d->mainWindow)) {
-                    ++numberOfOpenDocuments;
-                }
+                createNewDocFromTemplate(fileName, d->mainWindow);
                 // now try to load
             }
             else {
@@ -791,10 +788,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     else {
                         KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
 
-                        if (d->mainWindow->openDocument(fileName, flags)) {
-                            // Normal case, success
-                            numberOfOpenDocuments++;
-                        }
+                        d->mainWindow->openDocument(fileName, flags);
                     }
                 }
             }

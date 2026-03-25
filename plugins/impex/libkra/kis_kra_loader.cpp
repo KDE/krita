@@ -1440,14 +1440,11 @@ void KisKraLoader::loadCompositions(const QDomElement& elem, KisImageSP image)
 void KisKraLoader::loadAssistantsList(const QDomElement &elem)
 {
     QDomNode child;
-    int count = 0;
     for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
         QDomElement e = child.toElement();
         QString type = e.attribute("type");
         QString file_name = e.attribute("filename");
         m_d->assistantsFilenames.insert(file_name,type);
-        count++;
-
     }
 }
 
@@ -1488,13 +1485,11 @@ void KisKraLoader::loadMirrorAxis(const QDomElement &elem)
 void KisKraLoader::loadStoryboardItemList(const QDomElement& elem)
 {
     QDomNode child;
-    int count = 0;
     for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
         QDomElement e = child.toElement();
         if (e.tagName() == "storyboarditem") {
             StoryboardItemSP item = toQShared( new StoryboardItem() );
             item->loadXML(e);
-            count++;
             m_d->storyboardItemList.append(item);
         }
     }
@@ -1503,7 +1498,6 @@ void KisKraLoader::loadStoryboardItemList(const QDomElement& elem)
 void KisKraLoader::loadStoryboardCommentList(const QDomElement& elem)
 {
     QDomNode child;
-    int count = 0;
     for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
         QDomElement e = child.toElement();
         if (e.tagName() == "storyboardcomment") {
@@ -1514,7 +1508,6 @@ void KisKraLoader::loadStoryboardCommentList(const QDomElement& elem)
             if (e.hasAttribute("name")) {
                 comment.name = e.attribute("name");
             }
-            count++;
             m_d->storyboardCommentList.append(comment);
         }
     }

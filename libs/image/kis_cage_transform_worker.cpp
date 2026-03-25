@@ -303,8 +303,6 @@ QRect KisCageTransformWorker::approxChangeRect(const QRect &rc)
     const int numValidPoints = cageSamplePoints.size();
     QVector<QPointF> transformedPoints(numValidPoints);
 
-    int failedPoints = 0;
-
     for (int i = 0; i < numValidPoints; i++) {
         transformedPoints[i] = cage.transformedPoint(i, m_d->transfCage);
 
@@ -312,7 +310,6 @@ QRect KisCageTransformWorker::approxChangeRect(const QRect &rc)
             qIsNaN(transformedPoints[i].y())) {
 
             transformedPoints[i] = cageSamplePoints[i];
-            failedPoints++;
         }
     }
 

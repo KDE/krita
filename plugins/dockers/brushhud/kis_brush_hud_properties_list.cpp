@@ -25,12 +25,10 @@ KisBrushHudPropertiesList::~KisBrushHudPropertiesList()
 
 void KisBrushHudPropertiesList::addProperties(const QList<KisUniformPaintOpPropertySP> &properties)
 {
-    int index = 0;
     Q_FOREACH (KisUniformPaintOpPropertySP prop, properties) {
         QListWidgetItem *item = new QListWidgetItem(prop->name(), this);
         item->setData(Qt::UserRole, prop->id());
         addItem(item);
-        index++;
     }
 }
 

@@ -264,7 +264,6 @@ void KisPaintingAssistantsDecoration::adjustLine(QPointF &point, QPointF &stroke
     bool minDistValid = false;
     QPointF finalPoint = originalPoint;
     QPointF finalStrokeBegin = originalStrokeBegin;
-    int id = 0;
     KisPaintingAssistantSP bestAssistant;
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
@@ -284,7 +283,6 @@ void KisPaintingAssistantsDecoration::adjustLine(QPointF &point, QPointF &stroke
                 bestAssistant = assistant;
             }
         }
-        id ++;
     }
     if (bestAssistant) {
         bestAssistant->setFollowBrushPosition(true);

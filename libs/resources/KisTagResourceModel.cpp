@@ -238,10 +238,7 @@ bool KisAllTagResourceModel::tagResources(const KisTagSP tag, const QVector<int>
         // needed for beginInsertRows calculations
         QMap<int, int> resourcesCountForLastActiveRowId;
 
-        int idd = 0;
-
         while (allIndices.next()) {
-            idd++;
             bool isActive = allIndices.value("resource_tags_pair_active").toBool();
             if (isActive) {
                 activesRowId++;
@@ -405,10 +402,7 @@ bool KisAllTagResourceModel::untagResources(const KisTagSP tag, const QVector<in
     // needed for beginInsertRows indices calculations
     QMap<int, int> resourcesCountForLastActiveRowId;
 
-    int idd = 0;
-
     while (allIndices.next()) {
-        idd++;
         bool variantSuccess = true;
 
         bool isActive = true; // all of them are active!

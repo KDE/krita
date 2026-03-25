@@ -639,8 +639,6 @@ void KisAlgebra2DTest::testLineRectIntersectionsRandom()
     QRect testRect = QRect(-1, -2, 5, 7);
 
     int numberOfTests = 100;
-    int skipped = 0;
-    int negative = 0;
     QRandomGenerator random(1000);
 
     for (int i = 0; i < numberOfTests; i++) {
@@ -719,9 +717,6 @@ void KisAlgebra2DTest::testLineRectIntersectionsRandom()
         } else if ((t2 < 0) || (t1 > 1)) {
             if (!onEdge) {
                 testLineRectIntersection(testRect, testLine, testLine, false, false, false);
-                negative++;
-            } else {
-                skipped++;
             }
         } else {
             if (t1 < 0) {

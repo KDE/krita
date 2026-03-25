@@ -7790,7 +7790,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr "Posa text en un camí"
+msgstr "Posa text en el camí"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
@@ -16728,7 +16728,7 @@ msgstr "Convertix el tipus de text"
 #: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Canvi del text a les propietats del camí"
+msgstr "Canvia les propietats del text en el camí"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -30764,7 +30764,7 @@ msgstr "Afig «Fusionades» a les capes de grup fusionades"
 #: libs/ui/forms/wdggeneralsettings.ui:1627
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
-msgstr "Afig «(apegat)» a les capes enganxades"
+msgstr "Afig «(apegat)» a les capes apegades"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1634
@@ -57232,7 +57232,7 @@ msgid ""
 msgstr ""
 "Mentre que les formes de text es poden guardar a PSD, només s'admeten "
 "característiques bàsiques. No es guardaran les característiques avançades, "
-"com les característiques de text en camí i opentype."
+"com les característiques text en el camí i opentype."
 
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
@@ -66089,7 +66089,7 @@ msgstr "Afig formes al flux de text."
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr "Posa text en un camí"
+msgstr "Posa text en el camí"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:688
 msgctxt "(qtundo-format)"
@@ -67172,7 +67172,7 @@ msgstr "Tots els glifs"
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "Canvia el text a la posició del camí"
+msgstr "Canvia la posició del text en el camí"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"

@@ -13870,7 +13870,7 @@ msgstr "粘贴"
 #, kde-format
 msgctxt "action"
 msgid "Paste at Cursor"
-msgstr "在光标处粘贴"
+msgstr "粘贴到光标处"
 
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
@@ -13880,7 +13880,7 @@ msgstr "在光标处粘贴"
 #, kde-format
 msgctxt "action"
 msgid "Paste at cursor"
-msgstr "在光标处粘贴"
+msgstr "粘贴到光标处"
 
 #. i18n: context: text @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
@@ -14039,7 +14039,7 @@ msgstr "填充 - 额外属性"
 #, kde-format
 msgctxt "action"
 msgid "Stro&ke selected shapes"
-msgstr "对选中形状描边(&K)"
+msgstr "描边 - 选中形状(&K)"
 
 #. i18n: context: toolTip @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
@@ -14049,14 +14049,14 @@ msgstr "对选中形状描边(&K)"
 #, kde-format
 msgctxt "action"
 msgid "Stroke selected shapes"
-msgstr "对选中形状描边"
+msgstr "描边 - 选中形状"
 
 #. i18n: context: text @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:547
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "选区描边(&T)..."
+msgstr "描边 - 选区(&T)..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -14066,7 +14066,7 @@ msgstr "选区描边(&T)..."
 #, kde-format
 msgctxt "action"
 msgid "Stroke selection"
-msgstr "选区描边"
+msgstr "描边 - 选区"
 
 #. i18n: context: text @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
@@ -24629,7 +24629,7 @@ msgstr "转换形状为矢量选区"
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
-msgstr "绘制折线"
+msgstr "绘制多段线"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:120
 msgctxt "(qtundo-format)"
@@ -27533,7 +27533,7 @@ msgstr "恢复默认值"
 #, kde-format
 msgctxt "@title:window"
 msgid "Stroke Selection Properties"
-msgstr "选区描边属性"
+msgstr "描边 - 选区属性"
 
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
@@ -31818,7 +31818,7 @@ msgstr "颜色历史环排序方式："
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
 #, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "固定 sRGB 三角拾色器旋转角度"
+msgstr "禁止 sRGB 三角形拾色器旋转"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192
@@ -38693,8 +38693,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"新图像的尺寸为 %1 x %2 像素、色彩空间为 %3 、像素大小为 %4 位、每个颜料图层将"
-"占用 %5 内存。"
+"新图像的尺寸为 %1 x %2 像素，色彩空间为 %3，像素大小为 %4 位，每个颜料图层将"
+"占用 %5 运行内存。"
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:155
 #, kde-format
@@ -63035,15 +63035,15 @@ msgstr "绘制参数随机调整"
 #, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "随机调整"
+msgstr "随机调整绘制参数"
 
 #: plugins/python/mutator/mutator.py:82 plugins/python/mutator/mutator.py:237
 msgid "Mutate"
-msgstr "随机调整"
+msgstr "随机调整绘制参数"
 
 #: plugins/python/mutator/mutator.py:127
 msgid "Settings mutated!"
-msgstr "设置已随机变化"
+msgstr "绘制参数已随机变化"
 
 #: plugins/python/mutator/mutator.py:157
 msgid "Mutator"
@@ -63120,7 +63120,8 @@ msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
-"调用“随机调整”操作，该操作会根据上面的设置随机调整各种全局笔刷参数和颜色。"
+"调用“随机调整绘制参数”操作，该操作会根据上面的设置随机调整各种全局笔刷参数和"
+"颜色。"
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
@@ -67450,14 +67451,14 @@ msgstr "多边形工具：单击画布开始绘制，Shift+单击结束绘制。
 #: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
-msgstr "折线工具：单击画布开始绘制，Shift+单击结束绘制。"
+msgstr "多段线工具：单击画布开始绘制，Shift+单击结束绘制。"
 
 #. i18n: context: text @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_polyline/KisToolPolyline.action:7
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool"
-msgstr "折线工具"
+msgstr "多段线工具"
 
 #. i18n: context: toolTip @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67468,7 +67469,7 @@ msgstr "折线工具"
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool. Shift-mouseclick ends the polyline."
-msgstr "折线工具：单击画布开始绘制，Shift+单击结束绘制。"
+msgstr "多段线工具：单击画布开始绘制，Shift+单击结束绘制。"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:134
 #, kde-format

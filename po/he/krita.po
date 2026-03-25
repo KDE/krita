@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 00:42+0000\n"
-"PO-Revision-Date: 2026-03-23 16:46+0200\n"
+"PO-Revision-Date: 2026-03-24 10:52+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -43328,43 +43328,43 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:437
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select OpenColorIO Configuration"
-msgstr "זוויות:"
+msgstr "הגדרת תצורת OpenColorIO"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:514
-#, fuzzy, kde-format
+#, kde-format
 msgid "Luminance"
-msgstr "רוחב:"
+msgstr "הארה"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:515
-#, fuzzy, kde-format
+#, kde-format
 msgid "All Channels"
-msgstr "ערוצים"
+msgstr "כל הערוצים"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:574
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "ללא"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use OpenColorIO"
-msgstr "&צבע"
+msgstr "להשתמש ב־OpenColorIO"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblDisplayDevice)
 #: plugins/dockers/lut/wdglut.ui:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display Device:"
-msgstr "חזרה:"
+msgstr "אמצעי תצוגה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/lut/wdglut.ui:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Components:"
-msgstr "זוויות:"
+msgstr "רכיבים:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, m_lblExposure)
@@ -43608,7 +43608,7 @@ msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
 "tool is not found"
 msgid "[NOT FOUND]"
-msgstr ""
+msgstr "[לא נמצא]"
 
 #: plugins/dockers/recorder/recorder_export.cpp:94
 #, kde-format
@@ -43740,7 +43740,7 @@ msgstr ""
 #, kde-format
 msgctxt "Contraction of \"second\" for interval"
 msgid " sec."
-msgstr ""
+msgstr " שנ׳"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:243
@@ -43944,9 +43944,9 @@ msgid "File extension:"
 msgstr "סיומת קובץ:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clean Up"
-msgstr "העמוד הבא"
+msgstr "ניקוי"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:138
 #, kde-format
@@ -44008,7 +44008,7 @@ msgstr "מתבצעת סריקה…"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
 #, kde-format
 msgid "Please select recordings to remove"
-msgstr ""
+msgstr "נא לבחור הקלטות להסרה"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpaceTitle)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
@@ -44284,7 +44284,7 @@ msgstr "מקליט"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
-msgstr ""
+msgstr "המערכת שלך לא יעילה מספיק ליכולת הזאת"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:627
 #, kde-format
@@ -44304,6 +44304,8 @@ msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
+"המקליט עצר עקב כשל בכתיבה לתמונית. נא לבדוק שיש מספיק מקום פנוי ואז להפעיל "
+"את המקליט שוב."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:755
 #, kde-format
@@ -44525,13 +44527,13 @@ msgstr "הסרת סצנה"
 msgid ""
 "Please enter correct range. There are no panels in the range of frames "
 "provided."
-msgstr ""
+msgstr "נא למלא את הטווח הנכון. אין לוחות בטווח התמוניות שצוין."
 
 #: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1261
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
-msgstr ""
+msgstr "סצנה "
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:293
 #, kde-format
@@ -45052,17 +45054,16 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "None"
 msgstr "ללא"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:132
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Length"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "אורך"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:133
 #: plugins/dockers/textproperties/qml/OTPosition.qml:79
@@ -45080,10 +45081,10 @@ msgid "Sub"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
-msgstr "מקושר"
+msgstr "כותרת:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, kde-format
@@ -45092,34 +45093,34 @@ msgid "Style Name:"
 msgstr "שם סגנון:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textarea"
 msgid "Description:"
-msgstr "&בוחר צבעים"
-
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
-#, fuzzy, kde-format
-msgctxt "@info:placeholder"
-msgid "Style Description."
 msgstr "תיאור:"
 
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Style Description."
+msgstr "תיאור סגנון."
+
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "label:listbox"
 msgid "Style Type:"
-msgstr "מקושר"
+msgstr "סוג סגנון:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
-msgstr "שרטרז"
+msgstr "תו"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
-msgstr "טקסט פיסקה רגיל"
+msgstr "פסקה"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
@@ -45138,54 +45139,53 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textfield"
 msgid "Sample Text:"
-msgstr "שכבה חדשה"
+msgstr "טקסט לדוגמה:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
-msgstr "לפני (%1):"
+msgstr "לפני…"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
-msgstr "גוו&ני אפור"
+msgstr "דוגמה…"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
-msgstr "&לבן"
+msgstr "… אחרי"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "רוחב:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "גובה:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Direction"
-msgstr "&בוחר צבעים"
+msgstr "כיוון"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:17
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
 msgstr ""
+"הכיוון מאפשר להגדיר האם הטקסט הוא משמאל לימין או מימין לשמאל (כמו בעברית)."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -45196,16 +45196,16 @@ msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Direction.qml:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left to Right"
-msgstr "בודד"
+msgstr "משמאל לימין"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:108
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right to Left"
-msgstr "הזחה ימנית"
+msgstr "מימין לשמאל"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:125
 #, kde-format
@@ -45225,41 +45225,40 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/OTPosition.qml:78
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:122
 #: plugins/dockers/textproperties/qml/WordBreak.qml:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Normal"
-msgstr "&לבן"
+msgstr "רגיל"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:137
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Embed"
-msgstr ""
+msgstr "הטמעה"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Override"
-msgstr "מאפייני שכבה..."
+msgstr "דריסה"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:139
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate"
-msgstr "מלבן"
+msgstr "בידוד"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:140
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "בידוד-דריסה"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:141
-#, fuzzy, kde-format
-#| msgid "Find Text"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Plain Text"
-msgstr "איתור טקסט"
+msgstr "טקסט פשוט"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:12
 #, kde-format
@@ -45302,8 +45301,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "@label"
 msgid "Font Family"
 msgstr "משפחת גופנים"
@@ -45326,19 +45324,19 @@ msgid "font-family, typeface, font, fallback"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove family"
-msgstr "הסר בחירה"
+msgstr "הסרת משפחה"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Family list is empty."
-msgstr "&תמונה"
+msgstr "רשימת המשפחות ריקה."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:171
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Fallback Family"
-msgstr "כל השפות"
+msgstr "הוספת משפחה לגיבוי"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:16
 #, fuzzy, kde-format
@@ -45363,18 +45361,16 @@ msgid "font-kerning, tracking"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size"
-msgstr "גודל גופן"
+msgstr "גודל כתב"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:19
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr ""
+msgstr "גודל הכתב מאפשר להגדיר את גודל התווים."
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -45420,10 +45416,10 @@ msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Font Style"
-msgstr "&תמונה"
+msgstr "סגנון כתב"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:18
 #, kde-format
@@ -45444,11 +45440,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
-msgstr "גובה:"
+msgstr "משקל: "
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:302
 #, kde-format
@@ -45457,10 +45452,10 @@ msgid "Synthesize Bold"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:slider"
 msgid "Width: "
-msgstr "רוחב:"
+msgstr "רוחב: "
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:328
 #, kde-format
@@ -45469,10 +45464,10 @@ msgid "Slant:"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
-msgstr "נטוי:"
+msgstr "נטוי"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:341
 #, kde-format
@@ -45493,10 +45488,10 @@ msgid "Synthesize Slant"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
-msgstr "הסר ערוץ"
+msgstr "גודל אופטי"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
@@ -45563,10 +45558,10 @@ msgid "Hang Last"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Language"
-msgstr "שפה:"
+msgstr "שפה"
 
 #: plugins/dockers/textproperties/qml/Language.qml:18
 #, kde-format
@@ -45692,9 +45687,7 @@ msgid "Soft breaks will occur along any grapheme."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "@label"
 msgid "Line Height"
 msgstr "גובה שורה"
@@ -45703,7 +45696,7 @@ msgstr "גובה שורה"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
-msgstr ""
+msgstr "גובה השורה שולטת בגובה השורה שתשמשת לטווח הטקסט."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:21
 #, kde-format
@@ -45711,25 +45704,25 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "גובה שורה, ריווח שורה"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:134
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Normal"
-msgstr "&לבן"
+msgstr "רגיל"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:14
 #, kde-format
 msgctxt "@label"
 msgid "OpenType Features"
-msgstr ""
+msgstr "יכולות OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
-msgstr "&צבע"
+msgstr "הגדרת יכולות OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -45745,24 +45738,23 @@ msgid "No OpenType features are currently set."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove feature."
-msgstr "ה&סר שכבה"
+msgstr "הסרת יכולת."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
 #: qmlmodules/components/qml/ResourceView.qml:297
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "מברשות"
+msgstr "חיפוש…"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:12
-#, fuzzy, kde-format
-#| msgid "Small Caps"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr "רישיות קטנות"
+msgstr "גליפים: אותיות גדולות"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
@@ -45840,11 +45832,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
-#, fuzzy, kde-format
-#| msgid "Picture"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Variant:"
-msgstr "תמונה"
+msgstr "הגוון:"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:101
 #, kde-format
@@ -45871,33 +45862,31 @@ msgid "JIS04"
 msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Simplified"
-msgstr "שכבה חדשה"
+msgstr "מפושט"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Traditional"
-msgstr "עירובים"
+msgstr "מסורתי"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Width:"
 msgstr "רוחב:"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:125
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Full width"
-msgstr "רוחב:"
+msgstr "רוחב מלא"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "יחסי"
@@ -45909,11 +45898,10 @@ msgid "Ruby"
 msgstr "Ruby"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:12
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr "לוח גליפים"
+msgstr "גליפים: ליגטורות"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
@@ -45979,10 +45967,10 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
-msgstr "מקושר"
+msgstr "סגנון:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
 #, fuzzy, kde-format
@@ -45997,14 +45985,13 @@ msgid "Oldstyle"
 msgstr "&תמונה"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Spacing:"
 msgstr "ריווח:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "יחסי"
@@ -46013,25 +46000,25 @@ msgstr "יחסי"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Tabular"
-msgstr ""
+msgstr "טבלאי"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Fractions:"
-msgstr "בחירה"
+msgstr "שברים:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:156
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Diagonal"
-msgstr "אלכסוני הפוך"
+msgstr "אלכסוני"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Stacked"
-msgstr "מקושר"
+msgstr "מוערם"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:173
 #, fuzzy, kde-format
@@ -46043,19 +46030,19 @@ msgstr "אלכסוני"
 #, kde-format
 msgctxt "@option:check"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "אפס עם קו אלכסוני"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Position"
-msgstr "מיקום"
+msgstr "גליפים: מקום"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "הפעלת כתב עילי או תחתי על הטקסט."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -46127,17 +46114,17 @@ msgid "text-align, justification, text-anchor"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Text Align:"
-msgstr "כלי מי&לוי"
+msgstr "יישור טקסט:"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:306
 #: plugins/dockers/textproperties/qml/TextAlign.qml:338
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left"
-msgstr "&צבע"
+msgstr "שמאל"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:307
 #: plugins/dockers/textproperties/qml/TextAlign.qml:339
@@ -46149,8 +46136,7 @@ msgstr "התחלה"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:308
 #: plugins/dockers/textproperties/qml/TextAlign.qml:340
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Center"
 msgstr "מרכז"
@@ -46158,24 +46144,23 @@ msgstr "מרכז"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:309
 #: plugins/dockers/textproperties/qml/TextAlign.qml:341
 #: plugins/dockers/textproperties/qml/TextAlign.qml:369
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "End"
-msgstr "כחול"
+msgstr "סוף"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:310
 #: plugins/dockers/textproperties/qml/TextAlign.qml:342
-#, fuzzy, kde-format
-#| msgid "Right"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right"
-msgstr "ימינה"
+msgstr "ימין"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:311
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Justified"
-msgstr "לש&ני הצדדים"
+msgstr "מפוזר לצדדים"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:327
 #, fuzzy, kde-format
@@ -46184,16 +46169,16 @@ msgid "Align Last:"
 msgstr "יישור"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:357
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
-msgstr "כלי מי&לוי"
+msgstr "עוגן טקסט:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "תבניות"
+msgstr "אזור טקסט"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
@@ -46210,23 +46195,22 @@ msgid "text-in-shape, padding, margin"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "ניווט"
+msgstr "ריפוד צורה: "
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "ניווט"
+msgstr "גבול צורה: "
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
-#, fuzzy, kde-format
-#| msgid "Decoration:"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Decoration"
-msgstr "קישוט:"
+msgstr "קישוט טקסט"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
 #, kde-format
@@ -46234,7 +46218,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
 "text."
-msgstr ""
+msgstr "קישוט טקסט מאפשר ציור קווים תחתונים, עליונים וחוצים ביחס לטקסט."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -46242,18 +46226,16 @@ msgctxt ""
 "comma separated search terms for the text-decoration property, matching is "
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
-msgstr ""
+msgstr "קו תחתון, קו עליון, קו חוצה, קו מבעד"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Line:"
-msgstr "&שכבה"
+msgstr "קו:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:177
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Underline"
+#, kde-format
 msgctxt "@option:check"
 msgid "Underline"
 msgstr "קו תחתון"
@@ -46273,33 +46255,31 @@ msgid "Line-through"
 msgstr "קו חוצה"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:222
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Color:"
-msgstr "&צבע"
+msgstr "צבע:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:255
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Solid"
-msgstr "מוצק"
+msgstr "אחיד"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:256
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dotted"
-msgstr ""
+msgstr "מנוקד"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:257
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dashed"
-msgstr "מאתחל..."
+msgstr "מקווקוו"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:258
-#, fuzzy, kde-format
-#| msgctxt "Line spacing value"
-#| msgid "Double"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Double"
 msgstr "כפול"
@@ -46308,7 +46288,7 @@ msgstr "כפול"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Wavy"
-msgstr ""
+msgstr "גלי"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:14
 #, fuzzy, kde-format
@@ -46347,16 +46327,16 @@ msgid "Indent after hardbreaks"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:64
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Paragraph"
-msgstr "טקסט פיסקה רגיל"
+msgstr "פסקה"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Character"
-msgstr "שרטרז"
+msgstr "תו"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
 #, fuzzy, kde-format
@@ -46383,31 +46363,28 @@ msgid "Clone Style Preset"
 msgstr "מקושר"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
-#, fuzzy, kde-format
-#| msgid "Filter"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "מסנן"
+msgstr "סינון…"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:334
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
-msgstr "Script"
+msgstr "הוספת מאפיין"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:352
-#, fuzzy, kde-format
-#| msgid "&Add Group..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Add Property..."
-msgstr "&הוספת קבוצה..."
+msgstr "הוספת מאפיין…"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@label:button"
 msgid "Configure"
-msgstr "הגדר"
+msgstr "הגדרה"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:39
 #, fuzzy, kde-format
@@ -46431,43 +46408,43 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Always Show"
-msgstr "כלי &עט"
+msgstr "תמיד להציג"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr "ב&רירת מחדל"
+msgstr "כמו ברירת המחדל"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Never Show"
-msgstr "שנה גודל"
+msgstr "לעולם לא להציג"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Rendering"
-msgstr "אלפא"
+msgstr "תיצוג טקסט"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
-msgstr ""
+msgstr "תיצוג טקסט שולט ברימוז ובסגנון התיצוג למאפיין"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr "מאתחל..."
+msgstr "תיצוג טקסט, רימוז, החלקת קצוות"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -46478,10 +46455,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Speed"
-msgstr "הסר ערוץ"
+msgstr "מיטוב מהירות"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:84
 #, fuzzy, kde-format
@@ -46515,11 +46492,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
-#, fuzzy, kde-format
-#| msgid "Free Transform"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Transform"
-msgstr "התמרה חופשית"
+msgstr "התמרת טקסט"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
 #, kde-format
@@ -46529,6 +46505,8 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"התמרת טקסט מאפשר להתמיר את טווח התווים שצוין, למשל על ידי הגדרתם לגדולים או "
+"החלפת צורות חצי רוחב לצורות ברוחב מלא."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -46544,32 +46522,31 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
-msgstr ""
+msgstr "מצב רישיות:"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
-msgstr "רישיות:"
+msgstr "הגדלת אותיות ראשונות"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
-msgstr "ספרות רומיות רישיות"
+msgstr "אותיות גדולות"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:107
-#, fuzzy, kde-format
-#| msgid "Lowercase"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lower Case"
-msgstr "אותיות רגילות"
+msgstr "אותיות קטנות"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:125
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Full-width"
-msgstr "רוחב:"
+msgstr "רוחב מלא"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:136
 #, kde-format
@@ -46740,10 +46717,10 @@ msgid "word-spacing, tracking, white space,"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Writing Mode"
-msgstr "זוויות:"
+msgstr "מצב כתיבה"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, kde-format
@@ -46762,22 +46739,22 @@ msgid "writing-mode, horizontal, vertical, top-to-bottom"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Horizontal"
-msgstr "גל משולש"
+msgstr "אופקי"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:78
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
-msgstr "הזחה ימנית"
+msgstr "אנכי, מימין לשמאל"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
-msgstr "בודד"
+msgstr "אנכי, משמאל לימין"
 
 #: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:222
 #, fuzzy, kde-format
@@ -46786,26 +46763,26 @@ msgid "New Style Preset"
 msgstr "מקושר"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Properties"
-msgstr "מאפיינים"
+msgstr "מאפייני טקסט"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "זוויות:"
+msgstr "הגדרות מאפייני טקסט"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
-#, fuzzy, kde-format
+#, kde-format
 msgid "Touch Docker"
-msgstr "מספר שורות"
+msgstr "מעגן מגע"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Model"
-msgstr "צבעים"
+msgstr "דגם הצבעים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
@@ -46851,21 +46828,21 @@ msgstr "&לבן"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select..."
-msgstr "בחירה"
+msgstr "בחירה…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
 #, kde-format
 msgid "Selection Color Space:"
-msgstr "בחירת מרחב צבע:"
+msgstr "מרחב צבע בחירה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer/Mask"
-msgstr "שמירת שכבה בתור תמונה..."
+msgstr "שכבה/מסכה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
@@ -46889,9 +46866,9 @@ msgstr "&תמונה"
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:547
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Patches"
-msgstr "&בוחר צבעים"
+msgstr "טלאי צבע"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -46899,9 +46876,9 @@ msgstr "&בוחר צבעים"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:568
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:775
-#, fuzzy, kde-format
+#, kde-format
 msgid "Orientation:"
-msgstr "עירוב:"
+msgstr "כיוון:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -46909,9 +46886,9 @@ msgstr "עירוב:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:590
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:797
-#, fuzzy, kde-format
+#, kde-format
 msgid "hori&zontal"
-msgstr "גל משולש"
+msgstr "&אופקי"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -46919,9 +46896,9 @@ msgstr "גל משולש"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:600
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:807
-#, fuzzy, kde-format
+#, kde-format
 msgid "&vertical"
-msgstr "גל משולש"
+msgstr "א&נכי"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -46949,9 +46926,9 @@ msgstr "גל משולש"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:649
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:856
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scrolling:"
-msgstr "ריווח:"
+msgstr "גלילה:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -46959,9 +46936,9 @@ msgstr "ריווח:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:659
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:866
-#, fuzzy, kde-format
+#, kde-format
 msgid "Patches"
-msgstr "&בוחר צבעים"
+msgstr "טלאים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -47005,15 +46982,15 @@ msgstr "הדבקת בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Count:"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "כמות שורות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Height:"
-msgstr "גובה:"
+msgstr "גובה שורה:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:734
@@ -47023,21 +47000,21 @@ msgstr "כפתור פינוי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:760
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "מחליף צבעים"
+msgstr "&צבעים מתמונה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:941
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto Update"
-msgstr "חזרה:"
+msgstr "עדכון אוטומטי"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Range:"
-msgstr "מלבן"
+msgstr "טווח:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -47051,15 +47028,15 @@ msgstr "היסט:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display:"
-msgstr "חזרה:"
+msgstr "תצוגה:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "מחוון &גלילה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
@@ -47071,9 +47048,9 @@ msgstr "&בוחר צבעים"
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
 #: plugins/tools/basictools/wdgcolorsampler.ui:265
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview:"
-msgstr "שינוי גודל תמונה"
+msgstr "תצוגה מקדימה:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
@@ -47102,10 +47079,10 @@ msgstr "כלי מ&חיקה"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "כלי מ&חיקה"
+msgstr "הצגת בורר הצללות"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -47113,10 +47090,10 @@ msgstr "כלי מ&חיקה"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "כלי מ&חיקה"
+msgstr "הצגת בורר MyPaint"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -47124,10 +47101,10 @@ msgstr "כלי מ&חיקה"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "אלפא"
+msgstr "הבהרת הצבע"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -47137,6 +47114,7 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"הגדלת הערך, הבהירות והעוצמה או הלומה של הצבע הנבחר, בהתאם לדגם הצבעים הנבחר"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -47144,10 +47122,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "&בוחר צבעים"
+msgstr "הכהית הצבע"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -47157,6 +47135,7 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"הקטנת הערך, הבהירות והעוצמה או הלומה של הצבע הנבחר, בהתאם לדגם הצבעים הנבחר"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -47164,17 +47143,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "תמצית"
+msgstr "הגברת רוויית הצבע"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "הגברת רוויית הצבע הנבחר"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -47182,17 +47161,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "תיאור:"
+msgstr "הפחתת רוויית הצבע"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "הפחתת רוויית הצבע הנבחר"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -47236,10 +47215,10 @@ msgid "Wide Gamut Color Selector"
 msgstr "הדבקת בחירה"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "זוויות:"
+msgstr "הגדרה…"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, fuzzy, kde-format
@@ -47247,14 +47226,14 @@ msgid "Wide Gamut Color Selector Settings"
 msgstr "הדבקת בחירה"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Please paste this information in your bug report"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "נא להדביק את המידע הזה לתוך דיווח התקלה שלך"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy to clipboard"
-msgstr "העתק בחירה לשכבה חדשה"
+msgstr "העתקה ללוח הגזירים"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:42
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:76

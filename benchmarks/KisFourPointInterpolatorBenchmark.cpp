@@ -162,6 +162,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorRoundTrip()
 
                 //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
                 qreal length = (bwdPt - pt).manhattanLength() < 1e-3;
+                Q_UNUSED(length);
             }
         }
     }
@@ -196,6 +197,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorUnevenlyShearedT
 
             //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
             qreal length = (bwdPt - pt).manhattanLength() < 1e-3;
+            Q_UNUSED(length);
         }
 
         // points from within polygons
@@ -209,6 +211,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorUnevenlyShearedT
 
                 //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
                 qreal length = (bwdPt - pt).manhattanLength() < 1e-3;
+                Q_UNUSED(length);
             }
         }
 
@@ -223,6 +226,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorUnevenlyShearedT
                 //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
                 //DBGVERIFY(((bwdPt - pt).manhattanLength() < 1e-3), (QString(pt).append(fwdPt).append(bwdPt)));
                 qreal length = (bwdPt - pt).manhattanLength() < 1e-3;
+                Q_UNUSED(length);
             }
         }
 #endif
@@ -262,7 +266,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorFoldedTetragon()
 
             //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
             qreal length = (bwdPt - pt).manhattanLength() < 1e-3;
-
+            Q_UNUSED(length);
         }
 
         // points from within polygons
@@ -276,6 +280,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorFoldedTetragon()
 
                 //dbgKrita << "R:" << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
                 qreal length = (bwdPt - pt).manhattanLength() < 1e-3;
+                Q_UNUSED(length);
             }
         }
 
@@ -292,6 +297,7 @@ void KisFourPointInterpolatorBenchmark::testBackwardInterpolatorFoldedTetragon()
                     qCritical() << ppVar(pt) << ppVar(fwdPt) << ppVar(bwdPt) << (bwdPt - pt);
                 }
                 qreal length = bwdPt - pt).manhattanLength() < 1e-3;
+                Q_UNUSED(length);
             }
         }
 #endif

@@ -179,17 +179,6 @@ auto hangingPunactuationCommaProp =
 
 }
 
-auto propertyState = [](const KoSvgTextProperties::PropertyId &propId) { return [propId] (const KoSvgTextPropertyData &value) -> KoSvgTextPropertiesModel::PropertyState {
-    if (value.commonProperties.hasProperty(propId)) {
-        return KoSvgTextPropertiesModel::PropertySet;
-    } else if (value.tristate.contains(propId) || value.inheritedProperties.hasProperty(propId)) {
-        return KoSvgTextPropertiesModel::PropertyTriState;
-    }
-    return KoSvgTextPropertiesModel::PropertyUnset;
-
-};
-};
-
 KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData)
     : textData(_textData)
     , commonProperties(textData[&KoSvgTextPropertyData::commonProperties])

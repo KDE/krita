@@ -280,8 +280,6 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
 void KisTransactionTest::testTransactionWrapperFactory()
 {
     KisSurrogateUndoAdapter undoAdapter;
-    const QRect imageRect(0,0,100,100);
-
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -450,8 +448,6 @@ TestInterstrokeData* resolveType(KisInterstrokeDataSP data) {
 void KisTransactionTest::testInterstrokeData()
 {
     KisSurrogateUndoAdapter undoAdapter;
-    const QRect imageRect(0,0,100,100);
-
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);

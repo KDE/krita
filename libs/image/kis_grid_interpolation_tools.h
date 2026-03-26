@@ -863,9 +863,6 @@ bool canProcessRectsInRandomOrder(IndexesOp &indexesOp, const QVector<QPointF> &
     QPoint startPoint = subgrid.topLeft();
     QPoint endPoint = subgrid.bottomRight();
 
-
-    int polygonsChecked = 0;
-
     for (int row = startPoint.y(); row < endPoint.y(); row++) {
         for (int col = startPoint.x(); col < endPoint.x(); col++) {
             int numExistingPoints = 0;

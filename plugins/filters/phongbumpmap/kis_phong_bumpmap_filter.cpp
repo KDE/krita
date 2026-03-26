@@ -71,7 +71,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     quint32 posdown;
     quint32 posleft;
     quint32 posright;
-    QColor I; //Reflected light
+    //QColor I; //Reflected light
 
     if (progressUpdater) progressUpdater->setProgress(1);
 
@@ -222,5 +222,3 @@ KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *paren
     KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, parent);
     return w;
 }
-
-

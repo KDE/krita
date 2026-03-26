@@ -181,9 +181,7 @@ void TimelineNodeListKeeper::Private::disconnectDummy(KisNodeDummy *dummy)
         return;
     }
 
-    Q_FOREACH(KisKeyframeChannel *channel, channels) {
-        channelConnectionsStore.clear();
-    }
+    channelConnectionsStore.clear();
 
     connectionsSet.remove(dummy);
 }

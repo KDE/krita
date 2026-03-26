@@ -272,7 +272,6 @@ void KisGridInterpolationToolsTest::testCutOutSubgridFromBounds_data()
     QTest::addColumn<QList<QRectF>>("expected");
 
     int pixelPrecision = 8;
-    QRect originalBounds = QRect(20, 20, 100, 200);
 
     QRect srcBounds = QRect(0, 0, 1240, 1754);
     QRect srcBoundsSmall = QRect(0, 0, 100, 100);

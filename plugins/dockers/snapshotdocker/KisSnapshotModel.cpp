@@ -56,7 +56,6 @@ QPointer<KisDocument> KisSnapshotModel::Private::curDocument()
 bool KisSnapshotModel::Private::switchToDocument(QPointer<KisDocument> doc)
 {
     if (curCanvas && curCanvas->imageView()) {
-        KisView *view = curCanvas->imageView();
         KisDocument *curDoc = curDocument();
         if (curDoc && doc) {
             curDoc->copyFromDocument(*doc);

@@ -597,7 +597,6 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
     QPainterPath dragRect;
     int width = actionsPosition.x()+globalEditorWidgetData.boundingSize.width()-globalEditorWidgetData.dragDecorationWidth+globalEditorWidgetData.widgetOffset;
-    int height = actionsPosition.y()+globalEditorWidgetData.boundingSize.height()+globalEditorWidgetData.widgetOffset;
     dragRect.addRect(QRectF(width,actionsPosition.y()+globalEditorWidgetData.widgetOffset,globalEditorWidgetData.dragDecorationWidth,globalEditorWidgetData.boundingSize.height()));
 
     gc.fillPath(bgPath.intersected(dragRect),dragDecorationColor);

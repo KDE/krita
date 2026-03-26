@@ -87,7 +87,6 @@ void TestCompositeOpInversion::test()
                     Q_FOREACH (int dstColorValue, values) {
                         KoBgrU8Traits::Pixel *srcPixel = reinterpret_cast<KoBgrU8Traits::Pixel*>(srcColor.data());
                         KoBgrU8Traits::Pixel *dstPixel = reinterpret_cast<KoBgrU8Traits::Pixel*>(dstColor.data());
-                        KoBgrU8Traits::Pixel *origDstPixel = reinterpret_cast<KoBgrU8Traits::Pixel*>(origDstColor.data());
 
                         srcPixel->red = srcColorValue;
                         srcPixel->green = 255 - srcColorValue;

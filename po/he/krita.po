@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 02:41+0000\n"
-"PO-Revision-Date: 2026-03-24 10:52+0200\n"
+"PO-Revision-Date: 2026-03-25 18:11+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -41109,14 +41109,14 @@ msgid "Perspective Ellipse"
 msgstr "כלי מ&חיקה"
 
 #: plugins/assistants/Assistants/RulerAssistant.cc:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ruler assistant"
-msgstr "אליפסה"
+msgstr "מסייע סרגלים"
 
 #: plugins/assistants/Assistants/RulerAssistant.cc:345
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ruler"
-msgstr "הס&תר\\הצג שכבה"
+msgstr "סרגל"
 
 #: plugins/assistants/Assistants/SplineAssistant.cc:75
 #, fuzzy, kde-format
@@ -41145,9 +41145,9 @@ msgid "Vanishing Point assistant"
 msgstr "אליפסה"
 
 #: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vanishing Point"
-msgstr "אלפא"
+msgstr "נקודת ההיעלמות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_17)
@@ -41241,114 +41241,114 @@ msgid "Cr"
 msgstr "כלי מי&לוי"
 
 #: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "ICC Engine"
-msgstr "מחליף צבעים"
+msgstr "מנוע ICC"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b*/8 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת L*a*b*/8"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b*/16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת L*a*b*/16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b*/32 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת L*a*b*/32"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBA/8 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת RGBA/8"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:185
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBA/16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת RGBA/16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:191
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBA/F16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת RGBA/F16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:197
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBA/F32 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת RGBA/F32"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgid "GRAY/8 Histogram"
-msgstr "אלפא"
+msgstr "היסטוגרמת GRAY/8"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "GRAY/16 Histogram"
-msgstr "אלפא"
+msgstr "היסטוגרמת GRAY/16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "GRAYF/F16 Histogram"
-msgstr "אלפא"
+msgstr "היסטוגרמת GRAYF/F16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "GRAY/F32 float Histogram"
-msgstr "אלפא"
+msgstr "היסטוגרמת GRAY/F32 עם נקודה צפה"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:243
-#, fuzzy, kde-format
+#, kde-format
 msgid "CMYK/8 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת CMYK/8"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid "CMYK/16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת CMYK/16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:251
-#, fuzzy, kde-format
+#, kde-format
 msgid "CMYK/F32 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת CMYK/F32"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZ/8 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת XYZ/8"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:273
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZ/16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת XYZ/16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZ/F16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת XYZ/F16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:285
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZF32 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת XYZF32"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCbCr/8 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת YCbCr/8"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:302
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCbCr/16 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת YCbCr/16"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:306
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCbCr/F32 Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמת YCbCr/F32"
 
 #: plugins/dockers/advancedcolorselector/kis_color_history.cpp:30
 #, kde-format
@@ -41387,9 +41387,9 @@ msgid "When Pressing Middle Mouse Button"
 msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "On Mouse Over"
-msgstr "שכבה חדשה"
+msgstr "עם מעבר העכבר"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
 #, fuzzy, kde-format
@@ -41427,13 +41427,15 @@ msgid ""
 "Saturation, in turn, goes from the most saturated color to white, gray or "
 "black."
 msgstr ""
+"ערכים נעים בין בין שחור ללבן, או שחור לצבע הרווי ביותר. רוויה, מאידך גיסא, "
+"נעה מהצבע הרווי ביותר עד לבן, אפור או שחור."
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:273
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
-msgstr ""
+msgstr "בהירות נאה משחור ללבן, עם אפור באמצע ששווה לצבע הרווי ביותר."
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:276
 #, kde-format
@@ -41477,9 +41479,9 @@ msgstr "מעגן:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:66
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Selector"
-msgstr "הדבקת בחירה"
+msgstr "בורר צבעים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
@@ -41506,21 +41508,21 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:238
 #, kde-format
 msgid "Red':"
-msgstr ""
+msgstr "אדום':"
 
 #. i18n: ectx: property (text), widget (QLabel, greenlabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:148
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Green':"
-msgstr "ירוק"
+msgstr "ירוק':"
 
 #. i18n: ectx: property (text), widget (QLabel, bluelabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:162
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:158
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blue':"
-msgstr "כחול"
+msgstr "כחול':"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spLumaGamma)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, SP_Gamma)
@@ -41549,7 +41551,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
 #, kde-format
 msgid "Behavior"
-msgstr ""
+msgstr "התנהגות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:274
@@ -41578,16 +41580,16 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:351
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:406
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shade Selector"
-msgstr "הדבקת בחירה"
+msgstr "בורר הצללות"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
 #: plugins/python/colorspace/uicolorspace.py:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color model:"
-msgstr "&בוחר צבעים"
+msgstr "דגם הצבעים:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
@@ -41605,15 +41607,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background color changes"
-msgstr "&צבע רקע"
+msgstr "שינויי צבע רקע"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
-#, fuzzy, kde-format
+#, kde-format
 msgid "Foreground color changes"
-msgstr "&צבע רקע"
+msgstr "שינויי צבע חזית"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:415
@@ -41635,55 +41637,55 @@ msgstr "הדבקת בחירה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsColorPatches)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colo&r Patches"
-msgstr "&בוחר צבעים"
+msgstr "&טלאי צבע"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsGradient)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:457
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Gradient"
-msgstr "עירובים"
+msgstr "מ&דרג"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:513
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Count: "
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "כמות שורות: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Height: "
-msgstr "גובה:"
+msgstr "גובה שורה: "
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
 #, kde-format
 msgid "Patches Per Line: "
-msgstr ""
+msgstr "טלאים לשורה: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:603
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:553
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color History"
-msgstr "הדבקת בחירה"
+msgstr "היסטוריית צבעים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lastUsedColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:609
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Color Histor&y"
-msgstr "הדבקת בחירה"
+msgstr "הצגת הי&סטוריית צבעים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:639
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:862
-#, fuzzy, kde-format
+#, kde-format
 msgid "Patch Options"
-msgstr "&מברשת"
+msgstr "אפשרויות טלאי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -41703,9 +41705,9 @@ msgstr "&בוחר צבעים"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:227
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:562
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:769
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layout"
-msgstr "הגדרות עמוד"
+msgstr "פריסה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignVertical)
@@ -41713,9 +41715,9 @@ msgstr "הגדרות עמוד"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:729
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:946
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Vertical"
-msgstr "גל משולש"
+msgstr "א&נכי"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignHorizontal)
@@ -41723,9 +41725,9 @@ msgstr "גל משולש"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:739
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:953
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hori&zontal"
-msgstr "גל משולש"
+msgstr "או&פקי"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsAllowScrolling)
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAllowScrolling)
@@ -41733,7 +41735,7 @@ msgstr "גל משולש"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1012
 #, kde-format
 msgid "Allow scrolling"
-msgstr ""
+msgstr "לאפשר גלילה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsPerDocument)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
@@ -41743,27 +41745,27 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colors from Image"
-msgstr "מחליף צבעים"
+msgstr "צבעים מתמונה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:838
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Colors from the ima&ge"
-msgstr "מחליף צבעים"
+msgstr "הצ&גת צבעים מהתמונה"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, commonColorsAutoUpdate)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1022
 #, kde-format
 msgid "this can be slow on big images"
-msgstr ""
+msgstr "זה יכול להיות איטי בתמונות גדולות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAutoUpdate)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1025
-#, fuzzy, kde-format
+#, kde-format
 msgid "Update after every stroke"
-msgstr "כלי מ&חיקה"
+msgstr "לעדכן אחרי כל משיכה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hsy)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1065
@@ -41773,9 +41775,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1071
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lightness: "
-msgstr "מקושר"
+msgstr "בהירות: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_lightness)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_saturation)
@@ -41787,15 +41789,15 @@ msgstr "מקושר"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1099
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1129
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1143
-#, fuzzy, kde-format
+#, kde-format
 msgid " steps"
-msgstr "אלפא"
+msgstr " צעדים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1085
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation: "
-msgstr "ניווט"
+msgstr "רוויה: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1106
@@ -41811,27 +41813,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Redder/Greener: "
-msgstr "ירוק"
+msgstr "אדום/ירוק יותר:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bluer/Yellower: "
-msgstr "זוויות:"
+msgstr "כחול/צהוב יותר: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
-msgstr "בחירה"
+msgstr "איפוס"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:264
-#, fuzzy, kde-format
+#, kde-format
 msgid "Animation Curves"
-msgstr "&שכבה"
+msgstr "עקומות הנפשה"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:75
@@ -41841,10 +41843,10 @@ msgstr "ייצוא תמונה"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
-msgstr "חדות:"
+msgstr "מהירות: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
@@ -41864,14 +41866,14 @@ msgid "Value register"
 msgstr "ייצוא תמונה"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "גל משולש"
+msgstr "תקריב אופקי"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom vertically"
-msgstr "בחירה"
+msgstr "תקריב אנכי"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
@@ -41880,54 +41882,53 @@ msgid "Onion skins menu"
 msgstr "תפריט קליפות בצל"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Audio menu"
-msgstr "&שכבה"
+msgstr "תפריט שמע"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "Animation settings menu"
-msgstr "&שכבה"
+msgstr "תפריט הגדרות הנפשה"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clip Start: "
-msgstr "כלי &עט"
+msgstr "תחילת הסרטון: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clip End: "
-msgstr "כלי &עט"
+msgstr "סוף הסרטון: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
-#, fuzzy, kde-format
+#, kde-format
 msgid "Frame Rate: "
-msgstr "ייצוא תמונה"
+msgstr "קצב תמוניות: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Channel Operations"
-msgstr "פעולה בוליאנית"
+msgstr "פעילויות ערוץ"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer Operations"
-msgstr "פעולה בוליאנית"
+msgstr "פעילויות שכבה"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:288
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Reset Channel"
-msgstr "מלבן"
+msgstr "איפוס ערוץ"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset All Channels"
-msgstr "ערוצים"
+msgstr "איפוס כל הערוצים"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:492
 #, kde-format
@@ -41971,23 +41972,20 @@ msgid "Add Scalar Keyframes"
 msgstr "הבא שכבה מעלה"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "כוונון תמונית מפתח"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:234
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת תמונית מפתח"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:249
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:723
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust tangent"
-msgstr "מצב צבעים"
+msgstr "כוונון משיק"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:258
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:270
@@ -41996,26 +41994,25 @@ msgstr "מצב צבעים"
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:888
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:897
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:925
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set interpolation mode"
-msgstr "&בוחר צבעים"
+msgstr "הגדרת מצב ביון"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:315
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "כוונון תמונית מפתח"
+msgstr[1] "כוונון שתי תמוניות מפתח"
+msgstr[2] "כוונון %1 תמוניות מפתח"
+msgstr[3] "כוונון %1 תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
-#, fuzzy, kde-format
+#, kde-format
 msgid "Animation Timeline"
-msgstr "רוחב:"
+msgstr "ציר זמן הנפשה"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
@@ -42024,23 +42021,23 @@ msgid "Import Audio..."
 msgstr "ייבוא שמע…"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
-msgstr "הזז בחירה"
+msgstr "הסרת שמע"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
-msgstr "מצב:"
+msgstr "השתקה"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "כחול"
+msgstr "עוצמת שמע: {n}%"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
 #, fuzzy, kde-format
@@ -42104,9 +42101,9 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Layers:"
-msgstr "שכבות"
+msgstr "עריכת שכבות:"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:234
 #, kde-format
@@ -42115,51 +42112,50 @@ msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת או הסרת תמוניות החזקה"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
-#, fuzzy, kde-format
-#| msgid "Enter group name:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
-msgstr "הזן שם לקבוצה:"
+msgstr "נא למלא כמות תמוניות"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Frames:"
-msgstr "הסר שכבה נוכחית"
+msgstr "עריכת תמוניות:"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
-msgstr "ירוק"
+msgstr "תמוניות החזקה"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Columns:"
-msgstr "כחול"
+msgstr "עריכת עמודות:"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
-msgstr "הסר בחירה"
+msgstr "עמודות תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
-msgstr "כפתור איפוס"
+msgstr "החזקת עמודות תמוניות"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:26
 #, fuzzy, kde-format
@@ -42167,86 +42163,83 @@ msgid "Auto Frame Mode"
 msgstr "&מברשת"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drop Frames"
-msgstr "ירוק"
+msgstr "השמטת תמוניות"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Layer"
 msgstr "שכבה חדשה"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pin Existing Layer"
-msgstr "הסר שכבה"
+msgstr "נעיצת השכבה הנוכחית"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Layer"
-msgstr "הסר שכבה"
+msgstr "הסרת שכבה"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add transform keyframe"
-msgstr "מצבע הקידמה לשקוף"
+msgstr "הוספת תמונית מפתח התאמה"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove transform keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "הסרת תמונית מפתח התמרה"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "העתקת תמונית מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:39
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת תמונית מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:146
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "הסרת תמונית מפתח  ‏"
+msgstr[1] "הסרת תמוניות מפתח"
+msgstr[2] "הסרת תמוניות מפתח"
+msgstr[3] "הסרת תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:319
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "העברת תמונית מפתח"
+msgstr[1] "העברת שתי תמוניות מפתח"
+msgstr[2] "העברת %1 תמוניות מפתח"
+msgstr[3] "העברת %1 תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "העתקת תמונית מפתח"
+msgstr[1] "העתקת שתי תמוניות מפתח"
+msgstr[2] "העתקת %1 תמוניות מפתח"
+msgstr[3] "העתקת %1 תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:396
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שכפול תמונית מפתח"
+msgstr[1] "שכפול שתי תמוניות מפתח"
+msgstr[2] "שכפול %1 תמוניות מפתח"
+msgstr[3] "שכפול %1 תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
@@ -42314,81 +42307,79 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
-msgstr "ירוק"
+msgstr "שיקוף תמוניות"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Insert Keyframes"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת תמוניות מפתח"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Number of frames:"
-msgstr "כפתור איפוס"
+msgstr "מספר תמוניות:"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Frame timing:"
-msgstr "ייצוא תמונה"
+msgstr "תזמון תמונית:"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:48
 #, kde-format
 msgctxt "@label:group"
 msgid "Side:"
-msgstr ""
+msgstr "צד:"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:radio"
 msgid "Left / Before"
-msgstr "לפני (%1):"
+msgstr "שמאל / לפני"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:radio"
 msgid "Right / After"
-msgstr "הזחה ימנית"
+msgstr "ימין / אחרי"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:36
 #, kde-format
 msgid "Activate the Select Shapes Tool to arrange objects."
-msgstr ""
+msgstr "יש להפעיל את כלי בחירת הצורות כדי לסדר עצמים."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:90
-#, fuzzy, kde-format
-#| msgid "Alignment"
+#, kde-format
 msgid "Align"
 msgstr "יישור"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:654
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute"
-msgstr "מחיקת טקסט"
+msgstr "פיזור"
 
 #: plugins/dockers/arrangedocker/arrangedocker_dock.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Arrange"
-msgstr "כתום"
+msgstr "סידור"
 
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Artistic Color Selector"
-msgstr "הדבקת בחירה"
+msgstr "בורר צבע אומנותי"
 
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:113
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Continuous Mode"
-msgstr "זוויות:"
+msgstr "מצב רציף"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:21
@@ -42414,9 +42405,9 @@ msgstr ""
 #: plugins/filters/palettize/palettize.ui:56
 #: plugins/python/colorspace/colorspace.py:17
 #: plugins/python/colorspace/uicolorspace.py:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Space"
-msgstr "&בוחר צבעים"
+msgstr "מרחב צבעים"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsy)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:52
@@ -42436,7 +42427,7 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:256
 #, kde-format
 msgid "Gamut Mask Behavior"
-msgstr ""
+msgstr "התנהגות מסכת מנעד"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enforceGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:264
@@ -42460,17 +42451,17 @@ msgstr "הדבקת בחירה"
 #. i18n: ectx: property (toolTip), widget (QLabel, labelHueSteps)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:305
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hue Steps"
-msgstr "אלפא"
+msgstr "מדרגות גוון"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefSaturationSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelSaturationSteps)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:321
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation Rings"
-msgstr "ניווט"
+msgstr "טבעות רוויה"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefValueScaleSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelValueScaleSteps)
@@ -42482,27 +42473,27 @@ msgstr "&תמונה"
 
 #. i18n: ectx: property (toolTip), widget (KisPopupButton, bnWheelPrefs)
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color wheel preferences"
-msgstr "העדפות"
+msgstr "העדפות גלגל צבעים"
 
 #. i18n: ectx: property (toolTip), widget (KisPopupButton, bnDockerPrefs)
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Docker settings"
-msgstr "הגדרות"
+msgstr "הגדרות מעגן"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invert Saturation"
-msgstr "ניווט"
+msgstr "היפוך רוויה"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDefault)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset to default"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "איפוס לברירת המחדל"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
 #, fuzzy, kde-format
@@ -42528,66 +42519,66 @@ msgstr "זוויות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available properties:"
-msgstr "מאפייני שכבה..."
+msgstr "מאפיינים זמינים:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current properties:"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "מאפיינים נוכחיים:"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Compositions"
-msgstr "מיקום"
+msgstr "תרכובות"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Composition"
-msgstr "מיקום"
+msgstr "מחיקת תרכובת"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Composition"
-msgstr "מיקום"
+msgstr "תרכובת חדשה"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Composition"
-msgstr "מיקום"
+msgstr "ייצוא תרכובת"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move Composition Up"
-msgstr "מיקום"
+msgstr "העלאת התרכובת למעלה"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move Composition Down"
-msgstr "מיקום"
+msgstr "הורדת התרכובת למטה"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Images"
-msgstr "ייצוא תמונה"
+msgstr "ייצוא תמונות"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Animations"
-msgstr "מיקום"
+msgstr "ייצוא הנפשות"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Name"
-msgstr "הבא שכבה מעלה"
+msgstr "הוספת שם"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:247
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select a Directory"
-msgstr "מלבן"
+msgstr "נא לבחור תיקייה"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:267
 #, fuzzy, kde-format
@@ -42600,9 +42591,9 @@ msgid "Exporting composition: %1..."
 msgstr "מיקום"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:453
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename Composition"
-msgstr "מיקום"
+msgstr "שינוי שם תרכובת"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
@@ -42632,61 +42623,61 @@ msgid "Digital Colors Mixer"
 msgstr "כלי ציור"
 
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "Return to default settings"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "חזרה להגדרות ברירת המחדל"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskNew)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create new mask"
-msgstr "זוויות:"
+msgstr "יצירת מסכה חדשה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskEditor)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit selected mask"
-msgstr "&מברשת"
+msgstr "עריכת המסכה הנבחרת"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskDuplicate)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate selected mask"
-msgstr "שכפל תמונה"
+msgstr "שכפול המסכה הנבחרת"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskDelete)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete selected mask"
-msgstr "יצירת שכבה חדשה"
+msgstr "מחיקת המסכה הנבחרת"
 
 #. i18n: ectx: property (title), widget (QGroupBox, maskPropertiesBox)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:126
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit the gamut mask"
-msgstr "לוחות צבעים"
+msgstr "עריכת מסכת המנעד"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:56
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gamut Masks"
-msgstr "זוויות:"
+msgstr "מסכות מנעד"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not open gamut mask for editing."
-msgstr "אין אפשרות ליצור את הקובץ לשמירה"
+msgstr "לא ניתן לפתוח את מסכת המנעד לעריכה."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:129
 #, kde-format
 msgid "The editor template was not found."
-msgstr ""
+msgstr "תבנית העורך לא נמצאה."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:262
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
-msgstr ""
+msgstr "שמירת מסכת המנעד ‚%1’ בוטלה לחלוטין."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
@@ -42697,23 +42688,19 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
-#| "it?</p>"
+#, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
-msgstr "<p>המסמך <b>\"%1\"</b> שונה.</p><p>האם ברצונך לשמור אותו?</p>"
+msgstr "מסכת המנעד <b>‚%1’</b> נערכה."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
-#, fuzzy, kde-format
-#| msgid "Do you really want to remove that group?"
+#, kde-format
 msgid "Do you want to save it?"
-msgstr "האם אתה בטוח שברצונך להסיר קבוצה זו?"
+msgstr "לשמור אותה?"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:562
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
-msgstr ""
+msgstr "למחוק את המסכה <b>‚%1’</b>?"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -42731,31 +42718,31 @@ msgstr "מלבן"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:64
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
-#, fuzzy, kde-format
+#, kde-format
 msgid "Isometric (Legacy)"
-msgstr "אפשרויות עירוב"
+msgstr "איזומטרי (מיושן)"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Isometric"
-msgstr "אפשרויות עירוב"
+msgstr "איזומטרי"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
-#, fuzzy, kde-format
+#, kde-format
 msgid "Isometric (Legacy - requires OpenGL)"
-msgstr "אפשרויות עירוב"
+msgstr "איזומטרי (מיושן דורש OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show grid"
-msgstr "הצג סרגל כלים %1"
+msgstr "הצגת רשת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snap to grid"
-msgstr "כחול"
+msgstr "הצמדה לרשת"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
@@ -42765,10 +42752,10 @@ msgstr "כחול"
 #: plugins/dockers/griddocker/grid_config_widget.ui:244
 #: plugins/dockers/griddocker/grid_config_widget.ui:300
 #: plugins/dockers/griddocker/grid_config_widget.ui:808
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Grid line style - Solid Lines"
 msgid "Lines"
-msgstr "&שכבה"
+msgstr "קווים"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
@@ -42778,9 +42765,9 @@ msgstr "&שכבה"
 #: plugins/dockers/griddocker/grid_config_widget.ui:249
 #: plugins/dockers/griddocker/grid_config_widget.ui:305
 #: plugins/dockers/griddocker/grid_config_widget.ui:813
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dashed"
-msgstr "מאתחל..."
+msgstr "מקווקוו"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
@@ -42792,124 +42779,123 @@ msgstr "מאתחל..."
 #: plugins/dockers/griddocker/grid_config_widget.ui:818
 #, kde-format
 msgid "Dots"
-msgstr ""
+msgstr "נקודות"
 
 #. i18n: ectx: property (text), widget (QLabel, leftAngleLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:142
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left Angle:"
-msgstr "שמאל:"
+msgstr "זווית שמאלית:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell Size:"
-msgstr "&תמונה"
+msgstr "גודל תאים:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Style:"
-msgstr "גל משולש"
+msgstr "סגנון אנכי:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell Spacing:"
-msgstr "ריווח:"
+msgstr "ריווח תאים:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightAngleLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:197
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right Angle:"
-msgstr "ימין:"
+msgstr "זווית ימנית:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMainStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:210
-#, fuzzy, kde-format
+#, kde-format
 msgid "Main Style:"
-msgstr "&סגנון"
+msgstr "סגנון עיקרי:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
 #: plugins/dockers/griddocker/grid_config_widget.ui:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subdivision:"
-msgstr "הזז בחירה"
+msgstr "תת־חלוקה:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subdivision Style:"
-msgstr "הזז בחירה"
+msgstr "סגנון תת־חלוקה:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
-#, fuzzy, kde-format
+#, kde-format
 msgid "X spacing:"
-msgstr "ריווח:"
+msgstr "ריווח ב־X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:581
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y spacing:"
-msgstr "ריווח:"
+msgstr "ריווח ב־Y:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOffset)
 #: plugins/dockers/griddocker/grid_config_widget.ui:634
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid Offset"
-msgstr "היסט:"
+msgstr "היסט רשת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:756
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show guides"
-msgstr "כחול"
+msgstr "הצגת קווים מנחים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:763
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snap to guides"
-msgstr "אישור שמירה"
+msgstr "הצמדה לקווים המנחים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLockGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:770
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lock guides"
-msgstr "רוחב:"
+msgstr "נעילת קווים מנחים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRulers)
 #: plugins/dockers/griddocker/grid_config_widget.ui:777
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show rulers"
-msgstr "כחול"
+msgstr "הצגת סרגלים"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGuidesStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:794
-#, fuzzy, kde-format
+#, kde-format
 msgid "Guides:"
-msgstr "מספר שורות"
+msgstr "קווים מנחים:"
 
 #: plugins/dockers/griddocker/griddocker_dock.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid and Guides"
-msgstr "מספר שורות"
+msgstr "רשת וקווים מנחים"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "עדכון היסטוגרמה"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Histogram"
-msgstr "טוען..."
+msgstr "היסטוגרמה"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undo History"
-msgstr "הדבקת בחירה"
+msgstr "היסטוריית הסגות"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:159
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
@@ -42935,10 +42921,10 @@ msgid "Thumbnail Size"
 msgstr "אלפא"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:351
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
-msgstr "עירוב:"
+msgstr "הזחת עץ"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:374
 #, fuzzy, kde-format
@@ -42957,29 +42943,28 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "ללא"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:382
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
-msgstr "שכבה חדשה"
+msgstr "פשוט"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:383
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "מחליף צבעים"
+msgstr "מאוזן"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:384
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "ב&רירת מחדל"
+msgstr "מפורט"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:397
 #, fuzzy, kde-format
@@ -43002,10 +42987,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:429
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "מחליף צבעים"
+msgstr "תיבת סימון לבחירת שכבות"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:430
 #, fuzzy, kde-format
@@ -43026,66 +43011,66 @@ msgid "Cancel Quick Selection Mask"
 msgstr "בחירה"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1240
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Toggle Locks && Visibility"
-msgstr "זוויות:"
+msgstr "ה&חלפת מצב נעילות וחשיפה"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1247
 #: plugins/dockers/layerdocker/LayerBox.cpp:1271
 #, kde-format
 msgid "&Add"
-msgstr ""
+msgstr "הוס&פה"
 
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 %"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "No"
-msgstr "ללא"
+msgstr "לא"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Yes"
-msgstr "זוויות:"
+msgstr "כן"
 
 #. i18n: ectx: property (whatsThis), widget (KisCompositeOpComboBox, cmbComposite)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select the blending mode for the layer."
-msgstr "בחירה"
+msgstr "נא לבחור את מצב הערבול של השכבה."
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, doubleOpacity)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:120
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer Opacity"
-msgstr "אטימות"
+msgstr "אטימות שכבה"
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "הסר שכבה"
+msgstr "הוספת שכבה או מסכה חדשה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate layer or mask"
-msgstr "שכפל תמונה"
+msgstr "שכפול שכבה או מסכה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move layer or mask down"
-msgstr "הסר שכבה"
+msgstr "הורדת שכבה או מסכה למטה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:266
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move layer or mask up"
-msgstr "הסר שכבה"
+msgstr "העלאת שכבה או מסכה למעלה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:291
@@ -43095,49 +43080,49 @@ msgstr "הצגת או שינוי מאפייני השכבה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:332
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the layer or mask"
-msgstr "יצירת שכבה חדשה"
+msgstr "מחיקת השכבה או המסכה"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:41
 #, kde-format
 msgid "Log Viewer"
-msgstr ""
+msgstr "מציג יומנים"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Log Settings"
-msgstr "הגדרות"
+msgstr "הגדרות יומן"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resource Management"
-msgstr "מחליף צבעים"
+msgstr "ניהול משאבים"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image Core"
-msgstr "הוס&פת תמונה בתור שכבה..."
+msgstr "ליבת תמונה"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:135
-#, fuzzy, kde-format
+#, kde-format
 msgid "Registries"
-msgstr "כלי &עט"
+msgstr "רישום"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tile Engine"
-msgstr "מחליף צבעים"
+msgstr "מנוע אריחים"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plugin Management"
-msgstr "מחליף צבעים"
+msgstr "ניהול תוספים"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "User Interface"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "ממשק משתמש"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:159
 #, kde-format
@@ -43147,45 +43132,45 @@ msgstr "טעינה ושמירה של קבצים"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Mathematics and calculations"
-msgstr ""
+msgstr "מתמטיקה וחישובים"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:167
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image Rendering"
-msgstr "זוויות:"
+msgstr "תיצוג תמונות"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scripting"
-msgstr "כתב תחתי"
+msgstr "סקריפטים"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Input handling"
-msgstr "הגדרות"
+msgstr "טיפול בקלט"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: plugins/dockers/logdocker/LogDockerDock.cpp:179
 #: plugins/extensions/pykrita/plugin/info.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Actions"
-msgstr "בחירה"
+msgstr "פעולות"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tablet Handling"
-msgstr "הגדרות"
+msgstr "טיפול בלוחות ציור"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "GPU Canvas"
-msgstr "משטח ציור"
+msgstr "משטח ציור מעבד גרפי"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnToggle)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enable Logging"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "הפעלת תיעוד"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnClear)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:62
@@ -43195,30 +43180,30 @@ msgstr "פינוי היומן"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSave)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save the log"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "שמירת היומן"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSettings)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Logging"
-msgstr "אישור שמירה"
+msgstr "הגדרת תיעוד"
 
 #: plugins/dockers/lut/black_white_point_chooser.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Black:"
-msgstr "אטימות"
+msgstr "שחור:"
 
 #: plugins/dockers/lut/black_white_point_chooser.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "White:"
-msgstr "אלפא"
+msgstr "לבן:"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "LUT Management"
-msgstr "מחליף צבעים"
+msgstr "ניהול LUT"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:100
 #, fuzzy, kde-format
@@ -43244,16 +43229,16 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:258
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
-msgstr "ייצוא השכבה"
+msgstr "חשיפה: %1"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:277
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
-msgstr "ירוק בהיר"
+msgstr "גאמה: %1"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:347
 #, kde-format
@@ -43262,6 +43247,7 @@ msgid ""
 "Exposure and Gamma corrections are disabled in Internal mode. Switch to OCIO "
 "mode to use them"
 msgstr ""
+"תיקוני חשיפה וגאמה מושבתים במצב פנימי. יש לעבור למצב OCIO כדי להשתמש בהם"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:437
 #, kde-format

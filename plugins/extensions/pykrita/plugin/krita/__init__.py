@@ -22,14 +22,14 @@ if (spec := importlib.util.find_spec(pyqt_wrong)):
 
 # Look for PyQt
 try:
-    from PyQt6 import QtCore
-except ImportError:
-    try:
+    if pykrita.qt_major_version() == 5:
         from PyQt5 import QtCore
-    except ImportError:
-        print("Python cannot find the Qt5 bindings.", file=sys.stderr)
-        print("Please make sure, that the needed packages are installed.", file=sys.stderr)
-        raise
+    else:
+        from PyQt6 import QtCore
+except ImportError:
+    print("Python cannot find the Qt%d bindings." % pykrita.qt_major_version(), file=sys.stderr)
+    print("Please make sure that the needed packages are installed.", file=sys.stderr)
+    raise
 
 from .api import *
 from .decorators import *

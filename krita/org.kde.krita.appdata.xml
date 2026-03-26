@@ -504,7 +504,7 @@
       <caption xml:lang="ar">هناك أيضًا تكامل مع G'Mic، والذي يضيف مئات من المرشحات</caption>
       <caption xml:lang="bg">Има и интеграция с G'Mic, която добавя още стотици филтри</caption>
       <caption xml:lang="ca">I també hi ha integració amb el G'Mic, el qual afegeix més centenars de filtres</caption>
-      <caption xml:lang="ca-valencia">I també hi ha integració amb G'Mic, el qual afig més centenars de filtres</caption>
+      <caption xml:lang="ca-valencia">I també hi ha integració amb G'MIC, el qual afig més centenars de filtres</caption>
       <caption xml:lang="cs">A také máme integraci s G'Mic, která nám přidává ještě další stovky filtrů</caption>
       <caption xml:lang="el">Και ακόμη ενσωμάτωση με το G'Mic, το οποίο προσθέτει εκατοντάδες φίλτρα</caption>
       <caption xml:lang="en-GB">And, there is integration with G'Mic, too, which adds hundreds of filters more</caption>
@@ -657,7 +657,7 @@
       <description>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</description>
       <description xml:lang="ar">هذا الإصدار مخصص لإصلاح العلات مع عدد من إصلاحات الانهيار وحلول بديلة لتحسين الاستخدام مع Xiaomi Pad</description>
       <description xml:lang="ca">Una versió de correcció d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</description>
-      <description xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</description>
+      <description xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb Xiaomi Pad</description>
       <description xml:lang="cs">Opravné vydání, která obsahuje řadu oprav pádů a řešení, aby se zlepšila použitelnost s tabletem Xiaomi Pad</description>
       <description xml:lang="es">Una versión de corrección de errores con una serie de correcciones de fallos y soluciones alternativas para mejorar el uso del Xiaomi Pad.</description>
       <description xml:lang="fr">Une version corrective incluant la correction de plusieurs plantages et des solutions de contournement pour améliorer l'utilisation du pavé tactile de Xiaomi</description>

@@ -46,7 +46,6 @@ public:
 private:
     KisImageWSP m_image;
     RecipeSP m_recipe;
-    KisCommandUtils::FlipFlopCommand::State m_state;
 };
 
 #endif // KISBATCHUPDATELAYERMODIFICATIONCOMMAND_H

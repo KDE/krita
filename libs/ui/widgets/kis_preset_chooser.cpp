@@ -43,11 +43,10 @@
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate(KisResourceMetaDataModel *metaDataModel, QObject * parent = 0)
+    KisPresetDelegate(QObject * parent = 0)
         : QAbstractItemDelegate(parent)
         , m_showText(false)
-        , m_useDirtyPresets(false)
-        , m_metaDataModel(metaDataModel) {}
+        , m_useDirtyPresets(false) {}
 
     ~KisPresetDelegate() override {}
 
@@ -70,7 +69,6 @@ public:
 private:
     bool m_showText;
     bool m_useDirtyPresets;
-    KisResourceMetaDataModel *m_metaDataModel;
 };
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -178,7 +176,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent)
 
     m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
     m_chooser->setRowHeight(50);
-    m_delegate = new KisPresetDelegate(KisResourceModelProvider::resourceMetadataModel(), this);
+    m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
     m_chooser->showImportExportBtns(false);

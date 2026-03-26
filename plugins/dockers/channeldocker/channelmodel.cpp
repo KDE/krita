@@ -22,7 +22,6 @@
 ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
     m_canvas(nullptr),
-    m_oversampleRatio(2),
     m_channelCount(0)
 {
     setThumbnailSizeLimit(QSize(64, 64));

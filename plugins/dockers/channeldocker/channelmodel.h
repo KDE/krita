@@ -53,7 +53,6 @@ private:
     QVector<QImage> m_thumbnails;
 
     QSize m_thumbnailSizeLimit;
-    int m_oversampleRatio;
     KisSignalAutoConnectionsStore m_canvasConnections;
     int m_channelCount;
 };

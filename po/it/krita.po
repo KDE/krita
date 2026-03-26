@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-21 00:42+0000\n"
-"PO-Revision-Date: 2026-03-07 16:37+0100\n"
+"PO-Revision-Date: 2026-03-21 20:00+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16345,9 +16345,7 @@ msgid "Krita"
 msgstr "Krita"
 
 #: krita/main.cc:677
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Krita is the full-featured digital art studio"
+#, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr "Krita è uno studio d'arte digitale completo"
 
@@ -19542,7 +19540,7 @@ msgid ""
 "the x-height of a font than small capital forms."
 msgstr ""
 "Sostituisce le lettere maiuscole con formati di piccolo maiuscoletto, più "
-"vicini all'altezza normale di un tipo di carattere rispetto ai formati di "
+"vicini all'altezza della x di un tipo di carattere rispetto ai formati di "
 "maiuscoletto."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
@@ -19571,7 +19569,7 @@ msgid ""
 "the x-height of a font than small capital forms."
 msgstr ""
 "Sostituisce le lettere minuscole con formati di piccolo maiuscoletto, più "
-"vicini all'altezza normale di un tipo di carattere rispetto ai formati del "
+"vicini all'altezza della x di un tipo di carattere rispetto ai formati del "
 "maiuscoletto."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
@@ -20254,7 +20252,7 @@ msgstr "Sostituisce i glifi con glifi con larghezza di un terzo."
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Metriche verticali alternative"
+msgstr "Dimensioni verticali alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -20302,7 +20300,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr "Mezze metriche verticali alternative"
+msgstr "Mezze dimensioni verticali alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -20348,7 +20346,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr "Metriche verticali alternative proporzionali"
+msgstr "Dimensioni verticali alternative proporzionali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -46038,7 +46036,7 @@ msgstr "Spento"
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr "Tag funzionalità OpenType"
+msgstr "Tag delle funzioni OpenType"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:12
 #, kde-format
@@ -46150,8 +46148,8 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
-"Allinea al centro tra la linea di base alfabetico e l'altezza x mentre è "
-"disteso orizzontalmente, in verticale questa è la linea di base centrale."
+"Allinea al centro tra la linea di base alfabetico e l'altezza della x mentre "
+"è disteso orizzontalmente, in verticale questa è la linea di base centrale."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
@@ -46581,7 +46579,7 @@ msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
 "Regolazione dimensione caratteri permette di impostare una proporzione con "
-"cui deve coincidere l'altezza x."
+"cui deve coincidere l'altezza della x."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -46602,8 +46600,8 @@ msgstr "Calcola"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
-"Calcola l'altezza x alla proporzione della dimensione caratteri per la prima "
-"famiglia di caratteri."
+"Calcola l'altezza della x alla proporzione della dimensione caratteri per la "
+"prima famiglia di caratteri."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
@@ -46927,13 +46925,13 @@ msgstr "Normale"
 #, kde-format
 msgctxt "@label"
 msgid "OpenType Features"
-msgstr "Funzionalità OpenType"
+msgstr "Funzioni OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
-msgstr "Configura le funzionalità OpenType."
+msgstr "Configura le funzioni OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -46946,7 +46944,7 @@ msgstr "impostazioni-funzionalità-carattere, OpenType"
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr "Attualmente non sono impostate funzionalità OpenType."
+msgstr "Attualmente non sono impostate funzioni OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -46971,7 +46969,7 @@ msgstr "Glifi: Maiuscole"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr "Abilita le funzionalità OpenType relative alle maiuscole."
+msgstr "Abilita le funzioni OpenType relative alle maiuscole."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -47100,8 +47098,7 @@ msgid "Full width"
 msgstr "Larghezza intera"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Proporzionale"
@@ -47211,8 +47208,7 @@ msgid "Spacing:"
 msgstr "Spaziatura:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "Proporzionale"
@@ -57263,8 +57259,8 @@ msgid ""
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
 "Nonostante le forme di testo possano essere salvate in formato PSD, sono "
-"supportate soltanto le funzionalità di base. Le funzionalità avanzate, come "
-"testo su tracciato e funzionalità OpenType, non saranno salvate."
+"supportate soltanto le funzioni di base. Le funzioni avanzate, come testo su "
+"tracciato e le funzioni OpenType, non saranno salvate."
 
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
@@ -68519,6 +68515,8 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"Modalità taglio: taglia tra le forme per creare spazi di larghezza "
+"specificata."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
 #, kde-format
@@ -68526,7 +68524,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "Modalità unione: rimuove lo spazio tra le forme."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #, kde-format
@@ -68581,10 +68579,9 @@ msgstr "Unità di larghezza:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Spazio spesso:"
+msgstr "Larghezza spazio spesso"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -68596,10 +68593,9 @@ msgstr "Spazio spesso:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "Spazio fine:"
+msgstr "Larghezza spazio fine"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -68611,10 +68607,9 @@ msgstr "Spazio fine:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "Spazio speciale:"
+msgstr "Larghezza spazio speciale"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -68626,7 +68621,7 @@ msgstr "Spazio speciale:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "Scegli automaticamente la larghezza, basata sull'angolo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -68638,28 +68633,25 @@ msgstr "Automatico"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Onda orizzontale"
+msgstr "Tipo di spazi orizzontali:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Stile verticale:"
+msgstr "Tipo di spazi verticali:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Diagonale:"
+msgstr "Tipo di spazi diagonali:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -68671,10 +68663,9 @@ msgstr "Diagonale:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Local contrast threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Soglia locale di contrasto:"
+msgstr "Soglia angolo del tipo diagonale:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"

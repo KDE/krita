@@ -454,6 +454,22 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
     }
 #endif
 
+#if defined Q_OS_WIN
+    /**
+     * Disabling accessibility at the runtime is currently available on Windows only
+     */
+    if (!qEnvironmentVariableIsSet("QT_DISABLE_ACCESSIBILITY")) {
+        if (kritarc.value("DisableAccessibilityInQt", false).toBool()) {
+            qInfo() << "INFO: activating QT_DISABLE_ACCESSIBILITY via kritadisplayrc...";
+            qputenv("QT_DISABLE_ACCESSIBILITY", "1");
+        }
+    } else {
+        if (qEnvironmentVariableIntValue("QT_DISABLE_ACCESSIBILITY")) {
+            qInfo() << "INFO: QT_DISABLE_ACCESSIBILITY is activated via environment...";
+        }
+    }
+#endif
+
 #if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
     if (!qEnvironmentVariableIsSet("QT_BACKING_STORE_USE_FAST_QIMAGE_TRANSFER")) {
         qputenv("QT_BACKING_STORE_USE_FAST_QIMAGE_TRANSFER", "1");

@@ -1053,7 +1053,7 @@ void KisViewManager::slotSaveIncremental()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         fileName.replace(regex2, extensionPlusVersion);
 #else
-        regex2.replaceIn(fileName, extensionPlusVersion);
+        fileName = regex2.replaceIn(fileName, extensionPlusVersion);
 #endif
     }
 
@@ -1078,7 +1078,7 @@ void KisViewManager::slotSaveIncremental()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         fileName.replace(regex, newVersion);
 #else
-        regex.replaceIn(fileName, newVersion);
+        fileName = regex.replaceIn(fileName, newVersion);
 #endif
         fileAlreadyExists = QFileInfo(path + '/' + fileName).exists();
         if (fileAlreadyExists) {
@@ -1162,7 +1162,7 @@ void KisViewManager::slotSaveIncrementalBackup()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             backupFileName.replace(regex, newVersion);
 #else
-            regex.replaceIn(backupFileName, newVersion);
+            backupFileName = regex.replaceIn(backupFileName, newVersion);
 #endif
             fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
@@ -1197,7 +1197,7 @@ void KisViewManager::slotSaveIncrementalBackup()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         backupFileName.replace(regex2, extensionPlusVersion);
 #else
-        regex2.replaceIn(backupFileName, extensionPlusVersion);
+        backupFileName = regex2.replaceIn(backupFileName, extensionPlusVersion);
 #endif
 
         // Save version with 1 number higher than the highest version found ignoring letters
@@ -1208,7 +1208,7 @@ void KisViewManager::slotSaveIncrementalBackup()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             backupFileName.replace(regex, newVersion);
 #else
-            regex.replaceIn(backupFileName, newVersion);
+            backupFileName = regex.replaceIn(backupFileName, newVersion);
 #endif
             fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {

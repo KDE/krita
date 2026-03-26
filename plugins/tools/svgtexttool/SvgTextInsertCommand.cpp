@@ -34,7 +34,7 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     text.replace(exp, "\n");
 #else
-    exp.replaceIn(text, "\n");
+    text = exp.replaceIn(text, "\n");
 #endif
     m_text = text;
 }

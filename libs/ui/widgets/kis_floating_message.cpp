@@ -174,11 +174,11 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 #else
     // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
     QRegExp r(" +\n");
-    r.replaceIn(m_message, "\n");
+    m_message = r.replaceIn(m_message, "\n");
 
      // remove consecutive line breaks
     QRegExp r2(( "\n+"));
-    r2.replaceIn(m_message, "\n");
+    m_message = r2.replaceIn(m_message, "\n");
 #endif
 
     // The osd cannot be larger than the screen

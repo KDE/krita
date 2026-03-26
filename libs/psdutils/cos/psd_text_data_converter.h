@@ -16,7 +16,7 @@
 class KoSvgTextShape;
 class KoColorSpace;
 class KoShape;
-class KoCSSFontInfo;
+struct KoCSSFontInfo;
 class KoSvgTextProperties;
 class QDomElement;
 

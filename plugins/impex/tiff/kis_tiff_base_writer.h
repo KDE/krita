@@ -14,7 +14,7 @@
 
 #include <kis_types.h>
 
-class KisTIFFOptions;
+struct KisTIFFOptions;
 class KoColorSpace;
 
 class KisTIFFBaseWriter

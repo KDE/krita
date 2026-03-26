@@ -36,7 +36,7 @@ public:
     /// Set the textPath on the current node.
     void setTextPathOnCurrentNode(KoShape *s);
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> d;
 };
 

@@ -12,7 +12,7 @@
 #include "data/KoUnicodeBlockData.h"
 #include "kritaflake_export.h"
 
-class KoOpenTypeFeatureInfo;
+struct KoOpenTypeFeatureInfo;
 /**
  * @brief The KoFontGlyphModel class
  * Creates a tree model of all the glyphs in a given face.

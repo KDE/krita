@@ -14,7 +14,7 @@
 #include <QRect>
 
 class KoShape;
-class KoShapeBulkActionInterface;
+struct KoShapeBulkActionInterface;
 
 class KRITAFLAKE_EXPORT KoShapeBulkActionLockAdapter {
 public:

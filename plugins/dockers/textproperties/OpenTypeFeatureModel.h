@@ -10,7 +10,7 @@
 #include <QSortFilterProxyModel>
 
 class KoSvgTextProperties;
-class KoOpenTypeFeatureInfo;
+struct KoOpenTypeFeatureInfo;
 class KoSvgTextPropertiesModel;
 
 // Filter SortProxy that filters by both name and tag.

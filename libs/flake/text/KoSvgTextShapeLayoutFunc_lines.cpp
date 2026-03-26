@@ -55,7 +55,6 @@ void addWordToLine(QVector<CharacterResult> &result,
                    QPointF &currentPos,
                    QVector<int> &wordIndices,
                    LineBox &currentLine,
-                   bool ltr,
                    bool isHorizontal)
 {
     QPointF lineAdvance = currentPos;
@@ -521,10 +520,10 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                 if (abs(lineLength) - inlineSize.customValue > 0.01) {
                     softBreak = true;
                 } else {
-                    addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
+                    addWordToLine(result, currentPos, wordIndices, currentLine, isHorizontal);
                 }
             } else {
-                addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
+                addWordToLine(result, currentPos, wordIndices, currentLine, isHorizontal);
             }
         }
 
@@ -564,7 +563,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                         if (wordLength <= inlineSize.customValue) {
                             partialWord.append(i);
                         } else {
-                            addWordToLine(result, currentPos, partialWord, currentLine, ltr, isHorizontal);
+                            addWordToLine(result, currentPos, partialWord, currentLine, isHorizontal);
 
                             finalizeLine(result,
                                          currentPos,
@@ -589,7 +588,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                     wordIndices = partialWord;
                 }
             }
-            addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
+            addWordToLine(result, currentPos, wordIndices, currentLine, isHorizontal);
         }
 
         if (charResult.breakType == BreakType::HardBreak) {
@@ -613,7 +612,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
 
         if (currentLine.lastLine) {
             if (!wordIndices.isEmpty()) {
-                addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
+                addWordToLine(result, currentPos, wordIndices, currentLine, isHorizontal);
             }
             finalizeLine(result,
                          currentPos,

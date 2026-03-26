@@ -12,7 +12,7 @@ KisBatchUpdateLayerModificationCommand::KisBatchUpdateLayerModificationCommand(K
                                                                                RecipeSP recipe,
                                                                                KisCommandUtils::FlipFlopCommand::State state,
                                                                                KUndo2Command *parent)
-    : KisCommandUtils::FlipFlopCommand(state)
+    : KisCommandUtils::FlipFlopCommand(state, parent)
     , m_image(image)
     , m_recipe(recipe)
 {

@@ -555,7 +555,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                     }
                 } else {
                     currentLine.currentChunk = i;
-                    addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
+                    addWordToLine(result, currentPos, wordIndices, currentLine, isHorizontal);
                     break;
                 }
             }
@@ -669,7 +669,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                         wordIndices = wordNew;
                     }
                 }
-                addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
+                addWordToLine(result, currentPos, wordIndices, currentLine, isHorizontal);
             } else {
                 currentLine = LineBox();
                 QPointF advance = currentPos;

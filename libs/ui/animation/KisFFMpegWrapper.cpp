@@ -406,6 +406,9 @@ void KisFFMpegWrapper::fixUpNonEmbeddedProcessEnvironment(const QString &process
         env.remove("LD_LIBRARY_PATH");
         process.setProcessEnvironment(env);
     }
+#else
+    Q_UNUSED(processPath);
+    Q_UNUSED(process);
 #endif /* Q_OS_LINUX */
 }
 

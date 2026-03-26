@@ -1544,6 +1544,8 @@ void KisCanvas2::slotSurfaceFormatChanged(const KisDisplayConfig &config)
 
     auto newState = m_d->multiSurfaceSetupManager.onCanvasSurfaceFormatChanged(*m_d->multiSurfaceState, config);
     m_d->assignChangedMultiSurfaceStateSkipCanvasSurface(newState);
+#else
+    Q_UNUSED(config);
 #endif
 }
 

@@ -11,7 +11,7 @@
 
 struct KoFontChangeTracker::Private {
 
-    Private(QStringList paths = QStringList(), int refresh = 500)
+    Private(QStringList paths = QStringList())
         : fileSystemWatcher(paths) {
 
     }
@@ -25,7 +25,7 @@ KoFontChangeTracker::KoFontChangeTracker(QStringList paths, QObject *parent)
     : QObject(parent)
     , d(new Private(paths))
 {
-    connect(&d->fileSystemWatcher, SIGNAL(directoryChanged(QString)), SLOT(directoriesChanged(QString)));
+    connect(&d->fileSystemWatcher, SIGNAL(directoryChanged(QString)), SLOT(directoriesChanged()));
 }
 
 KoFontChangeTracker::~KoFontChangeTracker()
@@ -38,7 +38,7 @@ void KoFontChangeTracker::resetChangeTracker()
 }
 
 
-void KoFontChangeTracker::directoriesChanged(QString path)
+void KoFontChangeTracker::directoriesChanged()
 {
     if (!d->filesChanged) {
         d->filesChanged = true;

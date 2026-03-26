@@ -185,6 +185,9 @@ protected:
 
     void iterationEndedCallback(KisImageWSP image, KisNodeSP activeNode, int iteration) override
     {
+        Q_UNUSED(image);
+        Q_UNUSED(activeNode);
+
         qDebug() << "Waiting for the final update...";
         /// the delay in the mask is 3000ms, so we should wait a little bit longer to catch
         /// spurious updates

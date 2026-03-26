@@ -170,6 +170,8 @@ void KisSelectionActionsPanel::setEnabled(bool enabled)
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
+    Q_UNUSED(obj);
+
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         const QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);

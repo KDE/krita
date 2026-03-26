@@ -25,10 +25,6 @@ void writeOutVector(QVector<QPointF> &vector)
     }
 }
 
-void createPoints(QRandomGenerator& randGen, int n, QVector<QPointF>& initial, QVector<QPointF>& firstChange, QVector<QPointF>& secondChange, KisSpatialContainer &container) {
-
-}
-
 void KisSpatialContainerTest::testSpatialContainerAddMovePoints()
 {
     QRandomGenerator gen(1000);

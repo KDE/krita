@@ -384,7 +384,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         } else if (e.tagName() == "audio") {
-            backCompat_loadAudio(e, image, m_d->document);
+            backCompat_loadAudio(e, m_d->document);
         }
     }
 
@@ -669,7 +669,7 @@ void KisKraLoader::loadAudio(KoStore *store, KisDocument *kisDoc)
     }
 }
 
-void KisKraLoader::backCompat_loadAudio(const QDomElement& elem, KisImageSP image, KisDocument *document)
+void KisKraLoader::backCompat_loadAudio(const QDomElement& elem, KisDocument *document)
 {
     QDomDocument dom;
     dom.appendChild(dom.importNode(elem, true));

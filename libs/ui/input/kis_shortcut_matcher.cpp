@@ -514,7 +514,7 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
     return retval;
 }
 
-void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &localPos)
+void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
 {
     Private::RecursionNotifier notifier(this);
 

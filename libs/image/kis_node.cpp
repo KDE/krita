@@ -662,6 +662,9 @@ void KisNode::handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChanne
 
 void KisNode::handleKeyframeChannelFrameHasBeenRemoved(const KisKeyframeChannel *channel, int time)
 {
+    Q_UNUSED(channel);
+    Q_UNUSED(time);
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->frameRemovalUpdateRecipe);
     m_d->frameRemovalUpdateRecipe->notify(this);
     m_d->frameRemovalUpdateRecipe = std::nullopt;

@@ -870,7 +870,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (ignoreCancel) {
             d->matcher.touchEndEvent(touchEvent);
         } else {
-            d->matcher.touchCancelEvent(touchEvent, d->previousPos);
+            d->matcher.touchCancelEvent(touchEvent);
         }
         // reset state
         d->lastPointCount = 0;

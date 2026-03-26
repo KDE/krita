@@ -19,7 +19,6 @@ void addWordToLine(QVector<CharacterResult> &result,
                    QPointF &currentPos,
                    QVector<int> &wordIndices,
                    LineBox &currentLine,
-                   bool ltr,
                    bool isHorizontal);
 
 void finalizeLine(QVector<CharacterResult> &result,

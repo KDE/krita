@@ -64,7 +64,7 @@ public:
     static bool comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2);
 
     virtual void notifyWindowMinimized(bool minimized);
-    virtual void setCanvasWidget(KisCanvasWidgetBase* canvas) {};
+    virtual void setCanvasWidget(KisCanvasWidgetBase* canvas) { Q_UNUSED(canvas); };
 
 public Q_SLOTS:
     /**

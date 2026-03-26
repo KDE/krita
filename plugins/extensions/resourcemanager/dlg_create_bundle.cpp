@@ -150,7 +150,7 @@ DlgCreateBundle::~DlgCreateBundle()
     delete m_ui;
 }
 
-QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QString resourceType) const
+QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QString resourceType) const
 {
     QVector<KisTagSP> tagsToEmbed;
     KisTagModel *tagModel = new KisTagModel(resourceType);
@@ -223,7 +223,7 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
 
         m_selectedTagIds = m_pageTagChooser->selectedTagIds();
 
-        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id), res->resourceType().first);
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(res->resourceType().first);
         bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), prettyFilename);
 
         if (m_bundleCreaterMode == "Creator") {

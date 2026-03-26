@@ -1358,6 +1358,8 @@ void testRemoveGutterOneCase(const QString testName, const QPainterPath& shape1,
 
                 qCritical() << "Expected:" << expectedVector;
                 qCritical() << "Actual:" << actualVector;
+#else
+    Q_UNUSED(testName);
 #endif
 
     QCOMPARE(actualVector.segmentsCount(), expectedSize);

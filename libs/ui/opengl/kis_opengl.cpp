@@ -616,6 +616,7 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
 #if defined Q_OS_MACOS
         format.setVersion(4, 1);
         format.setProfile(QSurfaceFormat::CoreProfile);
+        Q_UNUSED(inhibitCompatibilityProfile);
 #else
         // If asked for 3.0 "Core", Qt will instead request
         // an OpenGL ES context.

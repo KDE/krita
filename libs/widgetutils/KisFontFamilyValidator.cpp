@@ -16,6 +16,8 @@ KisFontFamilyValidator::KisFontFamilyValidator(const QStringList &families, QObj
 
 QValidator::State KisFontFamilyValidator::validate(QString &input, int &pos) const
 {
+    Q_UNUSED(pos);
+
     for (const QString &family : m_families) {
         if (input == family) {
             return State::Acceptable;

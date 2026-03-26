@@ -25,7 +25,7 @@ public:
 Q_SIGNALS:
     void sigUpdateConfig();
 private Q_SLOTS:
-    void directoriesChanged(QString path);
+    void directoriesChanged();
 private:
     struct Private;
     QScopedPointer<Private> d;

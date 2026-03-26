@@ -41,7 +41,7 @@ private Q_SLOTS:
     void reject() override;
 
     void saveToConfiguration(bool full);
-    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QString resourceType) const;
+    QVector<KisTagSP> getTagsForEmbeddingInResource(QString resourceType) const;
 
 public Q_SLOTS:
 

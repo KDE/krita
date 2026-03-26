@@ -93,6 +93,7 @@ QString KisPlatformPluginInterfaceFactory::colorManagementReport(QWidget *widget
         return "Surface color management is not supported on this platform\n";
     }
 #else
+    Q_UNUSED(widget);
     return "Surface color management is disabled\n";
 #endif
 }
@@ -108,6 +109,7 @@ QString KisPlatformPluginInterfaceFactory::osPreferredColorSpaceReport(QWidget *
         return "Surface color management is not supported on this platform\n";
     }
 #else
+    Q_UNUSED(widget);
     return "Surface color management is disabled\n";
 #endif
 }

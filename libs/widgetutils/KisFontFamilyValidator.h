@@ -17,8 +17,8 @@ public:
 
     ~KisFontFamilyValidator();
 
-    QValidator::State validate(QString &input, int &pos) const;
-    void fixup(QString &input) const;
+    QValidator::State validate(QString &input, int &pos) const override;
+    void fixup(QString &input) const override;
 
 private:
     QStringList m_families;

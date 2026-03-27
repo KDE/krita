@@ -71,7 +71,11 @@ struct KisAsyncColorSamplerHelper::Private
     bool circlePreviewExtraCircles {true};
     qreal circleZoomPreviewScale {2};
     QRectF previewDocRect;
+
     QPainterPath cacheCircleInnerClip;
+    QVector<KisReferenceImage*> cacheReferenceImageList; // Sorted reference images by zIndex
+    QRect cacheCanvasRect;
+    QImage cacheCanvasImage;
 
     QColor currentColor;
     QColor baseColor;
@@ -171,6 +175,21 @@ struct KisAsyncColorSamplerHelper::Private
         const QRectF colorPreviewDocumentRect = converter().viewToDocument(colorPreviewViewRect);
         return colorPreviewDocumentRect.translated(outlineDocPoint);
     }
+
+    void updateCachedReferenceImages() {
+        KisDocument *doc = canvas->viewManager()->document();
+        if (!doc || !doc->referenceImagesLayer()) {
+            cacheReferenceImageList.clear();
+            return;
+        }
+
+        // TODO: Perhaps use KoShapeManager->shapeAt(QRect)?
+        cacheReferenceImageList = doc->referenceImagesLayer()->referenceImages();
+        // Sort by zIndex to show correct order
+        std::sort(cacheReferenceImageList.begin(), cacheReferenceImageList.end(), [](KisReferenceImage *a, KisReferenceImage *b){
+            return a->zIndex() < b->zIndex();
+        });
+    }
 };
 
 KisAsyncColorSamplerHelper::KisAsyncColorSamplerHelper(KisCanvas2 *canvas)
@@ -222,6 +241,11 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
     m_d->circlePreviewOutlineEnabled = cfg.colorSamplerPreviewCircleOutlineEnabled();
     m_d->circlePreviewExtraCircles = cfg.colorSamplerPreviewCircleExtraCirclesEnabled();
     m_d->circleZoomPreviewScale = cfg.colorSamplerZoomPreviewScale()/100.0; // saved in percentages
+
+    // Reset the cache
+    m_d->cacheCanvasImage = QImage();
+    m_d->cacheCanvasRect = QRect();
+    m_d->updateCachedReferenceImages();
 
     m_d->activationDelayTimer.start();
 }
@@ -584,15 +608,54 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     gc.restore();
 }
 
+QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
+    KisImageWSP canvasImage = m_d->canvas->image();
+
+    if (!canvasImage->bounds().intersects(canvasPixelRect)) {
+        return QImage();
+    }
+
+    // If already cached the whole canvas, just use it from now on
+    if (m_d->cacheCanvasRect == canvasImage->bounds()) {
+        dbgUI << "Using cached canvas image!";
+        return m_d->cacheCanvasImage;
+    }
+
+    if (m_d->cacheCanvasRect.isEmpty() || !m_d->cacheCanvasRect.contains(canvasPixelRect)) {
+        // Cache an area larger than the needed preview area
+        // to avoid rapid small dynamic allocations
+        qreal cacheScale = 4;
+        QRect cacheCanvasRect = canvasPixelRect;
+        cacheCanvasRect.setSize(canvasPixelRect.size() * cacheScale);
+        cacheCanvasRect.moveCenter(canvasPixelRect.center());
+
+        // if cache larger than canvas, then just copy whole canvas
+        if (cacheCanvasRect.width() >= canvasImage->width() || cacheCanvasRect.height() >= canvasImage->height()) {
+            cacheCanvasRect = canvasImage->bounds();
+        }
+
+        dbgUI << "Invalid cache. Copying canvas image";
+        dbgUI << "Canvas preview: " << canvasPixelRect;
+        dbgUI << "Canvas cache: " << cacheCanvasRect;
+
+        m_d->cacheCanvasImage = canvasImage->convertToQImage(cacheCanvasRect, canvasImage->profile());
+
+        m_d->cacheCanvasRect = cacheCanvasRect;
+    }
+
+    canvasPixelRect.translate(-m_d->cacheCanvasRect.topLeft());
+
+    return m_d->cacheCanvasImage;
+}
+
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
     gc.save();
 
-    QRect sampleCanvasRect = m_d->canvas->image()->documentToPixel(sampleDocRectF).toRect();
+    QRect canvasPixelRectF = m_d->canvas->image()->documentToPixel(sampleDocRectF).toRect();
     // In case zoom and scale is both so large that sample size becomes 0
-    if (sampleCanvasRect.isEmpty()) sampleCanvasRect.setSize(QSize(1, 1));
+    if (canvasPixelRectF.isEmpty()) canvasPixelRectF.setSize(QSize(1, 1));
 
-
-    QImage canvasPreview = m_d->canvas->image()->convertToQImage(sampleCanvasRect, nullptr);
+    QImage cachedImage = cacheCanvasImage(canvasPixelRectF);
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
     gc.setClipPath(clip);
@@ -600,30 +663,19 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     // QtDoc: The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
     // Since the piece of canvas is (zoomPreviewScale) times smaller than cacheRect
     // drawImage will scale it up that many times, thus achieving the zoom effect
-    gc.drawImage(viewRectF, canvasPreview);
+    gc.drawImage(viewRectF, cachedImage, canvasPixelRectF);
 
     gc.restore();
 }
 
 // Won't show opacity because the color sampled doesn't respect opacity either
 void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip) {
-    KisDocument *doc = m_d->canvas->viewManager()->document();
-    if (!doc) return;
-    KisReferenceImagesLayerSP refLayer = doc->referenceImagesLayer();
-    if (!refLayer) return;
-
     gc.save();
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     gc.setClipPath(clip);
 
-    // TODO: Perhaps use KoShapeManager->shapeAt(QRect)?
-    QVector<KisReferenceImage*> refList = refLayer->referenceImages();
-    // Sort by zIndex to show correct order
-    std::sort(refList.begin(), refList.end(), [](KisReferenceImage *a, KisReferenceImage *b){
-        return a->zIndex() < b->zIndex();
-    });
-    Q_FOREACH(KisReferenceImage *refImage, refList) {
+    Q_FOREACH(KisReferenceImage *refImage, m_d->cacheReferenceImageList) {
         // Check if sampleRect intersect with reference image
         QPolygonF outline = refImage->absoluteTransformation().map(refImage->outlineRect());
         if (!outline.intersects(QPolygonF(sampleDocRectF))) continue;

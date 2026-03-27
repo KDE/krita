@@ -85,6 +85,10 @@ private:
     // Return true if at least one reference image preview was drawn
     void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &sampleDocRectF, const QPainterPath &clip);
 
+    // Returns a cached canvas image that should either contain the canvasPixelRectF, or the whole canvas if canvasPixelRectF > canvas size.
+    // Also modify the input rect to point to the same position relative to the returned image
+    QImage cacheCanvasImage(QRect &canvasPixelRect);
+
     struct Private;
     QScopedPointer<Private> m_d;
 };

@@ -8,18 +8,6 @@ import pykrita
 import os
 import sys
 
-# Try to make sure there's no conflicting version of PyQt on sys.path, because
-# loading that would load a conflicting version of Qt and crash Krita when used.
-# However, this will also cause any neighboring modules to be removed.
-import importlib.util
-pyqt_wrong = "PyQt" + ("6" if pykrita.qt_major_version() == 5 else "5")
-if (spec := importlib.util.find_spec(pyqt_wrong)):
-    parent_folder = os.path.dirname(os.path.dirname(spec.origin))
-    if sys.path.__contains__(parent_folder):
-        print(f"Found {pyqt_wrong} in '{parent_folder}', "
-               "removing from Python's search path to avoid crashes.", file=sys.stderr)
-        sys.path.remove(parent_folder)
-
 # Look for PyQt
 try:
     if pykrita.qt_major_version() == 5:
@@ -30,6 +18,21 @@ except ImportError:
     print("Python cannot find the Qt%d bindings." % pykrita.qt_major_version(), file=sys.stderr)
     print("Please make sure that the needed packages are installed.", file=sys.stderr)
     raise
+
+import builtins
+
+# Disallow importing a conflicting version of PyQt,
+# which would load a conflicting version of Qt and crash Krita when used.
+pyqt_wrong = "PyQt" + ("6" if pykrita.qt_major_version() == 5 else "5")
+import_real = builtins.__import__
+def importAvoidWrongPyQtHack(name, globals=None, locals=None, fromlist=(), level=0):
+    if name == pyqt_wrong or name.startswith(pyqt_wrong+"."):
+        raise(ModuleNotFoundError(
+            f"This version of Krita is not compatible with {pyqt_wrong}!",
+            name=name))
+    else:
+        return import_real(name, globals, locals, fromlist, level)
+builtins.__import__ = importAvoidWrongPyQtHack
 
 from .api import *
 from .decorators import *
@@ -47,10 +50,6 @@ print("%s added to PYTHONPATH" % krita_path, file=sys.stderr)
 import excepthook
 excepthook.install()
 
-if sys.version_info[0] > 2:
-    import builtins
-else:
-    import __builtin__ as builtins
 builtins.i18n = Krita.krita_i18n
 builtins.i18nc = Krita.krita_i18nc
 builtins.Scripter = Krita.instance()

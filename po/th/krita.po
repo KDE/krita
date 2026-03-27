@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 02:41+0000\n"
+"POT-Creation-Date: 2026-03-27 02:40+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -16292,21 +16292,21 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "เครื่องมือเ&ลือกสี"
 
-#: krita/main.cc:679
+#: krita/main.cc:695
 #, fuzzy, kde-format
 #| msgid "(c) 1999-2009 The Krita team.\n"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "สงวนลิขสิทธิ์ (c) 2542-2552 ทีมงาน Krita\n"
 
-#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Sander Koning"
 
-#: krita/main.cc:777
+#: krita/main.cc:793
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

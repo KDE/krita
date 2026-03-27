@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 02:41+0000\n"
+"POT-Creation-Date: 2026-03-27 02:40+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -16262,7 +16262,7 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Hvatač boje"
 
-#: krita/main.cc:679
+#: krita/main.cc:695
 #, fuzzy, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
@@ -16270,7 +16270,7 @@ msgstr ""
 "(c) 1999-2002 The Krita team.\n"
 "(c) 2002-2003 Patrick Julien.\n"
 
-#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, fuzzy, kde-format
 #| msgid "Warning"
@@ -16278,7 +16278,7 @@ msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Upozorenje"
 
-#: krita/main.cc:777
+#: krita/main.cc:793
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

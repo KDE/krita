@@ -43,6 +43,10 @@
 #include <QBuffer>
 #include <QWidget>
 
+#ifdef Q_OS_ANDROID
+#include <config-qt-patches-present.h>
+#endif
+
 
 struct IMEDecorationInfo {
     int start = -1; ///< The startPos from the attribute.
@@ -1038,7 +1042,18 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
         return Qt::ImhMultiLine;
         break;
     // case Qt::ImPreferredLanguage: // requires access to properties.
-    // case Qt::ImPlatformData: // this is only for iOS at time of writing.
+#if defined(Q_OS_ANDROID) && KRITA_QT_HAS_ANDROID_INPUT_PLATFORM_DATA_SOFT_INPUT_ADJUST_NOTHING
+    case Qt::ImPlatformData:
+        // Platform-specific data. Qt normally only uses this on iOS, but we
+        // have a patch that allows us to control the keyboard pan behavior.
+        // Normally it pans the application window up if the text area would end
+        // up underneath the keyboard, but that's silly for the on-canvas text
+        // input because the location can be changed by panning the canvas. And
+        // if you do that while the keyboard is up, you end up with the whole
+        // window panned up for no reason until you dismiss and re-show it, so
+        // better to just do nothing in the first place and let the user pan.
+        return Qt::ANDROID_INPUT_PLATFORM_DATA_SOFT_INPUT_ADJUST_NOTHING;
+#endif
     case Qt::ImEnterKeyType:
         if (d->shape) {
             return Qt::EnterKeyDefault; // because input method hint is always multiline, this will show a return key.

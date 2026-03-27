@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 00:42+0000\n"
+"POT-Creation-Date: 2026-03-27 00:42+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -16270,31 +16270,31 @@ msgstr "Ruang Kerja"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:691 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:677
+#: krita/main.cc:693
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr ""
 
-#: krita/main.cc:679
+#: krita/main.cc:695
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr ""
 
-#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr ""
 
-#: krita/main.cc:777
+#: krita/main.cc:793
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

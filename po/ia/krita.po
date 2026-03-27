@@ -54,8 +54,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 00:42+0000\n"
-"PO-Revision-Date: 2026-02-18 18:55+0100\n"
+"POT-Creation-Date: 2026-03-27 00:42+0000\n"
+"PO-Revision-Date: 2026-03-26 10:30+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -14258,10 +14258,10 @@ msgstr "Colla"
 
 #. i18n: context: text @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:373
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste at Cursor"
-msgstr "Mascara de &filtro..."
+msgstr "Colla a Cursor"
 
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
@@ -14271,7 +14271,7 @@ msgstr "Mascara de &filtro..."
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paste at cursor"
-msgstr "Mascara de &filtro..."
+msgstr "Colla a Cursor"
 
 #. i18n: context: text @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
@@ -16672,32 +16672,32 @@ msgstr "Spatio de labor"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:691 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:677
-#, kde-format
+#: krita/main.cc:693
+#, fuzzy, kde-format
 msgid "Krita is the full-featured digital art studio"
-msgstr ""
+msgstr "Krita es le studio de arte digital complete."
 
-#: krita/main.cc:679
+#: krita/main.cc:695
 #, fuzzy, kde-format
 #| msgid "© 1999-%1, The Krita Team"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "(c) 1999-%1, Le Equipa de Krita"
 
-#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita:Aviso"
 
-#: krita/main.cc:777
+#: krita/main.cc:793
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -23112,7 +23112,7 @@ msgstr ""
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:172
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "Operation indefinite in spatio de color alpha"
 
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:28
 #: libs/pigment/colorspaces/KoLabColorSpace.h:66
@@ -28683,7 +28683,7 @@ msgstr "Largessa de linea"
 #: libs/ui/forms/KisDetailsPaneBase.ui:156
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr ""
+msgstr "Usa sempre iste patrono al startar del application"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: libs/ui/forms/KisDetailsPaneBase.ui:159
@@ -32477,7 +32477,7 @@ msgstr "Selector de forma de Mypaint"
 #, fuzzy, kde-format
 #| msgid "Rotation:"
 msgid "Rotation Angle:"
-msgstr "Rotation:"
+msgstr "Angulo de rotation:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbTriangleRotationAngle)
 #. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
@@ -35235,7 +35235,7 @@ msgstr "Selige opac"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -35644,9 +35644,9 @@ msgid "Too many templates found for: %1"
 msgstr "Il trovava nimie patronos pro: %1"
 
 #: libs/ui/KisApplication.cpp:1233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Template %1 failed to load."
-msgstr "Selige disposition (Layer)"
+msgstr "Patrono %1 falleva a cargar."
 
 #: libs/ui/KisApplication.cpp:1265
 #, kde-format
@@ -35729,10 +35729,9 @@ msgid "Start Krita in full-screen mode"
 msgstr ""
 
 #: libs/ui/KisApplicationArguments.cpp:91
-#, fuzzy, kde-format
-#| msgid "Grid Spacing"
+#, kde-format
 msgid "Override display DPI"
-msgstr "Spatiamento de grillia"
+msgstr "Superscribe DPI de monstrator"
 
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
@@ -35778,16 +35777,16 @@ msgid "Discard All"
 msgstr "Abandona toto"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:184
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr "Le file  non poteva esser aperite."
+msgstr ""
+"Le sequente file de salveguardar automaticamente pote esser recuperate:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr "Le file  non poteva esser aperite."
+msgstr ""
+"Le sequente files de salveguardar automaticamente pote esser recuperate:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:241
 #, kde-format
@@ -36803,10 +36802,9 @@ msgid "&Select..."
 msgstr "&Selige..."
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
-#, fuzzy, kde-format
-#| msgid "Create Template"
+#, kde-format
 msgid "Use the new template as default"
-msgstr "Crea patrono"
+msgstr "Usa le nove patrono como predefinite"
 
 #: libs/ui/KisTemplateCreateDia.cpp:153
 #, fuzzy, kde-format
@@ -36815,10 +36813,9 @@ msgid "Use the new template every time Krita starts"
 msgstr "Crea patrono"
 
 #: libs/ui/KisTemplateCreateDia.cpp:285
-#, fuzzy, kde-format
-#| msgid "Could not create the output document"
+#, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Il non pote crear le documento de exito"
+msgstr "Tu vole vermente superscriber le patrono existente '%1'?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
@@ -36872,9 +36869,9 @@ msgid "Could not load picture."
 msgstr "Il non pote cargar pictura."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
-#, fuzzy, kde-format
+#, kde-format
 msgid "No picture available."
-msgstr "Disponibile"
+msgstr "Nulle imagine disponibile"
 
 #: libs/ui/KisTemplatesPane.cpp:39
 #, kde-format
@@ -38267,10 +38264,9 @@ msgid "Toolbox"
 msgstr "Instrumentario (Cassetta de instrumentos)"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
-#, fuzzy, kde-format
-#| msgid "Company:"
+#, kde-format
 msgid "Compact"
-msgstr "Compania:"
+msgstr "Compacte"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
@@ -38306,30 +38302,25 @@ msgid "&Right-to-left"
 msgstr "&Dextera a Sinistra"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:227
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "Orientation"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:230
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "&Automatic"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:237
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
-msgstr "Horizontal"
+msgstr "&Horizontal"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:244
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "&Vertical"
@@ -40043,9 +40034,9 @@ msgstr "Alpha"
 
 #. i18n: ectx: property (text), widget (QLabel, noiseSeedLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:141
-#, kde-format
+#, fuzzy, kde-format
 msgid "Seed"
-msgstr ""
+msgstr "Semine:"
 
 #. i18n: ectx: property (text), widget (QToolButton, noiseSeedRandomizeButton)
 #: libs/ui/widgets/KisDitherWidget.ui:154
@@ -40306,12 +40297,12 @@ msgstr "Lisiar:"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Butt cap (punctal)"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Round cap"
-msgstr "&Indiciza Colores..."
+msgstr "Round cap (tappo circular)"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
 #, kde-format
@@ -40319,21 +40310,19 @@ msgid "Square cap"
 msgstr "Capsula quadrate"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Miter limit"
+#, kde-format
 msgid "Miter join"
-msgstr "Delimitator (Miter limit)"
+msgstr "Juncto mitra"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Round join"
-msgstr "&Indiciza Colores..."
+msgstr "Juncto circular"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
-#, fuzzy, kde-format
-#| msgid "Miter limit"
+#, kde-format
 msgid "Bevel join"
-msgstr "Delimitator (Miter limit)"
+msgstr "Juncto blasate"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
 #, kde-format
@@ -40341,9 +40330,9 @@ msgid "Miter limit"
 msgstr "Delimitator (Miter limit)"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set line width of actual selection"
-msgstr "Scala selection"
+msgstr "Assigna largessa de linea del selection actual"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
@@ -40660,7 +40649,7 @@ msgstr "Selige filtro"
 #: libs/widgets/KoConfigAuthorPage.cpp:65
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr ""
+msgstr "Adde nove profilo de autor (initia como un copia del currente)"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:69
 #, kde-format
@@ -40721,7 +40710,7 @@ msgstr "Anonyme"
 #: libs/widgets/KoConfigAuthorPage.cpp:280
 #, kde-format
 msgid "Name (not duplicate or blank name):"
-msgstr ""
+msgstr "Nomine (non duplicate o nomine vacue)"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:280
 #, kde-format
@@ -47224,8 +47213,7 @@ msgid "Full width"
 msgstr "Largessa plen"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Proportional"
@@ -47333,8 +47321,7 @@ msgid "Spacing:"
 msgstr "Spatiar:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "Proportional"
@@ -53718,17 +53705,15 @@ msgstr "Forma de Rectangulo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Radius x:"
+#, kde-format
 msgid "Corner radius x:"
-msgstr "Radius x:"
+msgstr "Radius de angulo x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:52
-#, fuzzy, kde-format
-#| msgid "Radius y:"
+#, kde-format
 msgid "Corner radius y:"
-msgstr "Radius y:"
+msgstr "Radius de angulo y:"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:25
 #, kde-format
@@ -53736,12 +53721,9 @@ msgid "A rectangle"
 msgstr "Un Rectangulo"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
-msgstr "Cambia filtro"
+msgstr "Cambiaspiral"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:23
 #, kde-format
@@ -53749,10 +53731,9 @@ msgid "Clockwise"
 msgstr "In senso horari"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:24
-#, fuzzy, kde-format
-#| msgid "C&lockwise"
+#, kde-format
 msgid "Anticlockwise"
-msgstr "In senso &horari"
+msgstr "Anti Horari"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:18
@@ -53902,7 +53883,7 @@ msgstr "Quadrato"
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
-msgstr ""
+msgstr "Conic"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
 #: plugins/tools/basictools/kis_tool_gradient.cc:249
@@ -57048,7 +57029,7 @@ msgstr "Non es un valide file de Calligra: %1"
 #: plugins/impex/libkra/kra_converter.cpp:91
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr ""
+msgstr "Documento invalide:necun file 'maindoc.xml'."
 
 #: plugins/impex/libkra/kra_converter.cpp:147
 #, kde-format
@@ -57058,7 +57039,7 @@ msgstr "Il non pote crear le file per salveguardar"
 #: plugins/impex/libkra/kra_converter.cpp:226
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr ""
+msgstr "Incapace a scriber '%1'. Partition plen?"
 
 #: plugins/impex/libkra/kra_converter.cpp:318
 #, kde-format
@@ -59727,10 +59708,9 @@ msgid "Grid"
 msgstr "Grillia"
 
 #: plugins/paintops/gridbrush/kis_grid_paintop_settings.cpp:211
-#, fuzzy, kde-format
-#| msgid "Jaison Lee"
+#, kde-format
 msgid "Division Level"
-msgstr "Jaison Lee"
+msgstr "NIvello de division"
 
 #: plugins/paintops/gridbrush/KisGridShapeOptionWidget.cpp:44
 #, kde-format
@@ -59748,10 +59728,9 @@ msgstr "In senso &horari"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:42
-#, fuzzy, kde-format
-#| msgid "height:"
+#, kde-format
 msgid "Grid height:"
-msgstr "altessa:"
+msgstr "Altessa de grillia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:52
@@ -59776,10 +59755,9 @@ msgstr "Horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:108
-#, fuzzy, kde-format
-#| msgid "Border width:"
+#, kde-format
 msgid "Grid width:"
-msgstr "Largessa de bordo:"
+msgstr "Largessa de grillia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:121
@@ -59797,10 +59775,9 @@ msgstr "Vertical:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
-#, fuzzy, kde-format
-#| msgid "Horizontal:"
+#, kde-format
 msgid "Horizontal offset:"
-msgstr "Horizontal:"
+msgstr "Displaciamento Horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:160
@@ -60714,10 +60691,9 @@ msgstr "Displaciamento aleatori"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:291
-#, fuzzy, kde-format
-#| msgid "Horizontal:"
+#, kde-format
 msgid "Horizontal Offset:"
-msgstr "Horizontal:"
+msgstr "Displaciamento Horizontal:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-21 00:42+0000\n"
+"POT-Creation-Date: 2026-03-27 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -14536,7 +14536,7 @@ msgstr "重置视图的缩放、旋转、镜像到默认状态。"
 #, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "按打印尺寸显示"
+msgstr "显示为打印大小"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -16231,31 +16231,31 @@ msgstr "工作区"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:675 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:691 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:677
+#: krita/main.cc:693
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr "Krita 是一款功能齐全的数字绘画工作室软件"
 
-#: krita/main.cc:679
+#: krita/main.cc:695
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 The Krita Developers"
 
-#: krita/main.cc:776 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:818
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:777
+#: krita/main.cc:793
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

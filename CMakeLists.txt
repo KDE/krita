@@ -807,6 +807,15 @@ KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
 )
 
 CHECK_CXX_SOURCE_COMPILES("
+#include <QCoreApplication>
+int main(int argc, char *argv[]) {
+QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS);
+}
+"
+KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS
+)
+
+CHECK_CXX_SOURCE_COMPILES("
 #include <QScroller>
 #ifndef KRITA_QSCROLLER_PATCH
 #error \"QScroller filter patch not present\"

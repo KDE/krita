@@ -38,6 +38,11 @@ class QAction;
  *
  * It is also a shape listener to allow the textcursor to update itself
  * whenever the corresponding text shape changes.
+ *
+ * Note for Android: to get a debug view of where the text input is at the
+ * operating system level, you can set an environment variable:
+ *
+ *     qputenv("KRITA_ANDROID_EDIT_TEXT_DEBUG_DRAW", "1")
  */
 
 class KRITATOOLSVGTEXT_EXPORT SvgTextCursor : public KoToolSelection, public KoSvgTextShape::TextCursorChangeListener

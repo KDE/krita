@@ -77,6 +77,9 @@ public:
     /// @return the current value as Point, whatever is "return unit"
     double valuePt( ) const;
 
+    /// Sets the value in points
+    void setValuePt(double value, bool overWriteExpression = false);
+
     /// Set minimum value in current unit.
     void setMinimum(double min);
 

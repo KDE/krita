@@ -241,14 +241,17 @@ void DlgCanvasSize::slotAspectChanged(bool keep)
 
 
     if (keep) {
-        // size values may be out of sync, so we need to reset it to defaults
+        // Do a dummy update of all the data to force it to recalculate the offset and size
         m_xOffset = 0;
         m_yOffset = 0;
 
+        double h = m_page->newHeightDouble->valuePt();
+        double w = m_page->newWidthDouble->valuePt();
+
         m_page->canvasPreview->blockSignals(true);
-        m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
-        m_page->newWidthDouble->setValue(m_newWidth);
-        m_page->newHeightDouble->setValue(m_newHeight);
+        m_page->canvasPreview->setCanvasSize(w, h);
+        m_page->newWidthDouble->setValuePt(w);
+        m_page->newHeightDouble->setValuePt(h);
         m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
         m_page->canvasPreview->blockSignals(false);
         updateOffset(CENTER);

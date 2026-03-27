@@ -280,6 +280,11 @@ double KisDoubleParseUnitSpinBox::valuePt( ) const
     return d->unitManager->getReferenceValue( KisDoubleParseSpinBox::value() );
 }
 
+void KisDoubleParseUnitSpinBox::setValuePt(double value, bool overwriteExpression)
+{
+    KisDoubleParseSpinBox::setValue(d->unitManager->getApparentValue(value), overwriteExpression);
+}
+
 void KisDoubleParseUnitSpinBox::setMinimum(double min)
 {
     d->lowerInPoints = d->unitManager->getReferenceValue(min);

@@ -101,9 +101,9 @@ KisASCCDLTransformation::KisASCCDLTransformation(const KoColorSpace *cs, KoColor
 void KisASCCDLTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
     QVector<float> normalised(m_cs->channelCount());
-    const int pixelSize = m_cs->pixelSize();
-    const int alphaPos = m_cs->alphaPos();
-    const int channelCount = m_cs->channelCount();
+    const quint32 pixelSize = m_cs->pixelSize();
+    const quint32 alphaPos = m_cs->alphaPos();
+    const quint32 channelCount = m_cs->channelCount();
 
     while (nPixels--) {
         m_cs->normalisedChannelsValue(src, normalised);

@@ -63,7 +63,7 @@ bool Channel::visible() const
 
     const QList<KoChannelInfo *> channelInfo = d->node->colorSpace()->channels();
 
-    for (uint i = 0; i < channelInfo.size(); ++i) {
+    for (int i = 0; i < channelInfo.size(); ++i) {
         if (channelInfo[i] == d->channel) {
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
             const QBitArray& flags = layer->channelFlags();
@@ -87,7 +87,7 @@ void Channel::setVisible(bool value)
         flags.fill(1, channelInfo.size());
     }
 
-    for (uint i = 0; i < channelInfo.size(); ++i) {
+    for (int i = 0; i < channelInfo.size(); ++i) {
         if (channelInfo[i] == d->channel) {
             flags.setBit(i, value);
             layer->setChannelFlags(flags);

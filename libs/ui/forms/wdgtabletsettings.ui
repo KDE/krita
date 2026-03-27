@@ -196,6 +196,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkUseHighFunctionKeyMouseButtonEmulationWorkaround">
+     <property name="text">
+      <string>Treate F13 key as middle mouse button (workaround for OnePlus styluses)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="chkUseIgnoreHistoricTabletEventsWorkaround">
      <property name="text">
       <string>Disregard tablet position history (workaround for jagged lines with Xiaomi styluses)</string>

@@ -1622,6 +1622,11 @@ void TabletSettingsTab::setDefault()
         cfg.usePageUpDownMouseButtonEmulationWorkaround(true));
 #endif
 
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS
+    m_page->chkUseHighFunctionKeyMouseButtonEmulationWorkaround->setChecked(
+        cfg.useHighFunctionKeyMouseButtonEmulationWorkaround(true));
+#endif
+
 #if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
     m_page->chkUseIgnoreHistoricTabletEventsWorkaround->setChecked(cfg.useIgnoreHistoricTabletEventsWorkaround(true));
 #endif
@@ -1681,6 +1686,13 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
         cfg.usePageUpDownMouseButtonEmulationWorkaround());
 #else
     m_page->chkUsePageUpDownMouseButtonEmulationWorkaround->hide();
+#endif
+
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS
+    m_page->chkUseHighFunctionKeyMouseButtonEmulationWorkaround->setChecked(
+        cfg.useHighFunctionKeyMouseButtonEmulationWorkaround());
+#else
+    m_page->chkUseHighFunctionKeyMouseButtonEmulationWorkaround->hide();
 #endif
 
 #if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
@@ -2914,6 +2926,11 @@ bool KisDlgPreferences::editPreferences()
 #if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_PAGE_UP_DOWN
         cfg.setUsePageUpDownMouseButtonEmulationWorkaround(
             m_tabletSettings->m_page->chkUsePageUpDownMouseButtonEmulationWorkaround->isChecked());
+#endif
+
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS
+        cfg.setUseHighFunctionKeyMouseButtonEmulationWorkaround(
+            m_tabletSettings->m_page->chkUseHighFunctionKeyMouseButtonEmulationWorkaround->isChecked());
 #endif
 
 #if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS

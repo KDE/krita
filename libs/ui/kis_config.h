@@ -424,6 +424,9 @@ public:
     bool usePageUpDownMouseButtonEmulationWorkaround(bool defaultValue = false) const;
     void setUsePageUpDownMouseButtonEmulationWorkaround(bool value);
 
+    bool useHighFunctionKeyMouseButtonEmulationWorkaround(bool defaultValue = false) const;
+    void setUseHighFunctionKeyMouseButtonEmulationWorkaround(bool value);
+
     bool useIgnoreHistoricTabletEventsWorkaround(bool defaultValue = false) const;
     void setUseIgnoreHistoricTabletEventsWorkaround(bool value);
 #endif

@@ -1689,6 +1689,25 @@ void KisConfig::setUsePageUpDownMouseButtonEmulationWorkaround(bool value)
     KisConfigNotifier::instance()->notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged(value);
 }
 
+bool KisConfig::useHighFunctionKeyMouseButtonEmulationWorkaround(bool defaultValue) const
+{
+    // This hack is only relevant for OnePlus devices (as far as we know), but
+    // it only affects the F21 key, which isn't something a creature of flesh
+    // and blood would regularly input. So it'll be fine to just enable this b
+    // default rather than bothering to detect the tablet brand or something.
+    if (defaultValue) {
+        return true;
+    } else {
+        return m_cfg.readEntry("useHighFunctionKeyMouseButtonEmulationWorkaround", true);
+    }
+}
+
+void KisConfig::setUseHighFunctionKeyMouseButtonEmulationWorkaround(bool value)
+{
+    m_cfg.writeEntry("useHighFunctionKeyMouseButtonEmulationWorkaround", value);
+    KisConfigNotifier::instance()->notifyUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(value);
+}
+
 bool KisConfig::useIgnoreHistoricTabletEventsWorkaround(bool defaultValue) const
 {
     bool fallback = KisAndroidUtils::looksLikeXiaomiDevice();

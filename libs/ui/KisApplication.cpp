@@ -670,6 +670,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // workarounds above.
 #if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS
     QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS, true);
+    auto setHighFunctionKeyMouseButtonEmulationWorkaround = [](bool enabled) {
+        // QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS, enabled);
+    };
+    connect(cfgNotifier,
+            &KisConfigNotifier::sigUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged,
+            this,
+            setHighFunctionKeyMouseButtonEmulationWorkaround);
+    setHighFunctionKeyMouseButtonEmulationWorkaround(cfg.useHighFunctionKeyMouseButtonEmulationWorkaround());
 #endif
 
     // Xiaomi workaround: historic tablet motion events are garbage, they just

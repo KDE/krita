@@ -44,6 +44,7 @@ public:
 
 #ifdef Q_OS_ANDROID
     void notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled);
+    void notifyUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(bool enabled);
     void notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled);
 #endif
 
@@ -61,6 +62,7 @@ Q_SIGNALS:
     void sigLongPressChanged(bool enabled);
 #ifdef Q_OS_ANDROID
     void sigUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled);
+    void sigUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(bool enabled);
     void sigUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled);
 #endif
 

@@ -81,6 +81,11 @@ void KisConfigNotifier::notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged
     Q_EMIT sigUsePageUpDownMouseButtonEmulationWorkaroundChanged(enabled);
 }
 
+void KisConfigNotifier::notifyUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(bool enabled)
+{
+    Q_EMIT sigUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(enabled);
+}
+
 void KisConfigNotifier::notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled)
 {
     Q_EMIT sigUseIgnoreHistoricTabletEventsWorkaroundChanged(enabled);

@@ -381,32 +381,27 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const KoColorSpace *cs) const
 }
 
 QPair<bool, KisClipboard::PasteFormatBehaviour>
-KisClipboard::askUserForSource(const QMimeData *cbData,
-                               bool useClipboardFallback) const
+KisClipboard::askUserForSource(const QMimeData *cbData, bool useClipboardFallback) const
 {
     if (!cbData) {
         return {false, PASTE_FORMAT_ASK};
     }
+    const QImage qimage = getImageWithFallback(cbData, useClipboardFallback);
+    QList<QUrl> urls = cbData->urls();
 
+    return askUserForSourceWithData(qimage, urls, useClipboardFallback);
+}
+
+QPair<bool, KisClipboard::PasteFormatBehaviour>
+KisClipboard::askUserForSourceWithData(QImage qimage, const QList<QUrl> urls, bool useClipboardFallback) const
+{
     KisConfig cfg(true);
 
     bool saveSourceSetting = false;
 
     auto choice = (PasteFormatBehaviour)cfg.pasteFormat(false);
 
-    const QImage qimage = [&]() {
-        QImage qimage = getImageFromMimeData(cbData);
-
-        if (qimage.isNull() && useClipboardFallback) {
-            qimage = d->clipboard->image();
-        }
-
-        return qimage;
-    }();
-
-    if (!qimage.isNull() || cbData->hasUrls()) {
-        const auto &urls = cbData->urls();
-
+    if (!qimage.isNull() || !urls.isEmpty()) {
         bool local = false;
         bool remote = false;
         bool isURI = false;
@@ -426,7 +421,7 @@ KisClipboard::askUserForSource(const QMimeData *cbData,
                 || (qimage.isNull() && choice == PASTE_FORMAT_CLIP);
 
         dbgUI << "Incoming paste event:";
-        dbgUI << "\tHas attached bitmap:" << cbData->hasImage();
+        dbgUI << "\tHas attached bitmap:" << !qimage.isNull();
         dbgUI << "\tHas local images:" << local;
         dbgUI << "\tHas remote images:" << remote;
         dbgUI << "\tHas multiple formats:" << hasMultipleFormatsAvailable;
@@ -483,25 +478,32 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
         return nullptr;
     }
 
-    KisPaintDeviceSP clip;
-
-    PasteFormatBehaviour choice = PASTE_FORMAT_ASK;
-
     // On wayland opening a dialog invalidates the clipboard data so we cache all the data beforehand
     const auto &urls = cbData->urls();
+    const QImage qimage = getImageWithFallback(cbData, useClipboardFallback);
 
-    const QImage qimage = [&]() {
-        QImage qimage = getImageFromMimeData(cbData);
+    return clipFromBoardContentsWithData(qimage,
+                                         urls,
+                                         imageBounds,
+                                         showPopup,
+                                         pasteBehaviourOverride,
+                                         useClipboardFallback,
+                                         source);
+}
 
-        if (qimage.isNull() && useClipboardFallback) {
-            qimage = d->clipboard->image();
-        }
-
-        return qimage;
-    }();
+KisPaintDeviceSP KisClipboard::clipFromBoardContentsWithData(QImage qimage,
+                                                             const QList<QUrl> urls,
+                                                             const QRect &imageBounds,
+                                                             bool showPopup,
+                                                             int pasteBehaviourOverride,
+                                                             bool useClipboardFallback,
+                                                             QPair<bool, PasteFormatBehaviour> source) const
+{
+    KisPaintDeviceSP clip;
+    PasteFormatBehaviour choice = PASTE_FORMAT_ASK;
 
     if (!source.first) {
-        choice = askUserForSource(cbData).second;
+        choice = askUserForSourceWithData(qimage , urls).second;
     } else {
         choice = source.second;
     }
@@ -589,6 +591,17 @@ void KisClipboard::clipboardDataChanged()
     }
     d->pushedClipboard = false;
     Q_EMIT clipChanged();
+}
+
+QImage KisClipboard::getImageWithFallback(const QMimeData *cbData, bool useClipboardFallback) const
+{
+    QImage qimage = getImageFromMimeData(cbData);
+
+    if (qimage.isNull() && useClipboardFallback) {
+        qimage = d->clipboard->image();
+    }
+
+    return qimage;
 }
 
 bool KisClipboard::hasClip() const

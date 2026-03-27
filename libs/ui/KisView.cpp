@@ -506,17 +506,21 @@ void KisView::dropEvent(QDropEvent *event)
             }
         }
     } else if (event->mimeData()->hasImage() || event->mimeData()->hasUrls()) {
-        const auto *data = event->mimeData();
+        const QMimeData *mData = event->mimeData();
+
+        // Opening a window on wayland causes the clipboard to be cleared, so we need to cache all the data we may need beforehand
+        QList<QUrl> urls =  mData->urls();
+        const QImage qimage = KisClipboard::instance()->getImageWithFallback(mData, false);
 
         KisCanvasDrop dlgAction;
 
         const auto callPos = QCursor::pos();
 
-        const KisCanvasDrop::Action action = dlgAction.dropAs(*data, callPos);
+        const KisCanvasDrop::Action action = dlgAction.dropAs(*mData, callPos);
 
         if (action == KisCanvasDrop::INSERT_AS_NEW_LAYER) {
             const QPair<bool, KisClipboard::PasteFormatBehaviour> source =
-                KisClipboard::instance()->askUserForSource(data);
+                KisClipboard::instance()->askUserForSourceWithData (qimage, urls);
 
             if (!source.first) {
                 dbgUI << "Paste event cancelled";
@@ -524,7 +528,6 @@ void KisView::dropEvent(QDropEvent *event)
             }
 
             if (source.second != KisClipboard::PASTE_FORMAT_CLIP) {
-                const QList<QUrl> &urls = data->urls();
                 const auto url = std::find_if(
                     urls.constBegin(),
                     urls.constEnd(),
@@ -570,13 +573,7 @@ void KisView::dropEvent(QDropEvent *event)
                 }
             }
 
-            KisPaintDeviceSP clip =
-                KisClipboard::instance()->clipFromBoardContents(data,
-                                                                QRect(),
-                                                                true,
-                                                                -1,
-                                                                false,
-                                                                source);
+            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromBoardContentsWithData(qimage, urls, QRect(), true, -1, false, source);
             if (clip) {
                 const auto pos = this->viewConverter()
                                      ->imageToDocument(imgCursorPos)
@@ -602,8 +599,8 @@ void KisView::dropEvent(QDropEvent *event)
                 return;
             }
         } else if (action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGE) {
-            KisPaintDeviceSP clip =
-                KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
+
+            KisPaintDeviceSP clip = KisClipboard::instance()-> clipFromBoardContentsWithData(qimage, urls, QRect(), true);
             if (clip) {
                 KisImportCatcher::adaptClipToImageColorSpace(clip,
                                                              this->image());
@@ -614,8 +611,7 @@ void KisView::dropEvent(QDropEvent *event)
                                                        this);
 
                 if (reference) {
-                    if (data->hasUrls()) {
-                        const auto &urls = data->urls();
+                    if (!urls.isEmpty()) {
                         const auto url = std::find_if(urls.constBegin(), urls.constEnd(), std::mem_fn(&QUrl::isLocalFile));
                         if (url != urls.constEnd()) {
                             reference->setFilename((*url).toLocalFile());
@@ -637,7 +633,7 @@ void KisView::dropEvent(QDropEvent *event)
         } else if (action != KisCanvasDrop::NONE) {
             // multiple URLs detected OR about to open a document
 
-            for (QUrl url : data->urls()) { // do copy it
+            for (QUrl url : urls) { // do copy it
                 QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
                 tmp->setAutoRemove(true);
 

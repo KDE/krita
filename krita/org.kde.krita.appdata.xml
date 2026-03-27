@@ -628,6 +628,7 @@
     <release date="2026-03-24" version="5.3.0">
       <url>https://krita.org/en/posts/2026/krita-5.3.0-released/</url>
       <description>A new major release featuring the new on-canvas text tool, gap-closing features, selection toolbar and the new knife tool</description>
+      <description xml:lang="uk">У новому основному випуску програми реалізовано новий інструмент для роботи з текстом на полотні, можливості усування прогалин, панель інструментів позначення та новий інструмент «Ніж»</description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
           <location>https://download.kde.org/stable/krita/5.3.0/krita-5.3.0-x86_64.AppImage</location>

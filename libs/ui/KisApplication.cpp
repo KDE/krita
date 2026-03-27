@@ -662,6 +662,16 @@ bool KisApplication::start(const KisApplicationArguments &args)
     setPageUpDownMouseButtonEmulationWorkaround(cfg.usePageUpDownMouseButtonEmulationWorkaround());
 #endif
 
+    // OnePlus workaround: their stylus inexplicably inputs the F21 key when
+    // pressing the stylus button. This flag causes the Android platform
+    // integration to turn it into middle clicks instead. Currently
+    // unconditional because a setting requires translation-relevant text
+    // changes, but later versions of Krita let you toggle it like the Xiaomi
+    // workarounds above.
+#if KRITA_QT_HAS_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS
+    QCoreApplication::setKritaAttribute(KRITA_QATTRIBUTE_ANDROID_EMULATE_MOUSE_BUTTONS_FOR_HIGH_FUNCTION_KEYS, true);
+#endif
+
     // Xiaomi workaround: historic tablet motion events are garbage, they just
     // connect the actual points that the tablet sampled with a straight line
     // and no pressure emulation, leading to jagged curves that don't get

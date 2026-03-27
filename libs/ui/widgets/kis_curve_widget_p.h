@@ -235,11 +235,11 @@ enumState KisCurveWidget::Private::state() const
 void KisCurveWidget::Private::applyGlobalPointConstrain()
 {
     if (m_globalPointConstrain == PointConstrain_AlwaysCorner) {
-        for (int i = 0; i < m_curve.points().size(); ++i) {
+        for (int i = 0; i < m_curve.curvePoints().size(); ++i) {
             m_curve.setPointAsCorner(i, true);
         }
     } else if (m_globalPointConstrain == PointConstrain_AlwaysSmooth) {
-        for (int i = 0; i < m_curve.points().size(); ++i) {
+        for (int i = 0; i < m_curve.curvePoints().size(); ++i) {
             m_curve.setPointAsCorner(i, false);
         }
     } // else { // No need to change the points here }

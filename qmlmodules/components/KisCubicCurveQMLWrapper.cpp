@@ -9,9 +9,9 @@ KisCubicCurveQml::KisCubicCurveQml(QObject *parent)
     : QObject(parent)
 {}
 
-const QList<QPointF> KisCubicCurveQml::points() const
+const QList<KisCubicCurvePoint> KisCubicCurveQml::points() const
 {
-    return m_curve.points();
+    return m_curve.curvePoints();
 }
 
 const QString& KisCubicCurveQml::name() const
@@ -51,33 +51,33 @@ QString KisCubicCurveQml::toString() const
 
 void KisCubicCurveQml::fromString(const QString &str)
 {
-    m_curve.fromString(str);
+    m_curve = KisCubicCurve(str);
 }
 
 
-void KisCubicCurveQml::setPoints(const QList<QPointF> points)
+void KisCubicCurveQml::setPoints(const QList<KisCubicCurvePoint> points)
 {
     m_curve.setPoints(points);
-    emit pointsChanged(m_curve.points());
+    emit pointsChanged(m_curve.curvePoints());
 }
 
 void KisCubicCurveQml::setPoint(int idx, const QPointF &point)
 {
     m_curve.setPoint(idx, point);
-    emit pointsChanged(m_curve.points());
+    emit pointsChanged(m_curve.curvePoints());
 }
 
 int KisCubicCurveQml::addPoint(const QPointF &point)
 {
     const int idx = m_curve.addPoint(point);
-    emit pointsChanged(m_curve.points());
+    emit pointsChanged(m_curve.curvePoints());
     return idx;
 }
 
 void KisCubicCurveQml::removePoint(int idx)
 {
     m_curve.removePoint(idx);
-    emit pointsChanged(m_curve.points());
+    emit pointsChanged(m_curve.curvePoints());
 }
 
 void KisCubicCurveQml::setName(const QString& name)

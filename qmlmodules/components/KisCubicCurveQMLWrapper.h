@@ -16,13 +16,13 @@ class KisCubicCurveQml : public QObject
     Q_OBJECT
     QML_NAMED_ELEMENT(KisCubicCurve)
     
-    Q_PROPERTY(QList<QPointF> points READ points WRITE setPoints NOTIFY pointsChanged)
+    Q_PROPERTY(QList<KisCubicCurvePoint> points READ points WRITE setPoints NOTIFY pointsChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
 public:
     KisCubicCurveQml(QObject *parent = nullptr);
 
-    const QList<QPointF> points() const;
+    const QList<KisCubicCurvePoint> points() const;
     const QString& name() const;
 
     Q_INVOKABLE qreal value(qreal x) const;
@@ -34,14 +34,14 @@ public:
     Q_INVOKABLE void fromString(const QString&);
 
 public Q_SLOTS:
-    void setPoints(const QList<QPointF> points);
+    void setPoints(const QList<KisCubicCurvePoint> points);
     void setPoint(int idx, const QPointF &point);
     int addPoint(const QPointF &point);
     void removePoint(int idx);
     void setName(const QString& name);
 
 Q_SIGNALS:
-    void pointsChanged(const QList<QPointF>&);
+    void pointsChanged(const QList<KisCubicCurvePoint>&);
     void nameChanged(const QString&);
 
 private:

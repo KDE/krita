@@ -344,7 +344,7 @@ KisSprayCurveBasedDistribution::KisSprayCurveBasedDistribution(const KisCubicCur
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(repeat > 0);
 
-    KisSprayFunctionBasedDistribution::initialize(((curve.points().size() % 4) + 1) * 1000 * repeat, 0.0, 1.0,
+    KisSprayFunctionBasedDistribution::initialize(((curve.curvePoints().size() % 4) + 1) * 1000 * repeat, 0.0, 1.0,
         [curve, repeat](double x)
         { 
             const double sx = x * static_cast<double>(repeat);
@@ -360,7 +360,7 @@ KisSprayCurveBasedDistributionPolarDistance::KisSprayCurveBasedDistributionPolar
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(repeat > 0);
 
-    KisSprayFunctionBasedDistribution::initialize(((curve.points().size() % 4) + 1) * 1000 * repeat, 0.0, 1.0,
+    KisSprayFunctionBasedDistribution::initialize(((curve.curvePoints().size() % 4) + 1) * 1000 * repeat, 0.0, 1.0,
         [curve, repeat](double x)
         { 
             const double sx = x * static_cast<double>(repeat);

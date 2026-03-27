@@ -352,7 +352,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
         const qreal halfHandleSize = d->m_handleSize * 0.5;
 
         for (int i = 0; i < d->m_curve.curvePoints().count(); ++i) {
-            const KisCubicCurvePoint &point = d->m_curve.points().at(i);
+            const KisCubicCurvePoint &point = d->m_curve.curvePoints().at(i);
 
             if (i == d->m_grab_point_index) {
                 // active point is slightly more "bold"

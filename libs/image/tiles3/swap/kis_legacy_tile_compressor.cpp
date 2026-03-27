@@ -108,7 +108,7 @@ inline bool KisLegacyTileCompressor::writeHeader(KisTileSP tile,
     qint32 width, height;
 
     tile->extent().getRect(&x, &y, &width, &height);
-    sprintf((char *)buffer, "%d,%d,%d,%d\n", x, y, width, height);
+    snprintf((char *)buffer, (maxHeaderLength() + 1), "%d,%d,%d,%d\n", x, y, width, height);
 
     return true;
 }

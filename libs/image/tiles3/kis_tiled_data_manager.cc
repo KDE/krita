@@ -105,7 +105,7 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
 
     if(CURRENT_VERSION == LEGACY_VERSION) {
         char str[80];
-        sprintf(str, "%d\n", m_hashTable->numTiles());
+        snprintf(str, 80, "%d\n", m_hashTable->numTiles());
         retval = store.write(str, strlen(str));
     }
     else {

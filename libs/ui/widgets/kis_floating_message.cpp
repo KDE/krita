@@ -16,7 +16,7 @@
 #include <QScreen>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QScreen>
 #include <QLabel>
 #include <QGraphicsDropShadowEffect>
@@ -166,20 +166,10 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     else {
         max = QSize(1024, 768);
     }
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
-    m_message.replace(QRegExp( " +\n"), "\n");
+    m_message.replace(QRegularExpression( " +\n"), "\n");
     // remove consecutive line breaks
-    m_message.replace(QRegExp( "\n+"), "\n");
-#else
-    // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
-    QRegExp r(" +\n");
-    m_message = r.replaceIn(m_message, "\n");
-
-     // remove consecutive line breaks
-    QRegExp r2(( "\n+"));
-    m_message = r2.replaceIn(m_message, "\n");
-#endif
+    m_message.replace(QRegularExpression( "\n+"), "\n");
 
     // The osd cannot be larger than the screen
     QRect rect = fontMetrics().boundingRect(0, 0, max.width() - image.width(), max.height(),

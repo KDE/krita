@@ -6,7 +6,7 @@
 
 #include "kis_meta_data_value.h"
 #include <QPoint>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTime>
 #include <QVariant>
 
@@ -157,8 +157,7 @@ bool Value::setVariant(const QVariant& variant)
         *this = KisMetaData::Value(variant);
         return true;
     case Rational: {
-        QRegExp rx("([^\\/]*)\\/([^\\/]*)");
-        rx.indexIn(variant.toString());
+        QRegularExpression rx("([^\\/]*)\\/([^\\/]*)");
         // TODO: erm... did someone forgot to write actual code here?
 
         // for now just safe assert and return a failure

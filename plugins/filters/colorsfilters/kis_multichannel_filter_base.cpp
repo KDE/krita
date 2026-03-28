@@ -15,7 +15,7 @@
 #include <QDomDocument>
 #include <QHBoxLayout>
 #include <QMessageBox>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
@@ -183,7 +183,8 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
     QString attributeName;
     KisCubicCurve curve;
     quint16 index;
-    QRegExp curveRegexp("curve(\\d+)");
+    QRegularExpression curveRegexp("curve(\\d+)");
+    QRegularExpressionMatch match;
 
     while (!e.isNull()) {
         if ((attributeName = e.attribute("name")) == "activeCurve") {
@@ -193,9 +194,9 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
         } else if ((attributeName = e.attribute("name")) == "nTransfersWithAlpha") {
             numTransfersWithAlpha = e.text().toUShort();
         } else {
-            if (curveRegexp.indexIn(attributeName, 0) != -1) {
+            if (attributeName.contains(curveRegexp, &match)) {
 
-                index = curveRegexp.cap(1).toUShort();
+                index = match.captured(1).toUShort();
                 index = qMin(index, quint16(curves.count()));
 
                 if (!e.text().isEmpty()) {
@@ -375,12 +376,13 @@ void KisMultiChannelFilterConfiguration::setProperty(const QString& name, const 
 
 bool KisMultiChannelFilterConfiguration::curveIndexFromCurvePropertyName(const QString& name, int& curveIndex) const
 {
-    QRegExp rx("curve(\\d+)");
-    if (rx.indexIn(name, 0) == -1) {
+    QRegularExpression rx("curve(\\d+)");
+    QRegularExpressionMatch match;
+    if (!name.contains(rx, &match)) {
         return false;
     }
 
-    curveIndex = rx.cap(1).toUShort();
+    curveIndex = match.captured(1).toUShort();
     return true;
 }
 

@@ -9,7 +9,7 @@
 #include <QFontMetrics>
 #include <QGlobalStatic>
 #include <QMap>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <fontconfig/fontconfig.h>
 
@@ -362,14 +362,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             setProperty(BaselineShiftValueId, QVariant::fromValue(shift));
         }
     } else if (command == "vertical-align") {
-        QRegExp digits = QRegExp("\\d");
+        QRegularExpression digits = QRegularExpression("\\d");
         Q_FOREACH (const QString &param, value.split(' ', Qt::SkipEmptyParts)) {
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             bool paramContains = param.contains(digits);
-#else
-            bool paramContains = (digits.indexIn(param) > 0);
-#endif
-
 
             if (param == "sub" || param == "super" || param == "top" || param == "bottom" || paramContains) {
                 parseSvgTextAttribute(context, "baseline-shift", param);

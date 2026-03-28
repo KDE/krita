@@ -9,7 +9,7 @@
 #include <simpletest.h>
 
 #include <QDomDocument>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <KoCompositeOpRegistry.h>
 #include <resources/KoAbstractGradient.h>
@@ -390,13 +390,8 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
     {
         // the reference document has stripped "Idnt" field which is random
 
-        QRegExp rx("<node key=\"Idnt\" type=\"Text\" value=\".+\"/>");
-        rx.setMinimal(true);
-
-        int pos = 0;
-        while ((pos = rx.indexIn(xmlDoc, pos)) != -1) {
-            xmlDoc.remove(pos, rx.matchedLength());
-        }
+        QRegularExpression rx("<node key=\"Idnt\" type=\"Text\" value=\".+?\"/>");
+        xmlDoc.remove(rx);
 
         {
             //QFile xmlFile("reference_gradients.asl.xml");

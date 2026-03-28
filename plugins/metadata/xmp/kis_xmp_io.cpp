@@ -9,7 +9,7 @@
 #include <string>
 
 #include <QIODevice>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <kis_exiv2_common.h>
 #include <kis_meta_data_entry.h>
@@ -180,10 +180,11 @@ bool parseTagName(const QString &tagString,
     }
 
     if (numSubNames == 2) {
-        QRegExp regexp("([A-Za-z]\\w+)/([A-Za-z]\\w+):([A-Za-z]\\w+)");
-        if (regexp.indexIn(tagString) != -1) {
-            structName = regexp.capturedTexts()[1];
-            tagName = regexp.capturedTexts()[3];
+        QRegularExpression regexp("([A-Za-z]\\w+)/([A-Za-z]\\w+):([A-Za-z]\\w+)");
+        QRegularExpressionMatch match;
+        if (tagString.contains(regexp, &match)) {
+            structName = match.captured(1);
+            tagName = match.captured(3);
             *typeInfo = schema->propertyType(structName);
 
             if (*typeInfo && (*typeInfo)->propertyType() == KisMetaData::TypeInfo::StructureType) {
@@ -193,11 +194,12 @@ bool parseTagName(const QString &tagString,
             return true;
         }
 
-        QRegExp regexp2("([A-Za-z]\\w+)\\[(\\d+)\\]/([A-Za-z]\\w+):([A-Za-z]\\w+)");
-        if (regexp2.indexIn(tagString) != -1) {
-            structName = regexp2.capturedTexts()[1];
-            arrayIndex = regexp2.capturedTexts()[2].toInt() - 1;
-            tagName = regexp2.capturedTexts()[4];
+        QRegularExpression regexp2("([A-Za-z]\\w+)\\[(\\d+)\\]/([A-Za-z]\\w+):([A-Za-z]\\w+)");
+        QRegularExpressionMatch match2;
+        if (tagString.contains(regexp2, &match2)) {
+            structName = match2.captured(1);
+            arrayIndex = match2.captured(2).toInt() - 1;
+            tagName = match2.captured(4);
 
             if (schema->propertyType(structName)) {
                 *typeInfo = schema->propertyType(structName)->embeddedPropertyType();

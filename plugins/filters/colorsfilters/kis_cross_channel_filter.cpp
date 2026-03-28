@@ -14,7 +14,7 @@
 #include <QPainter>
 #include <QDomDocument>
 #include <QHBoxLayout>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
@@ -108,12 +108,13 @@ void KisCrossChannelFilterConfiguration::fromXML(const QDomElement& root)
     QVector<int> driverChannels;
     driverChannels.resize(m_curves.size());
 
-    QRegExp rx("driver(\\d+)");
+    QRegularExpression rx("^driver(\\d+)$");
+    QRegularExpressionMatch match;
     for (QDomElement e = root.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
         const QString attributeName = e.attribute("name");
 
-        if (rx.exactMatch(attributeName)) {
-            int channel = rx.cap(1).toUShort();
+        if (attributeName.contains(rx, &match)) {
+            int channel = match.captured(1).toUShort();
             int driver = KisDomUtils::toInt(e.text());
 
             if (0 <= channel && channel < driverChannels.size()) {
@@ -217,12 +218,13 @@ void KisCrossChannelFilterConfiguration::setProperty(const QString& name, const 
 
 bool KisCrossChannelFilterConfiguration::channelIndexFromDriverPropertyName(const QString& name, int& driverIndex) const
 {
-    QRegExp rx("driver(\\d+)");
-    if (rx.indexIn(name, 0) == -1) {
+    QRegularExpression rx("driver(\\d+)");
+    QRegularExpressionMatch match;
+    if (!name.contains(rx, &match)) {
         return false;
     }
 
-    driverIndex = rx.cap(1).toUShort();
+    driverIndex = match.captured(1).toUShort();
     return true;
 }
 

@@ -10,7 +10,7 @@
 
 #include <KoUnit.h>
 
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <WidgetsDebug.h>
 
@@ -62,8 +62,9 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     Q_UNUSED(pos);
 #endif
 
-    QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
-    const int res =  regexp.indexIn(input);
+    QRegularExpression regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
+    QRegularExpressionMatch match;
+    const int res = input.indexOf(regexp, 0, &match);
 
     if ( res == -1 )
     {
@@ -76,7 +77,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 
     // ### TODO: are all the QString::trimmed really necessary?
     const QString number ( input.left( res ).trimmed() );
-    const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
+    const QString unitName ( match.captured( 1 ).trimmed().toLower() );
 
 #ifdef DEBUG_VALIDATOR
     debugWidgets <<"Split:" << number <<":" << unitName <<":";

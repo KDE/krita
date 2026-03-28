@@ -7,7 +7,6 @@
  */
 
 #include <QRegularExpression>
-#include <QRegExp>
 
 #include <KoCompositeOpRegistry.h>
 #include <commands/KisNodeRenameCommand.h>
@@ -41,9 +40,10 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
     dbgPlugins << "Layer name: " << srcGmicImage.m_layerName;
 
     {
-        const QRegExp modeRe(R"(mode\(\s*([^)]*)\s*\))");
-        if (modeRe.indexIn(srcGmicImage.m_layerName) != -1) {
-            QString modeStr = modeRe.cap(1).trimmed();
+        const QRegularExpression modeRe(R"(mode\(\s*([^)]*)\s*\))");
+        QRegularExpressionMatch match;
+        if (srcGmicImage.m_layerName.contains(modeRe, &match)) {
+            QString modeStr = match.captured(1).trimmed();
             auto translatedMode =
                 KisQmicSimpleConvertor::stringToBlendingMode(modeStr);
             dbgPlugins << "Detected mode: " << modeStr << " => "
@@ -56,10 +56,10 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
     }
 
     {
-        const QRegExp opacityRe(R"(opacity\(\s*([^)]*)\s*\))");
-
-        if (opacityRe.indexIn(srcGmicImage.m_layerName) != -1) {
-            const auto opacity = opacityRe.cap(1).toFloat();
+        const QRegularExpression opacityRe(R"(opacity\(\s*([^)]*)\s*\))");
+        QRegularExpressionMatch match;
+        if (srcGmicImage.m_layerName.contains(opacityRe, &match)) {
+            const float opacity = match.captured(1).toFloat();
             dbgPlugins << "Detected opacity: " << opacity
                        << std::lround(opacity / 100.f * 255.f);
             cmd->addCommand(
@@ -70,10 +70,11 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
     }
 
     {
-        const QRegExp nameRe(R"(name\(\s*([^)]*)\s*\))");
+        const QRegularExpression nameRe(R"(name\(\s*([^)]*)\s*\))");
 
-        if (nameRe.indexIn(srcGmicImage.m_layerName) != -1) {
-            const auto name = nameRe.cap(1);
+        QRegularExpressionMatch match;
+        if (srcGmicImage.m_layerName.contains(nameRe, &match)) {
+            const auto name = match.captured(1);
             dbgPlugins << "Detected layer name: " << name;
             cmd->addCommand(new KisNodeRenameCommand(node, node->name(), name));
             // apply command

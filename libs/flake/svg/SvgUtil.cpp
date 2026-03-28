@@ -13,7 +13,7 @@
 #include <QString>
 #include <QRectF>
 #include <QStringList>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <math.h>
 #include "kis_debug.h"
@@ -458,18 +458,18 @@ QStringList SvgUtil::simplifyList(const QString &str)
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)
 {
-    QRegExp rexp("(defer)?\\s*(none|(x(Min|Max|Mid)Y(Min|Max|Mid)))\\s*(meet|slice)?", Qt::CaseInsensitive);
-    int index = rexp.indexIn(str.toLower());
+    QRegularExpression rexp("(defer)?\\s*(none|(x(Min|Max|Mid)Y(Min|Max|Mid)))\\s*(meet|slice)?", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch match = rexp.match(str.toLower());
 
-    if (index >= 0) {
-        if (rexp.cap(1) == "defer") {
+    if (match.hasMatch()) {
+        if (match.captured(1) == "defer") {
             defer = true;
         }
 
-        if (rexp.cap(2) != "none") {
-            xAlignment = alignmentFromString(rexp.cap(4));
-            yAlignment = alignmentFromString(rexp.cap(5));
-            mode = rexp.cap(6) == "slice" ?
+        if (match.captured(2) != "none") {
+            xAlignment = alignmentFromString(match.captured(4));
+            yAlignment = alignmentFromString(match.captured(5));
+            mode = match.captured(6) == "slice" ?
                 Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio;
         }
     }

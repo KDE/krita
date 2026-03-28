@@ -17,7 +17,7 @@ Parser::~Parser()
 #include "kis_meta_data_parser_p.h"
 
 #include <QDateTime>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QVariant>
 
 
@@ -50,9 +50,10 @@ Value DateParser::parse(const QString& _v) const
 
 Value RationalParser::parse(const QString& _v) const
 {
-    QRegExp regexp("(\\-?\\d+)/(\\d+)");
-    regexp.indexIn(_v);
-    if (regexp.capturedTexts().size() > 2)
-        return Value(Rational(regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt()));
+    QRegularExpression regexp("(\\-?\\d+)/(\\d+)");
+    QRegularExpressionMatch match = regexp.match(_v);
+
+    if (match.capturedTexts().size() > 2)
+        return Value(Rational(match.captured(1).toInt(), match.captured(2).toInt()));
     return Value();
 }

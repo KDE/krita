@@ -10,7 +10,6 @@
 #include "KisDlgImportVideoAnimation.h"
 
 #include <QStandardPaths>
-#include <QRegExp>
 #include <QtMath>
 #include <QJsonObject>
 #include <QJsonArray>

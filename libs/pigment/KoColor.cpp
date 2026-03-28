@@ -11,7 +11,7 @@
 #include <QColor>
 
 #include <QDomDocument>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "DebugPigment.h"
 
@@ -490,12 +490,8 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) co
         QString csName = colorSpace()->profile()->name();
         // remove forbidden characters
         // https://www.w3.org/TR/SVG11/types.html#DataTypeName
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        csName.remove(QRegExp("[\\(\\),\\s]"));
-#else
-        QRegExp reg("[\\(\\),\\s]");
-        reg.removeIn(csName);
-#endif
+        csName.remove(QRegularExpression("[\\(\\),\\s]"));
+
         //reuse existing name if possible. We're looking for the color profile, because svg doesn't care about depth.
         csName = profileList->key(colorSpace()->profile(), csName);
 
@@ -544,15 +540,14 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
     profileList.insert("sRGB", KoColorSpaceRegistry::instance()->p709SRGBProfile());
     // first, try to split at \w\d\) space.
     // we want to split up a string like... colorcolor none rgb(0.8, 0.1, 200%) #ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);
-    QRegExp splitDefinitions("(#?\\w+|[\\w\\-]*\\(.+\\))\\s");
+    QRegularExpression splitDefinitions("(#?\\w+|[\\w\\-]*\\(.+\\))\\s");
     int pos = 0;
-    int pos2 = 0;
     QStringList colorDefinitions;
     QString valueAdjust = value.split(";").first();
     valueAdjust.append(" ");
-    while ((pos2 = splitDefinitions.indexIn(valueAdjust, pos)) != -1) {
-        colorDefinitions.append(splitDefinitions.cap(1).trimmed());
-        pos = pos2 + splitDefinitions.matchedLength();
+    for (const QRegularExpressionMatch &match : splitDefinitions.globalMatch(valueAdjust)) {
+        colorDefinitions.append(match.captured(1).trimmed());
+        pos = match.capturedEnd(0);
     }
     if (pos < value.length()) {
         QString remainder = value.right(value.length()-pos);

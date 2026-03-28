@@ -21,7 +21,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_assign_profile_processing_visitor.h"
 #include "commands/kis_image_layer_add_command.h"
-#include <QRegExp>
+#include <QRegularExpression>
 
 struct KisAnimationImporter::Private
 {
@@ -85,14 +85,11 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 
     QPair<KisPaintLayerSP, KisRasterKeyframeChannel*> layerRasterChannelPair;
 
-    const QRegExp rx(QLatin1String("(\\d+)"));    //regex for extracting numbers
+    const QRegularExpression rx(QLatin1String("(\\d+)"));    //regex for extracting numbers
     QStringList fileNumberRxList;
-
-    int pos = 0;
-
-    while ((pos = rx.indexIn(files.at(0), pos)) != -1) {
-        fileNumberRxList << rx.cap(1);
-        pos += rx.matchedLength();
+    
+    for (const QRegularExpressionMatch &match : rx.globalMatch(files.at(0))) {
+        fileNumberRxList << match.captured(1);
     }
 
     int firstFrameNumber = 0;
@@ -149,11 +146,8 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
         if (!autoAddHoldframes) {
             layerRasterChannelPair.second->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0
         } else {
-            pos = 0;
-
-            while ((pos = rx.indexIn(file, pos)) != -1) {
-                fileNumberRxList << rx.cap(1);
-                pos += rx.matchedLength();
+            for (const QRegularExpressionMatch &match : rx.globalMatch(file)) {
+                fileNumberRxList << match.captured(1);
             }
 
             int filenum = fileNumberRxList.last().toInt(&ok);

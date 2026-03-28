@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KoWritingSystemUtils.h"
-#include <QRegExp>
+#include <QRegularExpression>
 
 static QMap<QFontDatabase::WritingSystem, QString> WRITINGSYSTEM_SCRIPT_MAP {
     {{QFontDatabase::Any},{"Zyyy"}},
@@ -449,15 +449,15 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     if (tags.isEmpty()) return bcp;
 
-    const QRegExp alphas("[A-Z]+", Qt::CaseInsensitive);
-    const QRegExp digits("[\\d]+");
+    const QRegularExpression alphas("^[A-Za-z]+$");
+    const QRegularExpression digits("^\\d+$");
 
     // Language -- single primary language, followed by optional 3 letter extended tags.
     if (tags.first().size() == 2 || tags.first().size() == 3) {
         bcp.languageTags.append(tags.takeFirst().toLower());
 
         // extensions only happen when first tag is 2 or 3 long.
-        while (!tags.isEmpty() && tags.first().size() == 3 && alphas.exactMatch(tags.first())) {
+        while (!tags.isEmpty() && tags.first().size() == 3 && tags.first().contains(alphas)) {
             bcp.languageTags.append(tags.takeFirst().toLower());
         }
     } else if (tags.first().size() >= 4 || tags.first().size() <= 8) {
@@ -473,7 +473,7 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     // Script -- This is an 4 letter alpha only.
 
-    if (alphas.exactMatch(tags.first()) && tags.first().size() == 4) {
+    if (tags.first().contains(alphas) && tags.first().size() == 4) {
         bcp.scriptTag = tags.takeFirst().toLower();
         bcp.scriptTag = bcp.scriptTag.at(0).toUpper()+bcp.scriptTag.mid(1);
     }
@@ -482,8 +482,8 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     // Region -- 2 letter alpha only.
 
-    if ((alphas.exactMatch(tags.first()) && tags.first().size() == 2)
-            || (digits.exactMatch(tags.first()) && tags.first().size() == 3)) {
+    if ((tags.first().contains(alphas) && tags.first().size() == 2)
+            || (tags.first().contains(digits) && tags.first().size() == 3)) {
         bcp.regionTag = tags.takeFirst().toUpper();
     }
 
@@ -491,11 +491,11 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     // Variants -- [0+] alpha numerics, either between 5-8 char long, or 4 but starting with a digit.
 
-    const QRegExp variantAlphaNumeric("\\d[a-z0-9]{3}", Qt::CaseInsensitive);
+    const QRegularExpression variantAlphaNumeric("^\\d[A-Za-z0-9]{3}$");
 
     while (!tags.isEmpty()
            && ( (tags.first().size() >= 5 && tags.first().size() <= 8)
-               || (variantAlphaNumeric.exactMatch(tags.first()) && tags.first().size() == 4) )
+               || (tags.first().contains(variantAlphaNumeric) && tags.first().size() == 4) )
            ) {
         bcp.variantTags.append(tags.takeFirst().toLower());
     }

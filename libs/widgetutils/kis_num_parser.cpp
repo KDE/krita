@@ -9,7 +9,7 @@
 #include <qnumeric.h> // for qIsNaN
 #include <qmath.h>
 #include <QVector>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QVariant>
 #include <QLocale>
@@ -23,11 +23,11 @@ const QVector<char> opLevel2 = {'*', '/'};
 
 const QStringList supportedFuncs = {"", "cos", "sin", "tan", "acos", "asin", "atan", "exp", "ln", "log10", "abs"};
 
-const QRegExp funcExpr("(-)?([a-zA-Z]*[0-9]*)?\\((.+)\\)");
-const QRegExp numberExpr("(-)?([0-9]+\\.?[0-9]*(e[0-9]*)?)");
+const QRegularExpression funcExpr("^(-)?([a-zA-Z]*[0-9]*)?\\((.+)\\)$");
+const QRegularExpression numberExpr("^(-)?([0-9]+\\.?[0-9]*(e[0-9]*)?)$");
 
-const QRegExp funcExprInteger("(-)?\\((.+)\\)");
-const QRegExp integerExpr("(-)?([0-9]+)");
+const QRegularExpression funcExprInteger("^(-)?\\((.+)\\)$");
+const QRegularExpression integerExpr("^(-)?([0-9]+)$");
 
 //double functions
 double treatFuncs(QString const& expr, bool & noProblem);
@@ -364,14 +364,15 @@ double treatFuncs(QString const& expr, bool & noProblem)
 
     noProblem = true;
 
-    QRegExp funcExp = funcExpr; //copy the expression in the current execution stack, to avoid errors for example when multiple thread call this function.
-    QRegExp numExp = numberExpr;
+    QRegularExpression funcExp = funcExpr; //copy the expression in the current execution stack, to avoid errors for example when multiple thread call this function.
+    QRegularExpression numExp = numberExpr;
+    QRegularExpressionMatch match;
 
-    if (funcExp.exactMatch(expr.trimmed())) {
+    if (expr.trimmed().contains(funcExp, &match)) {
 
-        int sign = funcExp.capturedTexts()[1].isEmpty() ? 1 : -1;
-        QString func = funcExp.capturedTexts()[2].toLower();
-        QString subExpr = funcExp.capturedTexts()[3];
+        int sign = match.captured(1).isEmpty() ? 1 : -1;
+        QString func = match.captured(2).toLower();
+        QString subExpr = match.captured(3);
 
         double val = treatLevel1(subExpr, noProblem);
 
@@ -412,7 +413,7 @@ double treatFuncs(QString const& expr, bool & noProblem)
         }
 
         return sign*val;
-    } else if(numExp.exactMatch(expr.trimmed())) {
+    } else if(expr.trimmed().contains(numExp)) {
         return expr.toDouble(&noProblem);
     }
 
@@ -534,14 +535,14 @@ double treatFuncsInt(QString const& expr, bool & noProblem)
 
     noProblem = true;
 
-    QRegExp funcExpInteger = funcExprInteger;
-    QRegExp integerExp = integerExpr;
-    QRegExp numberExp = numberExpr;
+    QRegularExpression funcExpInteger = funcExprInteger;
+    QRegularExpression numberExp = numberExpr;
+    QRegularExpressionMatch match;
 
-    if (funcExpInteger.exactMatch(expr.trimmed())) {
+    if (expr.trimmed().contains(funcExpInteger, &match)) {
 
-        int sign = funcExpInteger.capturedTexts()[1].isEmpty() ? 1 : -1;
-        QString subExpr = funcExpInteger.capturedTexts()[2];
+        int sign = match.captured(1).isEmpty() ? 1 : -1;
+        QString subExpr = match.captured(2);
 
         double val = treatLevel1Int(subExpr, noProblem);
 
@@ -551,7 +552,7 @@ double treatFuncsInt(QString const& expr, bool & noProblem)
 
         return sign*val;
 
-    } else if(numberExp.exactMatch(expr.trimmed())) {
+    } else if(expr.trimmed().contains(numberExp)) {
         double value = QVariant(expr).toDouble(&noProblem);
         return value;
     }

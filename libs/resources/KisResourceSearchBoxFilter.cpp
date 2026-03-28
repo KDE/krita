@@ -7,7 +7,6 @@
 #include "KisResourceSearchBoxFilter.h"
 
 
-#include <QRegExp>
 #include <QRegularExpression>
 #include <QList>
 #include <QSet>

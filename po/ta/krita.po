@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-27 00:42+0000\n"
+"POT-Creation-Date: 2026-03-28 00:41+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16317,7 +16317,7 @@ msgid "© 1999–2026 The Krita Developers"
 msgstr "(c) 1999-2004 க்ரிட்டா குழு.\n"
 
 #: krita/main.cc:792 libs/ui/KisApplication.cpp:506
-#: libs/ui/KisApplication.cpp:818
+#: libs/ui/KisApplication.cpp:836
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -20887,7 +20887,7 @@ msgstr "அளவு:"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
 #: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -23800,7 +23800,7 @@ msgstr "வெளியே"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23851,14 +23851,14 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:761
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:774
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1213
-#: libs/ui/KisApplication.cpp:1216 libs/ui/KisApplication.cpp:1232
-#: libs/ui/KisApplication.cpp:1264 libs/ui/KisApplication.cpp:1278
-#: libs/ui/KisApplication.cpp:1306 libs/ui/KisDocument.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1231
+#: libs/ui/KisApplication.cpp:1234 libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1282 libs/ui/KisApplication.cpp:1296
+#: libs/ui/KisApplication.cpp:1324 libs/ui/KisDocument.cpp:1054
 #: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
 #: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
 #: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
@@ -23870,7 +23870,7 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:679 libs/ui/KisView.cpp:1166
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24142,8 +24142,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24759,7 +24759,7 @@ msgid "Select All"
 msgstr "தேர்வு"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:778
+#: libs/ui/KisView.cpp:774
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -24829,7 +24829,7 @@ msgid "Paste shapes"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:589
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "உருவகைகள்"
@@ -24955,7 +24955,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2281
 #, fuzzy, kde-format
 msgid "Warning(s):"
 msgstr "கரும் ஆரஞ்சு"
@@ -25890,8 +25890,8 @@ msgstr "பெயர்ச்சி "
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2569
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2581
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25994,8 +25994,8 @@ msgstr "அடுக்கை நீக்கு"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2539
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2551
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26851,12 +26851,12 @@ msgstr "அடுக்கு குணங்கள்..."
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
 #: libs/ui/dialogs/kis_dlg_preferences.cc:298
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1758
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1762
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1851
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1774
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1863
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2390 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27363,19 +27363,19 @@ msgstr ""
 msgid "Install Color Profiles"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1659
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1664
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1673
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1678
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1675
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -27383,7 +27383,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1698
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1710
 #, fuzzy, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27393,26 +27393,26 @@ msgstr[1] "தூரிகை வடிவங்கள்"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1707
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1719
 #, fuzzy, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "அமைப்புகள்"
 msgstr[1] "அமைப்புகள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1714
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1726
 #, fuzzy, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "குறுக்கீடு:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1812
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1833
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27421,78 +27421,78 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "நொடி"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1836
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1848
 #, kde-format
 msgid " fps"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2087
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "பேனா"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2088
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2080
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2081
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "பேனா"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2083
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "பேனா"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2090
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "உருவகைகள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "தானியங்கி தூரிகை"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "வளைவு"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2182
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "வளைவு"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2172
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2184
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2178
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -27500,140 +27500,140 @@ msgid ""
 "switching between EGL and GLX</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #, fuzzy, kde-format
 msgid "Display Id: %1"
 msgstr "பெயர்ச்சி "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #, fuzzy, kde-format
 msgid "Min Luminance: %1"
 msgstr "ஒளி ஊட்டு "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #, fuzzy, kde-format
 msgid "Max Luminance: %1"
 msgstr "ஒளி ஊட்டு "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2235
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, fuzzy, kde-format
 msgid "White Point: %1, %2"
 msgstr "Alpha"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2407
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2419
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2530
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2542
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "ஒப்பந்தம்..."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "ஆவணத்தை ஏற்று"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2561
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "சேமிப்பதை உறுதிசெய்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2571
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "அமைப்புகள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2572
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "வரைதிரை"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, fuzzy, kde-format
 msgid "Color Management"
 msgstr "நிறம் மேலாளர்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2591
 #, fuzzy, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "&வண்ணங்கள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2601
 #, fuzzy, kde-format
 msgid "Performance"
 msgstr "செயல்திறன் சோதனை"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "அமைப்புகள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2611
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "நீலம்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2619
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "அமைப்புகள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2621
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "&மூடி வண்ணம்:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2619
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2629
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2631
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "உருவகைகள்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2627
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2639
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ஆசிரியர்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2629
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2641
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "ஆசிரியர்"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2636
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2648
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -32343,8 +32343,14 @@ msgid ""
 "styluses)"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseHighFunctionKeyMouseButtonEmulationWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
+#, kde-format
+msgid "Treate F13 key as middle mouse button (workaround for OnePlus styluses)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
+#: libs/ui/forms/wdgtabletsettings.ui:208
 #, kde-format
 msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
@@ -32352,7 +32358,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
-#: libs/ui/forms/wdgtabletsettings.ui:214
+#: libs/ui/forms/wdgtabletsettings.ui:221
 #, kde-format
 msgid ""
 "Maximum speed mapped to 1.0 for the speed sensor curve. Should be set to the "
@@ -32360,7 +32366,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intBrushSpeedSmoothing)
-#: libs/ui/forms/wdgtabletsettings.ui:227
+#: libs/ui/forms/wdgtabletsettings.ui:234
 #, kde-format
 msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
@@ -32368,13 +32374,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, tiltDirectionOffsetAngle)
-#: libs/ui/forms/wdgtabletsettings.ui:240
+#: libs/ui/forms/wdgtabletsettings.ui:247
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
-#: libs/ui/forms/wdgtabletsettings.ui:247
+#: libs/ui/forms/wdgtabletsettings.ui:254
 #, fuzzy, kde-format
 msgid "Open Tablet Tester..."
 msgstr "வெளிர் பச்சை"
@@ -33581,7 +33587,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/kis_clipboard.cc:762 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:775 libs/ui/KisView.cpp:680
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34729,35 +34735,35 @@ msgstr "வெளிப்படுத்தும் நிறமாற்ற�
 msgid "Launching..."
 msgstr "&பிம்பத்தை சுற்று..."
 
-#: libs/ui/KisApplication.cpp:710
+#: libs/ui/KisApplication.cpp:728
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:771
+#: libs/ui/KisApplication.cpp:789
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "%1 புதிதாக உருவாக்கு"
 
-#: libs/ui/KisApplication.cpp:799 libs/ui/KisApplication.cpp:1072
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1090
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/KisApplication.cpp:807 libs/ui/KisApplication.cpp:812
-#: libs/ui/KisApplication.cpp:1066 libs/ui/KisApplication.cpp:1080
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:825 libs/ui/KisApplication.cpp:830
+#: libs/ui/KisApplication.cpp:1084 libs/ui/KisApplication.cpp:1098
+#: libs/ui/KisApplication.cpp:1103
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: libs/ui/KisApplication.cpp:808 libs/ui/KisApplication.cpp:1081
+#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1099
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:813
+#: libs/ui/KisApplication.cpp:831
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34770,7 +34776,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:819
+#: libs/ui/KisApplication.cpp:837
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34778,32 +34784,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1067
+#: libs/ui/KisApplication.cpp:1085
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "உருவத்திற்கு அடுக்கை சேர்க்க முடியவில்லை."
 
-#: libs/ui/KisApplication.cpp:1086
+#: libs/ui/KisApplication.cpp:1104
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1214
+#: libs/ui/KisApplication.cpp:1232
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/ui/KisApplication.cpp:1217
+#: libs/ui/KisApplication.cpp:1235
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "%1 க்கான வார்ப்புரு அதிகமாக உள்ளது:"
 
-#: libs/ui/KisApplication.cpp:1233
+#: libs/ui/KisApplication.cpp:1251
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "தேர்வு"
 
-#: libs/ui/KisApplication.cpp:1265
+#: libs/ui/KisApplication.cpp:1283
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34813,7 +34819,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1279
+#: libs/ui/KisApplication.cpp:1297
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34821,7 +34827,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1307
+#: libs/ui/KisApplication.cpp:1325
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -35989,27 +35995,27 @@ msgstr "படம் எதுவும் கிடைக்கவில்ல�
 msgid "Use This Template"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: libs/ui/KisView.cpp:753
+#: libs/ui/KisView.cpp:749
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:444
+#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:444
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:446
+#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:446
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:448
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:448
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1167
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -36018,47 +36024,47 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: libs/ui/KisView.cpp:1245
+#: libs/ui/KisView.cpp:1241
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "திருத்தப் பாதுகாப்பு"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, fuzzy, kde-format
 msgid "Recovered"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: libs/ui/KisView.cpp:1351
+#: libs/ui/KisView.cpp:1347
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1356
+#: libs/ui/KisView.cpp:1352
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1358
+#: libs/ui/KisView.cpp:1354
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1370
+#: libs/ui/KisView.cpp:1366
 #, fuzzy, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "கரும் ஆரஞ்சு"
 
-#: libs/ui/KisView.cpp:1376
+#: libs/ui/KisView.cpp:1372
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "கரும் ஆரஞ்சு"
 
-#: libs/ui/KisView.cpp:1378
+#: libs/ui/KisView.cpp:1374
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1381
+#: libs/ui/KisView.cpp:1377
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "கரும் ஆரஞ்சு"
@@ -39959,69 +39965,69 @@ msgid ""
 "window used for status information.</p>"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:498
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "அலகு:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:508
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, fuzzy, kde-format
 msgid "Percent (%)"
 msgstr "&விகிதம்:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:505
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
 msgid "percent of view width (vw)"
 msgstr "புள்ளிகள்/அங்குலம்"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
 msgid "percent of view height (vh)"
 msgstr "புள்ளிகள்/அங்குலம்"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:513
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:518
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 msgid "degrees (°)"
 msgstr "&திரும்ப தேர்ந்தெடு"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:515
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:520
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:517
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:519
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 msgid "percent of circle (%)"
 msgstr "&விகிதம்:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:525
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:530
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, fuzzy, kde-format
 msgid "frames (f)"
 msgstr "கோர்ஸ்"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:527
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:532
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, fuzzy, kde-format
 msgid "seconds (s)"
 msgstr "நொடி"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:529
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:534
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, fuzzy, kde-format
 msgid "percent of animation (%)"
@@ -65539,74 +65545,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "உரை கருவி"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:480
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "அச்சு அளவு"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "பெரிதாக்கும் &கருவி"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "&அளவு மாற்று "
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "கோணம்:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "முறை:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "பூலியன் செயல்"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:493
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "வேறுபாடு:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:495
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "புள்ளிகள்/அங்குலம்"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:494
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:498
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "தேர்வு இல்லை"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:496
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:500
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

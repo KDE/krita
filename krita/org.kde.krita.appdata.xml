@@ -632,10 +632,12 @@
       <description xml:lang="ca-valencia">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</description>
       <description xml:lang="he">מהדורה עיקרית חדשה שמציגה את כלי הטקסט החדש על משטח הציור, יכולות סגירת פערים, סרגל כלי בחירה וכלי הסכין חדש</description>
       <description xml:lang="ka">ახალი დიდი გამოშვება, რომელიც ტილოზე ტექსტის მართვის ხელსაწყოს, დაშორების დახურვის თვისებებს, მონიშვნის ხელსაწყოთა პანელს და ახალი დანის ხელსაწყოს შეიცავს</description>
+      <description xml:lang="nl">Een nieuwe, belangrijke uitgave met de nieuwe hulpmiddelen voor tekst op het werkveld, functies voor het sluiten van openingen, een selectiebalk voor hulpmiddelen en het nieuwe hulpmiddel mes.</description>
       <description xml:lang="pt-BR">Uma nova versão principal com a nova ferramenta de texto na tela, recursos de fechamento de lacunas, barra de ferramentas de seleção e a nova ferramenta de faca</description>
       <description xml:lang="sl">Nova osrednja izdaja, ki vključuje novo orodje za besedilo na platnu, funkcije za zapolnjevanje vrzeli, orodno vrstico za izbiranje in novo orodje za rezanje</description>
       <description xml:lang="tr">Yeni tuval üzeri metin aracı, boşluk doldurma aracı, seçim araç çubuğu ve yeni bıçak aracını içeren büyük bir yayım!</description>
       <description xml:lang="uk">У новому основному випуску програми реалізовано новий інструмент для роботи з текстом на полотні, можливості усування прогалин, панель інструментів позначення та новий інструмент «Ніж»</description>
+      <description xml:lang="zh-CN">这是一个大版本更新，带来了完全重写的所见即所得文本工具、选区和填充自动闭合间隙、画布浮动选区操作工具条和漫画格子框编辑工具。</description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
           <location>https://download.kde.org/stable/krita/5.3.0/krita-5.3.0-x86_64.AppImage</location>

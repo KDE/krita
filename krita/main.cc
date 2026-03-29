@@ -376,12 +376,20 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     bool openGLDebugSynchronous = false;
     bool logUsage = true;
     {
-        if (kritarc.value("EnableHiDPI", true).toBool()) {
+        bool enableHighDpiScaling = kritarc.value("EnableHiDPI", true).toBool() || !qgetenv("KRITA_HIDPI").isEmpty();
+        // The AA_(Enable|Disable)HighDpiScaling attributes no longer have an
+        // effect on Qt6, high-DPI scaling is always enabled. To "disable" it,
+        // we need to use an environment variable instead, but we'll only do
+        // that if the user doesn't have it set yet to avoid clobberage.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        if (!enableHighDpiScaling && !qEnvironmentVariableIsSet("QT_ENABLE_HIGHDPI_SCALING")) {
+            qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
+        }
+#else
+        if (enableHighDpiScaling) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
-        if (!qgetenv("KRITA_HIDPI").isEmpty()) {
-            QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-        }
+#endif
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
         if (kritarc.value("EnableHiDPIFractionalScaling", false).toBool()) {
             QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);

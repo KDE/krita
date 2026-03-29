@@ -627,17 +627,19 @@
                last actual release -->
     <release date="2026-03-24" version="5.3.0">
       <url>https://krita.org/en/posts/2026/krita-5.3.0-released/</url>
-      <description>A new major release featuring the new on-canvas text tool, gap-closing features, selection toolbar and the new knife tool</description>
-      <description xml:lang="ca">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</description>
-      <description xml:lang="ca-valencia">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</description>
-      <description xml:lang="he">מהדורה עיקרית חדשה שמציגה את כלי הטקסט החדש על משטח הציור, יכולות סגירת פערים, סרגל כלי בחירה וכלי הסכין חדש</description>
-      <description xml:lang="ka">ახალი დიდი გამოშვება, რომელიც ტილოზე ტექსტის მართვის ხელსაწყოს, დაშორების დახურვის თვისებებს, მონიშვნის ხელსაწყოთა პანელს და ახალი დანის ხელსაწყოს შეიცავს</description>
-      <description xml:lang="nl">Een nieuwe, belangrijke uitgave met de nieuwe hulpmiddelen voor tekst op het werkveld, functies voor het sluiten van openingen, een selectiebalk voor hulpmiddelen en het nieuwe hulpmiddel mes.</description>
-      <description xml:lang="pt-BR">Uma nova versão principal com a nova ferramenta de texto na tela, recursos de fechamento de lacunas, barra de ferramentas de seleção e a nova ferramenta de faca</description>
-      <description xml:lang="sl">Nova osrednja izdaja, ki vključuje novo orodje za besedilo na platnu, funkcije za zapolnjevanje vrzeli, orodno vrstico za izbiranje in novo orodje za rezanje</description>
-      <description xml:lang="tr">Yeni tuval üzeri metin aracı, boşluk doldurma aracı, seçim araç çubuğu ve yeni bıçak aracını içeren büyük bir yayım!</description>
-      <description xml:lang="uk">У новому основному випуску програми реалізовано новий інструмент для роботи з текстом на полотні, можливості усування прогалин, панель інструментів позначення та новий інструмент «Ніж»</description>
-      <description xml:lang="zh-CN">这是一个大版本更新，带来了完全重写的所见即所得文本工具、选区和填充自动闭合间隙、画布浮动选区操作工具条和漫画格子框编辑工具。</description>
+      <description>
+        <p>A new major release featuring the new on-canvas text tool, gap-closing features, selection toolbar and the new knife tool</p>
+        <p xml:lang="ca">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</p>
+        <p xml:lang="ca-valencia">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</p>
+        <p xml:lang="he">מהדורה עיקרית חדשה שמציגה את כלי הטקסט החדש על משטח הציור, יכולות סגירת פערים, סרגל כלי בחירה וכלי הסכין חדש</p>
+        <p xml:lang="ka">ახალი დიდი გამოშვება, რომელიც ტილოზე ტექსტის მართვის ხელსაწყოს, დაშორების დახურვის თვისებებს, მონიშვნის ხელსაწყოთა პანელს და ახალი დანის ხელსაწყოს შეიცავს</p>
+        <p xml:lang="nl">Een nieuwe, belangrijke uitgave met de nieuwe hulpmiddelen voor tekst op het werkveld, functies voor het sluiten van openingen, een selectiebalk voor hulpmiddelen en het nieuwe hulpmiddel mes.</p>
+        <p xml:lang="pt-BR">Uma nova versão principal com a nova ferramenta de texto na tela, recursos de fechamento de lacunas, barra de ferramentas de seleção e a nova ferramenta de faca</p>
+        <p xml:lang="sl">Nova osrednja izdaja, ki vključuje novo orodje za besedilo na platnu, funkcije za zapolnjevanje vrzeli, orodno vrstico za izbiranje in novo orodje za rezanje</p>
+        <p xml:lang="tr">Yeni tuval üzeri metin aracı, boşluk doldurma aracı, seçim araç çubuğu ve yeni bıçak aracını içeren büyük bir yayım!</p>
+        <p xml:lang="uk">У новому основному випуску програми реалізовано новий інструмент для роботи з текстом на полотні, можливості усування прогалин, панель інструментів позначення та новий інструмент «Ніж»</p>
+        <p xml:lang="zh-CN">这是一个大版本更新，带来了完全重写的所见即所得文本工具、选区和填充自动闭合间隙、画布浮动选区操作工具条和漫画格子框编辑工具。</p>
+      </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
           <location>https://download.kde.org/stable/krita/5.3.0/krita-5.3.0-x86_64.AppImage</location>
@@ -664,23 +666,25 @@
     </release>
     <release date="2026-01-28" version="5.2.15">
       <url>https://krita.org/en/posts/2026/krita-5.2.15-released/</url>
-      <description>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</description>
-      <description xml:lang="ar">هذا الإصدار مخصص لإصلاح العلات مع عدد من إصلاحات الانهيار وحلول بديلة لتحسين الاستخدام مع Xiaomi Pad</description>
-      <description xml:lang="ca">Una versió de correcció d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</description>
-      <description xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb Xiaomi Pad</description>
-      <description xml:lang="cs">Opravné vydání, která obsahuje řadu oprav pádů a řešení, aby se zlepšila použitelnost s tabletem Xiaomi Pad</description>
-      <description xml:lang="es">Una versión de corrección de errores con una serie de correcciones de fallos y soluciones alternativas para mejorar el uso del Xiaomi Pad.</description>
-      <description xml:lang="fr">Une version corrective incluant la correction de plusieurs plantages et des solutions de contournement pour améliorer l'utilisation du pavé tactile de Xiaomi</description>
-      <description xml:lang="he">מהדורת תיקון תקלות עם כמה תיקוני תקלות ומעקפים לשיפור השימושיות עם Xiaomi Pad</description>
-      <description xml:lang="it">Un rilascio di correzione errori che corregge diversi blocchi e contiene soluzioni temporanee per migliorarne l'uso col Xiaomi Pad</description>
-      <description xml:lang="ka">გასწორდა ხარვეზები, მათ შორის პროგრამის გათიშვის შემთხვევები და დაემატა დროებითი გადაწყვეტები Xiaomi Pad-თან თავსებადობის გასაუმჯობესებლად</description>
-      <description xml:lang="nl">Dit is een uitgave met gerepareerde bugs waarin een aantal crashes zijn opgelost om gebruik te verbeteren met de Xiaomi Pad</description>
-      <description xml:lang="pt-BR">Uma versão com correções de bugs, incluindo diversas soluções para travamentos e soluções alternativas para melhorar a experiência com o Xiaomi Pad</description>
-      <description xml:lang="ru">Выпуск с исправлениями ошибок, включая устранение ряда причин аварийного завершения и обходные решения для улучшения работы с планшетом Xiaomi Pad.</description>
-      <description xml:lang="sl">To je izdaja s popravki hroščev z več popravki sesutij in prilagoditvami za izboljšanje uporabe naprave Xiaomi Pad.</description>
-      <description xml:lang="tr">Xiaomi Pad ile kullanımını iyileştirmek için bir dizi çökme düzeltmesi ve geçici çözüm içeren hata düzeltme sürümü.</description>
-      <description xml:lang="uk">Це випуск із виправленнями вад, зокрема аварійних завершень роботи, а також удосконаленнями для користування з Xiaomi Pad</description>
-      <description xml:lang="zh-CN">这是一个程序缺陷修复版本，重点修复了一系列崩溃问题，并改善了小米平板的压感笔兼容性。</description>
+      <description>
+        <p>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</p>
+        <p xml:lang="ar">هذا الإصدار مخصص لإصلاح العلات مع عدد من إصلاحات الانهيار وحلول بديلة لتحسين الاستخدام مع Xiaomi Pad</p>
+        <p xml:lang="ca">Una versió de correcció d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</p>
+        <p xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb Xiaomi Pad</p>
+        <p xml:lang="cs">Opravné vydání, která obsahuje řadu oprav pádů a řešení, aby se zlepšila použitelnost s tabletem Xiaomi Pad</p>
+        <p xml:lang="es">Una versión de corrección de errores con una serie de correcciones de fallos y soluciones alternativas para mejorar el uso del Xiaomi Pad.</p>
+        <p xml:lang="fr">Une version corrective incluant la correction de plusieurs plantages et des solutions de contournement pour améliorer l'utilisation du pavé tactile de Xiaomi</p>
+        <p xml:lang="he">מהדורת תיקון תקלות עם כמה תיקוני תקלות ומעקפים לשיפור השימושיות עם Xiaomi Pad</p>
+        <p xml:lang="it">Un rilascio di correzione errori che corregge diversi blocchi e contiene soluzioni temporanee per migliorarne l'uso col Xiaomi Pad</p>
+        <p xml:lang="ka">გასწორდა ხარვეზები, მათ შორის პროგრამის გათიშვის შემთხვევები და დაემატა დროებითი გადაწყვეტები Xiaomi Pad-თან თავსებადობის გასაუმჯობესებლად</p>
+        <p xml:lang="nl">Dit is een uitgave met gerepareerde bugs waarin een aantal crashes zijn opgelost om gebruik te verbeteren met de Xiaomi Pad</p>
+        <p xml:lang="pt-BR">Uma versão com correções de bugs, incluindo diversas soluções para travamentos e soluções alternativas para melhorar a experiência com o Xiaomi Pad</p>
+        <p xml:lang="ru">Выпуск с исправлениями ошибок, включая устранение ряда причин аварийного завершения и обходные решения для улучшения работы с планшетом Xiaomi Pad.</p>
+        <p xml:lang="sl">To je izdaja s popravki hroščev z več popravki sesutij in prilagoditvami za izboljšanje uporabe naprave Xiaomi Pad.</p>
+        <p xml:lang="tr">Xiaomi Pad ile kullanımını iyileştirmek için bir dizi çökme düzeltmesi ve geçici çözüm içeren hata düzeltme sürümü.</p>
+        <p xml:lang="uk">Це випуск із виправленнями вад, зокрема аварійних завершень роботи, а також удосконаленнями для користування з Xiaomi Pad</p>
+        <p xml:lang="zh-CN">这是一个程序缺陷修复版本，重点修复了一系列崩溃问题，并改善了小米平板的压感笔兼容性。</p>
+      </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
           <location>https://download.kde.org/stable/krita/5.2.15/krita-5.2.15-x86_64.AppImage</location>

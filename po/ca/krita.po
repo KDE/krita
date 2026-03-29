@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-28 00:41+0000\n"
-"PO-Revision-Date: 2026-03-18 11:59+0100\n"
+"PO-Revision-Date: 2026-03-28 08:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -32895,14 +32895,11 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseHighFunctionKeyMouseButtonEmulationWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
-#, fuzzy, kde-format
-#| msgid ""
-#| "Treat page up/down keys as right/middle mouse buttons (workaround for "
-#| "Xiaomi styluses)"
+#, kde-format
 msgid "Treate F13 key as middle mouse button (workaround for OnePlus styluses)"
 msgstr ""
-"Tracta les tecles amunt/avall de la pàgina com a botons dret/mig del ratolí "
-"(solució alternativa per als llapis Xiaomi)"
+"Tracta la tecla F13 com a botó del mig del ratolí (solució alternativa per "
+"als llapis OnePlus)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:208

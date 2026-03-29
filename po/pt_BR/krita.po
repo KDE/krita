@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-28 00:41+0000\n"
-"PO-Revision-Date: 2026-03-18 09:00-0300\n"
+"PO-Revision-Date: 2026-03-28 07:31-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -32789,14 +32789,11 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseHighFunctionKeyMouseButtonEmulationWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
-#, fuzzy, kde-format
-#| msgid ""
-#| "Treat page up/down keys as right/middle mouse buttons (workaround for "
-#| "Xiaomi styluses)"
+#, kde-format
 msgid "Treate F13 key as middle mouse button (workaround for OnePlus styluses)"
 msgstr ""
-"Tratar as teclas Page Up/Page Down como botões direito/do meio do mouse "
-"(solução alternativa para canetas Xiaomi)"
+"Trate a tecla F13 como o botão do meio do mouse (solução alternativa para "
+"canetas OnePlus)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:208

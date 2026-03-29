@@ -346,7 +346,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
-#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+#if defined(Q_OS_WIN) && defined(HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY)
     m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", false).toBool());
 #else
     m_wdgHiDPIFractionalScaling->setEnabled(false);
@@ -796,7 +796,7 @@ void GeneralTab::setDefault()
     m_chkTrimFramesImport->setChecked(cfg.trimFramesImport(true));
     chkZip64->setChecked(cfg.useZip64(true));
     m_chkHiDPI->setChecked(true);
-#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+#if defined(Q_OS_WIN) && defined(HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY)
     m_chkHiDPIFractionalScaling->setChecked(true);
 #endif
     chkUsageLogging->setChecked(true);
@@ -2796,7 +2796,7 @@ bool KisDlgPreferences::editPreferences()
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("EnableHiDPI", m_general->m_chkHiDPI->isChecked());
-#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+#if defined(Q_OS_WIN) && defined(HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY)
         kritarc.setValue("EnableHiDPIFractionalScaling", m_general->m_chkHiDPIFractionalScaling->isChecked());
 #endif
         kritarc.setValue("LogUsage", m_general->chkUsageLogging->isChecked());

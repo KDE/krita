@@ -259,7 +259,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     QImageReader::setAllocationLimit(0);
 #endif
 
-#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+#if defined(Q_OS_WIN) && defined(HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY)
     // This rounding policy depends on a series of patches to Qt related to
     // https://bugreports.qt.io/browse/QTBUG-53022. These patches are applied
     // in ext_qt for WIndows (patches 0031-0036).
@@ -390,7 +390,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
 #endif
-#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+#if defined(Q_OS_WIN) && defined(HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY)
         if (kritarc.value("EnableHiDPIFractionalScaling", false).toBool()) {
             QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
         }

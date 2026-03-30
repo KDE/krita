@@ -317,6 +317,17 @@ namespace KisToolUtils {
         QCursor::setPos(screen, point);
     }
 
+    void KRITAUI_EXPORT showBrushSizeFloatingMessage(KoCanvasBase *canvas, qreal size)
+    {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+        kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", size),
+                                                      QIcon(),
+                                                      1000,
+                                                      KisFloatingMessage::High,
+                                                      Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    }
+
     // get all shape layers with shapes at point. This is a bit coarser than 'FindNodes',
     // note that point is in Document coordinates instead of image coordinates.
     QList<KisShapeLayerSP> findShapeLayers(KisNodeSP root, const QPointF &point, bool editableOnly) {

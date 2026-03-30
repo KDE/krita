@@ -538,10 +538,7 @@ void KisToolPaint::decreaseBrushSize()
 
 void KisToolPaint::showBrushSize()
 {
-     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-     KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-     kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", currentPaintOpPreset()->settings()->paintOpSize())
-                                                   , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+    KisToolUtils::showBrushSizeFloatingMessage(canvas(), currentPaintOpPreset()->settings()->paintOpSize());
 }
 
 void KisToolPaint::rotateBrushTipClockwise()

@@ -109,6 +109,8 @@ bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeList nodes, KisSelection
  */
 void KRITAUI_EXPORT setCursorPos(const QPoint &point);
 
+void KRITAUI_EXPORT showBrushSizeFloatingMessage(KoCanvasBase *canvas, qreal size);
+
 class KRITAUI_EXPORT MoveShortcutsHelper
 {
 public:

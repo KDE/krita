@@ -841,6 +841,14 @@ void KisToolTransform::activate(const QSet<KoShape*> &shapes)
                                       this, SLOT(slotMoveDiscreteRight()));
     m_actionConnections.addConnection(action("movetool-move-right-more"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteRightMore()));
+    m_actionConnections.addConnection(action("increase_brush_size"),
+                                      SIGNAL(triggered()),
+                                      this,
+                                      SLOT(slotIncreaseBrushSize()));
+    m_actionConnections.addConnection(action("decrease_brush_size"),
+                                      SIGNAL(triggered()),
+                                      this,
+                                      SLOT(slotDecreaseBrushSize()));
 
     if (currentNode()) {
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeList(), {});
@@ -1402,6 +1410,16 @@ void KisToolTransform::slotMoveDiscreteRight()
 void KisToolTransform::slotMoveDiscreteRightMore()
 {
     setTranslateX(translateX()+10.0);
+}
+
+void KisToolTransform::slotIncreaseBrushSize()
+{
+    currentStrategy()->increaseBrushSize(canvas());
+}
+
+void KisToolTransform::slotDecreaseBrushSize()
+{
+    currentStrategy()->decreaseBrushSize(canvas());
 }
 
 void KisToolTransform::slotUpdateToWarpType()

@@ -71,6 +71,11 @@ struct KisLiquifyTransformStrategy::Private
     QPointF startResizeImagePos;
     QPoint startResizeGlobalCursorPos;
 
+    // for increase/decrease brush size
+    QPointF lastDocPos;
+    KisToolUtils::StandardBrushSizes standardBrushSizes{int(KisLiquifyProperties::minSize()),
+                                                        int(KisLiquifyProperties::maxSize())};
+
     KisLiquifyPaintHelper helper;
 
     bool recalculateOnNextRedraw;
@@ -140,6 +145,7 @@ bool KisLiquifyTransformStrategy::acceptsClicks() const
 
 bool KisLiquifyTransformStrategy::beginPrimaryAction(KoPointerEvent *event)
 {
+    m_d->lastDocPos = event->point;
     m_d->helper.configurePaintOp(*m_d->currentArgs.liquifyProperties(), m_d->currentArgs.liquifyWorker());
     m_d->helper.startPaint(event, m_d->manager);
 
@@ -150,6 +156,7 @@ bool KisLiquifyTransformStrategy::beginPrimaryAction(KoPointerEvent *event)
 
 void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event)
 {
+    m_d->lastDocPos = event->point;
     m_d->helper.continuePaint(event);
 
     // the updates should be compressed
@@ -159,6 +166,7 @@ void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event)
 
 bool KisLiquifyTransformStrategy::endPrimaryAction(KoPointerEvent *event)
 {
+    m_d->lastDocPos = event->point;
     if (m_d->helper.endPaint(event)) {
         m_d->recalculateTransformations();
         Q_EMIT requestCanvasUpdate();
@@ -169,6 +177,7 @@ bool KisLiquifyTransformStrategy::endPrimaryAction(KoPointerEvent *event)
 
 void KisLiquifyTransformStrategy::hoverActionCommon(KoPointerEvent *event)
 {
+    m_d->lastDocPos = event->point;
     m_d->helper.hoverPaint(event);
 }
 
@@ -196,6 +205,7 @@ void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAc
 
 bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
+    m_d->lastDocPos = event->point;
     if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
         m_d->lastMouseWidgetPos = widgetPoint;
@@ -213,6 +223,7 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
 
 void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
+    m_d->lastDocPos = event->point;
     if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
 
@@ -240,7 +251,7 @@ void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event,
 
 bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    Q_UNUSED(event);
+    m_d->lastDocPos = event->point;
 
     if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         KisToolUtils::setCursorPos(m_d->startResizeGlobalCursorPos);
@@ -251,6 +262,34 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
     }
 
     return false;
+}
+
+void KisLiquifyTransformStrategy::increaseBrushSize(KoCanvasBase *canvas)
+{
+    changeBrushSize(canvas, true);
+}
+
+void KisLiquifyTransformStrategy::decreaseBrushSize(KoCanvasBase *canvas)
+{
+    changeBrushSize(canvas, false);
+}
+
+void KisLiquifyTransformStrategy::changeBrushSize(KoCanvasBase *canvas, bool increase)
+{
+    KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
+    qreal oldSize = props->size();
+
+    int newSize;
+    if (increase) {
+        newSize = m_d->standardBrushSizes.increaseBrushSize(oldSize);
+    } else {
+        newSize = m_d->standardBrushSizes.decreaseBrushSize(oldSize);
+    }
+
+    props->setSize(newSize);
+    KisToolUtils::showBrushSizeFloatingMessage(canvas, newSize);
+    Q_EMIT requestCursorOutlineUpdate( m_d->converter->documentToImage(m_d->lastDocPos));
+    Q_EMIT requestUpdateOptionWidget();
 }
 
 inline QPointF KisLiquifyTransformStrategy::Private::imageToThumb(const QPointF &pt, bool useFlakeOptimization)

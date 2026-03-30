@@ -345,6 +345,9 @@ private Q_SLOTS:
     void slotMoveDiscreteRight();
     void slotMoveDiscreteRightMore();
 
+    void slotIncreaseBrushSize();
+    void slotDecreaseBrushSize();
+
     void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie);
     void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
 

@@ -102,3 +102,13 @@ bool KisTransformStrategyBase::endAlternateAction(KoPointerEvent *event, KisTool
     Q_UNUSED(action);
     return false;
 }
+
+void KisTransformStrategyBase::increaseBrushSize(KoCanvasBase *canvas)
+{
+    Q_UNUSED(canvas);
+}
+
+void KisTransformStrategyBase::decreaseBrushSize(KoCanvasBase *canvas)
+{
+    Q_UNUSED(canvas);
+}

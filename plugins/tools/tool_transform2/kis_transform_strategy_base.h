@@ -60,6 +60,9 @@ public:
     virtual void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
     virtual bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
 
+    virtual void increaseBrushSize(KoCanvasBase *canvas);
+    virtual void decreaseBrushSize(KoCanvasBase *canvas);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -8,6 +8,7 @@
 #define KIS_TOOL_PAINT_H_
 
 #include "kis_tool.h"
+#include "kis_tool_utils.h"
 
 #include <QGridLayout>
 #include <QPainterPath>
@@ -147,7 +148,7 @@ private:
 
     bool m_isOutlineEnabled;
     bool m_isOutlineVisible;
-    std::vector<int> m_standardBrushSizes;
+    KisToolUtils::StandardBrushSizes m_standardBrushSizes;
 
     KisPaintOpPresetSP m_oldPreset;
     qreal m_oldOpacity {1.0};

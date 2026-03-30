@@ -79,23 +79,10 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_isOutlineEnabled(true),
       m_isOutlineVisible(true),
+      m_standardBrushSizes(1, KisImageConfig(true).maxBrushSize()),
       m_colorSamplerHelper(dynamic_cast<KisCanvas2*>(canvas)),
       m_d(new Private())
 {
-
-    {
-        const int maxSize = KisImageConfig(true).maxBrushSize();
-
-        int brushSize = 1;
-        do {
-            m_standardBrushSizes.push_back(brushSize);
-            int increment = qMax(1, int(std::ceil(qreal(brushSize) / 15)));
-            brushSize += increment;
-        } while (brushSize < maxSize);
-
-        m_standardBrushSizes.push_back(maxSize);
-    }
-
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
     KIS_ASSERT(kiscanvas);
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->canvasResourceProvider(), SLOT(slotPainting()));
@@ -536,14 +523,7 @@ void KisToolPaint::setOutlineVisible(bool visible)
 void KisToolPaint::increaseBrushSize()
 {
     qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize();
-
-    std::vector<int>::iterator result =
-        std::upper_bound(m_standardBrushSizes.begin(),
-                         m_standardBrushSizes.end(),
-                         qRound(paintopSize));
-
-    int newValue = result != m_standardBrushSizes.end() ? *result : m_standardBrushSizes.back();
-
+    int newValue = m_standardBrushSizes.increaseBrushSize(paintopSize);
     currentPaintOpPreset()->settings()->setPaintOpSize(newValue);
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
@@ -551,15 +531,7 @@ void KisToolPaint::increaseBrushSize()
 void KisToolPaint::decreaseBrushSize()
 {
     qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize();
-
-    std::vector<int>::reverse_iterator result =
-        std::upper_bound(m_standardBrushSizes.rbegin(),
-                         m_standardBrushSizes.rend(),
-                         qRound(paintopSize),
-                         std::greater<int>());
-
-    int newValue = result != m_standardBrushSizes.rend() ? *result : m_standardBrushSizes.front();
-
+    int newValue = m_standardBrushSizes.decreaseBrushSize(paintopSize);
     currentPaintOpPreset()->settings()->setPaintOpSize(newValue);
     requestUpdateOutline(m_outlineDocPoint, 0);
 }

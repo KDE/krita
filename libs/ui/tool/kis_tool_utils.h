@@ -138,6 +138,17 @@ private:
 private:
     KoToolBase *m_tool;
 };
+
+class KRITAUI_EXPORT StandardBrushSizes {
+public:
+    StandardBrushSizes(int minSize, int maxSize);
+
+    int increaseBrushSize(qreal size);
+    int decreaseBrushSize(qreal size);
+
+private:
+    std::vector<int> m_sizes;
+};
 }
 
 #endif // KIS_TOOL_UTILS_H

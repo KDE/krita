@@ -32,6 +32,7 @@
 #include <kis_action_registry.h>
 #include <KoToolBase.h>
 
+#include <algorithm>
 
 #include "KisAnimAutoKey.h"
 
@@ -454,5 +455,31 @@ namespace KisToolUtils {
         }
         return message;
     }
+
+
+    StandardBrushSizes::StandardBrushSizes(int minSize, int maxSize)
+    {
+        int brushSize = minSize;
+        do {
+            m_sizes.push_back(brushSize);
+            int increment = qMax(1, int(std::ceil(qreal(brushSize) / 15)));
+            brushSize += increment;
+        } while (brushSize < maxSize);
+        m_sizes.push_back(maxSize);
+    }
+
+    int StandardBrushSizes::increaseBrushSize(qreal size)
+    {
+        std::vector<int>::iterator result = std::upper_bound(m_sizes.begin(), m_sizes.end(), qRound(size));
+        return result != m_sizes.end() ? *result : m_sizes.back();
+    }
+
+    int StandardBrushSizes::decreaseBrushSize(qreal size)
+    {
+        std::vector<int>::reverse_iterator result =
+            std::upper_bound(m_sizes.rbegin(), m_sizes.rend(), qRound(size), std::greater<int>());
+        return result != m_sizes.rend() ? *result : m_sizes.front();
+    }
+
 
 }

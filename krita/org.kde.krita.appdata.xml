@@ -629,8 +629,11 @@
       <url>https://krita.org/en/posts/2026/krita-5.3.0-released/</url>
       <description>
         <p>A new major release featuring the new on-canvas text tool, gap-closing features, selection toolbar and the new knife tool</p>
+        <p xml:lang="ar">إصدار رئيس جديد يتضمن أداة النص الجديدة على اللوحة، وميزات سد الفجوات، وشريط أدوات التحديد، وأداة السكين الجديدة.</p>
         <p xml:lang="ca">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</p>
         <p xml:lang="ca-valencia">Una versió important nova amb l'eina nova de text en el llenç, les característiques de tancament de separacions, la barra d'eines de selecció i l'eina de ganivet nova</p>
+        <p xml:lang="es">Una nueva versión mayor que incluye la nueva herramienta de texto sobre el lienzo, funciones para cerrar huecos, una barra de selección y la nueva herramienta de cuchillo.</p>
+        <p xml:lang="fr">Une nouvelle version majeure comprenant le nouvel outil de texte sur le canevas, des fonctionnalités de comblement des écarts, la barre d'outils de sélection et le nouvel outil « Couteau »</p>
         <p xml:lang="he">מהדורה עיקרית חדשה שמציגה את כלי הטקסט החדש על משטח הציור, יכולות סגירת פערים, סרגל כלי בחירה וכלי הסכין חדש</p>
         <p xml:lang="ka">ახალი დიდი გამოშვება, რომელიც ტილოზე ტექსტის მართვის ხელსაწყოს, დაშორების დახურვის თვისებებს, მონიშვნის ხელსაწყოთა პანელს და ახალი დანის ხელსაწყოს შეიცავს</p>
         <p xml:lang="nl">Een nieuwe, belangrijke uitgave met de nieuwe hulpmiddelen voor tekst op het werkveld, functies voor het sluiten van openingen, een selectiebalk voor hulpmiddelen en het nieuwe hulpmiddel mes.</p>

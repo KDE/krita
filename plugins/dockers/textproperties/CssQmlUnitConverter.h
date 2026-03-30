@@ -7,6 +7,7 @@
 #define CSSQMLUNITCONVERTER_H
 
 #include <QObject>
+#include <QVariant>
 
 class KoSvgTextPropertiesModel;
 /**

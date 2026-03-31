@@ -48,13 +48,13 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
             case KisMetaData::Value::Variant: {
                 int vt = m_store->entries()[index.row()].value().asVariant().type();
                 switch (vt) {
-                case QVariant::Date:
-                case QVariant::DateTime:
+                case QMetaType::QDate:
+                case QMetaType::QDateTime:
                     return i18n("Date");
-                case QVariant::Double:
-                case QVariant::Int:
+                case QMetaType::Double:
+                case QMetaType::Int:
                     return i18n("Number");
-                case QVariant::String:
+                case QMetaType::QString:
                     return i18n("String");
                 default:
                     return i18n("Variant (%1)", vt);

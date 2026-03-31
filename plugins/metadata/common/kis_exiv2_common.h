@@ -143,13 +143,13 @@ inline Exiv2::Value *variantToExivValue(const QVariant &variant, Exiv2::TypeId t
         return new Exiv2::DateValue(date.year(), date.month(), date.day());
     }
     case Exiv2::asciiString:
-        if (variant.type() == QVariant::DateTime) {
+        if (variant.type() == QMetaType::QDateTime) {
             return new Exiv2::AsciiValue(
                 qPrintable(QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss"))));
         } else
             return new Exiv2::AsciiValue(qPrintable(variant.toString()));
     case Exiv2::string: {
-        if (variant.type() == QVariant::DateTime) {
+        if (variant.type() == QMetaType::QDateTime) {
             return new Exiv2::StringValue(
                 qPrintable(QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss"))));
         } else
@@ -269,14 +269,14 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
         return new Exiv2::DataValue(Exiv2::invalidTypeId);
     case KisMetaData::Value::Variant: {
         QVariant var = value.asVariant();
-        if (var.type() == QVariant::Bool) {
+        if (var.type() == QMetaType::Bool) {
             if (var.toBool()) {
                 return new Exiv2::XmpTextValue("True");
             } else {
                 return new Exiv2::XmpTextValue("False");
             }
         } else {
-            // Q_ASSERT(var.canConvert(QVariant::String));
+            // Q_ASSERT(var.canConvert(QMetaType::QString));
             return new Exiv2::XmpTextValue(var.toString().toLatin1().constData());
         }
     }
@@ -322,7 +322,7 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
             }
             // Q_ASSERT(it.value().type() == KisMetaData::Value::Variant);
             QVariant var = it.value().asVariant();
-            // Q_ASSERT(var.type() == QVariant::String);
+            // Q_ASSERT(var.type() == QMetaType::QString);
             exivVal += var.toString();
             arrV->read(exivVal.toLatin1().constData());
         }

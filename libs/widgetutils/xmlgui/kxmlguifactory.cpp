@@ -627,11 +627,11 @@ void KisKXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &
     QVariant propertyValue;
 
     QVariant::Type propertyType = action->property(attrName.toLatin1().constData()).type();
-    bool isShortcut = (propertyType == QVariant::KeySequence);
+    bool isShortcut = (propertyType == QMetaType::QKeySequence);
 
-    if (propertyType == QVariant::Int) {
+    if (propertyType == QMetaType::Int) {
         propertyValue = QVariant(attribute.value().toInt());
-    } else if (propertyType == QVariant::UInt) {
+    } else if (propertyType == QMetaType::UInt) {
         propertyValue = QVariant(attribute.value().toUInt());
     } else if (isShortcut) {
         // Setting the shortcut by property also sets the default shortcut

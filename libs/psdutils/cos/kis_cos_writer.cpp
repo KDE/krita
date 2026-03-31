@@ -75,23 +75,23 @@ void writeVariant(QIODevice &dev, const QVariantHash object, int indent, bool pr
     Q_FOREACH(QString key, object.keys()) {
         QVariant val = object[key];
         QString name = QString(key);
-        if (val.type() == QVariant::Hash) {
+        if (val.type() == QMetaType::QVariantHash) {
             dev.write(indentString);
             dev.write((name+newLine).toLatin1());
             writeVariant(dev, val.toHash(), indent, prettyPrint);
-        } else if (val.type() == QVariant::List) {
+        } else if (val.type() == QMetaType::QVariantList) {
             QVariantList array = val.toList();
             if(array.isEmpty()) {
                 dev.write(indentString);
                 dev.write((name+" [ ]"+newLine).toLatin1());
-            } else if (array.at(0).type() == QVariant::Int) {
+            } else if (array.at(0).type() == QMetaType::Int) {
                 dev.write(indentString);
                 dev.write((name+" [").toLatin1());
                 for (int i=0; i<array.size(); i++) {
                     dev.write((" "+QString::number(array.at(i).toInt())).toLatin1());
                 }
                 dev.write((" ]"+newLine).toLatin1());
-            } else if (array.at(0).type() == QVariant::Double) {
+            } else if (array.at(0).type() == QMetaType::Double) {
                 dev.write(indentString);
                 dev.write((name+" [").toLatin1());
                 for (int i=0; i<array.size(); i++) {
@@ -103,27 +103,27 @@ void writeVariant(QIODevice &dev, const QVariantHash object, int indent, bool pr
                 dev.write((name+" ["+newLine).toLatin1());
                 for (int i=0; i<val.toList().size(); i++) {
                     QVariant arrVal = val.toList().at(i);
-                    if (arrVal.type() == QVariant::Hash) {
+                    if (arrVal.type() == QMetaType::QVariantHash) {
                         writeVariant(dev, arrVal.toHash(), indent, prettyPrint);
                     }
                 }
                 dev.write(indentString);
                 dev.write(("]"+newLine).toLatin1());
             }
-        } else if (val.type() == QVariant::String) {
+        } else if (val.type() == QMetaType::QString) {
 
             dev.write(indentString);
             writeString(dev, val, name);
             dev.write((newLine).toLatin1());
-        } else if (val.type() == QVariant::Bool) {
+        } else if (val.type() == QMetaType::Bool) {
             QString boolVal = val.toBool()? "true": "false";
             dev.write(indentString);
             dev.write((name+" "+boolVal+newLine).toLatin1());
         } else {
-            if (val.type() == QVariant::Double) {
+            if (val.type() == QMetaType::Double) {
                 dev.write(indentString);
                 dev.write((name+" "+QString::number(val.toDouble(), 'f', 5)+newLine).toLatin1());
-            } else if (val.type() == QVariant::Int) {
+            } else if (val.type() == QMetaType::Int) {
                 dev.write(indentString);
                 dev.write((name+" "+QString::number(val.toInt())+newLine).toLatin1());
             }

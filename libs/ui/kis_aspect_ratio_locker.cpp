@@ -154,7 +154,7 @@ void KisAspectRatioLocker::connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *s
     m_d->spinTwo.reset(new SliderWrapper(spinTwo));
     m_d->aspectButton = aspectButton;
 
-    if (QVariant::fromValue(spinOne->value()).type() == QVariant::Double) {
+    if (QVariant::fromValue(spinOne->value()).type() == QMetaType::Double) {
         connect(spinOne, SIGNAL(valueChanged(qreal)), SLOT(slotSpinOneChanged()));
         connect(spinTwo, SIGNAL(valueChanged(qreal)), SLOT(slotSpinTwoChanged()));
     } else {

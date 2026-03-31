@@ -560,7 +560,7 @@ void KisAnimTimelineTimeHeader::mouseMoveEvent(QMouseEvent *e)
 
             m_d->model->setScrubState(true);
             QVariant activeValue = model()->headerData(logical, orientation(), KisTimeBasedItemModel::ActiveFrameRole);
-            KIS_ASSERT(activeValue.type() == QVariant::Bool);
+            KIS_ASSERT(activeValue.type() == QMetaType::Bool);
             if (activeValue.toBool() != true) {
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
                 model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);

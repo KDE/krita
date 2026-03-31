@@ -288,37 +288,37 @@ Value& Value::operator+=(const Value & v)
             default:
                 warnMetaData << "KisMetaData: Merging metadata of type" << v1.type() << "is unsupported!";
                 break;
-            case QVariant::Date:
+            case QMetaType::QDate:
                 *d->value.variant = qMax(v1.toDate(), v2.toDate());
                 break;
-            case QVariant::DateTime:
+            case QMetaType::QDateTime:
                 *d->value.variant = qMax(v1.toDate(), v2.toDate());
                 break;
-            case QVariant::Double:
+            case QMetaType::Double:
                 *d->value.variant = v1.toDouble() + v2.toDouble();
                 break;
-            case QVariant::Int:
+            case QMetaType::Int:
                 *d->value.variant = v1.toInt() + v2.toInt();
                 break;
-            case QVariant::List:
+            case QMetaType::QVariantList:
                 *d->value.variant = v1.toList() + v2.toList();
                 break;
-            case QVariant::LongLong:
+            case QMetaType::LongLong:
                 *d->value.variant = v1.toLongLong() + v2.toLongLong();
                 break;
-            case QVariant::Point:
+            case QMetaType::QPoint:
                 *d->value.variant = v1.toPoint() + v2.toPoint();
                 break;
-            case QVariant::PointF:
+            case QMetaType::QPointF:
                 *d->value.variant = v1.toPointF() + v2.toPointF();
                 break;
-            case QVariant::String:
+            case QMetaType::QString:
                 *d->value.variant = QVariant(v1.toString() + v2.toString());
                 break;
-            case QVariant::StringList:
+            case QMetaType::QStringList:
                 *d->value.variant = v1.toStringList() + v2.toStringList();
                 break;
-            case QVariant::Time: {
+            case QMetaType::QTime: {
                 QTime t1 = v1.toTime();
                 QTime t2 = v2.toTime();
                 int h = t1.hour() + t2.hour();
@@ -340,10 +340,10 @@ Value& Value::operator+=(const Value & v)
                 *d->value.variant = QTime(h, m, s, ms);
             }
             break;
-            case QVariant::UInt:
+            case QMetaType::UInt:
                 *d->value.variant = v1.toUInt() + v2.toUInt();
                 break;
-            case QVariant::ULongLong:
+            case QMetaType::ULongLong:
                 *d->value.variant = v1.toULongLong() + v2.toULongLong();
                 break;
             }
@@ -391,7 +391,7 @@ QMap<QString, KisMetaData::Value> Value::asLangArray() const
         KisMetaData::Value valKeyVal = val.d->propertyQualifiers.value("xml:lang");
         Q_ASSERT(valKeyVal.type() == Variant);
         QVariant valKeyVar = valKeyVal.asVariant();
-        Q_ASSERT(valKeyVar.type() == QVariant::String);
+        Q_ASSERT(valKeyVar.type() == QMetaType::QString);
         langArray[valKeyVar.toString()] = val;
     }
     return langArray;

@@ -455,12 +455,12 @@ void KisMetaDataTest::testParser()
     Value intV = TypeInfo::Private::Integer->parser()->parse("1242");
     QVERIFY(intV.type() == Value::Variant);
     QVERIFY(intV.asVariant() == 1242);
-    QVERIFY(intV.asVariant().type() == QVariant::Int);
+    QVERIFY(intV.asVariant().type() == QMetaType::Int);
 
     Value textV = TypeInfo::Private::Text->parser()->parse("Bouh");
     QVERIFY(textV.type() == Value::Variant);
     QVERIFY(textV.asVariant() == "Bouh");
-    QVERIFY(textV.asVariant().type() == QVariant::String);
+    QVERIFY(textV.asVariant().type() == QMetaType::QString);
 
     Value dateV1 = TypeInfo::Private::Date->parser()->parse("2005-10-31");
     QVERIFY(dateV1.type() == Value::Variant);

@@ -654,9 +654,9 @@ bool KisExifIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                     Q_ASSERT(vUC.type() == KisMetaData::Value::Variant);
                     QVariant commentVar = vUC.asVariant();
                     QString comment;
-                    if (commentVar.type() == QVariant::String) {
+                    if (commentVar.type() == QMetaType::QString) {
                         comment = commentVar.toString();
-                    } else if (commentVar.type() == QVariant::ByteArray) {
+                    } else if (commentVar.type() == QMetaType::QByteArray) {
                         const QByteArray commentString = commentVar.toByteArray();
                         comment = QString::fromLatin1(commentString.constData(), commentString.size());
                     } else {

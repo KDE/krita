@@ -186,7 +186,7 @@ bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object, bool checkE
     QVariant val;
     while (parseValue(dev, key)) {
         object.insert(key.toString(), QVariant());
-        if (key.type() == QVariant::String && parseValue(dev, val)) {
+        if (key.type() == QMetaType::QString && parseValue(dev, val)) {
             object.insert(key.toString(), val);
         } else {
             return false;

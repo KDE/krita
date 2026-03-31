@@ -268,7 +268,7 @@ bool QGIFLibHandler::write ( const QImage & image )
     }
 
     QVariant descText = option(QImageIOHandler::Description);
-    if (descText.type() == QVariant::String)
+    if (descText.type() == QMetaType::QString)
     {
         QString comment = descText.toString();
         // Will be something like "Description: actual text" or just

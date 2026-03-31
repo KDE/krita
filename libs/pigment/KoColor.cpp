@@ -313,14 +313,14 @@ void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
         e.setAttribute("type", v.typeName());
 
         QString attrName = "value";
-        if(v.type() == QVariant::String ) {
+        if(v.type() == QMetaType::QString ) {
             e.setAttribute(attrName, v.toString());
             e.setAttribute("type", "string");
-        } else if(v.type() == QVariant::Int ) {
+        } else if(v.type() == QMetaType::Int ) {
             e.setAttribute(attrName, v.toInt());
-        } else if(v.type() == QVariant::Double ) {
+        } else if(v.type() == QMetaType::Double ) {
             e.setAttribute(attrName, v.toDouble());
-        } else  if(v.type() == QVariant::Bool ) {
+        } else  if(v.type() == QMetaType::Bool ) {
             e.setAttribute(attrName, v.toBool());
         } else {
             qWarning() << "no KoColor serialization for QVariant type:" << v.type();

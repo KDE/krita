@@ -170,7 +170,7 @@ struct LayerPropertyAdapter : public BaseAdapter {
             int sortingIndex = 0;
             KisBaseNode::PropertyList props = node->sectionModelProperties();
             Q_FOREACH (const KisBaseNode::Property &prop, props) {
-                if (prop.state.type() != QVariant::Bool) continue;
+                if (prop.state.type() != QMetaType::Bool) continue;
 
                 if (!adapters.contains(prop.id)) {
                     adapters.insert(prop.id, std::make_pair(prop, sortingIndex));

@@ -201,14 +201,14 @@ bool TypeInfo::hasCorrectType(const Value& value) const
 {
     switch (d->propertyType) {
     case BooleanType:
-        return value.type() == Value::Variant && value.asVariant().type() == QVariant::Bool;
+        return value.type() == Value::Variant && value.asVariant().type() == QMetaType::Bool;
     case IntegerType:
-        return value.type() == Value::Variant && value.asVariant().type() == QVariant::Int;
+        return value.type() == Value::Variant && value.asVariant().type() == QMetaType::Int;
     case DateType:
-        return value.type() == Value::Variant && value.asVariant().type() == QVariant::DateTime;
+        return value.type() == Value::Variant && value.asVariant().type() == QMetaType::QDateTime;
     case GPSCoordinateType:
     case TextType:
-        return value.type() == Value::Variant && value.asVariant().type() == QVariant::String;
+        return value.type() == Value::Variant && value.asVariant().type() == QMetaType::QString;
     case OrderedArrayType:
         if (value.type() == Value::OrderedArray) {
             return checkArray(value, d->embeddedTypeInfo);

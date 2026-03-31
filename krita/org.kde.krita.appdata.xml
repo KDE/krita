@@ -620,11 +620,40 @@
     <id>org.kde.krita.desktop</id>
   </provides>
   <content_rating type="oars-1.1"/>
-  <bundle type="appimage">krita-5.3.0</bundle>
+  <bundle type="appimage">krita-5.3.1</bundle>
   <releases>
     <!-- Note: website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the
                last actual release -->
+    <release date="2026-03-31" version="5.3.1">
+      <url>https://krita.org/en/posts/2026/krita-5.3.1-released/</url>
+      <description>
+        <p>This release mainly fixes a slowdown issue for Windows users who use automation tools like Microsoft Windows Powertoys' Fancy Zones or the Google Drive plugin</p>
+      </description>
+      <artifacts>
+        <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
+          <location>https://download.kde.org/stable/krita/5.3.1/krita-5.3.1-x86_64.AppImage</location>
+        </artifact>
+        <artifact type="binary" platform="macOS">
+          <location>https://download.kde.org/stable/krita/5.3.1/krita-5.3.1-signed.dmg</location>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/5.3.1/krita-x64-5.3.1-setup.exe</location>
+        </artifact>
+        <artifact type="binary" platform="android-x86_64">
+          <location>https://download.kde.org/stable/krita/5.3.1/krita-x86_64-5.3.1-release-signed.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-arm64_v8a">
+          <location>https://download.kde.org/stable/krita/5.3.1/krita-arm64-v8a-5.3.1-release-signed.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-armeabi_v7a">
+          <location>https://download.kde.org/stable/krita/5.3.1/krita-armeabi-v7a-5.3.1-release-signed.apk</location>
+        </artifact>
+        <artifact type="source">
+          <location>https://download.kde.org/stable/krita/6.0.1/krita-6.0.1.tar.xz</location>
+        </artifact>
+      </artifacts>
+    </release>
     <release date="2026-03-24" version="5.3.0">
       <url>https://krita.org/en/posts/2026/krita-5.3.0-released/</url>
       <description>A new major release featuring the new on-canvas text tool, gap-closing features, selection toolboar and the new knife tool</description>

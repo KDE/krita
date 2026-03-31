@@ -103,15 +103,27 @@ void KisWdgTagSelectionControllerOneResource::slotCreateNewTag(QString tag)
         m_tagModel->addTag(tag, false, vec);
         tagsp = m_tagModel->tagForUrl(tag);
     } else if (!tagsp->active()) { // if tag is active, simply use that tag
-        // if you use this simple cast, the order of buttons must match order of options in the enum
-        int response = QMessageBox::question(0, i18nc("Dialog title", "Overwrite tag?"), i18nc("Question to the user in a dialog about creating a tag",
-                                                                                          "A tag with this unique name already exists. Do you want to replace it?"),
-                                           i18nc("Option in a dialog to discard the previously existing tag and creating a new one in its place", "Replace (overwrite) tag"),
-                                           i18nc("Option in a dialog to undelete (reactivate) existing tag with its old assigned resources", "Restore previous tag"), i18n("Cancel"));
-        if (response == 0) { // Overwrite
+        QMessageBox question = QMessageBox(QMessageBox::Question,
+            i18nc("Dialog title", "Overwrite tag?"),
+            i18nc("Question to the user in a dialog about creating a tag",
+                  "A tag with this unique name already exists. Do you want to replace it?")
+        );
+        question.addButton(
+            i18nc("Option in a dialog to discard the previously existing tag and creating a new one in its place",
+                  "Replace (overwrite) tag"),
+            QMessageBox::DestructiveRole
+        );
+        question.addButton(
+            i18nc("Option in a dialog to undelete (reactivate) existing tag with its old assigned resources",
+                  "Restore previous tag"),
+            QMessageBox::AcceptRole);
+        question.addButton(QMessageBox::Cancel);
+        question.exec();
+        QMessageBox::ButtonRole response = question.buttonRole(question.clickedButton());
+        if (response == QMessageBox::DestructiveRole) { // Overwrite
             m_tagModel->addTag(tag, true, QVector<KoResourceSP>()); // will overwrite the tag
             tagsp = m_tagModel->tagForUrl(tag);
-        } else if (response == 1) { // Restore/use previously existing one
+        } else if (response == QMessageBox::AcceptRole) { // Restore/use previously existing one
             m_tagModel->setTagActive(tagsp);
         } else {
             updateView();

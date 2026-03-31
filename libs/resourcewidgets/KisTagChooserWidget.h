@@ -9,6 +9,7 @@
 #define KISTAGCHOOSERWIDGET_H
 
 #include <QWidget>
+#include <QMessageBox>
 #include "kritaresourcewidgets_export.h"
 
 #include <KisTag.h>
@@ -116,13 +117,7 @@ private:
     /// \param index index is the index of the tag in the combobox
     void setCurrentIndex(int index);
 
-    enum OverwriteDialogOptions {
-        Replace,
-        Undelete,
-        Cancel
-    };
-
-    OverwriteDialogOptions overwriteTagDialog(KisTagChooserWidget* parent, bool undelete);
+    QMessageBox::ButtonRole overwriteTagDialog(KisTagChooserWidget* parent, bool undelete);
 
 private:
     class Private;

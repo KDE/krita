@@ -260,15 +260,25 @@ void KisTagChooserWidget::addTag(const QString &tag)
     addTag(tag, 0);
 }
 
-KisTagChooserWidget::OverwriteDialogOptions KisTagChooserWidget::overwriteTagDialog(KisTagChooserWidget* parent, bool tagIsActive)
+QMessageBox::ButtonRole KisTagChooserWidget::overwriteTagDialog(KisTagChooserWidget* parent, bool tagIsActive)
 {
     QString undeleteOption = !tagIsActive ? i18nc("Option in a dialog to undelete (reactivate) existing tag with its old assigned resources", "Restore previous tag")
                                       : i18nc("Option in a dialog to use existing tag with its old assigned resources", "Use existing tag");
-    // if you use this simple cast, the order of buttons must match order of options in the enum
-    return (KisTagChooserWidget::OverwriteDialogOptions)QMessageBox::question(parent, i18nc("Dialog title", "Overwrite tag?"), i18nc("Question to the user in a dialog about creating a tag",
-                                                                                      "A tag with this unique name already exists. Do you want to replace it?"),
-                                       i18nc("Option in a dialog to discard the previously existing tag and creating a new one in its place", "Replace (overwrite) tag"),
-                                       undeleteOption, i18n("Cancel"));
+    QMessageBox question = QMessageBox(QMessageBox::Question,
+        i18nc("Dialog title", "Overwrite tag?"),
+        i18nc("Question to the user in a dialog about creating a tag",
+              "A tag with this unique name already exists. Do you want to replace it?")
+    );
+    question.setParent(parent);
+    question.addButton(
+        i18nc("Option in a dialog to discard the previously existing tag and creating a new one in its place",
+              "Replace (overwrite) tag"),
+        QMessageBox::DestructiveRole
+    );
+    question.addButton(undeleteOption, QMessageBox::AcceptRole);
+    question.addButton(QMessageBox::Cancel);
+    question.exec();
+    return question.buttonRole(question.clickedButton());
 }
 
 void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
@@ -283,14 +293,14 @@ void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
     KisTagSP tagForUrl = d->model->tagForUrl(tagName);
     if (!tagForUrl.isNull()) {
         int response = overwriteTagDialog(this, tagForUrl->active());
-        if (response == Undelete) { // Undelete
+        if (response == QMessageBox::AcceptRole) { // Undelete
             d->model->setTagActive(tagForUrl);
             if (!resource.isNull()) {
                 KisTagResourceModel(d->resourceType).tagResources(tagForUrl, QVector<int>() << resource->resourceId());
             }
             d->model->sort(KisAllTagsModel::Name);
             return;
-        } else if (response == Cancel) { // Cancel
+        } else if (response == QMessageBox::RejectRole) { // Cancel
             return;
         }
     }
@@ -309,14 +319,14 @@ void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
     KisTagSP tagForUrl = d->model->tagForUrl(tag->url());
     if (!tagForUrl.isNull()) {
         int response = overwriteTagDialog(this, tagForUrl->active());
-        if (response == Undelete) { // Undelete
+        if (response == QMessageBox::AcceptRole) { // Undelete
             d->model->setTagActive(tagForUrl);
             if (!resource.isNull()) {
                 KisTagResourceModel(d->resourceType).tagResources(tagForUrl, QVector<int>() << resource->resourceId());
             }
             d->model->sort(KisAllTagsModel::Name);
             return;
-        } else if (response == Cancel) { // Cancel
+        } else if (response == QMessageBox::RejectRole) { // Cancel
             return;
         }
     }

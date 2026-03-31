@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -303,7 +303,7 @@
       </attribute>
       <layout class="QFormLayout" name="formLayout">
        <property name="labelAlignment">
-        <set>Qt::AlignLeading</set>
+        <set>Qt::AlignmentFlag::AlignLeading</set>
        </property>
        <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_3">
@@ -416,7 +416,7 @@
                 </size>
                </property>
                <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
+                <enum>QFrame::Shape::NoFrame</enum>
                </property>
                <property name="text">
                 <string/>
@@ -579,7 +579,7 @@
              <item>
               <spacer name="horizontalSpacer_4">
                <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Qt::Orientation::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -608,7 +608,7 @@
        <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -900,7 +900,7 @@
        <item row="11" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -913,10 +913,10 @@
        <item row="5" column="0" colspan="2">
         <widget class="QFrame" name="m_frmColorSamplerCircleSettings">
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QFormLayout" name="m_frmColorSamplerCircleSettingsLayout">
           <item row="1" column="0">
@@ -1061,6 +1061,9 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="cmbTouchPainting"/>
+       </item>
        <item row="5" column="1">
         <widget class="QCheckBox" name="chkTouchPressureSensitivity">
          <property name="toolTip">
@@ -1102,27 +1105,14 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="10" column="0">
+       <item row="9" column="0">
         <widget class="QLabel" name="lblSelectionActionBar">
          <property name="text">
           <string>Selection Actions Bar</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="9" column="1">
         <widget class="QCheckBox" name="chkEnableSelectionActionBar">
          <property name="toolTip">
           <string>When enabled, any selections will produce a small floating panel of useful selection-related actions.</string>
@@ -1134,9 +1124,6 @@
           <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QComboBox" name="cmbTouchPainting"/>
        </item>
       </layout>
      </widget>
@@ -1184,7 +1171,7 @@
           <item>
            <spacer name="verticalSpacer_6">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1200,7 +1187,7 @@
        <item>
         <spacer name="verticalSpacer_6">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1256,7 +1243,7 @@
        <item row="5" column="0" colspan="2">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1288,13 +1275,13 @@
        <item>
         <widget class="QScrollArea" name="scrollArea">
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::Shape::NoFrame</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAsNeeded</enum>
+          <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+          <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -1304,8 +1291,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1675</width>
-            <height>624</height>
+            <width>653</width>
+            <height>687</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1399,7 +1386,7 @@
              <item>
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Qt::Orientation::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -1469,7 +1456,7 @@
               <item>
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -1542,10 +1529,10 @@
               <item>
                <spacer name="horizontalSpacer">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
+                 <enum>QSizePolicy::Policy::Fixed</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -1698,7 +1685,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
                  <item>
                   <spacer name="horizontalSpacer_5">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1727,7 +1714,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
            <item row="15" column="0" colspan="2">
             <spacer name="verticalSpacer">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>

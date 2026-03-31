@@ -545,7 +545,9 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
     QStringList colorDefinitions;
     QString valueAdjust = value.split(";").first();
     valueAdjust.append(" ");
-    for (const QRegularExpressionMatch &match : splitDefinitions.globalMatch(valueAdjust)) {
+    QRegularExpressionMatchIterator i = splitDefinitions.globalMatch(valueAdjust);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
         colorDefinitions.append(match.captured(1).trimmed());
         pos = match.capturedEnd(0);
     }

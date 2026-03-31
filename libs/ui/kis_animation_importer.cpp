@@ -88,7 +88,9 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
     const QRegularExpression rx(QLatin1String("(\\d+)"));    //regex for extracting numbers
     QStringList fileNumberRxList;
     
-    for (const QRegularExpressionMatch &match : rx.globalMatch(files.at(0))) {
+    QRegularExpressionMatchIterator i = rx.globalMatch(files.at(0));
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
         fileNumberRxList << match.captured(1);
     }
 
@@ -146,7 +148,9 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
         if (!autoAddHoldframes) {
             layerRasterChannelPair.second->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0
         } else {
-            for (const QRegularExpressionMatch &match : rx.globalMatch(file)) {
+            QRegularExpressionMatchIterator i = rx.globalMatch(file);
+            while (i.hasNext()) {
+                QRegularExpressionMatch match = i.next();
                 fileNumberRxList << match.captured(1);
             }
 

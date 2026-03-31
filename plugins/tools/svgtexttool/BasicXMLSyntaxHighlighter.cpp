@@ -35,7 +35,9 @@ BasicXMLSyntaxHighlighter::BasicXMLSyntaxHighlighter(QTextEdit * parent) :
 void BasicXMLSyntaxHighlighter::highlightBlock(const QString & text)
 {
     // Special treatment for xml element regex as we use captured text to emulate lookbehind
-    for (const QRegularExpressionMatch &match : m_xmlElementRegex.globalMatch(text)) {
+    QRegularExpressionMatchIterator i = m_xmlElementRegex.globalMatch(text);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
         setFormat(match.capturedStart(0), match.capturedLength(0), m_xmlElementFormat);
     } 
 
@@ -55,7 +57,9 @@ void BasicXMLSyntaxHighlighter::highlightBlock(const QString & text)
 void BasicXMLSyntaxHighlighter::highlightByRegex(const QTextCharFormat & format,
                                                  const QRegularExpression & regex, const QString & text)
 {
-    for (const QRegularExpressionMatch &match : regex.globalMatch(text)) {
+    QRegularExpressionMatchIterator i = regex.globalMatch(text);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
         setFormat(match.capturedStart(0), match.capturedLength(0), format);
     } 
 }

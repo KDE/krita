@@ -2623,7 +2623,11 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     QVariant rect = params->property("shapeRect");
     QVariant origin = params->property("origin");
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (rect.type()==QVariant::RectF) {
+#else
+    if (rect.typeId() == QMetaType::QRectF) {
+#endif
         shapeRect = rect.toRectF();
     }
 
@@ -2632,7 +2636,11 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
                              defs,
                              shapeRect,
                              documentResources->documentResolution());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (origin.type() == QVariant::PointF) {
+#else
+    if (origin.typeId() == QMetaType::QPointF) {
+#endif
         shape->setPosition(origin.toPointF());
     } else {
         shape->setPosition(shapeRect.topLeft());

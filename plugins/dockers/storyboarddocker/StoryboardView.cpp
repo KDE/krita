@@ -340,7 +340,11 @@ void StoryboardView::mouseReleaseEvent(QMouseEvent *event) {
     // To prevent selection changes from occurring when hitting the "plus" button,
     // we want to filter out these inputs before passing it up to QListView / QAbstractItemView
     if (index.isValid() && index.parent().isValid() && index.row() == StoryboardItem::FrameNumber) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         StoryboardDelegate* sbDelegate = dynamic_cast<StoryboardDelegate*>(itemDelegate(index));
+#else
+        StoryboardDelegate* sbDelegate = dynamic_cast<StoryboardDelegate*>(itemDelegateForIndex(index));
+#endif
         QRect itemRect = visualRect(index);
         if (sbDelegate && sbDelegate->isOverlappingActionIcons(itemRect, event)) {
             return;

@@ -344,7 +344,11 @@ void KisColorSelectorBase::dropEvent(QDropEvent *e)
         color = qvariant_cast<QColor>(e->mimeData()->colorData());
     }
     else if(e->mimeData()->hasText()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
         color.setNamedColor(e->mimeData()->text());
+#else
+        color.fromString(e->mimeData()->text());
+#endif
         if(!color.isValid())
             return;
     }

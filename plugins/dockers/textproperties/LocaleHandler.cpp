@@ -18,7 +18,11 @@ const QString localeName (const KoWritingSystemUtils::Bcp47Locale &locale) {
     QString name;
     const QLocale l = KoWritingSystemUtils::localeFromBcp47Locale(locale);
     const QString lang = QLocale::languageToString(l.language());
+#if QT_VERSION < QT_VERSION_CHECK(6, 2, 0)
     const QString region = QLocale::countryToString(l.country());
+#else
+    const QString region = QLocale::territoryToString(l.territory());
+#endif
 
     if (!lang.isEmpty() && lang != "C") {
         if (!locale.regionTag.isEmpty()) {

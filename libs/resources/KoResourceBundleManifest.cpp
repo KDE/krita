@@ -60,6 +60,7 @@ bool KoResourceBundleManifest::load(QIODevice *device)
     }
 
     QDomDocument manifestDocument;
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     QString errorMessage;
     int errorLine;
     int errorColumn;
@@ -67,6 +68,13 @@ bool KoResourceBundleManifest::load(QIODevice *device)
         warnKrita << "Error parsing manifest" << errorMessage
                   << "line" << errorLine
                   << "column" << errorColumn;
+#else
+    QDomDocument::ParseResult result = manifestDocument.setContent(device, QDomDocument::ParseOption::UseNamespaceProcessing);
+    if (!result) {
+        warnKrita << "Error parsing manifest" << result.errorMessage
+                  << "line" << result.errorLine
+                  << "column" << result.errorColumn;
+#endif
         return false;
     }
 

@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QScreen>
 #include <QPainter>
+#include <QWindow>
 
 #include <cmath>
 
@@ -75,7 +76,11 @@ void WGColorPreviewToolTip::paintEvent(QPaintEvent *e) {
     if (window && m_lastUsedColor.alpha() > 0) {
         QIcon::State iconState;
         iconState = estimateBrightness(m_lastUsedColor) > 0.5 ? QIcon::Off : QIcon::On;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         icon = m_brushIcon.pixmap(window, QSize(16, 16), QIcon::Normal, iconState);
+#else
+        icon = m_brushIcon.pixmap(QSize(16, 16), window->devicePixelRatio(), QIcon::Normal, iconState);
+#endif
     }
     if (!icon.isNull()) {
         painter.drawPixmap(width() - 18, height() - 18, icon);

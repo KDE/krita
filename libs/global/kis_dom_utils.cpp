@@ -276,7 +276,11 @@ bool loadValue(const QDomElement &e, QString *value)
 bool loadValue(const QDomElement &e, QColor *value)
 {
     if (!Private::checkType(e, "qcolor")) return false;
+#if QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     value->setNamedColor(e.attribute("value", "#FFFF0000"));
+#else
+    value->fromString(e.attribute("value", "#FFFF0000"));
+#endif
     return true;
 }
 

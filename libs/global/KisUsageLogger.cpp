@@ -115,7 +115,10 @@ QString KisUsageLogger::basicSystemInfo()
         }
     }
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // Attribute does nothing on Qt6
     systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
+#endif
 #ifdef Q_OS_MACOS
     KisMacosEntitlements entitlements;
     systemInfo.append("\n Sandbox: ").append((entitlements.sandbox()) ? "true" : "false");

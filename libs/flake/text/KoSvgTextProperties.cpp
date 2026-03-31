@@ -505,7 +505,11 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             } else if (param == "right") {
                 underlinePos.verticalPosition = UnderlineRight;
                 setPosition = true;
+#if QT_VERSION < QT_VERSION_CHECK(6, 6, 0)
             } else if (QColor::isValidColor(param)) {
+#else
+            } else if (QColor::isValidColorName(param)) {
+#endif
                 // TODO: Convert to KoColor::fromSvg11.
                 textDecorationColor = QColor(param);
             }

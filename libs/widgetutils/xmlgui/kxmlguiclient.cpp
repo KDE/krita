@@ -312,20 +312,28 @@ static void propagateTranslationDomain(QDomDocument &doc, const QStringList tagN
 void KisKXMLGUIClient::setXML(const QString &document, bool merge)
 {
     QDomDocument doc;
-    QString errorMsg;
-    int errorLine, errorColumn;
     // QDomDocument raises a parse error on empty document, but we accept no app-specific document,
     // in which case you only get ui_standards.xmlgui layout.
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+    QString errorMsg;
+    int errorLine, errorColumn;
     bool result = document.isEmpty() || doc.setContent(document, &errorMsg, &errorLine, &errorColumn);
     if (result) {
+#else
+    QDomDocument::ParseResult result = doc.setContent(document);
+    if (document.isEmpty() || result) {
+#endif
         propagateTranslationDomain(doc, d->m_textTagNames);
         setDOMDocument(doc, merge);
     } else {
-#ifdef NDEBUG
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
         qCritical() << "Error parsing XML document:" << errorMsg << "at line" << errorLine << "column" << errorColumn;
+#else
+        qCritical() << "Error parsing XML document:" << result.errorMessage << "at line" << result.errorLine << "column" << result.errorColumn;
+#endif
+#ifdef NDEBUG
         setDOMDocument(QDomDocument(), merge); // otherwise empty menus from ui_standards.xmlgui stay around
 #else
-        qCritical() << "Error parsing XML document:" << errorMsg << "at line" << errorLine << "column" << errorColumn;
         abort();
 #endif
     }

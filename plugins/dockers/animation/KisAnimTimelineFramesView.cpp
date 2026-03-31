@@ -1743,7 +1743,11 @@ QPixmap KisAnimTimelineFramesView::Private::renderToPixmap(const QModelIndexList
         const QModelIndex &current = paintPairs.at(j).second;
         //adjustViewOptionsForIndex(&option, current);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         q->itemDelegate(current)->paint(&painter, option, current);
+#else
+        q->itemDelegateForIndex(current)->paint(&painter, option, current);
+#endif
     }
 
     return pixmap;

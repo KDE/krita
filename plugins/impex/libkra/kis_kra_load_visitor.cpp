@@ -820,17 +820,25 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
         return;
     }
 
+
+    QDomDocument dom;
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     QString errorMsg;
     int errorLine;
     int errorColumn;
-
-    QDomDocument dom;
     bool ok = dom.setContent(m_store->device(), &errorMsg, &errorLine, &errorColumn);
+#else
+    QDomDocument::ParseResult result = dom.setContent(m_store->device());
+#endif
     m_store->close();
 
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     if (!ok) {
         m_errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, errorLine, errorColumn, i18n(errorMsg.toUtf8()));
+#else
+    if (!result) {
+        m_errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, result.errorLine, result.errorColumn, i18n(result.errorMessage.toUtf8()));
+#endif
         return;
     }
 

@@ -33,11 +33,17 @@ bool Schema::Private::load(const QString& _fileName)
     dbgMetaData << "Loading from " << _fileName;
 
     QDomDocument document;
+    QFile file(_fileName);
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     QString error;
     int line, column;
-    QFile file(_fileName);
     if (!document.setContent(&file, &error, &line, &column)) {
         dbgMetaData << error << " at " << line << ", " << column << " in " << _fileName;
+#else
+    QDomDocument::ParseResult result = document.setContent(&file);
+    if (!result) {
+        dbgMetaData << result.errorMessage << " at " << result.errorLine << ", " << result.errorColumn << " in " << _fileName;
+#endif
         return false;
     }
 

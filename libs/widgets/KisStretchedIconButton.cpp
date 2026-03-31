@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QAction>
+#include <QWindow>
 
 #include <kis_debug.h>
 
@@ -65,7 +66,11 @@ void KisStretchedIconButton::resizeEvent(QResizeEvent *event)
 
 void KisStretchedIconButton::updateLabelIcon()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_label->setPixmap(m_stretchedIcon.pixmap(this->windowHandle(), m_label->size()));
+#else
+    m_label->setPixmap(m_stretchedIcon.pixmap(m_label->size(), this->window()->devicePixelRatio()));
+#endif
 }
 
 void KisStretchedIconButton::slotActionChanged()

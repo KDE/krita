@@ -87,8 +87,13 @@ bool KisManualUpdater::availableVersionIsHigher(QString currentVersion, QString 
         return false;
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     int currentSuffixIndex {5};
     int availableSuffixIndex {5};
+#else
+    qsizetype currentSuffixIndex {5};
+    qsizetype availableSuffixIndex {5};
+#endif
 
     QVersionNumber currentVersionNumber = QVersionNumber::fromString(currentVersion, &currentSuffixIndex);
     QVersionNumber availableVersionNumber = QVersionNumber::fromString(availableVersion, &availableSuffixIndex);

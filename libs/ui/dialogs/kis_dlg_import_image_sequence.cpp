@@ -73,7 +73,11 @@ KisDlgImportImageSequence::KisDlgImportImageSequence(KisMainWindow *mainWindow, 
     connect(m_ui.spinStep, SIGNAL(valueChanged(int)), this, SLOT(slotSkipChanged(int)));
     connect(m_ui.cmbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
     connect(m_ui.cmbSortMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
+#if QT_VERSION < QT_VERSION_CHECK(6, 7, 0)
     connect(m_ui.autoAddHoldframesBox, &QCheckBox::stateChanged, this, &KisDlgImportImageSequence::autoAddHoldframes);
+#else
+    connect(m_ui.autoAddHoldframesBox, &QCheckBox::checkStateChanged, this, &KisDlgImportImageSequence::autoAddHoldframes);
+#endif
     // cold initialization of the controls
     slotSkipChanged(m_ui.spinStep->value());
     slotOrderOptionsChanged(m_ui.cmbOrder->currentIndex());

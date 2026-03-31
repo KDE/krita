@@ -1909,6 +1909,7 @@ bool KoColorSet::Private::loadSbzSwatchbook(QScopedPointer<KoStore> &store)
     dbgPigment << "XML palette: " << colorSet->filename() << ", SwatchBooker format";
 
     QDomDocument doc;
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     int errorLine, errorColumn;
     QString errorMessage;
     if (!doc.setContent(bytes, &errorMessage, &errorLine, &errorColumn)) {
@@ -1916,6 +1917,14 @@ bool KoColorSet::Private::loadSbzSwatchbook(QScopedPointer<KoStore> &store)
         warnPigment << "Error (line" << errorLine
                     << ", column" << errorColumn
                     << "):" << errorMessage;
+#else
+    QDomDocument::ParseResult result = doc.setContent(bytes);
+    if (!result) {
+        warnPigment << "Illegal XML palette:" << colorSet->filename();
+        warnPigment << "Error (line" << result.errorLine
+                    << ", column" << result.errorColumn
+                    << "):" << result.errorMessage;
+#endif
         return false;
     }
 

@@ -561,7 +561,11 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
     for (QString def : colorDefinitions) {
         if (def.toLower() == "currentcolor") {
             parsed = current;
+#if QT_VERSION < QT_VERSION_CHECK(6, 6, 0)
         } else if (QColor::isValidColor(def)) {
+#else
+        } else if (QColor::isValidColorName(def)) {
+#endif
             parsed.fromQColor(QColor(def));
         } else if (def.toLower().startsWith("rgb")) {
             QString parse = def.trimmed();

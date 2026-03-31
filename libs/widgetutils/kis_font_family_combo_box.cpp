@@ -88,7 +88,9 @@ KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
 
 void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QFontDatabase fonts = QFontDatabase();
+#endif
     int maxWidth        = 0;
     this->clear();
 
@@ -100,9 +102,15 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
     }
 
     for (int i = 0; i < writingSystems.size(); i++) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         Q_FOREACH (QString family, fonts.families(writingSystems.at(i))) {
             // if it's a private family it shouldn't be added.
             bool addFont = !fonts.isPrivateFamily(family);
+#else
+        Q_FOREACH (QString family, QFontDatabase::families(writingSystems.at(i))) {
+            // if it's a private family it shouldn't be added.
+            bool addFont = !QFontDatabase::isPrivateFamily(family);
+#endif
 
             if (addFont && filteredFonts.contains(family)) {
                 addFont = false;
@@ -113,13 +121,21 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
             if (addFont && m_blacklistedFonts.contains(family)) {
                 addFont = false;
             }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             if (addFont && !fonts.isSmoothlyScalable(family)) {
+#else
+            if (addFont && !QFontDatabase::isSmoothlyScalable(family)) {
+#endif
                 addFont = false;
             }
 
             if (addFont) {
                 // now, check for all possible familyname+style name combinations, so we can avoid those.
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 Q_FOREACH (const QString style, fonts.styles(family)) {
+#else
+                Q_FOREACH (const QString style, QFontDatabase::styles(family)) {
+#endif
                     duplicateFonts.append(family + " " + style);
                     duplicateFonts.append(family + "_" + style);
                 }
@@ -223,7 +239,11 @@ KisFontComboBoxes::KisFontComboBoxes(QWidget *parent)
 void KisFontComboBoxes::setCurrentFont(QFont font)
 {
     setCurrentFamily(font.family());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setCurrentStyle(QFontDatabase().styleString(font));
+#else
+    setCurrentStyle(QFontDatabase::styleString(font));
+#endif
 }
 
 void KisFontComboBoxes::setCurrentFamily(const QString family)
@@ -261,7 +281,11 @@ QString KisFontComboBoxes::currentStyle() const
 
 QFont KisFontComboBoxes::currentFont(int pointSize) const
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QFontDatabase().font(m_family->currentText(), m_styles->currentText(), pointSize);
+#else
+    return QFontDatabase::font(m_family->currentText(), m_styles->currentText(), pointSize);
+#endif
 }
 
 void KisFontComboBoxes::refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems)
@@ -273,7 +297,9 @@ void KisFontComboBoxes::refillComboBox(QVector<QFontDatabase::WritingSystem> wri
 void KisFontComboBoxes::fontFamilyChanged()
 {
     QString currentText = m_styles->currentText();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QFontDatabase fonts;
+#endif
     const QString family = m_family->currentText();
     int maxWidth         = 0;
     m_styles->clear();
@@ -282,15 +308,28 @@ void KisFontComboBoxes::fontFamilyChanged()
     KisFontFamilyComboBox *cmb = qobject_cast<KisFontFamilyComboBox *>(m_family);
     cmb->setTopFont(family);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (fonts.styles(family).isEmpty()) {
+#else
+    if (QFontDatabase::styles(family).isEmpty()) {
+#endif
         styles.append("Normal");
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_FOREACH (const QString style, fonts.styles(family)) {
         int b      = fonts.weight(family, style);
+#else
+    Q_FOREACH (const QString style, QFontDatabase::styles(family)) {
+        int b      = QFontDatabase::weight(family, style);
+#endif
         int bindex = 0;
         for (int i = 0; i < styles.size(); i++) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             if (b > fonts.weight(family, styles.at(i))) {
+#else
+            if (b > QFontDatabase::weight(family, styles.at(i))) {
+#endif
                 bindex = i;
             }
         }

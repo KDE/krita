@@ -318,11 +318,16 @@ KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QSt
         m_doc->setErrorMessage(i18n("Could not find %1", filename));
         return ImportExportCodes::FileNotExist;
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
     bool ok = xmldoc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
+#else
+    QDomDocument::ParseResult result = xmldoc.setContent(store->device());
+#endif
     store->close();
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     if (!ok) {
         errUI << "Parsing error in " << filename << "! Aborting!" << Qt::endl
               << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
@@ -330,6 +335,15 @@ KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QSt
         m_doc->setErrorMessage(i18n("Parsing error in %1 at line %2, column %3\nError message: %4",
                                     filename, errorLine, errorColumn,
                                     QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0)));
+#else
+    if (!result) {
+        errUI << "Parsing error in " << filename << "! Aborting!" << Qt::endl
+            << " In line: " << result.errorLine << ", column: " << result.errorColumn << Qt::endl
+            << " Error message: " << result.errorMessage << Qt::endl;
+        m_doc->setErrorMessage(i18n("Parsing error in %1 at line %2, column %3\nError message: %4",
+                                    filename, result.errorLine, result.errorColumn,
+                                    QCoreApplication::translate("QXml", result.errorMessage.toUtf8(), 0)));
+#endif
         return ImportExportCodes::FileFormatIncorrect;
     }
     dbgUI << "File" << filename << " loaded and parsed";

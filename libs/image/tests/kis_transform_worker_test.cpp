@@ -61,7 +61,11 @@ void testMirror(const QRect &imageRect, const QRect &mirrorRect, Qt::Orientation
 
 
     QImage srcImage = dev->convertToQImage(0, mirrorRect.x(), mirrorRect.y(), mirrorRect.width(), mirrorRect.height());
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     QImage mirroredImage = srcImage.mirrored(orientation == Qt::Horizontal, orientation == Qt::Vertical);
+#else
+    QImage mirroredImage = srcImage.flipped(orientation);
+#endif
     QImage result;
 
     //srcImage.save("input.png");
@@ -169,7 +173,11 @@ void KisTransformWorkerTest::testMirrorTransactionX()
 
     QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     image = image.mirrored(true, false);
+#else
+    image = image.flipped(Qt::Orientation::Horizontal);
+#endif
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, image, result)) {
@@ -193,7 +201,11 @@ void KisTransformWorkerTest::testMirrorTransactionY()
 
     QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     image = image.mirrored(false, true);
+#else
+    image = image.flipped(Qt::Orientation::Vertical);
+#endif
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, image, result)) {

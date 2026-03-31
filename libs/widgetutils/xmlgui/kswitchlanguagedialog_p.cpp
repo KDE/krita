@@ -313,20 +313,28 @@ void KisKSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *
             const QString languageName = nativeName.isEmpty() ? QLocale::languageToString(l.language()) : nativeName;
             if (!insertedLanguages.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
                 QString displayName;
-                // Check if languageCode contains a country name.
+                // Check if languageCode contains a territory name.
                 // For en and en_GB their native names already contain "American"
-                // and "British", so no need to append the country name.
+                // and "British", so no need to append the territory name.
                 // Same applies for zh_CN and zh_TW, however we will need to
                 // disambiguate between zh_TW and zh_HK if it is eventually
                 // added.
+#if QT_VERSION < QT_VERSION_CHECK(6, 2, 0)
                 if (l.language() != QLocale::English && l.language() != QLocale::Chinese && languageCode.contains('_')) {
-                    QString countryName = l.nativeCountryName();
+                    QString territoryName = l.nativeCountryName();
                     // Fallback just in case.
-                    if (countryName.isEmpty()) {
-                        countryName = QLocale::countryToString(l.country());
+                    if (territoryName.isEmpty()) {
+                        territoryName = QLocale::countryToString(l.country());
+#else
+                if (l.language() != QLocale::English && l.language() != QLocale::Chinese && languageCode.contains('_')) {
+                    QString territoryName = l.nativeTerritoryName();
+                    // Fallback just in case.
+                    if (territoryName.isEmpty()) {
+                        territoryName = QLocale::territoryToString(l.territory());
+#endif
                     }
-                    // Append the country name for disambiguation.
-                    displayName = languageName % " (" % countryName % ")";
+                    // Append the territory name for disambiguation.
+                    displayName = languageName % " (" % territoryName % ")";
                 } else {
                     displayName = languageName;
                 }

@@ -249,8 +249,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    //Does nothing on Qt6.
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
+#endif
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
 
     // In Qt6, QImageReader has an allocation limit to prevent large memory allocations.
@@ -922,7 +924,11 @@ void installQtTranslations(KisApplication &app)
         localeList.append(defaultLocale);
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QString translationsPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#else
+    QString translationsPath = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#endif
     dbgLocale << "Qt translations path:" << translationsPath;
 
     Q_FOREACH(const auto &localeToLoad, localeList) {
@@ -991,7 +997,11 @@ void installEcmTranslations(KisApplication &app)
 #if defined(Q_OS_ANDROID)
             const QString fullPath = QStringLiteral("assets:/") + subPath;
 #else
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const QString root = QLibraryInfo::location(QLibraryInfo::PrefixPath);
+#else
+            const QString root = QLibraryInfo::path(QLibraryInfo::PrefixPath);
+#endif
 
             // Our patched k18n uses AppDataLocation (for AppImage). Not using
             // KoResourcePaths::getAppDataLocation is correct here, because we

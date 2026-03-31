@@ -99,19 +99,19 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         QString type = "string";
         QVariant v = it.value();
         QDomText text;
-        if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
+        if (v.userType() == qMetaTypeId<KisCubicCurve>()) {
             text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
-        } else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+        } else if (v.userType() == qMetaTypeId<KoColor>()) {
             QDomDocument cdataDoc = QDomDocument("color");
             QDomElement cdataRoot = cdataDoc.createElement("color");
             cdataDoc.appendChild(cdataRoot);
             v.value<KoColor>().toXML(cdataDoc, cdataRoot);
             text = cdataDoc.createCDATASection(cdataDoc.toString());
             type = "color";
-        } else if(v.type() == QVariant::String ) {
+        } else if(v.type() == QMetaType::QString ) {
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
             type = "string";
-        } else if(v.type() == QVariant::ByteArray ) {
+        } else if(v.type() == QMetaType::QByteArray ) {
             text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitrary Data
             type = "bytearray";
         } else {
@@ -237,7 +237,7 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
             }
             break;
         }
-        case QVariant::String:
+        case QMetaType::QString:
         {
             QDomDocument doc;
             if (doc.setContent(v.toString())) {
@@ -257,13 +257,13 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
             }
             break;
         }
-        case QVariant::Color:
+        case QMetaType::QColor:
         {
             QColor c = v.value<QColor>();
             KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
             return kc;
         }
-        case QVariant::Int:
+        case QMetaType::Int:
         {
             QColor c(v.toInt());
             if (c.isValid()) {
@@ -283,7 +283,7 @@ void KisPropertiesConfiguration::dump() const
 {
     QMap<QString, QVariant>::ConstIterator it;
     for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
-        if (it->type() == QVariant::ByteArray) {
+        if (it->type() == QMetaType::QByteArray) {
             QByteArray ba = it->toByteArray();
 
             if (ba.size() > 32) {

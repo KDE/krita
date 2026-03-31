@@ -147,8 +147,8 @@ public:
                 }
 
                 if (QTest::currentTestFailed()) {
-                    QWARN(QString("Mask features: Ratio=%1, hfade=%2, vfade=%3 \n")
-                          .arg(k/100.f,0,'g',2).arg(i/100.f,0,'g',2).arg(j/100.f,0,'g',2).toLatin1());
+                    qWarning().nospace() << qSetRealNumberPrecision(2)
+                        << "Mask features: Ratio=" << k/100 << ", hfade" << i/100 << ", vfade=" << j/100 << "\n";
                     return false;
                 }
 

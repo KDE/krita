@@ -370,7 +370,7 @@ public:
         setToolTip(i18n("Transform a layer or a selection"));
         setSection(ToolBoxSection::Transform);
         setIconName(koIconNameCStr("krita_tool_transform"));
-        setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+        setShortcut(QKeySequence(Qt::CTRL | Qt::Key_T));
         setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

@@ -253,7 +253,7 @@ SliderSettings sliderSetting(SLIDER_TYPE type) {
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
         : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&HSV Adjustment..."))
 {
-    setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+    setShortcut(QKeySequence(Qt::CTRL | Qt::Key_U));
     setSupportsPainting(true);
 }
 

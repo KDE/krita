@@ -356,10 +356,8 @@ void GridConfig::setColorVertical(QColor colorVertical)
 bool GridConfig::fromXml(const QString &xmlContent) const
 {
     QDomDocument doc = QDomDocument();
-    QString errorMsg {""};
-    int errorLine {0}, errorColumn {0};
 
-    if(doc.setContent(xmlContent, &errorMsg, &errorLine, &errorColumn)) {
+    if(doc.setContent(xmlContent)) {
 
         return d->gridConfig->loadDynamicDataFromXml(doc.documentElement());
     }

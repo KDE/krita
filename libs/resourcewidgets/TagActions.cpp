@@ -96,7 +96,7 @@ void LineEditAction::slotActionTriggered()
     onTriggered();
     if (!m_editBox->text().isEmpty()) {
         if (m_closeParentOnTrigger) {
-            this->parentWidget()->close();
+            qobject_cast<QWidget*>(this->parent())->close();
             m_editBox->clearFocus();
             m_editBox->clear();
         }

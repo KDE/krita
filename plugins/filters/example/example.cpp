@@ -41,7 +41,7 @@ KritaExample::~KritaExample()
 
 KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Invert"))
 {
-    setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
     setShowConfigurationWidget(false);

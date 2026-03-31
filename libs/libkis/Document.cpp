@@ -267,9 +267,7 @@ QString Document::documentInfo() const
 void Document::setDocumentInfo(const QString &document)
 {
     QDomDocument doc;
-    QString errorMsg;
-    int errorLine, errorColumn;
-    doc.setContent(document, &errorMsg, &errorLine, &errorColumn);
+    doc.setContent(document);
     d->document->documentInfo()->load(doc);
 }
 

@@ -44,7 +44,7 @@ QDomDocument KisOpenRasterLoadContext::loadStack()
     m_store->open("stack.xml");
     KoStoreDevice io(m_store);
     QDomDocument doc;
-    doc.setContent(&io, false);
+    doc.setContent(&io);
     io.close();
     m_store->close();
     return doc;

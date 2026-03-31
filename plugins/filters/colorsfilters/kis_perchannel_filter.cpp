@@ -160,7 +160,7 @@ KisCubicCurve KisPerChannelFilterConfiguration::getDefaultCurve()
 
 KisPerChannelFilter::KisPerChannelFilter() : KisMultiChannelFilter(id(), i18n("&Color Adjustment curves..."))
 {
-    setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
 }
 
 KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const

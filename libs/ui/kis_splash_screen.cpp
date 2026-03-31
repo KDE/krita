@@ -343,7 +343,7 @@ void KisSplashScreen::toggleShowAtStartup(bool toggle)
 void KisSplashScreen::linkClicked(const QString &link)
 {
     KisPart::instance()->openExistingFile(link);
-    if (isTopLevel()) {
+    if (isWindow()) {
         close();
     }
 }

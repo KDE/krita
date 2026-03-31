@@ -157,7 +157,7 @@ KoColor KoColorPopupAction::currentKoColor() const
 void KoColorPopupAction::updateIcon()
 {
     QSize iconSize;
-    QToolButton *toolButton = dynamic_cast<QToolButton*>(parentWidget());
+    QToolButton *toolButton = dynamic_cast<QToolButton*>(parent());
     if (toolButton) {
         iconSize = QSize(toolButton->iconSize());
     } else {

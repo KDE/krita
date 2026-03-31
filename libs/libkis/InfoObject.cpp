@@ -49,7 +49,7 @@ QMap<QString, QVariant> InfoObject::properties() const
     for (const QString &key : map.keys()) {
         QVariant v = map.value(key);
 
-        if (v.isValid() && v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+        if (v.isValid() && v.userType() == qMetaTypeId<KoColor>()) {
             map[key] = QVariant::fromValue(v.value<KoColor>().toXML());
         }
     }
@@ -75,7 +75,7 @@ QVariant InfoObject::property(const QString &key)
     if (d->properties->hasProperty(key)) {
         d->properties->getProperty(key, v);
 
-        if (v.isValid() && v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+        if (v.isValid() && v.userType() == qMetaTypeId<KoColor>()) {
             return QVariant::fromValue(v.value<KoColor>().toXML());
         }
     }

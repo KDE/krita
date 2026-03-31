@@ -95,7 +95,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
             qWarning() << "Could not find brush tip " << settings->getString("brush_definition") << ", will use a default brush instead";
             QString brushDefinition("<Brush useAutoSpacing=\"1\" angle=\"0\" spacing=\"0.1\" density=\"1\" BrushVersion=\"2\" type=\"auto_brush\" randomness=\"0\" autoSpacingCoeff=\"0.8\"> <MaskGenerator spikes=\"2\" hfade=\"1\" ratio=\"1\" diameter=\"40\" id=\"default\" type=\"circle\" antialiasEdges=\"1\" vfade=\"1\"/> </Brush> ");
             QDomDocument d;
-            d.setContent(brushDefinition, false);
+            d.setContent(brushDefinition);
             QDomElement element = d.firstChildElement("Brush");
             m_brush = KisBrushRegistry::instance()->createBrush(element, settings->resourcesInterface()).resource<KisBrush>();
             Q_ASSERT(m_brush);

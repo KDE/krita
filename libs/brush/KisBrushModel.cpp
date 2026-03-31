@@ -44,7 +44,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
 
     if (!brushDefinition.isEmpty()) {
         QDomDocument d;
-        d.setContent(brushDefinition, false);
+        d.setContent(brushDefinition);
         element = d.firstChildElement("Brush");
     }
 

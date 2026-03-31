@@ -35,13 +35,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
     if (dstCs->profile())
         profile2 = dstCs->profile()->name();
 
-    QWARN(QString("Failed %1 %2 -> %3 %4 %5")
-          .arg(srcCs->name())
-          .arg(profile1)
-          .arg(dstCs->name())
-          .arg(profile2)
-          .arg(reason)
-          .toLatin1());
+    qWarning() << "Failed" << srcCs->name() << profile1 << "->" << dstCs->name() << profile2 << reason;
 }
 
 void KisCsConversionTest::testColorSpaceConversion()

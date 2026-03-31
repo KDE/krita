@@ -126,7 +126,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     m_syntaxHighlighter = new BasicXMLSyntaxHighlighter(m_textEditorWidget.svgTextEdit);
-    m_textEditorWidget.svgTextEdit->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
+    m_textEditorWidget.svgTextEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     createActions();
     // If we have customized the toolbars, load that first

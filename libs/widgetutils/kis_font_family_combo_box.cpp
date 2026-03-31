@@ -125,7 +125,7 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
                 }
                 filteredFonts.append(family);
                 int width = 1.5 * view()->fontMetrics()
-                        .horizontalAdvance(family + " " + fonts.writingSystemSample(QFontDatabase::Any));
+                        .horizontalAdvance(family + " " + QFontDatabase::writingSystemSample(QFontDatabase::Any));
                 if (width > maxWidth) {
                     maxWidth = width;
                 }

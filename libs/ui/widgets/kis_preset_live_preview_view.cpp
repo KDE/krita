@@ -246,7 +246,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         QDomDocument d;
         QString brushDefinition = settings->getString("brush_definition");
         if (!brushDefinition.isEmpty()) {
-            d.setContent(brushDefinition, false);
+            d.setContent(brushDefinition);
             element = d.firstChildElement("Brush");
 
             KisBrushSP brush = KisBrush::fromXML(element, KisGlobalResourcesInterface::instance());

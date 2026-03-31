@@ -285,7 +285,7 @@ void ToolTransformArgs::transformSrcAndDst(const QTransform &t)
         m_transformedCenter = t.map(m_transformedCenter);
 
         QMatrix4x4 m(t);
-        m_cameraPos = m * m_cameraPos;
+        m_cameraPos = m.map(m_cameraPos);
     } else if (m_mode == PERSPECTIVE_4POINT) {
         m_originalCenter = t.map(m_originalCenter);
         m_transformedCenter = t.map(m_transformedCenter);
@@ -625,7 +625,7 @@ void ToolTransformArgs::scale3dSrcAndDst(qreal scale)
         // so we cannot just do `QMatrix4x4 m(t)`.
         QMatrix4x4 m;
         m.scale(scale);
-        m_cameraPos = m * m_cameraPos;
+        m_cameraPos = m.map(m_cameraPos);
     } else {
         transformSrcAndDst(t);
     }

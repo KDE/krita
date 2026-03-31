@@ -51,7 +51,7 @@ public:
         setSection(ToolBoxSection::Select);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_rect_selection"));
-        setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+        setShortcut(QKeySequence(Qt::CTRL | Qt::Key_R));
         setPriority(0);
     }
 

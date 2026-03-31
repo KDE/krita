@@ -1426,7 +1426,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             QString value = style.at(1).trimmed();
 
             if (property == "font-family") {
-                charFormat.setFontFamily(value);
+                charFormat.setFontFamilies(QStringList(value));
             }
 
             if (property == "font-size") {
@@ -1565,8 +1565,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
 
             if (property == "stroke") {
                 QPen pen = charFormat.textOutline();
-                QColor color;
-                color.setNamedColor(value);
+                QColor color(value);
                 pen.setColor(color);
                 charFormat.setTextOutline(pen);
             }
@@ -1578,8 +1577,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "fill") {
-                QColor color;
-                color.setNamedColor(value);
+                QColor color(value);
 
                 // avoid assertion failure in `KoColor` later
                 if (!color.isValid()) {

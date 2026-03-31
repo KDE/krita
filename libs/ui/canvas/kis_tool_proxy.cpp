@@ -83,7 +83,7 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
     }
 
     *result = false;
-    QMouseEvent fakeEvent(QEvent::MouseMove, QPoint(),
+    QMouseEvent fakeEvent(QEvent::MouseMove, QPoint(), QPointF(),
                           Qt::NoButton, Qt::NoButton,
                           Qt::NoModifier);
 

@@ -276,7 +276,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
             break; // Data is not a String, ignore
         const int numChars = (lastIndex - index) / 2; // including trailing zero
 
-        QString setting = QString::fromUtf16((ushort *)(void *)(array.data() + index), numChars);
+        QString setting = QString::fromUtf16((char16_t *)(void *)(array.data() + index), numChars);
         index = lastIndex + 2;
         dbgMetaData << "Setting << " << setting;
         settings.append(KisMetaData::Value(setting));

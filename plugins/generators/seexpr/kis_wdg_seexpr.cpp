@@ -57,7 +57,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
 
     m_widget->txtEditor->updateCompleter();
 
-    m_widget->txtEditor->exprTe->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
+    m_widget->txtEditor->exprTe->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     const QFontMetricsF fntTe(m_widget->txtEditor->exprTe->fontMetrics());
     m_widget->txtEditor->exprTe->setTabStopDistance(fntTe.horizontalAdvance("    "));
 

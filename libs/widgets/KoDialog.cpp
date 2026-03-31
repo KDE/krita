@@ -464,7 +464,7 @@ int KoDialog::spacingHint()
 
 int KoDialog::groupSpacingHint()
 {
-    return QApplication::fontMetrics().lineSpacing();
+    return QFontMetricsF(QApplication::font()).lineSpacing();
 }
 
 QString KoDialog::makeStandardCaption(const QString &userCaption,

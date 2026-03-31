@@ -239,24 +239,6 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
     }
 }
 
-void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColorSpace * dstCs)
-{
-    QString profile1("no profile");
-    QString profile2("no profile");
-    if (srcCs->profile())
-        profile1 = srcCs->profile()->name();
-    if (dstCs->profile())
-        profile2 = dstCs->profile()->name();
-
-    QWARN(QString("Failed %1 %2 -> %3 %4 %5")
-          .arg(srcCs->name())
-          .arg(profile1)
-          .arg(dstCs->name())
-          .arg(profile2)
-          .arg(reason)
-          .toLatin1());
-}
-
 void KisPaintDeviceTest::testColorSpaceConversion()
 {
     QImage image(QString(FILES_DATA_DIR) + '/' + "tile.png");

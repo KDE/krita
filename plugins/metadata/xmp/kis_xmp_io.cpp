@@ -180,7 +180,13 @@ bool parseTagName(const QString &tagString,
     }
 
     if (numSubNames == 2) {
+        /**
+         * We use Unicode-matching mode, because according to XML specification
+         * the name of an entity can contain Unicode characters.
+         */
         QRegularExpression regexp("([A-Za-z]\\w+)/([A-Za-z]\\w+):([A-Za-z]\\w+)");
+        regexp.setPatternOptions(QRegularExpression::UseUnicodePropertiesOption);
+
         QRegularExpressionMatch match;
         if (tagString.contains(regexp, &match)) {
             structName = match.captured(1);
@@ -195,6 +201,8 @@ bool parseTagName(const QString &tagString,
         }
 
         QRegularExpression regexp2("([A-Za-z]\\w+)\\[(\\d+)\\]/([A-Za-z]\\w+):([A-Za-z]\\w+)");
+        regexp2.setPatternOptions(QRegularExpression::UseUnicodePropertiesOption);
+
         QRegularExpressionMatch match2;
         if (tagString.contains(regexp2, &match2)) {
             structName = match2.captured(1);

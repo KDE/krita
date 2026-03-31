@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-28 02:36+0000\n"
+"POT-Creation-Date: 2026-03-31 02:39+0000\n"
 "PO-Revision-Date: 2026-03-19 11:15+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -5909,7 +5909,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-brush."
 "gih"
 msgid "A - 2 Dirty Brush2"
-msgstr "A - 2 Pinzell brut2"
+msgstr "A – 2 Pinzell brut2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_distant-mountain.gih:1
@@ -5927,7 +5927,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dynamic-"
 "brush.gih"
 msgid "A - 2 Dynamic Brush"
-msgstr "A - 2 pinzell dinàmic"
+msgstr "A – 2 pinzell dinàmic"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dynamic-brush3.gih:1
@@ -5972,7 +5972,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-"
 "dirtybrush-anim.gih"
 msgid "A - 2 Dirty Brush"
-msgstr "A - 2 Pinzell brut"
+msgstr "A – 2 Pinzell brut"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-knife-anim.gih:1
@@ -16312,20 +16312,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espais de treball"
 
-#: krita/main.cc:695
+#: krita/main.cc:703
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 The Krita Developers"
 
-#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:800 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Avís"
 
-#: krita/main.cc:793
+#: krita/main.cc:801
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -18456,7 +18456,7 @@ msgstr "Components tangut"
 #, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr "Escriptura kitan xicoteta"
+msgstr "Estil cal·ligràfic kitan xicotet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
 #, kde-format
@@ -19310,7 +19310,9 @@ msgstr "Grec matemàtic"
 msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
-msgstr "Substituïx l'alfabet grec normal per glifs destinats a l'ús matemàtic."
+msgstr ""
+"Substituïx l'estil cal·ligràfic grec normal per glifs destinats a l'ús "
+"matemàtic."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
 #, kde-format
@@ -19403,7 +19405,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr "Estil alternatiu d'alfabet matemàtic"
+msgstr "Estil alternatiu d'estil cal·ligràfic matemàtic"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
@@ -19590,7 +19592,7 @@ msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
 msgstr ""
 "Controla la substitució per les formes de dalt la base en khmer i altres "
-"alfabets índics"
+"estils cal·ligràfics índics"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, kde-format
@@ -19604,7 +19606,8 @@ msgstr "Posicionament de marques sobre la base"
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
 msgstr ""
-"Controla el posicionament de les marques sobre la base als alfabets índics."
+"Controla el posicionament de les marques sobre la base als estils "
+"cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
 #, kde-format
@@ -19618,8 +19621,8 @@ msgstr "Substitucions per damunt de la base"
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
 msgstr ""
-"Controla les lligadures de les marques per damunt de la base per als "
-"alfabets índics."
+"Controla les lligadures de les marques per damunt de la base per als estils "
+"cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
 #, kde-format
@@ -19632,7 +19635,7 @@ msgstr "Akhand"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr "Controla les lligadures Akhand per a alfabets índics."
+msgstr "Controla les lligadures Akhand per a estils cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
@@ -19646,8 +19649,8 @@ msgstr "Formes per davall de la base"
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr ""
-"Controla la substitució de les formes per davall de la base en alfabets "
-"índics."
+"Controla la substitució de les formes per davall de la base en estils "
+"cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
@@ -19661,8 +19664,8 @@ msgstr "Posicionament de marques davall de la base"
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
 msgstr ""
-"Controla el posicionament davall la base de les marques per als alfabets "
-"índics."
+"Controla el posicionament davall la base de les marques per als estils "
+"cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
 #, kde-format
@@ -19676,7 +19679,8 @@ msgstr "Substitucions davall de la base"
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
 msgstr ""
-"Controla les lligadures marcades davall de la base per als alfabets índics."
+"Controla les lligadures marcades davall de la base per als estils "
+"cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
 #, kde-format
@@ -19689,7 +19693,8 @@ msgstr "Forma conjunta després de Ro"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr "Controla els glifs seguint la Ro conjunta en l'alfabet khmer."
+msgstr ""
+"Controla els glifs seguint la Ro conjunta en l'estil cal·ligràfic khmer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
@@ -19702,7 +19707,7 @@ msgstr "Formes conjuntes"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr "Controla les formes conjuntes en alfabets índics."
+msgstr "Controla les formes conjuntes en estils cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
@@ -19715,7 +19720,9 @@ msgstr "Distàncies"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls distances in Indic scripts, to avoid collisions."
-msgstr "Controla les distàncies en alfabets índics, per a evitar col·lisions."
+msgstr ""
+"Controla les distàncies en estils cal·ligràfics índics, per a evitar "
+"col·lisions."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
 #, kde-format
@@ -19729,7 +19736,8 @@ msgstr "Calces formes"
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
 msgstr ""
-"Substituïx les consonants en els alfabets índics per les seues calces formes."
+"Substituïx les consonants en els estils cal·ligràfics índics per les seues "
+"calces formes."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
@@ -19743,8 +19751,8 @@ msgstr "Formes Halant"
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
 msgstr ""
-"Substituïx les consonants en els alfabets índics per les seues formes "
-"«halant»."
+"Substituïx les consonants en els estils cal·ligràfics índics per les seues "
+"formes «halant»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
@@ -19760,8 +19768,8 @@ msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
 msgstr ""
-"Substituïx les consonants combinades amb «nukta» en els alfabets índics per "
-"les seues formes «nukta»."
+"Substituïx les consonants combinades amb «nukta» en els estils cal·ligràfics "
+"índics per les seues formes «nukta»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
 #, kde-format
@@ -19777,8 +19785,8 @@ msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
 "situation occurs."
 msgstr ""
-"Substituïx la forma prebase d'una consonant en alfabet khmer, quan es "
-"produïx una situació «Coeng Ra»."
+"Substituïx la forma prebase d'una consonant en estil cal·ligràfic khmer, "
+"quan es produïx una situació «Coeng Ra»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
 #, kde-format
@@ -19792,8 +19800,8 @@ msgstr "Substitucions prebase"
 msgctxt "@tooltip"
 msgid "Replaces consonants with their pre-base forms in Indic scripts."
 msgstr ""
-"Substituïx les consonants per les seues formes prebase en els alfabets "
-"índics."
+"Substituïx les consonants per les seues formes prebase en els estils "
+"cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
 #, kde-format
@@ -19825,7 +19833,7 @@ msgid ""
 "Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
 msgstr ""
 "Substituïx els glifs base i els glifs postbase per una lligadura en els "
-"alfabets índics."
+"estils cal·ligràfics índics."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
 #, kde-format
@@ -19839,8 +19847,8 @@ msgstr "Formes Rakar"
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
-"Substituïx seqüències de glifs en alfabets índics per les seues formes "
-"«rakar»."
+"Substituïx seqüències de glifs en estils cal·ligràfics índics per les seues "
+"formes «rakar»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
 #, kde-format
@@ -19855,8 +19863,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
 msgstr ""
-"Substituïx les formes de Reph en els alfabets índics per una seqüència de "
-"consonant i «halant»."
+"Substituïx les formes de Reph en els estils cal·ligràfics índics per una "
+"seqüència de consonant i «halant»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
 #, kde-format
@@ -19871,8 +19879,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces ligatures in Indic scripts with a base consonant and Vattu form."
 msgstr ""
-"Substituïx lligadures en alfabets índics per una consonant base i forma "
-"«vattu»."
+"Substituïx lligadures en estils cal·ligràfics índics per una consonant base "
+"i forma «vattu»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:343
@@ -19904,7 +19912,8 @@ msgstr "Puntuació CJK centrada"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
-msgstr "Ajusta la puntuació no centrada a centrar-se en alfabets CJK."
+msgstr ""
+"Ajusta la puntuació no centrada a centrar-se en estils cal·ligràfics CJK."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
 #, kde-format
@@ -20375,8 +20384,8 @@ msgid ""
 "Replaces all horizontal-script glyphs with rotated variants for vertical "
 "layout."
 msgstr ""
-"Substituïx tots els glifs d'alfabet horitzontal per variants girades per a "
-"una disposició vertical."
+"Substituïx tots els glifs d'estil cal·ligràfic horitzontal per variants "
+"girades per a una disposició vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
 #, kde-format
@@ -20404,8 +20413,8 @@ msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
 "end form."
 msgstr ""
-"Substituïx el glif final en una seqüència de glifs en un alfabet unit per la "
-"seua forma final."
+"Substituïx el glif final en una seqüència de glifs en un estil cal·ligràfic "
+"unit per la seua forma final."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
 #, kde-format
@@ -20455,8 +20464,8 @@ msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
 msgstr ""
-"Substituïx el primer glif en una seqüència de glifs en un alfabet unit per "
-"la seua forma inicial."
+"Substituïx el primer glif en una seqüència de glifs en un estil cal·ligràfic "
+"unit per la seua forma inicial."
 
 # skip-rule: kct-script
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
@@ -20466,8 +20475,8 @@ msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
 msgstr ""
-"Substituïx un glif en una seqüència de glifs en un alfabet unit per la seua "
-"forma aïllada."
+"Substituïx un glif en una seqüència de glifs en un estil cal·ligràfic unit "
+"per la seua forma aïllada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, kde-format
@@ -20508,8 +20517,8 @@ msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
 msgstr ""
-"Substituïx els glifs enmig d'una seqüència de glifs en un alfabet unit per "
-"les seues formes al mig."
+"Substituïx els glifs enmig d'una seqüència de glifs en un estil cal·ligràfic "
+"unit per les seues formes al mig."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, kde-format
@@ -23360,7 +23369,7 @@ msgstr "Mòdul"
 #, kde-format
 msgctxt "Blending mode - Modulo - Continuous"
 msgid "Modulo - Continuous"
-msgstr "Mòdul - Continu"
+msgstr "Mòdul – Continu"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:98
 #, kde-format
@@ -23372,7 +23381,7 @@ msgstr "Mòdul divisible"
 #, kde-format
 msgctxt "Blending mode - Divisive Modulo - Continuous"
 msgid "Divisive Modulo - Continuous"
-msgstr "Mòdul divisible - Continu"
+msgstr "Mòdul divisible – Continu"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
@@ -23384,7 +23393,7 @@ msgstr "Desplaçament de mòdul"
 #, kde-format
 msgctxt "Blending mode - Modulo Shift - Continuous"
 msgid "Modulo Shift - Continuous"
-msgstr "Desplaçament de mòdul - Continu"
+msgstr "Desplaçament de mòdul – Continu"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:103
 #, kde-format
@@ -23558,7 +23567,7 @@ msgstr "Interpolació"
 #, kde-format
 msgctxt "Blending mode - Interpolation - 2X"
 msgid "Interpolation - 2X"
-msgstr "Interpolació - 2X"
+msgstr "Interpolació – 2X"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:134
 #, kde-format
@@ -24131,7 +24140,7 @@ msgstr "Nom del fitxer"
 #: libs/resources/KisTagResourceModel.cpp:637
 #, kde-format
 msgid "Tooltip"
-msgstr "Consell"
+msgstr "Consell d'eina"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
@@ -35050,9 +35059,9 @@ msgid ""
 "  - instant preview:\t %4\n"
 msgstr ""
 "Mida de la imatge:\t %1\n"
-"  - Capes:\t\t %2\n"
-"  - Projeccions:\t %3\n"
-"  - Vista prèvia instantània:\t %4\n"
+"  – Capes:\t\t %2\n"
+"  – Projeccions:\t %3\n"
+"  – Vista prèvia instantània:\t %4\n"
 
 #: libs/ui/kis_statusbar.cc:291
 #, kde-format
@@ -35339,7 +35348,7 @@ msgstr ""
 "Si en lloc d'açò voleu afegir la capa de fitxer a un document que ja es "
 "troba en una instància en execució de Krita, marqueu la casella de selecció "
 "«Permet només una única instància de Krita» en la configuració (Configuració "
-"-> General -> Finestra)."
+"→ General → Finestra)."
 
 #: libs/ui/KisApplication.cpp:829
 #, kde-format
@@ -35723,7 +35732,7 @@ msgstr "S'ha produït un error mentre es llegia des del fitxer."
 #: libs/ui/KisImportExportErrorCode.cpp:28
 #, kde-format
 msgid "An error occurred when writing to the file."
-msgstr "S'ha produït un error mentre s'escrivia al fitxer."
+msgstr "S'ha produït un error mentre s'escrivia en el fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:30
 #, kde-format
@@ -35846,7 +35855,7 @@ msgstr "No hi ha prou espai en el disc per a guardar el fitxer."
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
 msgid "Error occurred while writing to the file."
-msgstr "S'ha produït un error mentre s'escrivia al fitxer."
+msgstr "S'ha produït un error mentre s'escrivia en el fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:170
 #, kde-format
@@ -41011,7 +41020,7 @@ msgstr "Quant a KDE"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:39
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
-msgstr "<html><font size=\"5\">KDE - Sigueu lliure</font></html>"
+msgstr "<html><font size=\"5\">KDE – Sigueu lliure</font></html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:53
 #, kde-format
@@ -41049,7 +41058,7 @@ msgid ""
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
 "<html>Els programes sempre es poden millorar, i l'equip de KDE està preparat "
-"per a fer-ho. En canvi, vós - l'usuari - heu de dir-nos quan alguna cosa no "
+"per a fer-ho. En canvi, vós – l'usuari – heu de dir-nos quan alguna cosa no "
 "funciona tal com s'espera o es pot fer millor.<br /><br />KDE té un sistema "
 "de seguiment d'errors. Visiteu <a href=\"%1\">%1</a> o utilitzeu el diàleg "
 "«Informeu d'un error…» des del menú «Ajuda» per a informar dels errors. <br /"
@@ -41163,7 +41172,7 @@ msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
 msgstr ""
-"La versió d'esta aplicació - assegureu-vos que no hi ha disponible cap "
+"La versió d'esta aplicació – assegureu-vos que no hi ha disponible cap "
 "versió més nova abans d'enviar un informe d'error"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:133
@@ -43808,7 +43817,7 @@ msgstr "Isomètric"
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
 #, kde-format
 msgid "Isometric (Legacy - requires OpenGL)"
-msgstr "Isomètric (antic - requerix OpenGL)"
+msgstr "Isomètric (antic – requerix OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -46013,7 +46022,8 @@ msgstr "Alfabètic"
 msgctxt "@info:tooltip"
 msgid "Align to the baseline for scripts that align at the bottom."
 msgstr ""
-"Alinea a la línia base per als alfabets que s'alineen a la part inferior."
+"Alinea a la línia base per als estils cal·ligràfics que s'alineen a la part "
+"inferior."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
@@ -46056,7 +46066,8 @@ msgstr "Suspensió"
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
 msgstr ""
-"Alinea al traç superior com s'utilitza en els alfabets bràmics del nord."
+"Alinea al traç superior com s'utilitza en els estils cal·ligràfics bràmics "
+"del nord."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -46708,7 +46719,7 @@ msgstr "Emmagatzema este idioma entre sessions."
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Script:"
-msgstr "Alfabet:"
+msgstr "Estil cal·ligràfic:"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, kde-format
@@ -46747,8 +46758,8 @@ msgid ""
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
 "Salt de línia permet triar una rigidesa per a l'algorisme de salt de línia. "
-"S'utilitza principalment per a alfabets CJK, requerix que s'establisca un "
-"idioma."
+"S'utilitza principalment per a estils cal·ligràfics CJK, requerix que "
+"s'establisca un idioma."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -49526,28 +49537,28 @@ msgstr "Ombra"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Daylight fluorescent (D5700 - 7100K)"
-msgstr "Fluorescent amb llum del dia (D 5700 - 7100 K)"
+msgstr "Fluorescent amb llum del dia (D 5700 – 7100 K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:650
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Day white fluorescent (N4600 - 5400K)"
-msgstr "Fluorescent de dia blanc (N 4600 - 5400 K)"
+msgstr "Fluorescent de dia blanc (N 4600 – 5400 K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:655
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cool white fluorescent (W3900 - 4500K)"
-msgstr "Fluorescent fred blanc (W 3900 - 4500 K)"
+msgstr "Fluorescent fred blanc (W 3900 – 4500 K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:660
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "White fluorescent (WW 3200 - 3700K)"
-msgstr "Fluorescent blanc (WW 3200 - 3700 K)"
+msgstr "Fluorescent blanc (WW 3200 – 3700 K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:670
@@ -51175,7 +51186,7 @@ msgid ""
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
 "Assegureu-vos que les accions corresponen al gest correcte a nivell del "
-"sistema. Estos es poden configurar a Paràmetres de S-Pen -> Accions aire."
+"sistema. Estos es poden configurar a Paràmetres de S-Pen → Accions aire."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -61118,13 +61129,13 @@ msgstr "Vora suavitzada:"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
-msgstr "Mida -> Difusa (sensor)"
+msgstr "Mida → Difusa (sensor)"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
-msgstr "Mida -> Esvaïx (sensor)"
+msgstr "Mida → Esvaïx (sensor)"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format
@@ -61285,7 +61296,7 @@ msgstr "Intensitat de la claredat"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
-msgstr "Textura -> Patró (vista prèvia de baixa qualitat)"
+msgstr "Textura → Patró (vista prèvia de baixa qualitat)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRepeat)
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39

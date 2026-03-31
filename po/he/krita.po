@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-28 02:36+0000\n"
+"POT-Creation-Date: 2026-03-31 02:39+0000\n"
 "PO-Revision-Date: 2026-03-28 10:22+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -16260,20 +16260,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "&בוחר צבעים"
 
-#: krita/main.cc:695
+#: krita/main.cc:703
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 מפתחי Krita"
 
-#: krita/main.cc:792 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:800 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:828
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita"
 
-#: krita/main.cc:793
+#: krita/main.cc:801
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

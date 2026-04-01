@@ -290,7 +290,7 @@ void KisOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title,
     }
 }
 
-bool KisOpenPane::selectItem(const QString name)
+bool KisOpenPane::selectItem(const QString &name)
 {
     QTreeWidgetItem* item =  d->m_itemMap->value(name, nullptr);
     if (!item) return false;

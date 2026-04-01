@@ -51,7 +51,7 @@ public:
 
     //For some reason this only works with custom widgets, since all templates seem to just be named "Template"
     /// Selects an option out of the dialog based on its untranslated name
-    bool selectItem(const QString name);
+    bool selectItem(const QString &name);
 
 Q_SIGNALS:
     /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'

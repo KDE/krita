@@ -380,7 +380,7 @@ private:
      * stores the initial step of our transform. All cancel and revert
      * operations should revert to it.
      */
-    QScopedPointer<ToolTransformArgs> m_continuedTransformation;
+    std::unique_ptr<ToolTransformArgs> m_continuedTransformation;
 
     //PixelPrecision should always be in powers of 2
     int m_pixelPrecision {8};

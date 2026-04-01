@@ -125,7 +125,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                 dbgFile << "== Enter PSDLayerRecord";
                 PSDHeader sanitizedHeader(m_header);
                 sanitizedHeader.tiffStyleLayerBlock = false; // disable padding
-                QScopedPointer<PSDLayerRecord> layerRecord(new PSDLayerRecord(sanitizedHeader));
+                std::unique_ptr<PSDLayerRecord> layerRecord(new PSDLayerRecord(sanitizedHeader));
                 if (!layerRecord->read(io)) {
                     error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                     return false;
@@ -133,7 +133,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                 dbgFile << "== Leave PSDLayerRecord";
                 dbgFile << "Finished reading layer" << i << layerRecord->layerName << "blending mode" << layerRecord->blendModeKey << io.pos()
                         << "Number of channels:" << layerRecord->channelInfoRecords.size();
-                layers << layerRecord.take();
+                layers << layerRecord.release();
             }
         }
 

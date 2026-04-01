@@ -158,7 +158,7 @@ KoShape* KoCssStylePreset::generateSampleShape() const
     const QString after = d->afterText;
     const QString before = d->beforeText;
 
-    QScopedPointer<KoSvgTextShape> sampleText(new KoSvgTextShape());
+    std::unique_ptr<KoSvgTextShape> sampleText(new KoSvgTextShape());
     sampleText->insertText(0, sample.isEmpty()? name().isEmpty()? SAMPLE_PLACEHOLDER.toString(): name(): sample);
     const QString type = styleType().isEmpty()? STYLE_TYPE_CHARACTER: styleType();
 
@@ -204,11 +204,11 @@ KoShape* KoCssStylePreset::generateSampleShape() const
         sampleText->setShapesInside({inlineShape});
         sampleText->relayout();
 
-        return sampleText.take();
+        return sampleText.release();
     } else {
         /// For character the sample always needs to be set to be a child to
         /// ensure that the character property doesn't include the default props.
-        QScopedPointer<KoSvgTextShape> newShape(new KoSvgTextShape());
+        std::unique_ptr<KoSvgTextShape> newShape(new KoSvgTextShape());
         KoSvgTextProperties paraProps = KoSvgTextProperties::defaultProperties();
         // Set whitespace rule to pre-wrap.
         paraProps.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
@@ -221,8 +221,8 @@ KoShape* KoCssStylePreset::generateSampleShape() const
             newShape->insertText(0, before);
         }
 
-        newShape->insertRichText(newShape->posForIndex(before.size()), sampleText.data());
-        return newShape.take();
+        newShape->insertRichText(newShape->posForIndex(before.size()), sampleText.get());
+        return newShape.release();
     }
 
     return nullptr;
@@ -472,7 +472,7 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
 bool KoCssStylePreset::saveToDevice(QIODevice *dev) const
 {
-    QScopedPointer<KoShape> shape(generateSampleShape());
+    std::unique_ptr<KoShape> shape(generateSampleShape());
     if (!shape) return false;
 
     QMap<QString, QVariant> m = metadata();
@@ -480,7 +480,7 @@ bool KoCssStylePreset::saveToDevice(QIODevice *dev) const
     shape->setAdditionalAttribute(TITLE, name());
 
     const QRectF boundingRect = shape->boundingRect();
-    SvgWriter writer({shape.take()});
+    SvgWriter writer({shape.release()});
     return writer.save(*dev, boundingRect.size());
 }
 

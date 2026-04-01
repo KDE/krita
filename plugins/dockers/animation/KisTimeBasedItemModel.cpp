@@ -452,7 +452,7 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indicesToRemov
 
 bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 {
-    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18n("Mirror Frames")));
+    std::unique_ptr<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18n("Mirror Frames")));
 
     {
         KisImageBarrierLock locker(m_d->image);
@@ -488,25 +488,25 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 
                         channel->swapKeyframes(srcIt->column(),
                                                dstIt->column(),
-                                               parentCommand.data());
+                                               parentCommand.get());
                     }
                     else if (channel->keyframeAt(srcIt->column())) {
 
                         channel->insertKeyframe(dstIt->column(),
                                                 channel->keyframeAt(srcIt->column()),
-                                                parentCommand.data());
+                                                parentCommand.get());
 
                         channel->removeKeyframe(srcIt->column(),
-                                                parentCommand.data());
+                                                parentCommand.get());
                     }
                     else if (channel->keyframeAt(dstIt->column())) {
 
                         channel->insertKeyframe(srcIt->column(),
                                                 channel->keyframeAt(dstIt->column()),
-                                                parentCommand.data());
+                                                parentCommand.get());
 
                         channel->removeKeyframe(dstIt->column(),
-                                                parentCommand.data());
+                                                parentCommand.get());
                     }
                 }
 
@@ -517,7 +517,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image,
-                                                    parentCommand.take(),
+                                                    parentCommand.release(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
     return true;

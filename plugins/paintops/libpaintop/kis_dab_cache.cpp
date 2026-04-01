@@ -143,9 +143,9 @@ struct TemporaryResourcesWithoutOwning : public KisDabCacheUtils::DabRenderingRe
     ~TemporaryResourcesWithoutOwning() override {
         // we do not own these resources, so just
         // release them before destruction
-        colorSource.take();
-        sharpnessOption.take();
-        textureOption.take();
+        colorSource.release();
+        sharpnessOption.release();
+        textureOption.release();
     }
 };
 

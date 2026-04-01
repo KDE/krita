@@ -108,7 +108,7 @@ public:
     QList<QPointer<KisDocument> > documents;
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    QScopedPointer<KisPlaybackEngine> playbackEngine;
+    std::unique_ptr<KisPlaybackEngine> playbackEngine;
 
     KisSessionResourceSP currentSession;
     bool closingSession{false};
@@ -500,7 +500,7 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
 
 KisPlaybackEngine *KisPart::playbackEngine() const
 {
-    return d->playbackEngine.data();
+    return d->playbackEngine.get();
 }
 
 void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
@@ -697,7 +697,7 @@ void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
 {
     // make sure that the old engine is still alive until the end
     // of the emitted signal
-    QScopedPointer backup(p_playbackEngine);
+    std::unique_ptr<KisPlaybackEngine> backup(p_playbackEngine);
     d->playbackEngine.swap(backup);
 
     // Log all changes to playback engine for easier debugging.

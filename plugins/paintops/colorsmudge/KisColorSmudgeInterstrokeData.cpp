@@ -34,8 +34,8 @@ void KisColorSmudgeInterstrokeData::beginTransaction()
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_parentCommand);
 
     m_parentCommand.reset(new KUndo2Command());
-    m_heightmapDeviceTransaction.reset(new KisTransaction(heightmapDevice, m_parentCommand.data()));
-    overlayDeviceWrapper.beginTransaction(m_parentCommand.data());
+    m_heightmapDeviceTransaction.reset(new KisTransaction(heightmapDevice, m_parentCommand.get()));
+    overlayDeviceWrapper.beginTransaction(m_parentCommand.get());
 }
 
 KUndo2Command *KisColorSmudgeInterstrokeData::endTransaction()
@@ -46,5 +46,5 @@ KUndo2Command *KisColorSmudgeInterstrokeData::endTransaction()
     (void) m_heightmapDeviceTransaction->endAndTake();
     (void) overlayDeviceWrapper.endTransaction();
 
-    return m_parentCommand.take();
+    return m_parentCommand.release();
 }

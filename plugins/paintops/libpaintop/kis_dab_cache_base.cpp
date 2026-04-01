@@ -247,7 +247,7 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
                                             request.shape,
                                             request.info,
                                             di->mirrorProperties,
-                                            resources->sharpnessOption.data());
+                                            resources->sharpnessOption.get());
     di->shape = KisDabShape(request.shape.scale(), request.shape.ratio(), position.realAngle);
     di->dstDabRect = position.rect;
     di->subPixel = position.subPixel;
@@ -255,7 +255,7 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
     const bool supportsCaching = resources->brush->supportsCaching();
 
     const KisUniformColorSource *uniformColorSource =
-        resources->colorSource ? dynamic_cast<const KisUniformColorSource*>(resources->colorSource.data()) : 0;
+        resources->colorSource ? dynamic_cast<const KisUniformColorSource*>(resources->colorSource.get()) : 0;
 
     di->solidColorFill = !resources->colorSource || uniformColorSource;
     di->paintColor = uniformColorSource ?
@@ -283,6 +283,6 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
         m_d->lastSavedDabParameters = newParams;
     }
 
-    di->needsPostprocessing = needSeparateOriginal(resources->textureOption.data(), resources->sharpnessOption.data());
+    di->needsPostprocessing = needSeparateOriginal(resources->textureOption.get(), resources->sharpnessOption.get());
 }
 

@@ -2932,31 +2932,31 @@ void TestSvgParser::testKoClipPathRendering()
     clipPath2.lineTo(15,30);
     clipPath2.lineTo(0,7);
 
-    QScopedPointer<KoPathShape> shape1(KoPathShape::createShapeFromPainterPath(path1));
+    std::unique_ptr<KoPathShape> shape1(KoPathShape::createShapeFromPainterPath(path1));
     shape1->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::blue)));
 
-    QScopedPointer<KoPathShape> shape2(KoPathShape::createShapeFromPainterPath(path2));
+    std::unique_ptr<KoPathShape> shape2(KoPathShape::createShapeFromPainterPath(path2));
     shape2->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::red)));
 
-    QScopedPointer<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
-    KoClipPath *koClipPath1 = new KoClipPath({clipShape1.take()}, KoFlake::UserSpaceOnUse);
+    std::unique_ptr<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
+    KoClipPath *koClipPath1 = new KoClipPath({clipShape1.release()}, KoFlake::UserSpaceOnUse);
     koClipPath1->setClipRule(Qt::WindingFill);
     shape1->setClipPath(koClipPath1);
 
-    QScopedPointer<KoShapeGroup> group(new KoShapeGroup());
+    std::unique_ptr<KoShapeGroup> group(new KoShapeGroup());
     {
-        QList<KoShape*> shapes({shape1.take(), shape2.take()});
+        QList<KoShape*> shapes({shape1.release(), shape2.release()});
 
-        KoShapeGroupCommand cmd(group.data(), shapes, false);
+        KoShapeGroupCommand cmd(group.get(), shapes, false);
         cmd.redo();
     }
 
-    QScopedPointer<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
-    KoClipPath *koClipPath2 = new KoClipPath({clipShape2.take()}, KoFlake::UserSpaceOnUse);
+    std::unique_ptr<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
+    KoClipPath *koClipPath2 = new KoClipPath({clipShape2.release()}, KoFlake::UserSpaceOnUse);
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
-    SvgRenderTester::testRender(group.take(), "load", "clip_render_test", QSize(30,30), 72.0);
+    SvgRenderTester::testRender(group.release(), "load", "clip_render_test", QSize(30,30), 72.0);
 }
 
 void TestSvgParser::testKoClipPathRelativeRendering()
@@ -2976,31 +2976,31 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     clipPath2.lineTo(0.5,1);
     clipPath2.lineTo(0,0);
 
-    QScopedPointer<KoPathShape> shape1(KoPathShape::createShapeFromPainterPath(path1));
+    std::unique_ptr<KoPathShape> shape1(KoPathShape::createShapeFromPainterPath(path1));
     shape1->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::blue)));
 
-    QScopedPointer<KoPathShape> shape2(KoPathShape::createShapeFromPainterPath(path2));
+    std::unique_ptr<KoPathShape> shape2(KoPathShape::createShapeFromPainterPath(path2));
     shape2->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::red)));
 
-    QScopedPointer<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
-    KoClipPath *koClipPath1 = new KoClipPath({clipShape1.take()}, KoFlake::UserSpaceOnUse);
+    std::unique_ptr<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
+    KoClipPath *koClipPath1 = new KoClipPath({clipShape1.release()}, KoFlake::UserSpaceOnUse);
     koClipPath1->setClipRule(Qt::WindingFill);
     shape1->setClipPath(koClipPath1);
 
-    QScopedPointer<KoShapeGroup> group(new KoShapeGroup());
+    std::unique_ptr<KoShapeGroup> group(new KoShapeGroup());
     {
-        QList<KoShape*> shapes({shape1.take(), shape2.take()});
+        QList<KoShape*> shapes({shape1.release(), shape2.release()});
 
-        KoShapeGroupCommand cmd(group.data(), shapes, false);
+        KoShapeGroupCommand cmd(group.get(), shapes, false);
         cmd.redo();
     }
 
-    QScopedPointer<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
-    KoClipPath *koClipPath2 = new KoClipPath({clipShape2.take()}, KoFlake::ObjectBoundingBox);
+    std::unique_ptr<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
+    KoClipPath *koClipPath2 = new KoClipPath({clipShape2.release()}, KoFlake::ObjectBoundingBox);
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
-    SvgRenderTester::testRender(group.take(), "load", "relative_clip_render_test", QSize(30,30), 72.0);
+    SvgRenderTester::testRender(group.release(), "load", "relative_clip_render_test", QSize(30,30), 72.0);
 }
 
 void TestSvgParser::testRenderClipPath_User()

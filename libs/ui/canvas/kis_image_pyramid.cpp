@@ -217,10 +217,10 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
     quint32 numPixels = rect.width() * rect.height();
 
-    QScopedArrayPointer<quint8> originalBytes(
+    std::unique_ptr<quint8[]> originalBytes(
         new quint8[originalProjection->colorSpace()->pixelSize() * numPixels]);
 
-    originalProjection->readBytes(originalBytes.data(), rect);
+    originalProjection->readBytes(originalBytes.get(), rect);
 
     if (m_displayFilter &&
         m_useOcio &&
@@ -244,17 +244,17 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
                 destinationProfile);
 
         if (projectionCs->colorDepthId() == Float32BitsColorDepthID) {
-            m_displayFilter->filter(originalBytes.data(), numPixels);
+            m_displayFilter->filter(originalBytes.get(), numPixels);
         } else {
-            QScopedArrayPointer<quint8> dst(new quint8[floatCs->pixelSize() * numPixels]);
-            projectionCs->convertPixelsTo(originalBytes.data(), dst.data(), floatCs, numPixels, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-            m_displayFilter->filter(dst.data(), numPixels);
+            std::unique_ptr<quint8[]> dst(new quint8[floatCs->pixelSize() * numPixels]);
+            projectionCs->convertPixelsTo(originalBytes.get(), dst.get(), floatCs, numPixels, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+            m_displayFilter->filter(dst.get(), numPixels);
             originalBytes.swap(dst);
         }
 
         {
-            QScopedArrayPointer<quint8> dst(new quint8[modifiedMonitorCs->pixelSize() * numPixels]);
-            floatCs->convertPixelsTo(originalBytes.data(), dst.data(), modifiedMonitorCs, numPixels, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+            std::unique_ptr<quint8[]> dst(new quint8[modifiedMonitorCs->pixelSize() * numPixels]);
+            floatCs->convertPixelsTo(originalBytes.get(), dst.get(), modifiedMonitorCs, numPixels, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
             originalBytes.swap(dst);
         }
 #endif
@@ -264,25 +264,25 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             setChannelFlags(QBitArray());
         }
         if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
-            QScopedArrayPointer<quint8> dst(new quint8[projectionCs->pixelSize() * numPixels]);
+            std::unique_ptr<quint8[]> dst(new quint8[projectionCs->pixelSize() * numPixels]);
 
             KisConfig cfg(true);
 
             if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
-                projectionCs->convertChannelToVisualRepresentation(originalBytes.data(), dst.data(), numPixels, m_selectedChannelIndex);
+                projectionCs->convertChannelToVisualRepresentation(originalBytes.get(), dst.get(), numPixels, m_selectedChannelIndex);
             }
             else {
-                projectionCs->convertChannelToVisualRepresentation(originalBytes.data(), dst.data(), numPixels, m_channelFlags);
+                projectionCs->convertChannelToVisualRepresentation(originalBytes.get(), dst.get(), numPixels, m_channelFlags);
             }
             originalBytes.swap(dst);
         }
 
-        QScopedArrayPointer<quint8> dst(new quint8[m_monitorColorSpace->pixelSize() * numPixels]);
-        projectionCs->convertPixelsTo(originalBytes.data(), dst.data(), m_monitorColorSpace, numPixels, m_renderingIntent, m_conversionFlags);
+        std::unique_ptr<quint8[]> dst(new quint8[m_monitorColorSpace->pixelSize() * numPixels]);
+        projectionCs->convertPixelsTo(originalBytes.get(), dst.get(), m_monitorColorSpace, numPixels, m_renderingIntent, m_conversionFlags);
         originalBytes.swap(dst);
     }
 
-    m_pyramid[ORIGINAL_INDEX]->writeBytes(originalBytes.data(), rect);
+    m_pyramid[ORIGINAL_INDEX]->writeBytes(originalBytes.get(), rect);
 }
 
 void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)

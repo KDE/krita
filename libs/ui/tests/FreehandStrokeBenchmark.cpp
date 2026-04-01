@@ -54,10 +54,10 @@ protected:
 
         KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
-        QScopedPointer<FreehandStrokeStrategy> stroke(
+        std::unique_ptr<FreehandStrokeStrategy> stroke(
             new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("Freehand Stroke")));
 
-        return stroke.take();
+        return stroke.release();
     }
 
     void addPaintingJobs(KisImageWSP image,
@@ -77,10 +77,10 @@ protected:
             pi1 = KisPaintInformation(QPointF(100, y), 0.5);
             pi2 = KisPaintInformation(QPointF(4900, y + 100), 1.0);
 
-            QScopedPointer<KisStrokeJobData> data(
+            std::unique_ptr<KisStrokeJobData> data(
                 new FreehandStrokeStrategy::Data(0, pi1, pi2));
 
-            image->addJob(strokeId(), data.take());
+            image->addJob(strokeId(), data.release());
         }
 
         image->addJob(strokeId(), new KisAsynchronousStrokeUpdateHelper::UpdateData(true));

@@ -52,7 +52,7 @@ void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers mod
 KUndo2Command* KoPathControlPointMoveStrategy::createCommand()
 {
     if (m_intermediateCommand) {
-        return new KisCommandUtils::SkipFirstRedoWrapper(m_intermediateCommand.take());
+        return new KisCommandUtils::SkipFirstRedoWrapper(m_intermediateCommand.release());
     }
     return nullptr;
 }

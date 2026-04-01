@@ -182,7 +182,7 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
         }
 
         if (m_reincarnationCommand) {
-            Private::safeDeleteShapeSelection(m_reincarnationCommand.take(), m_selection ? m_selection.data() : 0);
+            Private::safeDeleteShapeSelection(m_reincarnationCommand.release(), m_selection ? m_selection.data() : 0);
         }
     }
 
@@ -236,7 +236,7 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
 private:
     KisSelectionWSP m_selection;
     KisSelectionComponent *m_shapeSelection = 0;
-    QScopedPointer<KUndo2Command> m_reincarnationCommand;
+    std::unique_ptr<KUndo2Command> m_reincarnationCommand;
     bool m_firstRedo = true;
     bool m_isFlatten = false;
 };

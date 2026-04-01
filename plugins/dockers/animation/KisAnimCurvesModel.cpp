@@ -310,7 +310,7 @@ void KisAnimCurvesModel::endCommand()
 
 bool KisAnimCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int timeOffset, qreal valueOffset)
 {
-    QScopedPointer<KUndo2Command> command(
+    std::unique_ptr<KUndo2Command> command(
         new KUndo2Command(
             kundo2_i18np("Adjust Keyframe",
                          "Adjust %1 Keyframes",
@@ -320,7 +320,7 @@ bool KisAnimCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int tim
         KisImageBarrierLock lock(image());
 
         if (timeOffset != 0) {
-            bool ok = createOffsetFramesCommand(indexes, QPoint(timeOffset, 0), false, false, command.data());
+            bool ok = createOffsetFramesCommand(indexes, QPoint(timeOffset, 0), false, false, command.get());
             if (!ok) return false;
         }
 
@@ -338,10 +338,10 @@ bool KisAnimCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int tim
         };
 
         new KisCommandUtils::LambdaCommand(
-            command.data(),
+            command.get(),
             [frameItems, valueOffset] () -> KUndo2Command* {
 
-                QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+                std::unique_ptr<KUndo2Command> cmd(new KUndo2Command());
 
                 bool result = false;
 
@@ -359,15 +359,15 @@ bool KisAnimCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int tim
 
                     const qreal currentValue = scalarKeyframe->value();
                     //TODO Undo considerations.
-                    scalarKeyframe->setValue(currentValue + valueOffset, cmd.data());
+                    scalarKeyframe->setValue(currentValue + valueOffset, cmd.get());
                     result = true;
                 }
 
-                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : 0;
+                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.release()) : 0;
         });
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(image(), command.take(),
+    KisProcessingApplicator::runSingleCommandStroke(image(), command.release(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
 

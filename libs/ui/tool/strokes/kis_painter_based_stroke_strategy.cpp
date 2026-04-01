@@ -293,24 +293,24 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             }
         }
 
-        QScopedPointer<KisInterstrokeDataFactory> interstrokeDataFactory(
+        std::unique_ptr<KisInterstrokeDataFactory> interstrokeDataFactory(
             KisPaintOpRegistry::instance()->createInterstrokeDataFactory(m_resources->currentPaintOpPreset()));
 
         KIS_SAFE_ASSERT_RECOVER(!interstrokeDataFactory || !hasIndirectPainting) {
             interstrokeDataFactory.reset();
         }
 
-        QScopedPointer<KisInterstrokeDataTransactionWrapperFactory> wrapper;
+        std::unique_ptr<KisInterstrokeDataTransactionWrapperFactory> wrapper;
 
         if (interstrokeDataFactory) {
             wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
-                              interstrokeDataFactory.take(),
+                              interstrokeDataFactory.release(),
                               supportsContinuedInterstrokeData()));
         }
 
         m_transaction.reset(new KisTransaction(KUndo2MagicString(), targetDevice, nullptr,
                                                -1,
-                                               wrapper.take()));
+                                               wrapper.release()));
 
         // WARNING: masked brush cannot work without indirect painting mode!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
@@ -416,7 +416,7 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 
     if (m_autokeyCommand) {
         KisCommandUtils::CompositeCommand *wrapper = new KisCommandUtils::CompositeCommand(parentCommand.data());
-        wrapper->addCommand(m_autokeyCommand.take());
+        wrapper->addCommand(m_autokeyCommand.release());
     }
 
     if (indirect && indirect->hasTemporaryTarget()) {

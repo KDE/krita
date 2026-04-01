@@ -221,7 +221,7 @@ namespace KisCommandUtils
         return newCompositeParent;
     }
 
-    void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, QScopedPointer<KUndo2Command> &accumulatingCommand)
+    void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, std::unique_ptr<KUndo2Command> &accumulatingCommand)
     {
         cmd->redo();
         if (accumulatingCommand) {

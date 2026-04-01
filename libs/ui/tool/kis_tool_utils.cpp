@@ -228,7 +228,7 @@ namespace KisToolUtils {
                             [node, selection] () {
                                 KisPaintDeviceSP device = node->paintDevice();
 
-                                QScopedPointer<KisCommandUtils::CompositeCommand> parentCommand(
+                                std::unique_ptr<KisCommandUtils::CompositeCommand> parentCommand(
                                     new KisCommandUtils::CompositeCommand());
 
                                 KUndo2Command *autoKeyframeCommand = KisAutoKey::tryAutoCreateDuplicatedFrame(device);
@@ -250,7 +250,7 @@ namespace KisToolUtils {
                                 device->setDirty(dirtyRect);
                                 parentCommand->addCommand(transaction.endAndTake());
 
-                                return parentCommand.take();
+                                return parentCommand.release();
                             });
                     applicator.applyCommand(cmd, KisStrokeJobData::CONCURRENT);
                 }

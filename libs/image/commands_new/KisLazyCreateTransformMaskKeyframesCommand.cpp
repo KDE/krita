@@ -36,7 +36,7 @@ bool KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(KisTransformMa
 
 void KisLazyCreateTransformMaskKeyframesCommand::populateChildCommands()
 {
-    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command);
+    std::unique_ptr<KUndo2Command> parentCommand(new KUndo2Command);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_mask->parent());
 
@@ -52,18 +52,18 @@ void KisLazyCreateTransformMaskKeyframesCommand::populateChildCommands()
         }
     };
 
-    addKeyframe(KisKeyframeChannel::PositionX, parentCommand.data());
-    addKeyframe(KisKeyframeChannel::PositionY, parentCommand.data());
+    addKeyframe(KisKeyframeChannel::PositionX, parentCommand.get());
+    addKeyframe(KisKeyframeChannel::PositionY, parentCommand.get());
 
-    addKeyframe(KisKeyframeChannel::ScaleX, parentCommand.data());
-    addKeyframe(KisKeyframeChannel::ScaleY, parentCommand.data());
+    addKeyframe(KisKeyframeChannel::ScaleX, parentCommand.get());
+    addKeyframe(KisKeyframeChannel::ScaleY, parentCommand.get());
 
-    addKeyframe(KisKeyframeChannel::ShearX, parentCommand.data());
-    addKeyframe(KisKeyframeChannel::ShearY, parentCommand.data());
+    addKeyframe(KisKeyframeChannel::ShearX, parentCommand.get());
+    addKeyframe(KisKeyframeChannel::ShearY, parentCommand.get());
 
-    addKeyframe(KisKeyframeChannel::RotationX, parentCommand.data());
-    addKeyframe(KisKeyframeChannel::RotationY, parentCommand.data());
-    addKeyframe(KisKeyframeChannel::RotationZ, parentCommand.data());
+    addKeyframe(KisKeyframeChannel::RotationX, parentCommand.get());
+    addKeyframe(KisKeyframeChannel::RotationY, parentCommand.get());
+    addKeyframe(KisKeyframeChannel::RotationZ, parentCommand.get());
 
-    addCommand(parentCommand.take());
+    addCommand(parentCommand.release());
 }

@@ -29,5 +29,5 @@ void KisDabRenderingQueueCache::getDabType(bool hasDabInCache, KisDabCacheUtils:
 
 bool KisDabRenderingQueueCache::hasSeparateOriginal(KisDabCacheUtils::DabRenderingResources *resources) const
 {
-    return needSeparateOriginal(resources->textureOption.data(), resources->sharpnessOption.data());
+    return needSeparateOriginal(resources->textureOption.get(), resources->sharpnessOption.get());
 }

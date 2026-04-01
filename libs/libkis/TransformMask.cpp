@@ -101,15 +101,15 @@ bool TransformMask::fromXML (const QString &xml)
         return false;
     }
 
-    QScopedPointer<KUndo2Command> cmd(new KUndo2Command);
+    std::unique_ptr<KUndo2Command> cmd(new KUndo2Command);
 
     if (KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(mask)) {
-        new KisLazyCreateTransformMaskKeyframesCommand(mask, cmd.data());
+        new KisLazyCreateTransformMaskKeyframesCommand(mask, cmd.get());
     }
 
-    new KisSimpleModifyTransformMaskCommand(mask, params, {}, cmd.data());
+    new KisSimpleModifyTransformMaskCommand(mask, params, {}, cmd.get());
 
-    KisProcessingApplicator::runSingleCommandStroke(this->node()->image(), cmd.take());
+    KisProcessingApplicator::runSingleCommandStroke(this->node()->image(), cmd.release());
 
     return true;
 }

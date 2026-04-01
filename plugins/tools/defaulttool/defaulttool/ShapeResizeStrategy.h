@@ -54,7 +54,7 @@ private:
 
     QPointF m_globalStillPoint;
     QPointF m_globalCenterPoint;
-    QScopedPointer<KoShapeResizeCommand> m_executedCommand;
+    std::unique_ptr<KoShapeResizeCommand> m_executedCommand;
 
     bool m_forceUniformScalingMode {false};
 };

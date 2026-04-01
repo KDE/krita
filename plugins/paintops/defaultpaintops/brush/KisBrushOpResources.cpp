@@ -73,7 +73,7 @@ KisBrushOpResources::~KisBrushOpResources()
 void KisBrushOpResources::syncResourcesToSeqNo(int seqNo, const KisPaintInformation &info)
 {
     colorSource->selectColor(m_d->mixOption.apply(info), info);
-    m_d->darkenOption.apply(colorSource.data(), info);
+    m_d->darkenOption.apply(colorSource.get(), info);
 
     if (m_d->hsvTransformation) {
         Q_FOREACH (KisHSVOption * option, m_d->hsvOptions) {

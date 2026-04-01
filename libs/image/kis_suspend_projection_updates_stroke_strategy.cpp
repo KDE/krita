@@ -210,7 +210,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             m_command->redo();
         }
 
-        QScopedPointer<StrokeJobCommand> m_command;
+        std::unique_ptr<StrokeJobCommand> m_command;
     };
 
     // Suspend job should be a barrier to ensure all
@@ -516,7 +516,7 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
         runnable->run();
 
         if (Private::UndoableData *undoable = dynamic_cast<Private::UndoableData*>(data)) {
-            Private::StrokeJobCommand *command =  undoable->m_command.take();
+            Private::StrokeJobCommand *command =  undoable->m_command.release();
             m_d->executedCommands.append(command);
         }
     }

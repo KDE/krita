@@ -203,13 +203,13 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
         quint16 srcData[4];
         quint16 tmpData[4];
-        QScopedArrayPointer<qreal> matrix(new qreal[ 3 * healSW * healSH ]);
+        std::unique_ptr<qreal[]> matrix(new qreal[ 3 * healSW * healSH ]);
         // First divide
         const KoColorSpace* srcCs = realSourceDevice->colorSpace();
         const KoColorSpace* tmpCs = m_srcdev->colorSpace();
         KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(healRect.x(), healRect.y() , healSW);
         KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, healSW);
-        qreal* matrixIt = matrix.data();
+        qreal* matrixIt = matrix.get();
         for (int j = 0; j < healSH; j++) {
             for (int i = 0; i < healSW; i++) {
                 srcCs->toLabA16(srcIt->oldRawData(), (quint8*)srcData, 1);
@@ -229,10 +229,10 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         {
             int iter = 0;
             qreal err;
-            QScopedArrayPointer<qreal> solution(new qreal[ 3 * healSW * healSH ]);
+            std::unique_ptr<qreal[]> solution(new qreal[ 3 * healSW * healSH ]);
 
             do {
-                err = DuplicateOpUtils::minimizeEnergy(matrix.data(), solution.data(), healSW, healSH);
+                err = DuplicateOpUtils::minimizeEnergy(matrix.get(), solution.get(), healSW, healSH);
 
                 solution.swap(matrix);
 

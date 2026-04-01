@@ -107,7 +107,7 @@ struct MoveTransformMaskStrategy : public MoveNodeStrategyBase
     }
 
     QRect moveNode(const QPoint &offset) override {
-        QScopedPointer<KUndo2Command> cmd;
+        std::unique_ptr<KUndo2Command> cmd;
         QRect dirtyRect = m_node->projectionPlane()->tightUserVisibleBounds();
 
         KisTransformMask *mask = dynamic_cast<KisTransformMask*>(m_node.data());
@@ -137,7 +137,7 @@ struct MoveTransformMaskStrategy : public MoveNodeStrategyBase
 
     void finishMove(KUndo2Command *parentCommand) override {
         KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand(parentCommand);
-        cmd->addCommand(m_undoCommand.take());
+        cmd->addCommand(m_undoCommand.release());
     }
 
     QRect cancelMove() override {
@@ -146,7 +146,7 @@ struct MoveTransformMaskStrategy : public MoveNodeStrategyBase
 
 private:
     QPoint m_currentOffset;
-    QScopedPointer<KUndo2Command> m_undoCommand;
+    std::unique_ptr<KUndo2Command> m_undoCommand;
 };
 
 struct MovePaintableNodeStrategy : public MoveNodeStrategyBase

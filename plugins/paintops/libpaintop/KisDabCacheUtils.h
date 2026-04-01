@@ -39,10 +39,10 @@ struct PAINTOP_EXPORT DabRenderingResources
     virtual void syncResourcesToSeqNo(int seqNo, const KisPaintInformation &info);
 
     KisBrushSP brush;
-    QScopedPointer<KisColorSource> colorSource;
+    std::unique_ptr<KisColorSource> colorSource;
 
-    QScopedPointer<KisSharpnessOption> sharpnessOption;
-    QScopedPointer<KisTextureOption> textureOption;
+    std::unique_ptr<KisSharpnessOption> sharpnessOption;
+    std::unique_ptr<KisTextureOption> textureOption;
 
     KisPaintDeviceSP colorSourceDevice;
 

@@ -930,7 +930,7 @@ void KisImage::purgeUnusedData(bool isCancellable)
 
                 // all transactions will be linked to the final command via the
                 // parent-child relationship
-                m_transactions.emplace_back(dev, m_finalCommand.data(), -1, nullptr, KisTransaction::None);
+                m_transactions.emplace_back(dev, m_finalCommand.get(), -1, nullptr, KisTransaction::None);
             }
 
             // now, when the transactions are started, we can merge the two lists
@@ -949,20 +949,20 @@ void KisImage::purgeUnusedData(bool isCancellable)
 
         void finishStrokeCallback() override {
             for (auto it = m_transactions.begin(); it != m_transactions.end(); ++it) {
-                QScopedPointer<KUndo2Command> cmd(it->endAndTake());
+                std::unique_ptr<KUndo2Command> cmd(it->endAndTake());
 
                 // verify the transaction command is linked to m_finalCommand,
                 // if not, just delete on return
                 KIS_SAFE_ASSERT_RECOVER(cmd->hasParent()) { continue; }
 
                 // if has a parent, release...
-                (void)cmd.take();
+                (void)cmd.release();
             }
 
             m_transactions.clear();
 
             m_finalCommand->redo();
-            m_image->postExecutionUndoAdapter()->addCommand(toQShared(m_finalCommand.take()));
+            m_image->postExecutionUndoAdapter()->addCommand(toQShared(m_finalCommand.release()));
 
             // now reset the thumbnail generation limitation
             KisLayerUtils::recursiveApplyNodes(m_image->root(),
@@ -975,7 +975,7 @@ void KisImage::purgeUnusedData(bool isCancellable)
 
     private:
         KisImageSP m_image;
-        QScopedPointer<KUndo2Command> m_finalCommand;
+        std::unique_ptr<KUndo2Command> m_finalCommand;
         std::vector<KisTransaction> m_transactions;
     };
 

@@ -740,7 +740,7 @@ bool SvgParser::parseMarker(const QDomElement &e)
     const QString id = e.attribute("id");
     if (id.isEmpty()) return false;
 
-    QScopedPointer<KoMarker> marker(new KoMarker());
+    std::unique_ptr<KoMarker> marker(new KoMarker());
     marker->setCoordinateSystem(
         KoMarker::coordinateSystemFromString(e.attribute("markerUnits", "strokeWidth")));
 
@@ -771,7 +771,7 @@ bool SvgParser::parseMarker(const QDomElement &e)
 
     marker->setShapes({markerShape});
 
-    m_markers.insert(id, QExplicitlySharedDataPointer<KoMarker>(marker.take()));
+    m_markers.insert(id, QExplicitlySharedDataPointer<KoMarker>(marker.release()));
 
     return true;
 }
@@ -782,7 +782,7 @@ bool SvgParser::parseSymbol(const QDomElement &e)
 
     if (id.isEmpty()) return false;
 
-    QScopedPointer<KoSvgSymbol> svgSymbol(new KoSvgSymbol());
+    std::unique_ptr<KoSvgSymbol> svgSymbol(new KoSvgSymbol());
 
     // ensure that the clip path is loaded in local coordinates system
     m_context.pushGraphicsContext(e, false);
@@ -791,13 +791,13 @@ bool SvgParser::parseSymbol(const QDomElement &e)
 
     QString title = e.firstChildElement("title").toElement().text();
 
-    QScopedPointer<KoShape> symbolShape(parseGroup(e));
+    std::unique_ptr<KoShape> symbolShape(parseGroup(e));
 
     m_context.popGraphicsContext();
 
     if (!symbolShape) return false;
 
-    svgSymbol->shape = symbolShape.take();
+    svgSymbol->shape = symbolShape.release();
     svgSymbol->title = title;
     svgSymbol->id = id;
     if (title.isEmpty()) svgSymbol->title = id;
@@ -814,7 +814,7 @@ bool SvgParser::parseSymbol(const QDomElement &e)
         m_symbols.remove(id);
     }
 
-    m_symbols.insert(id, svgSymbol.take());
+    m_symbols.insert(id, svgSymbol.release());
 
     return true;
 }

@@ -150,7 +150,7 @@ void KoJsonTrader::initializePluginLoaderCache()
 #endif
 
             dbgPlugins << dirIter.fileName();
-            QScopedPointer<QPluginLoader> loader(new QPluginLoader(dirIter.filePath()));
+            std::unique_ptr<QPluginLoader> loader(new QPluginLoader(dirIter.filePath()));
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
             dbgPlugins << json << json.value("X-KDE-ServiceTypes");
@@ -173,7 +173,7 @@ void KoJsonTrader::initializePluginLoaderCache()
                 cacheEntry.filePath = dirIter.filePath();
                 cacheEntry.serviceTypes = serviceTypes;
                 cacheEntry.mimeTypes = mimeTypes;
-                cacheEntry.loader = toQShared(loader.take());
+                cacheEntry.loader = toQShared(loader.release());
                 m_pluginLoaderCache << cacheEntry;
             }
         }

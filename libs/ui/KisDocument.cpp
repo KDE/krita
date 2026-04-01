@@ -403,7 +403,7 @@ public:
 
     bool imageModifiedWithoutUndo = false;
     bool modifiedWhileSaving = false;
-    QScopedPointer<KisDocument> backgroundSaveDocument;
+    std::unique_ptr<KisDocument> backgroundSaveDocument;
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
@@ -1375,7 +1375,7 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
 {
     KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), KritaUtils::BackgroudSavingStartResult::Failure);
 
-    QScopedPointer<KisDocument> clonedDocument;
+    std::unique_ptr<KisDocument> clonedDocument;
 
     if (!optionalClonedDocument) {
         clonedDocument.reset(lockAndCloneForSaving());
@@ -1444,7 +1444,7 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
      */
     savingMutexLock.release();
 
-    d->backgroundSaveDocument.reset(clonedDocument.take());
+    d->backgroundSaveDocument.reset(clonedDocument.release());
     d->backgroundSaveJob = job;
     d->modifiedWhileSaving = false;
 
@@ -1452,7 +1452,7 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
         d->backgroundSaveDocument->d->isAutosaving = true;
     }
 
-    connect(d->backgroundSaveDocument.data(),
+    connect(d->backgroundSaveDocument.get(),
             SIGNAL(sigBackgroundSavingFinished(KisImportExportErrorCode, QString, QString)),
             this,
             SLOT(slotChildCompletedSavingInBackground(KisImportExportErrorCode, QString, QString)));
@@ -1475,7 +1475,7 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
     if (!error.isOk()) {
         // the state should have been deinitialized in slotChildCompletedSavingInBackground()
         KIS_SAFE_ASSERT_RECOVER (!d->backgroundSaveDocument && !d->backgroundSaveJob.isValid()) {
-            d->backgroundSaveDocument.take()->deleteLater();
+            d->backgroundSaveDocument.release()->deleteLater();
             d->savingMutex.unlock();
             d->backgroundSaveJob = KritaUtils::ExportFileJob();
         }
@@ -1506,7 +1506,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
         d->backgroundSaveDocument->d->isAutosaving = false;
     }
 
-    d->backgroundSaveDocument.take()->deleteLater();
+    d->backgroundSaveDocument.release()->deleteLater();
 
     KIS_ASSERT_RECOVER_RETURN(d->backgroundSaveJob.isValid());
 

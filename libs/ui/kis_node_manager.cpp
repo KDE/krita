@@ -760,13 +760,13 @@ void KisNodeManager::createReferenceImage(bool fromLayer) {
                                                   : canvas->currentImage()->projection();
     const QImage image = paintDevice->convertToQImage(0, KoColorConversionTransformation::internalRenderingIntent(),
         KoColorConversionTransformation::internalConversionFlags());
-    QScopedPointer<KisReferenceImage> reference(KisReferenceImage::fromQImage(*canvas->coordinatesConverter(), image));
+    std::unique_ptr<KisReferenceImage> reference(KisReferenceImage::fromQImage(*canvas->coordinatesConverter(), image));
     KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
     if (reference) {
         if (document->referenceImagesLayer()) {
             reference->setZIndex(document->referenceImagesLayer()->shapes().size());
         }
-        canvas->addCommand(KisReferenceImagesLayer::addReferenceImages(document, {reference.take()}));
+        canvas->addCommand(KisReferenceImagesLayer::addReferenceImages(document, {reference.release()}));
 
         KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
 

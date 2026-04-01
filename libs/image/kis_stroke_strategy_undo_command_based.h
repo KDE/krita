@@ -149,7 +149,7 @@ private:
     KUndo2CommandSP m_finishCommand;
     KisStrokeUndoFacade *m_undoFacade {nullptr};
 
-    QScopedPointer<KUndo2CommandExtraData> m_commandExtraData;
+    std::unique_ptr<KUndo2CommandExtraData> m_commandExtraData;
     int m_macroId;
 
     // protects done commands only

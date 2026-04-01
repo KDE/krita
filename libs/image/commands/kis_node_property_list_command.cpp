@@ -231,10 +231,10 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
         (properties.size() != 1 ||
          !KisLayerPropertiesIcons::isStatelessProperty(*properties.begin()));
 
-    QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
+    std::unique_ptr<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 
     if (undo) {
-        image->undoAdapter()->addCommand(cmd.take());
+        image->undoAdapter()->addCommand(cmd.release());
     }
     else {
         /**
@@ -268,7 +268,7 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
             QScopedPointer<KUndo2Command> m_cmd;
         };
 
-        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take()));
+        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.release()));
         image->endStroke(strokeId);
     }
 

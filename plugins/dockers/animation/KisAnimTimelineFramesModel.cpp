@@ -976,7 +976,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
 {
     if (selectedIndexes.isEmpty() || insertCount == 0) return true;
 
-    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", insertCount)));
+    std::unique_ptr<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", insertCount)));
 
     {
         KisImageBarrierLock locker(m_d->image);
@@ -1074,7 +1074,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
                                       QPoint(plannedFrameMove, 0),
                                       false,
                                       true,
-                                      parentCommand.data());
+                                      parentCommand.get());
         }
 
         if (originalActiveKeyframe) {
@@ -1083,11 +1083,11 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
                                         activeNode,
                                         KisKeyframeChannel::Raster,
                                         originalActiveKeyframe,
-                                        parentCommand.data());
+                                        parentCommand.get());
         }
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.get(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
     return true;

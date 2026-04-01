@@ -835,7 +835,7 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
     // the max allowed distance from a segment
     const QRectF grabRoi = handleGrabRect(point);
-    QScopedPointer<PathSegment> segment(new PathSegment);
+    std::unique_ptr<PathSegment> segment(new PathSegment);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -854,7 +854,7 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
         segment.reset();
     }
 
-    return segment.take();
+    return segment.release();
 }
 
 void KoPathTool::activate(const QSet<KoShape*> &shapes)

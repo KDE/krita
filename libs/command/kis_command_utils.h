@@ -175,7 +175,7 @@ namespace KisCommandUtils
      * sets the accumulating command to that command
      */
     KRITACOMMAND_EXPORT
-    void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, QScopedPointer<KUndo2Command> &accumulatingCommand);
+    void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, std::unique_ptr<KUndo2Command> &accumulatingCommand);
 }
 
 #endif /* __KIS_COMMAND_UTILS_H */

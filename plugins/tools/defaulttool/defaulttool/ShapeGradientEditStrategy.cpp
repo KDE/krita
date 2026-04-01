@@ -35,7 +35,7 @@ struct ShapeGradientEditStrategy::Private
     QPointF initialOffset;
     KoShapeGradientHandles gradientHandles;
     KoShapeGradientHandles::Handle::Type handleType {KoShapeGradientHandles::Handle::Type::None};
-    QScopedPointer<KUndo2Command> intermediateCommand;
+    std::unique_ptr<KUndo2Command> intermediateCommand;
 };
 
 
@@ -79,7 +79,7 @@ void ShapeGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
 KUndo2Command *ShapeGradientEditStrategy::createCommand()
 {
     return m_d->intermediateCommand ?
-        new KisCommandUtils::SkipFirstRedoWrapper(m_d->intermediateCommand.take()) :
+        new KisCommandUtils::SkipFirstRedoWrapper(m_d->intermediateCommand.release()) :
         nullptr;
 }
 

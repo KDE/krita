@@ -127,7 +127,7 @@ private:
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
 
-    QScopedPointer<KUndo2Command> m_autokeyCommand;
+    std::unique_ptr<KUndo2Command> m_autokeyCommand;
 
     bool m_useMergeID {false};
 

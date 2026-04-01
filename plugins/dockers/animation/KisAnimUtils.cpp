@@ -42,7 +42,7 @@ namespace KisAnimUtils {
             [image, node, channelId, time, copy] () mutable -> KUndo2Command* {
                 bool success = false;
 
-                QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+                std::unique_ptr<KUndo2Command> cmd(new KUndo2Command());
 
                 KisKeyframeChannel *channel = node->getKeyframeChannel(channelId);
                 quint8 originalOpacity = node->opacity();
@@ -62,7 +62,7 @@ namespace KisAnimUtils {
 
                 if ((copy || shouldPreserveCanvas) && channel->activeKeyframeAt(time)) {
                     if (!channel->keyframeAt(time)) {
-                        channel->copyKeyframe(channel->activeKeyframeTime(time), time, cmd.data());
+                        channel->copyKeyframe(channel->activeKeyframeTime(time), time, cmd.get());
                         success = true;
                     }
                 } else {
@@ -76,7 +76,7 @@ namespace KisAnimUtils {
                         if (device) {
                             const QRect dirtyRect = device->extent();
 
-                            KisTransaction transaction(kundo2_i18n("Clear"), device, cmd.data());
+                            KisTransaction transaction(kundo2_i18n("Clear"), device, cmd.get());
                             device->clear();
                             (void) transaction.endAndTake(); // saved as 'parent'
 
@@ -106,9 +106,9 @@ namespace KisAnimUtils {
                         if (isScalar && referenceKey) {
                             KisScalarKeyframeChannel* scalarChannel = static_cast<KisScalarKeyframeChannel*>(channel);
                             const qreal value = scalarChannel->valueAt(time); //Get interpolated value.
-                            scalarChannel->addScalarKeyframe(time, value, cmd.data());
+                            scalarChannel->addScalarKeyframe(time, value, cmd.get());
                         } else {
-                            channel->addKeyframe(time, cmd.data());
+                            channel->addKeyframe(time, cmd.get());
                         }
 
                         // Use color label of previous key, if exists...
@@ -125,7 +125,7 @@ namespace KisAnimUtils {
                 // maybe there is a better way to do this
                 node->setOpacity(originalOpacity);
 
-                return success ? cmd.take() : nullptr;
+                return success ? cmd.release() : nullptr;
         });
 
         return cmd;
@@ -150,7 +150,7 @@ namespace KisAnimUtils {
             [image, frames] () {
                 bool result = false;
 
-                QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+                std::unique_ptr<KUndo2Command> cmd(new KUndo2Command());
 
                 Q_FOREACH (const FrameItem &item, frames) {
                     const int time = item.time;
@@ -164,12 +164,12 @@ namespace KisAnimUtils {
                     KisKeyframeSP keyframe = channel->keyframeAt(time);
                     if (!keyframe) continue;
 
-                    channel->removeKeyframe(time, cmd.data());
+                    channel->removeKeyframe(time, cmd.get());
 
                     result = true;
                 }
 
-                return result ? cmd.take() : 0;
+                return result ? cmd.release() : 0;
         });
 
         KisProcessingApplicator::runSingleCommandStroke(image, cmd,
@@ -329,7 +329,7 @@ namespace KisAnimUtils {
             [srcDstPairs, copy, moveEmptyFrames] () -> KUndo2Command* {
                 bool result = false;
 
-                QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+                std::unique_ptr<KUndo2Command> cmd(new KUndo2Command());
 
                 using MoveChain = QList<FrameItem>;
                 QHash<FrameItem, MoveChain> moveMap;
@@ -373,9 +373,9 @@ namespace KisAnimUtils {
                         FrameItem srcItem = *frameIt++;
 
                         if (!isCycle) {
-                            moveOneFrameItem(srcItem, dstItem, copy, moveEmptyFrames, cmd.data());
+                            moveOneFrameItem(srcItem, dstItem, copy, moveEmptyFrames, cmd.get());
                         } else {
-                            swapOneFrameItem(srcItem, dstItem, cmd.data());
+                            swapOneFrameItem(srcItem, dstItem, cmd.get());
                         }
 
                         dstItem = srcItem;
@@ -383,7 +383,7 @@ namespace KisAnimUtils {
                     }
                 }
 
-                return result ? cmd.take() : nullptr;
+                return result ? cmd.release() : nullptr;
         });
 
         return cmd;
@@ -400,7 +400,7 @@ namespace KisAnimUtils {
                 [srcDstPairs, parentCommand]() -> KUndo2Command*
         {
             Q_UNUSED(parentCommand);
-            QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+            std::unique_ptr<KUndo2Command> cmd(new KUndo2Command());
 
             foreach (const FrameMovePair &move, srcDstPairs) {
                 KisRasterKeyframeChannel *srcRasterChan = dynamic_cast<KisRasterKeyframeChannel*>(move.first.node->getKeyframeChannel(move.first.channel));
@@ -411,13 +411,13 @@ namespace KisAnimUtils {
                 }
 
                 if (srcRasterChan == dstRasterChan) {
-                    srcRasterChan->cloneKeyframe(move.first.time, move.second.time, cmd.data());
+                    srcRasterChan->cloneKeyframe(move.first.time, move.second.time, cmd.get());
                 } else {
-                    KisKeyframeChannel::copyKeyframe(srcRasterChan, move.first.time, dstRasterChan, move.second.time, cmd.data());
+                    KisKeyframeChannel::copyKeyframe(srcRasterChan, move.first.time, dstRasterChan, move.second.time, cmd.get());
                 }
             }
 
-            return cmd.take();
+            return cmd.release();
         });
     }
 
@@ -426,7 +426,7 @@ namespace KisAnimUtils {
         KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
                     kundo2_i18n("Make clones Unique"),
                     [frames]() {
-            QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+            std::unique_ptr<KUndo2Command> cmd(new KUndo2Command());
 
             foreach (const FrameItem &frameItem, frames) {
                 KisRasterKeyframeChannel *rasterChan = dynamic_cast<KisRasterKeyframeChannel*>(frameItem.node->getKeyframeChannel(frameItem.channel));
@@ -434,10 +434,10 @@ namespace KisAnimUtils {
                     continue;
                 }
 
-                rasterChan->makeUnique(frameItem.time, cmd.data());
+                rasterChan->makeUnique(frameItem.time, cmd.get());
             }
 
-            return cmd.take();
+            return cmd.release();
         });
 
         KisProcessingApplicator::runSingleCommandStroke(image, cmd,

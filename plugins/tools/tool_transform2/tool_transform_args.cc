@@ -565,7 +565,7 @@ void ToolTransformArgs::saveContinuedState()
 
 void ToolTransformArgs::restoreContinuedState()
 {
-    QScopedPointer<ToolTransformArgs> tempTransformation(
+    std::unique_ptr<ToolTransformArgs> tempTransformation(
         new ToolTransformArgs(*m_continuedTransformation));
 
     *this = *tempTransformation;
@@ -574,7 +574,7 @@ void ToolTransformArgs::restoreContinuedState()
 
 const ToolTransformArgs* ToolTransformArgs::continuedTransform() const
 {
-    return m_continuedTransformation.data();
+    return m_continuedTransformation.get();
 }
 
 const KisBezierTransformMesh *ToolTransformArgs::meshTransform() const

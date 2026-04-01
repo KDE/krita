@@ -567,7 +567,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 
 
     KoFlake::MarkerPosition position = KoFlake::MarkerPosition(rawPosition);
-    QScopedPointer<KoMarker> marker;
+    std::unique_ptr<KoMarker> marker;
 
     switch (position) {
     case KoFlake::StartMarker:
@@ -587,7 +587,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
         break;
     }
 
-    KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker.take(), position);
+    KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker.release(), position);
     d->canvas->addCommand(command);
 
     Q_EMIT sigStrokeChanged();

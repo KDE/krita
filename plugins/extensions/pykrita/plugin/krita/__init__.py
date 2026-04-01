@@ -24,9 +24,13 @@ import builtins
 # Disallow importing a conflicting version of PyQt,
 # which would load a conflicting version of Qt and crash Krita when used.
 pyqt_wrong = "PyQt" + ("6" if pykrita.qt_major_version() == 5 else "5")
+pyqt_wrong_casefolded = pyqt_wrong.casefold()
 import_real = builtins.__import__
 def importAvoidWrongPyQtHack(name, globals=None, locals=None, fromlist=(), level=0):
-    if name == pyqt_wrong or name.startswith(pyqt_wrong+"."):
+    name_casefolded = name.casefold()
+    if name_casefolded == pyqt_wrong_casefolded or \
+        name_casefolded.startswith(pyqt_wrong_casefolded+"."):
+
         raise(ModuleNotFoundError(
             f"This version of Krita is not compatible with {pyqt_wrong}!",
             name=name))

@@ -27,7 +27,6 @@
 #include "kis_transform_mask_params_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_scalar_keyframe_channel.h"
-#include "kis_image_animation_interface.h"
 #include "commands_new/KisSimpleModifyTransformMaskCommand.h"
 #include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 
@@ -194,7 +193,7 @@ struct MoveStrokeStrategy::Private {
 };
 
 template <typename Functor>
-void MoveStrokeStrategy::recursiveApplyNodes(KisNodeList nodes, Functor &&func) {
+void MoveStrokeStrategy::recursiveApplyNodes(const KisNodeList &nodes, Functor &&func) {
     Q_FOREACH(KisNodeSP subtree, nodes) {
         KisLayerUtils::recursiveApplyNodes(subtree,
             [&] (KisNodeSP node) {

@@ -111,7 +111,7 @@ private:
     const int m_updateInterval {30};
 
     template <typename Functor>
-    void recursiveApplyNodes(KisNodeList nodes, Functor &&func);
+    void recursiveApplyNodes(const KisNodeList &nodes, Functor &&func);
 };
 
 #endif /* __MOVE_STROKE_STRATEGY_H */

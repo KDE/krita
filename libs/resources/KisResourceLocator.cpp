@@ -485,7 +485,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
     const QString md5 = KoMD5Generator::generateHash(resourceData);
     const QString resourceUrl = resourceType + "/" + resource->filename();
 
-    const KoResourceSP existingResource = storage->resource(resourceUrl);
+    KoResourceSP existingResource = storage->resource(resourceUrl);
 
     if (existingResource) {
         const QString existingResourceMd5Sum = storage->resourceMd5(resourceUrl);
@@ -660,7 +660,7 @@ bool KisResourceLocator::importWillOverwriteResource(const QString &resourceType
 
     const QString resourceUrl = resourceType + "/" + QFileInfo(fileName).fileName();
 
-    const KoResourceSP existingResource = storage->resource(resourceUrl);
+    KoResourceSP existingResource = storage->resource(resourceUrl);
 
     return !existingResource.isNull();
 }

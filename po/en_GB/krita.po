@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-31 02:39+0000\n"
+"POT-Creation-Date: 2026-04-01 02:39+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -21624,7 +21624,7 @@ msgstr "Hermite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:72
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:122
 #: libs/ui/widgets/KoFillConfigWidget.ui:421
 #, kde-format
 msgid "Bicubic"
@@ -21640,7 +21640,7 @@ msgstr ""
 "gradations than Bilinear."
 
 #: libs/image/kis_filter_strategy.h:86
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
 #, kde-format
 msgid "Nearest Neighbor"
 msgstr "Nearest Neighbour"
@@ -21656,7 +21656,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
@@ -21685,7 +21685,7 @@ msgid "BSpline"
 msgstr "BSpline"
 
 #: libs/image/kis_filter_strategy.h:146
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
 #, kde-format
 msgid "Lanczos3"
 msgstr "Lanczos3"
@@ -22943,8 +22943,8 @@ msgstr ""
 "instance by merging the list of authors together, or keeping identical "
 "photographic information."
 
-#: libs/metadata/kis_meta_data_value.cc:405
-#: libs/metadata/kis_meta_data_value.cc:444
+#: libs/metadata/kis_meta_data_value.cc:404
+#: libs/metadata/kis_meta_data_value.cc:443
 #, kde-format
 msgid "Invalid value."
 msgstr "Invalid value."
@@ -24200,15 +24200,15 @@ msgstr "Local Resources"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:568
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:589
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:596
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:64
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:172
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:289
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:567
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:588
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:595
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:662
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:702
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:772
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:774
@@ -24258,7 +24258,7 @@ msgstr "Local Resources"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:326
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:358
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:487
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:489
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
@@ -25357,45 +25357,45 @@ msgstr ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:40
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:39
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Video Animation"
 msgstr "Import Video Animation"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:64
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
 msgstr "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:80
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
 msgstr " FPS"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:650
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:87
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:93
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:649
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
 msgstr " s"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:99
 #, kde-format
 msgctxt "Import video to New Document"
 msgid "New Document"
 msgstr "New Document"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:103
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:102
 #, kde-format
 msgctxt "Import video to Current Document"
 msgid "Current Document"
 msgstr "Current Document"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:615
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:105
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:614
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -25405,24 +25405,24 @@ msgstr ""
 "<small>Document:\n"
 " %1 FPS</small>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:127
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
 #, kde-format
 msgctxt "An interpolation method"
 msgid "Spline"
 msgstr "Spline"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:172
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
 msgstr "Failed to create a work directory, make sure you have write permission"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:183
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:182
 #, kde-format
 msgctxt "Title for a messagebox"
 msgid "Krita"
 msgstr "Krita"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:184
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:183
 #, kde-format
 msgid ""
 "Warning: you are trying to import more than 100 frames into Krita.\n"
@@ -25437,7 +25437,7 @@ msgstr ""
 "If you want to edit a clip larger than 100 frames, consider using a real "
 "video editor, like Kdenlive (https://kdenlive.org)."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:235
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:234
 #, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
@@ -25445,59 +25445,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "Extracted %1 frames from %2 video."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:289
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Failed to export frames from video"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:353
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:352
 #, kde-format
 msgid "Select your Video File"
 msgstr "Select your Video File"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:378
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Width: %1 px"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:380
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Height: %1 px"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:384
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Colour Primaries: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Colour Transfer: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:390
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:389
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Duration: %1 s"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:390
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Frames: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:392
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -25507,7 +25507,7 @@ msgstr ""
 "*<font size='0.5em'><em>*FPS not right in file. Modified to see full "
 "duration</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:492
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:491
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -25517,13 +25517,13 @@ msgstr ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:498
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:504
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:503
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -25533,7 +25533,7 @@ msgstr ""
 "You do not have enough memory to load this many frames, the computer will be "
 "overloaded."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:512
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:511
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -25541,7 +25541,7 @@ msgid ""
 msgstr ""
 "This will take over half the available memory, editing will be difficult."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:521
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:520
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -25551,44 +25551,44 @@ msgstr ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:554
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:556
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:553
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:555
 #, kde-format
 msgid "Open FFProbe"
 msgstr "Open FFProbe"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:568
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:567
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe is invalid!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:575
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:577
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:574
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:576
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "Open FFMpeg"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:589
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:588
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFMpeg is invalid!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:596
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:595
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "No FFMpeg found!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:662
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "Your FFMpeg version does not support this format"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:702
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "No video stream could be found!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:772
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Failed to load video information"
@@ -27250,35 +27250,35 @@ msgstr "cd/m²"
 msgid "Image Properties"
 msgstr "Image Properties"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:66
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:61
 #, kde-format
 msgid "Ascending"
 msgstr "Ascending"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:67
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
 msgid "Descending"
 msgstr "Descending"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:70
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:65
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Alphabetical"
 msgid "Alphabetical"
 msgstr "Alphabetical"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:66
 #, kde-format
 msgid "Numerical"
 msgstr "Numerical"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
 #: libs/ui/KisMainWindow.cpp:1162
 #, kde-format
 msgid "Import Images"
 msgstr "Import Images"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:165
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:160
 #, kde-format
 msgid "Source fps: %1"
 msgstr "Source fps: %1"
@@ -29925,7 +29925,7 @@ msgstr "Overlay opacity:"
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:524
-#: libs/ui/forms/wdggeneralsettings.ui:1273
+#: libs/ui/forms/wdggeneralsettings.ui:1260
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Miscellaneous"
@@ -30480,7 +30480,7 @@ msgstr "Enable fractional scale factor"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:598
-#: libs/ui/forms/wdggeneralsettings.ui:1717
+#: libs/ui/forms/wdggeneralsettings.ui:1704
 #, kde-format
 msgid "(needs restart)"
 msgstr "(needs restart)"
@@ -30691,7 +30691,7 @@ msgid "Touch Painting:"
 msgstr "Enable Touch Painting"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1067
+#: libs/ui/forms/wdggeneralsettings.ui:1070
 #, kde-format
 msgid ""
 "Enable reading of pressure state for touch events. This data may be broken "
@@ -30703,38 +30703,38 @@ msgstr ""
 "reported as 0.0 all the time."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1070
+#: libs/ui/forms/wdggeneralsettings.ui:1073
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
 msgstr "Enable Touch Pressure Sensitivity (may be broken)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
-#: libs/ui/forms/wdggeneralsettings.ui:1077
+#: libs/ui/forms/wdggeneralsettings.ui:1080
 #, kde-format
 msgid "Activate transform tool after pasting"
 msgstr "Activate transform tool after pasting"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
-#: libs/ui/forms/wdggeneralsettings.ui:1084
+#: libs/ui/forms/wdggeneralsettings.ui:1087
 #, kde-format
 msgid "Zoom steps between powers of 2"
 msgstr "Zoom steps between powers of 2"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
-#: libs/ui/forms/wdggeneralsettings.ui:1101
+#: libs/ui/forms/wdggeneralsettings.ui:1104
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
 msgstr "Use horizontal axis for Canvas Zoom Action"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1121
+#: libs/ui/forms/wdggeneralsettings.ui:1111
 #, fuzzy, kde-format
 #| msgid "Selection Actions"
 msgid "Selection Actions Bar"
 msgstr "Selection Actions"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1128
+#: libs/ui/forms/wdggeneralsettings.ui:1118
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -30742,27 +30742,27 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1131
+#: libs/ui/forms/wdggeneralsettings.ui:1121
 #, fuzzy, kde-format
 #| msgid "Selection Actions"
 msgid "Enable Selection Actions Bar"
 msgstr "Selection Actions"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1145
+#: libs/ui/forms/wdggeneralsettings.ui:1132
 #, kde-format
 msgid "Animation"
 msgstr "Animation"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
-#: libs/ui/forms/wdggeneralsettings.ui:1151
+#: libs/ui/forms/wdggeneralsettings.ui:1138
 #, fuzzy, kde-format
 #| msgid "Animation settings menu"
 msgid "Animation Settings"
 msgstr "Animation settings menu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1157
+#: libs/ui/forms/wdggeneralsettings.ui:1144
 #, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
@@ -30772,13 +30772,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1160
+#: libs/ui/forms/wdggeneralsettings.ui:1147
 #, kde-format
 msgid "Automatically pin new layers to timeline"
 msgstr "Automatically pin new layers to timeline"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1167
+#: libs/ui/forms/wdggeneralsettings.ui:1154
 #, kde-format
 msgid ""
 "When checked, this option automatically adjusts the document's \"start\" and "
@@ -30788,14 +30788,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1170
+#: libs/ui/forms/wdggeneralsettings.ui:1157
 #, fuzzy, kde-format
 #| msgid "Adapt playback range to keyframes"
 msgid "Automatically adapt playback range to keyframes"
 msgstr "Adapt playback range to keyframes"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1177
+#: libs/ui/forms/wdggeneralsettings.ui:1164
 #, kde-format
 msgid ""
 "When checked, this option will automatically scale the Animation Timeline "
@@ -30805,83 +30805,83 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1180
+#: libs/ui/forms/wdggeneralsettings.ui:1167
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1217
+#: libs/ui/forms/wdggeneralsettings.ui:1204
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "Resources"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1223
+#: libs/ui/forms/wdggeneralsettings.ui:1210
 #, kde-format
 msgid "Resource Folder:"
 msgstr "Resource Folder:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1327
+#: libs/ui/forms/wdggeneralsettings.ui:1314
 #, kde-format
 msgid "When Krita starts:"
 msgstr "When Krita starts:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1344
+#: libs/ui/forms/wdggeneralsettings.ui:1331
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "Save session when Krita closes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1351
+#: libs/ui/forms/wdggeneralsettings.ui:1338
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr "On importing images as layers, convert to the image colourspace"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1364
-#: libs/ui/forms/wdggeneralsettings.ui:1374
+#: libs/ui/forms/wdggeneralsettings.ui:1351
+#: libs/ui/forms/wdggeneralsettings.ui:1361
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "Only applies to new or newly opened images."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1367
+#: libs/ui/forms/wdggeneralsettings.ui:1354
 #, kde-format
 msgid "Undo stack size:"
 msgstr "Undo stack size:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1395
+#: libs/ui/forms/wdggeneralsettings.ui:1382
 #, kde-format
 msgid "Use cumulative undo"
 msgstr "Use cumulative undo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1415
+#: libs/ui/forms/wdggeneralsettings.ui:1402
 #, kde-format
 msgid "Advanced..."
 msgstr "Advanced..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1424
+#: libs/ui/forms/wdggeneralsettings.ui:1411
 #, kde-format
 msgid "Show root layer"
 msgstr "Show root layer"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1431
+#: libs/ui/forms/wdggeneralsettings.ui:1418
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "Enable Logging for bug reports"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1462
+#: libs/ui/forms/wdggeneralsettings.ui:1449
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -30891,50 +30891,50 @@ msgstr ""
 "do not report a bug."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1465
+#: libs/ui/forms/wdggeneralsettings.ui:1452
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr "Enable native file dialogs"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1488
+#: libs/ui/forms/wdggeneralsettings.ui:1475
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(Warning: may not work correctly on some systems)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1498
+#: libs/ui/forms/wdggeneralsettings.ui:1485
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "Maximum brush size:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1526
+#: libs/ui/forms/wdggeneralsettings.ui:1513
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "The maximum diameter of a brush in pixels."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1529
+#: libs/ui/forms/wdggeneralsettings.ui:1516
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "px"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1564
+#: libs/ui/forms/wdggeneralsettings.ui:1551
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(Needs restart)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1574
+#: libs/ui/forms/wdggeneralsettings.ui:1561
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "Font DPI Workaround"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1589
+#: libs/ui/forms/wdggeneralsettings.ui:1576
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -30964,7 +30964,7 @@ msgstr ""
 "needed any more."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1592
+#: libs/ui/forms/wdggeneralsettings.ui:1579
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -30972,7 +30972,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1601
+#: libs/ui/forms/wdggeneralsettings.ui:1588
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -30990,59 +30990,59 @@ msgstr ""
 "fonts by entering it in this field."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1614
+#: libs/ui/forms/wdggeneralsettings.ui:1601
 #, fuzzy, kde-format
 #| msgid "Automatic hyphenation"
 msgid "Automatic layer naming"
 msgstr "Automatic hyphenation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1620
+#: libs/ui/forms/wdggeneralsettings.ui:1607
 #, fuzzy, kde-format
 #| msgid "Add \"Merged\" to merged group layers"
 msgid "Append \"Merged\" to merged group layers"
 msgstr "Add \"Merged\" to merged group layers"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1627
+#: libs/ui/forms/wdggeneralsettings.ui:1614
 #, fuzzy, kde-format
 #| msgid "Add \"(pasted)\" to pasted layers"
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Add \"(pasted)\" to pasted layers"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1634
+#: libs/ui/forms/wdggeneralsettings.ui:1621
 #, fuzzy, kde-format
 #| msgid "Add \"(pasted)\" to pasted layers"
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "Add \"(pasted)\" to pasted layers"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
-#: libs/ui/forms/wdggeneralsettings.ui:1644
+#: libs/ui/forms/wdggeneralsettings.ui:1631
 #, kde-format
 msgid "Long-press to open context menus"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1651
+#: libs/ui/forms/wdggeneralsettings.ui:1638
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "Kinetic Scrolling (needs restart)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1666
+#: libs/ui/forms/wdggeneralsettings.ui:1653
 #, kde-format
 msgid "Sensitivity:"
 msgstr "Sensitivity:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1691
+#: libs/ui/forms/wdggeneralsettings.ui:1678
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "Hide docker scrollbars if kinetic scrolling is enabled"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1743
+#: libs/ui/forms/wdggeneralsettings.ui:1730
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -31053,7 +31053,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1746
+#: libs/ui/forms/wdggeneralsettings.ui:1733
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr ""
@@ -36934,24 +36934,24 @@ msgstr "Active Author Profile"
 msgid "%1 (Copy)"
 msgstr "%1 (Copy)"
 
-#: libs/ui/KisViewManager.cpp:1096 libs/ui/KisViewManager.cpp:1180
+#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "Alternative names exhausted, try manually saving with a higher number"
 
-#: libs/ui/KisViewManager.cpp:1096
+#: libs/ui/KisViewManager.cpp:1066
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Couldn't save incremental version"
 
-#: libs/ui/KisViewManager.cpp:1180
+#: libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Couldn't save incremental backup"
 
-#: libs/ui/KisViewManager.cpp:1473
+#: libs/ui/KisViewManager.cpp:1418
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36960,13 +36960,13 @@ msgstr ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 
-#: libs/ui/KisViewManager.cpp:1543
+#: libs/ui/KisViewManager.cpp:1488
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Open Resource Folder"
 
-#: libs/ui/KisViewManager.cpp:1547
+#: libs/ui/KisViewManager.cpp:1492
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36990,19 +36990,19 @@ msgstr ""
 "<p><b>Private app location</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1562
+#: libs/ui/KisViewManager.cpp:1507
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Open in &user AppData"
 
-#: libs/ui/KisViewManager.cpp:1563
+#: libs/ui/KisViewManager.cpp:1508
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Open in &private app location"
 
-#: libs/ui/KisViewManager.cpp:1711 libs/ui/KisViewManager.cpp:1729
+#: libs/ui/KisViewManager.cpp:1656 libs/ui/KisViewManager.cpp:1674
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -51941,7 +51941,7 @@ msgstr "&Colour Balance..."
 msgid "Color Balance"
 msgstr "Colour Balance"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:326
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:328
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Cross-channel adjustment curves..."
@@ -52023,7 +52023,7 @@ msgstr "&HSV Adjustment..."
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL Adjustment"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:487
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:489
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "

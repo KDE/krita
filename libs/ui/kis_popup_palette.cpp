@@ -1126,6 +1126,9 @@ void KisPopupPalette::ensureWithinParent(const QPoint& globalPos, bool useUpperL
 
 void KisPopupPalette::showEvent(QShowEvent *event)
 {
+    // Ensure that the palette is always on top of all other canvas children
+    raise();
+
     m_clicksEater->reset();
 
     // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within

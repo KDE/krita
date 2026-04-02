@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-01 02:39+0000\n"
+"POT-Creation-Date: 2026-04-02 02:37+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17245,21 +17245,21 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "작업 공간"
 
-#: krita/main.cc:703
+#: krita/main.cc:705
 #, fuzzy, kde-format
 #| msgid "© 1999-%1, The Krita Team"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999-%1, The Krita 팀"
 
-#: krita/main.cc:800 libs/ui/KisApplication.cpp:506
-#: libs/ui/KisApplication.cpp:828
+#: krita/main.cc:802 libs/ui/KisApplication.cpp:506
+#: libs/ui/KisApplication.cpp:822
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 경고"
 
-#: krita/main.cc:801
+#: krita/main.cc:803
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -22333,7 +22333,7 @@ msgid "Set Image Resolution"
 msgstr "이미지 해상도 설정"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:214
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "이동"
@@ -22813,7 +22813,7 @@ msgstr "어니언 스킨"
 #: libs/image/kis_layer_properties_icons.cpp:30
 #: libs/resources/KisResourceModel.cpp:116
 #: libs/resources/KisStorageModel.cpp:473
-#: libs/resources/KisTagResourceModel.cpp:647
+#: libs/resources/KisTagResourceModel.cpp:641
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #, kde-format
 msgid "Active"
@@ -22952,8 +22952,9 @@ msgid "Processing"
 msgstr "처리"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1416
-#: libs/ui/KisMainWindow.cpp:1789 libs/ui/KisMainWindow.cpp:1802
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1417
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -23743,8 +23744,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "이미지 교체"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2160
-#: libs/ui/KisMainWindow.cpp:2239
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2193
 #, kde-format
 msgid "Import frames"
 msgstr "프레임 가져오기"
@@ -25042,7 +25043,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:1100
 #: libs/pigment/resources/KoColorSet.cpp:1444
 #: libs/pigment/resources/KoColorSet.cpp:1524
-#: libs/pigment/resources/KoColorSet.cpp:1933
+#: libs/pigment/resources/KoColorSet.cpp:1942
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -25094,27 +25095,27 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:772
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1117
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:774
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1223
-#: libs/ui/KisApplication.cpp:1226 libs/ui/KisApplication.cpp:1242
-#: libs/ui/KisApplication.cpp:1274 libs/ui/KisApplication.cpp:1288
-#: libs/ui/KisApplication.cpp:1316 libs/ui/KisDocument.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
+#: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
+#: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
+#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1054
 #: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
 #: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
-#: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
-#: libs/ui/KisMainWindow.cpp:1197 libs/ui/KisMainWindow.cpp:1294
-#: libs/ui/KisMainWindow.cpp:2020 libs/ui/KisMainWindow.cpp:2029
-#: libs/ui/KisMainWindow.cpp:2168 libs/ui/KisMainWindow.cpp:2227
-#: libs/ui/KisMainWindow.cpp:2246 libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:979 libs/ui/KisMainWindow.cpp:1049
+#: libs/ui/KisMainWindow.cpp:1198 libs/ui/KisMainWindow.cpp:1295
+#: libs/ui/KisMainWindow.cpp:1974 libs/ui/KisMainWindow.cpp:1983
+#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2181
+#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2832
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:679 libs/ui/KisView.cpp:1166
-#: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
@@ -25245,7 +25246,7 @@ msgstr "%1을(를) 데이터베이스와 동기화할 수 없음"
 
 #: libs/resources/KisResourceModel.cpp:98
 #: libs/resources/KisStorageModel.cpp:463
-#: libs/resources/KisTagResourceModel.cpp:629
+#: libs/resources/KisTagResourceModel.cpp:623
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
@@ -25254,7 +25255,7 @@ msgid "Id"
 msgstr "ID"
 
 #: libs/resources/KisResourceModel.cpp:100
-#: libs/resources/KisTagResourceModel.cpp:631
+#: libs/resources/KisTagResourceModel.cpp:625
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
 #, kde-format
 msgid "Storage ID"
@@ -25262,7 +25263,7 @@ msgstr "저장소 ID"
 
 #: libs/resources/KisResourceModel.cpp:102
 #: libs/resources/KisStorageModel.cpp:477
-#: libs/resources/KisTagResourceModel.cpp:633
+#: libs/resources/KisTagResourceModel.cpp:627
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
@@ -25271,13 +25272,13 @@ msgid "Name"
 msgstr "이름"
 
 #: libs/resources/KisResourceModel.cpp:104
-#: libs/resources/KisTagResourceModel.cpp:635
+#: libs/resources/KisTagResourceModel.cpp:629
 #, kde-format
 msgid "File Name"
 msgstr "파일 이름"
 
 #: libs/resources/KisResourceModel.cpp:106
-#: libs/resources/KisTagResourceModel.cpp:637
+#: libs/resources/KisTagResourceModel.cpp:631
 #, kde-format
 msgid "Tooltip"
 msgstr "풍선 도움말"
@@ -25286,7 +25287,7 @@ msgstr "풍선 도움말"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: libs/resources/KisResourceModel.cpp:108
-#: libs/resources/KisTagResourceModel.cpp:639
+#: libs/resources/KisTagResourceModel.cpp:633
 #: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
@@ -25299,14 +25300,14 @@ msgid "Image"
 msgstr "이미지"
 
 #: libs/resources/KisResourceModel.cpp:110
-#: libs/resources/KisTagResourceModel.cpp:641
+#: libs/resources/KisTagResourceModel.cpp:635
 #, kde-format
 msgid "Status"
 msgstr "상태"
 
 #: libs/resources/KisResourceModel.cpp:112
 #: libs/resources/KisStorageModel.cpp:467
-#: libs/resources/KisTagResourceModel.cpp:643
+#: libs/resources/KisTagResourceModel.cpp:637
 #: libs/resourcewidgets/KisIconToolTip.cpp:115
 #, kde-format
 msgid "Location"
@@ -25314,21 +25315,21 @@ msgstr "위치"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/resources/KisResourceModel.cpp:114
-#: libs/resources/KisTagResourceModel.cpp:645
+#: libs/resources/KisTagResourceModel.cpp:639
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, kde-format
 msgid "Resource Type"
 msgstr "리소스 종류"
 
 #: libs/resources/KisResourceModel.cpp:118
-#: libs/resources/KisTagResourceModel.cpp:649
-#: libs/resources/KisTagResourceModel.cpp:679
+#: libs/resources/KisTagResourceModel.cpp:643
+#: libs/resources/KisTagResourceModel.cpp:673
 #, kde-format
 msgid "Storage Active"
 msgstr "저장소 활성화됨"
 
 #: libs/resources/KisResourceModel.cpp:120
-#: libs/resources/KisTagResourceModel.cpp:651
+#: libs/resources/KisTagResourceModel.cpp:645
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "md5sum"
@@ -25336,7 +25337,7 @@ msgstr "md5sum"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
-#: libs/resources/KisTagResourceModel.cpp:653
+#: libs/resources/KisTagResourceModel.cpp:647
 #: libs/resourcewidgets/KisIconToolTip.cpp:99
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
@@ -25344,14 +25345,14 @@ msgid "Tags"
 msgstr "태그"
 
 #: libs/resources/KisResourceModel.cpp:124
-#: libs/resources/KisTagResourceModel.cpp:655
+#: libs/resources/KisTagResourceModel.cpp:649
 #, fuzzy, kde-format
 #| msgid "Clear Thumbnail"
 msgid "Large Thumbnail"
 msgstr "축소판 지우기"
 
 #: libs/resources/KisResourceModel.cpp:126
-#: libs/resources/KisTagResourceModel.cpp:657
+#: libs/resources/KisTagResourceModel.cpp:651
 #, kde-format
 msgid "Dirty"
 msgstr ""
@@ -25360,7 +25361,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/resources/KisResourceModel.cpp:128
-#: libs/resources/KisTagResourceModel.cpp:659
+#: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
@@ -25590,49 +25591,49 @@ msgstr "모든 리소스"
 msgid "All untagged resources"
 msgstr "태그가 없는 모든 리소스"
 
-#: libs/resources/KisTagResourceModel.cpp:667
+#: libs/resources/KisTagResourceModel.cpp:661
 #, kde-format
 msgid "Tag ID"
 msgstr ""
 
-#: libs/resources/KisTagResourceModel.cpp:669
+#: libs/resources/KisTagResourceModel.cpp:663
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, fuzzy, kde-format
 #| msgid "Resource"
 msgid "Resource ID"
 msgstr "리소스"
 
-#: libs/resources/KisTagResourceModel.cpp:671
+#: libs/resources/KisTagResourceModel.cpp:665
 #, kde-format
 msgid "Tag Url"
 msgstr ""
 
-#: libs/resources/KisTagResourceModel.cpp:673
+#: libs/resources/KisTagResourceModel.cpp:667
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:100
 #, fuzzy, kde-format
 #| msgid "Resource"
 msgid "Resource"
 msgstr "리소스"
 
-#: libs/resources/KisTagResourceModel.cpp:675
+#: libs/resources/KisTagResourceModel.cpp:669
 #, fuzzy, kde-format
 #| msgid "Resource View"
 msgid "Resource Active"
 msgstr "리소스 보기"
 
-#: libs/resources/KisTagResourceModel.cpp:677
+#: libs/resources/KisTagResourceModel.cpp:671
 #, fuzzy, kde-format
 #| msgid "Storage Active"
 msgid "Tag Active"
 msgstr "저장소 활성화됨"
 
-#: libs/resources/KisTagResourceModel.cpp:681
+#: libs/resources/KisTagResourceModel.cpp:675
 #, fuzzy, kde-format
 #| msgid "Resource Type"
 msgid "Resource Name"
 msgstr "리소스 종류"
 
-#: libs/resources/KisTagResourceModel.cpp:683
+#: libs/resources/KisTagResourceModel.cpp:677
 #, fuzzy, kde-format
 #| msgid "File Name"
 msgid "Tag File Name"
@@ -25676,7 +25677,7 @@ msgid "Delete resource"
 msgstr "리소스 삭제"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2675
+#: libs/ui/KisMainWindow.cpp:2629
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25877,7 +25878,7 @@ msgid "Tag options"
 msgstr "태그 옵션"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:144
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:305
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:315
 #, fuzzy, kde-format
 #| msgid "Rename tag"
 msgctxt "Dialog title"
@@ -25885,8 +25886,8 @@ msgid "Can't rename the tag"
 msgstr "태그 이름 바꾸기"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:144
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:277
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:305
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:287
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:315
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
@@ -25912,7 +25913,7 @@ msgid ""
 msgstr ""
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:265
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:118
 #, fuzzy, kde-format
 #| msgid "Go to previous page"
 msgctxt ""
@@ -25937,8 +25938,8 @@ msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "덮어쓰기"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:108
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, fuzzy, kde-format
 #| msgid ""
 #| "A profile with that name already exists.\n"
@@ -25949,8 +25950,8 @@ msgstr ""
 "이름이 같은 프로필이 이미 존재합니다.\n"
 "덮어쓰시겠습니까?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:275
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Replace text range"
@@ -25960,30 +25961,7 @@ msgctxt ""
 msgid "Replace (overwrite) tag"
 msgstr "텍스트 범위 변경"
 
-#. i18n: ectx: property (text), widget (QPushButton, btCancel)
-#. i18n: ectx: property (text), widget (QPushButton, cancelBrushNameUpdateButton)
-#. i18n: ectx: property (text), widget (QPushButton, cancel_button)
-#. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
-#. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
-#. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
-#: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
-#: libs/ui/forms/wdgpaintopsettings.ui:197
-#: libs/ui/input/kis_tool_invocation_action.cpp:44
-#: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
-#: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
-#: plugins/dockers/recorder/recorder_export.ui:853
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
-#: plugins/generators/seexpr/wdgseexpr.ui:179
-#: plugins/python/krita_script_starter/bbdkss.ui:203
-#, kde-format
-msgid "Cancel"
-msgstr "취소"
-
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:277
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:287
 #, fuzzy, kde-format
 #| msgid "Cannot create storage"
 msgctxt "Dialog title"
@@ -26175,7 +26153,7 @@ msgstr ""
 "애니메이션 프레임을 렌더링할 수 없습니다! 출력 파일이 완전하지 않습니다."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2268
+#: libs/ui/KisMainWindow.cpp:2222
 #, kde-format
 msgid "Render Animation"
 msgstr "애니메이션 렌더"
@@ -26535,7 +26513,7 @@ msgstr "비디오 정보를 불러올 수 없음"
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg가 충돌함"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:692
+#: libs/ui/animation/KisFFMpegWrapper.cpp:695
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -28234,13 +28212,13 @@ msgstr "이름 순서"
 msgid "Numerical"
 msgstr "숫자 순서"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1162
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
+#: libs/ui/KisMainWindow.cpp:1163
 #, kde-format
 msgid "Import Images"
 msgstr "이미지 가져오기"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:160
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:164
 #, kde-format
 msgid "Source fps: %1"
 msgstr "원본 fps: %1"
@@ -28352,7 +28330,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "새 스타일의 이름을 입력하십시오"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -29157,6 +29135,27 @@ msgstr ""
 msgid "Wait for existing frame generation process to complete..."
 msgstr "이미지 연산 완료를 기다리는 중..."
 
+#. i18n: ectx: property (text), widget (QPushButton, btCancel)
+#. i18n: ectx: property (text), widget (QPushButton, cancelBrushNameUpdateButton)
+#. i18n: ectx: property (text), widget (QPushButton, cancel_button)
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
+#. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
+#. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
+#: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
+#: libs/ui/forms/wdgpaintopsettings.ui:197
+#: libs/ui/input/kis_tool_invocation_action.cpp:44
+#: libs/ui/widgets/kis_canvas_drop.cpp:45
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
+#: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
+#: plugins/dockers/recorder/recorder_export.ui:853
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
+#: plugins/generators/seexpr/wdgseexpr.ui:179
+#: plugins/python/krita_script_starter/bbdkss.ui:203
+#, kde-format
+msgid "Cancel"
+msgstr "취소"
+
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
 msgid ""
@@ -29256,6 +29255,21 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:20
+#, kde-format
+msgid "Create new document"
+msgstr "새 문서 만들기"
+
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:33
+#, kde-format
+msgid "Custom Document"
+msgstr "사용자 정의 문서"
+
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:39
+#, kde-format
+msgid "Create from Clipboard"
+msgstr "클립보드에서 만들기"
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -29610,7 +29624,7 @@ msgid "Start"
 msgstr "시작"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:609
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:614
 #, kde-format
 msgid "DEV BUILD"
 msgstr "개발 빌드"
@@ -29651,43 +29665,43 @@ msgid "Community"
 msgstr "커뮤니티"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:361
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:366
 #, kde-format
 msgid "User Manual"
 msgstr "사용자 설명서"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:364
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Support Krita"
 msgstr "Krita 지원"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:373
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:378
 #, kde-format
 msgid "Powered by KDE"
 msgstr "KDE에서 지원함"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:370
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:375
 #, kde-format
 msgid "Source Code"
 msgstr "소스 코드"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:358
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:363
 #, kde-format
 msgid "Getting Started"
 msgstr "시작하기"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:355
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "User Community"
 msgstr "사용자 커뮤니티"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:367
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Krita Website"
 msgstr "Krita 웹사이트"
@@ -29747,7 +29761,7 @@ msgid "Show details"
 msgstr "자세한 정보 표시"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:375
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:380
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -32260,7 +32274,7 @@ msgstr "이미지 추가..."
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -32775,7 +32789,7 @@ msgstr "현재 브러시 사전 설정"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1023
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1024
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -35394,7 +35408,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "파일 레이어 변경"
 
-#: libs/ui/kis_clipboard.cc:775 libs/ui/KisView.cpp:680
+#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:680
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35460,7 +35474,7 @@ msgstr "도커(&D)"
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:269
 #, kde-format
 msgid "Patterns"
 msgstr "패턴"
@@ -35474,7 +35488,7 @@ msgstr "사용자 정의 패턴"
 #: libs/ui/KisApplication.cpp:427
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:272
 #, kde-format
 msgid "Gradients"
 msgstr "그라디언트"
@@ -36542,14 +36556,14 @@ msgid "Zoom: %1 %"
 msgstr "확대/축소: %1%"
 
 #: libs/ui/KisApplication.cpp:418
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
 #, kde-format
 msgid "Brush presets"
 msgstr "브러시 사전 설정"
 
 #: libs/ui/KisApplication.cpp:421 libs/ui/KisApplication.cpp:422
 #: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:267
 #, kde-format
 msgid "Brush tips"
 msgstr "브러시 끝"
@@ -36557,7 +36571,7 @@ msgstr "브러시 끝"
 #: libs/ui/KisApplication.cpp:429
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:270
 #, kde-format
 msgid "Palettes"
 msgstr "팔레트"
@@ -36565,7 +36579,7 @@ msgstr "팔레트"
 #: libs/ui/KisApplication.cpp:442 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:268
 #, kde-format
 msgid "Workspaces"
 msgstr "작업 공간"
@@ -36581,7 +36595,7 @@ msgid "Window layouts"
 msgstr "창 레이아웃"
 
 #: libs/ui/KisApplication.cpp:446
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:273
 #, kde-format
 msgid "Gamut masks"
 msgstr "색역 마스크"
@@ -36681,35 +36695,35 @@ msgstr "기본 창 불러오는 중..."
 msgid "Launching..."
 msgstr "검색 중..."
 
-#: libs/ui/KisApplication.cpp:720
+#: libs/ui/KisApplication.cpp:717
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME 형식을 찾을 수 없습니다. -mimetype 옵션을 사용하십시오"
 
-#: libs/ui/KisApplication.cpp:781
+#: libs/ui/KisApplication.cpp:778
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "애니메이션 프레임을 렌더링할 수 없습니다!"
 
-#: libs/ui/KisApplication.cpp:809 libs/ui/KisApplication.cpp:1082
+#: libs/ui/KisApplication.cpp:803 libs/ui/KisApplication.cpp:1076
 #, kde-format
 msgid "File layer"
 msgstr "파일 레이어"
 
-#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:822
-#: libs/ui/KisApplication.cpp:1076 libs/ui/KisApplication.cpp:1090
-#: libs/ui/KisApplication.cpp:1095
+#: libs/ui/KisApplication.cpp:811 libs/ui/KisApplication.cpp:816
+#: libs/ui/KisApplication.cpp:1070 libs/ui/KisApplication.cpp:1084
+#: libs/ui/KisApplication.cpp:1089
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:경고"
 
-#: libs/ui/KisApplication.cpp:818 libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:812 libs/ui/KisApplication.cpp:1085
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1을(를) 파일 레이어로 추가할 수 없음: 파일이 없습니다."
 
-#: libs/ui/KisApplication.cpp:823
+#: libs/ui/KisApplication.cpp:817
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36728,7 +36742,7 @@ msgstr ""
 "기존 Krita 인스턴스에 열린 문서에 파일 레이어를 추가하려면 설정(설정 -> 일반 "
 "-> 창)에서 \"Krita 인스턴스 한 개만 허용\" 옵션을 선택하십시오."
 
-#: libs/ui/KisApplication.cpp:829
+#: libs/ui/KisApplication.cpp:823
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36738,32 +36752,32 @@ msgstr ""
 "파일 레이어를 추가할 수 없음: 열린 문서가 없습니다.\n"
 "--new-image 옵션을 사용하여 새 파일을 만들거나, 존재하는 파일을 여십시오."
 
-#: libs/ui/KisApplication.cpp:1077
+#: libs/ui/KisApplication.cpp:1071
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "'%1'을(를) 열 수 없음"
 
-#: libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:1090
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "파일 레이어를 추가할 수 없음: 열린 문서가 없습니다."
 
-#: libs/ui/KisApplication.cpp:1224
+#: libs/ui/KisApplication.cpp:1218
 #, kde-format
 msgid "No template found for: %1"
 msgstr "다음의 서식을 찾을 수 없음: %1"
 
-#: libs/ui/KisApplication.cpp:1227
+#: libs/ui/KisApplication.cpp:1221
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "다음의 서식이 너무 많음: %1"
 
-#: libs/ui/KisApplication.cpp:1243
+#: libs/ui/KisApplication.cpp:1237
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "서식 %1을(를) 불러올 수 없습니다."
 
-#: libs/ui/KisApplication.cpp:1275
+#: libs/ui/KisApplication.cpp:1269
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36778,7 +36792,7 @@ msgstr ""
 "\n"
 "변경 사항을 적용하려면 Krita를 다시 시작해야 합니다."
 
-#: libs/ui/KisApplication.cpp:1289
+#: libs/ui/KisApplication.cpp:1283
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36789,7 +36803,7 @@ msgstr ""
 "\n"
 "다른 프로그램이 파일을 사용하지 않는지 확인하고 다시 시도하십시오."
 
-#: libs/ui/KisApplication.cpp:1317
+#: libs/ui/KisApplication.cpp:1311
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "설정 파일을 비우시겠습니까?"
@@ -37250,8 +37264,8 @@ msgid "The action was cancelled by the user."
 msgstr "사용자가 작업을 취소했습니다."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:388
-#: plugins/impex/libkra/kra_converter.cpp:417
+#: plugins/impex/libkra/kra_converter.cpp:402
+#: plugins/impex/libkra/kra_converter.cpp:431
 #, kde-format
 msgid "Unknown error."
 msgstr "알 수 없는 오류입니다."
@@ -37500,62 +37514,62 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "레이어 미리 보기 팝업 숨기기"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "스타일"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "도커(&D)"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "창(&W)"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "새 보기(&V)"
 
-#: libs/ui/KisMainWindow.cpp:190
+#: libs/ui/KisMainWindow.cpp:191
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "작업 공간(&K)"
 
-#: libs/ui/KisMainWindow.cpp:592
+#: libs/ui/KisMainWindow.cpp:593
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 도구 모음 표시"
 
-#: libs/ui/KisMainWindow.cpp:594
+#: libs/ui/KisMainWindow.cpp:595
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 도구 모음 숨기기"
 
-#: libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/KisMainWindow.cpp:1021
 #, kde-format
 msgid "Save as %1"
 msgstr "%1(으)로 저장"
 
-#: libs/ui/KisMainWindow.cpp:1048
+#: libs/ui/KisMainWindow.cpp:1049
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "파일 %1이(가) 없습니다."
 
-#: libs/ui/KisMainWindow.cpp:1162
+#: libs/ui/KisMainWindow.cpp:1163
 #, kde-format
 msgid "Open Images"
 msgstr "이미지 열기"
 
-#: libs/ui/KisMainWindow.cpp:1295
+#: libs/ui/KisMainWindow.cpp:1296
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -37568,44 +37582,29 @@ msgstr ""
 "\n"
 "원본 파일에 덮어쓰지 않을 위치를 지정하십시오!"
 
-#: libs/ui/KisMainWindow.cpp:1351
+#: libs/ui/KisMainWindow.cpp:1352
 #, kde-format
 msgid "Exporting"
 msgstr "내보내는 중"
 
-#: libs/ui/KisMainWindow.cpp:1351
+#: libs/ui/KisMainWindow.cpp:1352
 #, kde-format
 msgid "Saving As"
 msgstr "다른 이름으로 저장 중"
 
-#: libs/ui/KisMainWindow.cpp:1768
-#, kde-format
-msgid "Create new document"
-msgstr "새 문서 만들기"
-
-#: libs/ui/KisMainWindow.cpp:1792
-#, kde-format
-msgid "Custom Document"
-msgstr "사용자 정의 문서"
-
-#: libs/ui/KisMainWindow.cpp:1804
-#, kde-format
-msgid "Create from Clipboard"
-msgstr "클립보드에서 만들기"
-
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1943
 #, kde-format
 msgid "Layers/Masks"
 msgstr "레이어/마스크"
 
-#: libs/ui/KisMainWindow.cpp:2015
+#: libs/ui/KisMainWindow.cpp:1969
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "활성화된 리소스 번들이 없습니다."
 
-#: libs/ui/KisMainWindow.cpp:2019
+#: libs/ui/KisMainWindow.cpp:1973
 #, kde-format
 msgid ""
 "\n"
@@ -37616,7 +37615,7 @@ msgstr ""
 "브러시 사전 설정이 없습니다. 브러시 사전 설정이 포함된 번들을 다시 활성화하십"
 "시오.\n"
 
-#: libs/ui/KisMainWindow.cpp:2029
+#: libs/ui/KisMainWindow.cpp:1983
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -37627,7 +37626,7 @@ msgstr ""
 "\n"
 "로컬 리소스만 사용할 수 있습니다."
 
-#: libs/ui/KisMainWindow.cpp:2168 libs/ui/KisMainWindow.cpp:2246
+#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2200
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -37636,40 +37635,40 @@ msgstr ""
 "애니메이션 가져오기를 완료할 수 없음:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2227
+#: libs/ui/KisMainWindow.cpp:2181
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "새 문서를 만들 수 없습니다. 애니메이션 가져오기를 중단합니다."
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "작업 공간 가져오기(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2681
+#: libs/ui/KisMainWindow.cpp:2635
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "새 작업 공간(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "새 작업 공간..."
 
-#: libs/ui/KisMainWindow.cpp:2729
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2732
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2901
+#: libs/ui/KisMainWindow.cpp:2855
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -37678,19 +37677,19 @@ msgstr ""
 "Krita LittleCMS 색 관리 플러그인이 설치되어 있지 않습니다. Krita를 종료합니"
 "다."
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "설치 오류"
 
-#: libs/ui/KisMainWindow.cpp:3027
+#: libs/ui/KisMainWindow.cpp:2981
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "테마(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3086
+#: libs/ui/KisMainWindow.cpp:3040
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "확장 가능한 구분자"
@@ -37701,7 +37700,7 @@ msgctxt "A temporary action that actives a layer or mask"
 msgid "Activate %1"
 msgstr "%1 활성화"
 
-#: libs/ui/KisOpenPane.cpp:176
+#: libs/ui/KisOpenPane.cpp:184
 #, kde-format
 msgid "Open Existing Document"
 msgstr "기존 문서 열기"
@@ -38037,17 +38036,17 @@ msgstr "이 서식 사용"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "선택한 레이어 형식에는 이 도구를 사용할 수 없습니다"
 
-#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:444
+#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:456
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "레이어가 잠김, 숨김 상태입니다."
 
-#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:446
+#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:458
 #, kde-format
 msgid "Layer is locked."
 msgstr "레이어가 잠김 상태입니다."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:448
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:460
 #, kde-format
 msgid "Layer is invisible."
 msgstr "레이어가 숨김 상태입니다."
@@ -38180,12 +38179,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "익명"
 
-#: libs/ui/KisWelcomePageWidget.cpp:155
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "뉴스 및 새 릴리스 확인 활성화"
 
-#: libs/ui/KisWelcomePageWidget.cpp:157
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -38194,39 +38193,39 @@ msgstr ""
 "Krita 뉴스 표시: 인터넷으로 krita.org 웹사이트에 연결해서 정보를 다운로드해"
 "야 합니다"
 
-#: libs/ui/KisWelcomePageWidget.cpp:160
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Language"
 msgstr "언어"
 
-#: libs/ui/KisWelcomePageWidget.cpp:161
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr "영어 뉴스는 항상 최신 뉴스를 포함합니다."
 
-#: libs/ui/KisWelcomePageWidget.cpp:397
+#: libs/ui/KisWelcomePageWidget.cpp:402
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr "Krita 서포터 배지를 차지하세요!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:632
+#: libs/ui/KisWelcomePageWidget.cpp:637
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\" 잊기"
 
-#: libs/ui/KisWelcomePageWidget.cpp:723
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "새 Krita 버전을 사용할 수 있습니다."
 
-#: libs/ui/KisWelcomePageWidget.cpp:752
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "업데이트 중 오류 발생"
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr "다시 시작해야 합니다."
@@ -39191,12 +39190,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:683
+#: libs/ui/opengl/kis_opengl.cpp:684
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "인텔 그래픽 드라이버는 OpenGL 사용 시 알려진 문제가 있습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:685
+#: libs/ui/opengl/kis_opengl.cpp:686
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -39206,7 +39205,7 @@ msgstr ""
 "인텔 그래픽 드라이버는 OpenGL에 문제가 자주 발생하므로 ANGLE을 기본값으로 사"
 "용합니다. OpenGL로 직접 전환할 수 있지만 항상 올바르게 작동하지는 않습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1168
+#: libs/ui/opengl/kis_opengl.cpp:1169
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -39215,7 +39214,7 @@ msgstr ""
 "선호하는 렌더러에서 필요한 표면 형식을 지원하지 않습니다. 다른 렌더러를 선택"
 "했습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1170
+#: libs/ui/opengl/kis_opengl.cpp:1171
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"
@@ -39295,12 +39294,6 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "이 색 공간에서는 MyPaint 브러시 엔진을 사용할 수 없음"
 
-#: libs/ui/tool/kis_tool_paint.cc:571
-#, fuzzy, kde-format
-#| msgid "Brush size"
-msgid "Brush Size: %1 px"
-msgstr "브러시 크기"
-
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
@@ -39333,18 +39326,24 @@ msgstr ""
 "X: %1픽셀\n"
 "Y: %2픽셀"
 
-#: libs/ui/tool/kis_tool_utils.cpp:214 libs/ui/tool/kis_tool_utils.cpp:226
+#: libs/ui/tool/kis_tool_utils.cpp:215 libs/ui/tool/kis_tool_utils.cpp:227
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "지우기"
 
-#: libs/ui/tool/kis_tool_utils.cpp:450
+#: libs/ui/tool/kis_tool_utils.cpp:324
+#, fuzzy, kde-format
+#| msgid "Brush size"
+msgid "Brush Size: %1 px"
+msgstr "브러시 크기"
+
+#: libs/ui/tool/kis_tool_utils.cpp:462
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "레이어는 워시 모드에서만 그릴 수 있습니다."
 
-#: libs/ui/tool/kis_tool_utils.cpp:452
+#: libs/ui/tool/kis_tool_utils.cpp:464
 #, kde-format
 msgid "Group not editable."
 msgstr "그룹을 편집할 수 없습니다."
@@ -42073,23 +42072,23 @@ msgstr "연락처:"
 msgid "&Try"
 msgstr "시도하기(&T)"
 
-#: libs/widgets/KoDialog.cpp:480
+#: libs/widgets/KoDialog.cpp:471
 #, kde-format
 msgid "modified"
 msgstr "수정됨"
 
-#: libs/widgets/KoDialog.cpp:491
+#: libs/widgets/KoDialog.cpp:482
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr " – "
 
-#: libs/widgets/KoDialog.cpp:773
+#: libs/widgets/KoDialog.cpp:764
 #, kde-format
 msgid "&Details"
 msgstr "자세히(&D)"
 
-#: libs/widgets/KoDialog.cpp:931
+#: libs/widgets/KoDialog.cpp:922
 #, kde-format
 msgid "Get help..."
 msgstr "도움 요청..."
@@ -42334,13 +42333,13 @@ msgstr "초(s)"
 msgid "percent of animation (%)"
 msgstr "애니메이션의 백분율(%)"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:216
+#: libs/widgetutils/kis_font_family_combo_box.cpp:232
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Family"
 msgstr "글꼴 종류"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:217
+#: libs/widgetutils/kis_font_family_combo_box.cpp:233
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Style"
@@ -43069,24 +43068,24 @@ msgid ""
 "effect the next time the application is started."
 msgstr "이 앱의 언어가 변경되었습니다. 다음 번에 앱을 시작할 때 적용됩니다."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
 #, kde-format
 msgid "Fallback language:"
 msgstr "보조 언어:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
 #, kde-format
 msgid "Primary language:"
 msgstr "주 언어:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:424
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "앱에서 다른 언어보다 이 언어를 먼저 사용합니다."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:425
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
@@ -46838,7 +46837,7 @@ msgstr ""
 msgid "Small Color Selector"
 msgstr "작은 색상 선택기"
 
-#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
+#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:183
 #, kde-format
 msgctxt "snapshot names, e.g. \"Snapshot 1\""
 msgid "Snapshot %1"
@@ -47382,14 +47381,14 @@ msgctxt "Empty locale"
 msgid "Empty"
 msgstr "빈 슬롯"
 
-#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#: plugins/dockers/textproperties/LocaleHandler.cpp:30
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
 msgstr ""
 
-#: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#: plugins/dockers/textproperties/LocaleHandler.cpp:36
 #, fuzzy, kde-format
 #| msgid "Caricature"
 msgctxt "language, variant"
@@ -52548,12 +52547,12 @@ msgstr "삭제된 리소스 표시"
 msgid "Choose Save Location"
 msgstr "저장 위치:"
 
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:271
 #, kde-format
 msgid "Layer styles"
 msgstr "레이어 스타일"
 
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:274
 #, kde-format
 msgid "SeExpr scripts"
 msgstr "SeExpr 스크립트"
@@ -58082,7 +58081,8 @@ msgstr "래스터 선택 %1을(를) 불러올 수 없습니다."
 msgid "Could not load keyframes from %1."
 msgstr "%1에서 키프레임을 불러올 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:840
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -58091,7 +58091,7 @@ msgstr ""
 "키프레임 파일 %1의 %2행, %3열에서 해석 오류\n"
 "오류 메시지: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:846
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:854
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "알 수 없는 키프레임 채널 종류: %2의 %1"
@@ -58439,7 +58439,8 @@ msgstr "'%1'에 쓸 수 없습니다. 파티션이 가득 찼습니까?"
 msgid "Could not find %1"
 msgstr "%1을(를) 찾을 수 없음"
 
-#: plugins/impex/libkra/kra_converter.cpp:330
+#: plugins/impex/libkra/kra_converter.cpp:335
+#: plugins/impex/libkra/kra_converter.cpp:343
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -58448,22 +58449,22 @@ msgstr ""
 "%1의 %2행, %3열에서 해석 오류\n"
 "오류 메시지: %4"
 
-#: plugins/impex/libkra/kra_converter.cpp:348
+#: plugins/impex/libkra/kra_converter.cpp:362
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr "이 형식을 지원하지 않거나 파일이 잘못됨"
 
-#: plugins/impex/libkra/kra_converter.cpp:359
+#: plugins/impex/libkra/kra_converter.cpp:373
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr "파일의 버전이 Krita의 버전(%1)보다 높습니다."
 
-#: plugins/impex/libkra/kra_converter.cpp:365
+#: plugins/impex/libkra/kra_converter.cpp:379
 #, kde-format
 msgid "The file has no layers."
 msgstr "파일에 레이어가 없습니다."
 
-#: plugins/impex/libkra/kra_converter.cpp:404
+#: plugins/impex/libkra/kra_converter.cpp:418
 #, kde-format
 msgid "The file does not contain an image."
 msgstr "파일에 이미지가 없습니다."
@@ -58656,9 +58657,12 @@ msgstr "인터레이싱"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The compression will take a long time; saving the file will be slow."
+#| msgid "Small File Size"
 msgctxt "The compression will take a long time; saving the file will be slow."
-msgid "Small File Size"
+msgid "Small file size"
 msgstr "작은 파일 크기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveAsHDR)
@@ -65146,7 +65150,7 @@ msgid "Translation directory"
 msgstr "번역 디렉터리"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:306
 #, kde-format
 msgid "Pixels"
 msgstr "픽셀"
@@ -70230,7 +70234,7 @@ msgstr ""
 msgid "Comic Panel Editing Tool"
 msgstr "색상화 마스크 편집 도구"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:299
 #, kde-format
 msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to add gutters/cut "
@@ -70238,7 +70242,7 @@ msgctxt ""
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:301
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
 #, kde-format
 msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
@@ -70246,15 +70250,15 @@ msgctxt ""
 msgid "Merging mode: Removes the gutter between shapes."
 msgstr ""
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, fuzzy, kde-format
 #| msgid "millimeter"
 msgid "Millimeters"
 msgstr "밀리미터"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
 #, fuzzy, kde-format
 #| msgid "Thickness"
 msgctxt ""
@@ -70262,9 +70266,9 @@ msgctxt ""
 msgid "Thick"
 msgstr "두께"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
 #, fuzzy, kde-format
 #| msgid "Thinning:"
 msgctxt ""
@@ -70272,9 +70276,9 @@ msgctxt ""
 msgid "Thin"
 msgstr "얇게:"
 
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
-#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:322
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
+#: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
 #, fuzzy, kde-format
 #| msgid "Fill Special"
 msgctxt ""
@@ -70699,7 +70703,7 @@ msgstr "적용"
 msgid "Transform Tool Actions"
 msgstr "변형 도구 동작"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:934
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:942
 #, fuzzy, kde-format
 #| msgctxt "floating message in transformation tool"
 #| msgid "Cannot transform empty layer "
@@ -70707,7 +70711,7 @@ msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
 msgstr "빈 레이어를 변환할 수 없음 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:940
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:948
 #, fuzzy, kde-format
 #| msgctxt "floating message in transformation tool"
 #| msgid "Cannot transform empty layer "
@@ -70715,7 +70719,7 @@ msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
 msgstr "빈 레이어를 변환할 수 없음 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:954
 #, fuzzy, kde-format
 #| msgctxt "floating message in transformation tool"
 #| msgid "Cannot transform empty layer "
@@ -70723,13 +70727,13 @@ msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
 msgstr "빈 레이어를 변환할 수 없음 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:962
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:970
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "레이어 형식에서 변형 도구를 사용할 수 없음"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:969
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:977
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -70737,7 +70741,7 @@ msgstr ""
 "레이어 형식에서 변형 도구를 사용할 수 없습니다. 대신 변형 마스크를 사용하십시"
 "오."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:996
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -70747,20 +70751,20 @@ msgstr ""
 "레이어에 변형 마스크가 있는 자식 레이어가 있습니다. 변형을 실행하기 전에 비활"
 "성화하십시오."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1001
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1009
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "변형 마스크를 편집할 때는 선택 항목이 사용되지 않습니다 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1127
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1096
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1135
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "빈 레이어를 변환할 수 없음 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1114
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1122
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -70770,7 +70774,7 @@ msgstr ""
 "보이지 않는 하위 레이어도 같이 변형됩니다. 레이어를 변형시키지 않으려면 레이"
 "어를 잠그십시오 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:370
+#: plugins/tools/tool_transform2/kis_tool_transform.h:373
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "레이어 또는 선택 영역 변형"

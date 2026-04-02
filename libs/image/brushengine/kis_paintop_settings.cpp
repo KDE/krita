@@ -53,7 +53,7 @@
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private()
-        : disableDirtyNotifications(false)
+        : settingsWidget(0)
 #ifdef SANITY_CHECK_CACHE
         , versionRandomSource(int(reinterpret_cast<std::intptr_t>(this)))
         , versionCookie(versionRandomSource.generate())
@@ -65,8 +65,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
           modelName(rhs.modelName),
           resourcesInterface(rhs.resourcesInterface),
           canvasResourcesInterface(rhs.canvasResourcesInterface),
-          resourceCacheInterface(rhs.resourceCacheInterface),
-          disableDirtyNotifications(false)
+          resourceCacheInterface(rhs.resourceCacheInterface)
 #ifdef SANITY_CHECK_CACHE
         , versionRandomSource(int(reinterpret_cast<std::intptr_t>(this)))
         , versionCookie(rhs.versionCookie)
@@ -85,31 +84,11 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
     KoResourceCacheInterfaceSP resourceCacheInterface;
 
-    bool disableDirtyNotifications;
-
 #ifdef SANITY_CHECK_CACHE
     KisRandomSource versionRandomSource;
     quint64 versionCookie;
 #endif
 
-    class DirtyNotificationsLocker {
-    public:
-        DirtyNotificationsLocker(KisPaintOpSettings::Private *d)
-            : m_d(d),
-              m_oldNotificationsState(d->disableDirtyNotifications)
-        {
-            m_d->disableDirtyNotifications = true;
-        }
-
-        ~DirtyNotificationsLocker() {
-            m_d->disableDirtyNotifications = m_oldNotificationsState;
-        }
-
-    private:
-        KisPaintOpSettings::Private *m_d;
-        bool m_oldNotificationsState;
-        Q_DISABLE_COPY(DirtyNotificationsLocker)
-    };
 };
 
 KisPaintOpSettings::UpdateListener::~UpdateListener()
@@ -146,31 +125,12 @@ bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInforma
 {
     Q_UNUSED(modifiers);
     Q_UNUSED(currentNode);
-    setRandomOffset(paintInformation);
     return true; // ignore the event by default
 }
 
 bool KisPaintOpSettings::mouseReleaseEvent()
 {
     return true; // ignore the event by default
-}
-
-void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInformation)
-{
-	bool disableDirtyBefore = d->disableDirtyNotifications;
-	d->disableDirtyNotifications = true;
-    if (getBool("Texture/Pattern/Enabled")) {
-        if (getBool("Texture/Pattern/isRandomOffsetX")) {
-            setProperty("Texture/Pattern/OffsetX",
-                        paintInformation.randomSource()->generate(0, KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetX")));
-        }
-        if (getBool("Texture/Pattern/isRandomOffsetY")) {
-            setProperty("Texture/Pattern/OffsetY",
-                        paintInformation.randomSource()->generate(0, KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetY")));
-
-        }
-    }
-	d->disableDirtyNotifications = disableDirtyBefore;
 }
 
 bool KisPaintOpSettings::hasMaskingSettings() const
@@ -612,7 +572,7 @@ QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& in
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
-    if (value != KisPropertiesConfiguration::getProperty(name) && !d->disableDirtyNotifications) {
+    if (value != KisPropertiesConfiguration::getProperty(name)) {
         UpdateListenerSP updateListener = d->updateListener.toStrongRef();
 
         if (updateListener) {

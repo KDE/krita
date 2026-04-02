@@ -34,6 +34,7 @@
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
 #include <KoResourceLoadResult.h>
+#include <kis_paint_information.h>
 
 /**********************************************************************/
 /*       KisTextureOption                                             */
@@ -99,6 +100,8 @@ void KisTextureOption::fillProperties(const KisPropertiesConfiguration *setting,
     m_enabled = data.isEnabled;
     m_offsetX = data.offsetX;
     m_offsetY = data.offsetY;
+    m_isRandomOffsetX = data.isRandomOffsetX;
+    m_isRandomOffsetY = data.isRandomOffsetY;
 
     if (m_texturingMode == KisTextureOptionData::GRADIENT && canvasResourcesInterface) {
         KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()->cloneAndBakeVariableColors(canvasResourcesInterface);
@@ -107,6 +110,22 @@ void KisTextureOption::fillProperties(const KisPropertiesConfiguration *setting,
             m_cachedGradient.setGradient(gradient, 256);
         }
     }
+}
+
+int KisTextureOption::effectiveOffsetX(const KisPaintInformation &info) const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_maskInfo, 0);
+    return m_isRandomOffsetX ?
+        info.perStrokeRandomSource()->generate("texture_offset_x", 0, m_maskInfo->maskBounds().width()) :
+        m_offsetX;
+}
+
+int KisTextureOption::effectiveOffsetY(const KisPaintInformation &info) const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_maskInfo, 0);
+    return m_isRandomOffsetY ?
+        info.perStrokeRandomSource()->generate("texture_offset_y", 0, m_maskInfo->maskBounds().height()) :
+        m_offsetY;
 }
 
 QList<KoResourceLoadResult> KisTextureOption::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
@@ -181,8 +200,8 @@ void KisTextureOption::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& o
     KisCachedPaintDevice::Guard g(mask, KoColorSpaceRegistry::instance()->rgb8(), m_cachedPaintDevice);
     KisPaintDeviceSP fillMaskDevice = g.device();
 
-    int x = offset.x() % maskBounds.width() - m_offsetX;
-    int y = offset.y() % maskBounds.height() - m_offsetY;
+    int x = offset.x() % maskBounds.width() - effectiveOffsetX(info);
+    int y = offset.y() % maskBounds.height() - effectiveOffsetY(info);
 
     const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 
@@ -215,8 +234,8 @@ void KisTextureOption::applyGradient(KisFixedPaintDeviceSP dab, const QPoint& of
     KisCachedPaintDevice::Guard g(mask, KoColorSpaceRegistry::instance()->rgb8(), m_cachedPaintDevice);
     KisPaintDeviceSP fillDevice = g.device();
 
-    int x = offset.x() % maskBounds.width() - m_offsetX;
-    int y = offset.y() % maskBounds.height() - m_offsetY;
+    int x = offset.x() % maskBounds.width() - effectiveOffsetX(info);
+    int y = offset.y() % maskBounds.height() - effectiveOffsetY(info);
 
     const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 
@@ -279,8 +298,8 @@ void KisTextureOption::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, co
     KisCachedPaintDevice::Guard g(mask, KoColorSpaceRegistry::instance()->alpha8(), m_cachedPaintDevice);
     KisPaintDeviceSP maskPatch = g.device();
 
-    int x = offset.x() % maskBounds.width() - m_offsetX;
-    int y = offset.y() % maskBounds.height() - m_offsetY;
+    int x = offset.x() % maskBounds.width() - effectiveOffsetX(info);
+    int y = offset.y() % maskBounds.height() - effectiveOffsetY(info);
 
     const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 

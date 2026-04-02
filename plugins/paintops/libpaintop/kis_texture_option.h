@@ -56,10 +56,14 @@ private:
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
     void applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
     void fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    int effectiveOffsetX(const KisPaintInformation &info) const;
+    int effectiveOffsetY(const KisPaintInformation &info) const;
 private:
 
     int m_offsetX {0};
     int m_offsetY {0};
+    bool m_isRandomOffsetX {false};
+    bool m_isRandomOffsetY {false};
     KisTextureOptionData::TexturingMode m_texturingMode {KisTextureOptionData::MULTIPLY};
     bool m_useSoftTexturing {false};
     KoAbstractGradientSP m_gradient;

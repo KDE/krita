@@ -62,6 +62,8 @@ struct KoFontGlyphModel::Private {
     QVector<CodePointInfo> codePoints;
     QMap<QString, KoOpenTypeFeatureInfo> featureData;
     QVector<KoUnicodeBlockData> blocks;
+    KoOpenTypeFeatureInfoFactory openTypeFeaturesFactory;
+    KoUnicodeBlockDataFactory unicodeBlockFactory;
 
     ~Private() = default;
 
@@ -111,7 +113,7 @@ struct KoFontGlyphModel::Private {
         return vsData;
     }
 
-    static QMap<QString, KoOpenTypeFeatureInfo> getOpenTypeTables(FT_FaceSP face, QVector<CodePointInfo> &charMap, QMap<QString, KoOpenTypeFeatureInfo> previousFeatureInfo, bool gpos, bool samplesOnly, QStringList locales, QLatin1String lang = QLatin1String()) {
+    QMap<QString, KoOpenTypeFeatureInfo> getOpenTypeTables(FT_FaceSP face, QVector<CodePointInfo> &charMap, QMap<QString, KoOpenTypeFeatureInfo> previousFeatureInfo, bool gpos, bool samplesOnly, QStringList locales, QLatin1String lang = QLatin1String()) {
         // All of this was referenced from Inkscape's OpenTypeUtil.cpp::readOpenTypeGsubTable
         // It has since been reworked to include language testing and alternates.
         QMap<QString, KoOpenTypeFeatureInfo> featureInfo = previousFeatureInfo;
@@ -185,9 +187,6 @@ struct KoFontGlyphModel::Private {
                 tags.append(features);
             }
 
-
-
-            KoOpenTypeFeatureInfoFactory factory;
             QVector<uint> featureIndicesProcessed;
             QVector<uint> lookUpsProcessed;
             for (auto tagIt = tags.begin(); tagIt != tags.end(); tagIt++) {
@@ -208,7 +207,7 @@ struct KoFontGlyphModel::Private {
                 }
                 featureIndicesProcessed.append(featureIndex);
 
-                KoOpenTypeFeatureInfo info = featureInfo.value(tagName, factory.infoByTag(tagName));
+                KoOpenTypeFeatureInfo info = featureInfo.value(tagName, openTypeFeaturesFactory.infoByTag(tagName));
                 if (!featureInfo.contains(tagName)) {
                     hb_ot_name_id_t labelId = HB_OT_NAME_ID_INVALID;
                     hb_ot_name_id_t toolTipId = HB_OT_NAME_ID_INVALID;
@@ -536,7 +535,6 @@ void KoFontGlyphModel::setFace(FT_FaceSP face, QLatin1String language, bool samp
     d->codePoints = Private::charMap(face);
     d->blocks.clear();
     QMap<uint, QVector<Private::GlyphInfo>> VSData = Private::getVSData(face);
-    KoUnicodeBlockDataFactory blockFactory;
 
     for(auto it = d->codePoints.begin(); it != d->codePoints.end(); it++) {
         it->glyphs.append(VSData.value(it->ucs));
@@ -548,7 +546,7 @@ void KoFontGlyphModel::setFace(FT_FaceSP face, QLatin1String language, bool samp
             }
         }
         if (block == d->blocks.end()) {
-            KoUnicodeBlockData newBlock = blockFactory.blockForUCS(it->ucs);
+            KoUnicodeBlockData newBlock = d->unicodeBlockFactory.blockForUCS(it->ucs);
             if (newBlock != KoUnicodeBlockDataFactory::noBlock()) {
                 d->blocks.append(newBlock);
             }
@@ -556,8 +554,8 @@ void KoFontGlyphModel::setFace(FT_FaceSP face, QLatin1String language, bool samp
     }
     std::sort(d->blocks.begin(), d->blocks.end(), sortBlocks);
 
-    d->featureData = Private::getOpenTypeTables(face, d->codePoints, QMap<QString, KoOpenTypeFeatureInfo>() , false, samplesOnly, KLocalizedString::languages(), language);
-    d->featureData = Private::getOpenTypeTables(face, d->codePoints, d->featureData, true, samplesOnly, KLocalizedString::languages(), language);
+    d->featureData = d->getOpenTypeTables(face, d->codePoints, QMap<QString, KoOpenTypeFeatureInfo>() , false, samplesOnly, KLocalizedString::languages(), language);
+    d->featureData = d->getOpenTypeTables(face, d->codePoints, d->featureData, true, samplesOnly, KLocalizedString::languages(), language);
 
     endResetModel();
 }

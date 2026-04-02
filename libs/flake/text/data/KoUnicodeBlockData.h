@@ -44,7 +44,8 @@ public:
 
     // Default block when there's no other blocks.
     static KoUnicodeBlockData noBlock() {
-        return KoUnicodeBlockData(i18nc("@title", "No Block"), 0x10FFFF, 0x10FFFF);
+        static const QString noBlockName = i18nc("@title", "No Block");
+        return KoUnicodeBlockData(noBlockName, 0x10FFFF, 0x10FFFF);
     }
 private:
     struct Private;

@@ -573,9 +573,9 @@ void SvgTextTool::slotTextTypeUpdated()
     QActionGroup *typeConvertGroup = action("text_type_preformatted")->actionGroup();
     if (typeConvertGroup) {
         typeConvertGroup->setExclusive(true);
-    }
-    Q_FOREACH (QAction *a, typeConvertGroup->actions()) {
-        a->setCheckable(true);
+        Q_FOREACH (QAction *a, typeConvertGroup->actions()) {
+            a->setCheckable(true);
+        }
     }
     if (m_optionManager) {
         if (shape) {
@@ -594,7 +594,10 @@ void SvgTextTool::slotTextTypeUpdated()
             }
         }
         const bool enableTypeSetting = (m_optionManager->typeSettingMode() && shape && (shape->textType() == KoSvgTextShape::PreformattedText ||shape->textType() == KoSvgTextShape::PrePositionedText));
-        action("svg_type_setting_move_selection_start_down_1_px")->actionGroup()->setEnabled(enableTypeSetting);
+        QActionGroup *svgTypeSettingGroup = action("svg_type_setting_move_selection_start_down_1_px")->actionGroup();
+        if (svgTypeSettingGroup) {
+            svgTypeSettingGroup->setEnabled(enableTypeSetting);
+        }
         m_textCursor.updateTypeSettingDecorFromShape();
     }
 }

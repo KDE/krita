@@ -255,10 +255,10 @@ void KisUndoModel::addImage(int idx)
 
     const KUndo2Command* currentCommand = m_stack->command(idx-1);
     if (m_stack->count() == idx && !m_imageMap.contains(currentCommand)) {
-        KisImageWSP historyImage = m_canvas->image();
+        KisImageSP historyImage = m_canvas->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
         QSize size = QSize(32, 32)*m_devicePixelRatioF;
-        QImage image = paintDevice->createThumbnail(size.width(), size.height());
+        QImage image = paintDevice->createThumbnail(size.width(), size.height(), KisThumbnailBoundsMode::Coarse);
         image.setDevicePixelRatio(m_devicePixelRatioF);
         m_imageMap[currentCommand] = image;
     }

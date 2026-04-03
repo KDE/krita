@@ -629,6 +629,16 @@
       <url>https://krita.org/en/posts/2026/krita-5.3.1-released/</url>
       <description>
         <p>This release mainly fixes a slowdown issue for Windows users who use automation tools like Microsoft Windows Powertoys' Fancy Zones or the Google Drive plugin</p>
+        <p xml:lang="ar">يُصلح هذا الإصدار بشكل أساسي مشكلة بطء الأداء التي يواجهها مستخدمو وندوز الذين يستخدمون أدوات الأتمتة مثل ”Fancy Zones“ من Microsoft Windows Powertoys أو المكون الإضافي لغوغل درايف</p>
+        <p xml:lang="ca">Aquest llançament soluciona principalment un problema de desacceleració dels usuaris de Windows que utilitzen eines d'automatització com Fancy Zones de Powertoys de Microsoft Windows o el connector de Google Drive</p>
+        <p xml:lang="ca-valencia">Este llançament soluciona principalment un problema de desacceleració dels usuaris de Windows que utilitzen eines d'automatització com Fancy Zones de Powertoys de Microsoft Windows o el connector de Google Drive</p>
+        <p xml:lang="es">Esta versión corrige principalmente un problema de ralentización para los usuarios de Windows que usen herramientas de automatización, como las «Fancy Zones» de los Powertoys de Microsoft Windows o el complemento de Google Drive.</p>
+        <p xml:lang="he">המהדורה הזאת מתקנת בעיית איטיות שחוו משתמשי Windows שמשתמשים בכלי אוטומציה כגון Fancy Zones ב־Microsoft Windows Powertoys או בתוסף Google Drive</p>
+        <p xml:lang="nl">Deze uitgave verhelpt voornamelijk een probleem met vertragingen voor Windows-gebruikers die gebruikmaken van automatiseringshulpmiddelen zoals Fancy Zones van Microsoft Windows PowerToys of de Google Drive-plug-in.</p>
+        <p xml:lang="pt-BR">Esta versão corrige principalmente um problema de lentidão para usuários do Windows que utilizam ferramentas de automação como o Fancy Zones do Microsoft Windows Powertoys ou o plugin do Google Drive</p>
+        <p xml:lang="sl">Ta izdaja predvsem odpravlja težavo upočasnitve za uporabnike na sistemih Windows, ki uporabljajo samodejna orodja, kot sta Microsoft Windows Powertoys' Fancy Zones in vstavek Google Drive</p>
+        <p xml:lang="tr">Bu yayım, özellikle Microsoft Windows Powertoys’un Fancy Zones veya Google Drive eklentisi gibi otomasyon araçlarını kullanan Windows kullanıcıları için yaşanan yavaşlama sorununu gidermeyi amaçlamaktadır.</p>
+        <p xml:lang="uk">У цьому випуску, в основному, виправлено проблему уповільнення для користувачів Windows, які використовують інструменти автоматизації, зокрема Fancy Zones з Microsoft Windows Powertoys або додаток Диск Google.</p>
       </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
@@ -700,7 +710,7 @@
       <description>A bug fix release with a number of crash fixes and workarounds to improve use with the Xiaomi Pad</description>
       <description xml:lang="ar">هذا الإصدار مخصص لإصلاح العلات مع عدد من إصلاحات الانهيار وحلول بديلة لتحسين الاستخدام مع Xiaomi Pad</description>
       <description xml:lang="ca">Una versió de correcció d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb el Xiaomi Pad</description>
-      <description xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses correccions de fallades i solucions per a millorar l'ús amb Xiaomi Pad</description>
+      <description xml:lang="ca-valencia">Una versió d'esmena d'errors amb diverses esmenes de fallades i solucions per a millorar l'ús amb Xiaomi Pad</description>
       <description xml:lang="cs">Opravné vydání, která obsahuje řadu oprav pádů a řešení, aby se zlepšila použitelnost s tabletem Xiaomi Pad</description>
       <description xml:lang="es">Una versión de corrección de errores con una serie de correcciones de fallos y soluciones alternativas para mejorar el uso del Xiaomi Pad.</description>
       <description xml:lang="fr">Une version corrective incluant la correction de plusieurs plantages et des solutions de contournement pour améliorer l'utilisation du pavé tactile de Xiaomi</description>

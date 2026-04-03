@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-02 02:37+0000\n"
+"POT-Creation-Date: 2026-04-03 02:39+0000\n"
 "PO-Revision-Date: 2025-10-04 21:46+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -19029,7 +19029,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Fundul piscinei"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:408
+#: libs/flake/text/KoFontGlyphModel.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-02 02:37+0000\n"
+"POT-Creation-Date: 2026-04-03 02:39+0000\n"
 "PO-Revision-Date: 2026-03-24 10:18+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -18779,7 +18779,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "لا يوجد كتلة"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:408
+#: libs/flake/text/KoFontGlyphModel.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."

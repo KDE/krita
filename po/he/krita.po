@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-02 02:37+0000\n"
-"PO-Revision-Date: 2026-04-01 17:48+0300\n"
+"POT-Creation-Date: 2026-04-03 02:39+0000\n"
+"PO-Revision-Date: 2026-04-02 10:38+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -18828,7 +18828,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "הורד שכבה מטה"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:408
+#: libs/flake/text/KoFontGlyphModel.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -54280,9 +54280,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:426
-#, fuzzy, kde-format
+#, kde-format
 msgid "Encoder parameters"
-msgstr "שינוי טאבולטור"
+msgstr "משתני מקודד"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
@@ -56409,8 +56409,7 @@ msgstr ""
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "TIFF options"
 msgid "None"
 msgstr "ללא"
@@ -57633,9 +57632,9 @@ msgstr "סובב &90"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape creation:"
-msgstr "ניווט"
+msgstr "יצירת צורות:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, smoothCHBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:71
@@ -58037,9 +58036,9 @@ msgid "Hatching preferences"
 msgstr "&מברשת"
 
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Crosshatching"
-msgstr "ריווח:"
+msgstr "קווקוו צולב:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
@@ -58061,15 +58060,15 @@ msgstr "מקור Y:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
-#, fuzzy, kde-format
+#, kde-format
 msgid "Crosshatching style"
-msgstr "ריווח:"
+msgstr "סגנון קווקוו צולב:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noCrosshatchingRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:286
-#, fuzzy, kde-format
+#, kde-format
 msgid "No crosshatch&ing"
-msgstr "ריווח:"
+msgstr "&ללא קווקוו צולב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, perpendicularRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:308
@@ -58517,9 +58516,9 @@ msgstr "מצב מכחול"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset Adjustments"
-msgstr "מצב צבעים"
+msgstr "איפוס כוונונים"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFont)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:72
@@ -58559,9 +58558,9 @@ msgstr "ניגודיות: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Neutral point: "
-msgstr "יעד:"
+msgstr "נקודה נייטרלית: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99

@@ -78,7 +78,8 @@ void KisImageSignalRouter::emitNotification(KisImageSignalType type)
      */
 
     if (type.id == LayersChangedSignal ||
-        type.id == NodeReselectionRequestSignal) {
+        type.id == NodeReselectionRequestSignal ||
+        type.id == SizeChangedSignal) {
         slotNotification(type);
     } else {
         Q_EMIT sigNotification(type);

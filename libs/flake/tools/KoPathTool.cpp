@@ -323,7 +323,7 @@ void KoPathTool::convertToPath()
             KoShape *outlineShape = shape->textOutline();
 
             KoShapeContainer *parent = shape->parent();
-            canvas()->shapeController()->addShapeDirect(outlineShape, parent, cmd);
+            canvas()->shapeController()->addShapeDirect(outlineShape, &parent, cmd);
 
             newSelectedShapes << outlineShape;
         }

@@ -268,7 +268,10 @@ void TestShapePainting::testGroupUngroup()
             group->setName("group");
 
             KUndo2Command groupingCommand;
-            canvas.shapeController()->addShapeDirect(group, shapesFakeLayer.data(), &groupingCommand);
+
+            KoShapeContainer* parent = shapesFakeLayer.data();
+            canvas.shapeController()->addShapeDirect(group, &parent, &groupingCommand);
+
             new KoShapeGroupCommand(group, groupedShapes, true, &groupingCommand);
 
             groupingCommand.redo();

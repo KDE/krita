@@ -24,6 +24,7 @@
 #include "commands/KoSvgTextAddRemoveShapeCommands.h"
 #include "KoSvgTextPathInfoChangeCommand.h"
 #include "kis_global.h"
+#include "kis_shape_layer.h"
 #include "kundo2command.h"
 
 #include <KoPathShape.h>
@@ -154,8 +155,12 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     KUndo2Command *parentCommand = new KUndo2Command();
 
     new KoKeepShapesSelectedCommand(tool->koSelection()->selectedShapes(), {}, tool->canvas()->selectedShapesProxy(), false, parentCommand);
+    KoShapeContainer* parent = nullptr;
 
-    KUndo2Command *cmd = tool->canvas()->shapeController()->addShape(textShape, 0, parentCommand);
+    KUndo2Command *cmd = tool->canvas()->shapeController()->addShape(textShape, &parent, parentCommand);
+
+    KisShapeLayer *layer = dynamic_cast<KisShapeLayer *>(parent);
+
     parentCommand->setText(cmd->text());
 
     if (m_flowShape) {
@@ -187,7 +192,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
         }
     }
 
-    new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);
+    new KoKeepShapesSelectedCommand({}, {textShape}, layer->selectedShapesProxy(), true, parentCommand);
     tool->canvas()->snapGuide()->reset();
 
     return parentCommand;

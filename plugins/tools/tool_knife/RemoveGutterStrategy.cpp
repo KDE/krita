@@ -295,7 +295,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
     KoShapeContainer *parent = referenceShape->parent();
-    tool()->canvas()->shapeController()->addShapeDirect(resultShape, parent, cmd);
+    tool()->canvas()->shapeController()->addShapeDirect(resultShape, &parent, cmd);
 
     if (isSelected[shapeOrigIndexes[0]] || isSelected[shapeOrigIndexes[1]]) { // if either is selected
         resultSelectedShapes << resultShape;

@@ -1808,7 +1808,7 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
         newShape->setZIndex(referenceShape->zIndex());
 
         KoShapeContainer *parent = referenceShape->parent();
-        canvas()->shapeController()->addShapeDirect(newShape, parent, cmd);
+        canvas()->shapeController()->addShapeDirect(newShape, &parent, cmd);
 
         newSelectedShapes << newShape;
     }

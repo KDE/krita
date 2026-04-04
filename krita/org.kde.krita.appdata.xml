@@ -639,6 +639,7 @@
         <p xml:lang="sl">Ta izdaja predvsem odpravlja težavo upočasnitve za uporabnike na sistemih Windows, ki uporabljajo samodejna orodja, kot sta Microsoft Windows Powertoys' Fancy Zones in vstavek Google Drive</p>
         <p xml:lang="tr">Bu yayım, özellikle Microsoft Windows Powertoys’un Fancy Zones veya Google Drive eklentisi gibi otomasyon araçlarını kullanan Windows kullanıcıları için yaşanan yavaşlama sorununu gidermeyi amaçlamaktadır.</p>
         <p xml:lang="uk">У цьому випуску, в основному, виправлено проблему уповільнення для користувачів Windows, які використовують інструменти автоматизації, зокрема Fancy Zones з Microsoft Windows Powertoys або додаток Диск Google.</p>
+        <p xml:lang="zh-CN">这一版软件主要修复了 Windows 用户在使用某些自动化工具，如 Powertoys 的 Fancy Zones 或 Google Drive 插件时的拖慢问题。</p>
       </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">

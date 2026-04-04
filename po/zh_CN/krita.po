@@ -56065,7 +56065,7 @@ msgstr "交错式：图像在浏览器中随着下载进度逐渐从模糊变清
 #, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small file size"
-msgstr ""
+msgstr "较小文件体积"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveAsHDR)
 #: plugins/impex/png/kis_wdg_options_png.ui:153

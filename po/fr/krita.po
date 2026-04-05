@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-03 02:39+0000\n"
-"PO-Revision-Date: 2026-03-19 20:25+0100\n"
+"PO-Revision-Date: 2026-04-03 10:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -57365,10 +57365,7 @@ msgstr "Entrelacement"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The compression will take a long time; saving the file will be slow."
-#| msgid "Small File Size"
+#, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small file size"
 msgstr "Taille de fichier réduite"

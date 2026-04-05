@@ -25,6 +25,19 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
+// On Android, KF5I18n's loadMessageCatalog function is unbelievably,
+// unusably slow when setting a fallback language, causing Krita's startup
+// time to balloon several minutes long. Creating dialogs or other widgets
+// also ends up taking forever. Since it's non-functional anyway, we'll
+// disable the ability to set a fallback language. Other operating systems
+// don't seem to have this problem. If/when removing this, also remove the
+// matching check in main.cc!
+#ifdef Q_OS_ANDROID
+static constexpr bool ALLOW_FALLBACK_LANGUAGES = false;
+#else
+static constexpr bool ALLOW_FALLBACK_LANGUAGES = true;
+#endif
+
 // Believe it or not we can't use KConfig from here
 // (we need KConfig during QCoreApplication ctor which is too early for it)
 // So we cooked a QSettings based solution
@@ -153,6 +166,10 @@ KisKSwitchLanguageDialog::KisKSwitchLanguageDialog(QWidget *parent)
     const QStringList defaultLanguages = d->applicationLanguageList();
 
     int count = defaultLanguages.count();
+    if (!ALLOW_FALLBACK_LANGUAGES && count > 1) {
+        count = 1;
+    }
+
     for (int i = 0; i < count; ++i) {
         QString language = defaultLanguages[i];
         bool primaryLanguage = (i == 0);
@@ -164,14 +181,16 @@ KisKSwitchLanguageDialog::KisKSwitchLanguageDialog(QWidget *parent)
         d->addLanguageButton(l.name(), true);
     }
 
-    QHBoxLayout *addButtonHorizontalLayout = new QHBoxLayout();
-    topLayout->addLayout(addButtonHorizontalLayout);
+    if (ALLOW_FALLBACK_LANGUAGES) {
+        QHBoxLayout *addButtonHorizontalLayout = new QHBoxLayout();
+        topLayout->addLayout(addButtonHorizontalLayout);
 
-    QPushButton *addLangButton = new QPushButton(i18n("Add Fallback Language"), this);
-    addLangButton->setToolTip(i18n("Adds one more language which will be used if other translations do not contain a proper translation."));
-    connect(addLangButton, SIGNAL(clicked()), this, SLOT(slotAddLanguageButton()));
-    addButtonHorizontalLayout->addWidget(addLangButton);
-    addButtonHorizontalLayout->addStretch();
+        QPushButton *addLangButton = new QPushButton(i18n("Add Fallback Language"), this);
+        addLangButton->setToolTip(i18n("Adds one more language which will be used if other translations do not contain a proper translation."));
+        connect(addLangButton, SIGNAL(clicked()), this, SLOT(slotAddLanguageButton()));
+        addButtonHorizontalLayout->addWidget(addLangButton);
+        addButtonHorizontalLayout->addStretch();
+    }
 
     topLayout->addStretch(10);
 

@@ -362,6 +362,14 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     const QDir configPath(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
     QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
 
+    // KFI18N is broken on Android. See kswitchlanguagedialog_p.cpp for details.
+    // If/when removing this, also remove the matching logic from there!
+#ifdef Q_OS_ANDROID
+    static constexpr bool ALLOW_FALLBACK_LANGUAGES = false;
+#else
+    static constexpr bool ALLOW_FALLBACK_LANGUAGES = true;
+#endif
+
     QString root;
     QString language;
     {
@@ -530,10 +538,16 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
     dbgLocale << "Override language:" << language;
     bool rightToLeft = false;
     if (!language.isEmpty()) {
-        KLocalizedString::setLanguages(language.split(":"));
+        QStringList languageList = language.split(QStringLiteral(":"));
+        const QString &firstLanguage = languageList.constFirst();
+        if (ALLOW_FALLBACK_LANGUAGES) {
+            KLocalizedString::setLanguages(languageList);
+        } else {
+            KLocalizedString::setLanguages(QStringList() << firstLanguage);
+        }
 
         // And override Qt's locale, too
-        QLocale locale(language.split(":").first());
+        QLocale locale(firstLanguage);
         QLocale::setDefault(locale);
 #ifdef Q_OS_MAC
         // prevents python >=3.7 nl_langinfo(CODESET) fail bug 417312.
@@ -545,7 +559,7 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
         const QStringList rtlLanguages = QStringList()
                 << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";
 
-        if (rtlLanguages.contains(language.split(':').first())) {
+        if (rtlLanguages.contains(firstLanguage)) {
             rightToLeft = true;
         }
     }
@@ -611,7 +625,11 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
                 qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
                 qputenv("LANGUAGE", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
-                KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                if (ALLOW_FALLBACK_LANGUAGES) {
+                    KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                } else {
+                    KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                }
                 qputenv("LANG", envLanguage.toLocal8Bit());
                 qputenv("LANGUAGE", envLanguage.toLocal8Bit());
 #endif

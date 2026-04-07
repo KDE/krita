@@ -173,10 +173,7 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
             const QRectF mappedRect = KisAlgebra2D::mapToRect(cropRect).mapRect(rc);
             const QRect resultRect = mappedRect.toAlignedRect();
-
-            QString noParenthesisName(node->name());
-            noParenthesisName.replace(QChar('('), QChar(21)).replace(QChar(')'), QChar(22));
-
+            const QString noParenthesisName(KisQmicSimpleConvertor::nameToGMicName(node->name()));
             const auto translatedMode = KisQmicSimpleConvertor::blendingModeToString(node->compositeOpId());
 
             const QString name = QString("mode(%1),opacity(%2),pos(%3,%4),name(%5)")

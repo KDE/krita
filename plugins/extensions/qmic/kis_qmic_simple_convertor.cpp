@@ -1098,3 +1098,15 @@ QString KisQmicSimpleConvertor::stringToBlendingMode(QString blendMode)
         return blendingModeMap.at(blendMode);
     return COMPOSITE_OVER;
 }
+
+QString KisQmicSimpleConvertor::nameToGMicName(QString name)
+{
+    name.replace(QChar('('), QChar(21)).replace(QChar(')'), QChar(22));
+    return name;
+}
+
+QString KisQmicSimpleConvertor::gMicNameToName(QString name)
+{
+    name.replace(QChar(21), QChar('(')).replace(QChar(22), QChar(')'));
+    return name;
+}

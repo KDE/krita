@@ -21,6 +21,24 @@ public:
     static QString blendingModeToString(QString blendMode);
     static QString stringToBlendingMode(QString str);
 
+    /**
+     * A special function that removes all parenthesis from
+     * the layer name, since parenthesis are used in GMic to
+     * encode layer properties.
+     *
+     * The function basically replaces '(' and ')' symbols
+     * with \u0015 and \u0016 correspondingly.
+     */
+    static QString nameToGMicName(QString name);
+
+    /**
+     * Decode the GMic-encoded name back into the one with
+     * parenthesis
+     *
+     * \see nameToGMicName()
+     */
+    static QString gMicNameToName(QString name);
+
     static QImage convertToQImage(const KisQMicImage &gmicImage,
                                   float gmicMaxChannelValue = 255.0);
     static void convertFromQImage(const QImage &image,

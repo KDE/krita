@@ -70,11 +70,11 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
     }
 
     {
-        const QRegularExpression nameRe(R"(name\(\s*([^)]*)\s*\))");
+const QRegularExpression nameRe(R"(name\(\s*([^)]*)\s*\))");
 
         QRegularExpressionMatch match;
         if (srcGmicImage.m_layerName.contains(nameRe, &match)) {
-            const auto name = match.captured(1);
+            const auto name = KisQmicSimpleConvertor::gMicNameToName(match.captured(1));
             dbgPlugins << "Detected layer name: " << name;
             cmd->addCommand(new KisNodeRenameCommand(node, node->name(), name));
             // apply command

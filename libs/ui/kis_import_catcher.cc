@@ -119,13 +119,21 @@ void KisImportCatcher::slotLoadingFinished()
             list << "KisLayer";
             KoProperties props;
 
-            Q_FOREACH(KisNodeSP node, importedImage->rootLayer()->childNodes(list, props)) {
+            const bool multilayerImport = importedImage->rootLayer()->childCount() > 1;
+
+            /**
+             * The layers are added on the top of the active layer, so we should
+             * reverse their order.
+             */
+            KisNodeSP node = importedImage->rootLayer()->lastChild();
+            while (node) {
                 // we need to pass a copied device to make sure it is not reset
                 // on image's destruction
                 KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
                 adaptClipToImageColorSpace(dev, m_d->view->image());
-                m_d->importAsPaintLayer(dev, m_d->prettyLayerName(node->name()));
+                m_d->importAsPaintLayer(dev, multilayerImport ? node->name() : m_d->prettyLayerName(node->name()));
                 m_d->numLayersImported++;
+                node = node->prevSibling();
             }
         }
         else if (m_d->layerType == "KisShapeLayer") {

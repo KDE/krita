@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-03 02:39+0000\n"
+"POT-Creation-Date: 2026-04-07 02:40+0000\n"
 "PO-Revision-Date: 2025-11-14 09:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -16389,21 +16389,21 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Przestrzenie pracy"
 
-#: krita/main.cc:705
+#: krita/main.cc:723
 #, fuzzy, kde-format
 #| msgid "© 1999-%1, The Krita Team"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999-%1 Zespół Krity"
 
-#: krita/main.cc:802 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:820 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:822
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Ostrzeżenie"
 
-#: krita/main.cc:803
+#: krita/main.cc:821
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -31322,7 +31322,7 @@ msgstr "Dodaj obrazy..."
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:432
 #: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -41950,24 +41950,24 @@ msgstr "Zapisz skróty"
 msgid "Import Shortcuts"
 msgstr "Zaimportuj skróty"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:152
 #, kde-format
 msgid "Switch Application Language"
 msgstr "Zmień język programu"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:156
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "Wybierz język, którego ma używać ten program:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:188
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Add Fallback Language"
 msgid "Add Fallback Language"
 msgstr "Dodaj język zapasowy"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:189
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
@@ -41975,13 +41975,13 @@ msgid ""
 msgstr ""
 "Dodaje dodatkowy język, używany przy braku tłumaczenia dla języka domyślnego"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:285
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "Zmieniono język programu"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:286
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
@@ -41990,17 +41990,17 @@ msgstr ""
 "Język tego programu został zmieniony. Wprowadzone zmiany odniosą skutek przy "
 "następnym uruchomieniu programu."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, kde-format
 msgid "Fallback language:"
 msgstr "Język zapasowy:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, kde-format
 msgid "Primary language:"
 msgstr "Język główny:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:424
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:443
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
@@ -42008,7 +42008,7 @@ msgid ""
 msgstr ""
 "Jest to główny język programu, który będzie używany przed innymi językami."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:425
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:444
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "

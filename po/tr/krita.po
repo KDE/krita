@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-03 02:39+0000\n"
-"PO-Revision-Date: 2026-04-02 14:30+0300\n"
+"POT-Creation-Date: 2026-04-07 02:40+0000\n"
+"PO-Revision-Date: 2026-04-06 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16270,20 +16270,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: krita/main.cc:705
+#: krita/main.cc:723
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 Krita Geliştiricileri"
 
-#: krita/main.cc:802 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:820 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:822
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:803
+#: krita/main.cc:821
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -30874,7 +30874,7 @@ msgstr "Görseller Ekle…"
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:432
 #: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -41418,22 +41418,22 @@ msgstr "Kısayolları Kaydet"
 msgid "Import Shortcuts"
 msgstr "Kısayolları İçe Aktar"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:152
 #, kde-format
 msgid "Switch Application Language"
 msgstr "Uygulama Dilini Seç"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:156
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "Lütfen bu uygulama için kullanılacak dili seçin:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:188
 #, kde-format
 msgid "Add Fallback Language"
 msgstr "Yedek Dil Ekle"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:189
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
@@ -41442,13 +41442,13 @@ msgstr ""
 "Diğer çeviriler uygun bir çeviri içermediğinde kullanılmak için daha fazla "
 "dil ekler."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:285
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "Uygulama Dili Değiştirildi"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:286
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
@@ -41457,24 +41457,24 @@ msgstr ""
 "Bu uygulama için kullanılacak dil değiştirildi. Değişiklik, uygulamanın bir "
 "sonraki açılışında etkinleştirilecek."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, kde-format
 msgid "Fallback language:"
 msgstr "Yedek dil:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, kde-format
 msgid "Primary language:"
 msgstr "Ana dil:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:424
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:443
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "Diğer dillerden önce kullanılacak ana uygulama dili."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:425
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:444
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
@@ -68005,6 +68005,7 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"Kesme kipi: Belirtilen genişlikte oluklar oluşturmak için şekilleri keser."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
 #, kde-format
@@ -68012,7 +68013,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "Birleştirme kipi: Şekiller arasındaki olukları kaldırır."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format
@@ -68067,10 +68068,9 @@ msgstr "Genişlik birimi:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thick gap:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Kalın boşluk:"
+msgstr "Kalın boşluk genişliği"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
@@ -68082,10 +68082,9 @@ msgstr "Kalın boşluk:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thin gap:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "İnce boşluk:"
+msgstr "İnce boşluk genişliği"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
@@ -68097,10 +68096,9 @@ msgstr "İnce boşluk:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Special gap:"
+#, kde-format
 msgid "Special gap width"
-msgstr "Özel boşluk:"
+msgstr "Özel boşluk genişliği"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
@@ -68112,7 +68110,7 @@ msgstr "Özel boşluk:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "Açıya göre, boşluğu kendiliğinden seç"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
@@ -68124,28 +68122,25 @@ msgstr "Kendiliğinden"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Yatay Dalga"
+msgstr "Yatay boşluk türü:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Dikey biçem:"
+msgstr "Dikey boşluk türü:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Köşegenel:"
+msgstr "Köşegenel boşluk türü:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -68157,11 +68152,9 @@ msgstr "Köşegenel:"
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Instant preview threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Anında önizleme eşiği:"
+msgstr "Köşegenel tür açısı eşiği:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"

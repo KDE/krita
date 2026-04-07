@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-03 02:39+0000\n"
+"POT-Creation-Date: 2026-04-07 02:40+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16675,20 +16675,20 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "خىزمەت رايونلىرى"
 
-#: krita/main.cc:705
+#: krita/main.cc:723
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr ""
 
-#: krita/main.cc:802 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:820 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:822
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "ئاگاھلاندۇرۇش"
 
-#: krita/main.cc:803
+#: krita/main.cc:821
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -31429,7 +31429,7 @@ msgstr "سۈرەت تاللاش:"
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:432
 #: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -41717,59 +41717,59 @@ msgstr "سەپلە…"
 msgid "Import Shortcuts"
 msgstr "قۇرلارنى ئىمپورت قىلىش:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:152
 #, fuzzy, kde-format
 msgid "Switch Application Language"
 msgstr "مەشغۇلاتنى كۆپەيت"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:156
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:188
 #, fuzzy, kde-format
 msgid "Add Fallback Language"
 msgstr "گامما:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:189
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
 "contain a proper translation."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:285
 #, fuzzy, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "مەشغۇلاتنى كۆپەيت"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:286
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, fuzzy, kde-format
 msgid "Fallback language:"
 msgstr "گامما:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:394
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, fuzzy, kde-format
 msgid "Primary language:"
 msgstr "گامما:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:424
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:443
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:425
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:444
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "

@@ -73,7 +73,12 @@ static bool ReadOldLine(quint8 *image, int width, QDataStream &s)
         }
 
         if ((image[0] == 1) && (image[1] == 1) && (image[2] == 1)) {
-            for (i = image[3] << rshift; i > 0; i--) {
+            const int length = image[3] << rshift;
+            if (length > width) {
+                dbgFile << "Broken file detected: cannot duplicate pixels past image bounds!";
+                return false;
+            }
+            for (i = length; i > 0; i--) {
                 memcpy(image, image-4, 4);
                 image += 4;
                 width--;
@@ -124,7 +129,9 @@ static bool LoadHDR(QDataStream &s, const int width, const int height, KisSequen
     for (int cline = 0; cline < height; cline++) {
         // determine scanline type
         if ((width < MINELEN) || (MAXELEN < width)) {
-            ReadOldLine(image, width, s);
+            if (!ReadOldLine(image, width, s)) {
+                return false;
+            }
             RGBEToPaintDevice(image, width, it);
             continue;
         }
@@ -137,7 +144,9 @@ static bool LoadHDR(QDataStream &s, const int width, const int height, KisSequen
 
         if (val != 2) {
             s.device()->ungetChar(val);
-            ReadOldLine(image, width, s);
+            if (!ReadOldLine(image, width, s)) {
+                return false;
+            }
             RGBEToPaintDevice(image, width, it);
             continue;
         }
@@ -152,7 +161,9 @@ static bool LoadHDR(QDataStream &s, const int width, const int height, KisSequen
 
         if ((image[1] != 2) || (image[2] & 128)) {
             image[0] = 2;
-            ReadOldLine(image + 4, width - 1, s);
+            if (!ReadOldLine(image + 4, width - 1, s)) {
+                return false;
+            }
             RGBEToPaintDevice(image, width, it);
             continue;
         }
@@ -174,6 +185,10 @@ static bool LoadHDR(QDataStream &s, const int width, const int height, KisSequen
                     // run
                     code &= 127;
                     s >> val;
+                    if (j + code - 1 >= width) {
+                        dbgFile << "Broken file detected: cannot duplicate data past image bounds!";
+                        return false;
+                    }
                     while (code != 0) {
                         image[i + j * 4] = val;
                         j++;
@@ -181,6 +196,10 @@ static bool LoadHDR(QDataStream &s, const int width, const int height, KisSequen
                     }
                 } else {
                     // non-run
+                    if (j + code - 1 >= width) {
+                        dbgFile << "Broken file detected: cannot extract data past image bounds!";
+                        return false;
+                    }
                     while (code != 0) {
                         s >> image[i + j * 4];
                         j++;

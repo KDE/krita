@@ -39,6 +39,8 @@ public:
     void notifyWindowMinimized(bool minimized) override;
     void setCanvasWidget(KisCanvasWidgetBase* canvas) override;
 
+    void toggleSlectionVisibility();
+
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 
@@ -72,6 +74,8 @@ private:
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
     KisSelectionActionsPanel *m_selectionActionsPanel;
+
+    bool m_selectionVisibility;
 };
 
 #endif

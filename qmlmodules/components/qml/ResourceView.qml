@@ -23,6 +23,7 @@ Control {
         target: modelWrapper;
         function onCurrentIndexChanged() {
             control.highlightedIndex = modelWrapper.currentIndex;
+            view.positionViewAtIndex(modelWrapper.currentIndex, ListView.Center);
         }
         function onResourceTypeChanged() {
             control.resourceType = modelWrapper.resourceType;
@@ -208,11 +209,18 @@ Control {
                                 id: newTagName;
                                 placeholderText: i18nc("@info:placeholder", "New Tag Name...");
                                 Layout.fillWidth: true;
+                                onAccepted: {
+                                    addTagButton.addTag();
+                                }
                             }
                             ToolButton {
+                                id: addTagButton;
                                 icon.source: "qrc:///light_list-add.svg";
                                 icon.color: palette.text;
                                 onClicked:  {
+                                    addTag();
+                                }
+                                function addTag() {
                                     modelWrapper.addNewTag(newTagName.text, tagActionsContextMenu.resourceIndex);
                                     newTagName.text = "";
                                     tagActionsContextMenu.updateAndDismiss();

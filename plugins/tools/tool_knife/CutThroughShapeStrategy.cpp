@@ -155,6 +155,35 @@ void CutThroughShapeStrategy::initializeOutlineObjects(const QTransform &boolean
     }
 }
 
+void CutThroughShapeStrategy::initializeGapShapes(QRectF outlineRect, QLineF leftLine, QLineF rightLine, QPainterPath& outLeft, QPainterPath& outRight, QPainterPath &outLeftOpposite, QPainterPath &outRightOpposite,
+                                                  QRectF& outGapLineRect, QPolygonF& outGapLinePolygon)
+{
+
+
+    QRect outlineRectBiggerInt = kisGrowRect(outlineRect, 10).toRect();
+    QLineF leftLineLong = leftLine;
+    QLineF rightLineLong = rightLine;
+
+
+    KisAlgebra2D::cropLineToRect(leftLineLong, outlineRectBiggerInt, true, true);
+    KisAlgebra2D::cropLineToRect(rightLineLong, outlineRectBiggerInt, true, true);
+
+
+    QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLineLong, rightLineLong);
+    outLeft = paths[0];
+    outRight = paths[1];
+
+    QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLineLong, leftLineLong);
+    outLeftOpposite = pathsOpposite[0];
+    outRightOpposite = pathsOpposite[1];
+
+
+    outGapLineRect = KisAlgebra2D::createRectFromCorners(leftLine) | KisAlgebra2D::createRectFromCorners(rightLine); // will not be empty if the gutterWidth > 0
+
+    outGapLinePolygon = QPolygonF({leftLine.p1(), leftLine.p2(), rightLine.p2(), rightLine.p1(), leftLine.p1()});
+
+}
+
 void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     tool()->canvas()->updateCanvas(m_previousLineDirtyRect);
@@ -181,8 +210,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    QRectF outlineRectBigger = kisGrowRect(outlineRect, 10);
-    QRect outlineRectBiggerInt = outlineRectBigger.toRect();
 
     QLineF gapLine = QLineF(m_startPoint, m_endPoint);
     qreal eps = 0.0000001;
@@ -201,13 +228,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QLineF leftLine = gapLines[0];
     QLineF rightLine = gapLines[1];
 
-    QLineF leftLineLong = leftLine;
-    QLineF rightLineLong = rightLine;
 
 
 
-    KisAlgebra2D::cropLineToRect(leftLineLong, outlineRectBiggerInt, true, true);
-    KisAlgebra2D::cropLineToRect(rightLineLong, outlineRectBiggerInt, true, true);
 
     std::unique_ptr<KUndo2Command> cmd = std::unique_ptr<KUndo2Command>(new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes")));
 
@@ -221,25 +244,19 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
 
-    QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLineLong, rightLineLong);
-    QPainterPath left = paths[0];
-    QPainterPath right = paths[1];
+    QPainterPath left, right, leftOpposite, rightOpposite;
 
-    QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLineLong, leftLineLong);
-    QPainterPath leftOpposite = pathsOpposite[0];
-    QPainterPath rightOpposite = pathsOpposite[1];
+    QRectF gapLineRect;
+    QPolygonF gapLinePolygon;
+    initializeGapShapes(outlineRect, leftLine, rightLine, left, right, leftOpposite, rightOpposite, gapLineRect, gapLinePolygon);
 
     QList<KoShape*> newSelectedShapes;
 
     QList<KoShape*> shapesToRemove;
+    bool checkGapLineRect = !gapLineRect.isEmpty();
 
     QTransform booleanWorkaroundTransformInverted = booleanWorkaroundTransform.inverted();
 
-    QRectF gapLineLeftRect = KisAlgebra2D::createRectFromCorners(leftLine); // warning! can be empty for perfectly horizontal/vertical lines
-    QRectF gapLineRightRect = KisAlgebra2D::createRectFromCorners(rightLine);
-    QRectF gapLineRect = gapLineLeftRect | gapLineRightRect; // will not be empty if the gutterWidth > 0
-    bool checkGapLineRect = !gapLineRect.isEmpty();
-    QPolygonF gapLinePolygon = QPolygonF({leftLine.p1(), leftLine.p2(), rightLine.p2(), rightLine.p1(), leftLine.p1()});
 
     int affectedShapes = 0;
 

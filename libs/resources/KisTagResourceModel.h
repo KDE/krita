@@ -77,6 +77,7 @@ public:
     bool untagResources(const KisTagSP tag, const QVector<int> &resourceId) override;
     int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
+    QHash<int, QByteArray> roleNames() const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 private Q_SLOTS:
@@ -154,6 +155,7 @@ public:
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
+    QHash<int, QByteArray> roleNames() const override;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 

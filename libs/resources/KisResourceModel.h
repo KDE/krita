@@ -409,6 +409,7 @@ public:
     bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
+    QHash<int, QByteArray> roleNames() const override;
 
 public:
 

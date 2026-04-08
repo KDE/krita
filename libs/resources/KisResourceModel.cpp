@@ -1043,6 +1043,14 @@ bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, 
     return false;
 }
 
+QHash<int, QByteArray> KisResourceModel::roleNames() const
+{
+    if (sourceModel()) {
+        return sourceModel()->roleNames();
+    }
+    return QAbstractItemModel::roleNames();
+}
+
 bool KisResourceModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;

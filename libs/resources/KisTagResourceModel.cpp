@@ -682,6 +682,32 @@ QVariant KisAllTagResourceModel::headerData(int section, Qt::Orientation orienta
     return {};
 }
 
+// As above, keep in sync.
+QHash<int, QByteArray> KisAllTagResourceModel::roleNames() const
+{
+    QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
+    roles[Qt::UserRole + KisAbstractResourceModel::Id] = "id";
+    roles[Qt::UserRole + KisAbstractResourceModel::StorageId] = "storageId";
+    roles[Qt::UserRole + KisAbstractResourceModel::Name] = "name";
+    roles[Qt::UserRole + KisAbstractResourceModel::Filename] = "filename";
+    //roles[Qt::UserRole + Tooltip] = "tooltip";
+    roles[Qt::UserRole + KisAbstractResourceModel::Thumbnail] = "thumbnail";
+    roles[Qt::UserRole + KisAbstractResourceModel::Status] = "status";
+    roles[Qt::UserRole + KisAbstractResourceModel::Location] = "location";
+    roles[Qt::UserRole + KisAbstractResourceModel::ResourceType] = "resourcetype";
+    roles[Qt::UserRole + KisAbstractResourceModel::MD5] = "md5";
+    roles[Qt::UserRole + KisAbstractResourceModel::Tags] = "tags";
+    roles[Qt::UserRole + KisAbstractResourceModel::LargeThumbnail] = "largethumbnail";
+    roles[Qt::UserRole + KisAbstractResourceModel::Dirty] = "dirty";
+    roles[Qt::UserRole + KisAbstractResourceModel::MetaData] = "metadata";
+    roles[Qt::UserRole + KisAbstractResourceModel::ResourceActive] = "resourceactive";
+    roles[Qt::UserRole + KisAbstractResourceModel::StorageActive] = "storageactive";
+    roles[Qt::UserRole + KisAbstractResourceModel::BrokenStatus] = "brokenstatus";
+    roles[Qt::UserRole + KisAbstractResourceModel::BrokenStatusMessage] = "brokenstatusmessage";
+
+    return roles;
+}
+
 void KisAllTagResourceModel::closeQuery()
 {
     d->query.clear();
@@ -986,6 +1012,14 @@ bool KisTagResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QStrin
 {
     KisResourceModel resourceModel(d->resourceType);
     return resourceModel.setResourceMetaData(resource, metadata);
+}
+
+QHash<int, QByteArray> KisTagResourceModel::roleNames() const
+{
+    if (sourceModel()) {
+        return sourceModel()->roleNames();
+    }
+    return QAbstractItemModel::roleNames();
 }
 
 QVariant KisTagResourceModel::headerData(int section, Qt::Orientation orientation, int role) const

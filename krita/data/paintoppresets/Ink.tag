@@ -68,6 +68,7 @@ Comment[pl]=Nastawy pędzli tuszujących
 Comment[pt]=Predefinições de Pincéis de Tinta
 Comment[pt_BR]=Predefinições de pincel de tinta
 Comment[ru]=Профили чернил
+Comment[sk]=Skicovací štetec
 Comment[sl]=Prednastavitve čopiča s črnilom
 Comment[sv]=Förinställningar av teckningspenslar
 Comment[tr]=Mürekkep Fırçası Önayarları

@@ -68,6 +68,7 @@ Comment[pl]=Nastawy pędzli szkicujących
 Comment[pt]=Predefinições de pincéis de desenhos e rabiscos
 Comment[pt_BR]=Predefinições de pincel de esboço
 Comment[ru]=Профили эскизных кистей
+Comment[sk]=Skicovací štetec
 Comment[sl]=Prednastavitve čopiča za skiciranje
 Comment[sv]=Förinställningar av skisspenslar
 Comment[tr]=Eskiz fırçası önayarları

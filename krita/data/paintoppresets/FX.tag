@@ -68,6 +68,7 @@ Comment[pl]=Efekty specjalne.kpp
 Comment[pt]=Efeitos Especiais.kpp
 Comment[pt_BR]=Special Effects.kpp
 Comment[ru]=Специальные Эффекты.kpp
+Comment[sk]=Efekty filtra
 Comment[sl]=Posebni učinki.kpp
 Comment[sv]=Specialeffekter.kpp
 Comment[tr]=Özel Efektler.kpp

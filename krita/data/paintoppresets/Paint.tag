@@ -68,6 +68,7 @@ Comment[pl]=Pędzle do malowania
 Comment[pt]=Pincéis de Pintura
 Comment[pt_BR]=Pincéis de pintura
 Comment[ru]=Кисти с красками
+Comment[sk]=10 Štetcov
 Comment[sl]=Slikarski čopiči
 Comment[sv]=Målarpenslar
 Comment[tr]=Boyama Fırçaları

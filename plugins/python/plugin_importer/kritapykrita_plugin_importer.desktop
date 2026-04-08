@@ -68,6 +68,7 @@ Comment[pl]=Zaimportuj wtyczki Pythona z plików zip.
 Comment[pt]=Importa os 'plugins' em Python a partir de ficheiros Zip.
 Comment[pt_BR]=Importa plugins em Python a partir de arquivos zip.
 Comment[ru]=Позволяет импортировать модули Python из zip-файлов
+Comment[sk]=Imports Python plugins from zip files.
 Comment[sl]=Uvaža Pythonove vtičnike iz datotek zip.
 Comment[sv]=Importerar Python-insticksprogram från zip-filer.
 Comment[tr]=Python eklentilerini zip dosyalarından içe aktarır.

@@ -69,6 +69,7 @@ Comment[pl]=Nastawy pędzli teksturujących
 Comment[pt]=Predefinições de Pincéis com Texturas
 Comment[pt_BR]=Predefinições de pincel texturizado
 Comment[ru]=Профили кистей текстуры
+Comment[sk]=10 Štetcov
 Comment[sl]=Prednastavitve čopiča z teksturo
 Comment[sv]=Förinställningar av strukturpenslar
 Comment[tr]=Doku fırçası önayarları

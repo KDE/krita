@@ -69,6 +69,7 @@ Comment[pl]=Wtyczka do wykonywania kodu Pythona ad-hoc
 Comment[pt]='Plugin' para executar código em Python arbitrário
 Comment[pt_BR]=Plugin para executar código em Python arbitrário
 Comment[ru]=Модуль для выполнения специального кода Python
+Comment[sk]=Plugin to execute ad-hoc Python code
 Comment[sl]=Vtičnik za izvajanje kode ad-hoc v Pythonu
 Comment[sv]=Insticksprogram för att köra godtycklig Python-kod
 Comment[tr]=Geçici Python kodu çalıştırmak için eklenti

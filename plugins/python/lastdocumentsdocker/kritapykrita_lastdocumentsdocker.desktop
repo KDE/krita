@@ -69,6 +69,7 @@ Comment[pl]=Dok oparty na pythonie do wyświetlania miniatur ostatnich dziesięc
 Comment[pt]=Uma área acoplável, feita em Python, para mostrar as miniaturas dos últimos dez documentos
 Comment[pt_BR]=Um painel feito em Python para mostrar as miniaturas dos últimos dez documentos
 Comment[ru]=Панель на основе Python, отображающая миниатюры десяти последних открытых документов
+Comment[sk]=A Python-based docker for show thumbnails to last ten documents
 Comment[sl]=Sidrišče na osnovi Pythona za prikaz oglednih sličic zadnjih desetih dokumentov.
 Comment[sv]=Ett Python-baserat dockningsfönster för att visa miniatyrbilder för de tio senaste dokumenten
 Comment[tr]=Son on belgenin küçük görselini göstermek için Python tabanlı bir rıhtım

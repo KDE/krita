@@ -141,6 +141,20 @@ bool CutThroughShapeStrategy::willShapeBeCutPrecise(const QPainterPath& srcOutli
     return true;
 }
 
+void CutThroughShapeStrategy::initializeOutlineObjects(const QTransform &booleanWorkaroundTransform, QList<KoShape *> allShapes, QList<QPainterPath> &outSrcOutlines, QRectF &outOutlineRect)
+{
+    Q_FOREACH (KoShape *shape, allShapes) {
+
+        QPainterPath outlineHere =
+            booleanWorkaroundTransform.map(
+            shape->absoluteTransformation().map(
+                shape->outline()));
+
+        outSrcOutlines << outlineHere;
+        outOutlineRect |= outlineHere.boundingRect();
+    }
+}
+
 void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     tool()->canvas()->updateCanvas(m_previousLineDirtyRect);
@@ -158,16 +172,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    Q_FOREACH (KoShape *shape, m_allShapes) {
+    initializeOutlineObjects(booleanWorkaroundTransform, m_allShapes, srcOutlines, outlineRect);
 
-        QPainterPath outlineHere =
-            booleanWorkaroundTransform.map(
-            shape->absoluteTransformation().map(
-                shape->outline()));
 
-        srcOutlines << outlineHere;
-        outlineRect |= outlineHere.boundingRect();//booleanWorkaroundTransform.map(shape->absoluteOutlineRect()).boundingRect();
-    }
 
     if (outlineRect.isEmpty()) {
         //qCritical() << "The outline rect is empty";

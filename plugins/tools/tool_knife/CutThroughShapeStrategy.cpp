@@ -88,21 +88,13 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
 }
 
 
-bool CutThroughShapeStrategy::willShapeBeCutGeneral(KoShape* referenceShape, const QPainterPath& srcOutline, const QRectF& leftOppositeRect, const QRectF& rightOppositeRect, bool checkGapLineRect, const QRectF& gapLineRect)
+bool CutThroughShapeStrategy::willShapeBeCutGeneral(KoShape* referenceShape, const QPainterPath& srcOutline, bool checkGapLineRect, const QRectF& gapLineRect)
 {
     if (dynamic_cast<KoSvgTextShape*>(referenceShape)) {
         // skip all text
         return false;
     }
 
-    if ((srcOutline.boundingRect() & leftOppositeRect).isEmpty()
-            || (srcOutline.boundingRect() & rightOppositeRect).isEmpty()) {
-        // there is nothing on one side
-        // everything is on the other, far away from the gap line
-        // it just makes it a bit faster when there is a whole lot of shapes
-
-        return false;
-    }
 
     if (checkGapLineRect && (srcOutline.boundingRect() & gapLineRect).isEmpty()) {
         // the gap lines can't cross the shape since their bounding rects don't cross it
@@ -159,7 +151,7 @@ void CutThroughShapeStrategy::initializeOutlineObjects(const QTransform &boolean
     }
 }
 
-void CutThroughShapeStrategy::initializeGapShapes(QRectF outlineRect, QLineF leftLine, QLineF rightLine, QPainterPath& outLeft, QPainterPath& outRight, QPainterPath &outLeftOpposite, QPainterPath &outRightOpposite,
+void CutThroughShapeStrategy::initializeGapShapes(QRectF outlineRect, QLineF leftLine, QLineF rightLine, QPainterPath& outLeft, QPainterPath& outRight,
                                                   QRectF& outGapLineRect, QPolygonF& outGapLinePolygon)
 {
 
@@ -176,11 +168,6 @@ void CutThroughShapeStrategy::initializeGapShapes(QRectF outlineRect, QLineF lef
     QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLineLong, rightLineLong);
     outLeft = paths[0];
     outRight = paths[1];
-
-    QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLineLong, leftLineLong);
-    outLeftOpposite = pathsOpposite[0];
-    outRightOpposite = pathsOpposite[1];
-
 
     outGapLineRect = KisAlgebra2D::createRectFromCorners(leftLine) | KisAlgebra2D::createRectFromCorners(rightLine); // will not be empty if the gutterWidth > 0
 
@@ -240,11 +227,11 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     // -------------
 
-    QPainterPath left, right, leftOpposite, rightOpposite;
+    QPainterPath left, right;
 
     QRectF gapLineRect;
     QPolygonF gapLinePolygon;
-    initializeGapShapes(outlineRect, leftLine, rightLine, left, right, leftOpposite, rightOpposite, gapLineRect, gapLinePolygon);
+    initializeGapShapes(outlineRect, leftLine, rightLine, left, right, gapLineRect, gapLinePolygon);
 
 
     bool checkGapLineRect = !gapLineRect.isEmpty();
@@ -264,7 +251,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         KoShape* referenceShape = m_allShapes[i];
         bool wasSelected = m_selectedShapes.contains(referenceShape);
 
-        bool skipThisShape = !willShapeBeCutGeneral(referenceShape, srcOutlines[i], leftOpposite.boundingRect(), rightOpposite.boundingRect(), checkGapLineRect, gapLineRect);
+        bool skipThisShape = !willShapeBeCutGeneral(referenceShape, srcOutlines[i], checkGapLineRect, gapLineRect);
         skipThisShape = skipThisShape || !willShapeBeCutPrecise(srcOutlines[i], gapLine, leftLine, rightLine, gapLinePolygon);
 
         if (skipThisShape) {

@@ -129,16 +129,18 @@ bool CutThroughShapeStrategy::willShapeBeCutPrecise(const QPainterPath& srcOutli
             || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutline).count() > 0;
 
 
-    bool containsPointWithinGap = false;
-    Q_FOREACH(QPointF p, srcOutline.toFillPolygon()) {
-        if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
-            containsPointWithinGap = true;
-            break;
+    if (!bothGapLinePointsInside && !crossesGapLine) {
+        bool containsPointWithinGap = false;
+        Q_FOREACH(QPointF p, srcOutline.toFillPolygon()) {
+            if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
+                containsPointWithinGap = true;
+                break;
+            }
         }
-    }
 
-    if (!bothGapLinePointsInside && !crossesGapLine && !containsPointWithinGap) {
-        return false;
+        if (!containsPointWithinGap) {
+            return false;
+        }
     }
     return true;
 }

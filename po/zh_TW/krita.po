@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 02:40+0000\n"
+"POT-Creation-Date: 2026-04-08 02:40+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -50203,7 +50203,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "注釋"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "G'MIC 濾鏡"

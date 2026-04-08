@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 02:40+0000\n"
+"POT-Creation-Date: 2026-04-08 02:40+0000\n"
 "PO-Revision-Date: 2026-04-02 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -50836,7 +50836,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Коментар"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr ""

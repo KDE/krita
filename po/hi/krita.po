@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 02:40+0000\n"
+"POT-Creation-Date: 2026-04-08 02:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -50344,7 +50344,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "टिप्पणी"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Gmic filter"

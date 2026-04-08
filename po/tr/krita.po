@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 02:40+0000\n"
+"POT-Creation-Date: 2026-04-08 02:40+0000\n"
 "PO-Revision-Date: 2026-04-06 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -50069,7 +50069,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Yorum"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "G’Mic Süzgeci"

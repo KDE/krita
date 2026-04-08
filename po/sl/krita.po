@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-07 02:40+0000\n"
-"PO-Revision-Date: 2026-03-20 12:19+0100\n"
+"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"PO-Revision-Date: 2026-04-07 20:59+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -50136,7 +50136,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Komentar"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "Filter G’MIC"
@@ -56775,13 +56775,10 @@ msgstr "Prepletanje"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The compression will take a long time; saving the file will be slow."
-#| msgid "Small File Size"
+#, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small file size"
-msgstr "manjša datoteka"
+msgstr "Manjša datoteka"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveAsHDR)
 #: plugins/impex/png/kis_wdg_options_png.ui:153

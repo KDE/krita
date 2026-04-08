@@ -76,22 +76,19 @@ ResourceDelegateBase {
         acceptedButtons: Qt.RightButton | Qt.LeftButton;
         anchors.fill: parent;
         hoverEnabled: true;
-        onClicked: {
+        onClicked: (mouse) => {
             if (mouse.button === Qt.RightButton) {
-                resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
+                presetDelegate.resourceRightClicked(mouse.x, mouse.y, parent.model.name, parent.index);
             } else {
-                resourceView.applyHighlightedIndex();
                 presetDelegate.resourceLeftClicked();
             }
         }
         onDoubleClicked: {
-            resourceView.applyHighlightedIndex();
             presetDelegate.resourceDoubleClicked();
         }
+
         onContainsMouseChanged: {
-            if (containsMouse) {
-                resourceView.highlightedIndex = parent.model.index;
-            }
+            presetDelegate.resourceHovered(containsMouse);
         }
 
         readonly property string missingFontName : i18nc("%1 is name of a font family", "Font Family \"%1\" is missing on this machine. This style preset may not work correctly.", presetDelegate.meta.primary_font_family);

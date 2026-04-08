@@ -114,6 +114,7 @@ Button {
             modelWrapper.searchText = text;
             resourceView.showTagging = false;
             resourceView.showSearch = false;
+            resourceView.highlightedIndex = 0;
             resourceCmbPopup.open();
         }
 

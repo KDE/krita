@@ -44,7 +44,7 @@ Control {
         \qmlProperty highlightedIndex
         The currently hovered index on the resource selector.
      */
-    property alias highlightedIndex : view.currentIndex;
+    property int highlightedIndex;
 
     /*
         \qmlProperty resourceDelegate
@@ -106,10 +106,10 @@ Control {
     Keys.onDownPressed: downPress();
     Keys.onUpPressed: upPress();
 
-    function openContextMenu(x, y, resourceName, resourceIndex) {
+    function openContextMenu(target, x, y, resourceName, resourceIndex) {
         tagActionsContextMenu.resourceName = resourceName;
         tagActionsContextMenu.resourceIndex = resourceIndex;
-        tagActionsContextMenu.popup(x, y);
+        tagActionsContextMenu.popup(target, x, y);
     }
 
     contentItem: ColumnLayout {
@@ -279,12 +279,22 @@ Control {
                 clip: true;
                 anchors.fill: parent;
                 id: view;
-                currentIndex: 0;
+                currentIndex: modelWrapper.currentIndex;
 
                 Keys.onDownPressed: control.downPress();
                 Keys.onUpPressed: control.upPress();
 
                 ScrollBar.vertical: ScrollBar {
+                }
+
+                property alias highlightedIndex: control.highlightedIndex;
+
+                function resourceLeftClicked(resourceIndex) {
+                    control.highlightedIndex = resourceIndex;
+                    control.applyHighlightedIndex();
+                }
+                function openContextMenu(target, x, y, resourceName, resourceIndex) {
+                    control.openContextMenu(target, x, y, resourceName, resourceIndex);
                 }
             }
         }

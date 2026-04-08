@@ -19,26 +19,35 @@ ItemDelegate {
         value automatically gained from the model and represents the model data.
      */
     required property var model;
+    property int index: model.index;
     property double preferredHeight;
     property double minimumHeight;
-    /*
-        \qmlProperty resourceView
-        the resource view this is set on.
-     */
-    property Kis.ResourceView resourceView;
 
     signal resourceLeftClicked();
     signal resourceDoubleClicked();
-
-    highlighted: resourceView.highlightedIndex === model.index;
 
     /*
         \qmlProperty selected
         Whether the current item is selected in the model wrapper.
      */
-    property bool selected: resourceView.modelWrapper.currentIndex === model.index;
+    property bool selected: ListView.view? ListView.isCurrentItem: false;
+    highlighted: ListView.view.highlightedIndex === index;
 
-    palette: resourceView.palette;
+    palette: ListView.view.palette;
+
+    onResourceLeftClicked: {
+        ListView.view.resourceLeftClicked(control.index);
+    }
+
+    function resourceRightClicked(x, y, resourceName, resourceIndex) {
+            ListView.view.openContextMenu(control, x, y, resourceName, resourceIndex);
+    }
+
+    function resourceHovered(hovered) {
+        if (hovered && ListView.view) {
+            ListView.view.highlightedIndex = index;
+        }
+    }
 
     contentItem: Label {
         palette: control.palette;

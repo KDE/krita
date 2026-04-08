@@ -14,7 +14,6 @@ Kis.ResourcePopup {
     addResourceRowVisible: false;
     resourceDelegate: Kis.FontFamilyDelegate {
         id: fontDelegate;
-        resourceView: resourceCmb.view;
         locales: resourceCmb.locales;
         onResourceLeftClicked: {
             resourceCmb.activated();

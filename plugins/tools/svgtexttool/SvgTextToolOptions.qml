@@ -94,7 +94,6 @@ Control {
             resourceType: "css_styles";
             resourceDelegate: Kis.CssStylePresetDelegate {
                 id: presetDelegate;
-                resourceView: btnSelectCssStylePreset.view;
                 preferredHeight: minimumHeight;
                 onResourceLeftClicked: {
                     btnSelectCssStylePreset.activated();

@@ -23,7 +23,6 @@ ResourceDelegateBase {
     id: fontDelegateItem;
     property var locales: [];
     property string name: typeof model.name !== "undefined"? model.name: "";
-    property int index: model.index;
     property string fontName: name;
     property var metadata: model.metadata;
     // TODO: change this to use the text locale, if possible.
@@ -217,11 +216,10 @@ ResourceDelegateBase {
         acceptedButtons: Qt.RightButton | Qt.LeftButton;
         anchors.fill: parent;
         hoverEnabled: true;
-        onClicked: {
+        onClicked: (mouse) => {
             if (mouse.button === Qt.RightButton) {
-                resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.index);
+                fontDelegateItem.resourceRightClicked(mouse.x, mouse.y, parent.model.name, parent.index);
             } else {
-                resourceView.applyHighlightedIndex();
                 fontDelegateItem.resourceLeftClicked();
             }
         }
@@ -230,9 +228,7 @@ ResourceDelegateBase {
         }
 
         onContainsMouseChanged: {
-            if(containsMouse) {
-                resourceView.highlightedIndex = parent.index;
-            }
+            fontDelegateItem.resourceHovered(containsMouse);
         }
 
         Kis.ToolTipBase {

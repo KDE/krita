@@ -117,7 +117,6 @@ Control {
                 Layout.fillWidth: true;
 
                 resourceDelegate: Kis.CssStylePresetDelegate {
-                    resourceView: presetView;
                     onResourceDoubleClicked: {
                         canvasObserver.applyPreset(presetView.modelWrapper.currentResource);
                     }

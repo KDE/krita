@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2026-04-02 11:31+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -46824,7 +46824,7 @@ msgstr "Eliminar función."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -47430,19 +47430,19 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Preajuste"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Añadir preajuste de estilo"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Editar preajuste de estilo"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
@@ -67708,13 +67708,13 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Seleccionar preajuste de estilo"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Abrir propiedades del texto"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67723,73 +67723,73 @@ msgstr ""
 "Abrir el panel de propiedades del texto para modificar propiedades como el "
 "tamaño del texto y su estilo."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Opciones"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Usar cursor visual"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr "Usar el orden visual para el texto bidireccional."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Pegar texto enriquecido de forma predeterminada"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr "Pegar siempre texto enriquecido al usar la acción de pegar."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Modo de composición tipográfica"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Activar el modo de composición tipográfica."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Diálogos"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Editar fuente SVG"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Editar el texto seleccionado como SVG XML."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Paleta de glifos"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67799,19 +67799,19 @@ msgstr ""
 "Abrir la paleta de glifos, que proporciona acceso a variantes OpenType o "
 "Unicode alternativas de glifos, así como un mapa de caracteres."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Convertir tipo…"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Preformateado"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67822,13 +67822,13 @@ msgstr ""
 "los saltos de línea. Se inserta un salto de línea para que las líneas del "
 "ajuste y del posicionamiento permanezcan separadas."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Ajustado en línea"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67839,13 +67839,13 @@ msgstr ""
 "conservando los espacios y los saltos de línea. Los saltos de línea no se "
 "eliminan."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Preposicionado"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67856,19 +67856,19 @@ msgstr ""
 "líneas.  Los espacios y los saltos de línea se contraen. Permite "
 "compatibilidad con SVG 1.1."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Depuración"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Mostrar cuadros delimitadores de caracteres"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -69696,7 +69696,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Herramienta de edición de paneles de cómic"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -69706,49 +69706,49 @@ msgstr ""
 "La familia tipográfica «%1» no está presente en esta máquina. Es posible que "
 "este preajuste de estilo no funcione correctamente."
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Etiqueta"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Asignar a etiqueta"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Nuevo nombre: de etiqueta…"
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Eliminar de esta etiqueta"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Eliminar de otra etiqueta"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Buscar en etiqueta"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Importar %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

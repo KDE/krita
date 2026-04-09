@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2026-04-02 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -47325,7 +47325,7 @@ msgstr "Вилучити можливість."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -47938,19 +47938,19 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Набір"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Додати набір стилів"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Редагування набору стилів"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
@@ -68330,13 +68330,13 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Виберіть набір стилів"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Відкрити властивості тексту"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68345,74 +68345,74 @@ msgstr ""
 "Відкрити бічну панель властивостей тексту для редагування властивостей, "
 "зокрема розміру і стилю тексту."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Параметри"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Використовувати візуальний курсор"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr "Використовувати візуальний порядок для двоспрямованого тексту."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Типово вставляти форматований текст"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 "Завжди вставляти форматований текст при використанні дії зі вставлення."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Режим поліграфії"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Увімкнути режим поліграфії."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Діалогові вікна"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Редагувати код SVG"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Редагувати поточний позначений текст як XML SVG."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Палітра гліфів"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68422,19 +68422,19 @@ msgstr ""
 "Відкрити палітру гліфів, яка надає доступ до альтернативних варіантів гліфів "
 "OpenType або Unicode, а також таблиці символів."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Тип перетворення…"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Попереднє форматування"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68445,13 +68445,13 @@ msgstr ""
 "збережено. Розрив рядка буде вставлено так, щоб відокремити ці рядки від "
 "блоків з перенесенням та позиціюванням."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Вбудоване перенесення"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68461,13 +68461,13 @@ msgstr ""
 "Текст переноситиметься з фіксованою шириною, пробіли і розриви рядків буде "
 "збережено. Розриви рядків не вилучатимуться."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Попереднє позиціювання"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68478,19 +68478,19 @@ msgstr ""
 "рядків. Пробіли і розриви рядків буде згорнуто. Це для зворотної сумісності "
 "з SVG 1.1."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Діагностика"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Показувати обмежувальні рамки символів"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -70326,7 +70326,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Інструмент редагування «Панель коміксів»"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -70336,49 +70336,49 @@ msgstr ""
 "У цій системі немає гарнітури шрифту «%1». Цей набір параметрів стилю може "
 "працювати некоректно."
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Мітка"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Пов’язати з міткою"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Назва нової мітки…"
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Вилучити з цієї мітки"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Вилучити з іншої мітки"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Шукати у мітці"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Імпортувати %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

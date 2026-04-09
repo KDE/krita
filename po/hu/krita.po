@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2026-03-31 22:28+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -46637,7 +46637,7 @@ msgstr "Funkció eltávolítása."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -47241,19 +47241,19 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Előbeállítás"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Stílusbeállítás hozzáadása"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Stílusbeállítás szerkesztése"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
@@ -67414,13 +67414,13 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Stíluskészlet kiválasztása"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Szövegtulajdonságok megnyitása"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67429,73 +67429,73 @@ msgstr ""
 "A Szövegtulajdonságok dokkoló megnyitása a betűméret, stílus és egyéb "
 "tulajdonságok szerkesztéséhez."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Beállítások"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Vizuális kurzor használata"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr "A vizuális sorrend használata a kétirányú szövegekhez."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Formázott szöveg beillesztése alapértelmezés szerint"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr "Mindig formázott szöveg beillesztése a beillesztés műveletnél."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Szedési mód"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Szedési mód engedélyezése."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Párbeszédablakok"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "SVG forrás szerkesztése"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "A kijelölt szöveg szerkesztése SVG XML kódként."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Karakterjel-paletta"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67505,19 +67505,19 @@ msgstr ""
 "A Karakterjel-paletta megnyitása, mely hozzáférést biztosít az alternatív "
 "OpenType vagy Unicode glifavariációkhoz, valamint a karaktertáblához."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Típus átalakítása..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Előformázott"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67528,13 +67528,13 @@ msgstr ""
 "kerül beillesztésre, hogy a tördelésből vagy pozicionálásból eredő sorok "
 "elkülönítve maradjanak."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Kerethez tördelt"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67544,13 +67544,13 @@ msgstr ""
 "A szöveg fix hosszúságon belül törik meg, a szóközök és új sorok "
 "megmaradnak. Az új sorok nem kerülnek eltávolításra."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Előre pozicionált"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67561,19 +67561,19 @@ msgstr ""
 "pozicionálásához. A szóközök és új sorok összevonásra kerülnek. Ez az SVG "
 "1.1 verzióval való visszamenőleges kompatibilitást szolgálja."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Hibakeresés"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Karakterek befoglalókereteinek megjelenítése"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -69389,7 +69389,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Képregénypanel-szerkesztő eszköz"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -69399,49 +69399,49 @@ msgstr ""
 "A(z) \"%1\" betűcsalád hiányzik erről a gépről. Ez a stíluskészlet esetleg "
 "nem fog megfelelően működni."
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Címke"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Hozzárendelés címkéhez"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Új címkenév..."
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Eltávolítás ebből a címkéből"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Eltávolítás a másik címkéből"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Keresés a címkében"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "%1 importálása"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

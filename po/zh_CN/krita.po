@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -46069,7 +46069,7 @@ msgstr "移除特性。"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -46678,19 +46678,19 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "预设"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "创建文本样式预设"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "编辑文本样式预设"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
@@ -66465,86 +66465,86 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "新文本使用预设属性创建"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "文本属性面板"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr "打开或关闭用于编辑字体、大小和其他样式的文本属性面板。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "其他选项"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "按视觉顺序移动双向文本中的光标"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr "在双向文本中按视觉顺序移动光标。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "默认粘贴富文本"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr "粘贴时总是粘贴富文本。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "画布排版模式"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "启用画布排版模式。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "对话框"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "编辑 SVG 源代码"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "将当前选中的文本作为 SVG XML 进行编辑。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "字形表"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -66554,19 +66554,19 @@ msgstr ""
 "打开字形表，您可以在其中访问字形的 OpenType 或 Unicode 替代变体以及字符映射"
 "表。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "转换文本类型..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "回车换行"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -66576,13 +66576,13 @@ msgstr ""
 "文本不会自动换行，保留空格和新行。通过插入换行符来实现自动换行或人工换行的行"
 "的换行。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "自动换行"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -66590,13 +66590,13 @@ msgid ""
 "lines are not removed."
 msgstr "文本按照固定行宽自动换行，保留空格和新行。新行不会被移除。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "绝对定位换行"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -66606,19 +66606,19 @@ msgstr ""
 "使用 SVG 1.1 规范的字符转换功能来对每一行文本进行定位。空格和换行符会被折叠。"
 "此类型专门用于向后兼容 SVG 1.1 规范。"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "调试"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "显示字符边界框"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -68411,7 +68411,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "漫画格子框编辑工具"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -68419,49 +68419,49 @@ msgid ""
 "work correctly."
 msgstr "字体系列“%1”在本机缺失。此文本样式预设可能无法正常工作。"
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "标签"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "分配到标签"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "新标签名称..."
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "移除出此标签"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "移除出其他标签"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "搜索标签"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "导入 %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

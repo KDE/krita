@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -46430,7 +46430,7 @@ msgstr "मेटाव (&R)"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -47048,19 +47048,19 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "प्रीसेट:"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "प्रीसेट संपादित करव"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "प्रीसेट संपादित करव"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
@@ -67319,91 +67319,91 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "अगला सैली:"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "गुन"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "@label:group"
 msgid "Options"
 msgstr "विकल्प"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "वक्रों के साथ पेंट करव"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "डिफाल्ट"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "मीटरिंग मोड"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "फिल्टर सेटिंग"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, fuzzy, kde-format
 #| msgid "Dialog"
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "गोठ"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, fuzzy, kde-format
 #| msgid "Source"
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "स्रोत"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, fuzzy, kde-format
 #| msgid "Duplicate the currently selected layer or mask"
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "अभी हाल के चुने गे परत या मास्क ल दोहरता बनाथे "
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "रंगपट्टिका खोलव"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67411,21 +67411,21 @@ msgid ""
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, fuzzy, kde-format
 #| msgid "&Convert Image Type..."
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "फोटू किसिम बदलव... (&C)"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, fuzzy, kde-format
 #| msgid "Performance"
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "परफार्मेंस"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67433,14 +67433,14 @@ msgid ""
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, fuzzy, kde-format
 #| msgid "Sine"
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "ज्या"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67448,13 +67448,13 @@ msgid ""
 "lines are not removed."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "कम्पोजिट मोड"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67462,19 +67462,19 @@ msgid ""
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "नोड गाइड सक्छम करव"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -69314,7 +69314,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "अनुपात"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -69322,51 +69322,51 @@ msgid ""
 "work correctly."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, fuzzy, kde-format
 #| msgid "Target:"
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "लक्छ्य:"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "पूल तल"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "नाम:"
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "बिन्दु मेटाव"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "बिन्दु मेटाव"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, fuzzy, kde-format
 #| msgid "Selection decoration"
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "चयन डेकोरेसन"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "फोटू आयात करव"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

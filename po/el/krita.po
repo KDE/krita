@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -47439,7 +47439,7 @@ msgstr "Α&φαίρεση"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -48074,21 +48074,21 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Προεπιλογή:"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Προεπιλογές επεξεργασίας"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Προεπιλογές επεξεργασίας"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, fuzzy, kde-format
 #| msgid "New Style"
 msgctxt "@label:button"
@@ -68824,93 +68824,93 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Νέο στιλ"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, fuzzy, kde-format
 #| msgid "Text Properties"
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Ιδιότητες κειμένου"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Επιλογές"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Επικόλληση στο δρομέα"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, fuzzy, kde-format
 #| msgid "Reset to Default"
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Επαναφορά στο προκαθορισμένο"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Λειτουργία μέτρησης:"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, fuzzy, kde-format
 #| msgid "Dialog"
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Διάλογος"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, fuzzy, kde-format
 #| msgid "Source"
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Πηγή"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, fuzzy, kde-format
 #| msgid "Duplicate the currently selected layer or mask"
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Αντίγραφο του επιλεγμένου στρώματος ή μάσκας"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Άνοιγμα παλέτας"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68918,21 +68918,21 @@ msgid ""
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, fuzzy, kde-format
 #| msgid "&Convert Image Type..."
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "&Μετατροπή τύπου εικόνας..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, fuzzy, kde-format
 #| msgid "Performance"
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Επιδόσεις"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68940,14 +68940,14 @@ msgid ""
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, fuzzy, kde-format
 #| msgid "Sine"
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Ημίτονο"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68957,13 +68957,13 @@ msgstr ""
 "<html><head/><body><p>Χρώμα φόντου το οποίο θα αντικαταστήσει τη διαφάνεια "
 "των εικονοστοιχείων.</p></body></html>"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Σύνθεση"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -68971,19 +68971,19 @@ msgid ""
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Ενεργοποίηση οδηγού εγκιβωτισμού"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -70855,7 +70855,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Διαβαθμίσεις"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -70863,53 +70863,53 @@ msgid ""
 "work correctly."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Ετικέτες"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, fuzzy, kde-format
 #| msgid "Assign to tag"
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Ανάθεση σε ετικέτα"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Όνομα:"
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, fuzzy, kde-format
 #| msgid "Remove from this tag"
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Αφαίρεση από αυτή την ετικέτα"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, fuzzy, kde-format
 #| msgid "Remove from other tag"
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Αφαίρεση από άλλη ετικέτα"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, fuzzy, kde-format
 #| msgid "Selection decoration"
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Διακόσμηση επιλογής"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Εισαγωγή εικόνας"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

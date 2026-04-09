@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-08 02:40+0000\n"
+"POT-Creation-Date: 2026-04-09 03:28+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -47524,7 +47524,7 @@ msgstr "Өшіру"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:297
+#: qmlmodules/components/qml/ResourceView.qml:315
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -48163,21 +48163,21 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Дайыны:"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:135
+#: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Дайындарын өзгерту"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:148
+#: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Дайындарын өзгерту"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:167
+#: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, fuzzy, kde-format
 #| msgid "New Style"
 msgctxt "@label:button"
@@ -69033,94 +69033,94 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Жаңа стилі"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, fuzzy, kde-format
 #| msgid "Text Properties"
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Мәтіннің қасиеттері"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Параметрлері"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Меңзеген жерге орналастыру"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
 #, fuzzy, kde-format
 #| msgid "Reset to Default"
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Әдеттігідей қылу"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
 #, fuzzy, kde-format
 #| msgid "Texturing Mode:"
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Текстуралау режімі:"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Планшеттің параметрлері"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, fuzzy, kde-format
 #| msgid "Dialog"
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Диалог"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, fuzzy, kde-format
 #| msgid "Source"
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Қайдан"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
 #, fuzzy, kde-format
 #| msgid "Duplicate the currently selected layer or mask"
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Таңдалған қалқа не қабаттың көшірмесін жасау"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Палитраны ашу"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -69128,21 +69128,21 @@ msgid ""
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, fuzzy, kde-format
 #| msgid "&Convert Image Type..."
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Кескіннің түрін &аудару..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, fuzzy, kde-format
 #| msgid "Performance"
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Жылдамдылығы"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -69150,14 +69150,14 @@ msgid ""
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
 #, fuzzy, kde-format
 #| msgid "Sine"
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Синусты"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -69165,13 +69165,13 @@ msgid ""
 "lines are not removed."
 msgstr "<html><head/><body><p>Амалды сипаттау</p></body></html>"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Құрама"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -69179,19 +69179,19 @@ msgid ""
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Қалыптың төртбұрыш қоршауы"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
@@ -71064,7 +71064,7 @@ msgctxt "action"
 msgid "Comic Panel Editing Tool"
 msgstr "Градиенттер"
 
-#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:97
+#: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
@@ -71072,53 +71072,53 @@ msgid ""
 "work correctly."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:141
+#: qmlmodules/components/qml/ResourceView.qml:142
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Белгілер"
 
-#: qmlmodules/components/qml/ResourceView.qml:184
+#: qmlmodules/components/qml/ResourceView.qml:185
 #, fuzzy, kde-format
 #| msgid "Assign to tag"
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Белгіге тағайындау"
 
-#: qmlmodules/components/qml/ResourceView.qml:209
+#: qmlmodules/components/qml/ResourceView.qml:210
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Атауы:"
 
-#: qmlmodules/components/qml/ResourceView.qml:227
+#: qmlmodules/components/qml/ResourceView.qml:235
 #, fuzzy, kde-format
 #| msgid "Remove from this tag"
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Белгіден өшіру"
 
-#: qmlmodules/components/qml/ResourceView.qml:236
+#: qmlmodules/components/qml/ResourceView.qml:244
 #, fuzzy, kde-format
 #| msgid "Remove from other tag"
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Басқа белгіден өшіру"
 
-#: qmlmodules/components/qml/ResourceView.qml:305
+#: qmlmodules/components/qml/ResourceView.qml:323
 #, fuzzy, kde-format
 #| msgid "Selection decoration"
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Таңдалғанның ерекшелеуі"
 
-#: qmlmodules/components/qml/ResourceView.qml:324
+#: qmlmodules/components/qml/ResourceView.qml:342
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Кескінді импорттау"
 
-#: qmlmodules/components/qml/ResourceView.qml:348
+#: qmlmodules/components/qml/ResourceView.qml:366
 #, fuzzy, kde-format
 #| msgid "Remove"
 msgctxt "@info:tooltip, %1 is resource type name"

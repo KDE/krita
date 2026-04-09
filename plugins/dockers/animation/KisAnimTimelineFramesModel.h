@@ -111,6 +111,8 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
+    void requestNodeChange(const QModelIndex& nodeIndex);
+
     enum ItemDataRole
     {
         ActiveLayerRole = KisTimeBasedItemModel::UserRole,

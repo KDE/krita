@@ -1341,6 +1341,10 @@ void KisAnimTimelineFramesView::currentChanged(const QModelIndex &current, const
             m_d->model->setData(current, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
         }
     }
+
+    if (current.row() != previous.row()) {
+        m_d->model->requestNodeChange(current);
+    }
 }
 
 QItemSelectionModel::SelectionFlags KisAnimTimelineFramesView::selectionCommand(const QModelIndex &index,

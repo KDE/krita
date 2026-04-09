@@ -843,6 +843,12 @@ bool KisAnimTimelineFramesModel::removeRows(int row, int count, const QModelInde
     return result;
 }
 
+void KisAnimTimelineFramesModel::requestNodeChange(const QModelIndex& nodeIndex)
+{
+    KisNodeSP node = nodeAt(nodeIndex);
+    Q_EMIT requestCurrentNodeChanged(node);
+}
+
 bool KisAnimTimelineFramesModel::insertOtherLayer(int index, int dstRow)
 {
     Q_UNUSED(dstRow);

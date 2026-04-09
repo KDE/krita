@@ -407,6 +407,7 @@ public:
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
+    QMetaObject::Connection completeSavingConnection;
     KisSignalAutoConnectionsStore referenceLayerConnections;
 
     bool isRecovered = false;
@@ -1457,8 +1458,12 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
             SLOT(slotChildCompletedSavingInBackground(KisImportExportErrorCode, QString, QString)));
 
 
-    connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString, QString)),
-            receiverObject, receiverMethod, Qt::UniqueConnection);
+    if (d->completeSavingConnection) {
+        disconnect(d->completeSavingConnection);
+    }
+    d->completeSavingConnection = connect(
+        this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString, QString)),
+        receiverObject, receiverMethod);
 
     KisImportExportErrorCode error =
             d->backgroundSaveDocument->startExportInBackground(actionName,
@@ -1518,6 +1523,10 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
                                  QString::number(fi.size())));
 
     Q_EMIT sigCompleteBackgroundSaving(job, status, errorMessage, warningMessage);
+    // One-shot: disconnect immediately after firing so future save completions
+    // don't invoke a stale or unrelated slot.
+    disconnect(d->completeSavingConnection);
+    d->completeSavingConnection = {};
 }
 
 void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument)

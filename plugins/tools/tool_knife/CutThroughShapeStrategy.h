@@ -48,6 +48,7 @@ private:
 
 
 private:
+    friend class CutThroughShapeStrategyTest;
 
     QPointF m_startPoint = QPointF();
     QPointF m_endPoint = QPointF();

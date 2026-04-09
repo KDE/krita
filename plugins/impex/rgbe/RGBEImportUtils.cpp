@@ -31,11 +31,13 @@ bool ReadOldLine(quint8 *image, int width, QDataStream &s)
         s >> image[0];
         s >> image[1];
         s >> image[2];
-        s >> image[3];
 
+        // check if we can read the whole pixel block correctly
         if (s.atEnd()) {
             return false;
         }
+
+        s >> image[3];
 
         if ((image[0] == 1) && (image[1] == 1) && (image[2] == 1)) {
             const int length = image[3] << rshift;
@@ -101,11 +103,11 @@ bool LoadHDR(QDataStream &s, const int width, const int height, KisSequentialIte
             continue;
         }
 
-        s >> val;
-
         if (s.atEnd()) {
-            return true;
+            return false;
         }
+
+        s >> val;
 
         if (val != 2) {
             s.device()->ungetChar(val);
@@ -118,11 +120,13 @@ bool LoadHDR(QDataStream &s, const int width, const int height, KisSequentialIte
 
         s >> image[1];
         s >> image[2];
-        s >> image[3];
 
+        // check if we can read the whole pixel block correctly
         if (s.atEnd()) {
-            return true;
+            return false;
         }
+
+        s >> image[3];
 
         if ((image[1] != 2) || (image[2] & 128)) {
             image[0] = 2;

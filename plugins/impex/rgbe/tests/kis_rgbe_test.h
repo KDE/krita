@@ -17,6 +17,8 @@ private Q_SLOTS:
     void testFiles();
     void testHDR();
     void testSaveRgbaColorSpace();
+    void testRLEOverflow_data();
+    void testRLEOverflow();
     void testImportIncorrectFormat();
 
 #ifndef Q_OS_WIN

@@ -1,11 +1,14 @@
 add_subdirectory(tests)
 
+add_library(kritargbeimportutils STATIC RGBEImportUtils.cpp)
+target_link_libraries(kritargbeimportutils PUBLIC kritaimage)
+
 set(kritargbeimport_SOURCES
     RGBEImport.cpp
 )
 
 add_library(kritargbeimport MODULE ${kritargbeimport_SOURCES})
-target_link_libraries(kritargbeimport kritaui)
+target_link_libraries(kritargbeimport kritaui kritargbeimportutils)
 
 install(TARGETS kritargbeimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

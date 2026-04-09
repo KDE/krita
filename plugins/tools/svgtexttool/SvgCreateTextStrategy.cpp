@@ -14,6 +14,7 @@
 #include "KoProperties.h"
 #include "KoSelection.h"
 #include "KoShapeController.h"
+#include "KoShapeControllerBase.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShapeRegistry.h"
 #include "KoToolBase.h"
@@ -155,11 +156,9 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     KUndo2Command *parentCommand = new KUndo2Command();
 
     new KoKeepShapesSelectedCommand(tool->koSelection()->selectedShapes(), {}, tool->canvas()->selectedShapesProxy(), false, parentCommand);
-    KoShapeContainer* parent = nullptr;
 
-    KUndo2Command *cmd = tool->canvas()->shapeController()->addShape(textShape, &parent, parentCommand);
-
-    KisShapeLayer *layer = dynamic_cast<KisShapeLayer *>(parent);
+    KoShapeContainer* parent = tool->canvas()->shapeController()->documentBase()->createParentForShapes({textShape}, false, parentCommand);
+    KUndo2Command *cmd = tool->canvas()->shapeController()->addShape(textShape, parent, parentCommand);
 
     parentCommand->setText(cmd->text());
 
@@ -192,7 +191,17 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
         }
     }
 
-    new KoKeepShapesSelectedCommand({}, {textShape}, layer->selectedShapesProxy(), true, parentCommand);
+    {
+        KoSelectedShapesProxy *finalSelectionProxy = tool->canvas()->selectedShapesProxy();
+        if (parent) {
+            KisShapeLayer *layer = dynamic_cast<KisShapeLayer *>(parent);
+            if (layer) {
+                finalSelectionProxy = layer->selectedShapesProxy();
+            }
+        }
+        new KoKeepShapesSelectedCommand({}, {textShape}, finalSelectionProxy, true, parentCommand);
+    }
+
     tool->canvas()->snapGuide()->reset();
 
     return parentCommand;

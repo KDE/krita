@@ -294,7 +294,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                 newSelectedShapes << shape.data();
             }
 
-            tool()->canvas()->shapeController()->addShapeDirect(shape.take(), &parent, cmd.data());
+            tool()->canvas()->shapeController()->addShapeDirect(shape.take(), parent, cmd.data());
 
         }
 

@@ -121,20 +121,30 @@ bool CutThroughShapeStrategy::willShapeBeCutPrecise(const QPainterPath& srcOutli
             || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutline).count() > 0;
 
 
-    if (!bothGapLinePointsInside && !crossesGapLine) {
-        bool containsPointWithinGap = false;
-        Q_FOREACH(QPointF p, srcOutline.toFillPolygon()) {
-            if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
-                containsPointWithinGap = true;
-                break;
-            }
-        }
+    // it doesn't contain exactly one point, therefore it contains either both or none.
+    // if it contains both, it will be true.
+    // if it contains none:
+    //       if it crosses either gap line, it will be true
+    //       if any of the shape points are inside the gap, it will be true
+    //       otherwise it's false
 
-        if (!containsPointWithinGap) {
-            return false;
+    if (bothGapLinePointsInside) {
+        return true;
+    }
+
+    if (crossesGapLine) {
+        return true;
+    }
+
+    Q_FOREACH(QPointF p, srcOutline.toFillPolygon()) {
+        if (gapLinePolygon.containsPoint(p, Qt::WindingFill)) {
+            // a shape point is inside the gap shape
+            return true;
         }
     }
-    return true;
+
+    return false;
+
 }
 
 void CutThroughShapeStrategy::initializeOutlineObjects(const QTransform &booleanWorkaroundTransform, QList<KoShape *> allShapes, QList<QPainterPath> &outSrcOutlines, QRectF &outOutlineRect)

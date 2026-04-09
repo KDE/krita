@@ -517,9 +517,6 @@ void SvgTextTool::requestStrokeEnd()
             m_interactionStrategy = nullptr;
             useCursor(Qt::ArrowCursor);
             m_textOnPathHelper.setStrategyActive(false);
-        } else if (isInTextMode()) {
-            // This doesn't seem to be necessary?
-            // canvas()->selectedShapesProxy()->selection()->deselectAll();
         }
     }
 }

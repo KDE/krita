@@ -19,6 +19,8 @@ protected:
     void paintEvent(QPaintEvent *e) override;
     void tabletEvent(QTabletEvent* e) override;
     bool event(QEvent* event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void mousePressEvent(QMouseEvent* event) override;
 };
 
 

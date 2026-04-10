@@ -6,6 +6,10 @@
 
 #include "kis_selection_actions_panel.h"
 
+#include "dialogs/kis_dlg_preferences.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
+#include "kis_config_notifier.h"
 #include "kis_canvas_widget_base.h"
 #include "KisDocument.h"
 #include "KisViewManager.h"
@@ -33,6 +37,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QPainterPath>
+#include <QMenu>
 
 static constexpr int BUTTON_SIZE = 30;
 static constexpr int BUFFER_SPACE = 5;
@@ -95,10 +100,12 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
     for (const ActionButtonData &buttonData : Private::buttonData()) {
         KisSelectionActionsPanelButton *button = new KisSelectionActionsPanelButton(buttonData.iconName, buttonData.tooltip, BUTTON_SIZE, viewManager->canvas());
         connect(button, &QAbstractButton::clicked, d->m_selectionManager, buttonData.slot);
+        connect(button, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
         d->m_buttons.append(button);
     }
 
     d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, viewManager->canvas());
+    connect(d->m_handleWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -413,4 +420,26 @@ bool KisSelectionActionsPanel::touchEventPos(const QTouchEvent *touchEvent, QPoi
 
 QPoint KisSelectionActionsPanel::transformHandleCoords(QPoint pos) {
     return d->m_dragHandle->position + pos;
+}
+
+void KisSelectionActionsPanel::showContextMenu(const QPoint &pos)
+{
+    QMenu menu = QMenu();
+
+    QAction *disable = menu.addAction(i18n("Disable selection actions bar"));
+    QAction *configure = menu.addAction(i18n("Configure selection actions bar"));
+
+    auto action = menu.exec(pos);
+
+    if (action == disable) {
+        KisConfig cfg(false);
+        cfg.setSelectionActionBar(false);
+        KisConfigNotifier::instance()->notifyConfigChanged();
+    } else if (action == configure) {
+        KisAction *a = d->m_viewManager->actionManager()->actionByName("options_configure");
+
+        a->setData(QList<QVariant>({KisDlgPreferences::Page::General, KisDlgPreferences::GeneralTabs::Tools}));
+
+        a->trigger();
+    }
 }

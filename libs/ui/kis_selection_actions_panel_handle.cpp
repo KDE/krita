@@ -7,6 +7,7 @@
 #include "kis_selection_actions_panel_handle.h"
 #include "kis_icon_utils.h"
 #include <qapplication.h>
+#include <qevent.h>
 
 struct KisSelectionActionsPanelHandle::Private
 {
@@ -54,4 +55,20 @@ void KisSelectionActionsPanelHandle::draw(QPainter& painter)
 
     // Adjusting the icon location a bit to be properly centered
     d->handle_icon.paint(&painter, QRect(rect.x() + 3, rect.y(), d->size, d->size));
+}
+
+void KisSelectionActionsPanelHandle::contextMenuEvent(QContextMenuEvent *event)
+{
+    Q_EMIT customContextMenuRequested(mapToGlobal(event->pos()));
+    event->accept();
+}
+
+void KisSelectionActionsPanelHandle::mousePressEvent(QMouseEvent *event)
+{
+    //Do not propagate the rmb event, to prevent other tool context menus from appearing
+    if (event->button() == Qt::RightButton) {
+        event->accept();
+    } else {
+        QWidget::mousePressEvent(event);
+    }
 }

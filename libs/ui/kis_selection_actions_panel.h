@@ -41,6 +41,10 @@ public:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
     void canvasWidgetChanged(KisCanvasWidgetBase* canvas);
+
+private Q_SLOTS:
+    void showContextMenu(const QPoint& pos);
+
 private:
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
     QPoint initialDragHandlePosition() const;

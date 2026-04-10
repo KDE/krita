@@ -176,9 +176,10 @@ public:
      * Default implementation returns simple defaults, for tools that want to provide
      * a more responsive text entry experience for CJK languages it would be good to reimplement.
      * @param query specifies which property is queried.
+     * @param argument extra argument received from extended query API.
      * @param converter the view converter for the current canvas.
      */
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
 
     /**
      * Text entry of complex text, like CJK, can be made more interactive if a tool

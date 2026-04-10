@@ -271,7 +271,7 @@ public:
     void paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness = 1, qreal handleRadius = 5.0, KisHandlePalette handlePalette = KisHandlePalette());
 
     /// Process an input method query and return the requested result.
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
     /// Process an input method event. This is used by IME like virtual keyboards.
     void inputMethodEvent(QInputMethodEvent *event);
 

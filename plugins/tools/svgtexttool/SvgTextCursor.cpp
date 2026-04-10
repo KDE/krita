@@ -945,9 +945,9 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int de
     }
 }
 
-QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
 {
-    dbgTools << "receiving inputmethod query" << query;
+    dbgTools << "receiving inputmethod query" << query << argument;
 
     // Because we set the input item transform to be shape->document->view->widget->window,
     // the coordinates here should be in shape coordinates.
@@ -997,6 +997,17 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
     case Qt::ImAbsolutePosition:
     case Qt::ImCursorPosition:
         if (d->shape) {
+            const QPointF pt = argument.toPointF();
+            if (!pt.isNull()) {
+                // In theory, we'll never get this, as there's no selection handles while there's
+                // a preedit text, but let's try something relevant.
+                const int newPos = d->shape->posForPointLineSensitive(pt);
+                if (d->preEditCommand && newPos >= d->preEditStart && newPos < d->preEditStart+d->preEditLength) {
+                    return d->preEditStart;
+                } else {
+                    return newPos;
+                }
+            }
             return d->preEditCommand? d->shape->indexForPos(d->preEditStart): d->shape->indexForPos(d->pos);
         }
         break;

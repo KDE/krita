@@ -130,9 +130,10 @@ void KoToolBase::explicitUserStrokeEndRequest()
 {
 }
 
-QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
 {
     Q_D(const KoToolBase);
+    Q_UNUSED(argument);
     if (d->canvas->canvasWidget() == 0)
         return QVariant();
 

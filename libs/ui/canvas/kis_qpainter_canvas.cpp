@@ -139,7 +139,13 @@ void KisQPainterCanvas::drawImage(QPainter & gc, const QRect &updateWidgetRect) 
 
 QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return processInputMethodQuery(query);
+    return processInputMethodQuery(query, QVariant());
+}
+
+QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
+{
+    // see https://codereview.qt-project.org/c/qt/qtbase/+/76017
+    return processInputMethodQuery(query, argument);
 }
 
 void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)

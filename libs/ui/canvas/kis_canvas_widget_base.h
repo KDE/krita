@@ -80,7 +80,7 @@ protected:
      * All common event processing is carried out by these
      * functions.
      */
-    QVariant processInputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant processInputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
     void processInputMethodEvent(QInputMethodEvent *event);
     void processFocusInEvent(QFocusEvent *event);
     void processFocusOutEvent(QFocusEvent *event);

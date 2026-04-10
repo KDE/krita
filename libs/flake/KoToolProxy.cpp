@@ -349,10 +349,10 @@ void KoToolProxy::explicitUserStrokeEndRequest()
     }
 }
 
-QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
 {
     if (d->activeTool)
-        return d->activeTool->inputMethodQuery(query);
+        return d->activeTool->inputMethodQuery(query, argument);
     return QVariant();
 }
 

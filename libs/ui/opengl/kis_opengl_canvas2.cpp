@@ -380,7 +380,13 @@ void KisOpenGLCanvas2::slotShowFloatingMessage(const QString &message, int timeo
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return processInputMethodQuery(query);
+    return processInputMethodQuery(query, QVariant());
+}
+
+QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
+{
+    // see https://codereview.qt-project.org/c/qt/qtbase/+/76017
+    return processInputMethodQuery(query, argument);
 }
 
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)

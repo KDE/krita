@@ -222,12 +222,12 @@ KisPopupWidgetInterface *SvgTextTool::popupWidget()
     return nullptr;
 }
 
-QVariant SvgTextTool::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant SvgTextTool::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
 {
     if (canvas()) {
-        return m_textCursor.inputMethodQuery(query);
+        return m_textCursor.inputMethodQuery(query, argument);
     } else {
-        return KoToolBase::inputMethodQuery(query);
+        return KoToolBase::inputMethodQuery(query, argument);
     }
 }
 

@@ -3350,6 +3350,102 @@ void TestSvgText::testSetTransformsFromLayout()
     QVERIFY2(textShape->plainText() == result, QString("Insert newlines result is incorrect: \"%1\"").arg(textShape->plainText()).toLatin1());
 }
 
+void TestSvgText::testSvgCssHelper_data()
+{
+    QTest::addColumn<QString>("textClass");
+    QTest::addColumn<QStringList>("expectedStyles");
+
+    QTest::addRow("highlight")
+        << "highlight"
+        << QStringList({"fill: blue; font-family: Arial;", "fill: red; font-weight: bold;"});
+    QTest::addRow("small")
+        << "small"
+        << QStringList({"fill: blue; font-family: Arial;", "font-size: 10px;"});
+
+    QTest::addRow("huge")
+        << "huge"
+        << QStringList({"fill: blue; font-family: Arial;", "font-size: 50px;"});
+
+}
+
+void TestSvgText::testSvgCssHelper()
+{
+    /**
+     * This test case tests direct methods of SvgCssHelper.
+     * But since its API is not exported from a DLL, we
+     * just request that via SvgLoadingContext.
+     */
+
+    QFETCH(QString, textClass);
+    QFETCH(QStringList, expectedStyles);
+
+    const QString data =
+    R"---(
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100">
+  <defs>
+    <style type="text/css">
+      /* This is a CSS comment that should be removed */
+      text {
+        fill: blue;
+        font-family: Arial;
+      }
+
+      /* Another comment */
+
+      /*
+       Commented out highlight section!
+      .highlight {
+        fill: green;
+      }
+      */
+
+      .highlight {
+        fill: red;
+        font-weight: bold;
+      }
+
+      /*
+       One more commented out highlight section!
+      .highlight {
+        fill: pink;
+      }
+      */
+
+      /* Inline comment */ .small { font-size: 10px; }
+      /* Inline multiline
+      comment */ .huge { font-size: 50px; }
+    </style>
+  </defs>
+  <text x="10" y="30" class="highlight">Highlighted Text</text>
+  <text x="10" y="60" class="small">Small Text</text>
+  <text x="10" y="60" class="huge">Huge Text</text>
+</svg>
+    )---";
+
+    QDomDocument doc;
+    QVERIFY(doc.setContent(data.toLatin1()));
+    QDomElement root = doc.documentElement();
+    QDomElement defsEl = root.firstChildElement("defs");
+    QDomElement styleEl = defsEl.firstChildElement("style");
+    QVERIFY(!styleEl.isNull());
+
+    KoDocumentResourceManager resourceManager;
+    SvgLoadingContext context(&resourceManager);
+
+    context.addStyleSheet(styleEl);
+
+    QDomElement text = root.firstChildElement("text");
+    while(!text.isNull() && text.attribute("class") != textClass) {
+        text = text.nextSiblingElement("text");
+    }
+
+    QVERIFY(!text.isNull());
+    QCOMPARE(text.attribute("class"), textClass);
+
+    const QStringList styles = context.matchingCssStyles(text);
+    QCOMPARE(styles, expectedStyles);
+}
+
 #include "kistest.h"
 
 

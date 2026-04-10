@@ -623,7 +623,10 @@ void SvgCssHelper::parseStylesheet(const QDomElement &e)
     if (data.isEmpty())
         return;
 
-    // remove comments
+    // Remove comments
+    // NOTE: that must not be greedy as per definition of css-comments,
+    //       the first closing '*/' sequence closes the entire comment
+    //       block
     QRegularExpression commentExp("\\/\\*.*?\\*\\/");
     data.remove(commentExp);
 

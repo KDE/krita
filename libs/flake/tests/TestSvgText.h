@@ -139,6 +139,9 @@ private Q_SLOTS:
 
     void testSetTransformsFromLayout_data();
     void testSetTransformsFromLayout();
+
+    void testSvgCssHelper_data();
+    void testSvgCssHelper();
 };
 
 #endif // TESTSVGTEXT_H

@@ -997,12 +997,12 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query, QVariant ar
     case Qt::ImAbsolutePosition:
     case Qt::ImCursorPosition:
         if (d->shape) {
-            const QPointF pt = argument.toPointF();
-            if (!pt.isNull()) {
-                // In theory, we'll never get this, as there's no selection handles while there's
-                // a preedit text, but let's try something relevant.
+            if (!argument.isNull() && argument.canConvert<QPointF>()) {
+                const QPointF pt = argument.toPointF();
                 const int newPos = d->shape->posForPointLineSensitive(pt);
                 if (d->preEditCommand && newPos >= d->preEditStart && newPos < d->preEditStart+d->preEditLength) {
+                    // In theory, we'll never get this, as there's no selection handles while there's
+                    // a preedit text, but let's try something relevant.
                     return d->preEditStart;
                 } else {
                     return newPos;
@@ -1150,12 +1150,10 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         if (attribute.type == QInputMethodEvent::Selection) {
             dbgTools << "attribute: selection" << "start: " << attribute.start
                      << "length: " << attribute.length << "val: " << attribute.value;
-            d->pos = d->shape->posForIndex(attribute.start);
-            int index = d->shape->indexForPos(d->pos);
-            d->anchor = d->shape->posForIndex(index + attribute.length);
+            d->anchor = d->shape->posForIndex(attribute.start, false, false);
+            d->pos = d->shape->posForIndex(attribute.start + attribute.length, false, false);
         }
     }
-
 
     // insert a preedit string, if any.
     if (!event->preeditString().isEmpty()) {

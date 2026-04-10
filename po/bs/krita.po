@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-09 03:28+0000\n"
+"POT-Creation-Date: 2026-04-10 03:10+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -22003,7 +22003,7 @@ msgstr "Uvezi sliku"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2700 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -24713,9 +24713,9 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
-#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1054
-#: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
-#: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
+#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
+#: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
+#: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:979 libs/ui/KisMainWindow.cpp:1049
 #: libs/ui/KisMainWindow.cpp:1198 libs/ui/KisMainWindow.cpp:1295
 #: libs/ui/KisMainWindow.cpp:1974 libs/ui/KisMainWindow.cpp:1983
@@ -36566,44 +36566,44 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Zatvori dokument"
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:840
+#: libs/ui/KisDocument.cpp:841
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Bezuspješno kreiranje akcije."
 
-#: libs/ui/KisDocument.cpp:857
+#: libs/ui/KisDocument.cpp:858
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Bezuspješno kreiranje akcije."
 
-#: libs/ui/KisDocument.cpp:879
+#: libs/ui/KisDocument.cpp:880
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Exporting Document..."
 msgstr "Otvaram okument"
 
-#: libs/ui/KisDocument.cpp:880
+#: libs/ui/KisDocument.cpp:881
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Snimi dokument"
 
-#: libs/ui/KisDocument.cpp:895
+#: libs/ui/KisDocument.cpp:896
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:900
+#: libs/ui/KisDocument.cpp:901
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -36613,7 +36613,7 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:905
+#: libs/ui/KisDocument.cpp:906
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -36623,14 +36623,14 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1048
+#: libs/ui/KisDocument.cpp:1049
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Greška tokom automatskog snimanja. Particija puna?"
 
-#: libs/ui/KisDocument.cpp:1055
+#: libs/ui/KisDocument.cpp:1056
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -36640,7 +36640,7 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1072
+#: libs/ui/KisDocument.cpp:1073
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -36648,49 +36648,49 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1078
+#: libs/ui/KisDocument.cpp:1079
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1095
+#: libs/ui/KisDocument.cpp:1096
 #, fuzzy, kde-format
 #| msgid "Finish line:"
 msgid "Finished saving %1"
 msgstr "Finalna linija:"
 
-#: libs/ui/KisDocument.cpp:1528
+#: libs/ui/KisDocument.cpp:1537
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Automatski snimam..."
 
-#: libs/ui/KisDocument.cpp:1536
+#: libs/ui/KisDocument.cpp:1545
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatski snimam..."
 
-#: libs/ui/KisDocument.cpp:1542
+#: libs/ui/KisDocument.cpp:1551
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1685
+#: libs/ui/KisDocument.cpp:1694
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Greška tokom automatskog snimanja. Particija puna?"
 
-#: libs/ui/KisDocument.cpp:1699
+#: libs/ui/KisDocument.cpp:1708
 #, fuzzy, kde-format
 #| msgid "Finish line:"
 msgid "Finished autosaving %1"
 msgstr "Finalna linija:"
 
-#: libs/ui/KisDocument.cpp:1956
+#: libs/ui/KisDocument.cpp:1965
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -36702,18 +36702,18 @@ msgstr ""
 "Loše formiran URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:2028
+#: libs/ui/KisDocument.cpp:2037
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Datoteka %1 ne postoji."
 
-#: libs/ui/KisDocument.cpp:2057
+#: libs/ui/KisDocument.cpp:2066
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document"
 msgstr "Otvaram okument"
 
-#: libs/ui/KisDocument.cpp:2072
+#: libs/ui/KisDocument.cpp:2081
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -36723,25 +36723,25 @@ msgstr ""
 "Ne mogu otvoriti\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:2083
+#: libs/ui/KisDocument.cpp:2092
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2221
+#: libs/ui/KisDocument.cpp:2230
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Bez popune"
 
-#: libs/ui/KisDocument.cpp:2707
+#: libs/ui/KisDocument.cpp:2716
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Pozadina"
 
-#: libs/ui/KisDocument.cpp:2769
+#: libs/ui/KisDocument.cpp:2778
 #, fuzzy, kde-format
 #| msgid "Fetching the title: 0% complete"
 msgctxt ""
@@ -44174,7 +44174,7 @@ msgstr "Promjeni nivo sloja"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -44183,8 +44183,8 @@ msgstr[0] "Udvostruči segment"
 msgstr[1] "Udvostruči segment"
 msgstr[2] "Udvostruči segment"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
 #, fuzzy, kde-format
 #| msgid "Insert name"
 msgctxt "(qtundo-format)"
@@ -44206,32 +44206,32 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Umetni Ime"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Unesite ime grupe:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Spasi trenutne dimenzije"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Promjeni nivo sloja"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

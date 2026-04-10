@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-09 03:28+0000\n"
+"POT-Creation-Date: 2026-04-10 03:10+0000\n"
 "PO-Revision-Date: 2026-04-02 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -21518,7 +21518,7 @@ msgstr "Імпортоване зображення"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2700 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -24120,9 +24120,9 @@ msgstr "Локальні ресурси"
 #: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
-#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1054
-#: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
-#: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
+#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
+#: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
+#: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:979 libs/ui/KisMainWindow.cpp:1049
 #: libs/ui/KisMainWindow.cpp:1198 libs/ui/KisMainWindow.cpp:1295
 #: libs/ui/KisMainWindow.cpp:1974 libs/ui/KisMainWindow.cpp:1983
@@ -35861,35 +35861,35 @@ msgstr ""
 "Клонувати документ\n"
 "клонування документа"
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 "Запис до %1 неможливий. Будь ласка, збережіть дані до файла з іншою назвою."
 
-#: libs/ui/KisDocument.cpp:840
+#: libs/ui/KisDocument.cpp:841
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Не вдалося створити файл резервної копії"
 
-#: libs/ui/KisDocument.cpp:857
+#: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Не вдалося створити нумерований файл резервної копії"
 
-#: libs/ui/KisDocument.cpp:879
+#: libs/ui/KisDocument.cpp:880
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Експортуємо документ…"
 
-#: libs/ui/KisDocument.cpp:880
+#: libs/ui/KisDocument.cpp:881
 #, kde-format
 msgid "Saving Document..."
 msgstr "Зберігаємо документ…"
 
-#: libs/ui/KisDocument.cpp:895
+#: libs/ui/KisDocument.cpp:896
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -35898,28 +35898,28 @@ msgstr ""
 "Не вдалося розпочати збереження %1. Зачекайте, доки буде завершено поточну "
 "дію зі збереження."
 
-#: libs/ui/KisDocument.cpp:900
+#: libs/ui/KisDocument.cpp:901
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "Не вдалося розпочати зберігання %1. Зображення зайняте іншою програмою"
 
-#: libs/ui/KisDocument.cpp:905
+#: libs/ui/KisDocument.cpp:906
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "Не вдалося розпочати збереження %1. Сталася невідома критична помилка"
 
-#: libs/ui/KisDocument.cpp:1048
+#: libs/ui/KisDocument.cpp:1049
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Помилка під час збереження %1: %2"
 
-#: libs/ui/KisDocument.cpp:1055
+#: libs/ui/KisDocument.cpp:1056
 #, kde-format
 msgid "Could not save %1."
 msgstr "Не вдалося зберегти %1."
 
-#: libs/ui/KisDocument.cpp:1072
+#: libs/ui/KisDocument.cpp:1073
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -35927,45 +35927,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 було записано, але дані є неповними."
 
-#: libs/ui/KisDocument.cpp:1078
+#: libs/ui/KisDocument.cpp:1079
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Під час збереження виникли певні проблеми."
 
-#: libs/ui/KisDocument.cpp:1095
+#: libs/ui/KisDocument.cpp:1096
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Завершено збереження %1"
 
-#: libs/ui/KisDocument.cpp:1528
+#: libs/ui/KisDocument.cpp:1537
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Автозбереження… %1"
 
-#: libs/ui/KisDocument.cpp:1536
+#: libs/ui/KisDocument.cpp:1545
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автозбереження…"
 
-#: libs/ui/KisDocument.cpp:1542
+#: libs/ui/KisDocument.cpp:1551
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Автозберення відкладено: документ зайнято…"
 
-#: libs/ui/KisDocument.cpp:1685
+#: libs/ui/KisDocument.cpp:1694
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Помилка під час автозбереження %1: %2"
 
-#: libs/ui/KisDocument.cpp:1699
+#: libs/ui/KisDocument.cpp:1708
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Завершено автозбереження %1"
 
-#: libs/ui/KisDocument.cpp:1956
+#: libs/ui/KisDocument.cpp:1965
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -35974,38 +35974,38 @@ msgstr ""
 "Помилкове форматування шляху\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:2028
+#: libs/ui/KisDocument.cpp:2037
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Файла %1 не існує."
 
-#: libs/ui/KisDocument.cpp:2057
+#: libs/ui/KisDocument.cpp:2066
 #, kde-format
 msgid "Opening document"
 msgstr "Відкриваємо документ"
 
-#: libs/ui/KisDocument.cpp:2072
+#: libs/ui/KisDocument.cpp:2081
 #, kde-format
 msgid "Could not open %1."
 msgstr "Не вдалось відкрити %1."
 
-#: libs/ui/KisDocument.cpp:2083
+#: libs/ui/KisDocument.cpp:2092
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Під час спроби відкрити %1 виникли проблеми."
 
-#: libs/ui/KisDocument.cpp:2221
+#: libs/ui/KisDocument.cpp:2230
 #, kde-format
 msgid "Not Saved"
 msgstr "Не збережено"
 
-#: libs/ui/KisDocument.cpp:2707
+#: libs/ui/KisDocument.cpp:2716
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Заповнення тла"
 
-#: libs/ui/KisDocument.cpp:2769
+#: libs/ui/KisDocument.cpp:2778
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -43539,7 +43539,7 @@ msgstr "Викинутих кадрів:\t%1%"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Пропущені кадри у цьому екземплярі Krita не є доступними"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -43549,8 +43549,8 @@ msgstr[1] "Додати %1 порожніх кадри"
 msgstr[2] "Додати %1 порожніх кадрів"
 msgstr[3] "Додати порожній кадр"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -43581,30 +43581,30 @@ msgstr ""
 "Змінити масштаб на монтажному столі. Натисніть і перетягніть ліворуч або "
 "праворуч."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Вставлення або вилучення кадрів затримки"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Вкажіть кількість кадрів"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Редагувати кадри:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ключові кадри"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

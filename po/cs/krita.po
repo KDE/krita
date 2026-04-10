@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-09 03:28+0000\n"
+"POT-Creation-Date: 2026-04-10 03:10+0000\n"
 "PO-Revision-Date: 2026-02-24 22:32+0100\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
@@ -21215,7 +21215,7 @@ msgstr "Importovaný obrázek"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2700 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -23659,9 +23659,9 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
-#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1054
-#: libs/ui/KisDocument.cpp:1069 libs/ui/KisDocument.cpp:2028
-#: libs/ui/KisDocument.cpp:2071 libs/ui/KisDocument.cpp:2082
+#: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
+#: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
+#: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:979 libs/ui/KisMainWindow.cpp:1049
 #: libs/ui/KisMainWindow.cpp:1198 libs/ui/KisMainWindow.cpp:1295
 #: libs/ui/KisMainWindow.cpp:1974 libs/ui/KisMainWindow.cpp:1983
@@ -34786,62 +34786,62 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Do souboru %1 nelze zapisovat. Prosím zvolte jiný název souboru."
 
-#: libs/ui/KisDocument.cpp:840
+#: libs/ui/KisDocument.cpp:841
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Vytvoření záložního souboru selhalo"
 
-#: libs/ui/KisDocument.cpp:857
+#: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Vytvoření číslovaného záložního souboru selhalo"
 
-#: libs/ui/KisDocument.cpp:879
+#: libs/ui/KisDocument.cpp:880
 #, kde-format
 msgid "Exporting Document..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:880
+#: libs/ui/KisDocument.cpp:881
 #, kde-format
 msgid "Saving Document..."
 msgstr "Ukládám dokument..."
 
-#: libs/ui/KisDocument.cpp:895
+#: libs/ui/KisDocument.cpp:896
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:900
+#: libs/ui/KisDocument.cpp:901
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:905
+#: libs/ui/KisDocument.cpp:906
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1048
+#: libs/ui/KisDocument.cpp:1049
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1055
+#: libs/ui/KisDocument.cpp:1056
 #, kde-format
 msgid "Could not save %1."
 msgstr "Nelze uložit %1."
 
-#: libs/ui/KisDocument.cpp:1072
+#: libs/ui/KisDocument.cpp:1073
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -34849,83 +34849,83 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1078
+#: libs/ui/KisDocument.cpp:1079
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1095
+#: libs/ui/KisDocument.cpp:1096
 #, kde-format
 msgid "Finished saving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1528
+#: libs/ui/KisDocument.cpp:1537
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Probíhá automatické ukládání... %1"
 
-#: libs/ui/KisDocument.cpp:1536
+#: libs/ui/KisDocument.cpp:1545
 #, kde-format
 msgid "Autosaving..."
 msgstr "Probíhá automatické ukládání..."
 
-#: libs/ui/KisDocument.cpp:1542
+#: libs/ui/KisDocument.cpp:1551
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1685
+#: libs/ui/KisDocument.cpp:1694
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1699
+#: libs/ui/KisDocument.cpp:1708
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1956
+#: libs/ui/KisDocument.cpp:1965
 #, kde-format
 msgid ""
 "Malformed Path\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2028
+#: libs/ui/KisDocument.cpp:2037
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Soubor %1 neexistuje."
 
-#: libs/ui/KisDocument.cpp:2057
+#: libs/ui/KisDocument.cpp:2066
 #, kde-format
 msgid "Opening document"
 msgstr "Otevírá se dokument"
 
-#: libs/ui/KisDocument.cpp:2072
+#: libs/ui/KisDocument.cpp:2081
 #, kde-format
 msgid "Could not open %1."
 msgstr "Nelze otevřít %1."
 
-#: libs/ui/KisDocument.cpp:2083
+#: libs/ui/KisDocument.cpp:2092
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Při otevírání došlo k problémům %1."
 
-#: libs/ui/KisDocument.cpp:2221
+#: libs/ui/KisDocument.cpp:2230
 #, kde-format
 msgid "Not Saved"
 msgstr "Neuloženo"
 
-#: libs/ui/KisDocument.cpp:2707
+#: libs/ui/KisDocument.cpp:2716
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2769
+#: libs/ui/KisDocument.cpp:2778
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -41981,7 +41981,7 @@ msgstr ""
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -41990,8 +41990,8 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -42011,30 +42011,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
 #, kde-format
 msgid "Edit Frames:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Klíčové snímky"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

@@ -816,9 +816,27 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
 void KisMainWindow::slotPreferences()
 {
+    std::optional<KisDlgPreferences::PageDesc>page = std::nullopt;
+
+    KisAction* action = d->actionManager()->actionByName("options_configure");
+    QVariant data  = action->data();
+    if (data.userType() == QMetaType::QVariantList) {
+        // Reset the data first
+        action->setData(QVariant());
+        QList<QVariant> list = data.toList();
+
+        Q_ASSERT(list.length() == 2);
+        Q_ASSERT(list[0].userType() == QMetaType::Int);
+        Q_ASSERT(list[1].userType() == QMetaType::Int);
+
+        KisDlgPreferences::Page p = (KisDlgPreferences::Page)list[0].toInt();
+        int t = list[1].toInt();
+        page = KisDlgPreferences::PageDesc{p, t};
+    }
+
     QScopedPointer<KisDlgPreferences> dlgPreferences(new KisDlgPreferences(this));
 
-    if (dlgPreferences->editPreferences()) {
+    if (dlgPreferences->editPreferences(page)) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisImageConfigNotifier::instance()->notifyConfigChanged();

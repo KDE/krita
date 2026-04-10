@@ -33,9 +33,9 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="General">
       <attribute name="title">
        <string>General</string>
       </attribute>
@@ -167,7 +167,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="Display">
       <attribute name="title">
        <string>Display</string>
       </attribute>
@@ -263,7 +263,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="SoftProofing">
       <attribute name="title">
        <string>Soft Proofing</string>
       </attribute>
@@ -299,15 +299,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisProofingOptionsWidget</class>
    <extends>QWidget</extends>
    <header location="global">KisProofingOptionsWidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KisCmbIDList</class>

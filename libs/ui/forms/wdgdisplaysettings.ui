@@ -39,9 +39,9 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="CanvasAcceleration">
       <attribute name="title">
        <string>Canvas Acceleration</string>
       </attribute>
@@ -253,7 +253,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabHDR">
+     <widget class="QWidget" name="HDR">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -321,7 +321,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="CanvasDecoration">
       <attribute name="title">
        <string>Canvas Decorations</string>
       </attribute>
@@ -519,7 +519,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="Miscellaneous">
       <attribute name="title">
        <string>Miscellaneous</string>
       </attribute>
@@ -607,6 +607,12 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
@@ -615,12 +621,6 @@
    <class>KisWarningBlock</class>
    <extends>QGroupBox</extends>
    <header location="global">kis_warning_block.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

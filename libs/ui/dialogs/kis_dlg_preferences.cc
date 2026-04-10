@@ -2246,7 +2246,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
 #ifndef HAVE_HDR
-    tabHDR->setEnabled(false);
+    HDR->setEnabled(false);
 
     /**
      * We hide the HDR page in Wayland mode, because the mode is managed
@@ -2254,7 +2254,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
      * systems just to promote the existence of this feature.
      */
     if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
-        const int hdrTabIndex = tabWidget->indexOf(tabHDR);
+        const int hdrTabIndex = tabWidget->indexOf(HDR);
         KIS_SAFE_ASSERT_RECOVER_NOOP(hdrTabIndex >= 0);
         if (hdrTabIndex >= 0) {
             tabWidget->setTabVisible(hdrTabIndex, false);
@@ -2725,9 +2725,146 @@ void KisDlgPreferences::slotDefault()
     }
 }
 
-bool KisDlgPreferences::editPreferences()
+KPageWidgetItem *KisDlgPreferences::getPage(Page page_enum)
+{
+    QString name = "";
+    switch (page_enum) {
+    case General:
+        name = "general";
+        break;
+    case Shortucts:
+        name = "shortcuts";
+        break;
+    case Color:
+        name = "colormanagement";
+        break;
+    case Performance:
+        name = "performance";
+        break;
+    case Display:
+        name = "display";
+        break;
+    case Tablet:
+        name = "tablet";
+        break;
+    case Fullscreen:
+        name = "canvasonly";
+        break;
+    case Input:
+        name = "canvasinput";
+        break;
+    case PopupPalette:
+        name = "popuppalette";
+        break;
+    }
+
+    Q_FOREACH (KPageWidgetItem *page, m_pages) {
+        if (page->objectName() == name) {
+            return page;
+        }
+    }
+    return nullptr;
+}
+
+void KisDlgPreferences::switchTab(PageDesc page)
+{
+    switch (page.page) {
+    case General: {
+        QWidget *tab = nullptr;
+        switch (page.tab) {
+        case File:
+            tab = m_general->File;
+            break;
+        case Pasting:
+            tab = m_general->Pasting;
+            break;
+        case Window:
+            tab = m_general->Window;
+            break;
+        case Cursor:
+            tab = m_general->Cursor;
+            break;
+        case Tools:
+            tab = m_general->Tools;
+            break;
+        case Animation:
+            tab = m_general->Animation;
+            break;
+        case Resources:
+            tab = m_general->Resources;
+            break;
+        case MiscellaneousGeneral:
+            tab = m_general->Miscellaneous;
+            break;
+        }
+        m_general->tabWidget->setCurrentWidget(tab);
+    } break;
+    case Color: {
+        QWidget *tab = nullptr;
+        switch (page.tab) {
+        case GeneralColor:
+            tab = m_colorSettings->m_page->General;
+            break;
+        case DisplayTab:
+            tab = m_colorSettings->m_page->Display;
+            break;
+        case SoftProofing:
+            tab = m_colorSettings->m_page->SoftProofing;
+            break;
+        }
+        m_colorSettings->m_page->tabWidget->setCurrentWidget(tab);
+    } break;
+    case Performance: {
+        QWidget *tab = nullptr;
+        switch (page.tab) {
+        case GeneralPerformance:
+            tab = m_performanceSettings->General;
+            break;
+        case Advanced:
+            tab = m_performanceSettings->Advanced;
+            break;
+        case AnimationCache:
+            tab = m_performanceSettings->AnimationCache;
+            break;
+        case InstantPreview:
+            tab = m_performanceSettings->InstantPreview;
+            break;
+        }
+        m_performanceSettings->tabWidget->setCurrentWidget(tab);
+    } break;
+    case Display: {
+        QWidget *tab = nullptr;
+        switch (page.tab) {
+        case CanvasAcceleration:
+            tab = m_displaySettings->CanvasAcceleration;
+            break;
+        case HDR:
+            tab = m_displaySettings->HDR;
+            break;
+        case CanvasDecoration:
+            tab = m_displaySettings->CanvasDecoration;
+            break;
+        case MiscellaneousDisplay:
+            tab = m_displaySettings->Miscellaneous;
+            break;
+        }
+        m_displaySettings->tabWidget->setCurrentWidget(tab);
+    } break;
+
+    default:
+        break;
+    }
+}
+
+bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
 {
     connect(this->buttonBox(), SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
+
+    if (page.has_value()) {
+        PageDesc page_val = page.value();
+        setCurrentPage(getPage(page_val.page));
+        switchTab(page_val);
+    }
 
     int retval = exec();
     Q_UNUSED(retval);

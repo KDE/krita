@@ -389,15 +389,60 @@ class KisDlgPreferences : public KPageDialog
     Q_OBJECT
 
 public:
+    enum Page {
+        General,
+        Shortucts,
+        Color,
+        Performance,
+        Display,
+        Tablet,
+        Fullscreen,
+        Input,
+        PopupPalette,
+    };
+    enum GeneralTabs {
+        File,
+        Pasting,
+        Window,
+        Cursor,
+        Tools,
+        Animation,
+        Resources,
+        MiscellaneousGeneral
+    };
+    enum ColorTabs {
+        GeneralColor,
+        DisplayTab,
+        SoftProofing
+    };
+    enum DisplayTabs {
+        CanvasAcceleration,
+        HDR,
+        CanvasDecoration,
+        MiscellaneousDisplay
+    };
+    enum PerformaceTabs {
+        GeneralPerformance,
+        Advanced,
+        AnimationCache,
+        InstantPreview,
+    };
+
+    struct PageDesc {
+        Page page;
+        int tab;
+    };
 
     KisDlgPreferences(QWidget *parent = 0, const char *name = 0);
     ~KisDlgPreferences() override;
 
-    bool editPreferences();
+    bool editPreferences(std::optional<PageDesc> page);
 
     void showEvent(QShowEvent *event) override;
 
 private:
+    KPageWidgetItem* getPage(Page page_enum);
+    void switchTab (PageDesc tab);
 
     GeneralTab *m_general;
     ShortcutSettingsTab  *m_shortcutSettings;

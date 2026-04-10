@@ -368,6 +368,7 @@ void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 {
     if (d->shape) {
         Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
+        inputQueryUpdateBlocker.setChangeVisibility(true);
         int pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
         if (d->preEditCommand) {
             int start = d->shape->indexForPos(d->preEditStart);

@@ -1100,6 +1100,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
     QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
     SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
+    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
 
     bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
                 || event->replacementLength() > 0;
@@ -1120,8 +1121,6 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         return;
     }
 
-    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
-
     // remove the selection if any.
     addCommandToUndoAdapter(removeSelectionImpl(false));
 
@@ -1141,12 +1140,16 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
     // add the commit string, if any.
     if (!event->commitString().isEmpty()) {
+        qDebug() << "adding commit string" << d->pos << event->commitString();
         insertText(event->commitString());
+        qDebug() << "after" << d->pos;
     }
 
     // set the selection...
     Q_FOREACH(const QInputMethodEvent::Attribute attribute, event->attributes()) {
         if (attribute.type == QInputMethodEvent::Selection) {
+            dbgTools << "attribute: selection" << "start: " << attribute.start
+                     << "length: " << attribute.length << "val: " << attribute.value;
             d->pos = d->shape->posForIndex(attribute.start);
             int index = d->shape->indexForPos(d->pos);
             d->anchor = d->shape->posForIndex(index + attribute.length);
@@ -1293,6 +1296,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     updateIMEDecoration();
     updateSelection();
     updateCursor();
+    qDebug() << Q_FUNC_INFO << event->commitString() << "accepted";
     event->accept();
 }
 

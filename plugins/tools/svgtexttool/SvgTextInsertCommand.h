@@ -23,6 +23,8 @@ public:
     int id() const override;
     bool mergeWith(const KUndo2Command *other) override;
 
+    static QString filterInputUnicodeString(QString text);
+
 private:
     KoSvgTextShape *m_shape;
 

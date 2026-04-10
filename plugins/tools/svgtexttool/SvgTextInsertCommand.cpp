@@ -20,19 +20,24 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
 {
     setText(kundo2_i18n("Insert Text"));
 
+    m_text = filterInputUnicodeString(text);
+}
+
+QString SvgTextInsertCommand::filterInputUnicodeString(QString text)
+{
     QRegularExpression exp;
     // This replaces...
     // - carriage return
-    // - linefeed-carriage return
     // - carriage return-linefeed
     // - line separator
     // - paragraph separator
     // - vertical tab/line tab
     // with a single linefeed to avoid them from being added to the textShape.
-    exp.setPattern("[\\r|\\r\\n|\\x2029|\\x2028\\x000b]");
-
+    // NOTE: \r\n comes **before** \r to ensure that full match
+    //       is preferred to the partial match!
+    exp.setPattern("(\\r\\n|\\r|\\x{2029}|\\x{2028}|\\x{000b})");
     text.replace(exp, "\n");
-    m_text = text;
+    return text;
 }
 
 void SvgTextInsertCommand::redo()

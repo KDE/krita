@@ -231,6 +231,29 @@ void SvgTextCursorTest::test_ttb_lr()
     QCOMPARE(cursor.getPos(), result);
 }
 
+void SvgTextCursorTest::test_filter_control_chars_in_command_data()
+{
+    QTest::addColumn<QString>("srcText");
+    QTest::addColumn<QString>("expectedFilteredText");
+
+    QTest::addRow("cr") << "test\rtext" << "test\ntext";
+    QTest::addRow("crlf") << "test\r\ntext" << "test\ntext";
+    QTest::addRow("Unicode Paragraph Separator (U+2029)") << QString::fromUtf16(u"test\x2029text") << "test\ntext";
+    QTest::addRow("Unicode Line Separator (U+2028)") << QString::fromUtf16(u"test\x2028text") << "test\ntext";
+    QTest::addRow("Unicode Vertical Tab (U+000B)") << QString::fromUtf16(u"test\x000Btext") << "test\ntext";
+    QTest::addRow("Whitespace is preserved") << "test text" << "test text";
+    QTest::addRow("Multiwhitespace is preserved") << "test  text" << "test  text";
+}
+
+void SvgTextCursorTest::test_filter_control_chars_in_command()
+{
+    QFETCH(QString, srcText);
+    QFETCH(QString, expectedFilteredText);
+
+    const QString result = SvgTextInsertCommand::filterInputUnicodeString(srcText);
+    QCOMPARE(result, expectedFilteredText);
+}
+
 // Test basic text insertion in a horizontal ltr wrapped text;
 void SvgTextCursorTest::test_text_insert_command()
 {

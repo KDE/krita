@@ -44,7 +44,7 @@ public: // QWidget overrides
     void resizeEvent(QResizeEvent *e) override;
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
-    QVariant inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
+    Q_INVOKABLE QVariant inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const;
     void inputMethodEvent(QInputMethodEvent *event) override;
 
     void focusInEvent(QFocusEvent *event) override;

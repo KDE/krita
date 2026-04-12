@@ -12,7 +12,7 @@
 # Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2006.
 # Robert Gomulka <rgom@o2.pl>, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2009, 2013.
-# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2023, 2024, 2025 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2023, 2024, 2025, 2026 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Daniel Wit Preuss <danpre@tlen.pl>, 2004.
 # Robert Gomulka <carramba@epf.pl>, 2005, 2008, 2009.
 # Robert Gomulka <rgom@o2.pl>, 2006.
@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-10 03:10+0000\n"
-"PO-Revision-Date: 2025-11-14 09:30+0100\n"
+"PO-Revision-Date: 2026-04-11 09:01+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
 "Language: pl\n"
@@ -63616,7 +63616,7 @@ msgstr "Usuń stronę"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Batch Resize"
-msgstr "Wsadowa zmiana rozmiaru"
+msgstr "Masowa zmiana rozmiaru"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "View Page In Window"
@@ -63701,8 +63701,6 @@ msgid "Where should the pages go?"
 msgstr "Gdzie odkładać stworzone strony?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "Który obraz powinien być podstawą dla nowej strony?"
 
@@ -63720,7 +63718,7 @@ msgstr "Zmień rozmiar wszystkich stron"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 msgid "Resizing pages..."
-msgstr "Zmiana rozmiaru stron..."
+msgstr "Zmiana rozmiaru stron…"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 msgid "Resizing Pages"
@@ -64522,31 +64520,25 @@ msgstr "Liczba wierszy suwaka: "
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "Kurator"
+msgstr "Mutator"
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
-#| msgid "Rotate"
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "Obróć"
+msgstr "Zmutuj"
 
 #: plugins/python/mutator/mutator.py:127
-#, fuzzy
-#| msgid "Getting Started"
 msgid "Settings mutated!"
-msgstr "Jak zacząć"
+msgstr "Zmutowano ustawienia"
 
 #: plugins/python/mutator/mutator.py:157
-#, fuzzy
-#| msgid "Curator"
 msgid "Mutator"
-msgstr "Kurator"
+msgstr "Mutator"
 
 #: plugins/python/mutator/mutator.py:171
 msgid ""
@@ -64554,10 +64546,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:173
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Size Mutation: "
-msgstr "Nasycenie: "
+msgstr "Mutacja rozmiaru: "
 
 #: plugins/python/mutator/mutator.py:180
 msgid ""
@@ -64565,10 +64555,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:182
-#, fuzzy
-#| msgid "Rotation: "
 msgid "Rotation Mutation: "
-msgstr "Obrót: "
+msgstr "Mutacja obrotu: "
 
 #: plugins/python/mutator/mutator.py:189
 msgid ""
@@ -64576,10 +64564,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:191
-#, fuzzy
-#| msgid "Opacity: "
 msgid "Opacity Mutation: "
-msgstr "Nieprzezroczystość:"
+msgstr "Mutacja nieprzezroczystości: "
 
 #: plugins/python/mutator/mutator.py:198
 msgid ""
@@ -64587,10 +64573,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:200
-#, fuzzy
-#| msgid "Rotation: "
 msgid "Flow Mutation: "
-msgstr "Obrót: "
+msgstr "Mutacja płynięcia: "
 
 #: plugins/python/mutator/mutator.py:207
 msgid ""
@@ -64599,10 +64583,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:209
-#, fuzzy
-#| msgid "Rotation: "
 msgid "Hue Mutation: "
-msgstr "Obrót: "
+msgstr "Mutacja odcienia: "
 
 #: plugins/python/mutator/mutator.py:216
 msgid ""
@@ -64611,11 +64593,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:218
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Saturation Rings:"
 msgid "Saturation Mutation: "
-msgstr "Pierścienie nasycenia:"
+msgstr "Mutacja nasycenia:"
 
 #: plugins/python/mutator/mutator.py:225
 msgid ""
@@ -64624,16 +64603,12 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:227
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Value Mutation: "
-msgstr "Czas trwania filmu:"
+msgstr "Mutacja wartości: "
 
 #: plugins/python/mutator/mutator.py:237
-#, fuzzy
-#| msgid "Rotate"
 msgid "Mutate"
-msgstr "Obróć"
+msgstr "Zmutuj"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""

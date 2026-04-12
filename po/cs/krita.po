@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-10 03:10+0000\n"
-"PO-Revision-Date: 2026-02-24 22:32+0100\n"
+"PO-Revision-Date: 2026-04-11 22:40+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -58,7 +58,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 26.03.80\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11727,21 +11727,21 @@ msgstr "Maska filtrů"
 #, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr ""
+msgstr "Přidat barevnou pře&krývací masku"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr ""
+msgstr "Přidat novou rychlou barevnou překrývací fitrovací masku"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2689
 #, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr ""
+msgstr "Rychlá barevná překrývací maska"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2698
@@ -12922,7 +12922,7 @@ msgstr "Převést barevný prostor vrstvy"
 #, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr ""
+msgstr "Sjednotit barevný prostor vrstev"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3504
@@ -13137,7 +13137,7 @@ msgstr "Referenční obrázek z viditelného"
 #, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr ""
+msgstr "Vynutit paletu barev"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
@@ -13150,13 +13150,15 @@ msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
+"Vynutit barevný výběr, aby se daly vybrat pouze barvy z vybrané palety, "
+"která je aktuálně vybraná."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3681
 #, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr ""
+msgstr "Vynutit paletu"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -13332,12 +13334,12 @@ msgstr "Štětce a další"
 #: krita/krita5.xmlgui:456
 #, kde-format
 msgid "Custom toolbar 1"
-msgstr ""
+msgstr "Vlastní panel nástrojů 1"
 
 #: krita/krita5.xmlgui:459
 #, kde-format
 msgid "Custom toolbar 2"
-msgstr ""
+msgstr "Vlastní panel nástrojů 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -13459,7 +13461,7 @@ msgstr "Sezení..."
 #, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr ""
+msgstr "Otevřít správce sezení"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
@@ -13510,14 +13512,14 @@ msgstr "Exportovat"
 #, kde-format
 msgctxt "action"
 msgid "Export Advanced..."
-msgstr "Exportovat pokročilé..."
+msgstr "Exportovat s pokročilými volbami..."
 
 #. i18n: context: toolTip @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:106
 #, kde-format
 msgctxt "action"
 msgid "Advanced Export"
-msgstr ""
+msgstr "Pokročilý export"
 
 #. i18n: context: text @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:117
@@ -13541,7 +13543,7 @@ msgstr "Importovat rámce animace"
 #, kde-format
 msgctxt "action"
 msgid "Import video animation..."
-msgstr ""
+msgstr "Importovat video animaci..."
 
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
@@ -13551,7 +13553,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import video animation"
-msgstr ""
+msgstr "Importovat video animaci"
 
 #. i18n: context: text @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:141
@@ -13565,7 +13567,7 @@ msgstr "Vyk&reslit animaci..."
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr ""
+msgstr "Vykreslit animaci do GIFu, sekvence obrázků nebo videa"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -13582,14 +13584,14 @@ msgstr "Vykreslit animaci"
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation Again"
-msgstr ""
+msgstr "Znovu &vykreslit animaci"
 
 #. i18n: context: toolTip @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:155
 #, kde-format
 msgctxt "action"
 msgid "Render Animation Again"
-msgstr ""
+msgstr "Znovu vykreslit animaci"
 
 #. i18n: context: text @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:165
@@ -13873,14 +13875,14 @@ msgstr "Kopírovat sloučené"
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr ""
+msgstr "Kopírovat styl vrstvy"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style from the Current Node"
-msgstr ""
+msgstr "Kopírovat styl vrstvy ze současného uzlu"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
@@ -13931,7 +13933,7 @@ msgstr "Vložit na kurzoru"
 #, kde-format
 msgctxt "action"
 msgid "Paste into Active Layer"
-msgstr ""
+msgstr "Vložit do aktivní vrstvy"
 
 #. i18n: context: text @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:397
@@ -13961,7 +13963,7 @@ msgstr "Vložit do nového obrázku"
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
-msgstr ""
+msgstr "Vložit styl tvaru"
 
 #. i18n: context: text @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:421
@@ -13988,14 +13990,14 @@ msgstr "Vložit jako referenční obrázek"
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr ""
+msgstr "Vložit styl vrstvy"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr ""
+msgstr "Vložit styl vrstvy do současného uzlu"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
@@ -14094,7 +14096,7 @@ msgstr "Táhnout vybrané tvary"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr ""
+msgstr "Výběr &tahu..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -14104,7 +14106,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Stroke selection"
-msgstr ""
+msgstr "Výběr tahu"
 
 #. i18n: context: text @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
@@ -14198,7 +14200,7 @@ msgstr "Zobrazit po&uze plátno"
 #, kde-format
 msgctxt "action"
 msgid "Show just the canvas or the whole window"
-msgstr ""
+msgstr "Zobrazit pouze plátno nebo celé okno"
 
 #. i18n: context: iconText @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:619
@@ -14243,14 +14245,14 @@ msgstr "Oddělit plátno"
 #, kde-format
 msgctxt "action"
 msgid "Show the canvas on a separate window"
-msgstr ""
+msgstr "Zobrazit plátno ve zvláštním okně"
 
 #. i18n: context: text @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:652
 #, kde-format
 msgctxt "action"
 msgid "&Wrap Around Mode"
-msgstr ""
+msgstr "Režim &zalamování okolí"
 
 #. i18n: context: toolTip @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
@@ -14260,7 +14262,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Mode"
-msgstr ""
+msgstr "Režim zalamování okolí"
 
 #. i18n: context: text @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
@@ -14273,7 +14275,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr ""
+msgstr "Režim zalamování okolí v obou směrech"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -14286,7 +14288,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr ""
+msgstr "Zalamovat vodorovně"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -14299,7 +14301,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr ""
+msgstr "Zalamovat svisle"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -14333,7 +14335,7 @@ msgstr "Softwarový náhled"
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr ""
+msgstr "Zapne softwarový náhled"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:722
@@ -14353,6 +14355,8 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
+"Zapne varování pro barvy mimo ověřený gamut, vyžaduje zapnutí softwarového "
+"náhledu."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -14391,7 +14395,7 @@ msgstr "Zrcadlit pohled okolo kurzoru"
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "Zrcadlit pohled okolo plátna"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -14453,7 +14457,7 @@ msgstr "Vyplnit pohled"
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr ""
+msgstr "Přizpůsobit plátno pohledu"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
@@ -14463,14 +14467,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr ""
+msgstr "Přizpůsobit šířce pohledu"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr ""
+msgstr "Přizpůsobit plátno šířce pohledu"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
@@ -14480,14 +14484,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr ""
+msgstr "Přizpůsobit výšce pohledu"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr ""
+msgstr "Přizpůsobit plátno výšce pohledu"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14500,7 +14504,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr ""
+msgstr "Přepnout přizpůsobení pohledu"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -14557,14 +14561,14 @@ msgstr "Vrátit otočení plátna"
 #, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr ""
+msgstr "Obnovit zobrazení"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
 #, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr ""
+msgstr "Obnovit zvětšení, otočení a zrcadlení do výchozích stavů."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -14574,14 +14578,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr ""
+msgstr "Zobrazit velikost tisku"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
 #, kde-format
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
-msgstr ""
+msgstr "Namapuje zobrazení plátna na velikost tisku podle rozlišení obrázku."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -14599,6 +14603,9 @@ msgid ""
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
+"Pravítka ukazují horizontální a vertikální polohu myši na obrázku a lze je "
+"použít k umístění myši na správné místo na plátně.<p>Zrušte zaškrtnutí u "
+"této volby, chcete-li pravítka skrýt.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -14631,6 +14638,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"Pravítka budou sledovat aktuální polohu myši a zobrazovat ji na obrazovce. "
+"To může způsobovat mírné snížení výkonu"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -14647,7 +14656,7 @@ msgstr "Zobrazit vodítka"
 #, kde-format
 msgctxt "action"
 msgid "Show or hide guides"
-msgstr ""
+msgstr "Zobrazít nebo skrýt vodítka"
 
 #. i18n: context: text @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
@@ -14664,7 +14673,7 @@ msgstr "Zamknout vodítka"
 #, kde-format
 msgctxt "action"
 msgid "Lock or unlock guides"
-msgstr ""
+msgstr "Zamknout/odemknout vodítka"
 
 #. i18n: context: text @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
@@ -14695,7 +14704,7 @@ msgstr "Zobrazovat stavový pane&l"
 #, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr ""
+msgstr "Zobrazit/skrýt stavový panel"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
@@ -14758,7 +14767,7 @@ msgstr "Přichytávat k mřížce"
 #, kde-format
 msgctxt "action"
 msgid "Show Snap Options Popup"
-msgstr ""
+msgstr "Zobrazit vyskakovací okno s možnostmi přichytávání"
 
 #. i18n: context: text @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
@@ -14771,7 +14780,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Orthogonal"
-msgstr ""
+msgstr "Přichytávat ortogonálně"
 
 #. i18n: context: text @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
@@ -14797,7 +14806,7 @@ msgstr "Přichytávat uzel"
 #, kde-format
 msgctxt "action"
 msgid "Snap Extension"
-msgstr ""
+msgstr "Přichytávat rozšíření"
 
 #. i18n: context: text @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
@@ -14810,7 +14819,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr ""
+msgstr "Přichytávat pixel"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -14823,7 +14832,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Intersection"
-msgstr ""
+msgstr "Přichytávat průsečík"
 
 #. i18n: context: text @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
@@ -14836,7 +14845,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr ""
+msgstr "Přichytávat ohraničení"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -14849,7 +14858,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Bounds"
-msgstr ""
+msgstr "Přichytávat hranice obrázku"
 
 #. i18n: context: text @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
@@ -14862,14 +14871,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Center"
-msgstr ""
+msgstr "Přichytávat střed obrázku"
 
 #. i18n: context: text @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1107
 #, kde-format
 msgctxt "action"
 msgid "S&how Painting Assistants"
-msgstr ""
+msgstr "&Zobrazit kreslicí asistenty"
 
 #. i18n: context: toolTip @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
@@ -14879,7 +14888,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Painting Assistants"
-msgstr ""
+msgstr "Zobrazit kreslicí asistenty"
 
 #. i18n: context: text @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1119
@@ -14903,7 +14912,7 @@ msgstr "Zobrazit náhledy asistenta"
 #, kde-format
 msgctxt "action"
 msgid "S&how Reference Images"
-msgstr ""
+msgstr "Zobrazit &referenční obrázky"
 
 #. i18n: context: toolTip @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
@@ -14913,7 +14922,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Reference Images"
-msgstr ""
+msgstr "Zobrazit referenční obrázky"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
@@ -14999,14 +15008,14 @@ msgstr "Oříznout na velikost obrázku"
 #, kde-format
 msgctxt "action"
 msgid "Purge Unused Image Data"
-msgstr ""
+msgstr "Vymazat nepoužitá obrazová data"
 
 #. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1199
 #, kde-format
 msgctxt "action"
 msgid "Removes all fully transparent pixels from the image storage"
-msgstr ""
+msgstr "Odstraní všechny plně průhledné pixely z obrazového úložiště"
 
 #. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209
@@ -15787,21 +15796,21 @@ msgstr "Nastavit aplikaci Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
-msgstr ""
+msgstr "Spravovat &knihovny zdrojů..."
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1765
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
-msgstr ""
+msgstr "Spravovat knihovny zdrojů"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1766
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
-msgstr ""
+msgstr "Spravovat knihovny zdrojů"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1775
@@ -16269,7 +16278,7 @@ msgstr "Pracovní plochy"
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr ""
+msgstr "© 1999-2026, Vývojáři aplikace Krita"
 
 #: krita/main.cc:820 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:822
@@ -16289,12 +16298,12 @@ msgstr ""
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:563
 #, kde-format
 msgid "Path options"
-msgstr ""
+msgstr "Volby cesty"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:565
 #, kde-format
 msgid "Autosmooth curve"
-msgstr ""
+msgstr "Automaticky vyhlazovat křivku"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:569
 #, kde-format
@@ -16355,13 +16364,13 @@ msgstr "Čára"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Density recommended value 100.0"
-msgstr ""
+msgstr "Doporučená hodnota hustoty štětce 100.0"
 
 #: libs/brush/kis_auto_brush.cpp:455 libs/brush/KisBrushModel.cpp:85
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
-msgstr ""
+msgstr "Doporučená hodnota náhodnosti štětce 0.0"
 
 #: libs/brush/kis_brush.cpp:758 libs/brush/KisBrushModel.cpp:76
 #, kde-format
@@ -16373,7 +16382,7 @@ msgstr ""
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
 #, kde-format
 msgid "Could not access brush tip metadata"
-msgstr ""
+msgstr "Nelze přistupovat k metadatům špičky štětce"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -16423,7 +16432,7 @@ msgstr "Zpět"
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
-msgstr ""
+msgstr "Připojit podcesty"
 
 #: libs/flake/commands/KoMultiPathPointMergeCommand.cpp:38
 #: libs/flake/commands/KoPathPointMergeCommand.cpp:135
@@ -16446,7 +16455,7 @@ msgstr "Převést na cestu"
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr ""
+msgstr "Rozbít podcestu v bodech"
 
 #: libs/flake/commands/KoPathCombineCommand.cpp:54
 msgctxt "(qtundo-format)"
@@ -16461,7 +16470,7 @@ msgstr "Přesunout kontrolní bod"
 #: libs/flake/commands/KoPathFillRuleCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
-msgstr ""
+msgstr "Nastavte vyplňovací pravidlo"
 
 #: libs/flake/commands/KoPathPointInsertCommand.cpp:67
 msgctxt "(qtundo-format)"
@@ -16488,7 +16497,7 @@ msgstr "Nastavit typ bodu"
 #: libs/flake/commands/KoPathReverseCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
-msgstr ""
+msgstr "Obrátit cesty"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
 msgctxt "(qtundo-format)"
@@ -23989,7 +23998,7 @@ msgstr "Přednastavení štětců"
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
-msgstr ""
+msgstr "Špičky štětce"
 
 #: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
@@ -24019,13 +24028,13 @@ msgstr "Pracovní plochy"
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
-msgstr ""
+msgstr "Knihovny symbolů"
 
 #: libs/resources/KisResourceTypes.cpp:51
 #, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
-msgstr ""
+msgstr "Rozložení oken"
 
 #: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
@@ -26309,7 +26318,7 @@ msgstr "<html><head/><body><h1 align=\"center\">Vytvořil</h1></p><p>"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Vít Pelčák"
+msgstr "Vít PelčákJan Papež (honyczek)"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
 #, kde-format
@@ -35834,17 +35843,17 @@ msgstr "Obnoveno"
 #: libs/ui/KisView.cpp:1347
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
-msgstr ""
+msgstr "Softwarový náhled nefunguje v režimu plovoucí desetinné čárky."
 
 #: libs/ui/KisView.cpp:1352
 #, kde-format
 msgid "Soft Proofing turned on."
-msgstr ""
+msgstr "Softwarový náhled je zapnutý."
 
 #: libs/ui/KisView.cpp:1354
 #, kde-format
 msgid "Soft Proofing turned off."
-msgstr ""
+msgstr "Softwarový náhled je vypnutý."
 
 #: libs/ui/KisView.cpp:1366
 #, kde-format
@@ -35859,7 +35868,7 @@ msgstr "Varování Gamut zapnuta."
 #: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "But Soft Proofing is still off."
-msgstr ""
+msgstr "Ale softwarový náhled je stále vypnutý."
 
 #: libs/ui/KisView.cpp:1377
 #, kde-format
@@ -49212,7 +49221,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the PNG "
 "files belong to: brush tips or patterns"
 msgid "What resource do you want to import these PNG files as?"
-msgstr ""
+msgstr "Jaký zdroj chcete použít pro import těchto souborů PNG jako?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:37
 #, kde-format
@@ -49220,7 +49229,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the SVG "
 "files belong to: brush tips or patterns or symbols"
 msgid "What resource do you want to import these SVG files as?"
-msgstr ""
+msgstr "Jaký zdroj chcete použít pro import těchto souborů SVG jako?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:40
 #, kde-format
@@ -58372,7 +58381,7 @@ msgstr "Razítko"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
 #, kde-format
 msgid "Current Brush Tip"
-msgstr ""
+msgstr "Aktuální špička štětce"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
@@ -58534,7 +58543,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
-msgstr ""
+msgstr "Špička štětce"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
 #, kde-format
@@ -65626,7 +65635,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr ""
+msgstr "Zobrazit ohraničení znaků"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format

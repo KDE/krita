@@ -52696,7 +52696,7 @@ msgstr "Lumineux"
 #, kde-format
 msgctxt "Color palette shade"
 msgid "Light"
-msgstr "Léger"
+msgstr "Clair"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
 #, kde-format

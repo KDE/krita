@@ -61,6 +61,10 @@ Q_SIGNALS:
     void referenceLayersChanged(ReferenceLayers referenceLayers);
     void selectedColorLabelsChanged();
 
+private Q_SLOTS:
+    void slotConfigChanged();
+    void slotSelectionActionsPanelCheckboxToggled(bool value);
+
 private:
     class Private;
     QScopedPointer<Private> m_d;

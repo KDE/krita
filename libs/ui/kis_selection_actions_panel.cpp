@@ -164,7 +164,7 @@ void KisSelectionActionsPanel::setEnabled(bool enabled)
     d->m_enabled = enabled;
     if (configurationChanged) {
         // Reset visibility when configuration changes
-        setVisible(d->m_visible);
+        setVisible(enabled);
     }
 }
 

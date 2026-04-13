@@ -10,13 +10,9 @@
 #include <QToolButton>
 
 #include <kis_icon.h>
-#include "kis_types.h"
-#include "kis_layer.h"
-#include "kis_image.h"
-#include "kis_selection.h"
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_paint_device.h"
-#include "KisViewManager.h"
-#include "kis_shape_controller.h"
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -38,6 +34,7 @@ public:
     KisSliderSpinBox *sliderFeatherSelection{nullptr};
     KisOptionButtonStrip *optionButtonStripReference{nullptr};
     KisColorLabelSelectorWidget *widgetLabels{nullptr};
+    QCheckBox*  checkBoxSelectionActionsPanel{nullptr};
 
     int modeToButtonIndex(SelectionMode mode) const
     {
@@ -175,6 +172,18 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
         KisIconUtils::loadIcon("selection_symmetric_difference"));
     m_d->optionButtonStripAction->button(0)->setChecked(true);
 
+    m_d->checkBoxSelectionActionsPanel = new QCheckBox(i18n("Enable Selection Actions Bar"));
+    m_d->checkBoxSelectionActionsPanel->setToolTip(
+        i18n("When enabled, any selections will produce a small floating panel of useful selection-related actions."));
+
+    KisConfig cfg(true);
+
+    if (cfg.selectionActionBar()) {
+        m_d->checkBoxSelectionActionsPanel->setCheckState(Qt::CheckState::Checked);
+    } else {
+        m_d->checkBoxSelectionActionsPanel->setCheckState(Qt::CheckState::Unchecked);
+    }
+
     m_d->checkBoxAntiAliasSelection = new QCheckBox(
         i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
     KisOptionCollectionWidget *containerGrowSelection = new KisOptionCollectionWidget;
@@ -284,6 +293,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
                                      m_d->sliderFeatherSelection);
     appendWidget("sectionAdjustments", sectionAdjustments);
 
+    appendWidget("sapChckBox", m_d->checkBoxSelectionActionsPanel);
+
     // Make connections
     connect(m_d->optionButtonStripMode,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
@@ -315,6 +326,11 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     connect(m_d->widgetLabels,
             SIGNAL(selectionChanged()),
             SIGNAL(selectedColorLabelsChanged()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(m_d->checkBoxSelectionActionsPanel,
+            SIGNAL(toggled(bool)),
+            SLOT(slotSelectionActionsPanelCheckboxToggled(bool)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -485,4 +501,25 @@ void KisSelectionOptions::updateActionButtonToolTip(
     }
 
     m_d->optionButtonStripAction->button(buttonIndex)->setToolTip(toolTipText);
+}
+
+void KisSelectionOptions::slotConfigChanged()
+{
+    KisConfig cfg(true);
+
+    if (cfg.selectionActionBar()) {
+        m_d->checkBoxSelectionActionsPanel->setCheckState(Qt::Checked);
+    } else {
+        m_d->checkBoxSelectionActionsPanel->setCheckState(Qt::Unchecked);
+    }
+}
+
+void KisSelectionOptions::slotSelectionActionsPanelCheckboxToggled(bool value)
+{
+    KisConfig cfg(false);
+    cfg.setSelectionActionBar(value);
+
+    blockSignals(true);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+    blockSignals(false);
 }

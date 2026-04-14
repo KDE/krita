@@ -11,7 +11,9 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include <QDataStream>
+#include <cmath>
+
+ #include <QDataStream>
 #include <QIODevice>
 #include <kis_sequential_iterator.h>
 

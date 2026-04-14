@@ -16,10 +16,6 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <cmath>
-#include <cstdint>
-#include <memory>
-
 #include <KisDocument.h>
 #include <KisImportExportErrorCode.h>
 #include <KoColorModelStandardIds.h>

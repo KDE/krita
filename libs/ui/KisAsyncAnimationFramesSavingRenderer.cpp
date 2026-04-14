@@ -105,24 +105,29 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     }
 
     //Get all identical frames to this one and either copy or symlink based on settings.
-    KisTimeSpan identicals = KisTimeSpan::calculateIdenticalFramesRecursive(image->root(), frame);
-    identicals &= m_d->range;
-    if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
-        for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {
-            QString identicalFrameNumber = QString("%1").arg(identicalFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
-            QString identicalFrameName = m_d->filenamePrefix + identicalFrameNumber + m_d->filenameSuffix;
+    if (status.isOk()) {
+        KisTimeSpan identicals = KisTimeSpan::calculateIdenticalFramesRecursive(image->root(), frame);
+        identicals &= m_d->range;
+        if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
+            for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {
+                QString identicalFrameNumber = QString("%1").arg(identicalFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+                QString identicalFrameName = m_d->filenamePrefix + identicalFrameNumber + m_d->filenameSuffix;
 
-            QFile::copy(filename, identicalFrameName);
+                if (!QFile::copy(filename, identicalFrameName)) {
+                    status = ImportExportCodes::ErrorWhileWriting;
+                    break;
+                }
 
-            /*  This would be nice to do but sym-linking on windows isn't possible without
-             *  way more other work to be done. This works on linux though!
-             *
-             *  if (m_d->linkRedundantFrames) {
-             *      QFile::link(filename, identicalFrameName);
-             *  } else {
-             *      QFile::copy(filename, identicalFrameName);
-             *  }
-             */
+                /*  This would be nice to do but sym-linking on windows isn't possible without
+                 *  way more other work to be done. This works on linux though!
+                 *
+                 *  if (m_d->linkRedundantFrames) {
+                 *      QFile::link(filename, identicalFrameName);
+                 *  } else {
+                 *      QFile::copy(filename, identicalFrameName);
+                 *  }
+                 */
+            }
         }
     }
 

@@ -80,6 +80,7 @@
 //new
 #include "kis_node_query_path.h"
 #include "kis_tool_shape.h"
+#include "kis_config_notifier.h"
 
 KisSelectionManager::KisSelectionManager(KisViewManager * view)
         : m_view(view)
@@ -188,6 +189,14 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     action = actionManager->createAction("convert_selection_to_shape");
     connect(action, SIGNAL(triggered()), SLOT(convertToShape()));
 
+    KisConfig cfg(true);
+    m_enableSelectionActionsPanel = actionManager->createAction("enable_sap");
+    m_enableSelectionActionsPanel->setChecked(cfg.selectionActionBar());
+    connect(m_enableSelectionActionsPanel, SIGNAL(triggered(bool)), SLOT(enableSelectionActionsPanel(bool)));
+
+    action = actionManager->createAction("configure_sap");
+    action->setVisible(false);
+
     m_toggleSelectionOverlayMode  = actionManager->createAction("toggle-selection-overlay-mode");
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
 
@@ -196,6 +205,8 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
 }
 
 
@@ -499,6 +510,21 @@ void KisSelectionManager::convertToShape()
 {
     KisSelectionToShapeActionFactory factory;
     factory.run(m_view);
+}
+
+void KisSelectionManager::enableSelectionActionsPanel(bool visible)
+{
+    KisConfig cfg(false);
+    cfg.setSelectionActionBar(visible);
+
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+void KisSelectionManager::configChanged()
+{
+    KisConfig cfg(true);
+
+    m_enableSelectionActionsPanel->setChecked(cfg.selectionActionBar());
 }
 
 void KisSelectionManager::clear()

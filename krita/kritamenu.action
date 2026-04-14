@@ -1604,6 +1604,30 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="enable_sap">
+      <icon></icon>
+      <text>Enable Selection Actions Bar</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags></activationFlags>
+      <activationConditions></activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="configure_sap">
+      <icon></icon>
+      <text>Configure selection actions bar</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags></activationFlags>
+      <activationConditions></activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 
   <Actions category="Filter">

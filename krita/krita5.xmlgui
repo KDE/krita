@@ -352,6 +352,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="shrinkselection"/>
       <Action name="borderselection"/>
       <Action name="smoothselection"/>
+      <Separator/>
+      <Action name="enable_sap"/>
+      <Action name="configure_sap"/>
     </Menu>
     <Menu name="Filter">
       <text>Filte&amp;r</text>

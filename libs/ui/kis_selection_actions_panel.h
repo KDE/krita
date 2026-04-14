@@ -44,6 +44,8 @@ public:
 
 private Q_SLOTS:
     void showContextMenu(const QPoint& pos);
+    void disableSelectionActionsPanel();
+    void configureSelectionActionsPanel();
 
 private:
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;

@@ -88,6 +88,8 @@ struct KisSelectionActionsPanel::Private {
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle
 
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
+    KisAction* disable_action  = nullptr;
+    KisAction* configure_action  = nullptr;
 };
 
 KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
@@ -106,6 +108,12 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
 
     d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, viewManager->canvas());
     connect(d->m_handleWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+
+    d->disable_action = new KisAction(i18n("Disable selection actions bar"));
+    connect(d->disable_action, SIGNAL(triggered()), SLOT(disableSelectionActionsPanel())  );
+
+    d->configure_action = viewManager->actionManager()->actionByName("configure_sap");
+    connect(d->configure_action, SIGNAL(triggered()), SLOT(configureSelectionActionsPanel()));
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -130,6 +138,8 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
 
 void KisSelectionActionsPanel::setVisible(bool p_visible)
 {
+    d->configure_action->setVisible(p_visible && d->m_enabled);
+
     QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
     if (!canvasWidget) {
         return;
@@ -167,6 +177,8 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
 
 void KisSelectionActionsPanel::setEnabled(bool enabled)
 {
+    d->configure_action->setVisible(enabled);
+
     bool configurationChanged = enabled != d->m_enabled;
     d->m_enabled = enabled;
     if (configurationChanged) {
@@ -425,21 +437,23 @@ QPoint KisSelectionActionsPanel::transformHandleCoords(QPoint pos) {
 void KisSelectionActionsPanel::showContextMenu(const QPoint &pos)
 {
     QMenu menu = QMenu();
+    menu.addAction(d->disable_action);
+    menu.addAction(d->configure_action);
+    menu.exec(pos);
+}
 
-    QAction *disable = menu.addAction(i18n("Disable selection actions bar"));
-    QAction *configure = menu.addAction(i18n("Configure selection actions bar"));
+void KisSelectionActionsPanel::disableSelectionActionsPanel()
+{
+    KisConfig cfg(false);
+    cfg.setSelectionActionBar(false);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}
 
-    auto action = menu.exec(pos);
+void KisSelectionActionsPanel::configureSelectionActionsPanel()
+{
+    KisAction *a = d->m_viewManager->actionManager()->actionByName("options_configure");
 
-    if (action == disable) {
-        KisConfig cfg(false);
-        cfg.setSelectionActionBar(false);
-        KisConfigNotifier::instance()->notifyConfigChanged();
-    } else if (action == configure) {
-        KisAction *a = d->m_viewManager->actionManager()->actionByName("options_configure");
+    a->setData(QList<QVariant>({KisDlgPreferences::Page::General, KisDlgPreferences::GeneralTabs::Tools}));
 
-        a->setData(QList<QVariant>({KisDlgPreferences::Page::General, KisDlgPreferences::GeneralTabs::Tools}));
-
-        a->trigger();
-    }
+    a->trigger();
 }

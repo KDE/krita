@@ -121,6 +121,6 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
     customFFMpegOptions = config->getPropertyLazy("custom_ffmpeg_options", "");
 
     frameExportConfig = new KisPropertiesConfiguration();
-    frameExportConfig->setPrefixedProperties("frame_export/", frameExportConfig);
+    config->getPrefixedProperties("frame_export/", frameExportConfig);
 
 }

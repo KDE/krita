@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-10 03:10+0000\n"
-"PO-Revision-Date: 2026-04-11 22:40+0200\n"
+"PO-Revision-Date: 2026-04-14 23:30+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -58,7 +58,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.03.80\n"
+"X-Generator: Lokalize 26.03.90\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -26318,7 +26318,9 @@ msgstr "<html><head/><body><h1 align=\"center\">Vytvořil</h1></p><p>"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Vít PelčákJan Papež (honyczek)"
+msgstr ""
+"Vít Pelčák\n"
+"Jan Papež (honyczek)"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
 #, kde-format

@@ -105,7 +105,6 @@
         <!-- Generic image types: -->
         <uap3:Extension Category="windows.fileTypeAssociation">
           <uap3:FileTypeAssociation Name="images" Parameters="&quot;%1&quot;">
-            <uap:DisplayName>Image File</uap:DisplayName>
             <uap:Logo>Assets\fileicon.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.avif</uap:FileType>
@@ -114,10 +113,7 @@
               <uap:FileType>.gif</uap:FileType>
               <uap:FileType>.heic</uap:FileType>
               <uap:FileType>.heif</uap:FileType>
-              <uap:FileType>.jpeg</uap:FileType>
-              <uap:FileType>.jpg</uap:FileType>
               <uap:FileType>.jxl</uap:FileType>
-              <uap:FileType>.png</uap:FileType>
               <uap:FileType>.psd</uap:FileType>
               <uap:FileType>.tif</uap:FileType>
               <uap:FileType>.tiff</uap:FileType>
@@ -126,6 +122,28 @@
             </uap:SupportedFileTypes>
           </uap3:FileTypeAssociation>
         </uap3:Extension>
+
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="jpgimages" Parameters="&quot;%1&quot;">
+            <uap:DisplayName>Joint Photographic Experts Group File</uap:DisplayName>
+            <uap:Logo>Assets\fileicon.png</uap:Logo>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.jpeg</uap:FileType>
+              <uap:FileType>.jpg</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="pngimages" Parameters="&quot;%1&quot;">
+            <uap:DisplayName>Portable Network Graphics File</uap:DisplayName>
+            <uap:Logo>Assets\fileicon.png</uap:Logo>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.png</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+
       </Extensions>
     </Application>
   </Applications>

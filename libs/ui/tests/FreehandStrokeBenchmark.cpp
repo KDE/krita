@@ -24,6 +24,8 @@
 #include "KisResourceModel.h"
 #include "KisGlobalResourcesInterface.h"
 
+#include <memory>
+
 
 class FreehandStrokeBenchmarkTester : public utils::StrokeTester
 {

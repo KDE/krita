@@ -11,6 +11,7 @@
 #include "kis_undo_stores.h"
 #include "kritacommand_export.h"
 #include <functional>
+#include <memory>
 
 namespace KisCommandUtils
 {

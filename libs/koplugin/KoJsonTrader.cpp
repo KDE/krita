@@ -19,6 +19,8 @@
 #include <QGlobalStatic>
 #include <QMutexLocker>
 
+#include <memory>
+
 struct KoJsonTrader::PluginCacheEntry
 {
     QString filePath;

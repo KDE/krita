@@ -15,6 +15,8 @@
 #include <QList>
 #include <QTransform>
 
+#include <memory>
+
 class KoToolBase;
 class KoShape;
 class KoShapeResizeCommand;

@@ -28,6 +28,8 @@
 #include "kis_popup_palette.h"
 #include "config-qt-patches-present.h"
 
+#include <memory>
+
 
 /**
  * This hungry class EventEater encapsulates event masking logic.

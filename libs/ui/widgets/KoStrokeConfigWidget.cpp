@@ -18,6 +18,9 @@
 // Own
 #include "KoStrokeConfigWidget.h"
 
+// Std
+#include <memory>
+
 // Qt
 #include <QMenu>
 #include <QToolButton>

@@ -21,6 +21,8 @@
 
 #include "kis_sequential_iterator.h"
 
+#include <memory>
+
 class PaintOnTransparencyMaskTester : public utils::StrokeTester
 {
 public:

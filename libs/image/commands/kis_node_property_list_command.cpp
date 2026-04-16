@@ -15,6 +15,8 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_command_ids.h"
 
+#include <memory>
+
 // HACK! please refactor out!
 #include "kis_simple_stroke_strategy.h"
 #include "kis_abstract_projection_plane.h"

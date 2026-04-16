@@ -16,6 +16,8 @@
 #include "kis_pixel_selection.h"
 #include "kis_image.h"
 
+#include <memory>
+
 
 typedef int gint;
 typedef qint32 gint32;

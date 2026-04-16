@@ -11,6 +11,8 @@
 #include "KisInterstrokeData.h"
 #include "KisOverlayPaintDeviceWrapper.h"
 
+#include <memory>
+
 class KisTransaction;
 
 /**

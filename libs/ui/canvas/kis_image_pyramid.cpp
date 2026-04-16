@@ -21,6 +21,8 @@
 #include "kis_config.h"
 #include "kis_image_config.h"
 
+#include <memory>
+
 //#define DEBUG_PYRAMID
 
 #include <config-ocio.h>

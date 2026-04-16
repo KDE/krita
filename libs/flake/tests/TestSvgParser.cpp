@@ -17,6 +17,8 @@
 #include <qimage_test_util.h>
 #include <testflake.h>
 
+#include <memory>
+
 #ifdef USE_ROUND_TRIP
 #include "SvgWriter.h"
 #include <QBuffer>

@@ -88,6 +88,7 @@
 #include <QtCore>
 
 #include <functional>
+#include <memory>
 
 #include "kis_time_span.h"
 

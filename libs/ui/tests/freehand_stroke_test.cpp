@@ -20,6 +20,8 @@
 
 #include "testui.h"
 
+#include <memory>
+
 class FreehandStrokeTester : public utils::StrokeTester
 {
 public:

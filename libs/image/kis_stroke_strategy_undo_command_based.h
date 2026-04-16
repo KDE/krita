@@ -15,6 +15,8 @@
 #include "kis_simple_stroke_strategy.h"
 #include "KisRunnableBasedStrokeStrategy.h"
 
+#include <memory>
+
 
 class KisStrokeJob;
 class KisSavedMacroCommand;

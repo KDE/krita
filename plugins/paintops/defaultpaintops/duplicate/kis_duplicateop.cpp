@@ -12,6 +12,7 @@
 #include "kis_duplicateop_p.h"
 
 #include <string.h>
+#include <memory>
 
 #include <QRect>
 #include <QLayout>

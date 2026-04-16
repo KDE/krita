@@ -19,6 +19,7 @@
 
 #include "kritapaintop_export.h"
 #include <functional>
+#include <memory>
 
 class KisBrush;
 typedef QSharedPointer<KisBrush> KisBrushSP;

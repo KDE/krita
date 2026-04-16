@@ -13,6 +13,8 @@
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
+#include <memory>
+
 class KoPathTool;
 
 /**

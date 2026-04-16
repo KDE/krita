@@ -20,6 +20,8 @@
 #include "KisBezierTransformMesh.h"
 #include "kis_paint_device.h"
 
+#include <memory>
+
 #include <QScopedPointer>
 class KisLiquifyTransformWorker;
 class QDomElement;

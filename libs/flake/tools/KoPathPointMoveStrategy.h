@@ -12,6 +12,7 @@
 #include <QScopedPointer>
 #include "KoInteractionStrategy.h"
 
+#include <memory>
 
 class KoPathTool;
 

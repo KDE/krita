@@ -19,6 +19,8 @@
 #include "KisRunnableStrokeJobsInterface.h"
 #include "kis_paintop_utils.h"
 
+#include <memory>
+
 
 inline uint qHash(const QRect &rc) {
     return rc.x() +

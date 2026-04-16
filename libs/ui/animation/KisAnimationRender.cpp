@@ -99,21 +99,23 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
             // Write the video..
             if (videoFileWriteAllowed) {
-                KisImportExportErrorCode result;
+                KisImportExportErrorCode exportResult = ImportExportCodes::OK;
 
-                QFile videoOutputFile(videoOutputFilePath);
-                if (!videoOutputFile.open(QIODevice::WriteOnly)) {
-                    qWarning() << "Could not open" << videoOutputFile.fileName() << "for writing! Do you have permission to write to this file?";
-                    result = KisImportExportErrorCannotWrite(videoOutputFile.error());
+                QFile videoFile(videoOutputFilePath);
+                if (!videoFile.open(QIODevice::WriteOnly)) {
+                    qWarning() << "Could not open" << videoFile.fileName() << "for writing! Do you have permission to write to this file?";
+                    exportResult = KisImportExportErrorCannotWrite(videoFile.error());
                 } else {
-                    videoOutputFile.close();
+                    videoFile.close();
                 }
 
-                QScopedPointer<KisAnimationVideoSaver> encoder(new KisAnimationVideoSaver(doc, batchMode));
-                result = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
+                if (exportResult.isOk()) {
+                    QScopedPointer<KisAnimationVideoSaver> encoder(new KisAnimationVideoSaver(doc, batchMode));
+                    exportResult = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
+                }
 
-                if (!result.isOk()) {
-                    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", result.errorMessage()));
+                if (!exportResult.isOk()) {
+                    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", exportResult.errorMessage()));
 
                     delayReturnSuccess = false; // Delay return to clean up exported frames.
                 }

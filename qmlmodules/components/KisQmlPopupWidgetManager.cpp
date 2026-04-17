@@ -28,7 +28,7 @@ KisQmlPopupWidgetManager::KisQmlPopupWidgetManager(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
-    d->popup = new KisQQuickPopupWidget(qApp->activeWindow());
+    d->popup = new KisQQuickPopupWidget();
 
     connect(this, SIGNAL(marginsChanged()), this, SLOT(updateMargins()));
     connect(this, SIGNAL(topMarginChanged()), this, SLOT(updateMargins()));
@@ -40,7 +40,7 @@ KisQmlPopupWidgetManager::KisQmlPopupWidgetManager(QObject *parent)
 
 KisQmlPopupWidgetManager::~KisQmlPopupWidgetManager()
 {
-
+    d->popup->deleteLater();
 }
 
 qreal KisQmlPopupWidgetManager::x() const

@@ -26,7 +26,7 @@ void KisAslParserTest::test()
 {
     QString fileName(TestUtil::fetchDataFileLazy("asl/freebie.asl"));
     QFile aslFile(fileName);
-    aslFile.open(QIODevice::ReadOnly);
+    KIS_ASSERT(aslFile.open(QIODevice::ReadOnly));
 
     KisAslReader reader;
     QDomDocument doc = reader.readFile(aslFile);
@@ -90,7 +90,7 @@ void KisAslParserTest::testWithCallbacks()
     using namespace std::placeholders;
     QString fileName(TestUtil::fetchDataFileLazy("asl/freebie.asl"));
     QFile aslFile(fileName);
-    aslFile.open(QIODevice::ReadOnly);
+    KIS_ASSERT(aslFile.open(QIODevice::ReadOnly));
 
 
     KisAslReader reader;
@@ -234,13 +234,13 @@ void KisAslParserTest::testASLWriter()
 
     {
         QFile srcAslFile(srcFileName);
-        srcAslFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(srcAslFile.open(QIODevice::ReadOnly));
 
         KisAslReader reader;
         srcDoc = reader.readFile(srcAslFile);
 
         QFile tfile("src_parsed.xml");
-        tfile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(tfile.open(QIODevice::WriteOnly));
         tfile.write(srcDoc.toByteArray());
         tfile.close();
     }
@@ -249,7 +249,7 @@ void KisAslParserTest::testASLWriter()
 
     {
         QFile dstAslFile(dstFileName);
-        dstAslFile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(dstAslFile.open(QIODevice::WriteOnly));
 
         KisAslWriter writer;
         writer.writeFile(dstAslFile, srcDoc);
@@ -262,13 +262,13 @@ void KisAslParserTest::testASLWriter()
 
     {
         QFile roundTripAslFile(dstFileName);
-        roundTripAslFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(roundTripAslFile.open(QIODevice::ReadOnly));
 
         KisAslReader reader;
         dstDoc = reader.readFile(roundTripAslFile);
 
         QFile tfile("dst_parsed.xml");
-        tfile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(tfile.open(QIODevice::WriteOnly));
         tfile.write(dstDoc.toByteArray());
         tfile.close();
     }
@@ -293,13 +293,13 @@ void KisAslParserTest::testParserWithPatterns()
         dbgKrita << ppVar(fileInfo.fileName());
 
         QFile aslFile(fileInfo.absoluteFilePath());
-        aslFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(aslFile.open(QIODevice::ReadOnly));
 
         KisAslReader reader;
         QDomDocument doc = reader.readFile(aslFile);
 
         QFile xmlFile("mydata.xml");
-        xmlFile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(xmlFile.open(QIODevice::WriteOnly));
         xmlFile.write(doc.toByteArray());
 
         //dbgKrita << ppVar(doc.toString());

@@ -105,7 +105,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
         .arg(index);
 
     QFile logFile(fileName);
-    logFile.open(QFile::WriteOnly | QFile::Truncate);
+    KIS_ASSERT(logFile.open(QFile::WriteOnly | QFile::Truncate));
     QTextStream logStream(&logFile);
     KisPortingUtils::setUtf8OnStream(logStream);
     logStream.setFieldWidth(10);

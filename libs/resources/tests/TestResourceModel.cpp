@@ -151,7 +151,7 @@ void TestResourceModel::testImportResourceFile()
     resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
 
     QTemporaryFile f(QDir::tempPath() + "/testresourcemodel-testimportresourcefile-XXXXXX.kpp");
-    f.open();
+    KIS_ASSERT(f.open());
     f.write("0");
     f.close();
 

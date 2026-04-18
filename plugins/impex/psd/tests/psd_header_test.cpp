@@ -24,7 +24,7 @@ void PSDHeaderTest::testLoading()
 {
     QString filename = QString(FILES_DATA_DIR) + "/sources/2.psd";
     QFile f(filename);
-    f.open(QIODevice::ReadOnly);
+    KIS_ASSERT(f.open(QIODevice::ReadOnly));
     PSDHeader header;
     header.read(f);
 
@@ -42,7 +42,7 @@ void PSDHeaderTest::testRoundTripping()
 {
     QString filename = "test.psd";
     QFile f(filename);
-    f.open(QIODevice::ReadWrite);
+    KIS_ASSERT(f.open(QIODevice::ReadWrite));
     PSDHeader header;
     Q_ASSERT(!header.valid());
     header.signature = "8BPS";
@@ -57,7 +57,7 @@ void PSDHeaderTest::testRoundTripping()
     Q_ASSERT(retval); Q_UNUSED(retval);
 
     f.close();
-    f.open(QIODevice::ReadOnly);
+    KIS_ASSERT(f.open(QIODevice::ReadOnly));
     PSDHeader header2;
     retval = header2.read(f);
     Q_ASSERT(retval);

@@ -130,7 +130,7 @@ void KisPaintOpPresetTest::testConflictingEmbeddedPatterns()
 
         QString presetFileName(TestUtil::fetchDataFileLazy("conflicting-patterns/preset-stripes-vert.kpp"));
         QFile file(presetFileName);
-        file.open(QFile::ReadOnly);
+        KIS_ASSERT(file.open(QFile::ReadOnly));
 
         KoResourceSP resource = model.importResource(QFileInfo(presetFileName).fileName(), &file, false, "memory");
         QVERIFY(resource);
@@ -152,7 +152,7 @@ void KisPaintOpPresetTest::testConflictingEmbeddedPatterns()
 
         QString presetFileName(TestUtil::fetchDataFileLazy("conflicting-patterns/preset-stripes-vert-v2.kpp"));
         QFile file(presetFileName);
-        file.open(QFile::ReadOnly);
+        KIS_ASSERT(file.open(QFile::ReadOnly));
 
         KoResourceSP resource = model.importResource(QFileInfo(presetFileName).fileName(), &file, false, "memory");
         QVERIFY(resource);
@@ -174,7 +174,7 @@ void KisPaintOpPresetTest::testConflictingEmbeddedPatterns()
 
         QString presetFileName(TestUtil::fetchDataFileLazy("conflicting-patterns/preset-stripes-cross.kpp"));
         QFile file(presetFileName);
-        file.open(QFile::ReadOnly);
+        KIS_ASSERT(file.open(QFile::ReadOnly));
 
         KoResourceSP resource = model.importResource(QFileInfo(presetFileName).fileName(), &file, false, "memory");
         QVERIFY(resource);

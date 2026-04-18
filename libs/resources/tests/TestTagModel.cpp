@@ -60,7 +60,7 @@ void TestTagModel::initTestCase()
 
     m_tag.reset(new KisTag());
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
-    f.open(QFile::ReadOnly);
+    KIS_ASSERT(f.open(QFile::ReadOnly));
     m_tag->load(f);
 
     KisTagModel tagModel(m_resourceType);

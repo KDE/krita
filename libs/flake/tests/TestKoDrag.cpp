@@ -23,7 +23,7 @@ void TestKoDrag::test()
     QVERIFY(!fileName.isEmpty());
 
     QFile testShapes(fileName);
-    testShapes.open(QIODevice::ReadOnly);
+    KIS_ASSERT(testShapes.open(QIODevice::ReadOnly));
 
     QDomDocument doc = SvgParser::createDocumentFromSvg(&testShapes);
 

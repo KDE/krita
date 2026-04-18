@@ -69,10 +69,13 @@ void KisLevelFilterBenchmark::benchmarkFilter()
     // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + '/' + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream out(&file);
-        KisPortingUtils::setUtf8OnStream(out);
-        out << kfc->toXML();
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            KisPortingUtils::setUtf8OnStream(out);
+            out << kfc->toXML();
+        } else {
+            qDebug() << "Could not open" << file.fileName() << "for writing:" <<  file.errorString();
+        }
     } else {
         QString s;
         QTextStream in(&file);

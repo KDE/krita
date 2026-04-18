@@ -25,7 +25,7 @@ void KisSafeDocumentLoaderTest::test()
 {
     QTemporaryFile file("safe_loader_test_XXXXXX.png");
 
-    file.open();
+    KIS_ASSERT(file.open());
     writeToFile(file, Qt::black);
 
     KisSafeDocumentLoader loader(file.fileName());
@@ -62,7 +62,7 @@ void KisSafeDocumentLoaderTest::testFileLost()
 {
     QTemporaryFile file("safe_loader_test_XXXXXX.png");
 
-    file.open();
+    KIS_ASSERT(file.open());
     writeToFile(file, Qt::black);
 
     KisSafeDocumentLoader loader(file.fileName());
@@ -87,7 +87,7 @@ void KisSafeDocumentLoaderTest::testFileLost()
     QCOMPARE(spyExistsState[0][0].toBool(), false);
     spyExistsState.clear();
 
-    file.open();
+    KIS_ASSERT(file.open());
     writeToFile(file, Qt::white);
 
     spyExistsState.wait(3500);

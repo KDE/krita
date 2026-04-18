@@ -105,7 +105,7 @@ void TestResourceLocator::testLocatorInitialization()
 
     QFile f(m_dstLocation + '/' + "KRITA_RESOURCE_VERSION");
     QVERIFY(f.exists());
-    f.open(QFile::ReadOnly);
+    KIS_ASSERT(f.open(QFile::ReadOnly));
     QVersionNumber version = QVersionNumber::fromString(QString::fromUtf8(f.readAll()));
     QVERIFY(version == QVersionNumber::fromString(KritaVersionWrapper::versionString()));
 
@@ -1178,7 +1178,7 @@ void TestResourceLocator::testSyncVersions()
 void TestResourceLocator::testImportExportResource()
 {
     QTemporaryFile f(QDir::tempPath() + "/testresourcemodel-testimportresourcefile-XXXXXX.kpp");
-    f.open();
+    KIS_ASSERT(f.open());
     f.write("mysimpletestresource");
     f.close();
 
@@ -1233,7 +1233,7 @@ void TestResourceLocator::testImportExportResource()
 void TestResourceLocator::testImportDuplicatedResource()
 {
     QTemporaryFile f(QDir::tempPath() + "/testresourcelocator-testimportduplicated-XXXXXX.kpp");
-    f.open();
+    KIS_ASSERT(f.open());
     f.write("mysimpletestresource_version1");
     f.close();
 
@@ -1296,7 +1296,7 @@ void TestResourceLocator::testImportDuplicatedResource()
      * filesystem
      */
 
-    f.open();
+    KIS_ASSERT(f.open());
     KoResourceSP res4 = KisResourceLocator::instance()->importResource(ResourceType::PaintOpPresets, fileName.toUpper(), &f, false);
     f.close();
 
@@ -1305,7 +1305,7 @@ void TestResourceLocator::testImportDuplicatedResource()
      */
     QVERIFY(!res4);
 
-    f.open();
+    KIS_ASSERT(f.open());
     KoResourceSP res5 = KisResourceLocator::instance()->importResource(ResourceType::PaintOpPresets, fileName.toUpper(), &f, true);
     f.close();
 

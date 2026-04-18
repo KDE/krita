@@ -1200,8 +1200,7 @@ void TestSvgParser::testIccColor()
                 fileName = TestUtil::fetchDataFileLazy("icc/" + name);
             }
             QFile file(fileName);
-            KIS_ASSERT(file.exists());
-            file.open(QIODevice::ReadOnly);
+            KIS_ASSERT(file.open(QIODevice::ReadOnly));
             return file.readAll();
         });
 
@@ -3194,8 +3193,7 @@ QByteArray fileFetcherFunc(const QString &name)
 {
     const QString fileName = TestUtil::fetchDataFileLazy(name);
     QFile file(fileName);
-    KIS_ASSERT(file.exists());
-    file.open(QIODevice::ReadOnly);
+    KIS_ASSERT(file.open(QIODevice::ReadOnly));
     return file.readAll();
 }
 
@@ -3552,7 +3550,7 @@ void TestSvgParser::testPathData()
     QVERIFY(!fileName.isEmpty());
 
     QFile file(fileName);
-    file.open(QIODevice::ReadOnly);
+    KIS_ASSERT(file.open(QIODevice::ReadOnly));
     QByteArray pathData = file.readAll();
 
     SvgRenderTester t(pathData);

@@ -24,8 +24,7 @@ void TestTag::testLoadTag()
 
     QVERIFY(f.exists());
 
-    f.open(QFile::ReadOnly);
-    QVERIFY(f.isOpen());
+    QVERIFY(f.open(QFile::ReadOnly));
 
     bool r = tagLoader.load(f);
 
@@ -55,8 +54,7 @@ void TestTag::testSaveTag()
 
     QVERIFY(f.exists());
 
-    f.open(QFile::ReadOnly);
-    QVERIFY(f.isOpen());
+    QVERIFY(f.open(QFile::ReadOnly));
 
     bool r = tag1.load(f);
     QVERIFY(r);

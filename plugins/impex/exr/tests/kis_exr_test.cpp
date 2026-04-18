@@ -56,7 +56,7 @@ void KisExrTest::testRoundTrip()
 
     QTemporaryFile savedFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".exr"));
     savedFile.setAutoRemove(true);
-    savedFile.open();
+    KIS_ASSERT(savedFile.open());
 
     QString savedFileName(savedFile.fileName());
 

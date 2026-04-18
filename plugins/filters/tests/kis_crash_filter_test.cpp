@@ -34,10 +34,13 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     QFile file(QString(FILES_DATA_DIR) + '/' + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         dbgKrita << "creating new file for " << f->id();
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream out(&file);
-        KisPortingUtils::setUtf8OnStream(out);
-        out << kfc->toXML();
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            KisPortingUtils::setUtf8OnStream(out);
+            out << kfc->toXML();
+        } else {
+            qDebug() << "Could not open" << file.fileName() << "for writing:" <<  file.errorString();
+        }
     } else {
         QString s;
         QTextStream in(&file);

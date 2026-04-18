@@ -91,7 +91,7 @@ void TestResourceStorage::testImportExportResource()
 
     {
         QFile f("testpattern.png");
-        f.open(QFile::ReadOnly);
+        KIS_ASSERT(f.open(QFile::ReadOnly));
         ba = f.readAll();
         f.close();
     }
@@ -103,7 +103,7 @@ void TestResourceStorage::testImportExportResource()
         KisResourceStorage folderStorage(m_dstLocation);
 
         QFile f("testpattern.png");
-        f.open(QFile::ReadOnly);
+        KIS_ASSERT(f.open(QFile::ReadOnly));
         bool r = folderStorage.importResource("patterns/testpattern.png", &f);
         QVERIFY(r);
         QCOMPARE(md5, folderStorage.resourceMd5("patterns/testpattern.png"));
@@ -118,7 +118,7 @@ void TestResourceStorage::testImportExportResource()
 
     {
         QFile f("testpattern.png");
-        f.open(QFile::ReadOnly);
+        KIS_ASSERT(f.open(QFile::ReadOnly));
         KisResourceStorage memoryStorage("memory");
         bool r = memoryStorage.importResource("patterns/testpattern.png", &f);
         QVERIFY(r);
@@ -134,7 +134,7 @@ void TestResourceStorage::testImportExportResource()
 
     {
         QFile f("testpattern.png");
-        f.open(QFile::ReadOnly);
+        KIS_ASSERT(f.open(QFile::ReadOnly));
         KisResourceStorage bundleStorage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
         bool r = bundleStorage.importResource("patterns/testpattern.png", &f);
         QVERIFY(!r);

@@ -35,7 +35,7 @@ void KisAslLayerStyleSerializerTest::testReading()
 //    QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_style.asl"));
     QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_and_pattern.asl"));
     QFile aslFile(srcFileName);
-    aslFile.open(QIODevice::ReadOnly);
+    KIS_ASSERT(aslFile.open(QIODevice::ReadOnly));
     s.readFromDevice(aslFile);
 
     QVector<KisPSDLayerStyleSP> styles = s.styles();
@@ -195,7 +195,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
 
         QString srcFileName(TestUtil::fetchDataFileLazy("asl/test_all_and_pattern.asl"));
         QFile aslFile(srcFileName);
-        aslFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(aslFile.open(QIODevice::ReadOnly));
         s.readFromDevice(aslFile);
 
         styles = s.styles();
@@ -216,7 +216,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
         s.setStyles(styles);
 
         QFile dstFile("test_written.asl");
-        dstFile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(dstFile.open(QIODevice::WriteOnly));
         s.saveToDevice(dstFile);
         dstFile.close();
     }
@@ -225,7 +225,7 @@ void KisAslLayerStyleSerializerTest::testWriting()
 
     {
         QFile resultFile("test_written.asl");
-        resultFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(resultFile.open(QIODevice::ReadOnly));
 
         KisAslReader reader;
         QDomDocument doc = reader.readFile(resultFile);
@@ -233,12 +233,12 @@ void KisAslLayerStyleSerializerTest::testWriting()
     }
 
     QFile refXMLFile("save_round_trip_src.xml");
-    refXMLFile.open(QIODevice::WriteOnly);
+    KIS_ASSERT(refXMLFile.open(QIODevice::WriteOnly));
     refXMLFile.write(refXMLDoc);
     refXMLFile.close();
 
     QFile resultXMLFile("save_round_trip_dst.xml");
-    resultXMLFile.open(QIODevice::WriteOnly);
+    KIS_ASSERT(resultXMLFile.open(QIODevice::WriteOnly));
     resultXMLFile.write(resultXMLDoc);
     resultXMLFile.close();
 
@@ -273,7 +273,7 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
         s.setStyles(QVector<KisPSDLayerStyleSP>() << style);
 
         QFile dstFile("test_written_pattern_only.asl");
-        dstFile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(dstFile.open(QIODevice::WriteOnly));
         s.saveToDevice(dstFile);
         dstFile.close();
     }
@@ -282,7 +282,7 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
 
     {
         QFile resultFile("test_written.asl");
-        resultFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(resultFile.open(QIODevice::ReadOnly));
 
         KisAslReader reader;
         QDomDocument doc = reader.readFile(&resultFile);
@@ -303,7 +303,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
         QString srcFileName(TestUtil::fetchDataFileLazy("asl/multiple_styles.asl"));
         QFile aslFile(srcFileName);
-        aslFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT( aslFile.open(QIODevice::ReadOnly));
         s.readFromDevice(aslFile);
 
         styles = s.styles();
@@ -315,7 +315,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
         QString dstFileName("multiple_styles_out.asl");
         QFile aslFile(dstFileName);
-        aslFile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(aslFile.open(QIODevice::WriteOnly));
 
         s.setStyles(styles);
         s.saveToDevice(aslFile);
@@ -326,7 +326,7 @@ void KisAslLayerStyleSerializerTest::testReadMultipleStyles()
 
         QString srcFileName("multiple_styles_out.asl");
         QFile aslFile(srcFileName);
-        aslFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(aslFile.open(QIODevice::ReadOnly));
         s.readFromDevice(aslFile);
 
         styles = s.styles();
@@ -371,7 +371,7 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
         s.setStyles(QVector<KisPSDLayerStyleSP>() << style);
 
         QFile dstFile("test_written_stop_gradient.asl");
-        dstFile.open(QIODevice::WriteOnly);
+        KIS_ASSERT(dstFile.open(QIODevice::WriteOnly));
         s.saveToDevice(dstFile);
         dstFile.close();
     }
@@ -380,7 +380,7 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
 
     {
         QFile resultFile("test_written_stop_gradient.asl");
-        resultFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(resultFile.open(QIODevice::ReadOnly));
 
         KisAslReader reader;
         QDomDocument doc = reader.readFile(resultFile);
@@ -395,14 +395,14 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
 
         {
             //QFile xmlFile("reference_gradients.asl.xml");
-            //xmlFile.open(QIODevice::WriteOnly);
+            //KIS_ASSERT(xmlFile.open(QIODevice::WriteOnly));
             //xmlFile.write(xmlDoc.toLatin1());
             //xmlFile.close();
         }
 
         QString refFileName(TestUtil::fetchDataFileLazy("reference_gradients.asl.xml"));
         QFile refFile(refFileName);
-        refFile.open(QIODevice::ReadOnly);
+        KIS_ASSERT(refFile.open(QIODevice::ReadOnly));
         QString refDoc = QString(refFile.readAll());
 
         QEXPECT_FAIL("", "Tried to compare two gradient files, which are not the same. The order of attributes when serializing is undefined.", Continue);

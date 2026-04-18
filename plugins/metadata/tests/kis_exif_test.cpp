@@ -36,7 +36,7 @@ void KisExifTest::testExifLoader()
     IOBackend *exifIO = KisMetadataBackendRegistry::instance()->get("exif");
     QVERIFY(exifIO);
     QFile exifFile(QString(FILES_DATA_DIR) + "/metadata/hpim3238.exv");
-    exifFile.open(QIODevice::ReadOnly);
+    KIS_ASSERT(exifFile.open(QIODevice::ReadOnly));
     exifFile.seek(17);
     QByteArray exifBytes = exifFile.readAll();
     QBuffer exifBuffer(&exifBytes);

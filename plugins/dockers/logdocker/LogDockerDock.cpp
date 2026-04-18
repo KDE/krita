@@ -12,6 +12,7 @@
 #include <QStandardPaths>
 #include <QDateTime>
 #include <QCheckBox>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
@@ -103,9 +104,13 @@ void LogDockerDock::saveLog()
     QString filename = fileDialog.filename();
     if (!filename.isEmpty()) {
         QFile f(filename);
-        f.open(QFile::WriteOnly);
-        f.write(txtLogViewer->document()->toPlainText().toUtf8());
-        f.close();
+        if (f.open(QFile::WriteOnly)) {
+            f.write(txtLogViewer->document()->toPlainText().toUtf8());
+            f.close();
+        } else {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"),
+                i18n("Could not save %1.\nReason: %2.", f.fileName(), f.errorString()));
+        }
     }
 }
 

@@ -430,7 +430,11 @@ void KisCustomImageWidget::saveAsPredefined()
     QString saveLocation = KoResourcePaths::saveLocation("data", "predefined_image_sizes/", true);
     QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_').replace(':', '_') + ".predefinedimage");
 
-    f.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"),
+            i18n("Could not save %1.\nReason: %2.", f.fileName(), f.errorString()));
+        return;
+    }
     KisPropertiesConfigurationSP predefined = new KisPropertiesConfiguration();
     predefined->setProperty("name", txtPredefinedName->text());
     predefined->setProperty("width", doubleWidth->value());

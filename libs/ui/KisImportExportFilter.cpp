@@ -175,7 +175,9 @@ QString KisImportExportFilter::verify(const QString &fileName) const
     }
 
     QFile f(fileName);
-    f.open(QFile::ReadOnly);
+    if (!f.open(QFile::ReadOnly)) {
+        return i18n("%1 could not be opened", fileName);
+    }
     QByteArray ba = f.read(std::min(f.size(), (qint64)1000));
     bool found = false;
     for(int i = 0; i < ba.size(); ++i) {

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-17 02:39+0000\n"
+"POT-Creation-Date: 2026-04-18 02:37+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -21152,7 +21152,7 @@ msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Ändring av ogenomskinlighet"
 
-#: libs/image/commands/kis_node_property_list_command.cpp:59
+#: libs/image/commands/kis_node_property_list_command.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "Ändringar av egenskaper"
@@ -21175,7 +21175,7 @@ msgid "Node Rename"
 msgstr "Byt namn på nod"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:841
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Ändra bildstorlek"
@@ -21422,55 +21422,55 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Skicka igenom"
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:398
 #, kde-format
 msgid "Imported Image"
 msgstr "Importerad bild"
 
 #. i18n.
-#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Bakgrund"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "Målarlager"
 
-#: libs/image/kis_image.cc:839
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Beskär bild"
 
-#: libs/image/kis_image.cc:886
+#: libs/image/kis_image.cc:887
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:990
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Beskär lager"
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:992
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Beskär mask"
 
-#: libs/image/kis_image.cc:1028
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skala bild"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1030
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Ändra bildupplösning"
 
-#: libs/image/kis_image.cc:1079
+#: libs/image/kis_image.cc:1080
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21478,17 +21478,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Skala lager"
 msgstr[1] "Skala %1 lager"
 
-#: libs/image/kis_image.cc:1218
+#: libs/image/kis_image.cc:1219
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotera bild"
 
-#: libs/image/kis_image.cc:1228
+#: libs/image/kis_image.cc:1229
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotera mask"
 
-#: libs/image/kis_image.cc:1231
+#: libs/image/kis_image.cc:1232
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21496,12 +21496,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Rotera lager"
 msgstr[1] "Rotera %1 lager"
 
-#: libs/image/kis_image.cc:1332
+#: libs/image/kis_image.cc:1333
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Skjuva mask"
 
-#: libs/image/kis_image.cc:1336
+#: libs/image/kis_image.cc:1337
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21509,42 +21509,42 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Skjuva lager"
 msgstr[1] "Skjuva %1 lager"
 
-#: libs/image/kis_image.cc:1343
+#: libs/image/kis_image.cc:1344
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Skjuva bild"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1362
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Konvertera lagerfärgrymd"
 
-#: libs/image/kis_image.cc:1412
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konvertera bildens färgrymd"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertera projektionens färgrymd"
 
-#: libs/image/kis_image.cc:1465
+#: libs/image/kis_image.cc:1466
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Förena lagerfärgrymd"
 
-#: libs/image/kis_image.cc:1495
+#: libs/image/kis_image.cc:1496
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Tilldela profil till lager"
 
-#: libs/image/kis_image.cc:1536
+#: libs/image/kis_image.cc:1537
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tilldela profil"
 
-#: libs/image/kis_image.cc:2572
+#: libs/image/kis_image.cc:2573
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Beskär markeringar"
@@ -23887,7 +23887,7 @@ msgstr "Lokala resurser"
 #: libs/resources/KisResourceCacheDb.cpp:353
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
@@ -24873,7 +24873,7 @@ msgstr ""
 "innan export."
 
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -24899,14 +24899,14 @@ msgstr ""
 "                                                              Är du säker på "
 "att du vill skriva över den befintliga filen?"
 
-#: libs/ui/animation/KisAnimationRender.cpp:151
 #: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Återgivningsfel"
 
-#: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
@@ -40030,72 +40030,72 @@ msgstr "Kolumner:"
 msgid "Smoothing:"
 msgstr "Utjämning:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:93
 #, kde-format
 msgid "Butt cap"
 msgstr "Platt ända"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:100
 #, kde-format
 msgid "Round cap"
 msgstr "Rundad ända"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:107
 #, kde-format
 msgid "Square cap"
 msgstr "Fyrkantig ända"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:118
 #, kde-format
 msgid "Miter join"
 msgstr "Sned hopfogning"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:125
 #, kde-format
 msgid "Round join"
 msgstr "Rundad hopfogning"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:132
 #, kde-format
 msgid "Bevel join"
 msgstr "Fasad hopfogning"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:142
 #, kde-format
 msgid "Miter limit"
 msgstr "Sned gräns"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:238
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Ställ in linjebredd för själva markeringen"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "Linjestil:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:252
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Linjestil"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Startmarkör"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Nodmarkör"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"

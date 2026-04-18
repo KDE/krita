@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-17 02:39+0000\n"
+"POT-Creation-Date: 2026-04-18 02:37+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -21158,7 +21158,7 @@ msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Opacitat :"
 
-#: libs/image/commands/kis_node_property_list_command.cpp:59
+#: libs/image/commands/kis_node_property_list_command.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Property Changes"
@@ -21184,7 +21184,7 @@ msgid "Node Rename"
 msgstr "Nom :"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:841
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21434,60 +21434,60 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:398
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "Imatge"
 
 #. i18n.
-#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Color de fons"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Filtre"
 
-#: libs/image/kis_image.cc:839
+#: libs/image/kis_image.cc:840
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Imatge"
 
-#: libs/image/kis_image.cc:886
+#: libs/image/kis_image.cc:887
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:990
+#: libs/image/kis_image.cc:991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Filtre"
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:992
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Rosegar"
 
-#: libs/image/kis_image.cc:1028
+#: libs/image/kis_image.cc:1029
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Imatge"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1030
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Resolucion :"
 
-#: libs/image/kis_image.cc:1079
+#: libs/image/kis_image.cc:1080
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21495,19 +21495,19 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "&Suprimir "
 msgstr[1] "&Suprimir "
 
-#: libs/image/kis_image.cc:1218
+#: libs/image/kis_image.cc:1219
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Imatge"
 
-#: libs/image/kis_image.cc:1228
+#: libs/image/kis_image.cc:1229
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotacion"
 
-#: libs/image/kis_image.cc:1231
+#: libs/image/kis_image.cc:1232
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21515,13 +21515,13 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "&Suprimir "
 msgstr[1] "&Suprimir "
 
-#: libs/image/kis_image.cc:1332
+#: libs/image/kis_image.cc:1333
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Suprimir pagina"
 
-#: libs/image/kis_image.cc:1336
+#: libs/image/kis_image.cc:1337
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21529,49 +21529,49 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Seleccion"
 msgstr[1] "Seleccion"
 
-#: libs/image/kis_image.cc:1343
+#: libs/image/kis_image.cc:1344
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Imatge"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1362
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Filtre"
 
-#: libs/image/kis_image.cc:1412
+#: libs/image/kis_image.cc:1413
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Filtre"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1414
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Filtre"
 
-#: libs/image/kis_image.cc:1465
+#: libs/image/kis_image.cc:1466
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Filtre"
 
-#: libs/image/kis_image.cc:1495
+#: libs/image/kis_image.cc:1496
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Esquèrra:"
 
-#: libs/image/kis_image.cc:1536
+#: libs/image/kis_image.cc:1537
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Opcions"
 
-#: libs/image/kis_image.cc:2572
+#: libs/image/kis_image.cc:2573
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -23950,7 +23950,7 @@ msgstr "Sorga"
 #: libs/resources/KisResourceCacheDb.cpp:353
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
@@ -24936,7 +24936,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #, fuzzy, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -24957,15 +24957,15 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:151
 #: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Filtre"
 
-#: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, fuzzy, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Seleccion"
@@ -39451,73 +39451,73 @@ msgstr "Valor"
 msgid "Smoothing:"
 msgstr "Aleatòri"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:93
 #, kde-format
 msgid "Butt cap"
 msgstr ""
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:100
 #, fuzzy, kde-format
 msgid "Round cap"
 msgstr "Colors"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:107
 #, fuzzy, kde-format
 #| msgid "Square"
 msgid "Square cap"
 msgstr "Carrat"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:118
 #, fuzzy, kde-format
 msgid "Miter join"
 msgstr "Suprimir pagina"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:125
 #, fuzzy, kde-format
 msgid "Round join"
 msgstr "Colors"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:132
 #, fuzzy, kde-format
 msgid "Bevel join"
 msgstr "Suprimir pagina"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:142
 #, fuzzy, kde-format
 msgid "Miter limit"
 msgstr "Suprimir pagina"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:238
 #, fuzzy, kde-format
 msgid "Set line width of actual selection"
 msgstr "Seleccion"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 msgid "Line Style:"
 msgstr "Estils"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:252
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Estils"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:263
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Estèla"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:270
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Estèla"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:277
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-17 02:39+0000\n"
+"POT-Creation-Date: 2026-04-18 02:37+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -21902,7 +21902,7 @@ msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Белги услубини ўзгартириш"
 
-#: libs/image/commands/kis_node_property_list_command.cpp:59
+#: libs/image/commands/kis_node_property_list_command.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Property Changes"
@@ -21931,7 +21931,7 @@ msgid "Node Rename"
 msgstr "Номи:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:841
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -22191,146 +22191,146 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:398
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "Услубларни импорт қилиш"
 
 #. i18n.
-#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Сония"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:839
+#: libs/image/kis_image.cc:840
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Бетга мослаш"
 
-#: libs/image/kis_image.cc:886
+#: libs/image/kis_image.cc:887
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:990
+#: libs/image/kis_image.cc:991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:992
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1028
+#: libs/image/kis_image.cc:1029
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Матнни қўйиш"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1030
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Табуляцияни ўзгартириш"
 
-#: libs/image/kis_image.cc:1079
+#: libs/image/kis_image.cc:1080
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1218
+#: libs/image/kis_image.cc:1219
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Матнни қўйиш"
 
-#: libs/image/kis_image.cc:1228
+#: libs/image/kis_image.cc:1229
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1231
+#: libs/image/kis_image.cc:1232
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1332
+#: libs/image/kis_image.cc:1333
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1336
+#: libs/image/kis_image.cc:1337
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1343
+#: libs/image/kis_image.cc:1344
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1362
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1412
+#: libs/image/kis_image.cc:1413
 #, fuzzy
 #| msgid "Color:"
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Ранги:"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1414
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1465
+#: libs/image/kis_image.cc:1466
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1495
+#: libs/image/kis_image.cc:1496
 #, fuzzy
 #| msgid "Right indent"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Ўнгдан бўш жой"
 
-#: libs/image/kis_image.cc:1536
+#: libs/image/kis_image.cc:1537
 #, fuzzy
 #| msgid "Missing Export Filter"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Экспорт филтери етишмаяпти"
 
-#: libs/image/kis_image.cc:2572
+#: libs/image/kis_image.cc:2573
 #, fuzzy
 #| msgid "Current Section"
 msgctxt "(qtundo-format)"
@@ -24796,7 +24796,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/resources/KisResourceCacheDb.cpp:353
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
@@ -25863,7 +25863,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -25890,14 +25890,14 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:151
 #: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Яратиш хатоси"
 
-#: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, fuzzy, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Текислашни ўзгартириш"
@@ -41065,76 +41065,76 @@ msgstr "Устунлар:"
 msgid "Smoothing:"
 msgstr "Боғни олиб ташлаш"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:93
 #, kde-format
 msgid "Butt cap"
 msgstr ""
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:100
 #, fuzzy, kde-format
 msgid "Round cap"
 msgstr "Экспорт қилишни тасдиқлаш"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:107
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Square cap"
 msgstr "Бошқа"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:118
 #, fuzzy, kde-format
 msgid "Miter join"
 msgstr "Бўш жой"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:125
 #, fuzzy, kde-format
 msgid "Round join"
 msgstr "Экспорт қилишни тасдиқлаш"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:132
 #, fuzzy, kde-format
 msgid "Bevel join"
 msgstr "Боғни олиб ташлаш"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:142
 #, fuzzy, kde-format
 msgid "Miter limit"
 msgstr "Бўш жой"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:238
 #, fuzzy, kde-format
 #| msgid "Completion"
 msgid "Set line width of actual selection"
 msgstr "Тўлдириш"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 #| msgid "Font style:"
 msgid "Line Style:"
 msgstr "Шрифтнинг услуби:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:252
 #, fuzzy, kde-format
 #| msgid "Font style:"
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Шрифтнинг услуби:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:263
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Сония"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:270
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Сония"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:277
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"

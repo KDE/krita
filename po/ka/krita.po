@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-17 02:39+0000\n"
+"POT-Creation-Date: 2026-04-18 02:37+0000\n"
 "PO-Revision-Date: 2026-04-06 02:01+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -21017,7 +21017,7 @@ msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "გაუმჭვირვალობის ცვლილება"
 
-#: libs/image/commands/kis_node_property_list_command.cpp:59
+#: libs/image/commands/kis_node_property_list_command.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "თვისების ცვლილებები"
@@ -21040,7 +21040,7 @@ msgid "Node Rename"
 msgstr "კვანძის სახელის გადარქმევა"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:841
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "გამოსახულების ზომის შეცვლა"
@@ -21278,55 +21278,55 @@ msgstr "მიტჩელი"
 msgid "Pass Through"
 msgstr "გატარება"
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:398
 #, kde-format
 msgid "Imported Image"
 msgstr "შემოტანილი გამოსახულება"
 
 #. i18n.
-#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "ფონი"
 
-#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "სახატავი ფენა"
 
-#: libs/image/kis_image.cc:839
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "გამოსახულების ამოჭრა"
 
-#: libs/image/kis_image.cc:886
+#: libs/image/kis_image.cc:887
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr "გამოუყენებელი მონაცემების გაწმენდა"
 
-#: libs/image/kis_image.cc:990
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "ფენის ამოჭრა"
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:992
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "ამოჭრის ნიღაბი"
 
-#: libs/image/kis_image.cc:1028
+#: libs/image/kis_image.cc:1029
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "გამოსახულების მასშტაბირება"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1030
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "გამოსახულების გაფართოების შეცვლა"
 
-#: libs/image/kis_image.cc:1079
+#: libs/image/kis_image.cc:1080
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21334,17 +21334,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "ფენის მასშტაბირება"
 msgstr[1] "%1 ფენის მასშტაბირება"
 
-#: libs/image/kis_image.cc:1218
+#: libs/image/kis_image.cc:1219
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "გამოსახულების შემობრუნება"
 
-#: libs/image/kis_image.cc:1228
+#: libs/image/kis_image.cc:1229
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "ნიღბის შემობრუნება"
 
-#: libs/image/kis_image.cc:1231
+#: libs/image/kis_image.cc:1232
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21352,12 +21352,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "ფენის შემობრუნება"
 msgstr[1] "%1 ფენის შემობრუნება"
 
-#: libs/image/kis_image.cc:1332
+#: libs/image/kis_image.cc:1333
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "ნიღბის დახრა"
 
-#: libs/image/kis_image.cc:1336
+#: libs/image/kis_image.cc:1337
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21365,42 +21365,42 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "ფენის დახრა"
 msgstr[1] "%1 ფენის დახრა"
 
-#: libs/image/kis_image.cc:1343
+#: libs/image/kis_image.cc:1344
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "გამოსახულების დახრა"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1362
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "ფენის ფერის სივრცის გარდაქმნა"
 
-#: libs/image/kis_image.cc:1412
+#: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "გამოსახულების ფერის სივრცის გარდაქმნა"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "პროექციის ფერის სივრცის გარდაქმნა"
 
-#: libs/image/kis_image.cc:1465
+#: libs/image/kis_image.cc:1466
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "ფენის ფერის სივრცის გაერთიანება"
 
-#: libs/image/kis_image.cc:1495
+#: libs/image/kis_image.cc:1496
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "პროფილის ფენაზე მინიჭება"
 
-#: libs/image/kis_image.cc:1536
+#: libs/image/kis_image.cc:1537
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "პროფილის მინიჭება"
 
-#: libs/image/kis_image.cc:2572
+#: libs/image/kis_image.cc:2573
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "მონიშნულების ამოჭრა"
@@ -23719,7 +23719,7 @@ msgstr "ლოკალური რესურსები"
 #: libs/resources/KisResourceCacheDb.cpp:353
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
@@ -24709,7 +24709,7 @@ msgstr ""
 "გამოსახულება მის გატანამდე."
 
 #: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:116
+#: libs/ui/animation/KisAnimationRender.cpp:118
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -24735,14 +24735,14 @@ msgstr ""
 "                                                              გნებავთ "
 "არსებული ფაილის თავზე გადაწერა?"
 
-#: libs/ui/animation/KisAnimationRender.cpp:151
 #: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "რენდერის შეცდომა"
 
-#: libs/ui/animation/KisAnimationRender.cpp:153
+#: libs/ui/animation/KisAnimationRender.cpp:155
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "ანიმაციის კადრების რენდერი ჩავარდა! გამოტანილი ფაილები დაუსრულებელია."
@@ -39302,72 +39302,72 @@ msgstr "სვეტი:"
 msgid "Smoothing:"
 msgstr "მოგლუვება:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:93
 #, kde-format
 msgid "Butt cap"
 msgstr "ბრტყელი"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:100
 #, kde-format
 msgid "Round cap"
 msgstr "მომრგვალებული"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:107
 #, kde-format
 msgid "Square cap"
 msgstr "კვადრატული"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:118
 #, kde-format
 msgid "Miter join"
 msgstr "წამახული"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:125
 #, kde-format
 msgid "Round join"
 msgstr "მომრგვალებული შეერთება"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:132
 #, kde-format
 msgid "Bevel join"
 msgstr "მოღუნული შეერთება"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:142
 #, kde-format
 msgid "Miter limit"
 msgstr "ფაცეტის ლიმიტი"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:238
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "მონიშნულის ხაზის სიგანის დაყენება"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "ხაზის სტილი:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:252
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "ხაზის სტილი"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "დაწყების მარკერი"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "კვანძის მარკერი"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"

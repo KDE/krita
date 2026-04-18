@@ -64,7 +64,9 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     }
     vertSource.append(vertHeader);
     QFile vertexShaderFile(":/" + vertPath);
-    vertexShaderFile.open(QIODevice::ReadOnly);
+    if (!vertexShaderFile.open(QIODevice::ReadOnly)) {
+        throw ShaderLoaderException(QString("%1: %2 - Cause: %3").arg("Failed to open vertex shader source file", vertPath, vertexShaderFile.errorString()));
+    }
     vertSource.append(vertexShaderFile.readAll());
 
     result = shader->addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource);
@@ -104,7 +106,9 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     }
     fragSource.append(fragHeader);
     QFile fragmentShaderFile(":/" + fragPath);
-    fragmentShaderFile.open(QIODevice::ReadOnly);
+    if (!fragmentShaderFile.open(QIODevice::ReadOnly)) {
+        throw ShaderLoaderException(QString("%1: %2 - Cause: %3").arg("Failed to open fragment shader source file", fragPath, fragmentShaderFile.errorString()));
+    }
     fragSource.append(fragmentShaderFile.readAll());
 
     result = shader->addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource);

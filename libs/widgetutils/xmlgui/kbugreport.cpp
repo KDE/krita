@@ -170,8 +170,7 @@ KisKBugReport::KisKBugReport(const KAboutData &aboutData, QWidget *_parent)
 
     QByteArray additionalInformation;
     QFile sysinfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
-    if (sysinfo.exists()) {
-        sysinfo.open(QFile::ReadOnly);
+    if (sysinfo.open(QFile::ReadOnly)) {
         additionalInformation += sysinfo.readAll();
         sysinfo.close();
     }
@@ -179,8 +178,7 @@ KisKBugReport::KisKBugReport(const KAboutData &aboutData, QWidget *_parent)
     additionalInformation += "\n---------------------\n";
 
     QFile log(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
-    if (log.exists()) {
-        log.open(QFile::ReadOnly);
+    if (log.open(QFile::ReadOnly)) {
         additionalInformation += log.readAll();
         log.close();
     }
@@ -188,8 +186,7 @@ KisKBugReport::KisKBugReport(const KAboutData &aboutData, QWidget *_parent)
     additionalInformation += "\n---------------------\n";
 
     QFile crashes(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/kritacrash.log");
-    if (crashes.exists()) {
-        crashes.open(QFile::ReadOnly);
+    if (crashes.open(QFile::ReadOnly)) {
         additionalInformation += crashes.readAll();
         crashes.close();
     }

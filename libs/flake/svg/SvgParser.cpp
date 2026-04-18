@@ -226,8 +226,7 @@ void SvgParser::setXmlBaseDir(const QString &baseDir)
             possibleNames << QDir::cleanPath(QDir(m_context.xmlBaseDir()).absoluteFilePath(name));
             for (QString fileName : possibleNames) {
                 QFile file(fileName);
-                if (file.exists()) {
-                    file.open(QIODevice::ReadOnly);
+                if (file.open(QIODevice::ReadOnly)) {
                     return file.readAll();
                 }
             }

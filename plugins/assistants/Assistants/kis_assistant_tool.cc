@@ -1438,11 +1438,9 @@ void KisAssistantTool::loadAssistants()
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-assistant", "application/x-krita-assistant");
     QString filename = dialog.filename();
-    if (filename.isEmpty()) return;
-    if (!QFileInfo(filename).exists()) return;
 
     QFile file(filename);
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) { return; }
 
     QByteArray data = file.readAll();
     QXmlStreamReader xml(data);
@@ -1677,8 +1675,11 @@ void KisAssistantTool::saveAssistants()
     if (filename.isEmpty()) return;
 
     QFile file(filename);
-    file.open(QIODevice::WriteOnly);
-    file.write(data);
+    if (file.open(QIODevice::WriteOnly)) {
+        file.write(data);
+    } else {
+        qWarning() << "Couldn't open file" << file.fileName() << "for writing:" << file.errorString();
+    }
 }
 
 QWidget *KisAssistantTool::createOptionWidget()

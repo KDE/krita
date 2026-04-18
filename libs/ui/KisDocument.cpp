@@ -1612,7 +1612,7 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
 
                         if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
                             QFile f2(tempFileName);
-                            f2.open(QFile::ReadOnly);
+                            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f2.open(QFile::ReadOnly), false);
 
                             QByteArray ba = f2.readAll();
 

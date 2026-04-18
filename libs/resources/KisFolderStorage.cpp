@@ -55,8 +55,7 @@ private:
     {
         QFile f(m_dirIterator->filePath());
         tag->setFilename(m_dirIterator->fileName());
-        if (f.exists()) {
-            f.open(QFile::ReadOnly);
+        if (f.open(QFile::ReadOnly)) {
             if (!tag->load(f)) {
                 qWarning() << m_dirIterator->filePath() << "is not a valid tag desktop file";
                 return false;

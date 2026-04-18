@@ -98,13 +98,14 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
             connect(this, &KisFFMpegWrapper::sigFinishedWithError, [renderLogPath, sessionRenderLogPath](QString){
                 QFile renderLog(renderLogPath);
                 QFile sessionRenderLog(sessionRenderLogPath);
-                renderLog.open(QIODevice::ReadOnly);
-                sessionRenderLog.open(QIODevice::WriteOnly | QIODevice::Append);
+                if (renderLog.open(QIODevice::ReadOnly) &&
+                    sessionRenderLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
 
-                QByteArray buffer;
-                int chunksize = 256;
-                while (!(buffer = renderLog.read(chunksize)).isEmpty()) {
-                    sessionRenderLog.write(buffer);
+                    QByteArray buffer;
+                    int chunksize = 256;
+                    while (!(buffer = renderLog.read(chunksize)).isEmpty()) {
+                        sessionRenderLog.write(buffer);
+                    }
                 }
             });
         }

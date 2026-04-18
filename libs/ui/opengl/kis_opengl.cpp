@@ -314,15 +314,18 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     }
 
     QFile log(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/krita-opengl.txt");
-    log.open(QFile::WriteOnly);
-    QString vendor((const char*)f->glGetString(GL_VENDOR));
-    log.write(vendor.toLatin1());
-    log.write(", ");
-    log.write(openGLCheckResult->rendererString().toLatin1());
-    log.write(", ");
-    QString version((const char*)f->glGetString(GL_VERSION));
-    log.write(version.toLatin1());
-    log.close();
+    if (log.open(QFile::WriteOnly)) {
+        QString vendor((const char*)f->glGetString(GL_VENDOR));
+        log.write(vendor.toLatin1());
+        log.write(", ");
+        log.write(openGLCheckResult->rendererString().toLatin1());
+        log.write(", ");
+        QString version((const char*)f->glGetString(GL_VERSION));
+        log.write(version.toLatin1());
+        log.close();
+    } else {
+        qWarning() << "Could not open" << log.fileName() << "for writing:" << log.errorString();
+    }
 }
 
 const QString &KisOpenGL::getDebugText()

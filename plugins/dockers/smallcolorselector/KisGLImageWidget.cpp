@@ -73,11 +73,17 @@ void KisGLImageWidget::initializeGL()
     m_shader.reset(new QOpenGLShaderProgram);
 
     QFile vertexShaderFile(QString(":/") + "kis_gl_image_widget.vert");
-    vertexShaderFile.open(QIODevice::ReadOnly);
+    if (!vertexShaderFile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Could not open vertex code";
+        return;
+    }
     QString vertSource = vertexShaderFile.readAll();
 
     QFile fragShaderFile(QString(":/") + "kis_gl_image_widget.frag");
-    fragShaderFile.open(QIODevice::ReadOnly);
+    if (!fragShaderFile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Could not open fragment code";
+        return;
+    }
     QString fragSource = fragShaderFile.readAll();
 
     if (context()->isOpenGLES()) {

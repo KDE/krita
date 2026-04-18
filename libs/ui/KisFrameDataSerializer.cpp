@@ -97,7 +97,9 @@ int KisFrameDataSerializer::saveFrame(const KisFrameDataSerializer::Frame &frame
     const QString frameFilePath = m_d->framesDirObject.filePath(frameRelativePath);
 
     QFile file(frameFilePath);
-    file.open(QFile::WriteOnly);
+    if (!file.open(QFile::WriteOnly)) {
+        return frameId;
+    }
 
     QDataStream stream(&file);
     stream << frameId;

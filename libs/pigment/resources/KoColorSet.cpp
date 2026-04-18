@@ -1286,7 +1286,10 @@ bool KoColorSet::Private::init()
             warnPigment << "Cannot load palette" << colorSet->name() << "there is no data available";
             return false;
         }
-        file.open(QIODevice::ReadOnly);
+        if (!file.open(QIODevice::ReadOnly)) {
+            warnPigment << "Cannot load palette" << colorSet->name() << ":" << file.errorString();
+            return false;
+        }
         data = file.readAll();
         file.close();
     }

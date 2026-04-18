@@ -353,37 +353,40 @@ void KisSafeDocumentLoader::delayedLoadStart()
                      * NOTE: we cannot use QImage for loading, since it strips
                      * the color profile attached to the PNG file
                      */
-                    QTemporaryFile temporaryFile(QDir::tempPath() + QLatin1String("/krita_merged_image_XXXXXX.png"));
-                    temporaryFile.open();
-
-                    QByteArray buffer(BUFSIZ, 0);
                     qint64 totalWritten = 0;
                     const qint64 expectedFileSize = store->size();
+                    QTemporaryFile temporaryFile(QDir::tempPath() + QLatin1String("/krita_merged_image_XXXXXX.png"));
+                    if (temporaryFile.open()) {
+                        QByteArray buffer(BUFSIZ, 0);
 
-                    while (true) {
-                        qint64 read = store->read(buffer.data(), buffer.size());
-                        if (read < 0) {
-                            warnKrita << "Failed to read from mergedimage.png for the file layer's projection";
-                            break;
-                        } else if (read == 0) {
-                            // End of file
-                            break;
-                        } else {
-                            // Successful read, try to write it.
-                            qint64 written = temporaryFile.write(buffer.constData(), read);
-                            if (written < 0) {
-                                // Write error.
-                                warnKrita << "Failed to wirte mergedimage.png into a temporary file for the file layer's projection"
-                                          << temporaryFile.fileName() << ":" << temporaryFile.error();
+                        while (true) {
+                            qint64 read = store->read(buffer.data(), buffer.size());
+                            if (read < 0) {
+                                warnKrita << "Failed to read from mergedimage.png for the file layer's projection";
                                 break;
+                            } else if (read == 0) {
+                                // End of file
+                                break;
+                            } else {
+                                // Successful read, try to write it.
+                                qint64 written = temporaryFile.write(buffer.constData(), read);
+                                if (written < 0) {
+                                    // Write error.
+                                    warnKrita << "Failed to write mergedimage.png into a temporary file for the file layer's projection"
+                                              << temporaryFile.fileName() << ":" << temporaryFile.errorString();
+                                    break;
+                                }
+                                // We may not have written as much as we read, but we handle
+                                // that at the end.
+                                totalWritten += written;
                             }
-                            // We may not have written as much as we read, but we handle
-                            // that at the end.
-                            totalWritten += written;
                         }
-                    }
 
-                    temporaryFile.close();
+                        temporaryFile.close();
+                    } else {
+                        warnKrita << "Failed to open temporary file for mergedimage.png for the file layer's projection"
+                                  << temporaryFile.fileName() << ":" << temporaryFile.errorString();
+                    }
                     store->close();
 
                     if (totalWritten == expectedFileSize) {

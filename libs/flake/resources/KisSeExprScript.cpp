@@ -96,7 +96,10 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP res
             return false;
         }
 
-        file.open(QIODevice::ReadOnly);
+        if (!file.open(QIODevice::ReadOnly)) {
+            warnFlake << "Cannot load SeExpr script" << name() << ":" << file.errorString();
+            return false;
+        }
         d->data = file.readAll();
         file.close();
     }

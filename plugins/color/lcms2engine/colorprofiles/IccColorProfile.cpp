@@ -423,12 +423,13 @@ QByteArray IccColorProfile::uniqueId() const
 bool IccColorProfile::load()
 {
     QFile file(fileName());
-    file.open(QIODevice::ReadOnly);
-    QByteArray rawData = file.readAll();
-    setRawData(rawData);
-    file.close();
-    if (init()) {
-        return true;
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray rawData = file.readAll();
+        setRawData(rawData);
+        file.close();
+        if (init()) {
+            return true;
+        }
     }
     qWarning() << "Failed to load profile from " << fileName();
     return false;

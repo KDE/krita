@@ -375,8 +375,7 @@ void KisCustomImageWidget::fillPredefined()
 
         Q_FOREACH (const QString &definition, definitions) {
             QFile f(definition);
-            f.open(QIODevice::ReadOnly);
-            if (f.exists()) {
+            if (f.open(QIODevice::ReadOnly)) {
                 QString xml = QString::fromUtf8(f.readAll());
                 KisPropertiesConfigurationSP predefined = new KisPropertiesConfiguration;
                 predefined->fromXML(xml);

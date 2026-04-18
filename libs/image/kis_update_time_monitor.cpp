@@ -183,16 +183,19 @@ void KisUpdateTimeMonitor::printValues()
     }
 
     QFile logFile(QString("log/%1stroke.rdata").arg(prefix));
-    logFile.open(QIODevice::Append);
-    QTextStream stream(&logFile);
-    KisPortingUtils::setUtf8OnStream(stream);
+    if (logFile.open(QIODevice::Append)) {
+        QTextStream stream(&logFile);
+        KisPortingUtils::setUtf8OnStream(stream);
 
-    stream << i18n("Stroke Time:") << strokeTime << "\t"
-           << i18n("Mouse Speed:") << QString::number( mouseSpeed, 'f', 3 ) << "\t"
-           << i18n("Jobs/Update:") << QString::number( jobsPerUpdate, 'f', 3 ) << "\t"
-           << i18n("Non Update Time:") << QString::number( nonUpdateTime, 'f', 3 ) << "\t"
-           << i18n("Response Time:") << responseTime << Qt::endl; // 'endl' will use the correct OS line ending
-    logFile.close();
+        stream << i18n("Stroke Time:") << strokeTime << "\t"
+               << i18n("Mouse Speed:") << QString::number( mouseSpeed, 'f', 3 ) << "\t"
+               << i18n("Jobs/Update:") << QString::number( jobsPerUpdate, 'f', 3 ) << "\t"
+               << i18n("Non Update Time:") << QString::number( nonUpdateTime, 'f', 3 ) << "\t"
+               << i18n("Response Time:") << responseTime << Qt::endl; // 'endl' will use the correct OS line ending
+        logFile.close();
+    } else {
+        qDebug() << "Could not open" << logFile.fileName() << "for writing:" << logFile.errorString();
+    }
 }
 
 void KisUpdateTimeMonitor::reportJobStarted(void *key)

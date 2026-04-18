@@ -264,8 +264,7 @@ void KoDocumentInfo::updateParameters()
     setActiveAuthorInfo("company", "");
     if (dir.entryList(filters).contains(profile+".authorinfo")) {
         QFile file(dir.absoluteFilePath(profile+".authorinfo"));
-        if (file.exists()) {
-            file.open(QFile::ReadOnly);
+        if (file.open(QFile::ReadOnly)) {
             QByteArray ba = file.readAll();
             file.close();
             QDomDocument doc = QDomDocument();

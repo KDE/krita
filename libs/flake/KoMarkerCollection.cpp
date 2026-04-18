@@ -77,9 +77,8 @@ void KoMarkerCollection::loadMarkersFromFile(const QString &svgFile)
     parser.setFileFetcher(
         [](const QString &fileName) {
             QFile file(fileName);
-            if (!file.exists()) return QByteArray();
+            if (!file.open(QIODevice::ReadOnly)) return QByteArray();
 
-            file.open(QIODevice::ReadOnly);
             return file.readAll();
         });
 

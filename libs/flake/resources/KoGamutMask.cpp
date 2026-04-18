@@ -236,7 +236,10 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
             return false;
         }
 
-        file.open(QIODevice::ReadOnly);
+        if (!file.open(QIODevice::ReadOnly)) {
+            warnFlake << "Cannot load gamut mask" << name() << ":" << file.errorString();
+            return false;
+        }
         d->data = file.readAll();
         file.close();
     }

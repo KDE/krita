@@ -97,8 +97,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     QStringList filters = QStringList() << "*.authorinfo";
     Q_FOREACH(const QString &entry, dir.entryList(filters)) {
         QFile file(dir.absoluteFilePath(entry));
-        if (file.exists()) {
-            file.open(QFile::ReadOnly);
+        if (file.open(QFile::ReadOnly)) {
             QByteArray ba = file.readAll();
             file.close();
             QDomDocument doc = QDomDocument();
@@ -399,11 +398,14 @@ void KoConfigAuthorPage::apply()
             ba = doc.toByteArray();
 
             QFile f(authorInfo + d->cmbAuthorProfiles->itemText(i) +".authorinfo");
-            f.open(QFile::WriteOnly);
-            if (f.write(ba) < 0) {
-                qWarning()<<"Writing author info went wrong:"<<f.errorString();
+            if(f.open(QFile::WriteOnly)) {
+                if (f.write(ba) < 0) {
+                    qWarning() << "Writing author info went wrong:" << f.errorString();
+                }
+                f.close();
+            } else {
+                qWarning() << "Writing author info went wrong:" << f.errorString();
             }
-            f.close();
         }
     }
 }

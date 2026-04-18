@@ -314,14 +314,10 @@ void KoStopGradient::loadSvgGradient(QIODevice* file)
                         KoColorSpaceRegistry::instance()->profileByUniqueId(uniqueId);
                 if (!profile) {
                     QFile file(href);
-                    if (file.exists()) {
+                    if (file.size() > 0 && file.open(QIODevice::ReadOnly)) {
                         KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
                         KIS_ASSERT(engine);
-                        file.open(QIODevice::ReadOnly);
-                        const QByteArray profileData = file.readAll();
-                        if (!profileData.isEmpty()) {
-                            profile = engine->addProfile(href);
-                        }
+                        profile = engine->addProfile(href);
                     }
                 }
 

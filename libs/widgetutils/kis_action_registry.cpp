@@ -375,9 +375,12 @@ void KisActionRegistry::Private::loadActionFiles()
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
-        QDomDocument doc;
         QFile f(actionDefinition);
-        f.open(QFile::ReadOnly);
+        if (!f.open(QFile::ReadOnly)) {
+            qWarning() << "Could not open" << f.fileName() << "for reading:" << f.errorString();
+            continue;
+        }
+        QDomDocument doc;
         doc.setContent(f.readAll());
 
         QDomElement base       = doc.documentElement(); // "ActionCollection" outer group

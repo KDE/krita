@@ -117,11 +117,10 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
     // Check whether we're updating from an older version
     if (initializationStatus != InitializationStatus::FirstRun) {
         QFile fi(d->resourceLocation + '/' + "KRITA_RESOURCE_VERSION");
-        if (!fi.exists()) {
+        if (!fi.open(QFile::ReadOnly)) {
             initializationStatus = InitializationStatus::FirstUpdate;
         }
         else {
-            fi.open(QFile::ReadOnly);
             QVersionNumber resource_version = QVersionNumber::fromString(QString::fromUtf8(fi.readAll()));
             QVersionNumber krita_version = QVersionNumber::fromString(KritaVersionWrapper::versionString());
             if (krita_version > resource_version) {
@@ -1083,9 +1082,12 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Initi
     }
 
     QFile f(d->resourceLocation + '/' + "KRITA_RESOURCE_VERSION");
-    f.open(QFile::WriteOnly);
-    f.write(KritaVersionWrapper::versionString().toUtf8());
-    f.close();
+    if (f.open(QFile::WriteOnly)) {
+        f.write(KritaVersionWrapper::versionString().toUtf8());
+        f.close();
+    } else {
+        qWarning() << "Could not open" << f.fileName() << "for writing:" << f.errorString();
+    }
 
     return LocatorError::Ok;
 }

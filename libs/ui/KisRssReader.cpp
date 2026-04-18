@@ -117,7 +117,10 @@ RssItemList KisRssReader::parse(QNetworkReply *reply) {
 
 RssItemList KisRssReader::parse(QFile &file) {
     requestUrl = file.fileName();
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Couldn't open" << file.fileName() << "for reading:" << file.errorString();
+        return RssItemList();
+    }
     m_streamReader.setDevice(&file);
 
     RssItemList itemList(parseStream(m_streamReader));

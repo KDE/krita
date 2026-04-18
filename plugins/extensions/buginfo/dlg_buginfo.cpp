@@ -167,9 +167,12 @@ QString DlgBugInfo::infoText(QSettings& kritarc)
     else {
 
         QFile log(originalFileName());
-        log.open(QFile::ReadOnly | QFile::Text);
-        info += QString::fromUtf8(log.readAll());
-        log.close();
+        if (log.open(QFile::ReadOnly | QFile::Text)) {
+            info += QString::fromUtf8(log.readAll());
+            log.close();
+        } else {
+            info += "Could not open file for reading" + log.fileName() + log.errorString();
+        }
     }
 
     return info;

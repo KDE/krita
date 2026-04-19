@@ -54,7 +54,6 @@ public class MainActivity extends QtActivity {
         Log.i(TAG, "TouchSlop: " + ViewConfiguration.get(this).getScaledTouchSlop());
         Log.i(TAG, "LibsLoaded");
         haveLibsLoaded = true;
-        new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
     }
@@ -183,6 +182,10 @@ public class MainActivity extends QtActivity {
     }
 
     public void onUserInteraction() {
+    }
+
+    public void copyAssets() {
+        new ConfigsManager(this).handleAssets();
     }
 
     public static int getLongPressTimeout() {

@@ -58,7 +58,7 @@
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #include <KisAndroidCrashHandler.h>
-#include <KisAndroidLogHandler.h>
+#include <KisAndroidUtils.h>
 #endif
 
 #if defined Q_OS_WIN
@@ -217,7 +217,7 @@ Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
 extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 {
 #ifdef Q_OS_ANDROID
-    KisAndroidLogHandler::handler_init();
+    KisAndroidUtils::performInitialSetup();
 #endif
 
 #ifdef Q_OS_WIN

@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-18 02:37+0000\n"
-"PO-Revision-Date: 2026-04-16 09:22+0300\n"
+"PO-Revision-Date: 2026-04-18 15:25+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -30098,7 +30098,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1361
 #, kde-format
 msgid "Only applies to new or newly opened images."
-msgstr ""
+msgstr "חלק רק על תמונות חדשות או כאלו שנפתחות לראשונה."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeneralsettings.ui:1354
@@ -30137,6 +30137,8 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
+"אזהרה: אם הפעלת את ההגדרה הזאת וחלוניות הקבצים עושות דברים מוזרים, לא לדווח "
+"על תקלה."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
 #: libs/ui/forms/wdggeneralsettings.ui:1452
@@ -30148,7 +30150,7 @@ msgstr "הפעלת חלוניות קבצים של מערכת ההפעלה"
 #: libs/ui/forms/wdggeneralsettings.ui:1475
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
-msgstr ""
+msgstr "(אזהרה: יכול להיות שלא יעבוד על כל מיני מערכות)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1485

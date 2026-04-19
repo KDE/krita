@@ -48,3 +48,6 @@ _build
 _install
 _staging
 _packaging
+env
+env_deactivate
+krita-deps-management/

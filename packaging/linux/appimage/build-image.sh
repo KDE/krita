@@ -356,8 +356,18 @@ fi
 
 EXTRA_PLUGINS_LIST="$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so"
 
+WAYLAND_PLATFORM_PLUGIN_NAME=
+# Qt6.8 names the plugin file as libqwayland-generic.so
 if [ -f $DEPS_INSTALL_PREFIX/plugins/platforms/libqwayland-generic.so ]; then
-  EXTRA_PLATFORM_PLUGINS="platforms/libqwayland-generic.so,wayland-shell-integration/libxdg-shell.so,wayland-graphics-integration-client/libqt-plugin-wayland-egl.so"
+  WAYLAND_PLATFORM_PLUGIN_NAME="platforms/libqwayland-generic.so"
+fi
+# Qt6.10 names the plugin file as libqwayland.so
+if [ -f $DEPS_INSTALL_PREFIX/plugins/platforms/libqwayland.so ]; then
+  WAYLAND_PLATFORM_PLUGIN_NAME="platforms/libqwayland.so"
+fi
+
+if [ -n "$WAYLAND_PLATFORM_PLUGIN_NAME" ]; then
+  EXTRA_PLATFORM_PLUGINS="$WAYLAND_PLATFORM_PLUGIN_NAME,wayland-shell-integration/libxdg-shell.so,wayland-graphics-integration-client/libqt-plugin-wayland-egl.so"
   EXTRA_PLUGINS_LIST="$EXTRA_PLUGINS_LIST,$EXTRA_PLATFORM_PLUGINS"
 fi
 

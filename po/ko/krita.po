@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-18 02:37+0000\n"
+"POT-Creation-Date: 2026-04-20 02:44+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -10404,7 +10404,7 @@ msgstr "전역 선택 마스크 표시(&S)"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:152
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -17746,7 +17746,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "스타일시트"
 
-#: libs/flake/svg/SvgParser.cpp:1762
+#: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -25041,9 +25041,9 @@ msgid "Out"
 msgstr "종점"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1444
-#: libs/pigment/resources/KoColorSet.cpp:1524
-#: libs/pigment/resources/KoColorSet.cpp:1942
+#: libs/pigment/resources/KoColorSet.cpp:1447
+#: libs/pigment/resources/KoColorSet.cpp:1527
+#: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -25051,7 +25051,7 @@ msgstr "종점"
 msgid "Untitled"
 msgstr "제목 없음"
 
-#: libs/pigment/resources/KoStopGradient.cpp:373
+#: libs/pigment/resources/KoStopGradient.cpp:369
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG 그라디언트"
@@ -25072,7 +25072,7 @@ msgstr "이름 없는 레이어"
 msgid "Unparsed Resource Block"
 msgstr "해석되지 않은 리소스 블록"
 
-#: libs/resources/KisFolderStorage.cpp:278
+#: libs/resources/KisFolderStorage.cpp:277
 #, kde-format
 msgid "Local Resources"
 msgstr "로컬 리소스"
@@ -25118,9 +25118,11 @@ msgstr "로컬 리소스"
 #: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: libs/ui/widgets/kis_custom_image_widget.cc:433
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1580
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
+#: plugins/dockers/logdocker/LogDockerDock.cpp:111
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -25180,66 +25182,66 @@ msgstr "1. %1에 리소스 위치를 만들 수 없습니다."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. 리소스 위치 %1에 쓸 수 없습니다."
 
-#: libs/resources/KisResourceLocator.cpp:873
+#: libs/resources/KisResourceLocator.cpp:872
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1을(를) 데이터베이스에 추가할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:928
-#: libs/resources/KisResourceLocator.cpp:1281
+#: libs/resources/KisResourceLocator.cpp:927
+#: libs/resources/KisResourceLocator.cpp:1283
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "저장소 %1을(를) 데이터베이스에서 삭제할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1036
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "%1을(를) 데이터베이스와 동기화할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:1045
+#: libs/resources/KisResourceLocator.cpp:1044
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita를 처음으로 실행했습니다. 초기화 과정에 시간이 조금 걸릴 수도 있습니다."
 
-#: libs/resources/KisResourceLocator.cpp:1052
+#: libs/resources/KisResourceLocator.cpp:1051
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. %1에 리소스 위치를 만들 수 없습니다."
 
-#: libs/resources/KisResourceLocator.cpp:1065
-#: libs/resources/KisResourceLocator.cpp:1081
+#: libs/resources/KisResourceLocator.cpp:1064
+#: libs/resources/KisResourceLocator.cpp:1080
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "리소스 %1을(를) %2(으)로 복사할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1076
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "번들 %1에서 리소스를 설치하고 있습니다."
 
-#: libs/resources/KisResourceLocator.cpp:1105
+#: libs/resources/KisResourceLocator.cpp:1107
 #, kde-format
 msgid "Temporary Resources"
 msgstr "임시 리소스"
 
-#: libs/resources/KisResourceLocator.cpp:1111
+#: libs/resources/KisResourceLocator.cpp:1113
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "글꼴 스타일"
 
-#: libs/resources/KisResourceLocator.cpp:1230
+#: libs/resources/KisResourceLocator.cpp:1232
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "리소스를 초기화하고 있습니다."
 
-#: libs/resources/KisResourceLocator.cpp:1243
-#: libs/resources/KisResourceLocator.cpp:1251
+#: libs/resources/KisResourceLocator.cpp:1245
+#: libs/resources/KisResourceLocator.cpp:1253
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1을(를) 데이터베이스와 동기화할 수 없음"
@@ -25363,7 +25365,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26508,12 +26510,12 @@ msgstr "비디오 스트림을 찾을 수 없습니다!"
 msgid "Failed to load video information"
 msgstr "비디오 정보를 불러올 수 없음"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:359
+#: libs/ui/animation/KisFFMpegWrapper.cpp:360
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg가 충돌함"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:695
+#: libs/ui/animation/KisFFMpegWrapper.cpp:696
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -27349,7 +27351,7 @@ msgstr "비디오 애니메이션 가져오기"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -29011,7 +29013,7 @@ msgid "Canvas Input"
 msgstr "캔버스 입력"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2565
-#: plugins/dockers/logdocker/LogDockerDock.cpp:195
+#: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Color Management"
 msgstr "색 관리"
@@ -31615,7 +31617,7 @@ msgstr "확장 가능한 구분자"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tools"
 msgstr "도구"
@@ -37301,7 +37303,13 @@ msgstr ""
 "%1이(가) 10바이트보다 작습니다. 손상된 것 같습니다. 다른 위치에서 다른 이름으"
 "로 다시 저장해 보십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:189
+#: libs/ui/KisImportExportFilter.cpp:179
+#, fuzzy, kde-format
+#| msgid "The file could not be opened."
+msgid "%1 could not be opened"
+msgstr "파일을 열 수 없습니다."
+
+#: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -37310,7 +37318,7 @@ msgstr ""
 "%1의 첫 1000바이트에 0만 있습니다. 손상되었을 수 있습니다. 다른 위치에서 다"
 "른 이름으로 다시 저장해 보십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:255
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37320,7 +37328,7 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색상 농도가 <b>%3</b>인 이미지를 저장할 수 없습니"
 "다. 이미지를 변환합니다."
 
-#: libs/ui/KisImportExportFilter.cpp:258
+#: libs/ui/KisImportExportFilter.cpp:260
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37330,7 +37338,7 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색 농도가 <b>%3</b>인 레이어를 저장할 수 없습니"
 "다. 레이어를 변환하거나 건너뜁니다."
 
-#: libs/ui/KisImportExportFilter.cpp:263
+#: libs/ui/KisImportExportFilter.cpp:265
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37340,7 +37348,7 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색 농도가 <b>%3</b>인 이미지를 저장할 수 없습니"
 "다. 이미지를 저장하지 않습니다."
 
-#: libs/ui/KisImportExportFilter.cpp:268
+#: libs/ui/KisImportExportFilter.cpp:270
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37350,14 +37358,14 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색 농도가 <b>%3</b>인 레이어를 저장할 수 없습니"
 "다. 레이어를 건너뜁니다."
 
-#: libs/ui/KisImportExportFilter.cpp:286
+#: libs/ui/KisImportExportFilter.cpp:288
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr "저장된 파일 %1을(를) 열 수 없습니다. 다른 위치에 다시 저장하십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:291
+#: libs/ui/KisImportExportFilter.cpp:293
 #, fuzzy, kde-format
 #| msgid ""
 #| "File %1 is missing in %2 and is broken. Please try to save again in a "
@@ -39192,12 +39200,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:684
+#: libs/ui/opengl/kis_opengl.cpp:687
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "인텔 그래픽 드라이버는 OpenGL 사용 시 알려진 문제가 있습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:686
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -39207,7 +39215,7 @@ msgstr ""
 "인텔 그래픽 드라이버는 OpenGL에 문제가 자주 발생하므로 ANGLE을 기본값으로 사"
 "용합니다. OpenGL로 직접 전환할 수 있지만 항상 올바르게 작동하지는 않습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1169
+#: libs/ui/opengl/kis_opengl.cpp:1172
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -39216,7 +39224,7 @@ msgstr ""
 "선호하는 렌더러에서 필요한 표면 형식을 지원하지 않습니다. 다른 렌더러를 선택"
 "했습니다."
 
-#: libs/ui/opengl/kis_opengl.cpp:1171
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"
@@ -40679,7 +40687,20 @@ msgstr ""
 "\"확인\"을 누르면 8비트 선형 RGB 색 공간을 만들고, \"취소\"를 누르면 설정 대"
 "화 상자로 돌아갑니다."
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:533
+#: libs/ui/widgets/kis_custom_image_widget.cc:434
+#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save %1\n"
+#| "Reason: %2"
+msgid ""
+"Could not save %1.\n"
+"Reason: %2."
+msgstr ""
+"%1을(를) 저장할 수 없음\n"
+"이유: %2"
+
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
@@ -42011,17 +42032,17 @@ msgstr "항목"
 msgid "Anonymous"
 msgstr "익명"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "이름(중복 및 비어 있는 이름 사용 불가):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name of Profile"
 msgstr "프로필 이름"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:333
+#: libs/widgets/KoConfigAuthorPage.cpp:332
 #, kde-format
 msgid "New Contact Info"
 msgstr "새 연락처 정보"
@@ -42586,7 +42607,7 @@ msgstr ""
 "리면서 채워 넣을 양식이 보입니다.<p><b>버그 보고서에 아래 정보를 붙여 넣으십"
 "시오!</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:204
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "버그 보고서 보내기(&S)"
@@ -43436,35 +43457,35 @@ msgstr "무한 눈금자"
 msgid "Select an Assistant"
 msgstr "도우미 선택"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "오류가 발생했습니다. 모든 도우미를 성공적으로 불러오지 못했습니다."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1673
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1671
 #, kde-format
 msgid "Save Assistant"
 msgstr "도우미 저장"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1768
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1774
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1769
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1775
 #, kde-format
 msgid "Opacity: "
 msgstr "불투명도: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1781
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1785
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1782
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1786
 #, kde-format
 msgid "Density: "
 msgstr "밀도: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1790
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1791
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "세분:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1794
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1795
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
@@ -45588,84 +45609,84 @@ msgstr "레이어 속성 보기/변경"
 msgid "Delete the layer or mask"
 msgstr "레이어/마스크 삭제"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:41
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr "로그 뷰어"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:116
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #, kde-format
 msgid "Log Settings"
 msgstr "로그 설정"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Resource Management"
 msgstr "리소스 관리"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, kde-format
 msgid "Image Core"
 msgstr "이미지 코어"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, kde-format
 msgid "Registries"
 msgstr "레지스트리"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: plugins/dockers/logdocker/LogDockerDock.cpp:148
 #, kde-format
 msgid "Tile Engine"
 msgstr "타일 엔진"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
 msgid "Plugin Management"
 msgstr "플러그인 관리"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "User Interface"
 msgstr "사용자 인터페이스"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "File loading and saving"
 msgstr "파일 열기 및 저장"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "수학과 계산"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
 msgid "Image Rendering"
 msgstr "이미지 렌더링"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Scripting"
 msgstr "스크립팅"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #, kde-format
 msgid "Input handling"
 msgstr "입력 처리"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "동작"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
 msgid "Tablet Handling"
 msgstr "태블릿 처리"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #, kde-format
 msgid "GPU Canvas"
 msgstr "GPU 캔버스"
@@ -51967,13 +51988,13 @@ msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr "<p><application>%1</application> 모듈 불러오기 실패:</p><pre>%2</pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "내부 엔진 오류"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
@@ -73113,17 +73134,6 @@ msgstr ""
 
 #~ msgid "&Description:"
 #~ msgstr "설명(&D):"
-
-#, fuzzy
-#~| msgid ""
-#~| "Could not save %1\n"
-#~| "Reason: %2"
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "%1을(를) 저장할 수 없음\n"
-#~ "이유: %2"
 
 #, fuzzy
 #~| msgid ""

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-18 02:37+0000\n"
+"POT-Creation-Date: 2026-04-20 02:44+0000\n"
 "PO-Revision-Date: 2026-04-02 14:05+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -9708,7 +9708,7 @@ msgstr "Globale selectiemasker tonen"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:152
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -16849,7 +16849,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Stijlvoorbeeld"
 
-#: libs/flake/svg/SvgParser.cpp:1762
+#: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -23890,9 +23890,9 @@ msgid "Out"
 msgstr "Uit"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1444
-#: libs/pigment/resources/KoColorSet.cpp:1524
-#: libs/pigment/resources/KoColorSet.cpp:1942
+#: libs/pigment/resources/KoColorSet.cpp:1447
+#: libs/pigment/resources/KoColorSet.cpp:1527
+#: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -23900,7 +23900,7 @@ msgstr "Uit"
 msgid "Untitled"
 msgstr "Zonder titel"
 
-#: libs/pigment/resources/KoStopGradient.cpp:373
+#: libs/pigment/resources/KoStopGradient.cpp:369
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG kleurverloop"
@@ -23921,7 +23921,7 @@ msgstr "Naamloze laag"
 msgid "Unparsed Resource Block"
 msgstr "Niet geanalyseerd hulpbronblok"
 
-#: libs/resources/KisFolderStorage.cpp:278
+#: libs/resources/KisFolderStorage.cpp:277
 #, kde-format
 msgid "Local Resources"
 msgstr "Lokale hulpbronnen"
@@ -23967,9 +23967,11 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: libs/ui/widgets/kis_custom_image_widget.cc:433
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1580
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
+#: plugins/dockers/logdocker/LogDockerDock.cpp:111
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -24026,64 +24028,64 @@ msgstr "1. Kon de hulpbronlocatie niet aanmaken op %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. De hulpbronlocatie op %1 is niet te beschrijven."
 
-#: libs/resources/KisResourceLocator.cpp:873
+#: libs/resources/KisResourceLocator.cpp:872
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Kon %1 niet toevoegen aan de database"
 
-#: libs/resources/KisResourceLocator.cpp:928
-#: libs/resources/KisResourceLocator.cpp:1281
+#: libs/resources/KisResourceLocator.cpp:927
+#: libs/resources/KisResourceLocator.cpp:1283
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Kon opslag %1 niet verwijderen uit de database"
 
-#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1036
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 "Kon bijgewerkt register met lettertypen niet synchroniseren met de database"
 
-#: libs/resources/KisResourceLocator.cpp:1045
+#: libs/resources/KisResourceLocator.cpp:1044
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita is voor de eerste keer actief. Initialiseren zal enige tijd nemen."
 
-#: libs/resources/KisResourceLocator.cpp:1052
+#: libs/resources/KisResourceLocator.cpp:1051
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Kon de hulpbronlocatie niet aanmaken op %1."
 
-#: libs/resources/KisResourceLocator.cpp:1065
-#: libs/resources/KisResourceLocator.cpp:1081
+#: libs/resources/KisResourceLocator.cpp:1064
+#: libs/resources/KisResourceLocator.cpp:1080
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Kon hulpbron %1 niet kopiëren naar %2"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1076
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "De hulpbronnen uit bundel %1 worden geïnstalleerd."
 
-#: libs/resources/KisResourceLocator.cpp:1105
+#: libs/resources/KisResourceLocator.cpp:1107
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Tijdelijke hulpbronnen"
 
-#: libs/resources/KisResourceLocator.cpp:1111
+#: libs/resources/KisResourceLocator.cpp:1113
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "Opslag van lettertypen"
 
-#: libs/resources/KisResourceLocator.cpp:1230
+#: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr "De hulpbronnen worden gesynchroniseerd"
 
-#: libs/resources/KisResourceLocator.cpp:1243
-#: libs/resources/KisResourceLocator.cpp:1251
+#: libs/resources/KisResourceLocator.cpp:1245
+#: libs/resources/KisResourceLocator.cpp:1253
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Kon %1 niet synchroniseren met de database"
@@ -24206,7 +24208,7 @@ msgstr "Vuil"
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -25296,12 +25298,12 @@ msgstr "Geen video-stream gevonden!"
 msgid "Failed to load video information"
 msgstr "Video-informatie laden is mislukt"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:359
+#: libs/ui/animation/KisFFMpegWrapper.cpp:360
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg is gecrasht"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:695
+#: libs/ui/animation/KisFFMpegWrapper.cpp:696
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -26104,7 +26106,7 @@ msgstr "Video-animatie importeren"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -27772,7 +27774,7 @@ msgid "Canvas Input"
 msgstr "Invoer voor werkblad"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2565
-#: plugins/dockers/logdocker/LogDockerDock.cpp:195
+#: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Color Management"
 msgstr "Kleurbeheer"
@@ -30364,7 +30366,7 @@ msgstr "Extra ruimt voor vergelijken"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tools"
 msgstr "Hulpmiddelen"
@@ -35900,7 +35902,13 @@ msgstr ""
 "%1 is kleiner dan 10 byes, het moet met fouten zijn. Probeer opnieuw opslaan "
 "onder een andere naam, in een andere locatie."
 
-#: libs/ui/KisImportExportFilter.cpp:189
+#: libs/ui/KisImportExportFilter.cpp:179
+#, fuzzy, kde-format
+#| msgid "The file could not be opened."
+msgid "%1 could not be opened"
+msgstr "Het bestand kon niet worden geopend."
+
+#: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -35909,7 +35917,7 @@ msgstr ""
 "%1 heeft alleen nul-bytes in de eerste 100bytes, het is waarschijnlijk fout. "
 "Probeer opnieuw opslaan onder een andere naam, in een andere locatie."
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:255
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35919,7 +35927,7 @@ msgstr ""
 "%1 kan afbeeldingen met kleurmodel <b>%2</b> en diepte <b>%3</b> niet "
 "opslaan. De afbeelding zal geconverteerd worden."
 
-#: libs/ui/KisImportExportFilter.cpp:258
+#: libs/ui/KisImportExportFilter.cpp:260
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35929,7 +35937,7 @@ msgstr ""
 "%1 kan lagen met kleurmodel <b>%2</b> en diepte <b>%3</b> niet opslaan. De "
 "lagen zullen geconverteerd worden of overgeslagen."
 
-#: libs/ui/KisImportExportFilter.cpp:263
+#: libs/ui/KisImportExportFilter.cpp:265
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35939,7 +35947,7 @@ msgstr ""
 "%1 kan afbeeldingen met kleurmodel <b>%2</b> en diepte <b>%3</b> niet "
 "opslaan. De afbeelding zal opgeslagen worden."
 
-#: libs/ui/KisImportExportFilter.cpp:268
+#: libs/ui/KisImportExportFilter.cpp:270
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35949,7 +35957,7 @@ msgstr ""
 "%1 kan lagen met kleurmodel <b>%2</b> en diepte <b>%3</b> niet opslaan. De "
 "lagen zullen worden overgeslagen."
 
-#: libs/ui/KisImportExportFilter.cpp:286
+#: libs/ui/KisImportExportFilter.cpp:288
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
@@ -35958,7 +35966,7 @@ msgstr ""
 "Het opgeslagen bestand %1 kon openen. Probeer opnieuw op te slaan in een "
 "andere locatie."
 
-#: libs/ui/KisImportExportFilter.cpp:291
+#: libs/ui/KisImportExportFilter.cpp:293
 #, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
@@ -37806,14 +37814,14 @@ msgstr ""
 "Textuurbuffers zijn expliciet uitgeschakeld op ANGLE-renderer vanwege "
 "problemen met prestaties."
 
-#: libs/ui/opengl/kis_opengl.cpp:684
+#: libs/ui/opengl/kis_opengl.cpp:687
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Het in gebruik zijnde grafische stuurprogramma voor Intel staat bekend om "
 "het hebben van problemen met OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:686
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37825,7 +37833,7 @@ msgstr ""
 "omschakelen naar OpenGL maar er is geen garantie dat het op de juiste manier "
 "werkt."
 
-#: libs/ui/opengl/kis_opengl.cpp:1169
+#: libs/ui/opengl/kis_opengl.cpp:1172
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -37834,7 +37842,7 @@ msgstr ""
 "Renderer met voorkeur ondersteunt het gevraagde oppervlakformaat niet. Een "
 "andere renderer is geselecteerd."
 
-#: libs/ui/opengl/kis_opengl.cpp:1171
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -39315,7 +39323,20 @@ msgstr ""
 "Druk op \"OK\" om een 8-bits integer lineaire RGB kleurruimte aan te maken "
 "of op \"Annuleren\" om terug te keren naar de instellingendialoog."
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:533
+#: libs/ui/widgets/kis_custom_image_widget.cc:434
+#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save %1.\n"
+#| "Reason: %2"
+msgid ""
+"Could not save %1.\n"
+"Reason: %2."
+msgstr ""
+"Kon %1 niet opgeslaan.\n"
+"Reden: %2"
+
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -40604,17 +40625,17 @@ msgstr "Item"
 msgid "Anonymous"
 msgstr "Anoniem"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Naam (geen duplicaat of blanco naam):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name of Profile"
 msgstr "Naam van het profiel"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:333
+#: libs/widgets/KoConfigAuthorPage.cpp:332
 #, kde-format
 msgid "New Contact Info"
 msgstr "Info nieuwe contactpersoon"
@@ -41201,7 +41222,7 @@ msgstr ""
 "formulier kunt vinden.</p><p><b>Gaarne de volgende informatie in het "
 "bugrapport plakken!</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:204
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "Bugrapport &indienen"
@@ -42048,35 +42069,35 @@ msgstr "Oneindige liniaal"
 msgid "Select an Assistant"
 msgstr "Een assistent selecteren"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 "Er deden zich fouten voor. Niet alle assistenten zijn met succes geladen."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1673
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1671
 #, kde-format
 msgid "Save Assistant"
 msgstr "Assistent opslaan"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1768
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1774
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1769
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1775
 #, kde-format
 msgid "Opacity: "
 msgstr "Dekking: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1781
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1785
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1782
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1786
 #, kde-format
 msgid "Density: "
 msgstr "Dichtheid: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1790
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1791
 #, kde-format
 msgid "Subdivisions: "
 msgstr "Onderverdelingen: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1794
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1795
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Kleine onderverdelingen: "
@@ -44169,84 +44190,84 @@ msgstr "Bekijk of wijzig de laageigenschappen"
 msgid "Delete the layer or mask"
 msgstr "Laag of masker verwijderen"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:41
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr "Logviewer"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:116
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #, kde-format
 msgid "Log Settings"
 msgstr "Loginstellingen"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Resource Management"
 msgstr "Hulpbronbeheer"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, kde-format
 msgid "Image Core"
 msgstr "Kern van afbeelding"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, kde-format
 msgid "Registries"
 msgstr "Registers"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: plugins/dockers/logdocker/LogDockerDock.cpp:148
 #, kde-format
 msgid "Tile Engine"
 msgstr "Tegel-engine"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
 msgid "Plugin Management"
 msgstr "Plug-in-beheer"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "User Interface"
 msgstr "Gebruikersinterface"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "File loading and saving"
 msgstr "Laden en opslaan van bestand"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "Wiskunde en berekeningen"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
 msgid "Image Rendering"
 msgstr "Renderen van afbeelding"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Scripting"
 msgstr "Scripting"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #, kde-format
 msgid "Input handling"
 msgstr "Invoerverwerking"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Acties"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
 msgid "Tablet Handling"
 msgstr "Behandeling van tablet"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #, kde-format
 msgid "GPU Canvas"
 msgstr "Werkblad van GPU"
@@ -50318,13 +50339,13 @@ msgstr ""
 "<p>Laden van module <application>%1</application> is mislukt:</p><pre>%2</"
 "pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "Mislukking in interne engine"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
@@ -71168,13 +71189,6 @@ msgstr ""
 
 #~ msgid "&Description:"
 #~ msgstr "&Beschrijving:"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "Kon %1 niet opgeslaan.\n"
-#~ "Reden: %2"
 
 #~ msgid ""
 #~ "Could not open %2.\n"

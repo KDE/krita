@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-18 02:37+0000\n"
+"POT-Creation-Date: 2026-04-20 02:44+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -9621,7 +9621,7 @@ msgstr "顯示全域選取區域遮罩"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:152
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -16769,7 +16769,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "樣式表"
 
-#: libs/flake/svg/SvgParser.cpp:1762
+#: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -24019,9 +24019,9 @@ msgid "Out"
 msgstr "輸出"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1444
-#: libs/pigment/resources/KoColorSet.cpp:1524
-#: libs/pigment/resources/KoColorSet.cpp:1942
+#: libs/pigment/resources/KoColorSet.cpp:1447
+#: libs/pigment/resources/KoColorSet.cpp:1527
+#: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -24029,7 +24029,7 @@ msgstr "輸出"
 msgid "Untitled"
 msgstr "無標題"
 
-#: libs/pigment/resources/KoStopGradient.cpp:373
+#: libs/pigment/resources/KoStopGradient.cpp:369
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG 漸變"
@@ -24050,7 +24050,7 @@ msgstr "未命名圖層"
 msgid "Unparsed Resource Block"
 msgstr "未解析的資源資料塊"
 
-#: libs/resources/KisFolderStorage.cpp:278
+#: libs/resources/KisFolderStorage.cpp:277
 #, kde-format
 msgid "Local Resources"
 msgstr "本機資源"
@@ -24096,9 +24096,11 @@ msgstr "本機資源"
 #: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: libs/ui/widgets/kis_custom_image_widget.cc:433
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1580
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
+#: plugins/dockers/logdocker/LogDockerDock.cpp:111
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -24154,65 +24156,65 @@ msgstr "1. 無法建立位於 %1 的資源位置。"
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. 位於 %1 的資源位置無法寫入。"
 
-#: libs/resources/KisResourceLocator.cpp:873
+#: libs/resources/KisResourceLocator.cpp:872
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "無法新增 %1 至資料庫"
 
-#: libs/resources/KisResourceLocator.cpp:928
-#: libs/resources/KisResourceLocator.cpp:1281
+#: libs/resources/KisResourceLocator.cpp:927
+#: libs/resources/KisResourceLocator.cpp:1283
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "無法從資料庫移除 %1 儲存空間"
 
-#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1036
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "無法與資料庫同步 %1"
 
-#: libs/resources/KisResourceLocator.cpp:1045
+#: libs/resources/KisResourceLocator.cpp:1044
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita 為第一次執行。需要一點時間初始化。"
 
-#: libs/resources/KisResourceLocator.cpp:1052
+#: libs/resources/KisResourceLocator.cpp:1051
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. 無法建立位於 %1 的資源位置。"
 
-#: libs/resources/KisResourceLocator.cpp:1065
-#: libs/resources/KisResourceLocator.cpp:1081
+#: libs/resources/KisResourceLocator.cpp:1064
+#: libs/resources/KisResourceLocator.cpp:1080
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "無法複製 %1 資源至 %2"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1076
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "正在從 %1 資源包安裝資源。"
 
-#: libs/resources/KisResourceLocator.cpp:1105
+#: libs/resources/KisResourceLocator.cpp:1107
 #, kde-format
 msgid "Temporary Resources"
 msgstr "暫存資源"
 
-#: libs/resources/KisResourceLocator.cpp:1111
+#: libs/resources/KisResourceLocator.cpp:1113
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "字型樣式"
 
-#: libs/resources/KisResourceLocator.cpp:1230
+#: libs/resources/KisResourceLocator.cpp:1232
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "正在初始化資源。"
 
-#: libs/resources/KisResourceLocator.cpp:1243
-#: libs/resources/KisResourceLocator.cpp:1251
+#: libs/resources/KisResourceLocator.cpp:1245
+#: libs/resources/KisResourceLocator.cpp:1253
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "無法與資料庫同步 %1"
@@ -24335,7 +24337,7 @@ msgstr "含未儲存更動"
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -25404,12 +25406,12 @@ msgstr "找不到影片流！"
 msgid "Failed to load video information"
 msgstr "無法載入影片資訊"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:359
+#: libs/ui/animation/KisFFMpegWrapper.cpp:360
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg 當掉了"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:695
+#: libs/ui/animation/KisFFMpegWrapper.cpp:696
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -26211,7 +26213,7 @@ msgstr "匯入影片動畫"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -27848,7 +27850,7 @@ msgid "Canvas Input"
 msgstr "畫布輸入"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2565
-#: plugins/dockers/logdocker/LogDockerDock.cpp:195
+#: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Color Management"
 msgstr "色彩管理"
@@ -30390,7 +30392,7 @@ msgstr "擴張空白佔位符"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tools"
 msgstr "工具"
@@ -35909,7 +35911,13 @@ msgid ""
 msgstr ""
 "%1 小於 10 位元組，可能是損壞的。試試看在其他位置使用不同名稱重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:189
+#: libs/ui/KisImportExportFilter.cpp:179
+#, fuzzy, kde-format
+#| msgid "The file could not be opened."
+msgid "%1 could not be opened"
+msgstr "無法開啟檔案。"
+
+#: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -35918,7 +35926,7 @@ msgstr ""
 "%1 的開頭 1000 位元組只有 0 位元組，可能是損壞的。試試看在其他位置使用不同名"
 "稱重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:255
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35928,7 +35936,7 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存影像。影像的色彩空間"
 "將被轉換。"
 
-#: libs/ui/KisImportExportFilter.cpp:258
+#: libs/ui/KisImportExportFilter.cpp:260
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35938,7 +35946,7 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存圖層。這些圖層的色彩"
 "空間將被轉換或忽略。"
 
-#: libs/ui/KisImportExportFilter.cpp:263
+#: libs/ui/KisImportExportFilter.cpp:265
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35948,7 +35956,7 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存影像。影像將不會被儲"
 "存。"
 
-#: libs/ui/KisImportExportFilter.cpp:268
+#: libs/ui/KisImportExportFilter.cpp:270
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35958,14 +35966,14 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存圖層。這些圖層將被忽"
 "略。"
 
-#: libs/ui/KisImportExportFilter.cpp:286
+#: libs/ui/KisImportExportFilter.cpp:288
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr "無法開啟儲存的 %1 檔案。請試試在其他位置重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:291
+#: libs/ui/KisImportExportFilter.cpp:293
 #, fuzzy, kde-format
 #| msgid ""
 #| "File %1 is missing in %2 and is broken. Please try to save again in a "
@@ -37771,12 +37779,12 @@ msgid ""
 "issues."
 msgstr "使用 ANGLE 繪製器時，紋理緩衝區因效能問題而會被強制停用。"
 
-#: libs/ui/opengl/kis_opengl.cpp:684
+#: libs/ui/opengl/kis_opengl.cpp:687
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "目前使用的 Intel 核芯顯示卡驅動程式對 OpenGL 的支援存有已知的問題。"
 
-#: libs/ui/opengl/kis_opengl.cpp:686
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37786,14 +37794,14 @@ msgstr ""
 "Intel 核芯顯示卡的驅動程式在 OpenGL 支援方面常常存在各種問題，因此預設將使用 "
 "ANGLE 繪製器。您可以手動切換成 OpenGL 模式，但是無法保證正常作業。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1169
+#: libs/ui/opengl/kis_opengl.cpp:1172
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首選繪製器不支援請求的表面格式。已選用另一個繪製器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1171
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用繪製器不支援首選輸出格式"
@@ -39173,7 +39181,20 @@ msgstr ""
 "點擊「確定」建立 8 位元整數線性 RGB 色彩空間，或者點擊「取消」回到設定對話"
 "框。"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:533
+#: libs/ui/widgets/kis_custom_image_widget.cc:434
+#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save %1\n"
+#| "Reason: %2"
+msgid ""
+"Could not save %1.\n"
+"Reason: %2."
+msgstr ""
+"無法儲存 %1\n"
+"原因：%2"
+
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -40454,17 +40475,17 @@ msgstr "條目"
 msgid "Anonymous"
 msgstr "匿名"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "名稱(不能重複或是為空)："
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name of Profile"
 msgstr "作者檔案名稱"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:333
+#: libs/widgets/KoConfigAuthorPage.cpp:332
 #, kde-format
 msgid "New Contact Info"
 msgstr "建立聯絡資料"
@@ -41025,7 +41046,7 @@ msgstr ""
 "\">https://bugs.kde.org</a> 的瀏覽器視窗，這裡您能看到能讓您填寫的表單。</"
 "p><p><b>請把下面的資訊貼到錯誤報告中！</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:204
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "提交錯誤報告(&S)"
@@ -41857,34 +41878,34 @@ msgstr "無限直線"
 msgid "Select an Assistant"
 msgstr "選擇輔助尺"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "發生錯誤。未能成功載入全部輔助尺。"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1673
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1671
 #, kde-format
 msgid "Save Assistant"
 msgstr "儲存輔助尺"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1768
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1774
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1769
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1775
 #, kde-format
 msgid "Opacity: "
 msgstr "不透明度："
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1781
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1785
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1782
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1786
 #, kde-format
 msgid "Density: "
 msgstr "密度："
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1790
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1791
 #, kde-format
 msgid "Subdivisions: "
 msgstr "分段數："
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1794
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1795
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "刻度細分："
@@ -43974,85 +43995,85 @@ msgstr "檢視或修改圖層屬性"
 msgid "Delete the layer or mask"
 msgstr "刪除圖層或遮罩"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:41
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr "紀錄檢視器"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:116
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #, kde-format
 msgid "Log Settings"
 msgstr "紀錄設定"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Resource Management"
 msgstr "資源管理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, kde-format
 msgid "Image Core"
 msgstr "影像核心"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, kde-format
 msgid "Registries"
 msgstr "註冊項"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: plugins/dockers/logdocker/LogDockerDock.cpp:148
 #, kde-format
 msgid "Tile Engine"
 msgstr "分塊引擎"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
 msgid "Plugin Management"
 msgstr "外掛程式管理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "User Interface"
 msgstr "使用者介面"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "File loading and saving"
 msgstr "檔案載入和儲存"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "數學和計算"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, fuzzy, kde-format
 #| msgid "Image Rendering"
 msgid "Image Rendering"
 msgstr "影像繪製"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Scripting"
 msgstr "指令稿處理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #, kde-format
 msgid "Input handling"
 msgstr "輸入處理"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "操作"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
 msgid "Tablet Handling"
 msgstr "數位板處理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #, kde-format
 msgid "GPU Canvas"
 msgstr "GPU 畫布"
@@ -50181,13 +50202,13 @@ msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr "<p>載入模組 <application>%1</application> 失敗：</p><pre>%2</pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "內部引擎錯誤"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"

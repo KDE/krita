@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-18 02:37+0000\n"
+"POT-Creation-Date: 2026-04-20 02:44+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -9615,7 +9615,7 @@ msgstr "Показване на глобална маска на селекци�
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:152
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -16782,7 +16782,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Име на слой:"
 
-#: libs/flake/svg/SvgParser.cpp:1762
+#: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -24066,9 +24066,9 @@ msgid "Out"
 msgstr "Навън"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1444
-#: libs/pigment/resources/KoColorSet.cpp:1524
-#: libs/pigment/resources/KoColorSet.cpp:1942
+#: libs/pigment/resources/KoColorSet.cpp:1447
+#: libs/pigment/resources/KoColorSet.cpp:1527
+#: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -24076,7 +24076,7 @@ msgstr "Навън"
 msgid "Untitled"
 msgstr "Неозаглавен"
 
-#: libs/pigment/resources/KoStopGradient.cpp:373
+#: libs/pigment/resources/KoStopGradient.cpp:369
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Преливка SVG"
@@ -24097,7 +24097,7 @@ msgstr "Неозаглавен слой"
 msgid "Unparsed Resource Block"
 msgstr ""
 
-#: libs/resources/KisFolderStorage.cpp:278
+#: libs/resources/KisFolderStorage.cpp:277
 #, fuzzy, kde-format
 #| msgid "Resources"
 msgid "Local Resources"
@@ -24144,9 +24144,11 @@ msgstr "Ресурси"
 #: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: libs/ui/widgets/kis_custom_image_widget.cc:433
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1580
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
+#: plugins/dockers/logdocker/LogDockerDock.cpp:111
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -24202,69 +24204,69 @@ msgstr "Грешка при създаване на файла за запис"
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:873
+#: libs/resources/KisResourceLocator.cpp:872
 #, fuzzy, kde-format
 #| msgid "Could not load \"id\" of the transform mask"
 msgid "Could not add %1 to the database"
 msgstr "Не може да се зареди \"id\" на маската за трансформация"
 
-#: libs/resources/KisResourceLocator.cpp:928
-#: libs/resources/KisResourceLocator.cpp:1281
+#: libs/resources/KisResourceLocator.cpp:927
+#: libs/resources/KisResourceLocator.cpp:1283
 #, fuzzy, kde-format
 #| msgid "Select the blending mode for the layer."
 msgid "Could not remove storage %1 from the database"
 msgstr "Изберете режим на смесване за канала."
 
-#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1036
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1045
+#: libs/resources/KisResourceLocator.cpp:1044
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1052
+#: libs/resources/KisResourceLocator.cpp:1051
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Грешка при създаване на файла за запис"
 
-#: libs/resources/KisResourceLocator.cpp:1065
-#: libs/resources/KisResourceLocator.cpp:1081
+#: libs/resources/KisResourceLocator.cpp:1064
+#: libs/resources/KisResourceLocator.cpp:1080
 #, fuzzy, kde-format
 #| msgid "Could not load %1."
 msgid "Could not copy resource %1 to %2"
 msgstr "Неуспешно зареждане на %1"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1076
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Инсталиране на  ресурс от пакет %1"
 
-#: libs/resources/KisResourceLocator.cpp:1105
+#: libs/resources/KisResourceLocator.cpp:1107
 #, fuzzy, kde-format
 #| msgid "Import Resources"
 msgid "Temporary Resources"
 msgstr "Импортиране на ресурси"
 
-#: libs/resources/KisResourceLocator.cpp:1111
+#: libs/resources/KisResourceLocator.cpp:1113
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "Стил на шрифта"
 
-#: libs/resources/KisResourceLocator.cpp:1230
+#: libs/resources/KisResourceLocator.cpp:1232
 #, fuzzy, kde-format
 #| msgid "Show deleted resources"
 msgid "Synchronizing the resources."
 msgstr "Показване на изтрити ресурси"
 
-#: libs/resources/KisResourceLocator.cpp:1243
-#: libs/resources/KisResourceLocator.cpp:1251
+#: libs/resources/KisResourceLocator.cpp:1245
+#: libs/resources/KisResourceLocator.cpp:1253
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr ""
@@ -24389,7 +24391,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -25490,13 +25492,13 @@ msgstr ""
 msgid "Failed to load video information"
 msgstr "Неуспешно зареждане на свързан файл: %1"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:359
+#: libs/ui/animation/KisFFMpegWrapper.cpp:360
 #, fuzzy, kde-format
 #| msgid "FFmpeg path:"
 msgid "FFMpeg Crashed"
 msgstr "Път към FFmpeg:"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:695
+#: libs/ui/animation/KisFFMpegWrapper.cpp:696
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -26316,7 +26318,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -27946,7 +27948,7 @@ msgid "Canvas Input"
 msgstr "Въвеждане на платно"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2565
-#: plugins/dockers/logdocker/LogDockerDock.cpp:195
+#: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Color Management"
 msgstr "Управление на цветовете"
@@ -30495,7 +30497,7 @@ msgstr "Потребителски шаблон"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tools"
 msgstr "Инструменти"
@@ -35995,14 +35997,20 @@ msgid ""
 "different name, in another location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:189
+#: libs/ui/KisImportExportFilter.cpp:179
+#, fuzzy, kde-format
+#| msgid "The file %1 does not exist."
+msgid "%1 could not be opened"
+msgstr "Файлът %1 не съществува."
+
+#: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
 "saving again under a different name, in another location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:255
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -36012,7 +36020,7 @@ msgstr ""
 "%1 не може да записва изображения с цветови модел<b>%2</b> и дълбочина <b>"
 "%3</b>. Изображението ще бъде конвертирано."
 
-#: libs/ui/KisImportExportFilter.cpp:258
+#: libs/ui/KisImportExportFilter.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "image conversion warning"
 #| msgid ""
@@ -36026,7 +36034,7 @@ msgstr ""
 "%1 не може да записва изображения с цветови модел<b>%2</b> и дълбочина <b>"
 "%3</b>. Изображението ще бъде конвертирано."
 
-#: libs/ui/KisImportExportFilter.cpp:263
+#: libs/ui/KisImportExportFilter.cpp:265
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -36036,7 +36044,7 @@ msgstr ""
 "%1 не може да записва изображения с цветови модел<b>%2</b> и дълбочина <b>"
 "%3</b>. Изображението няма да бъде записано."
 
-#: libs/ui/KisImportExportFilter.cpp:268
+#: libs/ui/KisImportExportFilter.cpp:270
 #, fuzzy, kde-format
 #| msgctxt "image conversion warning"
 #| msgid ""
@@ -36050,14 +36058,14 @@ msgstr ""
 "%1 не може да записва изображения с цветови модел<b>%2</b> и дълбочина <b>"
 "%3</b>. Изображението няма да бъде записано."
 
-#: libs/ui/KisImportExportFilter.cpp:286
+#: libs/ui/KisImportExportFilter.cpp:288
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:291
+#: libs/ui/KisImportExportFilter.cpp:293
 #, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
@@ -37926,12 +37934,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:684
+#: libs/ui/opengl/kis_opengl.cpp:687
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:686
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37939,14 +37947,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1169
+#: libs/ui/opengl/kis_opengl.cpp:1172
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1171
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -39310,7 +39318,20 @@ msgid ""
 "to return to the settings dialog."
 msgstr ""
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:533
+#: libs/ui/widgets/kis_custom_image_widget.cc:434
+#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save %1\n"
+#| "Reason: %2"
+msgid ""
+"Could not save %1.\n"
+"Reason: %2."
+msgstr ""
+"Грешка при запис %1\n"
+"Причина: %2"
+
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
@@ -40634,17 +40655,17 @@ msgstr "Запис"
 msgid "Anonymous"
 msgstr "Анонимен"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr ""
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name of Profile"
 msgstr "Име на профила"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:333
+#: libs/widgets/KoConfigAuthorPage.cpp:332
 #, kde-format
 msgid "New Contact Info"
 msgstr "Нови данни за контакт"
@@ -41226,7 +41247,7 @@ msgstr ""
 "bugs.kde.org</a>  в браузър. където ще трябва да попълните формуляр. </"
 "p><p><b>Моля, поставете следната информация в доклада за грешка!</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:204
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "&Изпращане на доклад за грешка"
@@ -42098,34 +42119,34 @@ msgstr ""
 msgid "Select an Assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1673
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1671
 #, kde-format
 msgid "Save Assistant"
 msgstr "Помощник за записване"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1768
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1774
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1769
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1775
 #, kde-format
 msgid "Opacity: "
 msgstr "Непрозрачност: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1781
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1785
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1782
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1786
 #, kde-format
 msgid "Density: "
 msgstr "Плътност: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1790
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1791
 #, kde-format
 msgid "Subdivisions: "
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1794
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1795
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr ""
@@ -44323,93 +44344,93 @@ msgstr "Показване или промяна настройките на с�
 msgid "Delete the layer or mask"
 msgstr "Изтриване на слоя или маската"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:41
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:116
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #, fuzzy, kde-format
 #| msgid "Tool Settings"
 msgid "Log Settings"
 msgstr "Настройки на инструмента"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Resource Management"
 msgstr "Управление на ресурси"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, fuzzy, kde-format
 #| msgid "Image Color Space"
 msgid "Image Core"
 msgstr "Цветово пространство"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, fuzzy, kde-format
 #| msgctxt "Button to restart the timelapse video configuring"
 #| msgid "Restart"
 msgid "Registries"
 msgstr "Рестартиране"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: plugins/dockers/logdocker/LogDockerDock.cpp:148
 #, fuzzy, kde-format
 #| msgctxt "%1 is the name of a brush engine"
 #| msgid "%1 Engine"
 msgid "Tile Engine"
 msgstr "%1 енджин"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Plugin Management"
 msgstr "Управление на цветовете"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "User Interface"
 msgstr "Потребителски интерфейс"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "File loading and saving"
 msgstr "Зареждане и запазване на файлове"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, fuzzy, kde-format
 #| msgid "Text Under Icons"
 msgid "Image Rendering"
 msgstr "Текст под икони"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Scripting"
 msgstr "Скриптове"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #, kde-format
 msgid "Input handling"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Действия"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, fuzzy, kde-format
 #| msgid "Tablet settings"
 msgid "Tablet Handling"
 msgstr "Настройки на таблет"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #, kde-format
 msgid "GPU Canvas"
 msgstr "Графичен процесор на платно"
@@ -50636,13 +50657,13 @@ msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
 #, fuzzy, kde-format
 #| msgid "Could not load %1."
 msgctxt "@info:tooltip"

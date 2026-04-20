@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-18 02:37+0000\n"
+"POT-Creation-Date: 2026-04-20 02:44+0000\n"
 "PO-Revision-Date: 2026-01-19 18:02+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -10250,7 +10250,7 @@ msgstr "Näytä &yleinen valintapeite"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:152
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -17839,7 +17839,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Tyylipohja"
 
-#: libs/flake/svg/SvgParser.cpp:1762
+#: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -25270,9 +25270,9 @@ msgid "Out"
 msgstr "Ulos"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1444
-#: libs/pigment/resources/KoColorSet.cpp:1524
-#: libs/pigment/resources/KoColorSet.cpp:1942
+#: libs/pigment/resources/KoColorSet.cpp:1447
+#: libs/pigment/resources/KoColorSet.cpp:1527
+#: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -25280,7 +25280,7 @@ msgstr "Ulos"
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: libs/pigment/resources/KoStopGradient.cpp:373
+#: libs/pigment/resources/KoStopGradient.cpp:369
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG-väriliuku"
@@ -25301,7 +25301,7 @@ msgstr "&Kopiotaso"
 msgid "Unparsed Resource Block"
 msgstr "&Resurssit"
 
-#: libs/resources/KisFolderStorage.cpp:278
+#: libs/resources/KisFolderStorage.cpp:277
 #, fuzzy, kde-format
 #| msgid "Loading Resources..."
 msgid "Local Resources"
@@ -25348,9 +25348,11 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: libs/ui/widgets/kis_custom_image_widget.cc:433
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1580
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
+#: plugins/dockers/logdocker/LogDockerDock.cpp:111
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -25408,38 +25410,38 @@ msgstr "Ei voitu luoda tiedostoa tallennettavaksi"
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Resurssin sijaintiin %1 ei voi kirjoittaa."
 
-#: libs/resources/KisResourceLocator.cpp:873
+#: libs/resources/KisResourceLocator.cpp:872
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Ei voitu lisätä tasoa kuvaan."
 
-#: libs/resources/KisResourceLocator.cpp:928
-#: libs/resources/KisResourceLocator.cpp:1281
+#: libs/resources/KisResourceLocator.cpp:927
+#: libs/resources/KisResourceLocator.cpp:1283
 #, fuzzy, kde-format
 #| msgid "Couldn't remove bundle from blacklist"
 msgid "Could not remove storage %1 from the database"
 msgstr "Pakettia ei voitu poistaa mustalta listalta"
 
-#: libs/resources/KisResourceLocator.cpp:1037
+#: libs/resources/KisResourceLocator.cpp:1036
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Ei voitu lisätä tasoa kuvaan."
 
-#: libs/resources/KisResourceLocator.cpp:1045
+#: libs/resources/KisResourceLocator.cpp:1044
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita on käynnistetty ensi kertaa. Valmistelu vie hetken."
 
-#: libs/resources/KisResourceLocator.cpp:1052
+#: libs/resources/KisResourceLocator.cpp:1051
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Ei voitu luoda tiedostoa tallennettavaksi"
 
-#: libs/resources/KisResourceLocator.cpp:1065
-#: libs/resources/KisResourceLocator.cpp:1081
+#: libs/resources/KisResourceLocator.cpp:1064
+#: libs/resources/KisResourceLocator.cpp:1080
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -25449,34 +25451,34 @@ msgstr ""
 "Tiedostoa %1 ei voitu avata\n"
 "Syy: %2"
 
-#: libs/resources/KisResourceLocator.cpp:1077
+#: libs/resources/KisResourceLocator.cpp:1076
 #, fuzzy, kde-format
 #| msgid "Could not install the resources for bundle %1."
 msgid "Installing the resources from bundle %1."
 msgstr "Paketin %1 resursseja ei voitu asentaa."
 
-#: libs/resources/KisResourceLocator.cpp:1105
+#: libs/resources/KisResourceLocator.cpp:1107
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
 msgid "Temporary Resources"
 msgstr "Tuo resurssi"
 
-#: libs/resources/KisResourceLocator.cpp:1111
+#: libs/resources/KisResourceLocator.cpp:1113
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Size"
 msgid "Font Storage"
 msgstr "Fonttikoko"
 
-#: libs/resources/KisResourceLocator.cpp:1230
+#: libs/resources/KisResourceLocator.cpp:1232
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Synchronizing the resources."
 msgstr "Hallinnoi resursseja..."
 
-#: libs/resources/KisResourceLocator.cpp:1243
-#: libs/resources/KisResourceLocator.cpp:1251
+#: libs/resources/KisResourceLocator.cpp:1245
+#: libs/resources/KisResourceLocator.cpp:1253
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
@@ -25604,7 +25606,7 @@ msgstr "Likainen"
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26810,13 +26812,13 @@ msgstr "”text”-solmua ei löytynyt!"
 msgid "Failed to load video information"
 msgstr "Etätiedoston lataus epäonnistui"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:359
+#: libs/ui/animation/KisFFMpegWrapper.cpp:360
 #, fuzzy, kde-format
 #| msgid "FF&Mpeg: "
 msgid "FFMpeg Crashed"
 msgstr "FF&Mpeg"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:695
+#: libs/ui/animation/KisFFMpegWrapper.cpp:696
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -27662,7 +27664,7 @@ msgstr "Poista animaatiotaso"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -29353,7 +29355,7 @@ msgid "Canvas Input"
 msgstr "Kangas 01"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2565
-#: plugins/dockers/logdocker/LogDockerDock.cpp:195
+#: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Color Management"
 msgstr "Värien hallinta"
@@ -32023,7 +32025,7 @@ msgstr "Laajeneva erotin"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tools"
 msgstr "Työkalut"
@@ -37810,7 +37812,13 @@ msgstr ""
 "Tiedoston %1 ensimmäiset tuhat tavua ovat nollia: se on todennäköisesti "
 "vioittunut. Yritä tallentaa toiseen paikkaan toisella nimellä."
 
-#: libs/ui/KisImportExportFilter.cpp:189
+#: libs/ui/KisImportExportFilter.cpp:179
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid "%1 could not be opened"
+msgstr "Tiedostoa %1 ei löytynyt"
+
+#: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -37819,7 +37827,7 @@ msgstr ""
 "Tiedoston %1 ensimmäiset tuhat tavua ovat nollia: se on todennäköisesti "
 "vioittunut. Yritä tallentaa toiseen paikkaan toisella nimellä."
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:255
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37829,7 +37837,7 @@ msgstr ""
 "%1 kuvia ei voi tallentaa väritilan <b>%2</b> ja syvyyden kanssa <b>%3</b>. "
 "Kuva muunnetaan."
 
-#: libs/ui/KisImportExportFilter.cpp:258
+#: libs/ui/KisImportExportFilter.cpp:260
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37839,7 +37847,7 @@ msgstr ""
 "%1 tasoja ei voi tallentaa väritilan <b>%2</b> ja syvyyden kanssa <b>%3</b>. "
 "Tasot muunnetaan tai jätetään pois."
 
-#: libs/ui/KisImportExportFilter.cpp:263
+#: libs/ui/KisImportExportFilter.cpp:265
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37849,7 +37857,7 @@ msgstr ""
 "%1 kuvia ei voi tallentaa väritilan <b>%2</b> ja syvyyden kanssa <b>%3</b>. "
 "Kuvaa ei tallenneta"
 
-#: libs/ui/KisImportExportFilter.cpp:268
+#: libs/ui/KisImportExportFilter.cpp:270
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -37859,7 +37867,7 @@ msgstr ""
 "%1 tasoja ei voi tallentaa väritilan <b>%2</b> ja syvyyden kanssa <b>%3</b>. "
 "Tasot jätetään pois."
 
-#: libs/ui/KisImportExportFilter.cpp:286
+#: libs/ui/KisImportExportFilter.cpp:288
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
@@ -37868,7 +37876,7 @@ msgstr ""
 "Tallennettua tiedostoa %1 ei voitu avata. Yritä tallentaa uudelleen eri "
 "sijaintiin."
 
-#: libs/ui/KisImportExportFilter.cpp:291
+#: libs/ui/KisImportExportFilter.cpp:293
 #, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
@@ -39752,12 +39760,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:684
+#: libs/ui/opengl/kis_opengl.cpp:687
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:686
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -39765,14 +39773,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1169
+#: libs/ui/opengl/kis_opengl.cpp:1172
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1171
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -41143,7 +41151,20 @@ msgstr ""
 "Luo 8-bittisten kokonaislukujen lineaarinen RGB-väriavaruus napsauttamalla "
 "”OK” tai palaa asetuksiin napsauttamalla ”Peru”."
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:533
+#: libs/ui/widgets/kis_custom_image_widget.cc:434
+#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save %1\n"
+#| "Reason: %2"
+msgid ""
+"Could not save %1.\n"
+"Reason: %2."
+msgstr ""
+"Ei voitu tallentaa tiedostoa %1\n"
+"Syy: %2"
+
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
@@ -42543,17 +42564,17 @@ msgstr "Maa:"
 msgid "Anonymous"
 msgstr "Nimetön"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Nimi (ei saa olla kaksoiskappale tai tyhjä):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:280
+#: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name of Profile"
 msgstr "Profiilin nimi"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:333
+#: libs/widgets/KoConfigAuthorPage.cpp:332
 #, fuzzy, kde-format
 #| msgid "Add caption"
 msgid "New Contact Info"
@@ -43146,7 +43167,7 @@ msgstr ""
 "org</a>, josta löydät täytettävän lomakkeen. Yllä olevat tiedot siirretään "
 "vikailmoituspalvelimelle.</qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:204
 #, fuzzy, kde-format
 #| msgid "Submit Bug Report"
 msgid "&Submit Bug Report"
@@ -44023,37 +44044,37 @@ msgstr "Ääretön viivain"
 msgid "Select an Assistant"
 msgstr "Valitse avustaja"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1583
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 "Virheitä ei kohdattu. Kaikkia opastettuja toimintoja ei onnistuttu lataamaan."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1673
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1671
 #, kde-format
 msgid "Save Assistant"
 msgstr "Tallenna avustaja"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1768
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1774
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1769
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1775
 #, fuzzy, kde-format
 msgid "Opacity: "
 msgstr "Peittävyys:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1781
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1785
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1782
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1786
 #, fuzzy, kde-format
 #| msgid "Density:"
 msgid "Density: "
 msgstr "Tiheys:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1790
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1791
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "Alajako:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1794
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1795
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
@@ -46262,89 +46283,89 @@ msgstr "Näytä tai muuta tason ominaisuuksia"
 msgid "Delete the layer or mask"
 msgstr "Poista taso tai maski"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:41
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr "Lokikatselin"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:116
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #, kde-format
 msgid "Log Settings"
 msgstr "Lokiasetukset"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Resource Management"
 msgstr "Resurssinhallinta"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, fuzzy, kde-format
 #| msgid "Image Color Space"
 msgid "Image Core"
 msgstr "Kuvan väritila"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, fuzzy, kde-format
 #| msgctxt "Button to restart the timelapse video configuring"
 #| msgid "Restart"
 msgid "Registries"
 msgstr "Käynnistä uudelleen"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: plugins/dockers/logdocker/LogDockerDock.cpp:148
 #, fuzzy, kde-format
 #| msgid "KS%1 Engine"
 msgid "Tile Engine"
 msgstr "KS%1-moottori"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
 msgid "Plugin Management"
 msgstr "Liitännäisten hallinnointi"
 
 # Taas yritetään välttää sanaa ”leikkaa”
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "User Interface"
 msgstr "Käyttöliittymä"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "File loading and saving"
 msgstr "Tiedostojen lataus ja tallennus"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "Matematiikka ja laskenta"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
 msgid "Image Rendering"
 msgstr "Kuvan hahmonnus"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Scripting"
 msgstr "Skriptaus"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #, kde-format
 msgid "Input handling"
 msgstr "Syötekäsittely"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Toiminnot"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
 msgid "Tablet Handling"
 msgstr "Piirtopöydän käsittely"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #, fuzzy, kde-format
 #| msgid "Pan Canvas"
 msgid "GPU Canvas"
@@ -52521,13 +52542,13 @@ msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "Moottorin sisäinen virhe"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
@@ -73277,17 +73298,6 @@ msgstr ""
 
 #~ msgid "&Description:"
 #~ msgstr "&Kuvaus:"
-
-#, fuzzy
-#~| msgid ""
-#~| "Could not save %1\n"
-#~| "Reason: %2"
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "Ei voitu tallentaa tiedostoa %1\n"
-#~ "Syy: %2"
 
 #, fuzzy
 #~| msgid ""

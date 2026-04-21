@@ -35135,10 +35135,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Soubor nelze otevřít."
+msgstr "%1 nelze otevřít"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format

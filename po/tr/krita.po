@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-20 02:44+0000\n"
-"PO-Revision-Date: 2026-04-06 19:55+0300\n"
+"PO-Revision-Date: 2026-04-20 18:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -35728,10 +35728,9 @@ msgstr ""
 "bir adla kaydetmeyi deneyin."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Dosya açılamadı."
+msgstr "%1 açılamadı."
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39107,16 +39106,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"%1 kaydedilemedi\n"
-"Gerekçe: %2"
+"%1 kaydedilemedi.\n"
+"Gerekçe: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format

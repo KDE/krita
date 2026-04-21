@@ -35713,10 +35713,9 @@ msgstr ""
 "menom, na druhé miesto."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Súbor nebolo možné otvoriť."
+msgstr "%1 nie je možné otvoriť"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39096,16 +39095,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1.\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
 "Nepodarilo sa uložiť %1.\n"
-"Dôvod: %2"
+"Dôvod: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format

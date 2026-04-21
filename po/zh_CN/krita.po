@@ -35367,10 +35367,9 @@ msgstr ""
 "%1 的文件体积小于 10 字节，它已经损坏。请用其他名称，或者在其他位置重新保存。"
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "文件无法打开。"
+msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -38632,16 +38631,11 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"无法保存 %1\n"
-"原因：%2"
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format

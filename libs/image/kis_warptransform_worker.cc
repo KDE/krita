@@ -247,6 +247,7 @@ void KisWarpTransformWorker::run(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDe
     GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, dstDev);
     GridIterationTools::processGrid(polygonOp, functionOp,
                                     srcBounds, pixelPrecision);
+    polygonOp.finalize();
 }
 
 #include "krita_utils.h"

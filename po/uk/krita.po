@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-20 02:44+0000\n"
-"PO-Revision-Date: 2026-04-02 09:48+0300\n"
+"PO-Revision-Date: 2026-04-21 08:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -36211,10 +36211,9 @@ msgstr ""
 "до файла із іншою назвою в іншій теці."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Не вдалося відкрити файл."
+msgstr "Не вдалося відкрити %1"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39651,16 +39650,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1.\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"Неможливо зберегти %1.\n"
-"Причина: %2"
+"Не вдалося зберегти %1.\n"
+"Причина: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format

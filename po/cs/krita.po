@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-20 02:44+0000\n"
-"PO-Revision-Date: 2026-04-14 23:30+0200\n"
+"PO-Revision-Date: 2026-04-21 09:59+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -15318,7 +15318,7 @@ msgstr "Znovu vybrat"
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
-msgstr "Převést na výběr v&ektorem"
+msgstr "Převést na ve&ktorový výběr"
 
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -15328,14 +15328,14 @@ msgstr "Převést na výběr v&ektorem"
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
-msgstr "Převést na výběr vektorem"
+msgstr "Převést na vektorový výběr"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1429
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
-msgstr ""
+msgstr "Převést na ra&strový výběr"
 
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
@@ -15345,7 +15345,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
-msgstr ""
+msgstr "Převést na rastrový výběr"
 
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
@@ -15365,7 +15365,7 @@ msgstr "Upravit výběr"
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
-msgstr "Převést tvary na výběr &vektorem"
+msgstr "Převést &tvary na vektorový výběr"
 
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -15375,14 +15375,14 @@ msgstr "Převést tvary na výběr &vektorem"
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
-msgstr "Převést tvary na výběr vektorem"
+msgstr "Převést tvary na vektorový výběr"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1465
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
-msgstr ""
+msgstr "Z&měkčit výběr..."
 
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
@@ -15392,7 +15392,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
-msgstr ""
+msgstr "Změkčit výběr"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1477
@@ -15450,7 +15450,7 @@ msgstr "Vybrat z rozsahu barev"
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
-msgstr ""
+msgstr "Vybrat neprůhledné (&nahradit)"
 
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
@@ -15467,7 +15467,7 @@ msgstr "Vybrat neprůhledné"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
-msgstr ""
+msgstr "Vybrat neprůhledné (&přidat)"
 
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
@@ -15477,14 +15477,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
-msgstr ""
+msgstr "Vybrat neprůhledné (přidat)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
-msgstr ""
+msgstr "Vybrat neprůhledné (&odečíst)"
 
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
@@ -15494,14 +15494,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
-msgstr ""
+msgstr "Vybrat neprůhledné (odečíst)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1549
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
-msgstr ""
+msgstr "Vybrat neprůhledné (prů&nik)"
 
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
@@ -15511,7 +15511,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
-msgstr ""
+msgstr "Vybrat neprůhledné (průnik)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1561
@@ -15610,7 +15610,7 @@ msgstr "Znovu aplikovat filtr"
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
-msgstr ""
+msgstr "Znovu aplikovat filtr (dotázat se)"
 
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
@@ -15621,6 +15621,7 @@ msgstr ""
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
 msgstr ""
+"Znovu použije naposledy použitý filtr se zobrazením dotazu na konfiguraci"
 
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
@@ -29696,7 +29697,7 @@ msgstr "(potřebuje restartovat)"
 #: libs/ui/forms/wdggeneralsettings.ui:625
 #, kde-format
 msgid "Cursor"
-msgstr "Kurzor:"
+msgstr "Kurzor"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdggeneralsettings.ui:637

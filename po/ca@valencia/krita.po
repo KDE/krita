@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-20 02:44+0000\n"
-"PO-Revision-Date: 2026-04-02 10:01+0200\n"
+"PO-Revision-Date: 2026-04-20 08:59+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -35112,7 +35112,7 @@ msgstr ""
 "\n"
 "AVÍS:\tS'ha exhaurit la memòria! Ha començat l'ús de la memòria "
 "d'intercanvi.\n"
-"\t\tConfigureu més RAM per a Krita en el diàleg de configuració"
+"\t\tPer favor, configureu més RAM per a Krita en el diàleg de configuració"
 
 #: libs/ui/kis_statusbar.cc:338
 #, kde-format
@@ -35921,10 +35921,9 @@ msgstr ""
 "altra vegada amb un nom diferent, a una altra ubicació."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "No s'ha pogut obrir el fitxer."
+msgstr "No s'ha pogut obrir %1"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39326,16 +39325,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"No s'ha pogut guardar %1\n"
-"Raó: %2"
+"No s'ha pogut guardar %1.\n"
+"Motiu: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
@@ -48839,7 +48835,7 @@ msgid ""
 "Reason: %2"
 msgstr ""
 "No s'ha pogut guardar %1\n"
-"Raó: %2"
+"Motiu: %2"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:170
 #: plugins/extensions/imagesplit/imagesplit.cpp:245
@@ -59653,7 +59649,7 @@ msgstr "Pèl"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
-msgstr "Pinzell de pèl (les línies seran més fines que en la vista prèvia)"
+msgstr "Pinzell de pèl (les línies seran més fines que a la vista prèvia)"
 
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format

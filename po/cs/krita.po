@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-20 02:44+0000\n"
-"PO-Revision-Date: 2026-04-21 09:59+0200\n"
+"PO-Revision-Date: 2026-04-22 22:20+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -58,7 +58,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.03.90\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -9017,7 +9017,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr ""
+msgstr "Přepnout předvolbu gumy"
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -10174,7 +10174,7 @@ msgstr "Rozostření čočky"
 #, kde-format
 msgctxt "action"
 msgid "M&inimize Channel"
-msgstr "M&inimalizovat kanál:"
+msgstr "M&inimalizovat kanál"
 
 #. i18n: context: toolTip @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
@@ -10191,7 +10191,7 @@ msgstr "Minimalizovat kanál"
 #, kde-format
 msgctxt "action"
 msgid "M&aximize Channel"
-msgstr "M&aximalizovat kanál:"
+msgstr "M&aximalizovat kanál"
 
 #. i18n: context: toolTip @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
@@ -15759,7 +15759,7 @@ msgstr "Znovu aplikovat poslední filtr G'MIC"
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
-msgstr ""
+msgstr "Znovu aplikovat poslední akci G'MIC-Qt"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -15963,14 +15963,14 @@ msgstr "Aktivní profil autora"
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
-msgstr ""
+msgstr "Obnovit všechna nastavení"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1875
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
-msgstr ""
+msgstr "Obnovit vše do výchozího nastavení"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1876
@@ -16141,7 +16141,7 @@ msgstr "Barva"
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
-msgstr ""
+msgstr "Vybrat barvu po&předí"
 
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16151,14 +16151,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr ""
+msgstr "Vybrat barvu popředí"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1993
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
-msgstr ""
+msgstr "Vybrat barvu po&zadí"
 
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16168,7 +16168,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
-msgstr ""
+msgstr "Vybrat barvu pozadí"
 
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16181,7 +16181,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
-msgstr ""
+msgstr "Volby štětce posuvník 1"
 
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16194,7 +16194,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
-msgstr ""
+msgstr "Volby štětce posuvník 2"
 
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16207,7 +16207,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
-msgstr ""
+msgstr "Volby štětce posuvník 3"
 
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16220,7 +16220,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
-msgstr ""
+msgstr "Volby štětce posuvník 4"
 
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16233,7 +16233,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
-msgstr ""
+msgstr "Volby štětce posuvník 5"
 
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16721,7 +16721,7 @@ msgstr ""
 #: libs/flake/KoPathShapeFactory.cpp:25
 #, kde-format
 msgid "A simple path shape"
-msgstr ""
+msgstr "Jednoduchý tvar cesty"
 
 #: libs/flake/KoShapeController.cpp:56
 #, kde-format
@@ -21004,12 +21004,12 @@ msgstr "Změnit styl vrstvy"
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
-msgstr ""
+msgstr "Přepnout aktuální čas"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr ""
+msgstr "Přepnout aktuální čas na klíčový rámec"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -21032,7 +21032,7 @@ msgstr ""
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Rozvinout uzel %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29409,7 +29409,7 @@ msgstr "Manipulace se soubory"
 #: libs/ui/forms/wdggeneralsettings.ui:58
 #, kde-format
 msgid "Enable Autosaving"
-msgstr ""
+msgstr "Povolit automatické ukládání"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:67
@@ -29429,49 +29429,50 @@ msgstr " min"
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
-msgstr "Každých"
+msgstr "Každých "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
 #: libs/ui/forms/wdggeneralsettings.ui:96
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
 msgstr ""
+"Nepojmenované automaticky uložené soubory jsou ve výchozím stavu skryté"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:109
 #, kde-format
 msgid "Create a Backup File on Saving"
-msgstr ""
+msgstr "Při ukládání vytvářet záložní soubor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:118
 #, kde-format
 msgid "Backup File Location"
-msgstr ""
+msgstr "Umístění záložního souboru"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:126
 #, kde-format
 msgid "Same Folder as Original File"
-msgstr ""
+msgstr "Stejná složka jako původní soubor"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:131
 #, kde-format
 msgid "User Folder"
-msgstr ""
+msgstr "Uživatelská složka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:136
 #, kde-format
 msgid "Temporary File Location"
-msgstr ""
+msgstr "Umístění dočasného souboru"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/forms/wdggeneralsettings.ui:144
 #, kde-format
 msgid "Backup File Suffix:"
-msgstr ""
+msgstr "Přípona záložního souboru:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBackupFileSuffix)
 #: libs/ui/forms/wdggeneralsettings.ui:151
@@ -29483,13 +29484,13 @@ msgstr "~"
 #: libs/ui/forms/wdggeneralsettings.ui:161
 #, kde-format
 msgid "Number of Backup Files Kept:"
-msgstr ""
+msgstr "Počet ponechaných záložních souborů:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdggeneralsettings.ui:181
 #, kde-format
 msgid "KRA File Compression"
-msgstr ""
+msgstr "Komprese souborů KRA"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:187
@@ -29499,6 +29500,9 @@ msgid ""
 "weight:600;\">very</span> large files: larger than 4 GiB on disk.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Tuto volbu použijte pouze pro <span style=\" font-"
+"weight:600;\">velmi</span> rozsáhlé soubory: větší než 4 GiB na disku.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:190
@@ -29507,30 +29511,32 @@ msgid ""
 "Use Zip64 (for very large files: cannot be opened in versions of Krita older "
 "than 4.2.0)"
 msgstr ""
+"Použít Zip64 (pro velmi rozsáhlé soubory: nelze otevřít ve verzích Krity "
+"starších než 4.2.0)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkCompressKra)
 #: libs/ui/forms/wdggeneralsettings.ui:197
 #, kde-format
 msgid "Compress .kra files more (slows loading/saving)"
-msgstr "Víc komprimovat soubory .kra (zpomaluje načítání a ukládání)"
+msgstr "Vyšší komprese souborů .kra (zpomaluje načítání a ukládání)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimKra)
 #: libs/ui/forms/wdggeneralsettings.ui:207
 #, kde-format
 msgid "Trim files before saving"
-msgstr ""
+msgstr "Oříznout soubory před uložením"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimFramesImport)
 #: libs/ui/forms/wdggeneralsettings.ui:217
 #, kde-format
 msgid "Trim frames when importing animations"
-msgstr ""
+msgstr "Oříznout rámečky při importu animací"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:230
 #, kde-format
 msgid "Default Export Filetype: "
-msgstr ""
+msgstr "Výchozí exportní typ souboru: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, Pasting)
 #: libs/ui/forms/wdggeneralsettings.ui:244
@@ -29542,7 +29548,7 @@ msgstr "Vkládání"
 #: libs/ui/forms/wdggeneralsettings.ui:256
 #, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
-msgstr ""
+msgstr "Preferovat stahování původního zdroje (vyžaduje přístup na internet)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
 #: libs/ui/forms/wdggeneralsettings.ui:263
@@ -29551,6 +29557,8 @@ msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
+"Poznámka: To se vztahuje na upuštění objektu do informačního okna, na plátno "
+"a akce vkládání."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:270
@@ -29559,12 +29567,15 @@ msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
 "or dropping an image."
 msgstr ""
+"Některé aplikace, jako Google Chrome, poskytují při vkládání nebo upuštění "
+"více formátů obrázku."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
 #: libs/ui/forms/wdggeneralsettings.ui:277
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr ""
+"Preferovat místní kopii (pokud je dostupná; metadata mohou být ztracena)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:284
@@ -29573,6 +29584,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
+"Vložit připojenou sRGB bitmapu (není zapotřebí přístup k souborovému systému "
+"nebo k internetu, ale metadata budou ztracena)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:291
@@ -29596,7 +29609,7 @@ msgstr "Režim pro více dokumentů:"
 #: libs/ui/forms/wdggeneralsettings.ui:328
 #, kde-format
 msgid "Subwindows"
-msgstr "Pod-okna"
+msgstr "Podokna"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
 #: libs/ui/forms/wdggeneralsettings.ui:333
@@ -29608,25 +29621,27 @@ msgstr "Karty"
 #: libs/ui/forms/wdggeneralsettings.ui:341
 #, kde-format
 msgid "Show on-canvas popup messages"
-msgstr ""
+msgstr "Zobrazit na plátně vyskakovací zprávy"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:348
 #, kde-format
 msgid "Zoom Margin Size:"
-msgstr ""
+msgstr "Velikost okraje přiblížení:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:358
 #, kde-format
 msgid "Spacing between the image and the page when zoomed to fit, in pixels"
 msgstr ""
+"Prostorová výplň mezi obrázkem a stránkou, když je přiblížený do vyplnění, v "
+"pixelech"
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:386
 #, kde-format
 msgid "Subwindow mode"
-msgstr "Režim pod-okna"
+msgstr "Režim podokna"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -29657,7 +29672,7 @@ msgstr "Pozadí okna:"
 #: libs/ui/forms/wdggeneralsettings.ui:491
 #, kde-format
 msgid "Don't show contents when moving sub-windows"
-msgstr ""
+msgstr "Nezobrazovat obsah při přesunu podoken"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
 #: libs/ui/forms/wdggeneralsettings.ui:501
@@ -29677,13 +29692,13 @@ msgstr "Písmo:"
 #: libs/ui/forms/wdggeneralsettings.ui:551
 #, kde-format
 msgid "Enable HiDPI support"
-msgstr ""
+msgstr "Povolit podporu HiDPI"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
 #: libs/ui/forms/wdggeneralsettings.ui:575
 #, kde-format
 msgid "Enable fractional scale factor"
-msgstr ""
+msgstr "Povolit faktor měřítka zobrazení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
@@ -29703,19 +29718,19 @@ msgstr "Kurzor"
 #: libs/ui/forms/wdggeneralsettings.ui:637
 #, kde-format
 msgid "Brush Cursor Icon:"
-msgstr ""
+msgstr "Ikona kurzoru štětce:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: libs/ui/forms/wdggeneralsettings.ui:656
 #, kde-format
 msgid "Brush Outline Shape:"
-msgstr ""
+msgstr "Tvar obrysu štětce:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdggeneralsettings.ui:681
 #, kde-format
 msgid "While painting..."
-msgstr ""
+msgstr "Při malování..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
 #. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
@@ -29734,6 +29749,8 @@ msgid ""
 "Dynamically adjust outline to match the effective size of the brush. (For "
 "example, as brush size changes due to pen pressure.)"
 msgstr ""
+"Dynamicky nastavit obrys tak, aby odpovídal skutečné velikosti štětce. "
+"(Například když se velikost štětce mění podle tlaku na pero.)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -29741,13 +29758,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:850
 #, kde-format
 msgid "Use effective outline size"
-msgstr ""
+msgstr "Použít obrys skutečné velikosti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdggeneralsettings.ui:734
 #, kde-format
 msgid "Brush Outline Color:"
-msgstr ""
+msgstr "Barva obrysu štětce:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkSeparateEraserCursor)
 #: libs/ui/forms/wdggeneralsettings.ui:754
@@ -29759,32 +29776,31 @@ msgstr "Použít oddělená nastavení pro gumu"
 #: libs/ui/forms/wdggeneralsettings.ui:775
 #, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr ""
+msgstr "Ikona kurzoru gumy:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:788
 #, kde-format
 msgid "Eraser Outline Shape:"
-msgstr ""
+msgstr "Tvar obrysu gumy:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdggeneralsettings.ui:825
 #, kde-format
 msgid "While painting with an eraser..."
-msgstr ""
+msgstr "Při malování pomocí gumy..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: libs/ui/forms/wdggeneralsettings.ui:863
 #, kde-format
 msgid "Eraser Outline Color:"
-msgstr ""
+msgstr "Barva obrysu gumy:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:886
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Barevné prostředí"
+msgstr "Tvar barevného vzorníku:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -29812,16 +29828,15 @@ msgstr "Tloušťka:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:961
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Kruhový obrys"
+msgstr "Povolit obrys"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
 #, kde-format
 msgid "Extra Comparison Space"
-msgstr ""
+msgstr "Srovnávací prostor navíc"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
@@ -29846,43 +29861,43 @@ msgstr "V do&ku"
 #: libs/ui/forms/wdggeneralsettings.ui:998
 #, kde-format
 msgid "I&n Toolbar"
-msgstr ""
+msgstr "V panelu &nástrojů"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1011
 #, kde-format
 msgid "Brush Flow Mode (needs restart):"
-msgstr ""
+msgstr "Režim toku štětce (vyžaduje restart):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1019
 #, kde-format
 msgid "Creamy (Krita 4.2+)"
-msgstr ""
+msgstr "Krémový (Krita 4.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1024
 #, kde-format
 msgid "Hard (Krita 4.1 and earlier versions)"
-msgstr ""
+msgstr "Tvrdý (Krita 4.1 a předchozí verze)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1032
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr ""
+msgstr "Režim míchání CMYK (vyžaduje restart):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
 #, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr ""
+msgstr "Subtraktivní (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1045
 #, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr ""
+msgstr "Aditivní (Krita 5.1 a předchozí verze)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkSwitchSelectionCtrlAlt)
 #: libs/ui/forms/wdggeneralsettings.ui:1053
@@ -29894,7 +29909,7 @@ msgstr "Přepnout modifikátory výběru Control/Alt"
 #: libs/ui/forms/wdggeneralsettings.ui:1060
 #, kde-format
 msgid "Touch Painting:"
-msgstr ""
+msgstr "Dotykové malování:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:1070
@@ -29904,36 +29919,39 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Povolit čtení stavu tlaku události dotyku. Tato data mohou být na některých "
+"platformách chybová, například na některých zařízeních Android, může být "
+"tlak neustále uváděn jako 0,0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:1073
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Povolit citlivost na tlak dotyku (může být nefunkční)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:1080
 #, kde-format
 msgid "Activate transform tool after pasting"
-msgstr ""
+msgstr "Po vložení aktivovat transformační nástroj"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
 #: libs/ui/forms/wdggeneralsettings.ui:1087
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr ""
+msgstr "Kroky přiblížení mezi mocninami 2"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
 #: libs/ui/forms/wdggeneralsettings.ui:1104
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr ""
+msgstr "Použít horizontální osu pro akci přiblížení plátna"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1111
 #, kde-format
 msgid "Selection Actions Bar"
-msgstr ""
+msgstr "Panel akcí výběru"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1118
@@ -29943,13 +29961,15 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"Pokud je povoleno, každý výběr bude zobrazovat malý plovoucí panel s "
+"užitečnými akcemi souvisejícími s výběrem."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1121
 #: libs/ui/widgets/kis_selection_options.cc:175
 #, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr ""
+msgstr "Povolit Panel akcí výběru"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1132
@@ -29961,7 +29981,7 @@ msgstr "Animace"
 #: libs/ui/forms/wdggeneralsettings.ui:1138
 #, kde-format
 msgid "Animation Settings"
-msgstr ""
+msgstr "Nastavení animace"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1144
@@ -29972,12 +29992,16 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with each other."
 msgstr ""
+"Pokud je tato možnost zaškrtnuta, budou nově vytvořené vrstvy automaticky "
+"připnuty k časové ose animace. To je užitečné při animaci s malým počtem "
+"vrstev nebo když mnoho prvků na různých animovaných vrstvách mezi sebou "
+"reagují."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1147
 #, kde-format
 msgid "Automatically pin new layers to timeline"
-msgstr ""
+msgstr "Automaticky připnout nové vrstvy k časové ose"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1154
@@ -29988,12 +30012,17 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Pokud je povoleno, tato možnost automaticky upraví \"počáteční\" a \"koncové"
+"\" snímky dokumentu tak, aby nově vytvořené klíčové snímky byly vždy v rámci "
+"rozsahu přehrávání animace. Tato funkce se doporučuje pro urychlení "
+"pracovního postupu při animaci, když se scéna improvizuje bez předem "
+"stanovené délky."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1157
 #, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr ""
+msgstr "Automaticky přizpůsobit rozsah přehrávání ke klíčovým snímkům"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1164
@@ -30015,6 +30044,7 @@ msgstr ""
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
+"Automaticky zvětšit časovou osu tak, aby se přizpůsobila rozsahu přehrávání"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -30034,13 +30064,13 @@ msgstr "Složka zdrojů:"
 #: libs/ui/forms/wdggeneralsettings.ui:1314
 #, kde-format
 msgid "When Krita starts:"
-msgstr ""
+msgstr "Když se Krita spouští:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
 #: libs/ui/forms/wdggeneralsettings.ui:1331
 #, kde-format
 msgid "Save session when Krita closes"
-msgstr ""
+msgstr "Uložit sezení při uzavírání Krity"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
 #: libs/ui/forms/wdggeneralsettings.ui:1338
@@ -30054,7 +30084,7 @@ msgstr "Při importu obrázků jako vrstev převézt barevný prostor obrázku"
 #: libs/ui/forms/wdggeneralsettings.ui:1361
 #, kde-format
 msgid "Only applies to new or newly opened images."
-msgstr ""
+msgstr "Platí pouze na nové a nově otevřené obrázky."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeneralsettings.ui:1354
@@ -30084,7 +30114,7 @@ msgstr "Zobrazit originální vrstvu"
 #: libs/ui/forms/wdggeneralsettings.ui:1418
 #, kde-format
 msgid "Enable Logging for bug reports"
-msgstr ""
+msgstr "Povolit protokolování pro hlášení chyb"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
 #: libs/ui/forms/wdggeneralsettings.ui:1449
@@ -30093,18 +30123,20 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
+"Upozornění: pokud tuto volbu povolíte a dialog souboru se bude chovat "
+"podivně, nehlaste to jako chybu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
 #: libs/ui/forms/wdggeneralsettings.ui:1452
 #, kde-format
 msgid "Enable native file dialogs"
-msgstr ""
+msgstr "Povolit nativní dialogy souboru"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: libs/ui/forms/wdggeneralsettings.ui:1475
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
-msgstr ""
+msgstr "(Upozornění: nemusí na některých systémech pracovat správně)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1485
@@ -30135,7 +30167,7 @@ msgstr "(Potřebuje restartovat)"
 #: libs/ui/forms/wdggeneralsettings.ui:1561
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr ""
+msgstr "Obcházení DPI fontu"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1576
@@ -30154,6 +30186,18 @@ msgid ""
 "After saving the file in Krita 5.0 at least once, no conversions will be "
 "needed anymore."
 msgstr ""
+"V některých verzích Krity před 5.0 mohla velikost textu záviset na aktuálním "
+"DPI displeje (což byl bug).\n"
+"V Kritě 5.0 byl tento bug opraven, což může způsobit, že soubory vytvořené v "
+"předchozích verzích budou vypadat jinak.\n"
+"\n"
+"Při načítání starých souborů se Krita pokusí upravit velikost písma podle "
+"DPI aktuální obrazovky.\n"
+"Pokud byl soubor vytvořen na jiné obrazovce, zkuste upravit tuto hodnotu "
+"ručně.\n"
+"\n"
+"Po uložení souboru v Kritě 5.0 alespoň jednou nebudou potřeba žádnédalší "
+"konverze."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1579
@@ -30174,36 +30218,43 @@ msgid ""
 "To restore the old behavior you can force Krita to use Display DPI for fonts "
 "by entering it in this field."
 msgstr ""
+"V některých verzích Krity před 4.4.3 mohla velikost textu záviset na "
+"aktuálnímDPI displeje (což byl bug).\n"
+"V Kritě 4.4.3 byl tento bug opraven, což může způsobit, že soubory "
+"vytvořenév předchozích verzích budou vypadat jinak.\n"
+"\n"
+"Chcete-li obnovit staré chování, můžete donutit Kritu používat DPI "
+"displejepro písma zadáním hodnoty do tohoto pole."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1601
 #, kde-format
 msgid "Automatic layer naming"
-msgstr ""
+msgstr "Automatické pojmenovávání vrstev"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1607
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
-msgstr ""
+msgstr "Přidávat „sloučeno“ ke sloučeným skupinám vrstev"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1614
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
-msgstr ""
+msgstr "Připojovat „(vloženo)“ k vloženým vrstvám"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1621
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr ""
+msgstr "Předkládat „Kopie“ ke zduplikovaným vrstvám"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
 #: libs/ui/forms/wdggeneralsettings.ui:1631
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Dlouhý stisk otevře kontextovou nabídku"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:1638
@@ -30233,12 +30284,17 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Některé aplikace mohou emulovat stisknutí funkčních kláves s vysokými čísly "
+"(např. F22), aby se dostaly do popředí. To může rozbít systém zkratek a akcí "
+"Krity. Pokud máte klávesnici s funkčními klávesami F13 nebo vyšší a chcete "
+"je používat, zkuste tuto možnost vypnout, ale vezměte v potaz tento "
+"potenciální problém."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1733
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ignorovat vysoké funkční klávesy (F13-F24)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -32631,13 +32687,13 @@ msgstr ""
 #: libs/ui/input/kis_change_frame_action.cpp:26
 #, kde-format
 msgid "Switch Time"
-msgstr ""
+msgstr "Přepnout čas"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
 msgid ""
 "The <i>Switch Time</i> action changes the current time of the animation."
-msgstr ""
+msgstr "Akce <i>Přepnout čas</i> změní současný čas v animaci."
 
 #: libs/ui/input/kis_change_frame_action.cpp:30
 #, kde-format
@@ -32682,7 +32738,7 @@ msgstr "Expozice a gama"
 #, kde-format
 msgid ""
 "The <i>Exposure and Gamma</i> action changes the display mode of the canvas."
-msgstr ""
+msgstr "Akce <i>Expozice a gama</i> změní režim zobrazení plátna."
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:66
 #, kde-format
@@ -32737,42 +32793,42 @@ msgstr "Gama -0.2"
 #: libs/ui/input/kis_gamma_exposure_action.cpp:79
 #, kde-format
 msgid "Reset Exposure and Gamma"
-msgstr ""
+msgstr "Obnovit expozici a gamu"
 
 #: libs/ui/input/kis_pan_action.cpp:40
 #, kde-format
 msgid "Pan Canvas"
-msgstr ""
+msgstr "Posun plátna"
 
 #: libs/ui/input/kis_pan_action.cpp:41
 #, kde-format
 msgid "The <i>Pan Canvas</i> action pans the canvas."
-msgstr ""
+msgstr "Akce <i>Posun plátna</i> provede posun plátna."
 
 #: libs/ui/input/kis_pan_action.cpp:44
 #, kde-format
 msgid "Pan Mode"
-msgstr "Režim ořezávání"
+msgstr "Režim posouvání"
 
 #: libs/ui/input/kis_pan_action.cpp:45
 #, kde-format
 msgid "Pan Left"
-msgstr ""
+msgstr "Posunout vlevo"
 
 #: libs/ui/input/kis_pan_action.cpp:46
 #, kde-format
 msgid "Pan Right"
-msgstr ""
+msgstr "Posunout vpravo"
 
 #: libs/ui/input/kis_pan_action.cpp:47
 #, kde-format
 msgid "Pan Up"
-msgstr ""
+msgstr "Posunout nahoru"
 
 #: libs/ui/input/kis_pan_action.cpp:48
 #, kde-format
 msgid "Pan Down"
-msgstr ""
+msgstr "Posunout dolů"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
@@ -32782,7 +32838,7 @@ msgstr "Otočit plátno"
 #: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
-msgstr ""
+msgstr "Akce <i>Otočit plátno</i> provede otočení plátna."
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
@@ -32819,7 +32875,7 @@ msgstr "Vybrat vrstvu"
 #: libs/ui/input/kis_select_layer_action.cpp:117
 #, kde-format
 msgid "Select layers under the cursor position"
-msgstr ""
+msgstr "Vybrat vrstvy pod pozicí kurzoru"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
 #, kde-format
@@ -32867,13 +32923,13 @@ msgstr " + "
 #, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
-msgstr "Vlevo"
+msgstr "Levé"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
 #, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
-msgstr "Vpravo"
+msgstr "Pravé"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
 #, kde-format
@@ -32981,7 +33037,7 @@ msgstr "Kolečko myši doprava"
 #: libs/ui/input/kis_shortcut_configuration.cpp:430
 #, kde-format
 msgid "Trackpad Pan"
-msgstr ""
+msgstr "Posun na trackpadu"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:434
 #, kde-format
@@ -33009,12 +33065,12 @@ msgstr ""
 #: libs/ui/input/kis_shortcut_configuration.cpp:478
 #, kde-format
 msgid "Pan Gesture"
-msgstr ""
+msgstr "Gesto posunu"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:480
 #, kde-format
 msgid "Rotate Gesture"
-msgstr ""
+msgstr "Gesto otočení"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, kde-format
@@ -33024,7 +33080,7 @@ msgstr ""
 #: libs/ui/input/kis_shortcut_configuration.cpp:485
 #, kde-format
 msgid "One Finger Tap"
-msgstr ""
+msgstr "Ťuknutí jedním prstem"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:487
 #, kde-format
@@ -33034,47 +33090,47 @@ msgstr "Ťuknutí dvěma prsty"
 #: libs/ui/input/kis_shortcut_configuration.cpp:489
 #, kde-format
 msgid "Three Finger Tap"
-msgstr ""
+msgstr "Ťuknutí třemi prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:491
 #, kde-format
 msgid "Four Finger Tap"
-msgstr ""
+msgstr "Ťuknutí čtyřmi prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:493
 #, kde-format
 msgid "Five Finger Tap"
-msgstr ""
+msgstr "Ťuknutí pěti prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:495
 #, kde-format
 msgid "One Finger Drag"
-msgstr ""
+msgstr "Potažení jedním prstem"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:497
 #, kde-format
 msgid "Two Finger Drag"
-msgstr ""
+msgstr "Potažení dvěma prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:499
 #, kde-format
 msgid "Three Finger Drag"
-msgstr ""
+msgstr "Potažení třemi prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:501
 #, kde-format
 msgid "Four Finger Drag"
-msgstr ""
+msgstr "Potažení čtyřmi prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:503
 #, kde-format
 msgid "Five Finger Drag"
-msgstr ""
+msgstr "Potažení pěti prsty"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:505
 #, kde-format
 msgid "One Finger Hold"
-msgstr ""
+msgstr "Podržení jedním prstem"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:508
 #, kde-format
@@ -33244,7 +33300,7 @@ msgstr ""
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
-msgstr ""
+msgstr "Přiblížit a otočit plátno"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -33257,16 +33313,18 @@ msgid ""
 "The Toggle Canvas Only action switches between full interface and canvas "
 "only mode"
 msgstr ""
+"Akce Přepnout pouze plátno přepíná mezi plným uživatelským rozhraním a "
+"režimem pouze plátno."
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:44
 #, kde-format
 msgid "Show Popup Widget"
-msgstr ""
+msgstr "Zobrazit vyskakovací widget"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:45
 #, kde-format
 msgid "Show the current tool's popup widget."
-msgstr ""
+msgstr "Zobrazit vyskakovací widget současného nástroje."
 
 #: libs/ui/input/KisTouchGestureAction.cpp:17
 #, kde-format
@@ -33287,12 +33345,12 @@ msgstr ""
 #: libs/ui/input/KisTouchGestureAction.cpp:24
 #, kde-format
 msgid "Toggle Eraser"
-msgstr ""
+msgstr "Přepnout gumu"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, kde-format
 msgid "Toggle Eraser Preset"
-msgstr ""
+msgstr "Přepnout předvolbu gumy"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
 #, kde-format
@@ -34158,7 +34216,7 @@ msgstr "Obrátit výběr"
 #: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Fill Selection with Color"
-msgstr ""
+msgstr "Vyplnit výběr barvou"
 
 #: libs/ui/kis_selection_actions_panel.cpp:78
 #, kde-format
@@ -34168,7 +34226,7 @@ msgstr "Smazat výběr"
 #: libs/ui/kis_selection_actions_panel.cpp:79
 #, kde-format
 msgid "Copy To New Layer"
-msgstr ""
+msgstr "Kopírovat do nové vrstvy"
 
 #: libs/ui/kis_selection_actions_panel.cpp:80
 #, kde-format
@@ -39654,7 +39712,7 @@ msgstr "Možnosti nástrojů"
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
@@ -41806,12 +41864,12 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
 #, kde-format
 msgid "Zoom horizontally"
-msgstr ""
+msgstr "Přiblížení vodorovné"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
 #, kde-format
 msgid "Zoom vertically"
-msgstr ""
+msgstr "Přiblížení svislé"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
@@ -41896,12 +41954,12 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:527
 #, kde-format
 msgid "Zoom view to fit channel range."
-msgstr ""
+msgstr "Přiblížit pohled tak, aby vyhovoval rozsahu kanálu."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:534
 #, kde-format
 msgid "Zoom view to fit curve."
-msgstr ""
+msgstr "Přiblížit pohled tak, aby vyhovoval křivce."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:663
 msgctxt "(qtundo-format)"
@@ -42043,7 +42101,7 @@ msgstr "Upravit vrstvy:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
-msgstr ""
+msgstr "Přiblížit časovou osu. Podržte dole a potáhněte vlevo nebo vpravo."
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
 #, kde-format
@@ -42273,7 +42331,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:radio"
 msgid "Right / After"
-msgstr ""
+msgstr "Vpravo / za"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:36
@@ -42925,7 +42983,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Zobrazit zaškrtávací políčko pro výběr/zrušení výběru vrstev. "
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1008
 msgctxt "(qtundo-format)"
@@ -43174,6 +43232,8 @@ msgid ""
 "Exposure and Gamma corrections are disabled in Internal mode. Switch to OCIO "
 "mode to use them"
 msgstr ""
+"Korekce expozice a gamy jsou v interním režimu zakázané. Pokud je chcete "
+"použít, přepněte na režim OCIO."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:437
 #, kde-format
@@ -44202,7 +44262,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Switch to selected snapshot"
-msgstr ""
+msgstr "Přepnout na vybraný snímek"
 
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:74
 #, kde-format
@@ -45959,7 +46019,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left"
-msgstr ""
+msgstr "Vlevo"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:307
 #: plugins/dockers/textproperties/qml/TextAlign.qml:339
@@ -45989,7 +46049,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right"
-msgstr ""
+msgstr "Vpravo"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:311
 #, kde-format
@@ -50137,12 +50197,12 @@ msgstr "Barva na alfa"
 #: plugins/filters/colors/kis_minmax_filters.cpp:58
 #, kde-format
 msgid "M&aximize Channel"
-msgstr "M&aximalizovat kanál:"
+msgstr "M&aximalizovat kanál"
 
 #: plugins/filters/colors/kis_minmax_filters.cpp:96
 #, kde-format
 msgid "M&inimize Channel"
-msgstr "M&inimalizovat kanál:"
+msgstr "M&inimalizovat kanál"
 
 #: plugins/filters/colors/kis_minmax_filters.h:27
 #, kde-format
@@ -63436,7 +63496,7 @@ msgstr "Nástroj vícero štětců"
 #: plugins/tools/basictools/kis_tool_pan.cpp:81
 #, kde-format
 msgid "Pan Tool"
-msgstr ""
+msgstr "Nástroj posunu"
 
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
@@ -67259,7 +67319,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Pan Tool"
-msgstr ""
+msgstr "Nástroj posunu"
 
 #. i18n: context: text @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)

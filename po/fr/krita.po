@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-20 02:44+0000\n"
-"PO-Revision-Date: 2026-04-03 10:04+0200\n"
+"PO-Revision-Date: 2026-04-21 07:17+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -36103,10 +36103,9 @@ msgstr ""
 "autre emplacement."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Impossible d'ouvrir le fichier."
+msgstr "Il est impossible d'ouvrir %1."
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39561,15 +39560,12 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1.\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"Impossible d'enregistrer %1.\n"
+"Il est impossible d'enregistrer %1.\n"
 "Raison : %2"
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536

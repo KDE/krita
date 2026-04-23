@@ -262,26 +262,23 @@ bool KisCosParser::parseValue(QIODevice &dev, QVariant &val) {
         dev.ungetChar(c);
         return false;
     } else if (c == 't') {
-        QByteArray t;
-        dev.read(t.data(), 3);
-        if (t[0] == 'r' && t[1] == 'u' && t[2] == 'e') {
+        const QByteArray t = dev.read(3);
+        if (t == "rue") {
             val = true;
         } else {
             return false;
         }
 
     } else if (c == 'f') {
-        QByteArray t;
-        dev.read(t.data(), 4);
-        if (t[0] == 'a' && t[1] == 'l' && t[2] == 's' && t[3] == 'e') {
+        const QByteArray t = dev.read(4);
+        if (t == "alse") {
             val = false;
         } else {
             return false;
         }
     } else if (c == 'n') {
-        QByteArray t;
-        dev.read(t.data(), 3);
-        if (t[0] == 'u' && t[1] == 'l' && t[2] == 'l') {
+        const QByteArray t = dev.read(3);
+        if (t == "ull") {
             val = QVariant();
         } else {
             return false;

@@ -43,6 +43,8 @@ void psd_cos_parser_test::test_parse_cos_struct_data()
     QTest::addRow("empty") << QByteArray("<<>>") << QVariantHash ();
     QTest::addRow("bool") << QByteArray("<< /Ligatures true /DLigatures false >>")
                                       << QVariantHash ({{"/Ligatures", true}, {"/DLigatures", false}});
+    QTest::addRow("null") << QByteArray("<< /StyleSheetData null /Ligatures true >>")
+                                      << QVariantHash ({{"/StyleSheetData", QVariant()}, {"/Ligatures", true}});
     QTest::addRow("int") << QByteArray("<< /FigureStyle 0 /PreHyphen 2 >>")
                                       << QVariantHash ({{"/FigureStyle", 0}, {"/PreHyphen", 2}});
     QTest::addRow("string") << QByteArray("\n\n<<\n\t/CloseDoubleQuote (\xFE\xFF \x1D)\n>>\n")

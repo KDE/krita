@@ -577,6 +577,21 @@ int KoSvgTextShape::wordEnd(int pos)
             break;
         }
 
+        // Also test the next cluster on whether it is a hardbreak. This is because hardbreaks by default get hidden.
+        if (i < d->cursorPos.size()-1 && i > pos) {
+            const CursorPos nextCursorPos = d->cursorPos.at(i+1);
+            bool found = false;
+            for (int j = cursorPos.cluster; j < nextCursorPos.cluster; j++) {
+                if (d->result.at(j).breakType == BreakType::HardBreak && d->result.at(j).addressable) {
+                    wordEnd = qMax(pos, wordEnd);
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                break;
+            }
+        }
     }
 
     return wordEnd;
@@ -597,6 +612,21 @@ int KoSvgTextShape::wordStart(int pos)
                 && (cursorPos.offset == 0 || cursorPos.offset+1 == res.cursorInfo.offsets.size())
                 && i < pos) {
             break;
+        }
+        // Also test the previous cluster on whether it is a hardbreak. This is because hardbreaks by default get hidden.
+        if (i > 1 && i < pos) {
+            const CursorPos prevCursorPos = d->cursorPos.at(i-1);
+            bool found = false;
+            for (int j = cursorPos.cluster; j > prevCursorPos.cluster; j--) {
+                if (d->result.at(j).breakType == BreakType::HardBreak && d->result.at(j).addressable) {
+                    wordStart = qMin(pos, i-1);
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                break;
+            }
         }
     }
 

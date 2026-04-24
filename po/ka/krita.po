@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-20 02:44+0000\n"
+"POT-Creation-Date: 2026-04-24 02:40+0000\n"
 "PO-Revision-Date: 2026-04-21 06:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -9987,8 +9987,8 @@ msgstr "&ბუნდოვნება..."
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1657
-#: krita/kritamenu.action:1659 krita/kritamenu.action:1660
+#: krita/krita.action:1284 krita/krita.action:1285 krita/kritamenu.action:1681
+#: krita/kritamenu.action:1683 krita/kritamenu.action:1684
 #, kde-format
 msgctxt "action"
 msgid "Blur"
@@ -13284,55 +13284,55 @@ msgstr "ალფას &გაყოფა"
 msgid "Select &Opaque"
 msgstr "აირჩიეთ &გაუმჭვირვალე"
 
-#: krita/krita5.xmlgui:357
+#: krita/krita5.xmlgui:360
 #, kde-format
 msgid "Filte&r"
 msgstr "&ფილტრი"
 
-#: krita/krita5.xmlgui:378 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:381 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "&ხელსაწყოები"
 
-#: krita/krita5.xmlgui:379
+#: krita/krita5.xmlgui:382
 #, kde-format
 msgid "Scripts"
 msgstr "სკრიპტები"
 
-#: krita/krita5.xmlgui:382 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
+#: krita/krita5.xmlgui:385 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "&მორგება"
 
-#: krita/krita5.xmlgui:409 libs/widgetutils/xmlgui/khelpmenu.cpp:133
+#: krita/krita5.xmlgui:412 libs/widgetutils/xmlgui/khelpmenu.cpp:133
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&დახმარება"
 
-#: krita/krita5.xmlgui:428 libs/ui/kis_file_layer.cpp:129
+#: krita/krita5.xmlgui:431 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:105
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "ფაილი"
 
-#: krita/krita5.xmlgui:434
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Edit"
 msgstr "ჩასწორება"
 
-#: krita/krita5.xmlgui:439
+#: krita/krita5.xmlgui:442
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "ფუნჯები და სხვა"
 
-#: krita/krita5.xmlgui:456
+#: krita/krita5.xmlgui:459
 #, kde-format
 msgid "Custom toolbar 1"
 msgstr "მორგებული პანელი 1"
 
-#: krita/krita5.xmlgui:459
+#: krita/krita5.xmlgui:462
 #, kde-format
 msgid "Custom toolbar 2"
 msgstr "მორგებული პანელი 2"
@@ -14123,8 +14123,8 @@ msgstr "საკვანძო კადრის წაშლა"
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:575 krita/kritamenu.action:1897
-#: krita/kritamenu.action:1898
+#: krita/kritamenu.action:575 krita/kritamenu.action:1921
+#: krita/kritamenu.action:1922
 #, kde-format
 msgctxt "action"
 msgid "Window"
@@ -15579,15 +15579,31 @@ msgctxt "action"
 msgid "Smooth"
 msgstr "რბილი"
 
+#. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
+#: krita/kritamenu.action:1609
+#, fuzzy, kde-format
+#| msgid "Enable Selection Actions Bar"
+msgctxt "action"
+msgid "Enable Selection Actions Bar"
+msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
+
+#. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
+#: krita/kritamenu.action:1621
+#, fuzzy, kde-format
+#| msgid "Enable Selection Actions Bar"
+msgctxt "action"
+msgid "Configure selection actions bar"
+msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
+
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1610
+#: krita/kritamenu.action:1634
 #, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "ფილტრი"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1613
+#: krita/kritamenu.action:1637
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
@@ -15597,14 +15613,14 @@ msgstr "&ფილტრის ხელახლა გადატარებ
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1615 krita/kritamenu.action:1616
+#: krita/kritamenu.action:1639 krita/kritamenu.action:1640
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
 msgstr "ფილტრის ხელახლა გადატარება"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1625
+#: krita/kritamenu.action:1649
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
@@ -15614,7 +15630,7 @@ msgstr "ფილტრის ხელახლა გადატარებ�
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1627 krita/kritamenu.action:1628
+#: krita/kritamenu.action:1651 krita/kritamenu.action:1652
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
@@ -15626,8 +15642,8 @@ msgstr "ბოლოს გამოყოფილი ფილტრის თ
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1637 krita/kritamenu.action:1639
-#: krita/kritamenu.action:1640
+#: krita/kritamenu.action:1661 krita/kritamenu.action:1663
+#: krita/kritamenu.action:1664
 #, kde-format
 msgctxt "action"
 msgid "Adjust"
@@ -15639,8 +15655,8 @@ msgstr "მორგება"
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1647 krita/kritamenu.action:1649
-#: krita/kritamenu.action:1650
+#: krita/kritamenu.action:1671 krita/kritamenu.action:1673
+#: krita/kritamenu.action:1674
 #, kde-format
 msgctxt "action"
 msgid "Artistic"
@@ -15652,8 +15668,8 @@ msgstr "მხატვრული"
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1667 krita/kritamenu.action:1669
-#: krita/kritamenu.action:1670
+#: krita/kritamenu.action:1691 krita/kritamenu.action:1693
+#: krita/kritamenu.action:1694
 #, kde-format
 msgctxt "action"
 msgid "Colors"
@@ -15665,8 +15681,8 @@ msgstr "ფერები"
 #. i18n: context: text @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1677 krita/kritamenu.action:1679
-#: krita/kritamenu.action:1680
+#: krita/kritamenu.action:1701 krita/kritamenu.action:1703
+#: krita/kritamenu.action:1704
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
@@ -15678,8 +15694,8 @@ msgstr "წიბოს დადგენა"
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1687 krita/kritamenu.action:1689
-#: krita/kritamenu.action:1690
+#: krita/kritamenu.action:1711 krita/kritamenu.action:1713
+#: krita/kritamenu.action:1714
 #, kde-format
 msgctxt "action"
 msgid "Enhance"
@@ -15691,8 +15707,8 @@ msgstr "გაუმჯობესება"
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1697 krita/kritamenu.action:1699
-#: krita/kritamenu.action:1700
+#: krita/kritamenu.action:1721 krita/kritamenu.action:1723
+#: krita/kritamenu.action:1724
 #, kde-format
 msgctxt "action"
 msgid "Emboss"
@@ -15704,8 +15720,8 @@ msgstr "ამოტვიფრვა"
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1707 krita/kritamenu.action:1709
-#: krita/kritamenu.action:1710
+#: krita/kritamenu.action:1731 krita/kritamenu.action:1733
+#: krita/kritamenu.action:1734
 #, kde-format
 msgctxt "action"
 msgid "Map"
@@ -15717,15 +15733,15 @@ msgstr "რუკა"
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1717 krita/kritamenu.action:1719
-#: krita/kritamenu.action:1720
+#: krita/kritamenu.action:1741 krita/kritamenu.action:1743
+#: krita/kritamenu.action:1744
 #, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "სხვები"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1727
+#: krita/kritamenu.action:1751
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
@@ -15735,14 +15751,14 @@ msgstr "G'MIC-Qt-ის გაშვება"
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1729 krita/kritamenu.action:1730
+#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
 msgstr "G'Mic-Qt-ის გაშვება"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1737
+#: krita/kritamenu.action:1761
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
@@ -15752,7 +15768,7 @@ msgstr "ბოლო G'MIC-ის ფილტრის თავიდან �
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
-#: krita/kritamenu.action:1739 krita/kritamenu.action:1740
+#: krita/kritamenu.action:1763 krita/kritamenu.action:1764
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
@@ -15764,7 +15780,7 @@ msgstr "ბოლო G'MIC-ის ფილტრის თავიდან �
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
-#: krita/kritamenu.action:1748
+#: krita/kritamenu.action:1772
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
@@ -15773,7 +15789,7 @@ msgid "Settings"
 msgstr "მორგება"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1751
+#: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
@@ -15783,35 +15799,35 @@ msgstr "Krita-ის მორგე&ბა..."
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1753 krita/kritamenu.action:1754
+#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
 msgstr "Krita-ის მორგება"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1763
+#: krita/kritamenu.action:1787
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
 msgstr "რესურსის ბიბლიოთეკების &მართვა..."
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1765
+#: krita/kritamenu.action:1789
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
 msgstr "რესურსის ბიბლიოთეკების მართვა"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1766
+#: krita/kritamenu.action:1790
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
 msgstr "რესურსის ბიბლიოთეკების მართვა"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1775
+#: krita/kritamenu.action:1799
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
@@ -15821,14 +15837,14 @@ msgstr "რესურსების მართვა..."
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1777 krita/kritamenu.action:1778
+#: krita/kritamenu.action:1801 krita/kritamenu.action:1802
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
 msgstr "რესურსების მართვა"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1787
+#: krita/kritamenu.action:1811
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
@@ -15838,14 +15854,14 @@ msgstr "აპ&ლიკაციის ენის გადართვა...
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1789 krita/kritamenu.action:1790
+#: krita/kritamenu.action:1813 krita/kritamenu.action:1814
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
 msgstr "აპლიკაციის ენის შეცვლა"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1797
+#: krita/kritamenu.action:1821
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
@@ -15855,14 +15871,14 @@ msgstr "პანელები&ს ჩვენება"
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1799 krita/kritamenu.action:1800
+#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
 msgstr "პანელების ჩვენება"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1809
+#: krita/kritamenu.action:1833
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
@@ -15872,14 +15888,14 @@ msgstr "&პანელების სათაურის ჩვენებ
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1811 krita/kritamenu.action:1812
+#: krita/kritamenu.action:1835 krita/kritamenu.action:1836
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "პანელების სათაურის ჩვენება"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1821
+#: krita/kritamenu.action:1845
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
@@ -15889,7 +15905,7 @@ msgstr "ხელსაწყოების &პანელების მო
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1823 krita/kritamenu.action:1824
+#: krita/kritamenu.action:1847 krita/kritamenu.action:1848
 #, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
@@ -15901,15 +15917,15 @@ msgstr "ხელსაწყოთა ზოლების გამართ�
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1833 krita/kritamenu.action:1835
-#: krita/kritamenu.action:1836
+#: krita/kritamenu.action:1857 krita/kritamenu.action:1859
+#: krita/kritamenu.action:1860
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
 msgstr "პანელები"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1843
+#: krita/kritamenu.action:1867
 #, kde-format
 msgctxt "action"
 msgid "&Themes"
@@ -15919,14 +15935,14 @@ msgstr "თემები"
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1845 krita/kritamenu.action:1846
+#: krita/kritamenu.action:1869 krita/kritamenu.action:1870
 #, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "თემები"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1853
+#: krita/kritamenu.action:1877
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
@@ -15936,7 +15952,7 @@ msgstr "&სტილები"
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1855 krita/kritamenu.action:1856
+#: krita/kritamenu.action:1879 krita/kritamenu.action:1880
 #, kde-format
 msgctxt "action"
 msgid "Styles"
@@ -15948,36 +15964,36 @@ msgstr "სტილები"
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1863 krita/kritamenu.action:1865
-#: krita/kritamenu.action:1866
+#: krita/kritamenu.action:1887 krita/kritamenu.action:1889
+#: krita/kritamenu.action:1890
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
 msgstr "აქტიური ავტორის პროფილი"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1873
+#: krita/kritamenu.action:1897
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
 msgstr "ყველა პარამეტრის დაბრუნება"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1875
+#: krita/kritamenu.action:1899
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
 msgstr "ყველა პარამეტრის დაბრუნება ნაგულისხმევ მნიშვნელობაზე"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1876
+#: krita/kritamenu.action:1900
 #, kde-format
 msgctxt "action"
 msgid "Reset Settings"
 msgstr "პარამეტრების ნაგულისხმებ მნიშვნელობაზე დაბრუნება"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1883
+#: krita/kritamenu.action:1907
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
@@ -15987,28 +16003,28 @@ msgstr "მალსა&ხმობების მორგება..."
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1885 krita/kritamenu.action:1886
+#: krita/kritamenu.action:1909 krita/kritamenu.action:1910
 #, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "მალსახმობების მორგება"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
-#: krita/kritamenu.action:1895
+#: krita/kritamenu.action:1919
 #, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "&ფანჯარა"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1906
+#: krita/kritamenu.action:1930
 #, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "დახმარება"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1909
+#: krita/kritamenu.action:1933
 #, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
@@ -16018,14 +16034,14 @@ msgstr "Krita-ის სა&ხელმძღვანელო"
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1911 krita/kritamenu.action:1912
+#: krita/kritamenu.action:1935 krita/kritamenu.action:1936
 #, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
 msgstr "Krita-ის სახელმძღვანელო"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1919
+#: krita/kritamenu.action:1943
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
@@ -16035,14 +16051,14 @@ msgstr "&შეცდომის ანგარიში..."
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1921 krita/kritamenu.action:1922
+#: krita/kritamenu.action:1945 krita/kritamenu.action:1946
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
 msgstr "შეცდომის ანგარიში"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1929
+#: krita/kritamenu.action:1953
 #, kde-format
 msgctxt "action"
 msgid "&About Krita"
@@ -16052,14 +16068,14 @@ msgstr "&Krita-ის შესახებ"
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1931 krita/kritamenu.action:1932
+#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
 #, kde-format
 msgctxt "action"
 msgid "About Krita"
 msgstr "Krita-ის შესახებ"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1939
+#: krita/kritamenu.action:1963
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
@@ -16069,21 +16085,21 @@ msgstr "&KDE-ს შესახებ"
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
-#: krita/kritamenu.action:1941 krita/kritamenu.action:1942
+#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
 msgstr "KDE-ს შესახებ"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1950
+#: krita/kritamenu.action:1974
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
 msgstr "ფუნჯები და სხვა"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1953
+#: krita/kritamenu.action:1977
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
@@ -16093,14 +16109,14 @@ msgstr "&გრადაციები"
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1955 krita/kritamenu.action:1956
+#: krita/kritamenu.action:1979 krita/kritamenu.action:1980
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "გრადაციები"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1963
+#: krita/kritamenu.action:1987
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
@@ -16110,14 +16126,14 @@ msgstr "&შაბლონები"
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1965 krita/kritamenu.action:1966
+#: krita/kritamenu.action:1989 krita/kritamenu.action:1990
 #, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "შაბლონები"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1973
+#: krita/kritamenu.action:1997
 #, kde-format
 msgctxt "action"
 msgid "&Color"
@@ -16127,14 +16143,14 @@ msgstr "&ფერი"
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1975 krita/kritamenu.action:1976
+#: krita/kritamenu.action:1999 krita/kritamenu.action:2000
 #, kde-format
 msgctxt "action"
 msgid "Color"
 msgstr "ფერი"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1983
+#: krita/kritamenu.action:2007
 #, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
@@ -16144,14 +16160,14 @@ msgstr "აირჩიეთ წინა პლანის &ფერი"
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1985 krita/kritamenu.action:1986
+#: krita/kritamenu.action:2009 krita/kritamenu.action:2010
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
 msgstr "აირჩიეთ წინა პლანის ფერი"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1993
+#: krita/kritamenu.action:2017
 #, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
@@ -16161,7 +16177,7 @@ msgstr "აი&რჩიეთ ფონის ფერი"
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1995 krita/kritamenu.action:1996
+#: krita/kritamenu.action:2019 krita/kritamenu.action:2020
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
@@ -16173,8 +16189,8 @@ msgstr "აირჩიეთ ფონის ფერი"
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2003 krita/kritamenu.action:2005
-#: krita/kritamenu.action:2006
+#: krita/kritamenu.action:2027 krita/kritamenu.action:2029
+#: krita/kritamenu.action:2030
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -16186,8 +16202,8 @@ msgstr "ფუნჯის პარამეტრის ჩოჩია 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2013 krita/kritamenu.action:2015
-#: krita/kritamenu.action:2016
+#: krita/kritamenu.action:2037 krita/kritamenu.action:2039
+#: krita/kritamenu.action:2040
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -16199,8 +16215,8 @@ msgstr "ფუნჯის პარამეტრის ჩოჩია 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2023 krita/kritamenu.action:2025
-#: krita/kritamenu.action:2026
+#: krita/kritamenu.action:2047 krita/kritamenu.action:2049
+#: krita/kritamenu.action:2050
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -16212,8 +16228,8 @@ msgstr "ფუნჯის პარამეტრის ჩოჩია 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2033 krita/kritamenu.action:2035
-#: krita/kritamenu.action:2036
+#: krita/kritamenu.action:2057 krita/kritamenu.action:2059
+#: krita/kritamenu.action:2060
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -16225,8 +16241,8 @@ msgstr "ფუნჯის პარამეტრის ჩოჩია 4"
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2043 krita/kritamenu.action:2045
-#: krita/kritamenu.action:2046
+#: krita/kritamenu.action:2067 krita/kritamenu.action:2069
+#: krita/kritamenu.action:2070
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
@@ -16238,22 +16254,22 @@ msgstr "ფუნჯის პარამეტრის ჩოჩია 5"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2053 krita/kritamenu.action:2055
-#: krita/kritamenu.action:2056
+#: krita/kritamenu.action:2077 krita/kritamenu.action:2079
+#: krita/kritamenu.action:2080
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "სარკე"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2087
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "განლაგებები"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2065
+#: krita/kritamenu.action:2089
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -16265,8 +16281,8 @@ msgstr "აირჩიეთ განლაგება"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2072 krita/kritamenu.action:2074
-#: krita/kritamenu.action:2075
+#: krita/kritamenu.action:2096 krita/kritamenu.action:2098
+#: krita/kritamenu.action:2099
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -20448,30 +20464,30 @@ msgid "Character Variant %1"
 msgstr "სიმბოლოს ვარიანტი %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2610
+#: libs/flake/text/KoSvgTextShape.cpp:2640
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "ადგილმჭერი ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2589
+#: libs/flake/text/KoSvgTextShape.cpp:2619
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2591
-#: libs/flake/text/KoSvgTextShape.cpp:2599
+#: libs/flake/text/KoSvgTextShape.cpp:2621
+#: libs/flake/text/KoSvgTextShape.cpp:2629
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG ტექსტის მოხაზულობა"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2597
+#: libs/flake/text/KoSvgTextShape.cpp:2627
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2620
+#: libs/flake/text/KoSvgTextShape.cpp:2650
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -21669,7 +21685,7 @@ msgstr "დამუშავება"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1417
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1435
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22426,8 +22442,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE გამოსახულება"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2114
-#: libs/ui/KisMainWindow.cpp:2193
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2132
+#: libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid "Import frames"
 msgstr "კადრების შემოტანა"
@@ -23776,11 +23792,11 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
 #: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
-#: libs/ui/KisMainWindow.cpp:979 libs/ui/KisMainWindow.cpp:1049
-#: libs/ui/KisMainWindow.cpp:1198 libs/ui/KisMainWindow.cpp:1295
-#: libs/ui/KisMainWindow.cpp:1974 libs/ui/KisMainWindow.cpp:1983
-#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2181
-#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2832
+#: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
+#: libs/ui/KisMainWindow.cpp:1216 libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1992 libs/ui/KisMainWindow.cpp:2001
+#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2199
+#: libs/ui/KisMainWindow.cpp:2218 libs/ui/KisMainWindow.cpp:2850
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24327,7 +24343,7 @@ msgid "Delete resource"
 msgstr "რესურსის წაშლა"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2647
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24782,7 +24798,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "ანიმაციის კადრების რენდერი ჩავარდა! გამოტანილი ფაილები დაუსრულებელია."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2222
+#: libs/ui/KisMainWindow.cpp:2240
 #, kde-format
 msgid "Render Animation"
 msgstr "ანიმაციის რენდერი"
@@ -25797,7 +25813,7 @@ msgid "Master Display:"
 msgstr "მთავარი ეკრანი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#. i18n: ectx: attribute (title), widget (QWidget, Display)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
@@ -25899,7 +25915,7 @@ msgstr "ვიდეო ანიმაციის შემოტანა"
 #. i18n: ectx: attribute (title), widget (QWidget, tabGeneral)
 #. i18n: ectx: property (title), widget (QGroupBox, grpGeneralOptions)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: attribute (title), widget (QWidget, General)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
@@ -26030,7 +26046,7 @@ msgid "Duration:"
 msgstr "ხანგრძლივობა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOptions)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#. i18n: ectx: attribute (title), widget (QWidget, Advanced)
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:250
@@ -26745,7 +26761,7 @@ msgid "Numerical"
 msgstr "რიცხვითი"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1163
+#: libs/ui/KisMainWindow.cpp:1181
 #, kde-format
 msgid "Import Images"
 msgstr "გამოსახულებების შემოტანა"
@@ -26862,7 +26878,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "შეიყვანეთ ახალი სტილის სახელი"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2640
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2658
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -28765,7 +28781,7 @@ msgstr "აბსოლუტური კოლორიმეტრული"
 msgid "Import profile"
 msgstr "პროფილის შემოტანა"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#. i18n: ectx: attribute (title), widget (QWidget, SoftProofing)
 #: libs/ui/forms/wdgcolorsettings.ui:268
 #, kde-format
 msgid "Soft Proofing"
@@ -29001,7 +29017,7 @@ msgstr "გამოყენება &შაბლონად"
 msgid "&Add to Predefined Patterns"
 msgstr "დამატება წინასწარ &აღწერილ ნიმუშებში"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: attribute (title), widget (QWidget, CanvasAcceleration)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
 #, kde-format
 msgid "Canvas Acceleration"
@@ -29108,7 +29124,7 @@ msgstr ""
 msgid "Use texture buffer"
 msgstr "ტექსტურის ბუფერის გამოყენება"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
+#. i18n: ectx: attribute (title), widget (QWidget, HDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:261
 #, kde-format
 msgid "HDR Settings"
@@ -29144,7 +29160,7 @@ msgstr "მიმდინარე გამოტანის ფორმა�
 msgid "Preferred Output Format:"
 msgstr "გამოტანის სასურველი ფორმატი:"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#. i18n: ectx: attribute (title), widget (QWidget, CanvasDecoration)
 #: libs/ui/forms/wdgdisplaysettings.ui:326
 #, kde-format
 msgid "Canvas Decorations"
@@ -29307,7 +29323,6 @@ msgid "Overlay opacity:"
 msgstr "ზედა ფენის გაუმჭვირვალობა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:524
 #: libs/ui/forms/wdggeneralsettings.ui:1260
 #, kde-format
@@ -31135,7 +31150,7 @@ msgstr "მიმდინარე ფუნჯის პრესეტი"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1024
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1042
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -31549,7 +31564,7 @@ msgid ""
 "add the contents of the directory to a bug report.</p></body></html>"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#. i18n: ectx: attribute (title), widget (QWidget, AnimationCache)
 #: libs/ui/forms/wdgperformancesettings.ui:442
 #, kde-format
 msgid "Animation Cache"
@@ -31665,7 +31680,7 @@ msgstr ""
 msgid "Enable background cache generation"
 msgstr "ფონური კეშის გენერაციის ჩართვა"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#. i18n: ectx: attribute (title), widget (QWidget, InstantPreview)
 #: libs/ui/forms/wdgperformancesettings.ui:556
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
@@ -33517,7 +33532,7 @@ msgid "Color Sampler"
 msgstr "ფერების მიქსერი"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:76
+#: libs/ui/kis_selection_actions_panel.cpp:81
 #, kde-format
 msgid "Deselect"
 msgstr "მონიშვნის მოხსნა"
@@ -34355,69 +34370,75 @@ msgstr ""
 "მათ ჯერ ჭდე უნდა დაადოთ და ის ჭდე აქ უნდა მონიშნოთ."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:74
+#: libs/ui/kis_selection_actions_panel.cpp:79
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "ყველაფრის მონიშვნა"
 
-#: libs/ui/kis_selection_actions_panel.cpp:75
+#: libs/ui/kis_selection_actions_panel.cpp:80
 #, kde-format
 msgid "Invert Selection"
 msgstr "მონიშვნის ინვერსია"
 
-#: libs/ui/kis_selection_actions_panel.cpp:77
+#: libs/ui/kis_selection_actions_panel.cpp:82
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "მონიშნულის შევსება ფერით"
 
-#: libs/ui/kis_selection_actions_panel.cpp:78
+#: libs/ui/kis_selection_actions_panel.cpp:83
 #, kde-format
 msgid "Clear Selection"
 msgstr "მონიშნულის გასუფთავება"
 
-#: libs/ui/kis_selection_actions_panel.cpp:79
+#: libs/ui/kis_selection_actions_panel.cpp:84
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "კოპირება ახალ ფენაში"
 
-#: libs/ui/kis_selection_actions_panel.cpp:80
+#: libs/ui/kis_selection_actions_panel.cpp:85
 #, kde-format
 msgid "Crop to Selection"
 msgstr "მონიშნულამდე ამოჭრა"
 
-#: libs/ui/kis_selection_manager.cc:612
+#: libs/ui/kis_selection_actions_panel.cpp:112
+#, fuzzy, kde-format
+#| msgid "Enable Selection Actions Bar"
+msgid "Disable selection actions bar"
+msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
+
+#: libs/ui/kis_selection_manager.cc:638
 #, kde-format
 msgid "Stroked Shapes"
 msgstr "დაშტრიხული მოხაზულობები"
 
-#: libs/ui/kis_selection_manager.cc:614
+#: libs/ui/kis_selection_manager.cc:640
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "მოხაზულობების დაშტრიხვა"
 
-#: libs/ui/kis_selection_manager.cc:732
+#: libs/ui/kis_selection_manager.cc:758
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "გაუმჭვირვალობის მონიშვნა (დამატება)"
 
-#: libs/ui/kis_selection_manager.cc:735
+#: libs/ui/kis_selection_manager.cc:761
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "გაუმჭვირვალობის მონიშვნა (გამოკლება)"
 
-#: libs/ui/kis_selection_manager.cc:738
+#: libs/ui/kis_selection_manager.cc:764
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "გაუმჭვირვალობის მონიშვნა (კვეთა)"
 
-#: libs/ui/kis_selection_manager.cc:741
+#: libs/ui/kis_selection_manager.cc:767
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "გაუმჭვირვალობის მონიშვნა (სიმეტრიული სხვაობა)"
 
-#: libs/ui/kis_selection_manager.cc:744
+#: libs/ui/kis_selection_manager.cc:770
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "გაუმჭვირვალობის მონიშვნა"
@@ -35609,22 +35630,22 @@ msgstr "%1 პანელის ჩვენება"
 msgid "Hide %1 Toolbar"
 msgstr "%1 პანელის დამალვა"
 
-#: libs/ui/KisMainWindow.cpp:1021
+#: libs/ui/KisMainWindow.cpp:1039
 #, kde-format
 msgid "Save as %1"
 msgstr "შენახვა, როგორც %1"
 
-#: libs/ui/KisMainWindow.cpp:1049
+#: libs/ui/KisMainWindow.cpp:1067
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "ფაილი არ არსებობს: %1."
 
-#: libs/ui/KisMainWindow.cpp:1163
+#: libs/ui/KisMainWindow.cpp:1181
 #, kde-format
 msgid "Open Images"
 msgstr "გამოსახულების გახსნა"
 
-#: libs/ui/KisMainWindow.cpp:1296
+#: libs/ui/KisMainWindow.cpp:1314
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35637,29 +35658,29 @@ msgstr ""
 "\n"
 "აირჩიეთ მდებარეობა, სადაც ორიგინალი ფაილის გადაფარვა არ მოხდება!"
 
-#: libs/ui/KisMainWindow.cpp:1352
+#: libs/ui/KisMainWindow.cpp:1370
 #, kde-format
 msgid "Exporting"
 msgstr "გატანა"
 
-#: libs/ui/KisMainWindow.cpp:1352
+#: libs/ui/KisMainWindow.cpp:1370
 #, kde-format
 msgid "Saving As"
 msgstr "შენახვა, როგორც"
 
-#: libs/ui/KisMainWindow.cpp:1943
+#: libs/ui/KisMainWindow.cpp:1961
 #, kde-format
 msgid "Layers/Masks"
 msgstr "ფენები/ნიღბები"
 
-#: libs/ui/KisMainWindow.cpp:1969
+#: libs/ui/KisMainWindow.cpp:1987
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "რესურსების ნაკრები ჩართული არ გაქვთ."
 
-#: libs/ui/KisMainWindow.cpp:1973
+#: libs/ui/KisMainWindow.cpp:1991
 #, kde-format
 msgid ""
 "\n"
@@ -35670,7 +35691,7 @@ msgstr ""
 "ფუნჯის პრესეტები ხელმისაწვდომი არაა. გაგრძელებამდე ჩართეთ პაკეტი, რომელსაც "
 "პრესეტები აქვს.\n"
 
-#: libs/ui/KisMainWindow.cpp:1983
+#: libs/ui/KisMainWindow.cpp:2001
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35681,7 +35702,7 @@ msgstr ""
 "\n"
 "ხელმისაწვდომია, მხოლოდ, თქვენი ლოკალური რესურსები."
 
-#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2218
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35690,40 +35711,40 @@ msgstr ""
 "ანიმაციის შემოტანის დასრულება შეუძლებელია:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2181
+#: libs/ui/KisMainWindow.cpp:2199
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "ახალი დოკუმენტის შექმნა ჩავარდა. ანიმაციის შემოტანა შეწყვეტილია."
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2638
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "სამუშაო სივრცის &შემოტანა..."
 
-#: libs/ui/KisMainWindow.cpp:2635
+#: libs/ui/KisMainWindow.cpp:2653
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&ახალი სამუშაო სივრცე..."
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2657
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "ახალი სამუშაო სივრცე..."
 
-#: libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/KisMainWindow.cpp:2701
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2704
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2873
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35732,19 +35753,19 @@ msgstr ""
 "Krita-ის ფერთა მართვის დამატება LittleCMLS დაყენებული არაა. Krita ახლა "
 "მუშაობას დაასრულებს."
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2889
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "დაყენების შეცდომა"
 
-#: libs/ui/KisMainWindow.cpp:2981
+#: libs/ui/KisMainWindow.cpp:2999
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "თემები"
 
-#: libs/ui/KisMainWindow.cpp:3040
+#: libs/ui/KisMainWindow.cpp:3058
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "გაფართოებადი შემვსები"

@@ -206,7 +206,7 @@ bool testPropertyEnabled(const SvgTextShortcutInfo &info, const QList<KoSvgTextP
         } else if (oldValue.canConvert<KoSvgText::CssFontStyleData>()) {
             const KoSvgText::CssFontStyleData testVal = testValue.value<KoSvgText::CssFontStyleData>();
             const KoSvgText::CssFontStyleData currentVal = oldValue.value<KoSvgText::CssFontStyleData>();
-            return (testVal.style == currentVal.style);
+            return (testVal.style != currentVal.style);
         } else if (oldValue.canConvert<KoSvgText::AutoValue>()) {
             const KoSvgText::AutoValue currentVal = oldValue.value<KoSvgText::AutoValue>();
             if (testValue.canConvert<KoSvgText::AutoValue>()) {

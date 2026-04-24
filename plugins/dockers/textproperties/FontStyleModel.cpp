@@ -102,9 +102,20 @@ QHash<int, KoSvgText::FontFamilyStyleInfo> searchAxisTag(const QString &tag,
     bool shouldNotReturnDefault = ((tag == ITALIC_TAG || tag == SLANT_TAG) && value != defaultVal);
     qreal selectedValue = KoCssTextUtils::cssSelectFontStyleValue(values, value, defaultVal, defaultValUpper, shouldNotReturnDefault);
     for (auto it = styles.begin(); it!= styles.end(); it++) {
-        qreal val = it.value().instanceCoords.value(tag, defaultVal);
-        if (val == selectedValue) {
-            if (shouldNotReturnDefault && val == defaultVal) continue;
+        qreal val = defaultVal;
+        if (it.value().instanceCoords.contains(tag)) {
+            val = it.value().instanceCoords.value(tag, defaultVal);
+        } else {
+            if (it.value().isItalic && tag == ITALIC_TAG) {
+                val = 1.0;
+            }
+            if (it.value().isOblique && it.value().isItalic && tag == SLANT_TAG) {
+                val = -14.0;
+            }
+        }
+
+        if (qFuzzyCompare(val, selectedValue)) {
+            if (shouldNotReturnDefault && qFuzzyCompare(val, defaultVal)) continue;
             filteredStyles.insert(it.key(), it.value());
         }
     }

@@ -117,6 +117,7 @@ CollapsibleGroupProperty {
         if (!fontWeightSpn.dragging) {
             blockSignals = true;
             fontWeight = properties.fontWeight;
+            updateAxisAndStyle();
             blockSignals = false;
         }
     }
@@ -126,6 +127,7 @@ CollapsibleGroupProperty {
             blockSignals = true;
             fontSlant = properties.fontStyle.style;
             fontSlantSlope = properties.fontStyle.value;
+            updateAxisAndStyle();
             blockSignals = false;
         }
     }
@@ -247,6 +249,7 @@ CollapsibleGroupProperty {
         textRole: "display";
         Layout.fillWidth: true;
         Layout.preferredHeight: implicitHeight;
+        Layout.minimumWidth: implicitHeight * 3;
         onActivated: {
             if (!blockSignals) {
                 // Because each change to propertiesModel causes signals to fire,
@@ -265,7 +268,51 @@ CollapsibleGroupProperty {
                 properties.axisValues = axesValues;
             }
         }
-    }}
+
+        }
+        Kis.GroupButton {
+            id: toggleBold;
+            checkable: true;
+            Layout.preferredHeight: styleCmb.height;
+            Layout.preferredWidth: height;
+            icon.source: "qrc:///16_light_format-text-bold.svg";
+            icon.height: 16;
+            icon.width: 16;
+            icon.color: palette.buttonText;
+            display: AbstractButton.IconOnly;
+            text: i18n("Bold");
+            checked: fontWeight >= 700;
+            onClicked: {
+                if (fontWeight >= 700) {
+                    fontWeight = 400;
+                } else {
+                    fontWeight = 700;
+                }
+            }
+        }
+
+        Kis.GroupButton {
+            id: toggleItalic;
+            checkable: true;
+            Layout.preferredHeight: styleCmb.height;
+            Layout.preferredWidth: height;
+            icon.source: "qrc:///16_light_format-text-italic.svg";
+            icon.height: 16;
+            icon.width: 16;
+            icon.color: palette.buttonText;
+            display: AbstractButton.IconOnly;
+            text: i18n("Italic");
+            checked: fontSlant != CssFontStyleModel.StyleNormal;
+            onClicked: {
+                if (fontSlant == CssFontStyleModel.StyleNormal) {
+                    fontSlant = CssFontStyleModel.StyleItalic;
+                } else {
+                    fontSlant = CssFontStyleModel.StyleNormal;
+                }
+            }
+        }
+
+    }
 
     contentItem: GridLayout {
         id: mainLayout;

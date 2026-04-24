@@ -485,9 +485,11 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
 
                     const qreal dot = KisAlgebra2D::dotProduct(miter, normal);
 
-                    if (KisAlgebra2D::norm((miter * halfWidth) / dot) < miterLimit) {
-                        c1 = p1 + ((miter * -halfWidth) / dot);
-                        c2 = p1 + ((miter * halfWidth) / dot);
+                    const qreal dotMulti = dot != 0? 1.0/dot: 0.0;
+
+                    if (KisAlgebra2D::norm((miter * halfWidth) * dotMulti) < miterLimit) {
+                        c1 = p1 + ((miter * -halfWidth) * dotMulti);
+                        c2 = p1 + ((miter * halfWidth) * dotMulti);
                     }
                 }
 
@@ -499,10 +501,11 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                         KisAlgebra2D::normalize(
                             normal + KisAlgebra2D::normalize(QPointF(-pNext.y(), pNext.x())));
                     const qreal dot = KisAlgebra2D::dotProduct(miter, normal);
+                    const qreal dotMulti = dot != 0? 1.0/dot: 0.0;
 
-                    if (KisAlgebra2D::norm((miter * halfWidth) / dot) < miterLimit) {
-                        c3 = p2 + ((miter * -halfWidth) / dot);
-                        c4 = p2 + (miter * halfWidth) / dot;
+                    if (KisAlgebra2D::norm((miter * halfWidth) * dotMulti) < miterLimit) {
+                        c3 = p2 + ((miter * -halfWidth) * dotMulti);
+                        c4 = p2 + (miter * halfWidth) * dotMulti;
                     }
                 }
 

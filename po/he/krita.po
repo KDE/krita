@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 02:40+0000\n"
-"PO-Revision-Date: 2026-04-23 09:02+0300\n"
+"POT-Creation-Date: 2026-04-25 02:43+0000\n"
+"PO-Revision-Date: 2026-04-24 19:56+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -18090,7 +18090,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Sogdian"
-msgstr ""
+msgstr "סוגדיאנית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:235
 #, kde-format
@@ -18294,7 +18294,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "בהיקסוקי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
 #, fuzzy, kde-format
@@ -18872,7 +18872,7 @@ msgstr "חלופה"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr ""
+msgstr "החלפת גליפים כתלות בהקשר שלהם בטקסט."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, fuzzy, kde-format
@@ -18887,7 +18887,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
-msgstr ""
+msgstr "החלפת רצפים של גליפים בליגטורות כתלות בהקשר שלהם בטקסט."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, fuzzy, kde-format
@@ -18900,7 +18900,7 @@ msgstr "זוויות:"
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
-msgstr ""
+msgstr "החלפת גליפים בגליפים עם גליפים עם סוואשים כתלות בהקשר שלהם בטקסט."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, fuzzy, kde-format
@@ -18913,7 +18913,7 @@ msgstr "&בוחר צבעים"
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
-msgstr ""
+msgstr "החלפת רצפים של גליפים בליגטורות שמיועדות לאפקט טיפוגרפי."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, fuzzy, kde-format
@@ -18960,7 +18960,7 @@ msgstr "קווים אנכיים"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
-msgstr ""
+msgstr "החלפת גליפים בחלופות שלהם באופן ייעודי ליישור."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
 #, fuzzy, kde-format
@@ -18972,7 +18972,7 @@ msgstr "כלי &עט"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr ""
+msgstr "החלפת רצפים של גליפים עם ליגטורות נפוצות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, fuzzy, kde-format
@@ -18984,7 +18984,7 @@ msgstr "&תמונה"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the left side."
-msgstr ""
+msgstr "כוונון הגליפים כך שאין יותר רווח משמאל."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
 #, fuzzy, kde-format
@@ -18996,7 +18996,7 @@ msgstr "ה&סר שכבה"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
-msgstr ""
+msgstr "החלפת הגליפים בגרסאות נקודתיות לשפה."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
 #, kde-format
@@ -19011,6 +19011,7 @@ msgid ""
 "Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
 "Krita."
 msgstr ""
+"כוונון הגליפים כך שהם ייושרו לפי הגבולות האופטיים שלהם. לא תקף ב־Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
 #, kde-format
@@ -19022,7 +19023,7 @@ msgstr "קישוטים"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ornaments for decorative purposes."
-msgstr ""
+msgstr "החלפת גליפים עם עיטורים למטרות עיצוביות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
 #, kde-format
@@ -19034,7 +19035,7 @@ msgstr "אקראיות"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with random alternates."
-msgstr ""
+msgstr "החלפת גליפים עם חלופות אקראיות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
 #, fuzzy, kde-format
@@ -19046,7 +19047,7 @@ msgstr "&תמונה"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the right side."
-msgstr ""
+msgstr "כוונון הגליפים כך שאין יותר רווח מימין."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
 #, kde-format
@@ -19060,25 +19061,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with stylistic alternates that do not fit in other "
 "categories."
-msgstr ""
+msgstr "החלפת גליפים עם חלופות מסוגננות שלא עונות על אף קטגוריה אחרת."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr ""
+msgstr "סוואש"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr ""
+msgstr "החלפת גליפים בחלופות עם סוואש."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
 #, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr ""
+msgstr "הרכבת/פירוק גליפים"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
 #, kde-format
@@ -19087,6 +19088,8 @@ msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
+"הרכבה או פירוק של גרפמה כך שאפשר יהיה להרכיב מחדש את הגליף שמתקבל. בדרך כלל "
+"משמש לטיפול בסימנים מבחינים/ניקוד."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
 #, kde-format
@@ -19098,7 +19101,7 @@ msgstr "ריווח"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls kerning on the font."
-msgstr ""
+msgstr "שליטה בריווח הפנימי בגופן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
@@ -19114,6 +19117,7 @@ msgid ""
 "This controls the positioning of mark glyphs on base glyphs. Commonly used "
 "for diacritics."
 msgstr ""
+"שליטה בהצבת גליפים לסימון על גליפים של בסיס. בדרך כלל משמש לסימנים מבחינים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
 #, kde-format
@@ -19122,6 +19126,8 @@ msgid ""
 "This controls the positioning of mark glyphs onto other mark glyphs. "
 "Commonly used for diacritics."
 msgstr ""
+"שליטה בהצבת גליפים לסימון על גליפים אחרים לסימון. בדרך כלל משמש לסימנים "
+"מבחינים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
 #, fuzzy, kde-format
@@ -19135,7 +19141,7 @@ msgstr "חלופה"
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
-msgstr ""
+msgstr "החלפת גליפים לפי הקשר עם חלופות, נחוץ כדי שהגופן יעבוד."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
@@ -19147,7 +19153,7 @@ msgstr "ליגטורות נחוצות"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs with required ligatures."
-msgstr ""
+msgstr "החלפת רצפים של גליפים עם הליגטורות הנחוצות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
 #, fuzzy, kde-format
@@ -19162,7 +19168,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in a variable font with ones suited for the current "
 "variation."
-msgstr ""
+msgstr "החלפת גליפים בגופן משתנה בכאלו שמתאימים להגוון הנוכחי."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
 #, kde-format
@@ -19176,7 +19182,7 @@ msgctxt "@tooltip"
 msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
-msgstr ""
+msgstr "ציון כמה הגופן מתאים לגודל הנוכחי שלו. לא תקף ב־Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
 #, kde-format
@@ -19188,7 +19194,7 @@ msgstr "ריווח אנכי"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls vertical kerning on the font."
-msgstr ""
+msgstr "שליטה בריווח פנימי אנכי של הגופן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
 #, fuzzy, kde-format
@@ -19200,7 +19206,7 @@ msgstr "כלי ציור"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
-msgstr ""
+msgstr "החלפת ספרות שמופרדות בלוכסן בצורת שברים אלכסוניים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
 #, fuzzy, kde-format
@@ -19214,7 +19220,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces figures with forms that are suited to represent the denominator in "
 "a fraction."
-msgstr ""
+msgstr "החלפת ספרות בצורות שמותאמות לייצוג מכנה בשבר."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:145
 #, fuzzy, kde-format
@@ -19229,6 +19235,8 @@ msgid ""
 "Replaces dotted letters such as i and j with dotless forms, for use in "
 "mathematical formula."
 msgstr ""
+"החלפת אותיות עם נקודות עיליות כמו i ו־j בצורות ללא נקודה, לשימוש בנוסחאות "
+"מתמטיות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
 #, fuzzy, kde-format
@@ -45202,7 +45210,7 @@ msgid "Unicode-Bidi"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
-#: plugins/dockers/textproperties/qml/FontStyle.qml:339
+#: plugins/dockers/textproperties/qml/FontStyle.qml:386
 #: plugins/dockers/textproperties/qml/LineBreak.qml:81
 #: plugins/dockers/textproperties/qml/OTCaps.qml:77
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:100
@@ -45427,61 +45435,93 @@ msgid ""
 "weight, bold, optical-size, variation"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:284
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:283
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
+#, kde-format
+msgid "Bold"
+msgstr "מודגש"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:304
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
+#, kde-format
+msgid "Italic"
+msgstr "נטוי"
+
+#: plugins/dockers/textproperties/qml/FontStyle.qml:331
 #, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
 msgstr "משקל: "
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:302
+#: plugins/dockers/textproperties/qml/FontStyle.qml:349
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:315
+#: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, kde-format
 msgctxt "@label:slider"
 msgid "Width: "
 msgstr "רוחב: "
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:328
+#: plugins/dockers/textproperties/qml/FontStyle.qml:375
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:340
+#: plugins/dockers/textproperties/qml/FontStyle.qml:387
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr "נטוי"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:341
+#: plugins/dockers/textproperties/qml/FontStyle.qml:388
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oblique"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:362
+#: plugins/dockers/textproperties/qml/FontStyle.qml:409
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr "°"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:393
+#: plugins/dockers/textproperties/qml/FontStyle.qml:440
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:408
+#: plugins/dockers/textproperties/qml/FontStyle.qml:455
 #, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
 msgstr "גודל אופטי"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:432
+#: plugins/dockers/textproperties/qml/FontStyle.qml:479
 #, kde-format
 msgid "No extra variable axes in this font"
 msgstr ""
@@ -60765,36 +60805,6 @@ msgstr "הסרת יוצר/ת"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
 msgstr "להשתמש בגופן"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
-#, kde-format
-msgid "Bold"
-msgstr "מודגש"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
-#, kde-format
-msgid "Italic"
-msgstr "נטוי"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"

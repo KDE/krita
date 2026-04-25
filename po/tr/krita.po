@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 02:40+0000\n"
-"PO-Revision-Date: 2026-04-20 18:24+0300\n"
+"POT-Creation-Date: 2026-04-25 02:43+0000\n"
+"PO-Revision-Date: 2026-04-24 16:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -46085,7 +46085,7 @@ msgid "Unicode-Bidi"
 msgstr "Unicode-Bidi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
-#: plugins/dockers/textproperties/qml/FontStyle.qml:339
+#: plugins/dockers/textproperties/qml/FontStyle.qml:386
 #: plugins/dockers/textproperties/qml/LineBreak.qml:81
 #: plugins/dockers/textproperties/qml/OTCaps.qml:77
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:100
@@ -46327,61 +46327,93 @@ msgstr ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:284
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:283
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
+#, kde-format
+msgid "Bold"
+msgstr "Kalın"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:304
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
+#, kde-format
+msgid "Italic"
+msgstr "Yatık"
+
+#: plugins/dockers/textproperties/qml/FontStyle.qml:331
 #, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
 msgstr "Ağırlık: "
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:302
+#: plugins/dockers/textproperties/qml/FontStyle.qml:349
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
 msgstr "Kalını sentezle"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:315
+#: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, kde-format
 msgctxt "@label:slider"
 msgid "Width: "
 msgstr "Genişlik: "
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:328
+#: plugins/dockers/textproperties/qml/FontStyle.qml:375
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
 msgstr "Eğilim:"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:340
+#: plugins/dockers/textproperties/qml/FontStyle.qml:387
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr "Yatık"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:341
+#: plugins/dockers/textproperties/qml/FontStyle.qml:388
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oblique"
 msgstr "Eğik"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:362
+#: plugins/dockers/textproperties/qml/FontStyle.qml:409
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr "°"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:393
+#: plugins/dockers/textproperties/qml/FontStyle.qml:440
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
 msgstr "Eğilimi sentezle"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:408
+#: plugins/dockers/textproperties/qml/FontStyle.qml:455
 #, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
 msgstr "Optik büyüklük"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:432
+#: plugins/dockers/textproperties/qml/FontStyle.qml:479
 #, kde-format
 msgid "No extra variable axes in this font"
 msgstr "Bu yazıtipinde ek değişken eksen yok"
@@ -47330,7 +47362,7 @@ msgstr "Asla gösterme"
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Rendering"
-msgstr "Metin Sunumu"
+msgstr "Metin Sunması"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, kde-format
@@ -47338,7 +47370,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
 msgstr ""
-"Metin sunumu, özellik için olan düzgünleştirmeyi ve sunum biçemini denetler."
+"Metin sunması, özellik için olan piksel hizalamasını ve sunma biçemini "
+"denetler."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -47355,7 +47388,7 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
-"Geometrik kesinlik ile aynıdır; düzgünleştirme kullanmaz ve içsel "
+"Geometrik kesinlik ile aynıdır; piksel hizalaması kullanmaz ve içsel "
 "biteşlemleri yüklemekten kaçınır."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
@@ -47380,7 +47413,7 @@ msgstr "Okunurluğu eniyile"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
-msgstr "Yatayda “night”, dikeyde “full” düzgünleştirme (hinting) kullanır."
+msgstr "Yatayda “light”, dikeyde “full” piksel hizalaması (hinting) kullanır."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
@@ -47394,7 +47427,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
 msgstr ""
-"Düzgünleştirme kullanmaz ve eğer yazıtipinde yol olmadığı sürece biteşlem "
+"Piksel hizalaması kullanmaz ve eğer yazıtipinde yol olmadığı sürece biteşlem "
 "vuruşlarını yüklemekten kaçınır."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
@@ -62336,36 +62369,6 @@ msgstr "Çizeri Kaldır"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
 msgstr "Yazıtipi kullan"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
-#, kde-format
-msgid "Bold"
-msgstr "Kalın"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
-#, kde-format
-msgid "Italic"
-msgstr "Yatık"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"

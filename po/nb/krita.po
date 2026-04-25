@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 02:40+0000\n"
+"POT-Creation-Date: 2026-04-25 02:43+0000\n"
 "PO-Revision-Date: 2024-03-09 12:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -44847,7 +44847,7 @@ msgid "Unicode-Bidi"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
-#: plugins/dockers/textproperties/qml/FontStyle.qml:339
+#: plugins/dockers/textproperties/qml/FontStyle.qml:386
 #: plugins/dockers/textproperties/qml/LineBreak.qml:81
 #: plugins/dockers/textproperties/qml/OTCaps.qml:77
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:100
@@ -45070,61 +45070,93 @@ msgid ""
 "weight, bold, optical-size, variation"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:284
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:283
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
+#, kde-format
+msgid "Bold"
+msgstr "Halvfet"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:304
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
+#, kde-format
+msgid "Italic"
+msgstr "Kursiv"
+
+#: plugins/dockers/textproperties/qml/FontStyle.qml:331
 #, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:302
+#: plugins/dockers/textproperties/qml/FontStyle.qml:349
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:315
+#: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, kde-format
 msgctxt "@label:slider"
 msgid "Width: "
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:328
+#: plugins/dockers/textproperties/qml/FontStyle.qml:375
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:340
+#: plugins/dockers/textproperties/qml/FontStyle.qml:387
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:341
+#: plugins/dockers/textproperties/qml/FontStyle.qml:388
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oblique"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:362
+#: plugins/dockers/textproperties/qml/FontStyle.qml:409
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:393
+#: plugins/dockers/textproperties/qml/FontStyle.qml:440
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:408
+#: plugins/dockers/textproperties/qml/FontStyle.qml:455
 #, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:432
+#: plugins/dockers/textproperties/qml/FontStyle.qml:479
 #, kde-format
 msgid "No extra variable axes in this font"
 msgstr ""
@@ -60430,36 +60462,6 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
-#, kde-format
-msgid "Bold"
-msgstr "Halvfet"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
-#, kde-format
-msgid "Italic"
-msgstr "Kursiv"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"

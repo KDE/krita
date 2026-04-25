@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-24 02:40+0000\n"
+"POT-Creation-Date: 2026-04-25 02:43+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -45576,7 +45576,7 @@ msgid "Unicode-Bidi"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
-#: plugins/dockers/textproperties/qml/FontStyle.qml:339
+#: plugins/dockers/textproperties/qml/FontStyle.qml:386
 #: plugins/dockers/textproperties/qml/LineBreak.qml:81
 #: plugins/dockers/textproperties/qml/OTCaps.qml:77
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:100
@@ -45802,63 +45802,95 @@ msgid ""
 "weight, bold, optical-size, variation"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:284
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:283
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
+#, fuzzy, kde-format
+msgid "Bold"
+msgstr "Đậm"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
+#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
+#: plugins/dockers/textproperties/qml/FontStyle.qml:304
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
+#, fuzzy, kde-format
+msgid "Italic"
+msgstr "Nghiêng"
+
+#: plugins/dockers/textproperties/qml/FontStyle.qml:331
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgctxt "@label:slider"
 msgid "Weight: "
 msgstr "Chiều cao:"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:302
+#: plugins/dockers/textproperties/qml/FontStyle.qml:349
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:315
+#: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Width: "
 msgstr "Chiều rộng:"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:328
+#: plugins/dockers/textproperties/qml/FontStyle.qml:375
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:340
+#: plugins/dockers/textproperties/qml/FontStyle.qml:387
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr "Nghiêng"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:341
+#: plugins/dockers/textproperties/qml/FontStyle.qml:388
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oblique"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:362
+#: plugins/dockers/textproperties/qml/FontStyle.qml:409
 #, fuzzy, kde-format
 #| msgid "°"
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr "°"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:393
+#: plugins/dockers/textproperties/qml/FontStyle.qml:440
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:408
+#: plugins/dockers/textproperties/qml/FontStyle.qml:455
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
 msgstr "Kênh"
 
-#: plugins/dockers/textproperties/qml/FontStyle.qml:432
+#: plugins/dockers/textproperties/qml/FontStyle.qml:479
 #, kde-format
 msgid "No extra variable axes in this font"
 msgstr ""
@@ -61431,36 +61463,6 @@ msgstr "Xoá đường con"
 #, fuzzy
 msgid "Use font"
 msgstr "Text đã &chọn"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
-#, fuzzy, kde-format
-msgid "Bold"
-msgstr "Đậm"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicKeyword)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicElement)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
-#. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
-#, fuzzy, kde-format
-msgid "Italic"
-msgstr "Nghiêng"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 #, fuzzy

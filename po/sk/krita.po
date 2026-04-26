@@ -15595,19 +15595,17 @@ msgstr "Vyhladiť"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
-msgstr "Akcie výberu"
+msgstr "Povoliť panel akcií výberu"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Configure sections"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Nastaviť sekcie"
+msgstr "Nastaviť panel akcií výberu"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -34730,10 +34728,9 @@ msgid "Crop to Selection"
 msgstr "Orezať výbery"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "Akcie výberu"
+msgstr "Zakázať panel akcií výberu"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-21 07:17+0200\n"
+"PO-Revision-Date: 2026-04-24 08:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -15722,19 +15722,17 @@ msgstr "Lissage"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "Activer la barre d'actions de sélection"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Configure sections"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Configurer les sections"
+msgstr "Configurer la barre d'actions de sélection"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -35100,10 +35098,9 @@ msgid "Crop to Selection"
 msgstr "Rogner vers la sélection"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "Activer la barre d'actions de sélection"
+msgstr "Désactiver la barre d'actions de sélection"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format

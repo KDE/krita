@@ -100,6 +100,7 @@ void TestResourceCacheDb::testMetaData()
 
 void TestResourceCacheDb::cleanupTestCase()
 {
+    QSqlDatabase::database().close();
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
     Q_ASSERT(res);

@@ -23,6 +23,7 @@
 #include <KoWritingSystemUtils.h>
 
 #include "KoViewConverter.h"
+#include "kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_painting_tweaks.h"
 #include "KoCanvasController.h"
@@ -31,6 +32,7 @@
 #include <KisHandlePainterHelper.h>
 #include <kis_acyclic_signal_connector.h>
 
+#include "kis_processing_applicator.h"
 #include "kundo2command.h"
 #include <QTimer>
 #include <QDebug>
@@ -172,10 +174,14 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
 
         ~InputQueryUpdateBlocker()
         {
+            unlock();
+        }
+
+        void unlock() {
             if (m_d) {
                 QInputMethod *inputMethod = QGuiApplication::inputMethod();
 
-                if (m_unblockQueryUpdates) {
+                if (m_unblockQueryUpdates && m_d->blockQueryUpdates) {
                     m_d->blockQueryUpdates = false;
                     inputMethod->update(Qt::ImQueryInput | Qt::ImPreferredLanguage);
                 }
@@ -248,6 +254,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QList<QAction*> actions;
 
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
+
+    int inputMethodReentryCounter = 0;
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
@@ -945,9 +953,11 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int de
     }
 }
 
+#include <QScopedValueRollback>
 QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
 {
     dbgTools << "receiving inputmethod query" << query << argument;
+
 
     // Because we set the input item transform to be shape->document->view->widget->window,
     // the coordinates here should be in shape coordinates.
@@ -1066,6 +1076,8 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query, QVariant ar
             const QString lang = d->shape->propertiesForPos(d->pos, true).propertyOrDefault(KoSvgTextProperties::TextLanguage).toString();
             if (!lang.isEmpty()) {
                 return KoWritingSystemUtils::localeFromBcp47Locale(KoWritingSystemUtils::parseBcp47Locale(lang));
+            } else {
+                return QLocale(KLocalizedString::languages().value(0));
             }
         }
         break;
@@ -1098,12 +1110,21 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     dbgTools << "Commit:"<< event->commitString() << "predit:"<< event->preeditString();
     dbgTools << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
+    /*
+    QScopedValueRollback<int> lock(d->inputMethodReentryCounter, d->inputMethodReentryCounter + 1);
+
+    KIS_ASSERT(d->inputMethodReentryCounter <= 1);
+*/
+    stopBlinkCursor();
+
     QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
     SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
     Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
 
     bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
                 || event->replacementLength() > 0;
+
+    bool undidPreedit = false;
 
     // Remove previous preedit string.
     if (d->preEditCommand) {
@@ -1112,37 +1133,50 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         d->preEditStart = -1;
         d->preEditLength = -1;
         updateRect |= d->shape? d->shape->boundingRect(): QRectF();
+        undidPreedit = true;
     }
 
     if (!d->shape || !isGettingInput) {
         blocker.unlock();
-        d->canvas->shapeManager()->update(updateRect);
+        if (undidPreedit) {
+            d->canvas->shapeManager()->update(updateRect);
+        }
         event->ignore();
         return;
     }
 
     // remove the selection if any.
-    addCommandToUndoAdapter(removeSelectionImpl(false));
+    KUndo2Command *parentCmd = new KUndo2Command();
+    removeSelectionImpl(false, parentCmd);
 
     // set the text insertion pos to replacement start and also remove replacement length, if any.
     int originalPos = d->pos;
     int index = d->shape->indexForPos(d->pos) + event->replacementStart();
     d->pos = d->shape->posForIndex(index);
+
+
     if (event->replacementLength() > 0) {
         SvgTextRemoveCommand *cmd = new SvgTextRemoveCommand(d->shape,
                                                              index + event->replacementLength(),
                                                              originalPos,
                                                              d->anchor,
                                                              event->replacementLength(),
-                                                             false);
-        addCommandToUndoAdapter(cmd);
+                                                             false, parentCmd);
+        parentCmd->setText(cmd->text());
     }
 
     // add the commit string, if any.
+
     if (!event->commitString().isEmpty()) {
-        qDebug() << "adding commit string" << d->pos << event->commitString();
-        insertText(event->commitString());
-        qDebug() << "after" << d->pos;
+        //qDebug() << "adding commit string" << d->pos << event->commitString();
+        SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, event->commitString(), parentCmd);
+        parentCmd->setText(insertCmd->text());
+        //qDebug() << "after" << d->pos;
+    }
+
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(d->canvas);
+    if (canvas2 && parentCmd->childCount() > 0) {
+        KisProcessingApplicator::runSingleCommandStroke(canvas2->image(), parentCmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
     }
 
     // set the selection...
@@ -1287,14 +1321,17 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     }
 
     blocker.unlock();
+    inputQueryUpdateBlocker.unlock();
     updateRect |= d->shape->boundingRect();
     // TODO: replace with KoShapeBulkActionLock
     d->shape->updateAbsolute(updateRect);
+
     d->styleMap = styleMap;
+
     updateIMEDecoration();
     updateSelection();
     updateCursor();
-    qDebug() << Q_FUNC_INFO << event->commitString() << "accepted";
+    //qDebug() << Q_FUNC_INFO << event->commitString() << "accepted";
     event->accept();
 }
 
@@ -1431,8 +1468,10 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
 
 void SvgTextCursor::notifyMarkupChanged()
 {
-    d->interface->emitSelectionChange();
-    d->interface->emitCharacterSelectionChange();
+    if (!d->blockQueryUpdates) {
+        d->interface->emitSelectionChange();
+        d->interface->emitCharacterSelectionChange();
+    }
     updateCursor();
     updateSelection();
     updateTypeSettingDecoration();
@@ -1752,8 +1791,9 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
 
     if (!d->blockQueryUpdates) {
         qApp->inputMethod()->update(Qt::ImQueryInput);
+        d->interface->emitCharacterSelectionChange();
     }
-    d->interface->emitCharacterSelectionChange();
+
     if (!(d->canvas->canvasWidget() && d->canvas->canvasController())) {
         // Mockcanvas in the tests has neither.
         return;
@@ -1762,7 +1802,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
         QRectF rect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
         d->canvas->canvasController()->ensureVisibleDoc(rect, false);
     }
-    if (d->canvas->canvasWidget()->hasFocus()) {
+    if (d->canvas->canvasWidget()->hasFocus() && !d->blockQueryUpdates) {
         d->cursorFlash.start();
         d->cursorFlashLimit.start();
         d->cursorVisible = false;

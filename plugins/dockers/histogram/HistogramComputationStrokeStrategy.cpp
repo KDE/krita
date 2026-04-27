@@ -109,7 +109,7 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
     }
     m_d->maximumValue = maximum;
 
-    const float maximumMultiplier = 255.0/maximum;
+    const double maximumMultiplier = 255.0/maximum;
 
 
     KisSequentialConstIterator it(m_dev, calculate);
@@ -124,7 +124,7 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
             if (--toSkip == 0) {
 
                 for (int chan = 0; chan < (int)channelCount; ++chan) {
-                    m_d->results[d_pd->jobId][chan][ qRound(channelValues.at(chan)*maximumMultiplier) ]++;
+                    m_d->results[d_pd->jobId][chan][ qBound(0, qRound(channelValues.at(chan)*maximumMultiplier), 255) ]++;
                 }
                 toSkip = nSkip;
             }

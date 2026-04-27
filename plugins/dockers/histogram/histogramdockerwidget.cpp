@@ -35,6 +35,7 @@ void HistogramDockerWidget::receiveNewHistogram(HistogramData data)
 {
     m_histogramData = data.bins;
     m_colorSpace = data.colorSpace;
+    m_maximumValue = data.maximumValue;
     update();
 }
 
@@ -71,11 +72,35 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         painter.fillRect(0, 0, this->width(), this->height(), this->palette().dark().color());
         painter.setPen(this->palette().light().color());
 
+        painter.save();
+
+        if (m_maximumValue > 1.0) {
+            const int pos = this->width() / (m_maximumValue);
+            painter.save();
+            QPen p(Qt::DashLine);
+            p.setColor(this->palette().light().color());
+            painter.setPen(p);
+
+            painter.drawLine(pos, 0, pos, this->height());
+            painter.restore();
+            painter.setOpacity(0.5);
+        }
+
+        float gridValue = 0.25;
+        float gridWidthLength = 0;
+        while(gridWidthLength < 5) {
+            gridWidthLength = this->width() / (m_maximumValue / gridValue);
+            gridValue *= 2;
+        }
+        for (float i = 0; i < float(this->width()); i+=gridWidthLength) {
+            painter.drawLine(qRound(i), 0, qRound(i), this->height());
+        }
         const int NGRID = 4;
         for (int i = 0; i <= NGRID; ++i) {
-            painter.drawLine(this->width()*i / NGRID, 0., this->width()*i / NGRID, this->height());
             painter.drawLine(0., this->height()*i / NGRID, this->width(), this->height()*i / NGRID);
         }
+
+        painter.restore();
 
         unsigned int nChannels = cs->channelCount();
         const QList<KoChannelInfo *> channels = cs->channels();

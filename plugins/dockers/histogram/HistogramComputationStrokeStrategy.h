@@ -19,6 +19,7 @@ struct HistogramData
 {
     HistVector bins;
     const KoColorSpace* colorSpace {0};
+    float maximumValue {1.0};
 };
 Q_DECLARE_METATYPE(HistogramData)
 

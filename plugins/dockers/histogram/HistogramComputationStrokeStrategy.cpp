@@ -30,6 +30,7 @@ struct HistogramComputationStrokeStrategy::Private
 
     KisImageSP image;
     std::vector<HistVector> results;
+    float maximumValue;
 };
 
 
@@ -88,6 +89,29 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
 
     quint32 toSkip = nSkip;
 
+    float maximum = 1.0;
+    QVector<float> channelValues(channelCount);
+    if (cs->hasHighDynamicRange()) {
+        KisSequentialConstIterator it(m_dev, calculate);
+
+        int numConseqPixels = it.nConseqPixels();
+        while (it.nextPixels(numConseqPixels)) {
+            numConseqPixels = it.nConseqPixels();
+            const quint8* pixel = it.rawDataConst();
+            for (int k = 0; k < numConseqPixels; ++k) {
+                cs->normalisedChannelsValue(pixel, channelValues);
+                for (int chan = 0; chan < (int)channelCount; ++chan) {
+                    maximum = qMax(maximum, channelValues.at(chan));
+                }
+                pixel += pixelSize;
+            }
+        }
+    }
+    m_d->maximumValue = maximum;
+
+    const float maximumMultiplier = 255.0/maximum;
+
+
     KisSequentialConstIterator it(m_dev, calculate);
 
     int numConseqPixels = it.nConseqPixels();
@@ -96,9 +120,11 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
         numConseqPixels = it.nConseqPixels();
         const quint8* pixel = it.rawDataConst();
         for (int k = 0; k < numConseqPixels; ++k) {
+            cs->normalisedChannelsValue(pixel, channelValues);
             if (--toSkip == 0) {
+
                 for (int chan = 0; chan < (int)channelCount; ++chan) {
-                    m_d->results[d_pd->jobId][chan][cs->scaleToU8(pixel, chan)]++;
+                    m_d->results[d_pd->jobId][chan][ qRound(channelValues.at(chan)*maximumMultiplier) ]++;
                 }
                 toSkip = nSkip;
             }
@@ -111,6 +137,7 @@ void HistogramComputationStrokeStrategy::finishStrokeCallback()
 {
     HistogramData hisData;
     hisData.colorSpace = m_d->image->projection()->colorSpace();
+    hisData.maximumValue = m_d->maximumValue;
 
     if (m_d->results.size() == 1) {
         hisData.bins = m_d->results[0];

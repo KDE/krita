@@ -37,6 +37,7 @@ private:
     HistVector m_histogramData;
     const KoColorSpace* m_colorSpace {0};
     bool m_smoothHistogram {false};
+    float m_maximumValue {1.0};
 };
 
 #endif // HISTOGRAMDOCKERWIDGET_H

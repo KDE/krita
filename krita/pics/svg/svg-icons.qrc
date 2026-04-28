@@ -4,6 +4,10 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>light_python_plugin_from_file.svg</file>
+        <file>dark_python_plugin_from_file.svg</file>
+        <file>dark_python_plugin_from_web.svg</file>
+        <file>light_python_plugin_from_web.svg</file>
         <file>broken-preset.svg</file>
         <file>dark_activate-next-layer.svg</file>
         <file>dark_activate-previous-layer.svg</file>

@@ -1,0 +1,38 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M11.5 11.9999V13.4999C11.5 13.8478 11.3011 14.1663 10.9697 14.4208C10.989 14.2832 11 14.1428 11 13.9999C11 13.2302 10.7082 12.5304 10.2314 11.9999H11.5ZM8.3418 8.75281L10.9102 10.9999H8.96289C8.81088 9.93725 8.18082 9.03043 7.29883 8.49988H8.05273L8.3418 8.75281ZM8.5 0.999878C9.88064 0.999878 10.9999 1.67151 11 2.49988V4.92078L8.3418 7.24695L8.05273 7.49988H7C6.38308 7.49988 5.8098 7.68645 5.33301 8.00574C4.00653 8.06805 2.87238 8.86653 2.33398 10.0038C2.05667 10.0167 1.78802 10.0628 1.53125 10.1366C1.19155 9.71391 1 9.15485 1 8.49988V7.49988C1.00005 5.99995 2.00004 4.99988 3.5 4.99988H7.5C7.77614 4.99988 8 4.77602 8 4.49988C7.99993 4.22379 7.7761 3.99988 7.5 3.99988H4.5V2.49988C4.50011 1.67151 5.61936 0.999878 7 0.999878H8.5ZM6.5 1.87488C6.15486 1.87488 5.87507 2.15476 5.875 2.49988C5.875 2.84506 6.15482 3.12488 6.5 3.12488C6.84518 3.12488 7.125 2.84506 7.125 2.49988C7.12493 2.15476 6.84514 1.87488 6.5 1.87488Z" fill="#373737"/>
+<path d="M16 7V9H13V11.5L9 8L13 4.5V7H16Z" fill="#373737"/>
+<path d="M2.5 16C1.11929 16 0 14.8807 0 13.5C0 12.1193 1.11929 11 2.5 11C3.31787 11 4.04401 11.3927 4.50012 11.9999L5.2998 11.3994C4.83881 10.7857 4.17815 10.3285 3.41406 10.1221C3.86154 9.44603 4.62857 9 5.5 9C6.88071 9 8 10.1193 8 11.5C8 11.6715 7.98274 11.8389 7.94987 12.0006C7.96653 12.0002 7.98324 12 8 12C9.10457 12 10 12.8954 10 14C10 15.1046 9.10457 16 8 16H2.5Z" fill="#373737"/>
+</svg>

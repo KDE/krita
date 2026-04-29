@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-24 19:56+0300\n"
+"PO-Revision-Date: 2026-04-25 11:07+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -19248,7 +19248,7 @@ msgstr "שכפל תמונה"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
-msgstr ""
+msgstr "החלפת סימני הטעמה ומבחינים בצורות מושטחות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
 #, kde-format
@@ -19343,7 +19343,7 @@ msgstr "אלכסוני"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces letters that follow figures with their ordinal forms."
-msgstr ""
+msgstr "החלפת אותיות שאחרי ספרות בצורות הסודרות שלהן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
 #, fuzzy, kde-format
@@ -19355,13 +19355,13 @@ msgstr "גל משולש"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces tabular figures with proportional figures."
-msgstr ""
+msgstr "החלפת ספרות טבלאיות בספרות תואמות יחס."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:185
 #, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "סימון תחתי מדעי"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19369,7 +19369,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with forms that are suited for displaying the number in "
 "chemical formulas."
-msgstr ""
+msgstr "החלפת גליפים בצורות שמתאימות להצגת מספר בנוסחאות כימיות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:189
 #, kde-format
@@ -19581,13 +19581,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Akhand"
-msgstr ""
+msgstr "היתוך אותיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr ""
+msgstr "שליטה בליגטורות היתוך אותיות לצורות כתב הודיות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
@@ -20159,6 +20159,7 @@ msgstr "קווים אנכיים"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
+"החלפת גליפים בגופנים סיניים/יפניים/קוריאניים בכלו שמתאימים לכתיבה אנכית."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
 #, fuzzy, kde-format
@@ -20249,7 +20250,7 @@ msgstr "מיקום"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts the position of glyphs so they cursively connect."
-msgstr ""
+msgstr "כיוון מקום הגליפים כך שיתחברו בכתב מחובר."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
 #, fuzzy, kde-format
@@ -20277,7 +20278,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form."
-msgstr ""
+msgstr "החלפת הגליף אָלַף בסוף מילים סוריות בצורה המתאימה שלו."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
 #, fuzzy, kde-format
@@ -20292,6 +20293,8 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form, when neither Terminal forms or Terminal forms 2 are applicable."
 msgstr ""
+"החלפת הגליף אָלַף בסוף של מילים סוריות בצורה המתאימה שלו, כאשר צורות מסוף או "
+"צורות מסוף 2 אינן תקפות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
@@ -20307,7 +20310,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
-msgstr ""
+msgstr "החלפת הגליף הראשון ברצף של גליפים בסקריפט מחובר בצורה ההתחלתית שלו."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
 #, kde-format
@@ -20315,7 +20318,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
-msgstr ""
+msgstr "החלפת גליף ברצף של גליפים בכתב מחובר בצורה המבודדת שלו."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, fuzzy, kde-format
@@ -20354,7 +20357,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
-msgstr ""
+msgstr "החלפת גליפים באמצע רצף של גליפים בכתב מחובר בצורות האמצעיות שלהם."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, fuzzy, kde-format
@@ -20368,7 +20371,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph in the middle of Syriac words with its appropriate "
 "form."
-msgstr ""
+msgstr "החלפת הגליף אָלַף באמצע מילים סוריות בצורה המתאימה שלו."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
 #, kde-format
@@ -20413,13 +20416,13 @@ msgstr "הזחה ימנית"
 #, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "פירוק גליפים נמתחים"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
-msgstr ""
+msgstr "החלפת גליפים שצריכים להימתח בגליפים נמתחים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
 #, fuzzy, kde-format
@@ -20750,7 +20753,7 @@ msgstr "לא ניתן למצוא את תגית ה־XML‏ „%1” ב־„%2”"
 #: libs/global/kis_dom_utils.cpp:158
 #, kde-format
 msgid "Error: incorrect type (%2) for value %1. Expected %3"
-msgstr ""
+msgstr "שגיאה: סוג שגוי (%2) לערך %1. אמור להיות %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
 #, kde-format

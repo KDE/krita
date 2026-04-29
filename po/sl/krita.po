@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-07 20:59+0200\n"
+"PO-Revision-Date: 2026-04-28 08:28+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15583,19 +15583,17 @@ msgstr "Zgladi"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "Omogoči vrstico Dejanja izbora"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Omogoči vrstico Dejanja izbora"
+msgstr "Prilagodi vrstico Dejanja izbora"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -34745,8 +34743,7 @@ msgid "Crop to Selection"
 msgstr "Obreži v izbor"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
 msgstr "Omogoči vrstico Dejanja izbora"
 
@@ -35744,10 +35741,9 @@ msgstr ""
 "pod drugim imenom na drugem mestu."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Datoteke ni bilo mogoče odpreti."
+msgstr "Datoteke %1 ni možno odpreti"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39139,16 +39135,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"Ni bilo mogoče shraniti %1\n"
-"Razlog: %2"
+"Ni mogoče shraniti %1.\n"
+"Razlog: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format

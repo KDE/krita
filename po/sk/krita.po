@@ -7691,7 +7691,7 @@ msgstr "Rozdeliť objekty s viacerými podcestami do viacerých objektov"
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "Konvertovať typ obrázku"
+msgstr "Previesť text na predformátovaný."
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
@@ -7716,14 +7716,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "Konvertovať typ obrázku"
+msgstr "Previesť text na vložený zabalený."
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
 #, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
-msgstr "Sínusoida"
+msgstr "Vložený zabalený."
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
@@ -7733,15 +7733,15 @@ msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Použiť sklon tabletu na určenie normál.</p></body></"
-"html>"
+"Text sa zalamuje na pevnú dĺžku, medzery a nové riadky sú zachované. Nové "
+"riadky nie sú odstraňované."
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "Konvertovať typ obrázku"
+msgstr "Previesť text na vopred umiestnený."
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
@@ -7792,8 +7792,7 @@ msgstr "Odpočítať tvary"
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
-msgstr ""
-"Uplatniť farby palety: vždy vybrať najbližšiu farbu z aktívnej palety ."
+msgstr "Zaradiť tvary do oblasti odčítaných tvarov prvého vybraného textu."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7807,22 +7806,21 @@ msgstr "Text na ceste"
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr ""
-"Uplatniť farby palety: vždy vybrať najbližšiu farbu z aktívnej palety ."
+msgstr "Nechať prvý vybraný text tiecť pozdĺž prvej vybranej cesty."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Odstrániť kolekciu tvarov"
+msgstr "Odstrániť tvary z reťazca textu."
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "Odstrániť kolekciu tvarov"
+msgstr "Odstrániť tvary z reťazca textu a pridať ich do vrstvy."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7833,7 +7831,7 @@ msgstr "Odstrániť kolekciu tvarov"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Prepnúť alfa vrstvy"
+msgstr "Prepnúť typ tvaru prúdu."
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
@@ -7908,7 +7906,7 @@ msgstr "Presunúť tvar neskôr v reťazi."
 #, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Odsadenie prvého riadku"
+msgstr "Prvý v reťazci."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -8130,7 +8128,7 @@ msgstr "Prerušiť v bode"
 #, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Prerušiť na segmente"
+msgstr "Prerušiť pri výbere."
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -8514,7 +8512,7 @@ msgstr "Zobraziť systémové informácie pre správy o chybách."
 #, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Informácie o dokumente"
+msgstr "Zobraziť informácie o správe farieb."
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
@@ -9013,7 +9011,7 @@ msgstr "Nastaviť režim gumy"
 #, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Prepnúť gumu"
+msgstr "Prepnúť predvoľbu gumy."
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -9023,7 +9021,7 @@ msgstr "Prepnúť gumu"
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "Prepnúť gumu"
+msgstr "Vybrať predvoľbu gumy."
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:572
@@ -9040,7 +9038,7 @@ msgstr "Vybrať predvoľbu gumy spolu s nástrojom voľného štetca"
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Aktuálna predvoľba štetca"
+msgstr "Vybrať predvoľbu štetca."
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:584
@@ -9383,7 +9381,7 @@ msgstr "Vyhladzovanie štetca: Zakázané"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Vyhladzovanie štetca:"
+msgstr "Vyhladzovanie štetca: Pixel."
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9443,7 +9441,7 @@ msgstr "Zväčšiť veľkosť štetca"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Otočiť objekt o 90° v smere hodinových ručičiek"
+msgstr "Otočiť špičku štetca v smere hodinových ručičiek."
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9455,7 +9453,7 @@ msgstr "Otočiť objekt o 90° v smere hodinových ručičiek"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Otočiť výber v smere hodinových ručičiek o 90 stupňov"
+msgstr "Otočiť špičku štetca v smere hodinových ručičiek (presne)."
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9467,7 +9465,7 @@ msgstr "Otočiť výber v smere hodinových ručičiek o 90 stupňov"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Otočiť objekt o 90° proti smeru hodinových ručičiek"
+msgstr "Otočiť špičku štetca proti smeru hodinových ručičiek."
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9479,7 +9477,7 @@ msgstr "Otočiť objekt o 90° proti smeru hodinových ručičiek"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Otočiť výber proti smeru hodinových ručičiek o 90 stupňov"
+msgstr "Otočiť špičku štetca proti smeru hodinových ručičiek (presne)."
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -9869,7 +9867,7 @@ msgstr "Vycentrovať..."
 #, kde-format
 msgctxt "action"
 msgid "Sobel"
-msgstr "Vycentrovať"
+msgstr "Sobelov."
 
 #. i18n: context: text @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1198
@@ -11733,14 +11731,14 @@ msgstr "Maska filtra"
 #, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Pridať zafarbenie masky"
+msgstr "Pridať masku farebného prekrytia."
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Pridať novú masku zafarbenia"
+msgstr "Pridať novú rýchlu filtrovaciu masku farebného prekrytia."
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2689
@@ -12932,7 +12930,7 @@ msgstr "Previesť farebný priestor vrstvy"
 #, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Previesť farebný priestor vrstvy"
+msgstr "Zjednotiť farebný priestor vrstiev."
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3504
@@ -13132,7 +13130,7 @@ msgstr "Nastaviť kopírovanie z"
 #, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr "Nástroj referenčných obrázkov"
+msgstr "Referenčný obrázok z vrstvy."
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
@@ -13142,7 +13140,7 @@ msgstr "Nástroj referenčných obrázkov"
 #, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "Nástroj referenčných obrázkov"
+msgstr "Referenčný obrázok z viditeľného plátna."
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3678
@@ -13345,12 +13343,12 @@ msgstr "Štetce a iné"
 #: krita/krita5.xmlgui:459
 #, kde-format
 msgid "Custom toolbar 1"
-msgstr "Vlastné farby"
+msgstr "Vlastný panel nástrojov 1."
 
 #: krita/krita5.xmlgui:462
 #, kde-format
 msgid "Custom toolbar 2"
-msgstr "Vlastné farby"
+msgstr "Vlastný panel nástrojov 2."
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -14579,7 +14577,7 @@ msgstr "Hlavný displej:"
 #, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Vrátiť voľby na ich predvolené hodnoty"
+msgstr "Vrátiť priblíženie, otočenie a zrkadlenie na ich predvolené stavy."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -14589,7 +14587,7 @@ msgstr "Vrátiť voľby na ich predvolené hodnoty"
 #, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Veľkosť tlače"
+msgstr "Zobraziť veľkosť tlače."
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -15027,7 +15025,7 @@ msgstr "Vyčistiť nepoužité dáta obrázka"
 #, kde-format
 msgctxt "action"
 msgid "Removes all fully transparent pixels from the image storage"
-msgstr "Vyhladí okraje výberu"
+msgstr "Odstraňuje všetky plne priehľadné pixely z úložiska obrázka."
 
 #. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209
@@ -15598,7 +15596,7 @@ msgstr "Vyhladiť"
 #, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
-msgstr "Povoliť panel akcií výberu"
+msgstr "Povoliť panel akcií výberu."
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
@@ -16619,7 +16617,7 @@ msgstr "Zamknúť tvary"
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr "Zmeniť vlastnosti vrstvy"
+msgstr "Zmeniť vlastnosti tvaru textu."
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:26
 #: libs/flake/commands/KoShapeMoveCommand.cpp:38
@@ -16630,7 +16628,7 @@ msgstr "Presunúť tvary"
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Nastaviť typ bodu"
+msgstr "Nastaviť poradie maľovania."
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -16706,7 +16704,7 @@ msgstr "Konvertovať typ obrázku"
 #: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Zmeniť vlastnosti vrstvy"
+msgstr "Zmeniť vlastnosti textu na ceste."
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -16778,7 +16776,7 @@ msgstr "Prispôsobiť výšku stránky"
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "List štýlov"
+msgstr "Ukážka štýlu."
 
 #: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
@@ -16796,13 +16794,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr "Základný mix"
+msgstr "Základná latinka."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
 #, kde-format
 msgctxt "@title"
 msgid "Latin-1 Supplement"
-msgstr "Zmeniť segment"
+msgstr "Latinský dodatok-1."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:23
 #, kde-format
@@ -16820,19 +16818,19 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "IPA Extensions"
-msgstr "Rozšírenie"
+msgstr "IPA rozšírenia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:26
 #, kde-format
 msgctxt "@title"
 msgid "Spacing Modifier Letters"
-msgstr "Modifikátory"
+msgstr "Písmená s diakritikou (medzerové modifikátory)."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:27
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks"
-msgstr "Zlúčiť normálne mapy"
+msgstr "Kombinujúce diakritické znamienka."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:28
 #, kde-format
@@ -16880,7 +16878,7 @@ msgstr "Soriac"
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Supplement"
-msgstr "Zmeniť segment"
+msgstr "Arabský dodatok."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:36
 #, kde-format
@@ -16916,13 +16914,13 @@ msgstr "Zmeniť segment"
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-B"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Arabčina rozšírená-B."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:42
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-A"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Arabčina rozšírená-A."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:43
 #, kde-format
@@ -17114,19 +17112,19 @@ msgstr "Zobraziť"
 #, kde-format
 msgctxt "@title"
 msgid "New Tai Lue"
-msgstr "Nový text"
+msgstr "Nové Tai Lue."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
 #, kde-format
 msgctxt "@title"
 msgid "Khmer Symbols"
-msgstr "Aktuálny farebný model:"
+msgstr "Khmerské symboly."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:76
 #, kde-format
 msgctxt "@title"
 msgid "Buginese"
-msgstr "Aplikačné jadrá štetcov"
+msgstr "Buginčina."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:77
 #, kde-format
@@ -17138,7 +17136,7 @@ msgstr "Tai Tham"
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Extended"
-msgstr "Zlúčiť normálne mapy"
+msgstr "Kombinujúce diakritické znamienka rozšírené."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:79
 #, kde-format
@@ -17174,7 +17172,7 @@ msgstr "Ol Chiki"
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-C"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Cyrilika rozšírená-C."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
 #, kde-format
@@ -17192,25 +17190,25 @@ msgstr "Zmeniť segment"
 #, kde-format
 msgctxt "@title"
 msgid "Vedic Extensions"
-msgstr "Rozšírenie"
+msgstr "Védske rozšírenia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
 #, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr "Prichytiť rozšírenie"
+msgstr "Fonetické rozšírenia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
 #, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions Supplement"
-msgstr "Prichytiť rozšírenie"
+msgstr "Dodatok fonetických rozšírení."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:90
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Supplement"
-msgstr "Zlúčiť normálne mapy"
+msgstr "Dodatok kombinujúcich diakritických znamienok."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:91
 #, kde-format
@@ -17228,7 +17226,7 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "Všeobecné nastavenie"
+msgstr "Všeobecná interpunkcia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
@@ -17240,13 +17238,13 @@ msgstr "Superscripts and Subscripts"
 #, kde-format
 msgctxt "@title"
 msgid "Currency Symbols"
-msgstr "Aktuálny farebný model:"
+msgstr "Menové symboly."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks for Symbols"
-msgstr "Zlúčiť normálne mapy"
+msgstr "Kombinujúce diakritické znamienka pre symboly."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:97
 #, kde-format
@@ -17258,7 +17256,7 @@ msgstr "Letterlike Symbols"
 #, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr "Počet snímok:"
+msgstr "Číselné formy."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
 #, kde-format
@@ -17282,7 +17280,7 @@ msgstr "Rôzne"
 #, kde-format
 msgctxt "@title"
 msgid "Control Pictures"
-msgstr "Nemôžem otvoriť obrázok."
+msgstr "Ovládacie obrázky."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
 #, kde-format
@@ -17300,7 +17298,7 @@ msgstr "Alfanumerické"
 #, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr "kreslenie"
+msgstr "Kreslenie rámčekov."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
 #, kde-format
@@ -17312,7 +17310,7 @@ msgstr "- prvky"
 #, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr "Geometria"
+msgstr "Geometrické tvary."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
 #, kde-format
@@ -17390,7 +17388,7 @@ msgstr "Koptské"
 #, kde-format
 msgctxt "@title"
 msgid "Georgian Supplement"
-msgstr "Zmeniť segment"
+msgstr "Gruzínsky dodatok."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:121
 #, kde-format
@@ -17408,19 +17406,19 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-A"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Cyrilika rozšírená-A."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:124
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Punctuation"
-msgstr "Všeobecné nastavenie"
+msgstr "Doplnková interpunkcia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:125
 #, kde-format
 msgctxt "@title"
 msgid "CJK Radicals Supplement"
-msgstr "Zmeniť segment"
+msgstr "Dodatok CJK radikálov."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:126
 #, kde-format
@@ -17438,7 +17436,7 @@ msgstr "Ideographic Description Characters"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Symbols and Punctuation"
-msgstr "Všeobecné nastavenie"
+msgstr "CJK symboly a interpunkcia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:129
 #, kde-format
@@ -17480,13 +17478,13 @@ msgstr "Bopomofo Extended"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr "Kľúčové ťahy"
+msgstr "CJK ťahy."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
 #, kde-format
 msgctxt "@title"
 msgid "Katakana Phonetic Extensions"
-msgstr "Prichytiť rozšírenie"
+msgstr "Katakanské fonetické rozšírenia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:137
 #, kde-format
@@ -17546,7 +17544,7 @@ msgstr "Vai"
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-B"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Cyrilika rozšírená-B."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:147
 #, kde-format
@@ -17558,7 +17556,7 @@ msgstr "Bamum"
 #, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr "Modifikátory"
+msgstr "Písmená s modifikátorom tónu."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
 #, kde-format
@@ -17576,7 +17574,7 @@ msgstr "Syloti Nagri"
 #, kde-format
 msgctxt "@title"
 msgid "Common Indic Number Forms"
-msgstr "Počet snímok:"
+msgstr "Bežné indické číselné formy."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:152
 #, kde-format
@@ -17594,7 +17592,7 @@ msgstr "Saurashtra"
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Dévanágarí rozšírená."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:155
 #, kde-format
@@ -17648,7 +17646,7 @@ msgstr "Zobraziť"
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek Extensions"
-msgstr "Rozšírenie"
+msgstr "Rozšírenia Meetei Mayek."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:164
 #, kde-format
@@ -17690,13 +17688,13 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "High Surrogates"
-msgstr "Vysoký tlak"
+msgstr "Vysoké náhradné znaky."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
 #, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr "Vysoký tlak"
+msgstr "Vysoké náhradné znaky na súkromné použitie."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
@@ -17708,7 +17706,7 @@ msgstr "Low Surrogates"
 #, kde-format
 msgctxt "@title"
 msgid "Private Use Area"
-msgstr "Vysoký tlak"
+msgstr "Oblasť na súkromné použitie."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:174
 #, kde-format
@@ -17720,31 +17718,31 @@ msgstr "CJK Compatibility Ideographs"
 #, kde-format
 msgctxt "@title"
 msgid "Alphabetic Presentation Forms"
-msgstr "prezentácia"
+msgstr "Abecedné prezentačné formy."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:176
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-A"
-msgstr "prezentácia"
+msgstr "Arabské prezentačné formy-A."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr "Umelecký výber farby"
+msgstr "Variačné selektory."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "Vertikálna hranica:"
+msgstr "Vertikálne formy."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
 #, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "Zlúčiť normálne mapy"
+msgstr "Kombinujúce polovičné znamienka."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
@@ -17762,7 +17760,7 @@ msgstr "Small Form Variants"
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-B"
-msgstr "prezentácia"
+msgstr "Arabské prezentačné formy-B."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:183
 #, kde-format
@@ -17780,13 +17778,13 @@ msgstr "Špeciálna výplň"
 #, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr "Lineárne stmavenie"
+msgstr "Lineárna B sylabika."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
 #, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr "Lineárne stmavenie"
+msgstr "Lineárne B ideogramy."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
 #, kde-format
@@ -17804,7 +17802,7 @@ msgstr "Počet:"
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr "Aktuálny farebný model:"
+msgstr "Staroveké symboly."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
@@ -17822,7 +17820,7 @@ msgstr "Lycian"
 #, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "Karikatúra"
+msgstr "Kariánčina."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
@@ -17852,7 +17850,7 @@ msgstr "Kurzíva"
 #, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "Logaritmická"
+msgstr "Ugaritčina."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
@@ -17864,7 +17862,7 @@ msgstr "Old Persian"
 #, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr "Zrušiť výber"
+msgstr "DeseRetská abeceda."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
@@ -17924,7 +17922,7 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr "Lineárne stmavenie"
+msgstr "Cyperská sylabika."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
@@ -18008,13 +18006,13 @@ msgstr "Avestan"
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr "Prvé veľké písmená:"
+msgstr "Inscripčná partčina."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Pahlavi"
-msgstr "Prvé veľké písmená:"
+msgstr "Inscripčná pahlavčina."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:225
 #, kde-format
@@ -18062,7 +18060,7 @@ msgstr "Yezidi"
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-C"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Arabčina rozšírená-C."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:233
 #, kde-format
@@ -18146,7 +18144,7 @@ msgstr "Khojki"
 #, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr "Násobenie"
+msgstr "Multánčina."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
@@ -18326,7 +18324,7 @@ msgstr "Zmeniť segment"
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr "Rovnomerné"
+msgstr "Klinové písmo."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
@@ -18380,7 +18378,7 @@ msgstr "Gurung Khema"
 #, kde-format
 msgctxt "@title"
 msgid "Bamum Supplement"
-msgstr "Zmeniť segment"
+msgstr "Bamumský dodatok."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
 #, kde-format
@@ -18446,7 +18444,7 @@ msgstr "Zložky:"
 #, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr "Povoliť skript"
+msgstr "Kitanské malé písmo."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
 #, kde-format
@@ -18464,7 +18462,7 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "Zmeniť segment"
+msgstr "Dodatok kana."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
 #, kde-format
@@ -18476,7 +18474,7 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr "Prichytiť rozšírenie"
+msgstr "Malé rozšírenie kana."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
@@ -18506,7 +18504,7 @@ msgstr "Symbols for Legacy Computing Supplement"
 #, kde-format
 msgctxt "@title"
 msgid "Znamenny Musical Notation"
-msgstr "Povoliť dotykové otočenie"
+msgstr "Znamenny hudobná notácia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:307
 #, kde-format
@@ -18524,7 +18522,7 @@ msgstr "Rôzne"
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Musical Notation"
-msgstr "Povoliť dotykové otočenie"
+msgstr "Staroveká grécka hudobná notácia."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:310
 #, kde-format
@@ -18572,13 +18570,13 @@ msgstr "OpenEXR  (Rozšírené)"
 #, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr "Zmeniť segment"
+msgstr "Hlaholský dodatok."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-D"
-msgstr "OpenEXR  (Rozšírené)"
+msgstr "Cyrilika rozšírená-D."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:319
 #, kde-format
@@ -18596,7 +18594,7 @@ msgstr "Toto"
 #, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "Ukotvenie:"
+msgstr "Wančo."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
@@ -18650,13 +18648,13 @@ msgstr "Arabic Mathematical Alphabetic Symbols"
 #, kde-format
 msgctxt "@title"
 msgid "Mahjong Tiles"
-msgstr "Malé dlaždice"
+msgstr "Doštičky mahjong."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
 #, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr "Malé dlaždice"
+msgstr "Doštičky domino."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
 #, kde-format
@@ -18668,7 +18666,7 @@ msgstr "Prehrávam makro"
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumeric Supplement"
-msgstr "Alfanumerické"
+msgstr "Dodatok uzatvorených alfanumerík."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:334
 #, kde-format
@@ -18710,7 +18708,7 @@ msgstr "Alchemical Symbols"
 #, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr "t) Shapes Rounded"
+msgstr "Rozšírené geometrické tvary."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
@@ -18728,7 +18726,7 @@ msgstr "Supplemental Symbols and Pictographs"
 #, kde-format
 msgctxt "@title"
 msgid "Chess Symbols"
-msgstr "Aktuálny farebný model:"
+msgstr "Šachové symboly."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:344
 #, kde-format
@@ -18806,7 +18804,7 @@ msgstr "Značky"
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors Supplement"
-msgstr "Umelecký výber farby"
+msgstr "Dodatok variačných selektorov."
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:357
 #, kde-format
@@ -18836,19 +18834,19 @@ msgstr "%1 glyph variants."
 #, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "Globálna alternatívna"
+msgstr "Prístup ku všetkým alternatívam."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
 msgctxt "@tooltip"
 msgid "Access any possible substitutions."
-msgstr "Znížiť sýtosť"
+msgstr "Prístup k akýmkoľvek možným substitúciám."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "Globálna alternatívna"
+msgstr "Kontextové alternatívy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
@@ -18890,7 +18888,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr "Filter smeru"
+msgstr "Voliteľné ligatúry."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18904,7 +18902,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr "Alternatívna"
+msgstr "Alternatívy posledného glyfu na riadku."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
@@ -18917,7 +18915,7 @@ msgstr "Replaces glyphs with their line-end forms."
 #, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "Histogram"
+msgstr "Historické formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18951,7 +18949,7 @@ msgstr "Replaces glyphs with their alternates meant for justification."
 #, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "Štandardné svetlo A"
+msgstr "Štandardné ligatúry."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
@@ -18975,7 +18973,7 @@ msgstr "This adjusts glyphs so there is no space at the left side."
 #, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "Lokálne zdroje"
+msgstr "Lokalizované formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
@@ -19039,7 +19037,7 @@ msgstr "This adjusts glyphs so there is no space at the right side."
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "Alternatívna"
+msgstr "Štylistické alternatívy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -19067,7 +19065,7 @@ msgstr "Replaces glyphs with swashed alternates."
 #, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr "Triediť podľa polohy"
+msgstr "Skladanie/rozkladanie glyfov."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
 #, kde-format
@@ -19122,7 +19120,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr "Globálna alternatívna"
+msgstr "Povinné kontextové alternatívy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
@@ -19136,7 +19134,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Ligatures"
-msgstr "Štandardné svetlo A"
+msgstr "Povinné ligatúry."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
 #, kde-format
@@ -19164,7 +19162,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Optimalizovať"
+msgstr "Optická veľkosť."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -19204,7 +19202,7 @@ msgstr "Replaces figures separated by a slash with a nut fraction form."
 #, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "Osvetľovač"
+msgstr "Menovatele."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -19220,7 +19218,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Dotless Forms"
-msgstr "Lokálne zdroje"
+msgstr "Formy bez bodky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:146
 #, kde-format
@@ -19268,7 +19266,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "Veterná výplň"
+msgstr "Čiarové číslice."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -19298,7 +19296,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr "Alternatívne vyvolanie"
+msgstr "Alternatívne formy anotácií."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
@@ -19326,7 +19324,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "Štýly vrstvy"
+msgstr "Starostylové číslice."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19354,7 +19352,7 @@ msgstr "Replaces letters that follow figures with their ordinal forms."
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "Proporcionálne"
+msgstr "Proporcionálne číslice."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
@@ -19418,7 +19416,7 @@ msgstr "Replaces glyphs with ones more suited for superscript."
 #, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr "Štandardné svetlo A"
+msgstr "Tabuľkové číslice."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
@@ -19446,7 +19444,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Case-Sensitive Forms"
-msgstr "Počiatočné:"
+msgstr "Formy rozlišujúce veľkosť písmen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
 #, kde-format
@@ -19474,7 +19472,7 @@ msgstr "Adjusts inter-glyph spacing for all-capital text."
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals From Capitals"
-msgstr "Malé kapitálky z veľkých písmen"
+msgstr "Malé kapitálky zo veľkých písmen (Petite)."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
 #, kde-format
@@ -19502,7 +19500,7 @@ msgstr "Replaces uppercase letters with small capital forms."
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
-msgstr "Zlúčiť tvary"
+msgstr "Malé kapitálky (Petite)."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:228
 #, kde-format
@@ -19518,7 +19516,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr "Kapitálky"
+msgstr "Malé kapitálky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
@@ -19580,7 +19578,7 @@ msgstr "Controls above-base mark positioning for Indic scripts."
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Substitutions"
-msgstr "Znížiť sýtosť"
+msgstr "Substitúcie nad základňou."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
 #, kde-format
@@ -19628,7 +19626,7 @@ msgstr "Controls below-base mark positioning for Indic scripts."
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Substitutions"
-msgstr "Znížiť sýtosť"
+msgstr "Substitúcie pod základňou."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
 #, kde-format
@@ -19664,7 +19662,7 @@ msgstr "Controls conjunct forms in Indic scripts."
 #, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr "Vzdialenosť"
+msgstr "Vzdialenosti."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
@@ -19676,7 +19674,7 @@ msgstr "Controls distances in Indic scripts, to avoid collisions."
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr "Počiatočné:"
+msgstr "Polovičné formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
@@ -19688,7 +19686,7 @@ msgstr "Replaces consonants in Indic scripts with their half forms."
 #, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
-msgstr "Počiatočné:"
+msgstr "Formy halant."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
 #, kde-format
@@ -19700,7 +19698,7 @@ msgstr "Replaces consonants in Indic scripts with their halant forms."
 #, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
-msgstr "Počet snímok:"
+msgstr "Formy nukta."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
 #, kde-format
@@ -19716,7 +19714,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Forms"
-msgstr "Počet snímok:"
+msgstr "Formy pred základňou."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:298
 #, kde-format
@@ -19732,7 +19730,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr "Znížiť sýtosť"
+msgstr "Substitúcie pred základňou."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
@@ -19744,7 +19742,7 @@ msgstr "Replaces consonants with their pre-base forms in Indic scripts."
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Forms"
-msgstr "Lokálne zdroje"
+msgstr "Formy za základňou."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
 #, kde-format
@@ -19760,7 +19758,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Substitutions"
-msgstr "Znížiť sýtosť"
+msgstr "Substitúcie za základňou."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
 #, kde-format
@@ -19774,7 +19772,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Rakar Forms"
-msgstr "Počet snímok:"
+msgstr "Formy rakar."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
 #, kde-format
@@ -19800,7 +19798,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vattu Variants"
-msgstr "Karikatúra"
+msgstr "Varianty vattu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
 #, kde-format
@@ -19832,7 +19830,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr "Všeobecné nastavenie"
+msgstr "Centrovaná CJK interpunkcia."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
 #, kde-format
@@ -19878,7 +19876,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "Horizontálne čiary"
+msgstr "Horizontálne alternatívy kana."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -20012,7 +20010,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr "Lokálne zdroje"
+msgstr "NLC formy kandži."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
@@ -20024,7 +20022,7 @@ msgstr "Replaces standard form kanji in Japanese fonts with the NLC forms."
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr "Proporcionálne"
+msgstr "Proporcionálne alternatívne šírky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
@@ -20036,7 +20034,7 @@ msgstr "Respaces full-width glyphs to fit in a proportional context."
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr "Proporcionálne"
+msgstr "Proporcionálna kana."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
@@ -20048,7 +20046,7 @@ msgstr "Replaces full-width kana in Japanese fonts with proportional kana."
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr "Proporcionálne"
+msgstr "Proporcionálne šírky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
@@ -20072,7 +20070,7 @@ msgstr "Replaces glyphs with quarter-width glyphs."
 #, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr "Alternatívne vyvolanie"
+msgstr "Formy ruby notácie."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -20088,7 +20086,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr "Simplex šum"
+msgstr "Zjednodušené formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -20116,7 +20114,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr "Farby prechodu"
+msgstr "Tradičné formy názvov."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -20132,7 +20130,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "Farby prechodu"
+msgstr "Tradičné formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -20156,7 +20154,7 @@ msgstr "Replaces glyphs with third-width glyphs."
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Zarovnať na zvislý stred"
+msgstr "Alternatívne zvislé metriky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -20168,7 +20166,7 @@ msgstr "Repositions glyphs so they look more appropriate in vertical layout."
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Alternatívna"
+msgstr "Alternatívne polšírky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -20198,7 +20196,7 @@ msgstr "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr "Zarovnať na zvislý stred"
+msgstr "Alternatívne zvislé polometriky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -20212,7 +20210,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr "Vertikálna hranica:"
+msgstr "Formy samohlások jamo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -20242,7 +20240,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr "Zarovnať na zvislý stred"
+msgstr "Proporcionálne alternatívne zvislé metriky."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -20268,7 +20266,7 @@ msgstr "Replaces a subset of glyphs with rotated variants for vertical layout."
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr "Alternatívne vyvolanie"
+msgstr "Vertikálne alternatívy a otočenie."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -20284,7 +20282,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "Pozícia textu"
+msgstr "Kurzívne umiestňovanie."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
@@ -20296,7 +20294,7 @@ msgstr "Adjusts the position of glyphs so they cursively connect."
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr "Vertikálna hranica:"
+msgstr "Terminálne formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -20312,7 +20310,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr "Vertikálna hranica:"
+msgstr "Terminálna forma č. 2."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -20328,7 +20326,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr "Vertikálna hranica:"
+msgstr "Terminálna forma č. 3."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -20345,7 +20343,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "Počiatočné:"
+msgstr "Počiatočné formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -20371,7 +20369,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr "Alternatívna"
+msgstr "Alternatívy glyfov zľava doprava."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
@@ -20383,19 +20381,19 @@ msgstr "Replaces glyphs with their left-to-right alternates."
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "Zľava doprava"
+msgstr "Zrkadlené formy zľava doprava."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr "Zľava doprava"
+msgstr "Nahradí glyfy ich zrkadlenými formami zľava doprava."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr "Vertikálna hranica:"
+msgstr "Stredné formy."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -20411,7 +20409,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr "Vertikálna hranica:"
+msgstr "Stredné formy č. 2."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20443,7 +20441,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left glyph alternates"
-msgstr "Alternatívna"
+msgstr "Alternatívy glyfov sprava doľava."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
 #, kde-format
@@ -20455,19 +20453,19 @@ msgstr "Replaces glyphs with their right-to-left alternates."
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr "Sprava doľava"
+msgstr "Zrkadlené formy sprava doľava."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr "Sprava doľava"
+msgstr "Nahradí glyfy ich zrkadlenými formami sprava doľava."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr "Triediť podľa polohy"
+msgstr "Rozkladanie naťahujúcich sa glyfov."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
 #, kde-format
@@ -20492,7 +20490,7 @@ msgstr "Replaces glyphs with alternates."
 #, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "Variant (%1)"
+msgstr "Variant znaku %1."
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
 #: libs/flake/text/KoSvgTextShape.cpp:2640
@@ -20598,7 +20596,7 @@ msgstr "Nástroj úpravy tvarov"
 #: libs/widgets/KoZoomWidget.cpp:55
 #, kde-format
 msgid "Zoom"
-msgstr "Priblížiť"
+msgstr "Priblížiť/oddialiť."
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:24
@@ -20807,7 +20805,7 @@ msgstr "Chyba: nesprávny typ (%2) pre hodnotu %1. Očakáva sa %3"
 #: libs/global/KisMessageBoxWrapper.cpp:24
 #, kde-format
 msgid "Don't ask this again"
-msgstr "Neupravovať stredné tóny"
+msgstr "Viac sa nepýtať."
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -21135,7 +21133,7 @@ msgstr "Prepnúť aktuálny čas"
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr "Prepnúť aktuálny čas"
+msgstr "Prepnúť aktuálny čas na kľúčovú snímku."
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -21146,7 +21144,7 @@ msgstr "Zmeniť klonované vrstvy"
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Ponuka nastavení animácie"
+msgstr "Aktualizovať nastavenia animácie."
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
@@ -21633,7 +21631,7 @@ msgstr "Chyba"
 #: libs/image/kis_layer_properties_icons.cpp:38
 #, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Previesť farebný priestor vrstvy"
+msgstr "Nesúlad farebného priestoru vrstvy."
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -22199,8 +22197,8 @@ msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"Váš obrázok obsahuje vrstvy s farebným modelom, ktorý sa líši od obrázka. "
-"Vrstvy budú prevedené."
+"Váš obrázok obsahuje vrstvy s čiastočnou nepriehľadnosťou. Vrstvy budú "
+"exportované s plnou nepriehľadnosťou."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -22248,8 +22246,8 @@ msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"Obrázok obsahuje vrstvu vyplnenia typu <b>%1</b>, ktorá nie je podporovaná, "
-"vrstva sa prevedie na vrstvu maľovania."
+"Obrázok obsahuje vektorovú vrstvu s tvarmi typu <b>%1</b>, ktorá nie je "
+"podporovaná, tieto nebudú uložené."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
 #, kde-format
@@ -22258,8 +22256,8 @@ msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"Obrázok obsahuje vrstvu vyplnenia typu <b>%1</b>, ktorá nie je podporovaná, "
-"vrstva sa prevedie na vrstvu maľovania."
+"Obrázok obsahuje vektorovú vrstvu s tvarmi typu <b>%1</b>, ktorá nie je "
+"podporovaná, tieto budú uložené ako cesty."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -22502,7 +22500,7 @@ msgstr "Importovať snímky"
 #: libs/libkis/PaintingResources.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "Ťah štetca voľnou rukou"
+msgstr "Skriptovaný ťah štetca."
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -23138,7 +23136,7 @@ msgstr "Jasné svetlo"
 #, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Jasné svetlo"
+msgstr "Jasné svetlo HDR."
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
@@ -23366,7 +23364,7 @@ msgstr "Tvrdé miešanie"
 #, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Tvrdé miešanie"
+msgstr "Tvrdé miešanie HDR."
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -23966,7 +23964,7 @@ msgstr "Dočasné zdroje"
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
-msgstr "Štýl písma"
+msgstr "Úložisko písiem."
 
 #: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
@@ -24253,7 +24251,7 @@ msgstr "Rodina písma"
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "List štýlov"
+msgstr "Predvoľby štýlov."
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -24343,7 +24341,7 @@ msgstr "Zdroj"
 #: libs/resources/KisTagResourceModel.cpp:669
 #, kde-format
 msgid "Resource Active"
-msgstr "Zobrazenie zdrojov"
+msgstr "Zdroj aktívny."
 
 #: libs/resources/KisTagResourceModel.cpp:671
 #, kde-format
@@ -24353,18 +24351,18 @@ msgstr "Úložisko aktívne"
 #: libs/resources/KisTagResourceModel.cpp:675
 #, kde-format
 msgid "Resource Name"
-msgstr "Typ zdroja"
+msgstr "Názov zdroja."
 
 #: libs/resources/KisTagResourceModel.cpp:677
 #, kde-format
 msgid "Tag File Name"
-msgstr "Názov súboru"
+msgstr "Názov súboru značky."
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
 #, kde-format
 msgid "Resource is broken!"
-msgstr "Zobrazenie zdrojov"
+msgstr "Zdroj je poškodený!"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -24375,7 +24373,7 @@ msgstr "priečinok zdrojov"
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:126
 #, kde-format
 msgid "Display settings"
-msgstr "Dynamické nastavenia"
+msgstr "Nastavenia zobrazenia."
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:133
 #, kde-format
@@ -24928,8 +24926,8 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
-"Umiestnenie súboru FFmpeg je neplatné. Prosím, vyberte správne umiestnenie "
-"spustiteľného súboru FFmpeg na vašom systéme."
+"FFmpeg, ktorý ste zadali, sa zdá byť komprimovaný. Najskôr ho prosím "
+"rozbaľte z archívu."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
 #, kde-format
@@ -25217,7 +25215,7 @@ msgstr "Codec:"
 #: libs/ui/animation/video_export_options_dialog.ui:23
 #, kde-format
 msgid "Codec options"
-msgstr "Nie je dostupná žiadna voľba"
+msgstr "Možnosti kodeku."
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -25998,7 +25996,7 @@ msgstr "Všeobecné"
 #: libs/ui/animation/VideoImportDialog.ui:40
 #, kde-format
 msgid "Video file:"
-msgstr "Video FPS:"
+msgstr "Video súbor:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -26262,7 +26260,7 @@ msgstr "Posledná snímka:"
 #: libs/ui/animation/wdg_animationrenderer.ui:49
 #, kde-format
 msgid "Export as image sequence"
-msgstr "Expozícia"
+msgstr "Exportovať ako obrazovú sekvenciu."
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
@@ -26320,7 +26318,7 @@ msgstr "Iba jedinečné snímky"
 #: libs/ui/animation/wdg_animationrenderer.ui:134
 #, kde-format
 msgid "Export as video"
-msgstr "Exportovať veľkosť:"
+msgstr "Exportovať ako video."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -26354,7 +26352,7 @@ msgstr "Zahrnúť zvuk"
 #: libs/ui/animation/wdg_animationrenderer.ui:239
 #, kde-format
 msgid "FFmpeg location:"
-msgstr "Umiestnenie obrázka:"
+msgstr "Umiestnenie FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
@@ -27132,7 +27130,7 @@ msgstr "Guma"
 #, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Odrezanie zakázané"
+msgstr "Automaticky (zakázané)."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:366
 #, kde-format
@@ -27202,7 +27200,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:581
 #, kde-format
 msgid "Internal Storage"
-msgstr "Interná chyba"
+msgstr "Interné úložisko."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format
@@ -27212,7 +27210,7 @@ msgstr "SD-Card"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:621
 #, kde-format
 msgid "Choose Manually"
-msgstr "Používateľská príručka"
+msgstr "Vybrať ručne."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:686
 #, kde-format
@@ -27256,13 +27254,13 @@ msgstr "Kruh"
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "Obdĺžnikový"
+msgstr "Obdĺžnik vľavo."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1072
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "Obdĺžnikový"
+msgstr "Obdĺžnik vpravo."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1073
 #, kde-format
@@ -27305,7 +27303,7 @@ msgstr "Display's color space is managed by the operating system"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1310
 #, kde-format
 msgid "Enable canvas color management"
-msgstr "Správa farieb"
+msgstr "Povoliť správu farieb plátna."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1313
 #, kde-format
@@ -27329,7 +27327,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1333
 #, kde-format
 msgid "Canvas surface color space:"
-msgstr "Nekalibrovaný farebný priestor"
+msgstr "Farebný priestor povrchu plátna:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1336
 #, kde-format
@@ -27349,7 +27347,7 @@ msgstr "Rec 709 Linear"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1339
 #, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rec 2100 PQ"
+msgstr "Rec 2020 PQ."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1340
 #, kde-format
@@ -27368,7 +27366,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1350
 #, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Režim prúdu štetca (vyžaduje reštart)"
+msgstr "Bitová hĺbka povrchu plátna (vyžaduje reštart):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27407,7 +27405,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1363
 #, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Nekalibrovaný farebný priestor"
+msgstr "Aktuálna bitová hĺbka povrchu plátna:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1370
 #, kde-format
@@ -27469,7 +27467,7 @@ msgstr[2] "Vyhladzovanie štetca: Zakázané"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1714
 #, kde-format
 msgid "Pen tilt direction offset: "
-msgstr "Smer sklonu"
+msgstr "Ofset smeru sklonu pera: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1812
@@ -27514,7 +27512,7 @@ msgstr "Direct3D 11 cez ANGLE"
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr "OpenGL cez ANGLE."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2083
 #, kde-format
@@ -27766,7 +27764,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
 #, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "Čakanie na dokončenie operácie obrázka..."
+msgstr "Počkajte na dokončenie existujúceho procesu generovania snímok..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btCancel)
 #. i18n: ectx: property (text), widget (QPushButton, cancelBrushNameUpdateButton)
@@ -27879,7 +27877,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
 #, kde-format
 msgid "Max group duration:"
-msgstr "Trvanie videa:"
+msgstr "Maximálna dĺžka skupiny:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -27995,7 +27993,7 @@ msgstr "Súradnica X:"
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:125
 #, kde-format
 msgid "Y offset:"
-msgstr "Súradnica X:"
+msgstr "Súradnica Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:36
@@ -28113,7 +28111,7 @@ msgstr "Absolútna kolorimetria"
 #, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Dynamické nastavenia"
+msgstr "Použiť globálne nastavenia zobrazenia."
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:93
 #, kde-format
@@ -29232,7 +29230,9 @@ msgstr "Preferované vykresľovanie (vyžaduje reštart)"
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
-msgstr "Preferované vykresľovanie (vyžaduje reštart)"
+msgstr ""
+"Preferované rozhranie openGL\n"
+"(vyžaduje reštart):"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -29623,7 +29623,7 @@ msgstr "Prispôsobiť na rozlíšenie obrázka (ppi)"
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
 #, kde-format
 msgid "&Scaling Filter:"
-msgstr "vo filtroch"
+msgstr "Filter mierkovania:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -29912,7 +29912,7 @@ msgstr "Predvolený profil tlačiarne:"
 #: libs/ui/forms/wdggeneralsettings.ui:244
 #, kde-format
 msgid "Pasting"
-msgstr "Maľovanie"
+msgstr "Vkladanie."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:256
@@ -30200,13 +30200,13 @@ msgstr "Hrúbka:"
 #: libs/ui/forms/wdggeneralsettings.ui:961
 #, kde-format
 msgid "Enable Outline"
-msgstr "Obrys kružnice"
+msgstr "Povoliť obrys."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
 #, kde-format
 msgid "Extra Comparison Space"
-msgstr "Rozširujúca medzera"
+msgstr "Ďalší porovnávací priestor."
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
@@ -30255,19 +30255,19 @@ msgstr "Hard (Krita 4.1 a staršie verzie)"
 #: libs/ui/forms/wdggeneralsettings.ui:1032
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Režim prúdu štetca (vyžaduje reštart)"
+msgstr "Režim miešania CMYK (vyžaduje reštart):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
 #, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Creamy (Krita 4.2+)"
+msgstr "Subtraktívny (Krita 5.2+)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:1045
 #, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Hard (Krita 4.1 a staršie verzie)"
+msgstr "Aditívny (Krita 5.1 a staršie verzie)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkSwitchSelectionCtrlAlt)
 #: libs/ui/forms/wdggeneralsettings.ui:1053
@@ -30321,7 +30321,7 @@ msgstr "Use horizontal axis for Canvas Zoom Action"
 #: libs/ui/forms/wdggeneralsettings.ui:1111
 #, kde-format
 msgid "Selection Actions Bar"
-msgstr "Akcie výberu"
+msgstr "Panel akcií výberu."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1118
@@ -30351,7 +30351,7 @@ msgstr "Animácia"
 #: libs/ui/forms/wdggeneralsettings.ui:1138
 #, kde-format
 msgid "Animation Settings"
-msgstr "Ponuka nastavení animácie"
+msgstr "Nastavenia animácie."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1144
@@ -30614,7 +30614,7 @@ msgstr "Pridať \"(vložené)\" do vložených vrstiev"
 #: libs/ui/forms/wdggeneralsettings.ui:1621
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr "Pridať \"(vložené)\" do vložených vrstiev"
+msgstr "Pridať „Kópia“ pred názov duplicitných vrstiev."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
 #: libs/ui/forms/wdggeneralsettings.ui:1631
@@ -32134,7 +32134,7 @@ msgstr "Odtieň/sýtosť/hodnota"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
 #, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Zobraziť kruh histórie farieb"
+msgstr "Triediť kruh histórie farieb podľa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -32224,7 +32224,7 @@ msgstr "Kompenzácia čierneho bodu"
 #: libs/ui/forms/wdgproofingoptions.ui:57
 #, kde-format
 msgid "Display Mode:"
-msgstr "Zobrazenie:"
+msgstr "Režim zobrazenia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgproofingoptions.ui:79
@@ -32520,7 +32520,7 @@ msgstr "Aktuálne štetec"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:68
 #, kde-format
 msgid "Solid line"
-msgstr "Plná biela"
+msgstr "Plná čiara."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:76
@@ -33367,32 +33367,32 @@ msgstr "Vyberie vrstvu pod pozíciou kurzora"
 #: libs/ui/input/kis_select_layer_action.cpp:120
 #, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Vybrať nepriehľadné (Nahradiť)"
+msgstr "Vybrať vrchnú vrstvu (nahradiť výber)."
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
 #, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Vybrať nepriehľadné (Nahradiť)"
+msgstr "Vybrať všetky vrstvy (nahradiť výber)."
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
 #, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Režim výberu: Nahradiť"
+msgstr "Výber z ponuky (nahradiť výber)."
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr "Zmeniť všetky vrstvy na novú veľkosť"
+msgstr "Vybrať vrchnú vrstvu (pridať k výberu)."
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
 #, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Zmeniť všetky vrstvy na novú veľkosť"
+msgstr "Vybrať všetky vrstvy (pridať k výberu)."
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
 #, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "Odpočítať z aktuálneho výberu"
+msgstr "Výber z ponuky (pridať k výberu)."
 
 #: libs/ui/input/kis_select_layer_action.cpp:247
 #, kde-format
@@ -33617,7 +33617,7 @@ msgstr "Ťahanie piatimi prstami"
 #: libs/ui/input/kis_shortcut_configuration.cpp:505
 #, kde-format
 msgid "One Finger Hold"
-msgstr "Ťuknutie jedným prstom"
+msgstr "Podržanie jedným prstom."
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:508
 #, kde-format
@@ -33712,7 +33712,7 @@ msgstr "Aktivovať nástroj výberu voľnou rukou"
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
 msgid "Activate with Other Color"
-msgstr "Aktivovať vrstvu čiar"
+msgstr "Aktivovať inou farbou."
 
 #: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
@@ -33757,12 +33757,12 @@ msgstr "Oddialiť"
 #: libs/ui/input/kis_zoom_action.cpp:78
 #, kde-format
 msgid "Zoom In To Cursor"
-msgstr "Žiadny kurzor"
+msgstr "Priblížiť ku kurzoru."
 
 #: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
-msgstr "Žiadny kurzor"
+msgstr "Oddialiť od kurzora."
 
 #: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
@@ -33837,7 +33837,7 @@ msgstr "Prepnúť gumu"
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, kde-format
 msgid "Toggle Eraser Preset"
-msgstr "Prepnúť gumu"
+msgstr "Prepnúť predvoľbu gumy."
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
 #, kde-format
@@ -33847,7 +33847,7 @@ msgstr "Hlavný displej:"
 #: libs/ui/input/KisTouchGestureAction.cpp:27
 #, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "Prepnúť gumu"
+msgstr "Prepnúť predchádzajúcu predvoľbu štetca."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
@@ -33906,7 +33906,7 @@ msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Čakanie na dokončenie operácie obrázka..."
+msgstr "Čakanie na dokončenie akcie..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -34031,7 +34031,7 @@ msgstr "Panel:"
 #: libs/ui/kis_control_frame.cpp:289
 #, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Panel nástrojov a panely"
+msgstr "Box panela nástrojov."
 
 #: libs/ui/kis_custom_pattern.cc:103
 #, kde-format
@@ -34090,7 +34090,7 @@ msgstr "Importovať obrázok"
 #: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:100
 #, kde-format
 msgid "Select a Color"
-msgstr "Vybrať farbu"
+msgstr "Vybrať farbu."
 
 #: libs/ui/kis_layer_manager.cc:194
 #, kde-format
@@ -34325,13 +34325,13 @@ msgstr "Previesť na masku výberu"
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
-msgstr "Nebolo možné načítať referenčný obrázok zo schránky"
+msgstr "Nebolo možné vytvoriť referenčný obrázok z aktívnej vrstvy."
 
 #: libs/ui/kis_node_manager.cpp:776
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
-msgstr "Nebolo možné načítať referenčný obrázok zo schránky"
+msgstr "Nebolo možné vytvoriť referenčný obrázok z viditeľného plátna."
 
 #: libs/ui/kis_node_manager.cpp:1023
 #, kde-format
@@ -34512,7 +34512,7 @@ msgstr "%1% %2"
 #: libs/ui/kis_paintop_box.cc:100
 #, kde-format
 msgid "Painter's Toolchest"
-msgstr "Maliarske nástroje"
+msgstr "Kufrík maliara."
 
 #: libs/ui/kis_paintop_box.cc:112
 #, kde-format
@@ -34710,7 +34710,7 @@ msgstr "Invertovať výber"
 #: libs/ui/kis_selection_actions_panel.cpp:82
 #, kde-format
 msgid "Fill Selection with Color"
-msgstr "Vybrať farbu"
+msgstr "Vyplniť výber farbou."
 
 #: libs/ui/kis_selection_actions_panel.cpp:83
 #, kde-format
@@ -34725,7 +34725,7 @@ msgstr "Kopírovať vrstvu"
 #: libs/ui/kis_selection_actions_panel.cpp:85
 #, kde-format
 msgid "Crop to Selection"
-msgstr "Orezať výbery"
+msgstr "Orezať na výber."
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
 #, kde-format
@@ -34791,9 +34791,7 @@ msgstr ""
 #: libs/ui/kis_splash_screen.cpp:225
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Nedávne súbory</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Používanie Krity</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:232
 #, kde-format
@@ -34836,9 +34834,7 @@ msgstr ""
 #: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Nedávne súbory</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Programovanie Krity</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
@@ -35115,12 +35111,12 @@ msgstr "Pridanie typov zdrojov..."
 #: libs/ui/KisApplication.cpp:560
 #, kde-format
 msgid "Loading plugins..."
-msgstr "Spravovať balíky zdrojov"
+msgstr "Načítavajú sa zásuvné moduly..."
 
 #: libs/ui/KisApplication.cpp:566
 #, kde-format
 msgid "Loading resources..."
-msgstr "Spravovať balíky zdrojov"
+msgstr "Načítavajú sa zdroje..."
 
 #: libs/ui/KisApplication.cpp:575
 #, kde-format
@@ -35396,13 +35392,13 @@ msgstr "Nie je možné zapisovať do %1. Prosím, uložte pod iným názvom."
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "Zlyhalo vytvorenie akcie."
+msgstr "Zlyhalo vytvorenie záložného súboru."
 
 #: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "Zlyhalo vytvorenie akcie."
+msgstr "Zlyhalo vytvorenie číslovaného záložného súboru."
 
 #: libs/ui/KisDocument.cpp:880
 #, kde-format
@@ -35426,14 +35422,12 @@ msgstr ""
 #: libs/ui/KisDocument.cpp:901
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Nebolo možné uložiť do svg: %1"
+msgstr "Nebolo možné spustiť ukladanie %1. Obrázok je zaneprázdnený."
 
 #: libs/ui/KisDocument.cpp:906
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Nebolo možné spustiť ukladanie %1. Počkajte, kým sa neukončí aktuálna "
-"operácia ukladania."
+msgstr "Nebolo možné spustiť ukladanie %1. Vyskytla sa neznáma chyba."
 
 #: libs/ui/KisDocument.cpp:1049
 #, kde-format
@@ -35542,7 +35536,7 @@ msgstr "Čakanie na dokončenie ukladania..."
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Skryť vyskakovacie okno náhľadu vrstvy"
+msgstr "Aktualizovať prehľadový náhľad."
 
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
@@ -35634,7 +35628,7 @@ msgstr "Nie je možné otvoriť súbor na zápis Dôvod: %1"
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr "Interná chyba"
+msgstr "Neočakávaná chyba."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -35952,7 +35946,7 @@ msgstr ""
 #: libs/ui/KisLayerThumbnailCache.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Skryť vyskakovacie okno náhľadu vrstvy"
+msgstr "Aktualizovať náhľady vrstiev."
 
 #: libs/ui/KisMainWindow.cpp:187
 #, kde-format
@@ -36160,7 +36154,7 @@ msgstr "Názov novej palety:"
 #, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "Farebná paleta Krita"
+msgstr "Paleta Krita (KPL)."
 
 #: libs/ui/KisPaletteEditor.cpp:104
 #, kde-format
@@ -39017,7 +39011,7 @@ msgstr "Otvoriť v novom dokumente"
 #: libs/ui/widgets/kis_canvas_drop.cpp:36
 #, kde-format
 msgid "Insert as Reference Image"
-msgstr "Vložiť ako referenčný obrázok"
+msgstr "Vložiť ako referenčný obrázok."
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:38
 #, kde-format
@@ -39773,7 +39767,7 @@ msgstr "Dolu"
 #: libs/ui/widgets/KisDockerHud.cpp:60
 #, kde-format
 msgid "Configure docker panel"
-msgstr "Konfigurovať Krita"
+msgstr "Konfigurovať panel dockera."
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
@@ -39791,7 +39785,7 @@ msgstr "Configure %1 dockers"
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Available dockers"
-msgstr "Dostupné vlastnosti:"
+msgstr "Dostupné panely."
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -41157,7 +41151,7 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, kde-format
 msgid "Choose Icon"
-msgstr "Vybrať farbu"
+msgstr "Vybrať ikonu."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1574
 #, kde-format
@@ -41728,13 +41722,13 @@ msgstr "Možnosti nástroja"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, kde-format
 msgid "Show Move"
-msgstr "Režim tieňa:"
+msgstr "Zobraziť presun."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, kde-format
 msgid "Show Snapping"
-msgstr "Zobraziť vyskakovacie okno možností prichytenia"
+msgstr "Zobraziť prichytávanie."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
@@ -41746,7 +41740,7 @@ msgstr "Zobraziť panely"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, kde-format
 msgid "Show Duplicate"
-msgstr "Duplikovať"
+msgstr "Zobraziť duplikát."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
@@ -41779,7 +41773,7 @@ msgstr "Koncentrická elipsa"
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
 #, kde-format
 msgid "Curvilinear Perspective assistant"
-msgstr "Perspektívny asistent"
+msgstr "Asistent krivočiarej perspektívy."
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, kde-format
@@ -42753,7 +42747,7 @@ msgstr "Register snímok"
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
 #, kde-format
 msgid "Zoom horizontally"
-msgstr "Vycentrovať horizontálne"
+msgstr "Priblížiť horizontálne."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
 #, kde-format
@@ -42925,7 +42919,7 @@ msgstr "Objem:"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
 #, kde-format
 msgid "Animation audio menu"
-msgstr "Ponuka nastavení animácie"
+msgstr "Ponuka zvuku animácie."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
 #, kde-format
@@ -43190,7 +43184,7 @@ msgstr "Zrkadliť snímky"
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert Keyframes"
-msgstr "Vložiť kľúčové snímky"
+msgstr "Vložiť kľúčové snímky."
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:44
 #, kde-format
@@ -43374,7 +43368,7 @@ msgstr "Vrátiť na predvolené nastavenia"
 #, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor štetcov"
+msgstr "Editor štetcov na plátne."
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -43437,7 +43431,7 @@ msgstr "Posunúť kompozíciu nadol"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:86
 #, kde-format
 msgid "Export Images"
-msgstr "Importovať obrázky"
+msgstr "Exportovať obrázky."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:89
 #, kde-format
@@ -43809,7 +43803,7 @@ msgstr "Stromové odsadenie"
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Režim miešania"
+msgstr "Štýl informácií o miešaní."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
@@ -43876,13 +43870,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Zlúčiť vybrané vrstvy"
+msgstr "Zaškrtávacie políčko pre výber vrstiev."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:430
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr "Zlúčiť vybrané vrstvy"
+msgstr "Zobraziť zaškrtávacie políčko na výber/zrušenie výberu vrstiev."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1008
 msgctxt "(qtundo-format)"
@@ -43936,7 +43930,7 @@ msgstr "Nepriehľadnosť vrstvy"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
 #, kde-format
 msgid "Add new layer or mask"
-msgstr "Posunúť vrstvu alebo masku nahor"
+msgstr "Pridať novú vrstvu alebo masku."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
@@ -44325,7 +44319,7 @@ msgstr "Pridať farbu popredia"
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
 #, kde-format
 msgid "Lock the current palette."
-msgstr "Odstrániť aktuálnu paletu"
+msgstr "Zamknúť aktuálnu paletu."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -44802,7 +44796,7 @@ msgstr "Prehľadáva sa..."
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
-msgstr "Zrušiť výber"
+msgstr "Odznačiť všetko."
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
@@ -44919,13 +44913,13 @@ msgstr "Formát:"
 #: plugins/dockers/recorder/recorderdocker.ui:326
 #, kde-format
 msgid "Number of threads, which should be used for recording"
-msgstr "Prosím vyberte jazyk, ktorý bude použitý pre túto aplikáciu:"
+msgstr "Počet vlákien, ktoré sa majú použiť na záznam."
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
 #, kde-format
 msgid "Threads:"
-msgstr "Rozprestrenie:"
+msgstr "Vlákna:"
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -45172,8 +45166,10 @@ msgid ""
 "Try to reduce the frame rate for the ffmpeg export or reduce the scaling "
 "filtering in the canvas acceleration settings."
 msgstr ""
-"Výstraha nízkeho výkonu. Záznamník nie je schopný zapísať všetky snímky "
-"včas. Skúste zvýšiť interval zachytávania."
+"Výstraha nízkeho výkonu. Záznamník nie je schopný zapísať všetky snímky včas "
+"počas režimu zachytávania v reálnom čase.\n"
+"Skúste znížiť snímkovú frekvenciu pre export ffmpeg alebo znížiť filtrovanie "
+"mierkovania v nastaveniach akcelerácie plátna."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
@@ -45642,7 +45638,7 @@ msgstr "Vymazať sadu úloh"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Veľkosť písma"
+msgstr "Veľkosť písma (em)."
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
 #, kde-format
@@ -45660,7 +45656,7 @@ msgstr "Výšková mapa R8"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Proporcionálne"
+msgstr "Proporcionálny posun (ch)."
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
@@ -45702,13 +45698,13 @@ msgstr "Upraviť predvoľby"
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optimalizovať"
+msgstr "Optická veľkosť."
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
 #, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "Prázdny slot"
+msgstr "Prázdne."
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:30
 #, kde-format
@@ -45739,7 +45735,7 @@ msgstr "vypnuté"
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr "Nastaviť obsah"
+msgstr "Značka funkcie OpenType."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:12
 #, kde-format
@@ -45810,7 +45806,7 @@ msgstr "Align to the ideographic em box bottom."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Central"
-msgstr "Vycentrovať"
+msgstr "Centrálny."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:89
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:87
@@ -45936,7 +45932,7 @@ msgstr "Dĺžka:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Super"
-msgstr "Superhrdina"
+msgstr "Horný index."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:134
 #: plugins/dockers/textproperties/qml/OTPosition.qml:80
@@ -45955,7 +45951,7 @@ msgstr "Názov:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
-msgstr "List štýlov"
+msgstr "Názov štýlu:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, kde-format
@@ -45967,7 +45963,7 @@ msgstr "Popis:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
-msgstr "Krátky popis"
+msgstr "Popis štýlu."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, kde-format
@@ -46023,7 +46019,7 @@ msgstr "Pred:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
-msgstr "Mierka..."
+msgstr "Vzorka..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, kde-format
@@ -46206,12 +46202,12 @@ msgstr "Odstrániť profil"
 #: plugins/dockers/textproperties/qml/FontFamily.qml:155
 #, kde-format
 msgid "Family list is empty."
-msgstr "Vrstva je prázdna "
+msgstr "Zoznam rodín je prázdny."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:171
 #, kde-format
 msgid "Add Fallback Family"
-msgstr "Pridať záložný jazyk"
+msgstr "Pridať záložnú rodinu písiem."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:16
 #, kde-format
@@ -46261,7 +46257,7 @@ msgstr "size, small, big, medium"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size Adjust"
-msgstr "Veľkosť písma"
+msgstr "Úprava veľkosti písma."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:17
 #, kde-format
@@ -46414,7 +46410,7 @@ msgstr "No extra variable axes in this font"
 #, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr "Všeobecné nastavenie"
+msgstr "Visutá interpunkcia."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
 #, kde-format
@@ -46452,7 +46448,7 @@ msgstr "Čiara:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Spracovanie súborov"
+msgstr "Bez visutia."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
@@ -46643,7 +46639,7 @@ msgstr "OpenType Features"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
-msgstr "Nastaviť obsah"
+msgstr "Konfigurovať funkcie OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -46675,7 +46671,7 @@ msgstr "Hľadať"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr "Kapitálky"
+msgstr "Glyfy: veľké písmená."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
@@ -46701,13 +46697,13 @@ msgstr "Kapitálky"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Small Caps"
-msgstr "Kapitálky"
+msgstr "Všetky malé kapitálky."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:80
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
-msgstr "Zlúčiť tvary"
+msgstr "Malé veľké písmená (Petite)."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:81
 #, kde-format
@@ -46785,13 +46781,13 @@ msgstr "JIS04"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Simplified"
-msgstr "Simplex šum"
+msgstr "Zjednodušené."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:106
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Traditional"
-msgstr "Farby prechodu"
+msgstr "Tradičné."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
 #, kde-format
@@ -46822,7 +46818,7 @@ msgstr "Ruby"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr "Otvoriť paletu"
+msgstr "Glyfy: Ligatúry."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
@@ -46858,7 +46854,7 @@ msgstr "Smer"
 #, kde-format
 msgctxt "@option:check"
 msgid "Historical"
-msgstr "Histogram"
+msgstr "Historický."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:125
 #, kde-format
@@ -46870,7 +46866,7 @@ msgstr "Obsah"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr "Alfanumerické"
+msgstr "Glyfy: číselné."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
@@ -46901,13 +46897,13 @@ msgstr "Štýl:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lining"
-msgstr "Stenčovanie:"
+msgstr "Linkovanie."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr "Štýly vrstvy"
+msgstr "Starostylový."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
 #, kde-format
@@ -46991,13 +46987,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert property."
-msgstr "Priorita clony"
+msgstr "Vrátiť vlastnosť."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:14
 #, kde-format
 msgctxt "@title:group"
 msgid "Tab Size"
-msgstr "Veľkosť cieľa"
+msgstr "Veľkosť tabulátora."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
 #, kde-format
@@ -47037,7 +47033,7 @@ msgstr "text-align, justification, text-anchor"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Text Align:"
-msgstr "Farba textu:"
+msgstr "Zarovnanie textu:"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:306
 #: plugins/dockers/textproperties/qml/TextAlign.qml:338
@@ -47092,7 +47088,7 @@ msgstr "Zarovnané na"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
-msgstr "Farba textu:"
+msgstr "Kotva textu:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
 #, kde-format
@@ -47130,7 +47126,7 @@ msgstr "Vytvorenie tvaru:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Decoration"
-msgstr "Dekorácia:"
+msgstr "Dekorácia textu."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
 #, kde-format
@@ -47172,7 +47168,7 @@ msgstr "Prehľad"
 #, kde-format
 msgctxt "@option:check"
 msgid "Line-through"
-msgstr "Prečiarknuté"
+msgstr "Prečiarknutie."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:222
 #, kde-format
@@ -47214,7 +47210,7 @@ msgstr "Wavy"
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Indent"
-msgstr "Ľavé odsadenie"
+msgstr "Odsadenie textu."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
 #, kde-format
@@ -47232,13 +47228,13 @@ msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr "Ľavé odsadenie"
+msgstr "odsadenie textu."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Orientácia stránky"
+msgstr "Visiace odsadenie."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
@@ -47262,7 +47258,7 @@ msgstr "Znak"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Preset"
-msgstr "Predvolené"
+msgstr "Predvoľba."
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, kde-format
@@ -47280,7 +47276,7 @@ msgstr "Upraviť predvoľby"
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "Nový štýl"
+msgstr "Klonovať predvoľbu štýlu."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, kde-format
@@ -47298,7 +47294,7 @@ msgstr "Pridať kľúč triedenia"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Add Property..."
-msgstr "&Pridať skupinu..."
+msgstr "Pridať vlastnosť..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
 #, kde-format
@@ -47310,7 +47306,7 @@ msgstr "Nastaviť"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
-msgstr "Predvolená šablóna:"
+msgstr "Predvolená viditeľnosť:"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
@@ -47337,7 +47333,7 @@ msgstr "Zobrazené panely"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr "Predvolené"
+msgstr "Sledovať predvolené."
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, kde-format
@@ -47365,7 +47361,7 @@ msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr "Povoliť výber vyhladenia krivky"
+msgstr "Vykresľovanie textu, hinting, vyhladzovanie."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -47381,13 +47377,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Speed"
-msgstr "Optimalizovať"
+msgstr "Optimalizovať rýchlosť."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Renders without antialiasing."
-msgstr "Používať vyhladzovanie kriviek"
+msgstr "Vykreslí bez vyhladzovania."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:85
 #, kde-format
@@ -47405,7 +47401,7 @@ msgstr "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Geometric Precision"
-msgstr "Geometrický priemer"
+msgstr "Geometrická presnosť."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:88
 #, kde-format
@@ -47419,7 +47415,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Transform"
-msgstr "Voľná transformácia"
+msgstr "Transformácia textu."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
 #, kde-format
@@ -47571,7 +47567,7 @@ msgstr "Rozbiť podcestu"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
-msgstr "Kresliť čiaru"
+msgstr "Pred riadkom."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
 #, kde-format
@@ -47630,7 +47626,7 @@ msgstr "Break-all"
 #, kde-format
 msgctxt "@title:group"
 msgid "Word Spacing"
-msgstr "Automatické rozostupy"
+msgstr "Medzera medzi slovami."
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:18
 #, kde-format
@@ -47654,7 +47650,7 @@ msgstr "word-spacing, tracking, white space,"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Writing Mode"
-msgstr "Maľovací režim"
+msgstr "Režim písania."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, kde-format
@@ -47684,19 +47680,19 @@ msgstr "Horizontálny"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
-msgstr "Sprava doľava"
+msgstr "Vertikálne, sprava doľava."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
-msgstr "Zľava doprava"
+msgstr "Vertikálne, zľava doprava."
 
 #: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:222
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "List štýlov"
+msgstr "Nová predvoľba štýlu."
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -47724,7 +47720,7 @@ msgstr "Farebný režim"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
 #, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "Vzhľad výberu"
+msgstr "Vzhľad kruhu odtieňa:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
@@ -47748,13 +47744,13 @@ msgstr "Dyna"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr "Dynamické nastavenia"
+msgstr "Dynamická + statická hrana."
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
 #, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "Panel rýchlych nastavení"
+msgstr "Zobraziť ponuku rýchlych nastavení."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
@@ -47772,7 +47768,7 @@ msgstr "&Vybrať..."
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
 #, kde-format
 msgid "Selection Color Space:"
-msgstr "Vybrať farebný priestor"
+msgstr "Farebný priestor výberu:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
@@ -47784,7 +47780,7 @@ msgstr "Vrstvy/Masky"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
 #, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Previesť projekčný farebný priestor"
+msgstr "Skúšobné farby do maľovacieho farebného priestoru."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
@@ -47844,7 +47840,7 @@ msgstr "Vertikálna"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:843
 #, kde-format
 msgid "Along Orientation"
-msgstr "Orientácia"
+msgstr "Pozdĺž orientácie."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -47854,7 +47850,7 @@ msgstr "Orientácia"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
 #, kde-format
 msgid "Laterally"
-msgstr "Vertikálne"
+msgstr "Bočne."
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -47874,7 +47870,7 @@ msgstr "Rozostup:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:866
 #, kde-format
 msgid "Patches"
-msgstr "Vzorkovníky"
+msgstr "Záplaty."
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -47890,13 +47886,13 @@ msgstr "Maximum opráv: "
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
 #, kde-format
 msgid "Update Base Color When:"
-msgstr "Aktualizovať výber keď:"
+msgstr "Aktualizovať základnú farbu keď:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
 #, kde-format
 msgid "Color changes externally"
-msgstr "Farebné kanály vo farbe"
+msgstr "Farba sa mení externe."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
@@ -47914,7 +47910,7 @@ msgstr "Iterácie"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
 #, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Výber minimálneho odtieňa"
+msgstr "Zobraziť výber minimálneho odtieňa."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -47932,7 +47928,7 @@ msgstr "Výška riadka: "
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:734
 #, kde-format
 msgid "Clear Button"
-msgstr "ľavé tlačidlo"
+msgstr "Vymazať tlačidlo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:760
@@ -47993,14 +47989,14 @@ msgstr "Náhľad"
 #, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Nastavenia výberu farieb"
+msgstr "Akcie výberu farieb WG."
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Zobraziť výber farby"
+msgstr "Zobraziť výber farieb so širokým rozsahom."
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
@@ -48029,7 +48025,7 @@ msgstr "skryť výber tieňa"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Zobraziť výber odtieňa MyPaint"
+msgstr "Zobraziť výber MyPaint."
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -48161,7 +48157,7 @@ msgstr "Nastaviť..."
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Nastavenia výberu farieb"
+msgstr "Nastavenia výberu farieb so širokým rozsahom."
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
@@ -48203,7 +48199,8 @@ msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Systémové informácie Krita: prosím, vložte tieto informácie do správy o chybe"
+"Informácie o správe farieb Krita: prosím, vložte tieto informácie do správy "
+"o chybe."
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format
@@ -48498,7 +48495,7 @@ msgstr "Krita verzie"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:151
 #, kde-format
 msgid "Upgrade date"
-msgstr "Aktualizovať"
+msgstr "Dátum aktualizácie."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -48522,7 +48519,7 @@ msgstr "Informácie o schéme"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
 #, kde-format
 msgid "Initialization"
-msgstr "Prvé veľké písmená:"
+msgstr "Inicializácia."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
@@ -50258,19 +50255,19 @@ msgstr "Zdroje úložiska"
 #: plugins/extensions/resourcemanager/wdgside.ui:80
 #, kde-format
 msgid "Choose Tags"
-msgstr "Vybrať farbu"
+msgstr "Vybrať značky."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:129
 #: plugins/extensions/resourcemanager/wdgside.ui:99
 #, kde-format
 msgid "Enter Bundle Details"
-msgstr "Štetina podrobnosti"
+msgstr "Zadať podrobnosti balíka."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #, kde-format
 msgid "Enter Save Location"
-msgstr "Uložiť umiestnenie:"
+msgstr "Zadať umiestnenie uloženia."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:135
 #, kde-format
@@ -50290,12 +50287,12 @@ msgstr "Upraviť text"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:140
 #, kde-format
 msgid "Edit Bundle Details"
-msgstr "Štetina podrobnosti"
+msgstr "Upraviť podrobnosti balíka."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
 #, kde-format
 msgid "Edit Save Location"
-msgstr "Uložiť umiestnenie:"
+msgstr "Upraviť umiestnenie uloženia."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:218
 #, kde-format
@@ -50495,7 +50492,7 @@ msgstr "(256 x 256)"
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
 #, kde-format
 msgid "Remove Selected"
-msgstr "Odstrániť vybranú skupinu"
+msgstr "Odstrániť vybrané."
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -50675,7 +50672,7 @@ msgstr "Zobraziť vymazané zdroje"
 #: plugins/extensions/resourcemanager/wdgside.ui:118
 #, kde-format
 msgid "Choose Save Location"
-msgstr "Uložiť umiestnenie:"
+msgstr "Vybrať umiestnenie uloženia."
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:271
 #, kde-format
@@ -50963,7 +50960,7 @@ msgstr "Buttons"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:49
 #, kde-format
 msgid "Press"
-msgstr "Predvoľby"
+msgstr "Stlačiť."
 
 #. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
@@ -51009,7 +51006,7 @@ msgstr "Potiahnuť vpravo"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:123
 #, kde-format
 msgid "Swipe Left"
-msgstr "Potiahnuť hore"
+msgstr "Potiahnuť doľava."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:130
@@ -51355,7 +51352,7 @@ msgstr "Režim miešania:"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
 #, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "Odtiene šedej (bez priehľadnosti)"
+msgstr "Normálny  (vrstvy s priehľadnosťou)."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
@@ -51367,13 +51364,13 @@ msgstr "Na vrstvy"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
 #, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Nastaviť hlavnú nepriehľadnosť pre vrstvu"
+msgstr "Nastaviť hlavnú nepriehľadnosť pre farbu prekrytia."
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:128
 #, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr "Nastaviť priehľadnosť vrstvy"
+msgstr "Nastaviť priehľadnosť farby prekrytia."
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -52741,7 +52738,7 @@ msgctxt ""
 "The 'maximum distance' slider in propagate colors filter; {n} is the number "
 "value, px is the pixels suffix"
 msgid "Maximum Distance: {n}px"
-msgstr "Maximálna veľkosť štetca:"
+msgstr "Maximálna vzdialenosť: {n}px."
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
 #, kde-format
@@ -52801,25 +52798,25 @@ msgstr "Rozšíriť iba farbu, alfa kanál ponechať nedotknutý"
 #, kde-format
 msgctxt "The 'distance metric' section label in propagate colors filter dialog"
 msgid "Expansion Pattern"
-msgstr "Rozširujúca medzera"
+msgstr "Vzor rozšírenia."
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
 #, kde-format
 msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
 msgid "Expansion Distance"
-msgstr "Rozširujúca medzera"
+msgstr "Vzdialenosť rozšírenia."
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
 #, kde-format
 msgctxt ""
 "The 'transparency behavior' section label in propagate colors filter dialog"
 msgid "Transparency Behavior"
-msgstr "Maska priehľadnosti"
+msgstr "Správanie priehľadnosti."
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
 #, kde-format
 msgid "Propagate Colors"
-msgstr "Triediť farby"
+msgstr "Šíriť farby."
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
 #, kde-format
@@ -52885,7 +52882,7 @@ msgstr "&Veľkosť okna:"
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
 #, kde-format
 msgid "Reset Transparent"
-msgstr "Priehľadný"
+msgstr "Vynulovať priehľadnosť."
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -53072,7 +53069,7 @@ msgstr "Koncový uhol:"
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:63
 #, kde-format
 msgid "Close ellipse"
-msgstr "Vybrať elipsu"
+msgstr "Uzavrieť elipsu."
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeFactory.cpp:23
 #, kde-format
@@ -54873,13 +54870,13 @@ msgstr "Animácia deklaruje snímkovú frekvenciu viac ako 240 FPS."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
-msgstr "Zlyhalo vykresľovanie snímok animácie! Výstupné súbory sú nekompletné."
+msgstr "Zlúčiť obrázok a uložiť ako jednovrstvový obrázok (predvolené)."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "Zlyhalo vykresľovanie snímok animácie! Výstupné súbory sú nekompletné."
+msgstr "Zlúčiť obrázok a vykresliť snímky animácie ako animovaný obrázok."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -55223,7 +55220,7 @@ msgstr "Animovaný obrázok"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
 #, kde-format
 msgid "Multi-layered image"
-msgstr "Viacvláknové spracovanie"
+msgstr "Viacvrstvový obrázok."
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
@@ -55249,7 +55246,7 @@ msgstr "Ak toto nie je povolené, uloží sa iba prvá snímka."
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:92
 #, kde-format
 msgid "Lossy encoding"
-msgstr "Bezstratové kódovanie"
+msgstr "Stratové kódovanie."
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:110
@@ -55311,7 +55308,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:164
 #, kde-format
 msgid "Lossless alpha"
-msgstr "Bezstratové"
+msgstr "Bezstratová alfa."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:174
@@ -55438,7 +55435,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:426
 #, kde-format
 msgid "Encoder parameters"
-msgstr "Modulárne parametre"
+msgstr "Parametre kodéra."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
@@ -55615,7 +55612,7 @@ msgstr "Silné"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:565
 #, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Popis akcie</p></body></html>"
+msgstr "<html><head/><body><p>Predvolené (vyberá kodér)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
@@ -55726,8 +55723,9 @@ msgid ""
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Pridať prezývku autora a prvý kontakt z profilu "
-"autora. Toto je potlačené anonymizérom.</p></body></html>"
+"<html><head/><body><p>Určuje poradie, v akom sú kódované dlaždice obrázka. "
+"Možnosť „Stred ako prvý“ uprednostňuje stred obrázka pri progresívnom "
+"načítaní, čo je užitočné pre webový obsah.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
@@ -55995,8 +55993,8 @@ msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Použiť sklon tabletu na určenie normál.</p></body></"
-"html>"
+"<html><head/><body><p>Nastavuje veľkosť dlaždice pre kompresiu. Väčšie "
+"skupiny môžu zlepšiť kompresiu, ale vyžadujú viac pamäte.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
@@ -56132,7 +56130,7 @@ msgstr "Nie je možné načítať \"id\" masky transformácie"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:400
 #, kde-format
 msgid "Could not find transform mask XML element"
-msgstr "Nemôžem vytvoriť parametre masky transformácie"
+msgstr "Nebolo možné nájsť XML prvok masky transformácie."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:422
 #, kde-format
@@ -56465,7 +56463,7 @@ msgstr "Nepodarilo sa uložiť metadáta animácie."
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Nepodarilo sa uložiť metadáta animácie."
+msgstr "Nepodarilo sa uložiť metadáta zvuku."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:473
 #, kde-format
@@ -58654,7 +58652,7 @@ msgstr "Rozmazávací režim"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
 #, kde-format
 msgid "Smearing"
-msgstr "Rozmazanie"
+msgstr "Rozotieranie."
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:45
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:107
@@ -59560,7 +59558,7 @@ msgstr "Možnosti šrafovania"
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
 msgid "Crosshatching"
-msgstr "Šrafovanie"
+msgstr "Krížové šrafovanie."
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
@@ -59650,7 +59648,7 @@ msgstr "Subpixelová presnosť"
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:56
 #, kde-format
 msgid "Color background"
-msgstr "Farba pozadia"
+msgstr "Farba pozadia."
 
 #. i18n: ectx: property (text), widget (QLabel, rateLbl)
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:41
@@ -60971,7 +60969,7 @@ msgstr "Základné"
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
 #, kde-format
 msgid "Y limit: "
-msgstr "Limit CPU:"
+msgstr "Limit Y: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
 #, kde-format
@@ -61173,7 +61171,7 @@ msgstr "Zafarbiť"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
 #, kde-format
 msgid "Posterization Levels"
-msgstr "Posterizovať"
+msgstr "Úrovne posterizácie."
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -61274,7 +61272,7 @@ msgstr "Dĺžka rozmazania"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
 #, kde-format
 msgid "Smudge Bucket"
-msgstr "Rozmazávacie hrable"
+msgstr "Vedro rozmazávania."
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, kde-format
@@ -63833,7 +63831,7 @@ msgstr ""
 
 #: plugins/python/mutator/mutator.py:182
 msgid "Rotation Mutation: "
-msgstr "Otočenie: "
+msgstr "Mutácia otočenia: "
 
 #: plugins/python/mutator/mutator.py:189
 msgid ""
@@ -63853,7 +63851,7 @@ msgstr ""
 
 #: plugins/python/mutator/mutator.py:200
 msgid "Flow Mutation: "
-msgstr "Otočenie: "
+msgstr "Mutácia prúdu: "
 
 #: plugins/python/mutator/mutator.py:207
 msgid ""
@@ -63865,7 +63863,7 @@ msgstr ""
 
 #: plugins/python/mutator/mutator.py:209
 msgid "Hue Mutation: "
-msgstr "Otočenie: "
+msgstr "Mutácia odtieňa: "
 
 #: plugins/python/mutator/mutator.py:216
 msgid ""
@@ -63889,7 +63887,7 @@ msgstr ""
 
 #: plugins/python/mutator/mutator.py:227
 msgid "Value Mutation: "
-msgstr "Trvanie videa:"
+msgstr "Mutácia hodnoty: "
 
 #: plugins/python/mutator/mutator.py:237
 msgid "Mutate"
@@ -64145,7 +64143,7 @@ msgstr "Otvoriť"
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
 msgid "Python Files"
-msgstr "Uložiť súbor Python"
+msgstr "Súbory Python."
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Invalid File"
@@ -64343,7 +64341,7 @@ msgstr "Vybrať nástroj štetca voľnou rukou pri stlačení skratky"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Zobraziť vyskakovacie správy na plátne"
+msgstr "Zobraziť vyskakovacie okno na plátne pri aktivácii predvoľby štetca."
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
@@ -64472,7 +64470,7 @@ msgstr "Súbory Python (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Custom icon"
-msgstr "Vlastné voľby:"
+msgstr "Vlastná ikona."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Tool icon"
@@ -64488,7 +64486,7 @@ msgstr "Nastavenia skupiny"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 msgid "Selected button:"
-msgstr "ľavé tlačidlo"
+msgstr "Vybrané tlačidlo:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Add a workflow button"
@@ -64504,19 +64502,19 @@ msgstr "Move selected workflow button to the right"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 msgid "Delete selected workflow button"
-msgstr "Vymazať vybranú masku"
+msgstr "Vymazať vybraté tlačidlo pracovného postupu."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 msgid "Select icon mode:"
-msgstr "Režim výberu:"
+msgstr "Režim výberu ikony:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 msgid "Select a custom icon:"
-msgstr "Vyberte cestu"
+msgstr "Vyberte vlastnú ikonu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 msgid "Custom icon path"
-msgstr "Vlastný vstup"
+msgstr "Cesta vlastnej ikony."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 msgid "Select the custom icon"
@@ -64524,7 +64522,7 @@ msgstr "Vymazať aktuálnu akciu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 msgid "Enter a Tooltip:"
-msgstr "Vnútorný spoločná pamäť:"
+msgstr "Zadajte tooltip:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 msgid "Tooltip text"
@@ -64532,11 +64530,11 @@ msgstr "Popisok"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 msgid "Select a tool:"
-msgstr "Vybrať farbu"
+msgstr "Vybrať nástroj:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 msgid "Select a brush preset:"
-msgstr "Aktuálna predvoľba štetca"
+msgstr "Vybrať predvoľbu štetca:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 msgid "Brush preset name"
@@ -64544,19 +64542,19 @@ msgstr "Predvoľby štetcov"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 msgid "Select the brush preset"
-msgstr "Aktuálna predvoľba štetca"
+msgstr "Vybrať predvoľbu štetca."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 msgid "Select foreground color:"
-msgstr "Vybrať farbu pozadia"
+msgstr "Vybrať farbu popredia:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 msgid "Load current foreground color"
-msgstr "Pridať farbu popredia"
+msgstr "Načítať aktuálnu farbu popredia."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 msgid "Clear foreground color"
-msgstr "Pridať farbu popredia"
+msgstr "Vymazať farbu popredia."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgid "Color model ; depth ; profile ; components"
@@ -64568,19 +64566,19 @@ msgstr "Vybrať farbu pozadia"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 msgid "Load current background color"
-msgstr "Vybrať farbu pozadia"
+msgstr "Načítať aktuálnu farbu pozadia."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 msgid "Clear background color"
-msgstr "Vybrať farbu pozadia"
+msgstr "Vymazať farbu pozadia."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select a script file:"
-msgstr "Vybrať skript"
+msgstr "Vyberte súbor skriptu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 msgid "Script path"
-msgstr "Vyberte cestu"
+msgstr "Cesta skriptu."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 msgid "Buttons size:"
@@ -64605,12 +64603,12 @@ msgstr "Farba:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
 msgid "Script files "
-msgstr "Súbory Python (*.py)"
+msgstr "Skriptové súbory."
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:26
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Nastavenia skupiny"
+msgstr "Tlačidlá pracovného postupu."
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
@@ -64624,12 +64622,12 @@ msgstr "Ťah štetca voľnou rukou"
 #: plugins/tools/basictools/kis_tool_brush.cc:216
 #, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Počet vzoriek:"
+msgstr "Počet vzoriek pri maximálnej rýchlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:226
 #, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Počet vzoriek:"
+msgstr "Počet vzoriek pri minimálnej rýchlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:236
 #, kde-format
@@ -64639,7 +64637,7 @@ msgstr "Vzdialenosť k odstavdu:"
 #: plugins/tools/basictools/kis_tool_brush.cc:246
 #, kde-format
 msgid "Distance at Min Speed:"
-msgstr "Rozsah vzd&ialenosti:"
+msgstr "Vzdialenosť pri minimálnej rýchlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
@@ -64818,7 +64816,7 @@ msgstr "Mierka:"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
 #, kde-format
 msgid "Use custom blending options"
-msgstr "Možnosti kódovania"
+msgstr "Použiť vlastné možnosti miešania."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:570
 #, kde-format
@@ -64909,13 +64907,13 @@ msgstr "Set custom blending options instead of using the brush ones"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:562
 #, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Nastaviť hlavnú nepriehľadnosť pre vrstvu"
+msgstr "Nastaviť vlastnú nepriehľadnosť pre výplň."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:563
 #, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Nastaviť režim miešania pre vrstvu"
+msgstr "Nastaviť vlastný režim miešania pre výplň."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:653
 #, kde-format
@@ -64957,7 +64955,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Rozmazať výber o nastavenú hodnotu"
+msgstr "Uzavrieť medzery v čiarach do nastavenej hodnoty."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:659
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
@@ -65015,12 +65013,13 @@ msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Vybrať nájdené oblasti zo zlúčenia vrstiev so označeniami špecifických farieb"
+"Zahrňuje aktívnu vrstvu do oblastí nájdených zlúčením vrstiev so štítkami "
+"špecifických farieb."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Ťahaním sa vyplnia oblasti ľubovoľnej farby"
+msgstr "Ťahaním sa nevyplnia odlišné oblasti."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
@@ -65633,7 +65632,7 @@ msgstr "Vnútorné"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Pridať tvary do skupiny"
+msgstr "Pridať tvary do toku textu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
 msgctxt "(qtundo-format)"
@@ -65648,7 +65647,7 @@ msgstr "Odpočítať tvary"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Odstrániť kolekciu tvarov"
+msgstr "Odstrániť tvary z toku textu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
 msgctxt "(qtundo-format)"
@@ -65663,12 +65662,12 @@ msgstr "Set Flow Shape as First"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:770
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Znížiť prúd"
+msgstr "Znížiť index tvaru prúdu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:772
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Zvýšiť prúd"
+msgstr "Zvýšiť index tvaru prúdu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:774
 msgctxt "(qtundo-format)"
@@ -65744,7 +65743,7 @@ msgstr "Vynulovať transformácie objektov"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1764
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
-msgstr "Zrušiť orezanie tvarov"
+msgstr "Zjednotiť tvary."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1778
 msgctxt "(qtundo-format)"
@@ -65984,12 +65983,12 @@ msgstr "Sýtosť [*kolíše*]: "
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Vymazať všetky referenčné obrázky"
+msgstr "Vymazať vybrané referenčné obrázky."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
 #, kde-format
 msgid "Add Reference Image From File"
-msgstr "Pridať referenčný obrázok"
+msgstr "Pridať referenčný obrázok zo súboru."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
@@ -65999,12 +65998,12 @@ msgstr "Vložiť referenčný obrázok zo systémovej schránky"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
 #, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr "Vložiť referenčný obrázok zo systémovej schránky"
+msgstr "Vytvoriť referenčný obrázok z aktívnej vrstvy."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
 #, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Vložiť referenčný obrázok zo systémovej schránky"
+msgstr "Vytvoriť referenčný obrázok z viditeľného plátna."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -66047,7 +66046,7 @@ msgstr "Uložiť umiestnenie:"
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
 #, kde-format
 msgid "Delete Selected Images"
-msgstr "Vymazať vybranú masku"
+msgstr "Vymazať vybrané obrázky."
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -66059,7 +66058,7 @@ msgstr "Pridať/vybrať obrázok na zobrazenie možností"
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
 #, kde-format
 msgid "Add a new reference image:"
-msgstr "Pridať referenčný obrázok"
+msgstr "Pridať nový referenčný obrázok:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
@@ -66673,7 +66672,7 @@ msgstr "Nástroj výberu podobnej farby"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
-msgstr "Alternatívna"
+msgstr "Alternatívy glyfov."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
 #, kde-format
@@ -66697,7 +66696,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Nie je dostupný žiadny obrázok."
+msgstr "Nie sú k dispozícii žiadne alternatívy glyfov."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -66709,7 +66708,7 @@ msgstr "Otvoriť paletu"
 #, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr "Všetky stránky"
+msgstr "Všetky glyfy."
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
 msgctxt "(qtundo-format)"
@@ -66849,17 +66848,17 @@ msgstr "Zmenili ste text. Zahodiť zmeny?"
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Obrátený text"
+msgstr "Vložiť text."
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Obrátený text"
+msgstr "Vložiť formátovaný text."
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Zmeniť vlastnosti vrstvy"
+msgstr "Zmeniť vlastnosti textu."
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -66869,7 +66868,7 @@ msgstr "Odstrániť šablónu"
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "Transformácia vzoru"
+msgstr "Odstrániť transformácie znakov."
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -67170,21 +67169,21 @@ msgstr "Try to paste styled text if possible."
 #, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Nájsť text"
+msgstr "Vložiť čistý text."
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
 #, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Pastelová textúra tenká"
+msgstr "Vložiť text bez formátovania."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "Presunúť výber"
+msgstr "Posunúť výber textu nadol."
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
@@ -67209,7 +67208,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "Presunúť výber"
+msgstr "Posunúť výber textu nahor."
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
@@ -67234,7 +67233,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "Presunúť výber"
+msgstr "Posunúť výber textu doľava."
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
@@ -67259,7 +67258,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "Presunúť výber"
+msgstr "Posunúť výber textu doprava."
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
@@ -67313,7 +67312,7 @@ msgstr "Formátovanie"
 #, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Vyhladí okraje výberu"
+msgstr "Odstrániť všetky nastavené vlastnosti textu z výberu."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
@@ -67336,7 +67335,7 @@ msgstr "Vytvoriť nový text s..."
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Aktuálne vlastnosti:"
+msgstr "Aktuálne vlastnosti textu."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
@@ -67350,7 +67349,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Nový štýl"
+msgstr "Vybrať predvoľbu štýlu."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, kde-format
@@ -67376,7 +67375,7 @@ msgstr "Možnosti"
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Vložiť na pozíciu kurzora"
+msgstr "Použiť vizuálny kurzor."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
@@ -67400,13 +67399,13 @@ msgstr "Always paste rich text when using paste action."
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Režim textúrovania:"
+msgstr "Režim sádzania textu."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Povoliť nastavenia pera"
+msgstr "Povoliť režim sádzania textu."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
@@ -67446,7 +67445,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "Konvertovať typ obrázku"
+msgstr "Previesť typ..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
 #, kde-format
@@ -67506,13 +67505,13 @@ msgstr "Ladiť"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Prichytiť ohraničujúci rámček"
+msgstr "Zobraziť ohraničujúce rámčeky znakov."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Zobraziť v priečinku"
+msgstr "Zobraziť rámčeky riadkov."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -67998,12 +67997,12 @@ msgid ""
 "layer and a starting shape first."
 msgstr ""
 "Tento nástroj funguje iba na vektorových vrstvách. Pravdepodobne chcete "
-"nástroj presunu."
+"najskôr vytvoriť vektorovú vrstvu a počiatočný tvar."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Nástroj úpravy zafarbenia masky"
+msgstr "Nástroj úpravy komiksových panelov."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:299
 #, kde-format
@@ -68043,7 +68042,7 @@ msgstr "Hrúbka"
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
-msgstr "Stenčovanie:"
+msgstr "Tenký."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
@@ -68061,14 +68060,15 @@ msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Jas displeja v nitoch. V predvolenom nastavení je to "
-"nastavené na 1000 pre prevod na lineárne displeja.</p></body></html>"
+"<html><head/><body><p>Tento nástroj funguje iba na vektorových vrstvách.<br/"
+">Vytvorte prvý panel pomocou ľubovoľného nástroja tvaru na vektorovej vrstve."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
 #, kde-format
 msgid "Unit of width:"
-msgstr "Pôvodná šírka:"
+msgstr "Jednotka šírky:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
@@ -68090,13 +68090,13 @@ msgstr "Hrúbka:"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
 #, kde-format
 msgid "Thin gap width"
-msgstr "Stenčovanie:"
+msgstr "Šírka tenkej medzery."
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
 #, kde-format
 msgid "Thin gap:"
-msgstr "Stenčovanie:"
+msgstr "Tenká medzera:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
@@ -68160,7 +68160,7 @@ msgstr "Diagonálny reliéf"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
 #, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Prah okamžitého náhľadu:"
+msgstr "Prah uhla diagonálneho typu:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
@@ -68442,19 +68442,19 @@ msgstr "Akcie transformačného nástroja"
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "Nemôžem transformovať prázdnu vrstvu "
+msgstr "Nemôžem transformovať zamknuté vrstvy."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:948
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "Nemôžem transformovať prázdnu vrstvu "
+msgstr "Nemôžem transformovať skryté vrstvy."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:954
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "Nemôžem transformovať prázdnu vrstvu "
+msgstr "Nemôžem použiť nástroj transformácie na túto sadu vrstiev."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:970
 #, kde-format
@@ -68660,42 +68660,42 @@ msgstr "Transformovať vrstvu alebo výber"
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Akcie transformačného nástroja"
+msgstr "Nástroj transformácie (voľná transformácia)."
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Akcie transformačného nástroja"
+msgstr "Nástroj transformácie (perspektívna transformácia)."
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Akcie transformačného nástroja"
+msgstr "Nástroj transformácie (deformačná transformácia)."
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Akcie transformačného nástroja"
+msgstr "Nástroj transformácie (klietková transformácia)."
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Akcie transformačného nástroja"
+msgstr "Nástroj transformácie (skvapalnená transformácia)."
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr "Akcie transformačného nástroja"
+msgstr "Nástroj transformácie (sieťová transformácia)."
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -69366,7 +69366,7 @@ msgstr "Odstrániť z inej značky"
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
-msgstr "Hľadať akcie"
+msgstr "Hľadať v značke."
 
 #: qmlmodules/components/qml/ResourceView.qml:342
 #, kde-format

@@ -57,10 +57,10 @@ private Q_SLOTS:
     void canvasSizeChanged(const QSize &size);
 
 private:
-    QPoint getFixedPosition();
+    QPoint getFixedPosition() const;
     void recalculateDimensions();
-    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
-    QPoint initialDragHandlePosition();
+    QPoint clipPositionToCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
+    QPoint initialTopLeftPosition() const;
     void drawActionBarBackground(QPainter &gc) const;
 
     bool handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button = Qt::LeftButton);

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-23 10:18+0400\n"
+"PO-Revision-Date: 2026-04-30 08:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15558,19 +15558,17 @@ msgstr "سَلِس"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "فعِّل شريط إجراءات التحديد"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Configure sections"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "اضبط الأقسام"
+msgstr "اضبط شريط إجراءات التحديد"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -34597,10 +34595,9 @@ msgid "Crop to Selection"
 msgstr "اقتصّ إلى التّحديد"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "فعِّل شريط إجراءات التحديد"
+msgstr "عطّل شريط إجراءات التحديد"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format

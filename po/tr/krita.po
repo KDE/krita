@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-24 16:24+0300\n"
+"PO-Revision-Date: 2026-05-01 15:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19549,7 +19549,7 @@ msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
 msgstr ""
-"Kmer ve diğer Hint alfabelerinde taban üstü biçimler için ikameyi denetler."
+"Kmer ve diğer Hint yazılarında taban üstü biçimler için ikameyi denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, kde-format
@@ -19561,7 +19561,7 @@ msgstr "Taban Üstü İm Konumlandırması"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
-msgstr "Hint alfabeleri için taban üstü im konumlandırmasını denetler."
+msgstr "Hint yazıları için taban üstü im konumlandırmasını denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
 #, kde-format
@@ -19573,7 +19573,7 @@ msgstr "Taban Üstü İkameler"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
-msgstr "Hint alfabeleri için taban üstü im bitişik harflerini denetler."
+msgstr "Hint yazıları için taban üstü im bitişik harflerini denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
 #, kde-format
@@ -19585,7 +19585,7 @@ msgstr "Akhand"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr "Hint alfabeleri için Akhand bitişik harflerini denetler."
+msgstr "Hint yazıları için Akhand bitişik harflerini denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
@@ -19598,7 +19598,7 @@ msgstr "Taban Altı Biçimler"
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr ""
-"Kmer ve diğer Hint alfabelerinde taban altı biçimler için ikameyi denetler."
+"Kmer ve diğer Hint yazılarında taban altı biçimler için ikameyi denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
@@ -19610,7 +19610,7 @@ msgstr "Taban Altı İm Konumlandırması"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
-msgstr "Hint alfabeleri için taban altı im konumlandırmasını denetler."
+msgstr "Hint yazıları için taban altı im konumlandırmasını denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
 #, kde-format
@@ -19622,7 +19622,7 @@ msgstr "Taban Altı İkameler"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
-msgstr "Hint alfabeleri için taban altı im bitişik harflerini denetler."
+msgstr "Hint yazıları için taban altı im bitişik harflerini denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
 #, kde-format
@@ -19634,7 +19634,7 @@ msgstr "Ro’dan Sonraki Bitişik Biçim"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr "Kmer alfabesinde bitişik Ro’yu takip eden glifleri denetler."
+msgstr "Kmer yazılarında bitişik Ro’yu takip eden glifleri denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
@@ -19646,7 +19646,7 @@ msgstr "Bitişik Biçimler"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr "Hint alfabelerindeki bitişik biçimleri denetler."
+msgstr "Hint yazılarındaki bitişik biçimleri denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
@@ -19658,7 +19658,7 @@ msgstr "Uzaklıklar"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls distances in Indic scripts, to avoid collisions."
-msgstr "Çarpışmaları önlemek için Hint alfabelerindeki uzaklıkları denetler."
+msgstr "Çarpışmaları önlemek için Hint yazılarındaki uzaklıkları denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
 #, kde-format
@@ -19670,7 +19670,7 @@ msgstr "Yarım Biçimler"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr "Hint alfabelerindeki ünsüzleri yarım biçimleriyle değiştirir."
+msgstr "Hint yazılarındaki ünsüzleri yarım biçimleriyle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
@@ -19682,7 +19682,7 @@ msgstr "Halant Biçimleri"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr "Hint alfabelerindeki ünsüzleri Halant biçimleriyle değiştirir."
+msgstr "Hint yazılarındaki ünsüzleri Halant biçimleriyle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
@@ -19697,7 +19697,7 @@ msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
 msgstr ""
-"Hint alfabelerinde Nukta ile kombine sessiz harfleri Nukta biçimleriyle "
+"Hint yazılarında Nukta ile kombine sessiz harfleri Nukta biçimleriyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
@@ -19713,7 +19713,7 @@ msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
 "situation occurs."
 msgstr ""
-"“Coeng Ra” durumu oluştuğunda, Kmer alfabesinde bir ünsüzün taban öncesi "
+"“Coeng Ra” durumu oluştuğunda, Kmer yazılarında bir ünsüzün taban öncesi "
 "biçiminin yerini alır."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
@@ -19726,7 +19726,7 @@ msgstr "Taban Öncesi İkameleri"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants with their pre-base forms in Indic scripts."
-msgstr "Hint alfabelerinde ünsüzleri taban öncesi biçimleriyle değiştirir."
+msgstr "Hint yazılarında ünsüzleri taban öncesi biçimleriyle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
 #, kde-format
@@ -19756,7 +19756,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
 msgstr ""
-"Hint alfabelerinde taban glifleri ve taban sonrası glifleri bir bitişik harf "
+"Hint yazılarında taban glifleri ve taban sonrası glifleri bir bitişik harf "
 "ile değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
@@ -19769,7 +19769,7 @@ msgstr "Rakar Biçimleri"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
-msgstr "Hint alfabelerindeki glif dizilerini Rakar biçimleriyle değiştirir."
+msgstr "Hint yazılarında glif dizilerini Rakar biçimleriyle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
 #, kde-format
@@ -19783,8 +19783,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
 msgstr ""
-"Hint alfabelerindeki Reph biçimlerini bir ünsüz ve Halant dizisiyle "
-"değiştirir."
+"Hint yazılarındaki Reph biçimlerini bir ünsüz ve Halant dizisiyle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
 #, kde-format
@@ -19798,7 +19797,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces ligatures in Indic scripts with a base consonant and Vattu form."
 msgstr ""
-"Hint alfabelerindeki bitişik harfleri bir taban ünsüz ve Vattu biçimiyle "
+"Hint yazılarındaki bitişik harfleri bir taban ünsüz ve Vattu biçimiyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
@@ -46833,14 +46832,15 @@ msgstr "Ruby"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr "Glifler: Bağlar"
+msgstr "Glifler: Bitişik harfler"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
 msgstr ""
-"Metindeki bağları ve bağlamsal alternatifleri etkinleştir/devre dışı bırak"
+"Metindeki bitişik harfleri ve bağlamsal alternatifleri etkinleştir/devre "
+"dışı bırak"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format

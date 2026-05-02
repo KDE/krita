@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-21 06:04+0200\n"
+"PO-Revision-Date: 2026-05-02 01:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -15581,19 +15581,17 @@ msgstr "რბილი"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
+msgstr "მონიშვნის ქმედებების პანელის მორგება"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -19692,7 +19690,7 @@ msgstr "Halant-ის ფორმები"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr ""
+msgstr "ცვლის თანხმოვნებს ინდურ დამწერლობებში მათ ჰალანტურ ფორმებად."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
@@ -19903,6 +19901,8 @@ msgid ""
 "Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
 "X 0212-1990') forms."
 msgstr ""
+"ჩაანაცვლებს 'JIS X 0213:2004' ფორმის კანჯის იაპონურ ფონტებში ჰოჯოს ('JIS X "
+"0212-1990') ფორმებით."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
 #, kde-format
@@ -19917,6 +19917,8 @@ msgid ""
 "Replaces or respaces proportional or full-width glyphs with half-width "
 "glyphs."
 msgstr ""
+"ჩაანაცვლებს, ან გადაალაგებს პროპორციულ, ან სრული სიგანის მქონე გლიფებს "
+"ნახევარი სიგანის მქნე გლიფებით."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
 #, kde-format
@@ -19991,6 +19993,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of leading class Hangul Jamo with a combined leading form."
 msgstr ""
+"ჩაანაცვლებს წამყვანი კლასის ჰანგული ჯამოს მიმდევრობებს კომბინირებული "
+"წამყვანი ფორმით."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
 #, kde-format
@@ -21250,6 +21254,8 @@ msgid ""
 "Adds pixels using the color of surrounding pixels. Produces smoother tonal "
 "gradations than Bilinear."
 msgstr ""
+"ამატებს პიქსელებს მიმდებარე პიქსელების ფერის გამოყენებით. წარმოქმნის უფრო "
+"გლუვ ტონალურ გრადაციებს, ვიდრე ორხაზოვანი."
 
 #: libs/image/kis_filter_strategy.h:86
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
@@ -21263,6 +21269,8 @@ msgid ""
 "Replicate pixels in the image. Preserves all the original detail, but can "
 "produce jagged effects."
 msgstr ""
+"პიქსელების გამეორება სურათზე. ინარჩუნებს ყველა თავდაპირველ დეტალს, მაგრამ "
+"შეუძლია წარმოქმნას დაკბილული ეფექტი."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
@@ -21303,6 +21311,9 @@ msgid ""
 "Offers similar results than Bicubic, but maybe a little bit sharper. Can "
 "produce light and dark halos along strong edges."
 msgstr ""
+"გთავაზობთ მსგავს შედეგებს, ვიდრე ბიკუბური, მაგრამ შესაძლოა ცოტა უფრო "
+"მკვეთრს. შეუძლია, აწარმოოს მსუბუქი და მუქი შარავანდედები ძლიერი წიბოების "
+"გასწვრივ."
 
 #: libs/image/kis_filter_strategy.h:163
 #, kde-format
@@ -22201,6 +22212,8 @@ msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
+"სურათი შეიცავს ვექტორულ ფენას <b>%1</b> ტიპის ფორმებით, რომელიც მხარდაჭერილი "
+"არაა. მათი შენახვა არ მოხდება."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
 #, kde-format
@@ -22209,6 +22222,8 @@ msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
+"სურათი შეიცავს ვექტორულ ფენას <b>%1</b> ტიპის ფორმებით, რომელიც მხარდაჭერილი "
+"არაა. ისინი შეინახება ბილიკების სახით"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -22522,6 +22537,9 @@ msgid ""
 "instance by merging the list of authors together, or keeping identical "
 "photographic information."
 msgstr ""
+"შერწყმის ეს სტრატეგია ცდილობს, იპოვოს საუკეთესო გამოსავალი შერწყმისთვის, "
+"მაგალითად, ავტორთა სიის გაერთიანებით, ან იდენტური ფოტოგრაფიული ინფორმაციის "
+"შენახვით."
 
 #: libs/metadata/kis_meta_data_value.cc:404
 #: libs/metadata/kis_meta_data_value.cc:443
@@ -26369,6 +26387,8 @@ msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
+"თქვენ ააქტიურებთ შეფუთვის რეჟიმს, მაგრამ არ ჩართეთ OpenGL.\n"
+"შეფუთვის რეჟიმის ვიზუალიზაციისთვის, ჩართეთ OpenGL."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, kde-format
@@ -28032,6 +28052,8 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
+"ამ ფაილისთვის ავტოშენახვა არსებობს. რა ვქნა?\n"
+"გაფრთხილება: თუ ავტოშენახვის ფაილს ახლა მოიცილებთ, ის წაიშლება."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
@@ -28540,6 +28562,9 @@ msgid ""
 "with it. If you do not select a profile, Krita will assume that the image "
 "data is encoded in the import profile defined in the Settings dialog."
 msgstr ""
+"გამოსახულების მონაცემებს, რომელთა ჩასმაც გსურთ, არ აქვს მასთან დაკავშირებული "
+"ICM პროფილი. თუ არ აირჩევთ პროფილს, Krita ჩათვლის, რომ გამოსახულების "
+"მონაცემები დაშიფრულია მორგების დიალოგში აღწერილ შემოტანილ პროფილში."
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfile)
 #: libs/ui/forms/wdgapplyprofile.ui:60
@@ -28551,7 +28576,7 @@ msgstr "&პროფილები:"
 #: libs/ui/forms/wdgapplyprofile.ui:88
 #, kde-format
 msgid "Rendering intent determines the bias in the color conversion."
-msgstr ""
+msgstr "რენდერის განზრახვა განსაზღვრავს მიკერძოებას ფერების გარდაქმნისას."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, grpRenderIntent)
@@ -31641,6 +31666,9 @@ msgid ""
 "p><p><span style=\" font-weight:600;\">Recommended value:</span> 2500&nbsp;"
 "px</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ზომის ლიმიტი, რის შემდეგაც კადრები დაპატარავდება</"
+"p><p><span style=\" font-weight:600;\">რეკომენდებული მნიშვნელობაა:</span> "
+"2500&nbsp;px</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
 #: libs/ui/forms/wdgperformancesettings.ui:506
@@ -31649,6 +31677,8 @@ msgid ""
 "<html><head/><body><p>When the image is too big, render only currently "
 "visible part of it</p></body></html>"
 msgstr ""
+"<html><head/><body><p>როცა გამოსახულება მეტისმეტად დიდია, მოხდება, მხოლოდ, "
+"მისი ხილული ნაწილის რენდერი</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRegionOfInterest)
 #: libs/ui/forms/wdgperformancesettings.ui:509
@@ -31673,6 +31703,8 @@ msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ანიმაციის კეშის ავტომატური პრერენდერი ფონურად, როცა "
+"მომხმარებელი უქმედაა</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:532
@@ -31707,6 +31739,9 @@ msgid ""
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>ფილტრის დიალოგი ყოველთვის გამოიყენებს მყის მინიატურას "
+"მაშინაც კი, თუ მყისი მინიატურა გამორთულია მენიუში &quot;ხედი&quot;</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:581
@@ -31722,6 +31757,9 @@ msgid ""
 "preview, even if instant preview is disabled in the &quot;View&quot; menu</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>გარდაქმნის ხელსაწყოს მინიატურა ყოველთვის გამოიყენებს "
+"მყის მინიატურას მაშინაც კი, თუ მყისი მინიატურა გამორთულია მენიუში &quot;"
+"ხედი&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:591
@@ -31737,6 +31775,9 @@ msgid ""
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>გადატანის ხელსაწყოს მინიატურა ყოველთვის გამოიყენებს "
+"მყის მინიატურას მაშინაც კი, თუ მყისი მინიატურა გამორთულია მენიუში &quot;"
+"ხედი&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:601
@@ -32373,6 +32414,8 @@ msgid ""
 "Use mouse events for right- and middle-clicks (workaround for convertible "
 "devices, needs restart)"
 msgstr ""
+"თაგუნას მოვლენების გამოყენება მარჯვენა და შუა წკაპებისთვის (პრობლემის "
+"შემოვლა გარდაქმნადი მოწყობიობებისთვის. საჭიროებს თავიდან გაშვებას)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsePageUpDownMouseButtonEmulationWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:194
@@ -32407,6 +32450,8 @@ msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
 "hardware-dependent"
 msgstr ""
+"შერბილების რაოდენობა, რომელიც Krita-მა სიჩქარის სენსორს უნდა გადაატაროს. ეს "
+"მნიშვნელობა ძალიანაა დამოკიდებული აპარატურის ტიპზე"
 
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, tiltDirectionOffsetAngle)
 #: libs/ui/forms/wdgtabletsettings.ui:240
@@ -34403,10 +34448,9 @@ msgid "Crop to Selection"
 msgstr "მონიშნულამდე ამოჭრა"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
+msgstr "მონიშვნის ქმედებების პანელის გამორთვა"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format
@@ -34595,6 +34639,10 @@ msgid ""
 "WARNING:\tOut of memory! Swapping has been started.\n"
 "\t\tPlease configure more RAM for Krita in Settings dialog"
 msgstr ""
+"\n"
+"\n"
+"გაფრთხილება:\tარასაკმარისი მეხსიერება! დაწყებულია სვოპის გამოყენება.\n"
+"\t\tმიანიჭეთ Krita-ს მეტი RAM მორგების დიალოგიდან"
 
 #: libs/ui/kis_statusbar.cc:338
 #, kde-format
@@ -37263,6 +37311,9 @@ msgid ""
 "by default. You may manually switch to OpenGL but it is not guaranteed to "
 "work properly."
 msgstr ""
+"Intel-ის გრაფიკულ დრაივერებს OpenGL-ისთან პრობლემები აქვს, ასე რომ, "
+"ნაგულისხმევად გამოყენებული იქნება ANGLE. თუ შეგიძლიათ, OpenGL-ზე ხელით "
+"გადართოთ, მაგრამ გარანტია, რომ ის სწორად იმუშავებს, არ არსებობს."
 
 #: libs/ui/opengl/kis_opengl.cpp:1172
 #, kde-format
@@ -45613,6 +45664,7 @@ msgstr "გამოთვლა"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
+"x-height-ის ფონტის ზომასთან ფარდობის გამოთვლა პირველი ფონტის ოჯახისთვის."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
@@ -45873,7 +45925,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
-msgstr ""
+msgstr "ხაზის გადატანის ალგორითმში განსაკუთრებული ცვლილებები არ შეტანილა"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
@@ -45886,6 +45938,8 @@ msgstr "ფართო"
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
+"მიუხედავად იმისა, რომ ჩვეულებრივ განსაზღვრავს უფრო რბილ ალგორითმს, ამჟამად "
+"იგივეა, რაც ავტომატური."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -45894,6 +45948,8 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"იგივეა, რაც ავტომატი. რბილი გამოტოვებები დაშვებული იქნება პატარა კანამდე, თუ "
+"ტექსტის ენა იაპონურია."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, kde-format
@@ -45931,6 +45987,7 @@ msgstr "ხაზის სიმაღლე"
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr ""
+"ხაზის სიმაღლე აკონტროლებს ტექსტის შუალედისთვის გამოყენებულ ხაზის სიმაღლეს."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:21
 #, kde-format
@@ -46146,6 +46203,7 @@ msgstr "გლიფები: ლიგატურები"
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
 msgstr ""
+"ტექსტზე ლიგატურებისა და კონტექსტური ალტერნატივების ჩართვა, ან გამორთვა."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -46305,6 +46363,8 @@ msgid ""
 "Revert property. Within the current selection, this property has different "
 "values."
 msgstr ""
+"თვისების დაბრუნება. მიმდინარე მონიშნულში ამ თვისებას სხვა მნიშვნელობები "
+"ჰქონდა."
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:23
 #, kde-format
@@ -46343,7 +46403,7 @@ msgstr "ტექსტის სწორება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
-msgstr ""
+msgstr "ტექსტის სწორება აყენებს სწორებას მითითებული სიმბოლოების ბლოკისთვის."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -46459,6 +46519,8 @@ msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"ტექსტის დეკორაცია ტექსტში ხაზგასმების, ხაზგადასმების და ხაზის ზემოდან "
+"გადასმების დახატვის საშუალებას გაძლევთ."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -46543,6 +46605,8 @@ msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"ტექსტის შეწევა ხაზის დასაწყისის შეწევის საშუალებას გაძლევთ. მუშაობს, მხოლოდ, "
+"მაშინ, როცა ხდება ტექსტის გადატანა."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -46674,7 +46738,7 @@ msgstr "ტექსტის რენდერი"
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
-msgstr ""
+msgstr "ტექსტის რენდერი მართავს ჰინტინგს და რენდერის სტილს თვისებისთვის"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -46803,7 +46867,7 @@ msgstr "ხაზგასმის მდებარეობა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "მიუთითეთ ხაზგასმის მდებარეობა text-decoration-ისთვის."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -46948,6 +47012,8 @@ msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
 msgstr ""
+"სიტყვებს შორის ადგილი მართავს სიტყვების გაყოფის სიმბოლოების, მაგ: ჰარეს "
+"ზომას."
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -46972,6 +47038,8 @@ msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"წერის რეჟიმი აყენებს, ტექსტის დინება ჰორიზონტალურად ხდება, თუ ვერტიკალურად "
+"და პირველ შემთხვევაში ბლოკის მარჯვნიდან მარცხნივ დინება ხდება, თუ პირიქით."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -49082,6 +49150,10 @@ msgid ""
 "bar and in toolbars as required. A string to use KDE's image loading system, "
 "or a custom QPixmap or QIcon, or None."
 msgstr ""
+"ამ ქმედებასთან ასოცირებული ხატულა. ის ნაჩვენები იქნება ტექსტის გვერდით "
+"მენიუს ზოლში და ხელსაწყოთა ზოლში, როცა საჭიროა. სტრიქონი KDE-ის "
+"გამოსახულების ჩატვირთვის სისტემისტვის, ან მორგებული QPixma-ისთვის, ან QIcon-"
+"ისთვის, ან არაფერი."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:41
@@ -53488,6 +53560,9 @@ msgid ""
 "p><r><ul>%1</ul></p><p><warning>these layers have <b>not</b> been saved to "
 "the final EXR file</warning></p>"
 msgstr ""
+"<p>შემდეგ ფენებს აქვთ ტიპი, რომლის მხარდაჭერაც EXR ფორმატს არ აქვს:</"
+"p><r><ul>%1</ul></p><p><warning>ამ ფენების შენახვა<b>not</b> საბოლოო EXR "
+"ფაილში არ მომხდარა</warning></p>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flatten)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFlatten)
@@ -54984,6 +55059,8 @@ msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
 "progression from the DCT coefficients."
 msgstr ""
+"პროგრესული რეჟიმის დაყენება VarDCT-ის AC კოეფიციენტისთვის DCT "
+"კოეფიციენტებიდან მიღებული სპექტრული პროგრესიით."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:704
@@ -55020,6 +55097,8 @@ msgstr "დაბალი გარჩევადობის DC"
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
+"პროგრესული რეჟიმის დაყენება დაბალი გაფართოების მქონე DC გამოსახულების "
+"გამოყენებით VarDCT-ისთვის."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:739
@@ -56498,6 +56577,8 @@ msgid ""
 "<title>Brightness</title><p>Specify the brightness level of output image. "
 "The default value is 1.0 (works in 8-bit mode only).</p>"
 msgstr ""
+"<title>სიკაშკაშე</title><p>მიუთითეთ გამოტანილი გამოსახულების სიკაშკაშის "
+"დონე. ნაგულისხმევი მნიშვნელობაა 1.0 (მუშაობს, მხოლოდ, 8-ბიტიან რეჟიმში).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:565
 #, kde-format
@@ -56513,6 +56594,9 @@ msgid ""
 "pictures. If you set this option to off, the Black Point value will be "
 "automatically computed.</p>"
 msgstr ""
+"<title>შავი წერტილი</title><p>მითითებული შავი წერტილის მნიშვნელობის "
+"გამოყენება RAW სურათების დეკოდირებისთვის. თუ ამ პარამეტრს გამორთავთ, შავი "
+"წერტილის გამოთვლა ავტომატურად მოხდება.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:573
 #, kde-format
@@ -56521,6 +56605,8 @@ msgid ""
 "<title>Black point value</title><p>Specify specific black point value of the "
 "output image.</p>"
 msgstr ""
+"<title>შავი წერტილის მნიშვნელობა</title><para>მიუთითეთ გამოტანილი "
+"გამოსახულების სპეციფიკური შავი წერტილის მნიშვნელობა.</para>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:576
 #, kde-format
@@ -56536,6 +56622,9 @@ msgid ""
 "pictures. If you set this option to off, the White Point value will be "
 "automatically computed.</p>"
 msgstr ""
+"<title>თეთრი წერტილი</title><p>მითითებული თეთრი წერტილის მნიშვნელობის "
+"გამოყენება RAW სურათების დეკოდირებისთვის. თუ ამ პარამეტრს გამორთავთ, თეთრი "
+"წერტილის გამოთვლა ავტომატურად მოხდება.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:584
 #, kde-format
@@ -56544,6 +56633,8 @@ msgid ""
 "<title>White point value</title><p>Specify specific white point value of the "
 "output image.</p>"
 msgstr ""
+"<title>თეთრი წერტილის მნიშვნელობა</title><para>მიუთითეთ გამოტანილი "
+"გამოსახულების სპეციფიკური თეთრი წერტილის მნიშვნელობა.</para>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:623
 #, kde-format
@@ -60473,6 +60564,8 @@ msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
+"აირჩიეთ, როგორ ხდება ნაწილაკების განაწილება შესხურების არეს ცენტრამდე "
+"მანძილის ფუნქციის სახით."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:82
 #, kde-format
@@ -60480,6 +60573,8 @@ msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
+"გაააქტიურებს ძველ ქცევას, სადაც ნაწილაკები შესხურების არეს ცენტრისკენ უფრო "
+"მეტად გროვდება."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
 #, kde-format
@@ -60528,6 +60623,8 @@ msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
 msgstr ""
+"დააყენეთ, რამდენჯერ მოხდება მრუდის გამეორება შესხურების არეს ცენტრიდან "
+"საზღვრამდე."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:177
 #, kde-format
@@ -61213,6 +61310,8 @@ msgid ""
 "A PO file can contain translator's comments. If this is checked, the "
 "translations comments will be added as references into the ACBF file."
 msgstr ""
+"PO ფაილი, შეიძლება, მთარგმნელის კომენტარებს შეიცავდეს. თუ ეს ჩართულია, "
+"მთარგმნელის კომენტარები ACBF ფაილში მიმართვად დაემატება."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
 msgid "ACBF UID:"
@@ -62066,6 +62165,8 @@ msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
 msgstr ""
+"ეს საშუალებას გაძლევთ, აირჩიოთ ზოგადი კომიკსების პროექტის საქაღალდე, "
+"რომელშიც შეიქმნება ახალი საქაღალდე პროექტისთვის ამ პროექტის სახელით."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
 msgid "pages"
@@ -63907,6 +64008,8 @@ msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
+"ჩასვამს აქტიურ ფენას რეგიონებში, რომლებიც მითითებული ფერის ჭდეებით შერწყმული "
+"ფენებისგანაა შექმნილი"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format
@@ -63924,6 +64027,8 @@ msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
+"გადათრევა, მხოლოდ, შეავსებს რეგიონებს, რომლებიც საწყისი რეგიონის ფერის "
+"მსგავსია (სასარგებლოა ხაზით ნახატების შევსებისას)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:675
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:580
@@ -64025,6 +64130,8 @@ msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
 "+Drag will force you to draw straight lines"
 msgstr ""
+"Alt+გადათრევა ამჟამად ნაჩვენები ხაზის წყაროს გადაიტანს. Shift+გადათრევა "
+"გაიძულებთ, სწორი ხაზები დახატოთ"
 
 #: plugins/tools/basictools/kis_tool_line.h:115
 #, kde-format

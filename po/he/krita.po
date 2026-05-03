@@ -36,13 +36,13 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2005, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024-2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-25 11:07+0300\n"
+"PO-Revision-Date: 2026-05-02 08:41+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -9853,20 +9853,20 @@ msgstr "רמות"
 
 #. i18n: context: text @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1186
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Sobel..."
-msgstr "טוען..."
+msgstr "&סובֵּל…"
 
 #. i18n: context: toolTip @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1188 krita/krita.action:1189
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Sobel"
-msgstr "מקושר"
+msgstr "סובֵּל"
 
 #. i18n: context: text @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1198
@@ -19629,25 +19629,25 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "צורת איחוי אחרי רו"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr ""
+msgstr "שליטה בגליפים שאחרי רו מחובר בצורת הכתב החמרית."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "צורות איחוי"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr ""
+msgstr "שליטה בצורות איחוי בצורות כתב הודיות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
@@ -19659,7 +19659,7 @@ msgstr "מרחקים"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls distances in Indic scripts, to avoid collisions."
-msgstr ""
+msgstr "שליטה במרחקים בצורות כתב הודיות, כדי להימנע מחפיפות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
 #, kde-format
@@ -19671,7 +19671,7 @@ msgstr "צורות חצי"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr ""
+msgstr "החלפת עיצורים בצורות כתב הודיות בצורות החצאיות שלהן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
@@ -19683,7 +19683,7 @@ msgstr "צורות הלאנט"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr ""
+msgstr "החלפת עיצורים בצורות כתב הודיות בצורות ההלאנט שלהן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
@@ -19697,7 +19697,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
-msgstr ""
+msgstr "החלפת עיצורים משולבי נוקטה בצורות כתב הודיות בצורות הנוקטה שלהם."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
 #, kde-format
@@ -50548,14 +50548,14 @@ msgid ""
 msgstr ""
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Color Adjustment curves..."
-msgstr "מצב צבעים"
+msgstr "&עקומות כוונון צבע…"
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.h:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Adjustment"
-msgstr "מצב צבעים"
+msgstr "כוונון צבע"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
 #, kde-format
@@ -50589,9 +50589,9 @@ msgstr "כחול"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetMidtones)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset Midtones  "
-msgstr "מקושר"
+msgstr "איפוס גווני ביניים"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
@@ -50782,15 +50782,15 @@ msgstr "פרוויט"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simple"
-msgstr "שכבה חדשה"
+msgstr "פשוט"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sobel"
-msgstr "מקושר"
+msgstr "סובֵּל"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/convertheightnormalmap/wdg_convert_height_to_normal_map.ui:55

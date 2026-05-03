@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-05-01 15:09+0300\n"
+"PO-Revision-Date: 2026-05-02 19:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -62852,7 +62852,7 @@ msgid ""
 msgstr ""
 "Çizgi romanın var olan bir kaynağın uyarlanması olup olmadığı ve öyleyse bu "
 "kaynak hakkında nasıl bilgi bulunacağı. Dolayısıyla, uyarlanmış bir web "
-"çizgi romanı için resmi web sitesi URL’si buraya eklenmelidir."
+"çizgi romanı için resmî web sitesi URL’si buraya eklenmelidir."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "City:"
@@ -65070,7 +65070,7 @@ msgid ""
 "(useful for filling line-art)"
 msgstr ""
 "Sürükleme, yalnızca ilk bölgeye benzer renkli bölgeleri doldurur (çizgi "
-"resmi doldurmak için kullanışlıdır)"
+"sanatını doldurmak için kullanışlıdır)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:675
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:580

@@ -163,7 +163,7 @@
       <statusTip/>
     </Action>
     <Action name="buginfo">
-      <icon/>
+      <icon>krita_log</icon>
       <text>Show Krita log for bug reports.</text>
       <whatsThis/>
       <toolTip>Show Krita log for bug reports.</toolTip>
@@ -193,7 +193,7 @@
       <statusTip/>
     </Action>
     <Action name="logcatdump">
-      <icon/>
+      <icon>show_android_log</icon>
       <text>Show Android log for bug reports.</text>
       <whatsThis/>
       <toolTip>Show Android log for bug reports.</toolTip>
@@ -203,7 +203,7 @@
       <statusTip/>
     </Action>
     <Action name="crashlog">
-      <icon/>
+      <icon>show_crash_log</icon>
       <text>Show crash log for bug reports.</text>
       <whatsThis/>
       <toolTip>Show crash log for bug reports.</toolTip>

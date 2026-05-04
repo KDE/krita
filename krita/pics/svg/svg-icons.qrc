@@ -4,6 +4,12 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_show_crash_log.svg</file>
+        <file>light_show_crash_log.svg</file>
+        <file>dark_show_android_log.svg</file>
+        <file>light_show_android_log.svg</file>
+        <file>dark_krita_log.svg</file>
+        <file>light_krita_log.svg</file>
         <file>light_python_plugin_from_file.svg</file>
         <file>dark_python_plugin_from_file.svg</file>
         <file>dark_python_plugin_from_web.svg</file>

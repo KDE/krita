@@ -1,0 +1,69 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+<dc:description>Based on the Krita icon by Wolthera van Hövell tot Westerflier and Timothée Giet, 2021</dc:description>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8.02734 2.39062C10.5377 2.39062 12.5732 4.42614 12.5732 6.93652C12.5732 8.11694 12.1225 9.19194 11.3848 10H4.66992C3.93219 9.19194 3.48243 8.11691 3.48242 6.93652C3.48242 4.42615 5.51698 2.39065 8.02734 2.39062Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4.09088 4.66394C5.34601 2.48999 8.12585 1.74495 10.2999 2.99987C12.4738 4.25499 13.2188 7.03486 11.9639 9.20886C11.7968 9.49834 11.602 9.76241 11.3858 9.99987H4.669C3.36969 8.5761 3.07577 6.42222 4.09088 4.66394Z" fill="url(#paint0_linear_174_56)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M5.75463 2.9999C7.92868 1.74472 10.7084 2.48991 11.9636 4.66396C12.9787 6.42215 12.6856 8.57612 11.3865 9.9999H4.66967C4.45334 9.76233 4.2578 9.49854 4.09057 9.20888C2.83569 7.03488 3.5807 4.25501 5.75463 2.9999Z" fill="url(#paint1_linear_174_56)"/>
+<path d="M8.0274 2.39084C10.5378 2.39085 12.5733 4.42636 12.5733 6.93674C12.5732 8.11735 12.1219 9.19214 11.3839 10.0002H4.67096C3.93293 9.19214 3.48157 8.11736 3.48151 6.93674C3.48151 4.42636 5.51702 2.39084 8.0274 2.39084Z" fill="url(#paint2_linear_174_56)"/>
+<path d="M4.23346 7.21995C4.59412 8.06207 6.91875 10.4916 9.7608 7.95627L10.6378 9.41526C10.51 9.64539 10.3567 9.83859 10.1856 10.0002H5.94147C5.00463 9.35299 4.39557 8.3315 4.23346 7.21995Z" fill="url(#paint3_linear_174_56)"/>
+<path d="M8.59213 7.37631C7.86384 8.05587 6.46269 6.97795 5.87128 6.30096C5.263 5.60465 2.99169 3.25619 2.82568 3.10388C2.65967 2.95157 2.52746 2.76348 2.67425 2.57634C2.82707 2.39409 3.03839 2.48464 3.22168 2.61565C3.40497 2.74666 6.17159 4.48444 6.97845 4.93593C7.7629 5.37491 9.10678 6.52345 8.59213 7.37631Z" fill="url(#paint4_linear_174_56)"/>
+<path d="M9.74872 8.28558C9.51653 8.39192 9.54164 8.46878 9.33548 8.43562C9.19329 8.41275 7.96148 7.47903 7.96148 7.47903C7.89905 7.32919 7.97394 7.12321 8.11463 6.96018C8.24511 6.78888 8.43121 6.67309 8.59071 6.70326C8.59071 6.70326 9.75853 7.71586 9.81025 7.85027C9.88524 8.04516 9.80485 8.03645 9.74872 8.28558Z" fill="#BFBFBF"/>
+<path d="M9.77833 10.2829C10.6959 9.76387 10.963 8.85974 10.6007 8.19823C10.3191 7.68418 9.85681 7.58699 9.53751 7.83555C9.22074 8.08213 9.19282 8.37594 9.28731 8.66775C9.48 9.26292 10.255 9.66906 9.77833 10.2829Z" fill="#282828"/>
+<path d="M6 12V13H11V12H6ZM6 14V15H10V14H6Z" fill="#D2D2D2"/>
+<path d="M5 12.5C5 12.7761 4.77614 13 4.5 13C4.22386 13 4 12.7761 4 12.5C4 12.2239 4.22386 12 4.5 12C4.77614 12 5 12.2239 5 12.5Z" fill="#D2D2D2"/>
+<path d="M5 14.5C5 14.7761 4.77614 15 4.5 15C4.22386 15 4 14.7761 4 14.5C4 14.2239 4.22386 14 4.5 14C4.77614 14 5 14.2239 5 14.5Z" fill="#D2D2D2"/>
+<defs>
+<linearGradient id="paint0_linear_174_56" x1="11.9636" y1="8.31839" x2="7.07227" y2="4.50083" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFFF00"/>
+<stop offset="1" stop-color="#FFFF00" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint1_linear_174_56" x1="4.08996" y1="8.65761" x2="9.21873" y2="4.9068" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00FFFF"/>
+<stop offset="1" stop-color="#00FFFF" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint2_linear_174_56" x1="8.02669" y1="3.27488" x2="8.02669" y2="8.65678" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF00FF"/>
+<stop offset="1" stop-color="#FF00FF" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint3_linear_174_56" x1="10.0104" y1="9.06681" x2="4.39784" y2="8.9972" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5596EA"/>
+<stop offset="1" stop-color="#5596EA" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint4_linear_174_56" x1="2.67428" y1="2.57632" x2="8.71495" y2="7.4821" gradientUnits="userSpaceOnUse">
+<stop stop-color="#343434"/>
+<stop offset="1" stop-color="#4D4D4D"/>
+</linearGradient>
+</defs>
+</svg>

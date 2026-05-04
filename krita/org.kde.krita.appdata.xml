@@ -23,6 +23,7 @@
   <name xml:lang="eu">Krita</name>
   <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
+  <name xml:lang="ga">Krita</name>
   <name xml:lang="gl">Krita</name>
   <name xml:lang="he">Krita</name>
   <name xml:lang="hi">क्रिता</name>
@@ -65,6 +66,7 @@
   <summary xml:lang="eu">Margolan digitala, sormen askatasuna</summary>
   <summary xml:lang="fi">Digitaalimaalaus, luova vapaus</summary>
   <summary xml:lang="fr">Peinture numérique, liberté créatrice</summary>
+  <summary xml:lang="ga">Péintéireacht Dhigiteach, Saoirse Chruthaitheach</summary>
   <summary xml:lang="gl">Debuxo dixital, liberdade creativa</summary>
   <summary xml:lang="he">ציור דיגיטלי, חופש יצירתי</summary>
   <summary xml:lang="hi">डिजिटल चित्रकारी, रचनात्मक स्वतंत्रता</summary>
@@ -106,6 +108,7 @@
     <p xml:lang="eu">Krita arte lantegi digital osoa da.</p>
     <p xml:lang="fi">Krita on täyspiirteinen digitaiteen ateljee.</p>
     <p xml:lang="fr">Krita est le studio d'art numérique complet.</p>
+    <p xml:lang="ga">Is stiúideo ealaíne digiteach lánfheistithe é Krita.</p>
     <p xml:lang="gl">Krita é un estudio completo de arte dixital.</p>
     <p xml:lang="he">Krita הוא אולפן האומנות הדיגיטלית שלם.</p>
     <p xml:lang="hi">क्रिता विशेषताओं से परिपूर्ण डिजिटल कला स्टूडियो है।</p>
@@ -146,6 +149,7 @@
     <p xml:lang="eu">Zirriborratzeko eta margotzeko ezin hobea da, eta hutsetik abiatuta margolan digitaleko fitxategiak sortzeko konponbide integral bat aurkezten du, maisuek egina.</p>
     <p xml:lang="fi">Se on täydellinen luonnosteluun ja maalaukseen ja tarjoaa kokonaisratkaisun digitaalisten kuvatiedostojen luomiseen alusta alkaen.</p>
     <p xml:lang="fr">Il est parfait pour crayonner et peindre, et constitue une solution de bout en bout pour créer des fichier de peinture numérique depuis la feuille blanche jusqu'au épreuves finales.</p>
+    <p xml:lang="ga">Tá sé foirfe le haghaidh sceitseála agus péintéireachta, agus cuireann sé réiteach ó thús go deireadh ar fáil chun comhaid phéintéireachta digiteacha a chruthú ó thús ag máistrí.</p>
     <p xml:lang="gl">Resulta perfecto para debuxar e pintar, e presenta unha solución completa que permite aos mestres crear ficheiros de debuxo dixital desde cero.</p>
     <p xml:lang="he">מושלם לאיור ולציור, ומציע פתרון מקצה לקצה ליצירת קובצי ציור דיגיטליים מאפס מידי מומחים.</p>
     <p xml:lang="hi">यह रेखाचित्र और पेंटिंग बनाने के लिए उत्तम है, और यह निपुण चित्रकारों को नए सिरे से डिजिटल पेंटिंग फाइलों को बनाने के लिए आद्योपान्त समाधान प्रस्तुत करता है।</p>
@@ -189,6 +193,7 @@
     <p xml:lang="eu">Krita aukera bikaina da kontzeptuzko artea, komikiak, errendatzeko ehundurak eta «matte» margolanak sortzeko. Kritak kolore-eremu ugari onartzen ditu hala nola GBU eta CMYK, 8 eta 16 biteko zenbaki osoko kanaletan, baita 16 eta 32 biteko koma-higikorreko kanaletan ere.</p>
     <p xml:lang="fi">Krita on hyvä valinta konseptikuvituksen, sarjakuvien, pintakuvioiden ja maalausten luomiseen. Krita tukee useita väriavaruuksia kuten RGB:tä ja CMYK:ta 8 ja 16 bitin kokonaisluku- samoin kuin 16 ja 32 bitin liukulukukanavin.</p>
     <p xml:lang="fr">Krita est un très bon choix pour créer des concepts arts, des bandes-dessinées, des textures de rendu et des peintures. Krita prend en charge plusieurs espaces de couleurs comme « RVB » et « CMJN » avec les canaux de 8 et 16 bits entiers ainsi que les canaux de 16 et 32 bits flottants.</p>
+    <p xml:lang="ga">Is rogha iontach é Krita chun ealaín choincheapúil, greannáin, uigeachtaí le haghaidh rindreála agus pictiúir neamhlonracha a chruthú. Tacaíonn Krita le go leor spásanna dathanna cosúil le RGB agus CMYK ag bealaí slánuimhir 8 agus 16 giotán, chomh maith le bealaí snámhphointe 16 agus 32 giotán.</p>
     <p xml:lang="gl">Krita é unha gran opción para crear arte conceptual, texturas para renderización e pinturas mate. Krita permite usar moitos espazos de cores como RGB e CMYK con canles de 8 e 16 bits, así como canles de coma flotante de 16 e 32 bits.</p>
     <p xml:lang="he">Krita היא בחירה נהדרת ליצירת אומנות קונספטואלית, קומיקס, מרקמים לעיבוד וציורים מחוספסים. Krita תומכת במגוון מרחבי צבע כגון RGB ו־CMYK בערוצי מספרים שלמים של 8 ו־16 סיביות, לרבות 16 ו־32 סיביות לערוצי נקודה צפה.</p>
     <p xml:lang="hi">क्रिता संकल्प कला, कॉमिक्स, रेंडरिंग और मैट पेंटिंग के लिए टेक्सचर बनाने के लिए एक बेहतरीन विकल्प है। क्रिता ८ और १६ बिट्स पूर्णांक चैनलों के साथ-साथ १६ और ३२ बिट्स फ्लोटिंग पॉइंट चैनलों पर RGB और CMYK जैसे कई वर्णव्योमों का समर्थन करता है।</p>
@@ -228,6 +233,7 @@
     <p xml:lang="eu">Margotzeaz goza ezazu, pintzel-motor aurreratuekin, iragazki txundigarriekin eta Krita ikaragarri emankorra egiten duten funtzio praktiko ugariekin.</p>
     <p xml:lang="fi">Pidä hauskaa maalatessasi edistyneillä sivellinmoottoreilla, hämmästyttävillä suotimilla ja monilla muilla kätevillä ominaisuuksilla, jotka tekevät Kritasta tavattoman tehokkaan.</p>
     <p xml:lang="fr">Amusez-vous à peindre avec les outils de brosse avancés, les filtres incroyables et les nombreuses fonctionnalités pratiques qui rendent Krita extrêmement productif.</p>
+    <p xml:lang="ga">Bain sult as péinteáil leis na hinnill scuaibe chun cinn, na scagairí iontacha agus na gnéithe úsáideacha iomadúla a fhágann go bhfuil Krita thar a bheith táirgiúil.</p>
     <p xml:lang="gl">Goza debuxando con motores de pincel avanzados, filtros fantásticos e moitas outras funcionalidades útiles que fan de Krita un programa extremadamente produtivo.</p>
     <p xml:lang="he">ציור בכיף עם מנועי המברשות המתקדמים, מסננים מדנימים ומגוון יכולות שימושיות שהופכות את Kirta למאוד יעילה.</p>
     <p xml:lang="hi">क्रिता को काफी उत्पादक बनाने वाले उन्नत ब्रश इंजन, अद्भुत फिल्टर और कई उपयोगी सुविधाओं के साथ पेंटिंग करने के मजे़ं लें।</p>
@@ -275,6 +281,7 @@
       <caption xml:lang="eu">Krita margolan-digital lantegi osoa bat da</caption>
       <caption xml:lang="fi">Krita on täyspiirteinen digitaiteen ateljee</caption>
       <caption xml:lang="fr">Krita est un studio d'art numérique complet.</caption>
+      <caption xml:lang="ga">Is stiúideo péintéireachta digiteach lánfheistithe é Krita</caption>
       <caption xml:lang="gl">Krita é un estudio completo de debuxo dixital.</caption>
       <caption xml:lang="he">Krita הוא אולפן ציור דיגיטלי שלם</caption>
       <caption xml:lang="hi">क्रिता एक विशेषताओं से परिपूर्ण डिजिटल कला स्टूडियो है।</caption>
@@ -316,6 +323,7 @@
       <caption xml:lang="eu">Abioko leihoak orain Kritari buruzko azken albisteak ematen dizkizu</caption>
       <caption xml:lang="fi">Aloitusikkunassa näytetään nyt myös Kritan tuoreimmat uutiset</caption>
       <caption xml:lang="fr">Maintenant, la fenêtre de démarrage vous donne aussi les dernières informations concernant Krita</caption>
+      <caption xml:lang="ga">Tugann an fhuinneog tosaithe an nuacht is déanaí faoi Krita duit anois freisin</caption>
       <caption xml:lang="gl">Agora a xanela de inicio tamén fornece as últimas novas sobre Krita.</caption>
       <caption xml:lang="he">חלון הפתיח מספק לך את החדשות העדכניות ביותר על Krita</caption>
       <caption xml:lang="hi">स्टार्टअप विंडो अब आपको क्रिता के बारे में ताज़ा समाचार भी देती है।</caption>
@@ -356,6 +364,7 @@
       <caption xml:lang="eu">Hamarretik gora isipu motor ikaragarri ahaltsu daude</caption>
       <caption xml:lang="fi">Tehokkaita sivellinmoottoreita on toistakymmentä</caption>
       <caption xml:lang="fr">Il y a plus de 10 moteurs de brosse, tous extrêmement puissants</caption>
+      <caption xml:lang="ga">Tá breis is deich n-inneall scuaibe thar a bheith cumhachtach ann</caption>
       <caption xml:lang="gl">Hai máis de dez motores de pinceis inmensamente potentes.</caption>
       <caption xml:lang="he">יש למעלה מעשרה מנועי מברשות עוצמתיים מאוד</caption>
       <caption xml:lang="hi">इसमें दस से अधिक शक्तिशाली ब्रश इंजन हैं</caption>
@@ -396,6 +405,7 @@
       <caption xml:lang="eu">Animaziorako? Krita-k ohiko eskuz-marraztutako animazioetarako behar duzun guztia dakar</caption>
       <caption xml:lang="fi">Kiinnostaako animointi? Krita tarjoaa kaiken, mitä tarvitaan perinteiseen käsin piirrettyyn animaatioon</caption>
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
+      <caption xml:lang="ga">An bhfuil suim agat i mbeochan? Soláthraíonn Krita gach rud a theastaíonn uait le haghaidh beochan traidisiúnta, lámhdhéanta</caption>
       <caption xml:lang="gl">Gusta das animacións? Krita fornece todo o necesario para animacións tradicionais debuxadas a man.</caption>
       <caption xml:lang="he">מה עם הנפשה? Krita מספקת כל מה שצריך להנפשה מאוירת מסורתית</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
@@ -437,6 +447,7 @@
       <caption xml:lang="eu">Margolan digitalean berria bazara, gaurkotuta dagoen eskuliburu zabal bat dago</caption>
       <caption xml:lang="fi">Jos digitaide on sinulle uutta, käsikirja on kattava ja ajan tasalla</caption>
       <caption xml:lang="fr">Si vous êtes nouveau en art graphique, il y a un manuel à jour et très fourni</caption>
+      <caption xml:lang="ga">Más rud é gur nua thú i saol na péintéireachta digiteach, tá lámhleabhar fairsing, cothrom le dáta ann</caption>
       <caption xml:lang="gl">Se está a empezar co debuxo dixital, existe un manual exhaustivo e actualizado.</caption>
       <caption xml:lang="he">אם אין לך רק בציור דיגיטלי, יש מדריך נרחב ועדכני</caption>
       <caption xml:lang="hi">यदि आप डिजिटल पेंटिंग में नए हैं, तो एक व्यापक, अद्यतन पु्स्तिका है</caption>
@@ -477,6 +488,7 @@
       <caption xml:lang="eu">Kritak iragazki ahaltsuak eskaintzen ditu</caption>
       <caption xml:lang="fi">Krita tarjoaa tehokkaita suodattimia</caption>
       <caption xml:lang="fr">Krita propose des filtres puissants</caption>
+      <caption xml:lang="ga">Cuireann Krita scagairí cumhachtacha ar fáil</caption>
       <caption xml:lang="gl">Krita ofrece potentes filtros.</caption>
       <caption xml:lang="he">Krita מציעה מסננים עוצמתיים</caption>
       <caption xml:lang="hi">क्रिता शक्तिशाली फिल्टरों को प्रदान करता है</caption>
@@ -514,6 +526,7 @@
       <caption xml:lang="eu">Eta G'Mic-ekin bateratzea dago ere, ehunka iragazki gehiago gehitzen dituelarik</caption>
       <caption xml:lang="fi">Ja G’Mic-eheytyksen myötä vielä satoja suodattimia lisää</caption>
       <caption xml:lang="fr">Et, il existe également une intégration avec « G-Mic », ajoutant des centaines de filtres, de plus.</caption>
+      <caption xml:lang="ga">Agus, tá comhtháthú le G'Mic ann freisin, a chuireann na céadta scagairí leis</caption>
       <caption xml:lang="gl">E tamén ten integración con G'Mic, que engade centos de filtros adicionais.</caption>
       <caption xml:lang="he">לרבות שילוב מול G'Mic, בנוסף, מה שמוסיף עוד מאות מסננים</caption>
       <caption xml:lang="hi">और, जी-मिक के साथ भी एकीकरण है, जो सैकड़ों फ़िल्टर और जोड़ता है</caption>
@@ -552,6 +565,7 @@
       <caption xml:lang="eu">Batu Youtubeko gure kanalera!</caption>
       <caption xml:lang="fi">Liity YouTube-kanavallemme!</caption>
       <caption xml:lang="fr">Rejoignez notre canal sur YouTube !</caption>
+      <caption xml:lang="ga">Bí linn ar ár gcainéal Youtube!</caption>
       <caption xml:lang="gl">Únase á nosa canle de YouTube!</caption>
       <caption xml:lang="he">מזמינים אותך לערוץ ה־YouTube שלנו!</caption>
       <caption xml:lang="hi">हमारे यूट्यूब चैनल से जुड़ें!</caption>
@@ -589,6 +603,7 @@
       <caption xml:lang="eu">Edo <a href="https://krita-artists.org">Krita Artisten komunitatea</a> aktiboa</caption>
       <caption xml:lang="fi">Tai aktiivinen <a href="https://krita-artists.org">Krita-taiteilijayhteisö</a></caption>
       <caption xml:lang="fr">Ou l'active <a href="https://krita-artists.org">La communauté d'artistes de Krita</a></caption>
+      <caption xml:lang="ga">Nó an <a href="https://krita-artists.org">Pobal Ealaíontóirí Krita</a> gníomhach</caption>
       <caption xml:lang="gl">Ou á activa <a href="https://krita-artists.org">comunidade de artistas de KDE</a>.</caption>
       <caption xml:lang="he">או ה־<a href="https://krita-artists.org">קהילת האומנים של Krita</a> הפעיל</caption>
       <caption xml:lang="hi">या सक्रिय <a href="https://krita-artists.org">क्रिता कलाकार समुदाय</a></caption>
@@ -639,6 +654,7 @@
         <p xml:lang="cs">Toto vydání hlavně opravuje problém se zpomalením pro uživatele systému Windows, kteří používají automatizační nástroje, jako jsou Microsoft Windows Powertoys' Fancy Zones nebo zásuvný modul Google Drive</p>
         <p xml:lang="es">Esta versión corrige principalmente un problema de ralentización para los usuarios de Windows que usen herramientas de automatización, como las «Fancy Zones» de los Powertoys de Microsoft Windows o el complemento de Google Drive.</p>
         <p xml:lang="fr">Cette version corrige principalement un problème de ralentissement pour lors de l'utilisation sous Windows pour les personnes utilisant des outils d'automatisation tels que « Fancy Zones » des outils « Powertoys » de Microsoft Windows ou le module externe « Google Drive »</p>
+        <p xml:lang="ga">Deisíonn an scaoileadh seo den chuid is mó fadhb moille d'úsáideoirí Windows a úsáideann uirlisí uathoibrithe cosúil le Fancy Zones de chuid Microsoft Windows Powertoys nó an breiseán Google Drive</p>
         <p xml:lang="he">המהדורה הזאת מתקנת בעיית איטיות שחוו משתמשי Windows שמשתמשים בכלי אוטומציה כגון Fancy Zones ב־Microsoft Windows Powertoys או בתוסף Google Drive</p>
         <p xml:lang="it">Questo rilascio corregge principalmente un problema di lentezza per gli utenti Windows che utilizzano strumenti di automazione tipo Fancy Zones di Microsoft Windows Powertoys o l'estensione di Google Drive</p>
         <p xml:lang="ka">ამ გამოცემის ფოკუსი ძირითადად არის შენელების პრობლემა Windows-ის მომხმარებლებისთვის, რომლებიც იყენებენ ისეთ ავტომატიზაციის ხელსაწყოებს, როგორიცაა Microsoft Windows Powertoys-ის Fancy Zones, ან Google Drive-ის დამატება</p>
@@ -684,6 +700,7 @@
       <description xml:lang="cs">Nové větší vydání s novým nástrojem pro text přímo na plátně, funkcemi pro uzavření mezer, lištou nástrojů pro výběr a novým nožem</description>
       <description xml:lang="es">Una nueva versión mayor que incluye la nueva herramienta de texto sobre el lienzo, funciones para cerrar huecos, una barra de selección y la nueva herramienta de cuchillo.</description>
       <description xml:lang="fr">Une nouvelle version majeure comprenant le nouvel outil de texte sur le canevas, des fonctionnalités de comblement des écarts, la barre d'outils de sélection et le nouvel outil « Couteau »</description>
+      <description xml:lang="ga">Scaoileadh mór nua ina bhfuil an uirlis téacs ar chanbhás nua, gnéithe dúnta bearnaí, clár uirlisí roghnúcháin agus an uirlis scian nua</description>
       <description xml:lang="he">מהדורה עיקרית חדשה שמציגה את כלי הטקסט החדש על משטח הציור, יכולות סגירת פערים, סרגל כלי בחירה וכלי הסכין חדש</description>
       <description xml:lang="it">Un nuovo rilascio principale che presenta il nuovo strumento del testo su tela, funzioni di chiusura spazio, la barra degli strumenti Selezione e il nuovo strumento Coltello</description>
       <description xml:lang="ka">ახალი გამოცემა ისეთი ფუნქციებით, როგორიცაა ახალი ტილოზე წერის ხელსაწყო, დაშორების დახურვის ფუნქციები, მონიშვნის ხელსაწყოთა პანელი და ახალი დანის ხელსაწყო</description>
@@ -727,6 +744,7 @@
       <description xml:lang="cs">Opravné vydání, která obsahuje řadu oprav pádů a řešení, aby se zlepšila použitelnost s tabletem Xiaomi Pad</description>
       <description xml:lang="es">Una versión de corrección de errores con una serie de correcciones de fallos y soluciones alternativas para mejorar el uso del Xiaomi Pad.</description>
       <description xml:lang="fr">Une version corrective incluant la correction de plusieurs plantages et des solutions de contournement pour améliorer l'utilisation du pavé tactile de Xiaomi</description>
+      <description xml:lang="ga">Scaoileadh ceartúcháin fabhtanna le roinnt ceartúcháin tuairteála agus réitigh sheachbhóthair chun úsáid leis an Xiaomi Pad a fheabhsú</description>
       <description xml:lang="he">מהדורת תיקון תקלות עם כמה תיקוני תקלות ומעקפים לשיפור השימושיות עם Xiaomi Pad</description>
       <description xml:lang="it">Un rilascio di correzione errori che corregge diversi blocchi e contiene soluzioni temporanee per migliorarne l'uso col Xiaomi Pad</description>
       <description xml:lang="ka">გასწორდა ხარვეზები, მათ შორის პროგრამის გათიშვის შემთხვევები და დაემატა დროებითი გადაწყვეტები Xiaomi Pad-თან თავსებადობის გასაუმჯობესებლად</description>
@@ -799,6 +817,7 @@
         <p xml:lang="cs">Jen o něco později, než jsme plánovali, přichází další verze s novými funkcemi pro Kritu! Tato verze přináší celou řadu nových typů vrstev výplně, včetně velmi všestranného typu vrstvy výplně založeného na skriptu SeExpr, vzrušující nové možnosti pro štětce Krity, jako je režim mapování přechodu pro štětce, režimy lehkosti a přechodu pro textury štětců, podpora dynamického použití barev v přechodech, export ve formátu webm pro animace, nové funkce skriptování — a samozřejmě stovky oprav chyb, které činí tuto verzi Krity lepší než kdy předtím. Zvláště vzrušující jsou všechny opravy, které jsme provedli pro Kritu na ChromeOS a Androidu!</p>
         <p xml:lang="es">Un poco más tarde de lo previsto, esta es la siguiente versión de Krita. Con un montón de nuevos tipos de capas de relleno, incluyendo el versátil tipo de capa de relleno programable basado en SeExpr, nuevas y emocionantes opciones para los pinceles de Krita, como el modo de mapa de degradado, los modos de luminosidad y degradado para las texturas, compatibilidad con el uso dinámico de colores en degradados, exportación a webm para animaciones, nuevas funciones de guiones y, por supuesto, cientos de correcciones de errores que hacen que esta versión de Krita sea mejor que nunca. Son especialmente interesantes las correcciones que hemos implementado para Krita en ChromeOS y Android.</p>
         <p xml:lang="fr">Un peu plus tard que prévu, voici la prochaine version de nouvelles fonctionnalités pour Krita ! Avec toute une série de nouveaux types de calques de remplissage, y compris le type de calque de remplissage scriptable vraiment polyvalent construit à partir de SeExpr, de nouvelles options passionnantes pour les brosses de Krita comme le mode de correspondance de dégradés pour les brosses, les modes de luminosité et de dégradé pour les textures de brosses, la prise en charge de l'utilisation dynamique des couleurs dans les dégradés, l'exportation au format « Webm » pour les animations, de nouvelles fonctionnalités de scripts — et bien sûr, des centaines de corrections de bogues rendant cette version de Krita meilleure que jamais. Particulièrement excitant, nous avons apportées un très grand nombre de corrections pour Krita sur ChromeOS et Android !</p>
+        <p xml:lang="ga">Beagán níos déanaí ná mar a bhí beartaithe againn, seo an chéad ghné eile de Krita! Le sraith iomlán cineálacha sraitheanna líonta nua, lena n-áirítear an cineál sraithe líonta scriptithe atá bunaithe ar SeExpr atá an-ildánach, roghanna nua spreagúla do scuaba Krita cosúil leis an modh léarscáile grádáin do scuaba, modhanna éadroime agus grádáin d'uigeachtaí scuab, tacaíocht d'úsáid dhinimiciúil dathanna i ngrádáin, onnmhairiú webm le haghaidh beochana, gnéithe scriptithe nua - agus ar ndóigh, na céadta ceartúcháin fabht a fhágann go bhfuil an leagan seo de Krita níos fearr ná riamh. Tá na ceartúcháin go léir a rinneamar do Krita ar ChromeOS agus Android thar a bheith spreagúil!</p>
         <p xml:lang="he">מעט מאוחר יותר משתכננו, זאת מהדורת היכולות הבאה של Krita! עם כמות גדולה של סוגי שכבות מילוי, כולל סוג שכבת המילוי שנשלטת בסקריפטים על בסיס SeExpr, אפשרויות חדשות ומרגשות למברשות של Krita כגון מצב מפת מדרג למצבי מברשות, בהירות ומדרגים למרקמי מברשות, תמיכה בשימוש דינמי שמדרגים, ייצוא של הנפשות ל־webm, יכולות חדשות לשליטה עם סקריפטים וכמובן מאות תיקוני תקלות שמשפות את הגרסה הזאת של Krita יותר מאי פעם. מה שמרגש במיוחד הם כל תיקוני התקלות שערכנו ב־Krita ל־ChromOS ול־Android!</p>
         <p xml:lang="it">Con leggero ritardo rispetto a quanto previsto, ecco il prossimo rilascio di Krita! Con una serie di nuovi tipi di livelli di riempimento, tra cui il super versatile tipo di livello di riempimento, gestibile con script, basato su SeExpr, nuove entusiasmanti opzioni per i pennelli di Krita quali la modalità mappa sfumatura per i pennelli, le modalità luminosità e sfumatura per le trame dei pennelli, il supporto per l'uso dinamico dei colori nelle sfumature, l'esportazione in WebM per le animazioni, nuove funzionalità di scripting e, naturalmente, centinaia di correzioni di errori che rendono questa versione di Krita migliore che mai. Particolarmente entusiasmanti sono tutte le correzioni che abbiamo apportato per Krita su ChromeOS e Android!</p>
         <p xml:lang="ka">დაგეგმილზე ოდნავ გვიან, თუმცა წარმოგიდგენთ Krita-ს ახალ ფუნქციონალურ გამოცემას! დაემატა უამრავი ახალი ტიპის შევსების ფენა, მათ შორის მრავალმხრივი SeExpr-ზე დაფუძნებული სკრიპტებადი შევსების ფენა, დაემატა ახალი პარამეტრები Krita-ს ფუნჯებისთვის, როგორიცაა გრადიენტის რუკის რეჟიმი, სინათლისა და გრადიენტის რეჟიმები ფუნჯის ტექსტურებისთვის, დაემატა ფერების დინამიკური გამოყენების მხარდაჭერა გრადიენტებში, ანიმაციების webm ექსპორტი, სკრიპტირების ახალი ფუნქციები და, რა თქმა უნდა, გასწორდა ასობით ხარვეზი, რაც Krita-ს ამ ვერსიას ყველა დროის საუკეთესოდ აქცევს. განსაკუთრებით აღსანიშნავია ყველა ის შესწორება, რაც განხორციელდა Krita-სთვის ChromeOS-სა და Android-ზე!</p>
@@ -820,6 +839,7 @@
         <p xml:lang="cs">Tři měsíce po vydání Krity 4.2.9 přicházíme s novou hlavní verzí plnou nových funkcí: Krita 4.3.0! V posledním roce jsme se nezabývali pouze opravou chyb, i když jsme jich opravili přes tisíc, ale také jsme přidali spoustu nových a zajímavých funkcí, se kterými si můžete hrát.</p>
         <p xml:lang="es">Tres meses después del lanzamiento de Krita 4.2.9, traemos una importante versión repleta de funcionalidades: Krita 4.3.0. El año pasado no solo hemos corregido errores: aunque hemos solucionado más de mil problemas, también nos hemos dedicado a añadir nuevas funciones interesantes con las que experimentar.</p>
         <p xml:lang="fr">Trois mois après la sortie de Krita 4.2.9, nous vous présentons une nouvelle version majeure  : Krita 4.3.0 ! Nous avons passé l’année dernière non seulement à corriger des bogues, même si nous en avons résolu plus de mille, mais nous avons également ajouté de nouvelles fonctionnalités intéressantes à découvrir.</p>
+        <p xml:lang="ga">Trí mhí tar éis eisiúint Krita 4.2.9, tá eisiúint gné nua shuntasach againn daoibh: Krita 4.3.0! Ní hamháin gur shocraíomar breis is míle saincheist le bliain anuas, ach bhíomar gnóthach ag cur rudaí nua fionnuara leis le himirt leo freisin.</p>
         <p xml:lang="he">שלושה חודשים אחרי היציאה לאור של 4.2.9, יש לנו מהדורת יכולות עיקרית בשבילכם: Krita 4.3.0! השקענו את השנה החולפת לא רק בתיקון תקלות, למרות שתיקנו למעלה מאלף תקלות, אבל גם עסקנו בהוספת דברים חדשים ומרתקים לשחק איתם.</p>
         <p xml:lang="it">Tre mesi dopo il rilascio di Krita 4.2.9, abbiamo rilasciato una nuova versione ricca di funzionalità per te: Krita 4.3.0! L'ultimo anno è stato speso non soltanto per correggere errori, dei quali ne abbiamo corretto oltre un migliaio, ma anche per aggiungere nuove fantastiche funzionalità con cui lavorare.</p>
         <p xml:lang="ka">გავიდა სამი თვე Krita 4.2.9-ის გამოსვლიდან და წარმოგიდგენთ ახალ მნიშვნელოვან ფუნქციონალურ გამოცემას: Krita 4.3.0! გასული წელი დავუთმეთ არა მხოლოდ ხარვეზების გასწორებას (თუმცა ათასზე მეტი პრობლემა მოვაგვარეთ), არამედ დაკავებულები ვიყავით საინტერესო სიახლეების დამატებითაც.</p>
@@ -837,6 +857,7 @@
         <p xml:lang="cs">Přichází zcela nová sada předvoleb štětců, které evokují malbu vodovými barvami. Ve filtru mapování přechodu je přidán režim barvy a zcela nový filtr paletizace a filtr vysokého průchodu. Rozhraní skriptování API bylo rozšířeno. Nyní je možné samostatně upravovat průhlednost a světlost na barevných špičkách štětců. Také nyní můžete vytvářet animované špičky štětců, které vybírají štětce podle více rozměrů. Umožnili jsme umístění oblasti plátna do vlastního okna, takže na nastavení s více monitory můžete mít všechny ovládací prvky na jednom monitoru a vaše obrázky na druhém. Výběr barvy dostal velkou aktualizaci. Přidán je nový dok snímků, který ukládá stavy vašeho obrázku, a můžete mezi nimi přepínat. Přidán je zcela nový nástroj magnetického výběru. Přechody lze nyní malovat jako spirály.</p>
         <p xml:lang="es">Hay un nuevo conjunto de preajustes de pincel que evocan la pintura de acuarela. Hay un modo de color en el filtro de mapa de degradado, un nuevo filtro de paletización y un filtro de paso alto. La API de guiones se ha ampliado. Ahora es posible ajustar la opacidad y la luminosidad de las puntas de pincel de color por separado. Ahora se pueden crear puntas de pincel animadas que seleccionan el pincel en múltiples dimensiones. Hemos hecho que se pueda colocar el área del lienzo en una ventana propia, por lo que, en una configuración de varios monitores, se pueden tener todos los controles en un monitor y las imágenes en el otro. El selector de color ha visto una gran actualización. Existe un nuevo panel de instantáneas que almacena los estados de la imagen y permite cambiar entre ellos. Hay una nueva herramienta de selección magnética. Los degradados pueden pintarse ahora como espirales.</p>
         <p xml:lang="fr">Il y a tout un nouvel ensemble de préréglages de brosses évoquant la peinture à l’aquarelle. Il existe un mode « Couleur » dans le filtre de correspondance des dégradés, ainsi qu’un tout nouveau filtre de palette et un filtre passe-haut. L’API de scripts a été étendue. Il est maintenant possible de régler séparément l’opacité et la luminosité des pointes de brosses colorées. Vous pouvez maintenant créer des pointes de brosses animées sélectionnant la brosse selon plusieurs dimensions. Nous avons rendu possible la mise en fenêtre de la zone de canevas, de sorte que sur une configuration multi-écrans, vous pouvez avoir tous les contrôles sur un écran et vos images sur l’autre. Le sélecteur de couleurs a été grandement mis à jour. Il y a un nouveau panneau de captures enregistrant les états de votre image et vous pouvez naviguer entre elles. Il y a un tout nouvel outil de sélection magnétique. Les dégradés peuvent maintenant être peints en spirale.</p>
+        <p xml:lang="ga">Tá sraith nua réamhshocruithe scuaibe ann a thugann péintéireacht uiscedhath chun cuimhne. Tá mód datha sa scagaire léarscáile grádáin agus scagaire pailéadaithe úrnua agus scagaire ardphas. Tá an API scriptithe sínte. Is féidir anois an teimhneacht agus an éadroime ar bharr scuaibe daite a choigeartú ar leithligh. Is féidir leat leideanna scuaibe beoite a chruthú anois a roghnaíonn scuab feadh ilthoisí. Tá sé déanta againn indéanta an limistéar chanbhás a chur i bhfuinneog dá chuid féin, mar sin ar shocrú il-mhonatóir, is féidir leat na rialuithe go léir a bheith agat ar mhonatóir amháin, agus do chuid íomhánna ar an gceann eile. Tá nuashonrú mór déanta ar an roghnóir datha. Tá dugaire snapshot nua ann a stórálann stáit d'íomhá, agus is féidir leat aistriú eatarthu sin. Tá uirlis roghnúcháin mhaighnéadach úrnua ann. Is féidir grádáin a phéinteáil mar spíreanna anois.</p>
         <p xml:lang="he">יש סדרה חדש שלמה של ערכות מברשות שמעוררות ציור בצבעי מים. יש מצב צבע במסנן מפת המדגרים ומסנן לוחות צבעים ומסנן גבוהים. ה־API של הסקריפטים הורחב. מעתה ניתן לתאם את האטימות והבהירות על קצוות של מברשות בנפרד. מעתה ניתן ליצור קצוות מברשות מונפשות שבוחר מברשת על פני מגוון ממדים. אפשרנו לשים את אזור משטח הציור בחלון משל עצמו, כך שבסביבה עם מגוון צגים, אפשר לשים את כל הפרדים בצג אחד ואת התמונות שלך באחר. בורר הצבעים זכה לעדכון משמעותי. יש מעגן צילומי מסך חדש חדש שמאחסן את המצבים של התמונה שלך, ואפשר להחליף ביניהם. יש כלי בחירה מגנטי חדש. אפשר מעתה לצייר מדרגים בתור ספירלות.</p>
         <p xml:lang="it">È presente un set completamente nuovo di preimpostazioni dei pennelli che evocano la pittura ad acquerello. È presente una modalità colore nel filtro mappa sfumatura, un nuovissimo filtro tavolozza e un filtro passa-alto. L'API di scripting è stata estesa. Ora è possibile regolare separatamente l'opacità e la luminosità delle punte di pennello colorate. Ora puoi creare punte di pennello animate che selezionano il pennello lungo più dimensioni. Abbiamo reso possibile il posizionamento dell'area della tela in una finestra a sé stante, quindi in una configurazione a più monitor puoi avere tutti i controlli su un monitor e le immagini sull'altro. Il selettore colore è stato notevolmente aggiornato. È presente una nuova area di aggancio per le istantanee che memorizza gli stati dell'immagine, ed è possibile passare da un'istantanea all'altra. È presente un nuovissimo strumento di selezione magnetica. Le sfumature ora possono essere disegnate come spirali.</p>
         <p xml:lang="ka">დაემატა ფუნჯების წინასწარი პარამეტრების სრულიად ახალი ნაკრები, რომელიც აკვარელით ხატვის ეფექტს ქმნის. დაემატა ფერების რეჟიმი გრადიენტის რუკის ფილტრში, სრულიად ახალი პალიტერიზაციის ფილტრი და მაღალი სიხშირის გამტარი ფილტრი. გაფართოვდა სკრიპტირების API. გახდა შესაძლებელი ფერადი ფუნჯის წვერების გამჭვირვალობისა და სინათლის ცალ-ცალკე რეგულირება. დაემატა ანიმირებული ფუნჯის წვერების შექმნის შესაძლებლობა, რომლებიც ფუნჯს რამდენიმე განზომილების მიხედვით ირჩევენ. გახდა შესაძლებელი სამუშაო არეალის ცალკე ფანჯარაში გატანა, რაც მრავალმონიტორიან სისტემებზე მართვის პანელების ერთ მონიტორზე, ხოლო გამოსახულების მეორეზე განთავსების საშუალებას იძლევა. განახლდა ფერების ამომრჩევი. დაემატა მომენტალური ასლების ახალი პანელი (Snapshot docker), რომელიც ინახავს გამოსახულების მდგომარეობებს და მათ შორის გადართვის საშუალებას იძლევა. დაემატა სრულიად ახალი მაგნიტური მონიშვნის ხელსაწყო. გახდა შესაძლებელი გრადიენტებით სპირალისებურად ხატვა.</p>

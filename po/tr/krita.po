@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-05-02 19:14+0300\n"
+"PO-Revision-Date: 2026-05-03 10:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15579,19 +15579,17 @@ msgstr "Pürüzsüzleştir"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
-msgstr "Seçim eylemleri çubuğunu etkinleştir"
+msgstr "Seçim Eylemleri Çubuğunu Etkinleştir"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Seçim eylemleri çubuğunu etkinleştir"
+msgstr "Seçim Eylemleri Çubuğunu Yapılandır"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -34751,10 +34749,9 @@ msgid "Crop to Selection"
 msgstr "Seçime Kırp"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "Seçim eylemleri çubuğunu etkinleştir"
+msgstr "Seçim eylemleri Çubuğunu Devre Dışı Bırak"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format

@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-25 02:43+0000\n"
-"PO-Revision-Date: 2026-04-05 23:03+0200\n"
+"PO-Revision-Date: 2026-04-23 17:45+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15645,19 +15645,17 @@ msgstr "Smussa"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "Abilita barra Azioni di selezione"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Configure sections"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Configura sezioni"
+msgstr "Configura barra Azioni di selezione"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -34928,10 +34926,9 @@ msgid "Crop to Selection"
 msgstr "Ritaglia alla selezione"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "Abilita barra Azioni di selezione"
+msgstr "Disabilita barra Azioni di selezione"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format
@@ -35927,10 +35924,9 @@ msgstr ""
 "un nome diverso in una posizione diversa."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Impossibile aprire il file."
+msgstr "Impossibile aprire %1"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -39353,16 +39349,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1.\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
 "Impossibile salvare %1.\n"
-"Motivo: %2"
+"Motivo: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format

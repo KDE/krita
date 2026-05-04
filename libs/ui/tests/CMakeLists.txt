@@ -104,6 +104,10 @@ kis_add_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../..
     LINK_LIBRARIES kritaui kritatestsdk
     )
 
+kis_add_test(move_selection_stroke_test.cpp  ../../../sdk/tests/stroke_testing_utils.cpp
+        TEST_NAME MoveSelectionStrokeTest
+        LINK_LIBRARIES kritadefaulttools_static kritabasicflakes kritaui kritatestsdk
+)
 
 ##### Tests that currently fail and should be fixed #####
 

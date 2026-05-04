@@ -231,6 +231,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
     tool/strokes/move_stroke_strategy.cpp
+    tool/strokes/move_selection_stroke_strategy.cpp
     tool/strokes/KisNodeSelectionRecipe.cpp
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp

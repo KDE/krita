@@ -7,6 +7,7 @@
 #ifndef __MOVE_SELECTION_STROKE_STRATEGY_H
 #define __MOVE_SELECTION_STROKE_STRATEGY_H
 
+#include "kritaui_export.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
 #include "kis_selection.h"
@@ -16,12 +17,12 @@ class KisPostExecutionUndoAdapter;
 class KisUpdatesFacade;
 
 
-class MoveSelectionStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
+class KRITAUI_EXPORT MoveSelectionStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
 {
     Q_OBJECT
 
 public:
-    struct ShowSelectionData : public KisStrokeJobData
+    struct KRITAUI_EXPORT ShowSelectionData : public KisStrokeJobData
     {
         ShowSelectionData(bool _showSelection)
             : KisStrokeJobData(),

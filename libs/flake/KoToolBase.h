@@ -164,7 +164,7 @@ public:
 
     /**
      * @brief explicitUserStrokeEndRequest is called by the input manager
-     *        when the user presses Enter key or any equivalent. This callback
+     *        when the user presses the Enter key or any equivalent key. This callback
      *        comes before requestStrokeEnd(), which comes from a different source.
      */
     virtual void explicitUserStrokeEndRequest();
@@ -362,8 +362,8 @@ public Q_SLOTS:
 
     /**
      * Called when the user requested undo while the stroke is
-     * active. If you tool supports undo of the part of its actions,
-     * override this method and do the needed work there.
+     * active. If your tool supports undoing, override this method
+     * and implement the desired effects there.
      *
      * NOTE: Default implementation forwards this request to
      *       requestStrokeCancellation() method, so that the stroke
@@ -379,16 +379,16 @@ public Q_SLOTS:
     virtual void requestRedoDuringStroke();
 
     /**
-     * Called when the user requested the cancellation of the current
-     * stroke. If you tool supports cancelling, override this method
-     * and do the needed work there
+     * Called when the user requests cancellation of the current
+     * stroke. If your tool supports cancelling, override this method
+     * and implement the desired effects there.
      */
     virtual void requestStrokeCancellation();
 
     /**
      * Called when the image decided that the stroke should better be
-     * ended. If you tool supports long strokes, override this method
-     * and do the needed work there
+     * ended. If your tool supports long strokes, override this method
+     * and implement the desired effects there.
      */
     virtual void requestStrokeEnd();
 

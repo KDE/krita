@@ -36,7 +36,7 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
      * all of them are completed before we start our stroke.
      */
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER);
-    enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
+    enableJob(KisSimpleStrokeStrategy::JOB_FINISH, true, KisStrokeJobData::BARRIER);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
 }
 

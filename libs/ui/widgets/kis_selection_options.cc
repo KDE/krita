@@ -28,6 +28,7 @@ public:
     KisSelectionOptions *q;
     KisOptionButtonStrip *optionButtonStripMode{nullptr};
     KisOptionButtonStrip *optionButtonStripAction{nullptr};
+    QCheckBox *checkBoxMoveSelectedContent{nullptr};
     QCheckBox *checkBoxAntiAliasSelection{nullptr};
     KisSliderSpinBox *sliderGrowSelection{nullptr};
     QToolButton *buttonStopGrowingAtDarkestPixel {nullptr};
@@ -184,6 +185,10 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
         m_d->checkBoxSelectionActionsPanel->setCheckState(Qt::CheckState::Unchecked);
     }
 
+    m_d->checkBoxMoveSelectedContent = new QCheckBox(
+        i18nc("The move-selected-content checkbox in selection tool options",
+            "Move Selected Content"));
+
     m_d->checkBoxAntiAliasSelection = new QCheckBox(
         i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
     KisOptionCollectionWidget *containerGrowSelection = new KisOptionCollectionWidget;
@@ -240,6 +245,9 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripAction->button(4)->setToolTip(
         i18nc("@info:tooltip", "Symmetric Difference"));
 
+    m_d->checkBoxMoveSelectedContent->setToolTip(
+        i18nc("@info:tooltip", "Move Selected Content"));
+
     m_d->checkBoxAntiAliasSelection->setToolTip(
         i18n("Smooths the edges of the selection"));
     m_d->sliderGrowSelection->setToolTip(
@@ -284,6 +292,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
 
     appendWidget("sapCheckBox", m_d->checkBoxSelectionActionsPanel);
 
+    appendWidget("checkBoxMoveSelectedContent", m_d->checkBoxMoveSelectedContent);
+
     KisOptionCollectionWidgetWithHeader *sectionAdjustments =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'adjustments' section label in selection tools options",
@@ -307,6 +317,9 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
             [this](int i, int c) {
                 m_d->on_optionButtonStripAction_buttonToggled(i, c);
             });
+    connect(m_d->checkBoxMoveSelectedContent,
+             SIGNAL(toggled(bool)),
+             SIGNAL(moveSelectedContentChanged(bool)));
     connect(m_d->checkBoxAntiAliasSelection,
             SIGNAL(toggled(bool)),
             SIGNAL(antiAliasSelectionChanged(bool)));
@@ -348,6 +361,11 @@ SelectionAction KisSelectionOptions::action() const
 {
     return m_d->buttonIndexToAction(
         m_d->optionButtonStripAction->checkedButtonIndex());
+}
+
+bool KisSelectionOptions::moveSelectedContent() const
+{
+    return m_d->checkBoxMoveSelectedContent->isChecked();
 }
 
 bool KisSelectionOptions::antiAliasSelection() const
@@ -398,6 +416,11 @@ void KisSelectionOptions::setAction(SelectionAction newAction)
     KIS_SAFE_ASSERT_RECOVER_RETURN(button);
 
     button->setChecked(true);
+}
+
+void KisSelectionOptions::setMoveSelectedContent(bool newMoveSelectedContent)
+{
+    m_d->checkBoxMoveSelectedContent->setChecked(newMoveSelectedContent);
 }
 
 void KisSelectionOptions::setAntiAliasSelection(bool newAntiAliasSelection)

@@ -34,6 +34,10 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(
             &KisSelectionOptions::actionChanged,
             this,
             &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
+    connect(m_optionsWidget,
+            &KisSelectionOptions::moveSelectedContentChanged,
+            this,
+            &KisSelectionToolConfigWidgetHelper::slotWidgetMoveSelectedContentChanged);
     connect(m_optionsWidget, &KisSelectionOptions::antiAliasSelectionChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged);
     connect(m_optionsWidget,
@@ -75,6 +79,14 @@ SelectionAction KisSelectionToolConfigWidgetHelper::selectionAction() const
         return SELECTION_DEFAULT;
     }
     return m_optionsWidget->action();
+}
+
+bool KisSelectionToolConfigWidgetHelper::moveSelectedContent() const
+{
+    if (!m_optionsWidget) {
+        return true;
+    }
+    return m_optionsWidget->moveSelectedContent();
 }
 
 bool KisSelectionToolConfigWidgetHelper::antiAliasSelection() const
@@ -146,6 +158,12 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     cfg.writeEntry("selectionAction", static_cast<int>(action));
     Q_EMIT selectionActionChanged(action);
+}
+
+void KisSelectionToolConfigWidgetHelper::slotWidgetMoveSelectedContentChanged(bool value)
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    cfg.writeEntry("moveSelectedContent", value);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged(bool value)
@@ -260,6 +278,8 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
 
     KConfigGroup cfgToolSpecific =
         KSharedConfig::openConfig()->group(m_configGroupForTool);
+    const bool moveSelectedContent =
+        cfgToolSpecific.readEntry("moveSelectedContent", false);
     const bool antiAliasSelection =
         cfgToolSpecific.readEntry("antiAliasSelection", true);
     const int growSelection = cfgToolSpecific.readEntry("growSelection", 0);
@@ -290,6 +310,7 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
     }
 
     KisSignalsBlocker b(m_optionsWidget);
+    m_optionsWidget->setMoveSelectedContent(moveSelectedContent);
     m_optionsWidget->setAntiAliasSelection(antiAliasSelection);
     m_optionsWidget->setGrowSelection(growSelection);
     m_optionsWidget->setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);

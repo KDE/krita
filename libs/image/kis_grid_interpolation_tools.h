@@ -171,6 +171,16 @@ struct PaintDevicePolygonOp
     PaintDevicePolygonOp(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev)
         : m_srcDev(srcDev), m_dstDev(dstDev) {}
 
+    ~PaintDevicePolygonOp()
+    {
+        /**
+         * When setCanMergeRects() is set to true, the caller should
+         * call finalize() to process all the postponed rects, which
+         * would clear the vector
+         */
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_rectsToCopy.isEmpty());
+    }
+
     void fastCopyArea(QRect areaToCopy) {
         fastCopyArea(areaToCopy, m_canMergeRects);
     }
@@ -314,6 +324,12 @@ struct PaintDevicePolygonOp
         copyPreviousRects();
     }
 
+    /**
+     * IMPORTANT: When setCanMergeRects() is set to `true`,
+     * the caller should calls finalilze() in the end of
+     * the processing action to actually copy all the lazily
+     * postponed rects.
+     */
     inline void setCanMergeRects(bool newCanMergeRects) {
         m_canMergeRects = newCanMergeRects;
     }
@@ -331,7 +347,7 @@ struct PaintDevicePolygonOp
 #endif
 
 private:
-    bool m_canMergeRects {true};
+    bool m_canMergeRects {false};
     QVector<QRect> m_rectsToCopy;
 
 };
@@ -347,6 +363,16 @@ struct QImagePolygonOp
           m_srcImageRect(m_srcImage.rect()),
           m_dstImageRect(m_dstImage.rect())
     {
+    }
+
+    ~QImagePolygonOp()
+    {
+        /**
+         * When setCanMergeRects() is set to true, the caller should
+         * call finalize() to process all the postponed rects, which
+         * would clear the vector
+         */
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_rectsToCopy.isEmpty());
     }
 
     void fastCopyArea(QRect areaToCopy) {
@@ -472,10 +498,15 @@ struct QImagePolygonOp
         copyPreviousRects();
     }
 
+    /**
+     * IMPORTANT: When setCanMergeRects() is set to `true`,
+     * the caller should calls finalilze() in the end of
+     * the processing action to actually copy all the lazily
+     * postponed rects.
+     */
     inline void setCanMergeRects(bool canMergeRects) {
         m_canMergeRects = canMergeRects;
     }
-
 
     const QImage &m_srcImage;
     QImage &m_dstImage;
@@ -488,7 +519,7 @@ struct QImagePolygonOp
     const qreal m_epsilon {0.001};
 
 private:
-    bool m_canMergeRects {true};
+    bool m_canMergeRects {false};
     QVector<QRect> m_rectsToCopy;
 };
 

@@ -72,6 +72,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
 
 KisSelectionDecoration::~KisSelectionDecoration()
 {
+    delete m_selectionActionsPanel;
 }
 
 KisSelectionDecoration::Mode KisSelectionDecoration::mode() const

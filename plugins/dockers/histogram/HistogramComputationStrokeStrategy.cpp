@@ -30,6 +30,7 @@ struct HistogramComputationStrokeStrategy::Private
 
     KisImageSP image;
     std::vector<HistVector> results;
+    std::vector<HistVector> resultsLog;
     float maximumValue;
 };
 
@@ -53,6 +54,7 @@ void HistogramComputationStrokeStrategy::initStrokeCallback()
     int i = 0;
     QVector<QRect> tileRects = KritaUtils::splitRectIntoPatches(m_d->image->bounds(), KritaUtils::optimalPatchSize());
     m_d->results.resize(tileRects.size());
+    m_d->resultsLog.resize(tileRects.size());
 
     Q_FOREACH (const QRect &tileRectangle, tileRects) {
         jobsData << new HistogramComputationStrokeStrategy::Private::ProcessData(tileRectangle, i);
@@ -86,6 +88,7 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
         return;
 
     initiateVector(m_d->results[d_pd->jobId], cs);
+    initiateVector(m_d->resultsLog[d_pd->jobId], cs);
 
     quint32 toSkip = nSkip;
 
@@ -110,6 +113,7 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
     m_d->maximumValue = maximum;
 
     const double maximumMultiplier = 255.0/maximum;
+    const double logMaxMultiplier = 255.0/(std::log(maximum+1));
 
 
     KisSequentialConstIterator it(m_dev, calculate);
@@ -125,6 +129,7 @@ void HistogramComputationStrokeStrategy::doStrokeCallback(KisStrokeJobData *data
 
                 for (int chan = 0; chan < (int)channelCount; ++chan) {
                     m_d->results[d_pd->jobId][chan][ qBound(0, qRound(channelValues.at(chan)*maximumMultiplier), 255) ]++;
+                    m_d->resultsLog[d_pd->jobId][chan][ qBound(0, qRound(std::log(channelValues.at(chan)+1)*logMaxMultiplier), 255) ]++;
                 }
                 toSkip = nSkip;
             }
@@ -141,12 +146,14 @@ void HistogramComputationStrokeStrategy::finishStrokeCallback()
 
     if (m_d->results.size() == 1) {
         hisData.bins = m_d->results[0];
+        hisData.binsLog = m_d->resultsLog[0];
         Q_EMIT computationResultReady(hisData);
     } else {
 
         quint32 channelCount = m_d->image->projection()->channelCount();
 
         initiateVector(hisData.bins, hisData.colorSpace);
+        initiateVector(hisData.binsLog, hisData.colorSpace);
 
         for (int chan = 0; chan < (int)channelCount; chan++) {
             int bsize = hisData.bins[chan].size();
@@ -155,6 +162,14 @@ void HistogramComputationStrokeStrategy::finishStrokeCallback()
                 hisData.bins[chan][bi] = 0;
                 for (int i = 0; i < (int)m_d->results.size(); i++) {
                     hisData.bins[chan][bi] += m_d->results[i][chan][bi];
+                }
+            }
+            int b2size = hisData.binsLog[chan].size();
+
+            for (int bi = 0; bi < b2size; bi++) {
+                hisData.binsLog[chan][bi] = 0;
+                for (int i = 0; i < (int)m_d->resultsLog.size(); i++) {
+                    hisData.binsLog[chan][bi] += m_d->resultsLog[i][chan][bi];
                 }
             }
         }

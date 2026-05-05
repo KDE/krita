@@ -28,6 +28,7 @@ public:
 
 public Q_SLOTS:
     void receiveNewHistogram(HistogramData data);
+    void enableLogarithmic(bool enable);
 
 private:
     KisIdleTasksManager::TaskGuard registerIdleTask(KisCanvas2 *canvas) override;
@@ -35,8 +36,10 @@ private:
 
 private:
     HistVector m_histogramData;
+    HistVector m_histogramDataLog;
     const KoColorSpace* m_colorSpace {0};
     bool m_smoothHistogram {false};
+    bool m_logarithmic{false};
     float m_maximumValue {1.0};
 };
 

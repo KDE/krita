@@ -7,7 +7,11 @@
 #include "histogramdocker_dock.h"
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QSpacerItem>
 #include <klocalizedstring.h>
+
 
 #include "kis_canvas2.h"
 #include <KisViewManager.h>
@@ -19,6 +23,15 @@ HistogramDockerDock::HistogramDockerDock()
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
 
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+    m_layout->addLayout(buttonLayout);
+    QToolButton *toggleLogarithm = new QToolButton(this);
+    buttonLayout->addWidget(toggleLogarithm);
+    buttonLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    toggleLogarithm->setIcon(KisIconUtils::loadIcon("histogram-logarithmic"));
+    toggleLogarithm->setToolTip(i18nc("@info:tooltip", "Toggle logarithmic histogram."));
+    toggleLogarithm->setCheckable(true);
+
     m_histogramWidget = new HistogramDockerWidget(this);
 
     m_histogramWidget->setBackgroundRole(QPalette::AlternateBase);
@@ -27,6 +40,9 @@ HistogramDockerDock::HistogramDockerDock()
     m_histogramWidget->setMinimumHeight(50);
     //m_histogramWidget->setSmoothHistogram(false);
     m_layout->addWidget(m_histogramWidget, 1);
+
+    connect(toggleLogarithm, SIGNAL(toggled(bool)), m_histogramWidget, SLOT(enableLogarithmic(bool)));
+
     setWidget(page);
     setEnabled(false);
 }

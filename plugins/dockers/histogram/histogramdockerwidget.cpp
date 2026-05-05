@@ -72,7 +72,7 @@ void HistogramDockerWidget::clearCachedState()
 
 QMap<float, float> calculateLogGridLines(int width, qreal maximumValue) {
     int power = 1;
-    QList<float> mainLines = {0.0, 0.25, 0.5, 1.0};
+    QList<float> mainLines = {0.0, 0.25, 0.5, 0.75, 1.0};
     while (mainLines.last() < (maximumValue)) {
         qreal mainLine = powf(10, power);
         mainLines.append(mainLine * 0.25);

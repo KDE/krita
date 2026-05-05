@@ -38944,7 +38944,7 @@ msgid ""
 msgstr ""
 "<p>Profily, ktoré končia '-srgbtrc.icc', '-g22.icc', a '-rec709.icc' majú "
 "približne, ale nie presne vnímavo jednotné TRC. Gama=1.8 TRC pre ProPhotoRGB "
-"nie je zasa až tak blízko, aby bolo vnímavo jednotné."
+"nie je zasa až tak blízko, aby bolo vnímavo jednotné.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format

@@ -112,7 +112,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
             dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
-    , m_moveShortcutsHelper(this)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -823,8 +822,6 @@ void KisToolTransform::activate(const QSet<KoShape*> &shapes)
     /// factory() is not yet initialized, so we cannot get toolId()
     slotGlobalConfigChanged();
 
-    m_moveShortcutsHelper.activate();
-
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
     m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),
@@ -862,7 +859,6 @@ void KisToolTransform::deactivate()
 {
     endStroke();
     m_canvas->updateCanvas();
-    m_moveShortcutsHelper.deactivate();
     m_actionConnections.clear();
     KisTool::deactivate();
 }
@@ -1044,7 +1040,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     }
 
     m_strokeId = image()->startStroke(strategy);
-    m_moveShortcutsHelper.startMoveAction();
 
     if (!m_currentlyUsingOverlayPreviewStyle) {
         m_asyncUpdateHelper.initUpdateStreamLowLevel(image().data(), m_strokeId);
@@ -1072,7 +1067,6 @@ void KisToolTransform::endStroke()
     }
 
     image()->endStroke(m_strokeId);
-    m_moveShortcutsHelper.endMoveAction();
 
     m_strokeStrategyCookie = 0;
     m_strokeId.clear();
@@ -1151,7 +1145,6 @@ void KisToolTransform::cancelStroke()
     }
 
     image()->cancelStroke(m_strokeId);
-    m_moveShortcutsHelper.cancelMoveAction();
     m_strokeStrategyCookie = 0;
     m_strokeId.clear();
     m_changesTracker.reset();
@@ -1501,7 +1494,14 @@ QList<QAction *> KisToolTransformFactory::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << KisToolUtils::MoveShortcutsHelper::createActions();
+    actions << actionRegistry->makeQAction("movetool-move-up", this);
+    actions << actionRegistry->makeQAction("movetool-move-down", this);
+    actions << actionRegistry->makeQAction("movetool-move-left", this);
+    actions << actionRegistry->makeQAction("movetool-move-right", this);
+    actions << actionRegistry->makeQAction("movetool-move-up-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-down-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-left-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-right-more", this);
 
     auto makeSubtoolAction = [&actionRegistry, &actions, this](QString actionName, const char *slot) {
         QAction *action = actionRegistry->makeQAction(actionName, this);

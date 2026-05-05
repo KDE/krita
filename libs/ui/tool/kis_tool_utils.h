@@ -11,11 +11,9 @@
 #include <kis_types.h>
 #include <kritaui_export.h>
 
-class QAction;
 class QPoint;
 class KoColor;
 class KoCanvasBase;
-class KoToolBase;
 class QPainterPath;
 
 namespace KisToolUtils {
@@ -110,36 +108,6 @@ bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeList nodes, KisSelection
 void KRITAUI_EXPORT setCursorPos(const QPoint &point);
 
 void KRITAUI_EXPORT showBrushSizeFloatingMessage(KoCanvasBase *canvas, qreal size);
-
-class KRITAUI_EXPORT MoveShortcutsHelper
-{
-public:
-    MoveShortcutsHelper(KoToolBase *tool);
-
-    void activate() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-    void deactivate() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-    void startMoveAction() {
-        setInternalMoveShortcutsEnabled(true);
-    }
-    void endMoveAction() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-    void cancelMoveAction() {
-        setInternalMoveShortcutsEnabled(false);
-    }
-
-    static QList<QAction*> createActions();
-
-private:
-    void setInternalMoveShortcutsEnabled(bool value);
-
-private:
-    KoToolBase *m_tool;
-};
 
 class KRITAUI_EXPORT StandardBrushSizes {
 public:

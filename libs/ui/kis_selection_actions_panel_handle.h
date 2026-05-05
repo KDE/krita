@@ -6,6 +6,7 @@
 
 #ifndef _KIS_SELECTION_ACTIONS_PANNEL_HANDLE
 #define _KIS_SELECTION_ACTIONS_PANNEL_HANDLE
+#include "kis_selection_actions_panel.h"
 #include <qpainter.h>
 #include <qwidget.h>
 
@@ -16,6 +17,7 @@ public:
     ~KisSelectionActionsPanelHandle();
     void draw(QPainter& painter);
     void set_held(bool held);
+    void setOrientation(Orientation orientation);
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
     void mousePressEvent(QMouseEvent* event) override;

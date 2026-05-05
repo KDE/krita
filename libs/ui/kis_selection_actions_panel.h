@@ -7,6 +7,7 @@
 #ifndef _KIS_SELECTION_ACTIONS_PANEL_H_
 #define _KIS_SELECTION_ACTIONS_PANEL_H_
 
+#include "kis_config.h"
 #include "kis_types.h"
 #include <QColor>
 #include <QObject>
@@ -27,6 +28,10 @@ class KisViewManager;
 class KisSelectionActionsPanel;
 typedef KisSharedPtr<KisSelectionActionsPanel> KisSelectionActionsPanelSP;
 
+using Orientation = KisConfig::SelectionActionsBarOrientation;
+using Position = KisConfig::SelectionActionsBarPosition;
+using Behavior = KisConfig::SelectionActionsBarBehavior;
+
 class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
 {
     Q_OBJECT
@@ -39,6 +44,8 @@ public:
     void setVisible(bool visible);
     void setEnabled(bool enabled);
     bool eventFilter(QObject *obj, QEvent *event) override;
+    void setOrientation(Orientation orientation);
+    void setHandleEnabled(bool enabled);
 
     void canvasWidgetChanged(KisCanvasWidgetBase* canvas);
 
@@ -46,10 +53,14 @@ private Q_SLOTS:
     void showContextMenu(const QPoint& pos);
     void disableSelectionActionsPanel();
     void configureSelectionActionsPanel();
+    void configChanged();
+    void canvasSizeChanged(const QSize &size);
 
 private:
+    QPoint getFixedPosition();
+    void recalculateDimensions();
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
-    QPoint initialDragHandlePosition() const;
+    QPoint initialDragHandlePosition();
     void drawActionBarBackground(QPainter &gc) const;
 
     bool handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button = Qt::LeftButton);

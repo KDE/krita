@@ -125,6 +125,9 @@ private Q_SLOTS:
     void colorSamplePreviewSizeChanged(int value);
     void colorSamplePreviewThicknessChanged(qreal value);
     void colorSamplePreviewOutlineEnabledChanged(int value);
+
+    void selectionActionsBarBehaviorChanged(int index);
+    void selectionActionsBarCheckboxChanged(Qt::CheckState value);
 public:
     QButtonGroup m_pasteFormatGroup;
     KisCumulativeUndoData m_cumulativeUndoData;

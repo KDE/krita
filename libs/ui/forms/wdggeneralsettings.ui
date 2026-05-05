@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1693</width>
-    <height>499</height>
+    <width>1699</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1047,24 +1047,24 @@
          </item>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="7" column="1">
         <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
          <property name="text">
           <string>Switch Control/Alt Selection Modifiers</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="8" column="0">
         <widget class="QLabel" name="lblTouchPainting">
          <property name="text">
           <string>Touch Painting:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="8" column="1">
         <widget class="QComboBox" name="cmbTouchPainting"/>
        </item>
-       <item row="5" column="1">
+       <item row="9" column="1">
         <widget class="QCheckBox" name="chkTouchPressureSensitivity">
          <property name="toolTip">
           <string>Enable reading of pressure state for touch events. This data may be broken on some platforms, e.g. on some Android devices, where pressure may be reported as 0.0 all the time.</string>
@@ -1074,21 +1074,21 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="10" column="1">
         <widget class="QCheckBox" name="chkEnableTransformToolAfterPaste">
          <property name="text">
           <string>Activate transform tool after pasting</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="11" column="0">
         <widget class="QLabel" name="lblZoomSteps">
          <property name="text">
           <string>Zoom steps between powers of 2</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="11" column="1">
         <widget class="QSpinBox" name="spnZoomSteps">
          <property name="minimum">
           <number>1</number>
@@ -1098,31 +1098,144 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="12" column="1">
         <widget class="QCheckBox" name="chkZoomHorizontally">
          <property name="text">
           <string>Use horizontal axis for Canvas Zoom Action</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lblSelectionActionBar">
-         <property name="text">
+       <item row="13" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
           <string>Selection Actions Bar</string>
          </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QCheckBox" name="chkEnableSelectionActionBar">
-         <property name="toolTip">
-          <string>When enabled, any selections will produce a small floating panel of useful selection-related actions.</string>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
          </property>
-         <property name="text">
-          <string>Enable Selection Actions Bar</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+          </property>
+          <property name="horizontalSpacing">
+           <number>153</number>
+          </property>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="chkEnableSelectionActionBar">
+            <property name="toolTip">
+             <string>When enabled, any selections will produce a small floating panel of useful selection-related actions.</string>
+            </property>
+            <property name="text">
+             <string>Enable Selection Actions Bar</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="selectionActionsBarBehaviorLabel">
+            <property name="text">
+             <string>Behavior:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="selectionActionsBarBehaviorComboBox">
+            <item>
+             <property name="text">
+              <string>Free floating</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fixed</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="selectionActionsBarPositionLabel">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Position:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QComboBox" name="selectionActionsBarPositionComboBox">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>Bottom</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bottom Left</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bottom Right</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Left</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Right</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Top</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Top Left</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Top Right</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="selectionActionsBarOrietationLabel">
+            <property name="text">
+             <string>Orietation:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QComboBox" name="selectionActionsBarOrietationComboBox">
+            <item>
+             <property name="text">
+              <string>Horizontal</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Vertical</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -1748,7 +1861,35 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisFileNameRequester</class>
+   <extends>QWidget</extends>
+   <header>kis_file_name_requester.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisFontComboBoxes</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_font_family_combo_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningBlock</class>
+   <extends>QGroupBox</extends>
+   <header location="global">kis_warning_block.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1761,34 +1902,6 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
    <class>KisColorSamplerPreviewPreview</class>
    <extends>QLabel</extends>
    <header>KisColorSamplerPreviewPreview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisWarningBlock</class>
-   <extends>QGroupBox</extends>
-   <header location="global">kis_warning_block.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisFileNameRequester</class>
-   <extends>QWidget</extends>
-   <header>kis_file_name_requester.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisFontComboBoxes</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_font_family_combo_box.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

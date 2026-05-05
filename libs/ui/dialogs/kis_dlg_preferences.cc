@@ -394,7 +394,27 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     intZoomMarginSize->setValue(cfg.zoomMarginSize());
 
-    chkEnableSelectionActionBar->setChecked(cfg.selectionActionBar());
+    bool sabEnabled = cfg.selectionActionBar();
+
+    chkEnableSelectionActionBar->setChecked(sabEnabled);
+    selectionActionsBarPositionComboBox->setCurrentIndex(cfg.selectionActionBarPosition());
+    selectionActionsBarBehaviorComboBox->setCurrentIndex(cfg.selectionActionBarBehavior());
+    selectionActionsBarOrietationComboBox->setCurrentIndex(cfg.selectionActionBarOrientation());
+
+    bool positionEnabled = (KisConfig::SelectionActionsBarBehavior)selectionActionsBarBehaviorComboBox->currentIndex()
+            == KisConfig::SelectionActionsBarBehavior::Fixed
+        && sabEnabled;
+    selectionActionsBarPositionComboBox->setEnabled(positionEnabled);
+    selectionActionsBarPositionLabel->setEnabled(positionEnabled);
+
+    selectionActionsBarBehaviorComboBox->setEnabled(sabEnabled);
+    selectionActionsBarBehaviorLabel->setEnabled(sabEnabled);
+
+    selectionActionsBarOrietationComboBox->setEnabled(sabEnabled);
+    selectionActionsBarOrietationLabel->setEnabled(sabEnabled);
+
+    connect(selectionActionsBarBehaviorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
+    connect(chkEnableSelectionActionBar, SIGNAL(checkStateChanged(Qt::CheckState)), this, SLOT(selectionActionsBarCheckboxChanged(Qt::CheckState)));
 
     //
     // File handling
@@ -873,6 +893,32 @@ void GeneralTab::colorSamplePreviewThicknessChanged(qreal value)
 void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
 {
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
+}
+
+void GeneralTab::selectionActionsBarBehaviorChanged(int index)
+{
+    bool enabled = (KisConfig::SelectionActionsBarBehavior)index == KisConfig::SelectionActionsBarBehavior::Fixed;
+
+    selectionActionsBarPositionComboBox->setEnabled(enabled);
+    selectionActionsBarPositionLabel->setEnabled(enabled);
+}
+
+void GeneralTab::selectionActionsBarCheckboxChanged(Qt::CheckState value)
+{
+    bool enabled = value == Qt::CheckState::Checked;
+
+    bool positionEnabled = (KisConfig::SelectionActionsBarBehavior)selectionActionsBarBehaviorComboBox->currentIndex()
+            == KisConfig::SelectionActionsBarBehavior::Fixed
+        && enabled;
+
+    selectionActionsBarPositionComboBox->setEnabled(positionEnabled);
+    selectionActionsBarPositionLabel->setEnabled(positionEnabled);
+
+    selectionActionsBarBehaviorComboBox->setEnabled(enabled);
+    selectionActionsBarBehaviorLabel->setEnabled(enabled);
+
+    selectionActionsBarOrietationComboBox->setEnabled(enabled);
+    selectionActionsBarOrietationLabel->setEnabled(enabled);
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -2958,6 +3004,11 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
+
+        cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior) m_general->selectionActionsBarBehaviorComboBox->currentIndex());
+        cfg.setSelectionActionBarPosition((KisConfig::SelectionActionsBarPosition)m_general->selectionActionsBarPositionComboBox->currentIndex());
+        cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->selectionActionsBarOrietationComboBox->currentIndex());
+
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());

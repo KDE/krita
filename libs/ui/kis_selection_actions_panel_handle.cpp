@@ -16,6 +16,7 @@ struct KisSelectionActionsPanelHandle::Private
     QCursor held_cursor;
     QIcon handle_icon;
     int size;
+    Orientation orientation;
 };
 
 KisSelectionActionsPanelHandle::KisSelectionActionsPanelHandle(int size, QWidget * parent) :
@@ -49,12 +50,19 @@ void KisSelectionActionsPanelHandle::set_held(bool held)
 void KisSelectionActionsPanelHandle::draw(QPainter& painter)
 {
     QRect rect = geometry();
+    QPoint offset;
 
     // Adjust the rect a bit to fill the right side of the bar properly
-    painter.fillRect(rect.marginsAdded(QMargins(-3, 4, 1, 4)), qApp->palette().window().color());
+    if (d->orientation == Orientation::Horizontal) {
+        painter.fillRect(rect.marginsAdded(QMargins(-3, 4, 1, 4)), qApp->palette().window().color());
+        offset = QPoint(3, 0);
+    } else {
+        painter.fillRect(rect.marginsAdded(QMargins(4, -3, 4, 1)), qApp->palette().window().color());
+        offset = QPoint(0, 3);
+    }
 
     // Adjusting the icon location a bit to be properly centered
-    d->handle_icon.paint(&painter, QRect(rect.x() + 3, rect.y(), d->size, d->size));
+    d->handle_icon.paint(&painter, QRect(QPoint(rect.topLeft() + offset), QSize(d->size, d->size)));
 }
 
 void KisSelectionActionsPanelHandle::contextMenuEvent(QContextMenuEvent *event)
@@ -71,4 +79,9 @@ void KisSelectionActionsPanelHandle::mousePressEvent(QMouseEvent *event)
     } else {
         QWidget::mousePressEvent(event);
     }
+}
+
+void KisSelectionActionsPanelHandle::setOrientation(Orientation orientation)
+{
+    d->orientation = orientation;
 }

@@ -6,6 +6,7 @@
 
 #include "kis_selection_actions_panel.h"
 
+#include "KoCanvasController.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -88,8 +89,14 @@ struct KisSelectionActionsPanel::Private {
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle
 
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
+    int m_actionBarHeight = BUTTON_SIZE;
+    int m_innerActionBarWidth = (m_buttonCount - 1) * BUTTON_SIZE;
+    int m_innerActionBarHeight = BUTTON_SIZE;
     KisAction* disable_action  = nullptr;
     KisAction* configure_action  = nullptr;
+    Orientation orientation = Orientation::Horizontal;
+    Position position = Position::Bottom;
+    Behavior behavior = Behavior::FreeFloating;
 };
 
 KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
@@ -114,6 +121,11 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
 
     d->configure_action = viewManager->actionManager()->actionByName("configure_sap");
     connect(d->configure_action, SIGNAL(triggered()), SLOT(configureSelectionActionsPanel()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
+
+    connect(d->m_viewManager->canvasBase()->canvasController()->proxyObject, SIGNAL(sizeChanged(const QSize&)), SLOT(canvasSizeChanged(const QSize&)));
+    configChanged();
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -133,7 +145,106 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
         button->draw(painter);
     }
 
-    d->m_handleWidget->draw(painter);
+    if (d->m_handleWidget->isEnabled()) {
+        d->m_handleWidget->draw(painter);
+    }
+}
+
+void KisSelectionActionsPanel::setOrientation(Orientation mode)
+{
+    d->orientation = mode;
+    d->m_handleWidget->setOrientation(mode);
+    recalculateDimensions();
+
+    //Recalcute the position of the bar to be inside the canvas
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
+    if (canvasWidget && d->m_dragHandle) {
+        d->m_dragHandle->position = updateCanvasBoundaries(d->m_dragHandle->position, canvasWidget);
+        movePanelWidgets();
+    }
+}
+
+void KisSelectionActionsPanel::setHandleEnabled(bool enabled)
+{
+    if (enabled && !d->m_handleWidget->isEnabled()) {
+        d->m_handleWidget->setEnabled(enabled);
+        d->m_buttonCount++;
+    }
+
+    if (!enabled && d->m_handleWidget->isEnabled()) {
+        d->m_handleWidget->setEnabled(enabled);
+        d->m_buttonCount--;
+    }
+    recalculateDimensions();
+}
+
+QPoint KisSelectionActionsPanel::getFixedPosition()
+{
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
+    if (!canvasWidget) {
+        return QPoint();
+    }
+
+    QRect canvasBounds = canvasWidget->rect();
+    QPoint result = QPoint();
+
+    switch (d->position) {
+    case KisConfig::Bottom:
+        result.setY(canvasBounds.bottom());
+        result.setX((canvasBounds.width() - d->m_actionBarWidth) / 2);
+        break;
+    case KisConfig::BottomLeft:
+        result.setY(canvasBounds.bottom());
+        result.setX(canvasBounds.left());
+        break;
+    case KisConfig::BottomRight:
+        result.setY(canvasBounds.bottom());
+        result.setX(canvasBounds.right());
+        break;
+    case KisConfig::Left:
+        result.setY((canvasBounds.height() - d->m_actionBarHeight) / 2);
+        result.setX(canvasBounds.left());
+        break;
+    case KisConfig::Right:
+        result.setY((canvasBounds.height() - d->m_actionBarHeight) / 2);
+        result.setX(canvasBounds.right());
+        break;
+    case KisConfig::Top:
+        result.setY(canvasBounds.top());
+        result.setX((canvasBounds.width() - d->m_actionBarWidth) / 2);
+        break;
+    case KisConfig::TopLeft:
+        result.setY(canvasBounds.top());
+        result.setX(canvasBounds.left());
+        break;
+    case KisConfig::TopRight:
+        result.setY(canvasBounds.top());
+        result.setX(canvasBounds.right());
+        break;
+    }
+
+    return updateCanvasBoundaries(result, canvasWidget);
+}
+
+void KisSelectionActionsPanel::recalculateDimensions()
+{
+    if (!d->m_handleWidget) return;
+
+    if (d->orientation == Orientation::Horizontal) {
+        d->m_innerActionBarHeight = d->m_actionBarHeight = BUTTON_SIZE;
+        d->m_innerActionBarWidth = d->m_actionBarWidth = BUTTON_SIZE * d->m_buttonCount;
+        if (d->m_handleWidget->isEnabled()) {
+            d->m_innerActionBarWidth = BUTTON_SIZE * (d->m_buttonCount - 1);
+        }
+    } else if (d->orientation == Orientation::Vertical) {
+        d->m_innerActionBarHeight = d->m_actionBarHeight = BUTTON_SIZE * d->m_buttonCount;
+        d->m_innerActionBarWidth = d->m_actionBarWidth = BUTTON_SIZE;
+        if (d->m_handleWidget->isEnabled()) {
+            d->m_innerActionBarHeight = BUTTON_SIZE * (d->m_buttonCount - 1);
+        }
+    }
+
+    movePanelWidgets();
 }
 
 void KisSelectionActionsPanel::setVisible(bool p_visible)
@@ -269,7 +380,7 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     QRect canvasBounds = canvasWidget->rect();
 
     const int ACTION_BAR_WIDTH = d->m_actionBarWidth;
-    const int ACTION_BAR_HEIGHT = BUTTON_SIZE;
+    const int ACTION_BAR_HEIGHT = d->m_actionBarHeight;
 
     int pos_x_min = canvasBounds.left() + BUFFER_SPACE;
     int pos_x_max = canvasBounds.right() - ACTION_BAR_WIDTH - BUFFER_SPACE;
@@ -294,8 +405,12 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     return position;
 }
 
-QPoint KisSelectionActionsPanel::initialDragHandlePosition() const
+QPoint KisSelectionActionsPanel::initialDragHandlePosition()
 {
+    if (d->behavior == Behavior::Fixed) {
+        return getFixedPosition();
+    }
+
     KisSelectionSP selection = d->m_viewManager->selection();
     KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(d->m_viewManager->canvas());
     KIS_ASSERT(selection);
@@ -333,10 +448,10 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
     const int outline_width = 4;
 
     //an outer 1px wide outline for contrast against the background
-    QRectF contrastOutline(d->m_dragHandle->position - QPoint(outline_width + 1,outline_width + 1), QSize(d->m_actionBarWidth, BUTTON_SIZE) +QSize(outline_width + 1,outline_width + 1) * 2);
-    QRectF midOutline(d->m_dragHandle->position - QPoint(outline_width,outline_width), QSize(d->m_actionBarWidth, BUTTON_SIZE) +QSize(outline_width,outline_width) * 2);
+    QRectF contrastOutline(d->m_dragHandle->position - QPoint(outline_width + 1,outline_width + 1), QSize(d->m_actionBarWidth, d->m_actionBarHeight) +QSize(outline_width + 1,outline_width + 1) * 2);
+    QRectF midOutline(d->m_dragHandle->position - QPoint(outline_width,outline_width), QSize(d->m_actionBarWidth, d->m_actionBarHeight) +QSize(outline_width,outline_width) * 2);
     //Add a bit of padding here for the icons
-    QRectF centerBackground(d->m_dragHandle->position - QPoint(outline_width,outline_width) / 2, QSize(d->m_actionBarWidth - BUTTON_SIZE, BUTTON_SIZE) +QSize(outline_width,outline_width));
+    QRectF centerBackground(d->m_dragHandle->position - QPoint(outline_width,outline_width) / 2, QSize(d->m_innerActionBarWidth, d->m_innerActionBarHeight) +QSize(outline_width,outline_width));
     QPainterPath bgPath;
     QPainterPath outlinePath;
     QPainterPath contrastOutlinePath;
@@ -382,14 +497,30 @@ bool KisSelectionActionsPanel::handleMove(QEvent *event, const QPoint &pos)
 
 void KisSelectionActionsPanel::movePanelWidgets()
 {
-    d->m_handleWidget->move(d->m_dragHandle->position.x() + d->m_buttons.size() * BUTTON_SIZE, d->m_dragHandle->position.y());
+    //This function gets called on panel creation, when dragHandle is not initialized, so we need to handle that
+    if (!d->m_dragHandle)
+        return;
+
+    if (d->orientation == Orientation::Vertical) {
+        d->m_handleWidget->move(d->m_dragHandle->position.x(),
+                                d->m_dragHandle->position.y() + d->m_buttons.size() * BUTTON_SIZE);
+    } else if (d->orientation == Orientation::Horizontal) {
+        d->m_handleWidget->move(d->m_dragHandle->position.x() + d->m_buttons.size() * BUTTON_SIZE,
+                                d->m_dragHandle->position.y());
+    }
     d->m_handleWidget->show();
 
     int i = 0;
-    Q_FOREACH(KisSelectionActionsPanelButton *button, d->m_buttons) {
+    Q_FOREACH (KisSelectionActionsPanelButton *button, d->m_buttons) {
         int buttonPosition = i * BUTTON_SIZE;
-        button->move(d->m_dragHandle->position.x() + buttonPosition, d->m_dragHandle->position.y());
+
+        if (d->orientation == Orientation::Vertical) {
+            button->move(d->m_dragHandle->position.x(), d->m_dragHandle->position.y() + buttonPosition);
+        } else if (d->orientation == Orientation::Horizontal) {
+            button->move(d->m_dragHandle->position.x() + buttonPosition, d->m_dragHandle->position.y());
+        }
         button->show();
+
         i++;
     }
 }
@@ -458,4 +589,34 @@ void KisSelectionActionsPanel::configureSelectionActionsPanel()
     a->setData(QList<QVariant>({KisDlgPreferences::Page::General, KisDlgPreferences::GeneralTabs::Tools}));
 
     a->trigger();
+}
+
+void KisSelectionActionsPanel::configChanged()
+{
+    KisConfig cfg(true);
+
+    setOrientation(cfg.selectionActionBarOrientation()) ;
+    setHandleEnabled(cfg.selectionActionBarBehavior() != Behavior::Fixed);
+    d->behavior = cfg.selectionActionBarBehavior();
+    d->position = cfg.selectionActionBarPosition();
+
+    if (d->behavior == Behavior::Fixed && d->m_dragHandle) {
+        d->m_dragHandle->position = initialDragHandlePosition();
+        movePanelWidgets();
+    }
+}
+
+void KisSelectionActionsPanel::canvasSizeChanged(const QSize &size)
+{
+    Q_UNUSED(size);
+
+    if (!d->m_dragHandle)
+        return;
+    if (d->behavior == Behavior::Fixed) {
+        d->m_dragHandle->position = initialDragHandlePosition();
+    } else {
+        d->m_dragHandle->position = updateCanvasBoundaries(d->m_dragHandle->position, d->m_viewManager->canvas());
+    }
+
+    movePanelWidgets();
 }

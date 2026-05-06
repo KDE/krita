@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-25 02:43+0000\n"
+"POT-Creation-Date: 2026-05-06 02:44+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -26137,7 +26137,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:141
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
 #, kde-format
 msgid "Reset"
 msgstr "पुन्हस्थापित करा"
@@ -37105,17 +37105,17 @@ msgstr "निर्माण करा (&C)"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:456
+#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:419
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "स्तर कुलूपबंद व अदृश्य आहे."
 
-#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:458
+#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:421
 #, kde-format
 msgid "Layer is locked."
 msgstr "स्तर कुलूपबंद आहे."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:460
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:423
 #, kde-format
 msgid "Layer is invisible."
 msgstr "स्तर अदृश्य आहे."
@@ -38394,25 +38394,25 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:215 libs/ui/tool/kis_tool_utils.cpp:227
+#: libs/ui/tool/kis_tool_utils.cpp:213 libs/ui/tool/kis_tool_utils.cpp:225
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "पुसून टाका"
 
-#: libs/ui/tool/kis_tool_utils.cpp:324
+#: libs/ui/tool/kis_tool_utils.cpp:322
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "कुंचल्याचा आकार"
 
-#: libs/ui/tool/kis_tool_utils.cpp:462
+#: libs/ui/tool/kis_tool_utils.cpp:425
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:464
+#: libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Group not editable."
 msgstr "समूह संपादनास अयोग्य."
@@ -66315,19 +66315,19 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "चौकोन"
 
-#: plugins/tools/basictools/kis_tool_move.cc:294
+#: plugins/tools/basictools/kis_tool_move.cc:292
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.cc:342
+#: plugins/tools/basictools/kis_tool_move.cc:340
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.h:185
+#: plugins/tools/basictools/kis_tool_move.h:183
 #, fuzzy, kde-format
 msgid "Move Tool"
 msgstr "पेंटरची साधने (&P)"
@@ -69656,117 +69656,117 @@ msgid ""
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
 #, fuzzy, kde-format
 #| msgid "Warp"
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr "वार्प"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
 msgstr "कुंचल्याचा आकार"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, fuzzy, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr "M_पिंजरा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, fuzzy, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "निवडा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:128
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr "आकलन"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
 #, fuzzy, kde-format
 msgid "Mirror Horizontal"
 msgstr "स्तर आडवेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
 #, fuzzy, kde-format
 msgid "Mirror Vertical"
 msgstr "स्तर उभेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, fuzzy, kde-format
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
 msgid "Rotate 90 degrees Clockwise"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, fuzzy, kde-format
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
 msgid "Rotate 90 degrees CounterClockwise"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:136
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Keep Aspect Ratio"
 msgid "Keep Aspect Ratio"
 msgstr "स्वरूपाचे गुणोत्तर ठेवा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Apply"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:426
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:425
 #, fuzzy, kde-format
 msgid "Transform Tool Actions"
 msgstr "रूपांतरित करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:942
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:938
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
 msgstr "नोड बदला"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:948
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:944
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
 msgstr "नोड बदला"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:954
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:950
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
 msgstr "नोड बदला"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:970
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:966
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "पुढचा स्तर सक्रिय करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:977
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:973
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "पुढचा स्तर सक्रिय करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:996
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:992
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -69774,20 +69774,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1009
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1005
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1096
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1090
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1129
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "नोड बदला"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1122
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1116
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -69795,7 +69795,7 @@ msgid ""
 "them to be transformed "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:373
+#: plugins/tools/tool_transform2/kis_tool_transform.h:370
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "स्तर किंवा निवड रूपांतरित करा"

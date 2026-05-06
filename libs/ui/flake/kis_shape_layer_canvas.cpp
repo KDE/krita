@@ -198,7 +198,8 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
     m_projection->setDefaultBounds(new KisDefaultBounds(image));
     if (image && m_hasUpdateOnSetImage) {
         m_hasUpdateOnSetImage = false;
-        updateCanvas(m_cachedImageRect);
+        const QRectF documentRect = viewConverter()->viewToDocument(m_cachedImageRect);
+        updateCanvas(documentRect);
     }
 }
 

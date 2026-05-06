@@ -397,14 +397,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     bool sapEnabled = cfg.selectionActionBar();
 
     chkEnableSelectionActionBar->setChecked(sapEnabled);
-    selectionActionsBarPositionComboBox->setCurrentIndex(cfg.selectionActionBarPosition());
     selectionActionsBarBehaviorComboBox->setCurrentIndex(cfg.selectionActionBarBehavior());
     selectionActionsBarOrietationComboBox->setCurrentIndex(cfg.selectionActionBarOrientation());
 
     bool positionEnabled = (KisConfig::SelectionActionsBarBehavior)selectionActionsBarBehaviorComboBox->currentIndex()
             == KisConfig::SelectionActionsBarBehavior::Fixed
         && sapEnabled;
-    selectionActionsBarPositionComboBox->setEnabled(positionEnabled);
+
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
 
     selectionActionsBarBehaviorComboBox->setEnabled(sapEnabled);
@@ -419,6 +418,38 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 #else
     connect(chkEnableSelectionActionBar, SIGNAL(stateChanged(int)), this, SLOT(selectionActionsBarCheckboxChanged(int)));
 #endif
+    sapRightMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+    sapTopRightButton->setIcon(KisIconUtils::loadIcon("arrow-topright"));
+    sapTopMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-up"));
+    sapTopLeftButton->setIcon(KisIconUtils::loadIcon("arrow-topleft"));
+    sapLeftMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    sapBottomLeftButton->setIcon(KisIconUtils::loadIcon("arrow-downleft"));
+    sapBottomMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
+    sapBottomRightButton->setIcon(KisIconUtils::loadIcon("arrow-downright"));
+
+
+    using Position = KisConfig::SelectionActionsBarPosition;
+    m_sapPositionToButtonMap = {
+        {Position::BottomLeft, sapBottomLeftButton},
+        {Position::Bottom, sapBottomMiddleButton},
+        {Position::BottomRight, sapBottomRightButton},
+        {Position::Left, sapLeftMiddleButton},
+        {Position::Right, sapRightMiddleButton},
+        {Position::TopLeft, sapTopLeftButton},
+        {Position::Top, sapTopMiddleButton},
+        {Position::TopRight, sapTopRightButton}
+    };
+
+    if (m_sapPositionToButtonMap.contains(cfg.selectionActionBarPosition())) {
+        QPushButton* sapCurrentPositionButton = m_sapPositionToButtonMap[cfg.selectionActionBarPosition()];
+        sapCurrentPositionButton->setChecked(true);
+    }
+
+    for (int i = 0; i < m_sapPositionToButtonMap.keys().length(); i++) {
+        QPushButton* button = m_sapPositionToButtonMap[m_sapPositionToButtonMap.keys()[i]];
+        m_sapPositionGroup.addButton(button);
+        button->setEnabled(positionEnabled);
+    }
 
     //
     // File handling
@@ -903,7 +934,10 @@ void GeneralTab::selectionActionsBarBehaviorChanged(int index)
 {
     bool enabled = (KisConfig::SelectionActionsBarBehavior)index == KisConfig::SelectionActionsBarBehavior::Fixed;
 
-    selectionActionsBarPositionComboBox->setEnabled(enabled);
+    Q_FOREACH(KisConfig::SelectionActionsBarPosition position, m_sapPositionToButtonMap.keys()) {
+        QPushButton* button = m_sapPositionToButtonMap[position];
+        button->setEnabled(enabled);
+    }
     selectionActionsBarPositionLabel->setEnabled(enabled);
 }
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
@@ -918,8 +952,11 @@ void GeneralTab::selectionActionsBarCheckboxChanged(int value)
             == KisConfig::SelectionActionsBarBehavior::Fixed
         && enabled;
 
-    selectionActionsBarPositionComboBox->setEnabled(positionEnabled);
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
+    Q_FOREACH(KisConfig::SelectionActionsBarPosition position, m_sapPositionToButtonMap.keys()) {
+        QPushButton* button = m_sapPositionToButtonMap[position];
+        button->setEnabled(positionEnabled);
+    }
 
     selectionActionsBarBehaviorComboBox->setEnabled(enabled);
     selectionActionsBarBehaviorLabel->setEnabled(enabled);
@@ -3022,7 +3059,16 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
 
         cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior) m_general->selectionActionsBarBehaviorComboBox->currentIndex());
-        cfg.setSelectionActionBarPosition((KisConfig::SelectionActionsBarPosition)m_general->selectionActionsBarPositionComboBox->currentIndex());
+
+        QPushButton* sapCurrentPositionButton = qobject_cast<QPushButton*>(m_general->m_sapPositionGroup.checkedButton());
+        if (sapCurrentPositionButton) {
+            // since there is no containsKey() function on QMap...
+            KisConfig::SelectionActionsBarPosition position = m_general->m_sapPositionToButtonMap.key(sapCurrentPositionButton, KisConfig::SelectionActionsBarPosition::Top);
+            if (m_general->m_sapPositionToButtonMap.contains(position) && m_general->m_sapPositionToButtonMap[position] == sapCurrentPositionButton) {
+                cfg.setSelectionActionBarPosition(position);
+            }
+        }
+
         cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->selectionActionsBarOrietationComboBox->currentIndex());
 
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());

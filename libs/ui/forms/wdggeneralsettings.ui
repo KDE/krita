@@ -1115,7 +1115,7 @@
          </property>
          <layout class="QFormLayout" name="formLayout_3">
           <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+           <enum>QFormLayout::FieldsStayAtSizeHint</enum>
           </property>
           <property name="formAlignment">
            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>

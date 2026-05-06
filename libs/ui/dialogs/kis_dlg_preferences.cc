@@ -429,28 +429,20 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
 
     using Position = KisConfig::SelectionActionsBarPosition;
-    m_sapPositionToButtonMap = {
-        {Position::BottomLeft, sapBottomLeftButton},
-        {Position::Bottom, sapBottomMiddleButton},
-        {Position::BottomRight, sapBottomRightButton},
-        {Position::Left, sapLeftMiddleButton},
-        {Position::Right, sapRightMiddleButton},
-        {Position::TopLeft, sapTopLeftButton},
-        {Position::Top, sapTopMiddleButton},
-        {Position::TopRight, sapTopRightButton}
-    };
+    m_sapPositionGroup.addButton(sapBottomLeftButton, Position::BottomLeft);
+    m_sapPositionGroup.addButton(sapBottomMiddleButton, Position::Bottom);
+    m_sapPositionGroup.addButton(sapBottomRightButton, Position::BottomRight);
+    m_sapPositionGroup.addButton(sapLeftMiddleButton, Position::Left);
+    m_sapPositionGroup.addButton(sapRightMiddleButton, Position::Right);
+    m_sapPositionGroup.addButton(sapTopLeftButton, Position::TopLeft);
+    m_sapPositionGroup.addButton(sapTopMiddleButton, Position::Top);
+    m_sapPositionGroup.addButton(sapTopRightButton, Position::TopRight);
 
-    if (m_sapPositionToButtonMap.contains(cfg.selectionActionBarPosition())) {
-        QPushButton* sapCurrentPositionButton = m_sapPositionToButtonMap[cfg.selectionActionBarPosition()];
-        sapCurrentPositionButton->setChecked(true);
+
+    if (m_sapPositionGroup.button(cfg.selectionActionBarPosition())) {
+        m_sapPositionGroup.button(cfg.selectionActionBarPosition())->setChecked(true);
     }
-
-    for (int i = 0; i < m_sapPositionToButtonMap.keys().length(); i++) {
-        QPushButton* button = m_sapPositionToButtonMap[m_sapPositionToButtonMap.keys()[i]];
-        m_sapPositionGroup.addButton(button);
-        button->setEnabled(positionEnabled);
-    }
-
+    setButtonGroupEnabled(m_sapPositionGroup, positionEnabled);
     //
     // File handling
     //
@@ -934,11 +926,9 @@ void GeneralTab::selectionActionsBarBehaviorChanged(int index)
 {
     bool enabled = (KisConfig::SelectionActionsBarBehavior)index == KisConfig::SelectionActionsBarBehavior::Fixed;
 
-    Q_FOREACH(KisConfig::SelectionActionsBarPosition position, m_sapPositionToButtonMap.keys()) {
-        QPushButton* button = m_sapPositionToButtonMap[position];
-        button->setEnabled(enabled);
-    }
+    setButtonGroupEnabled(m_sapPositionGroup, enabled);
     selectionActionsBarPositionLabel->setEnabled(enabled);
+
 }
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
 void GeneralTab::selectionActionsBarCheckboxChanged(Qt::CheckState value)
@@ -952,11 +942,8 @@ void GeneralTab::selectionActionsBarCheckboxChanged(int value)
             == KisConfig::SelectionActionsBarBehavior::Fixed
         && enabled;
 
+    setButtonGroupEnabled(m_sapPositionGroup, positionEnabled);
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
-    Q_FOREACH(KisConfig::SelectionActionsBarPosition position, m_sapPositionToButtonMap.keys()) {
-        QPushButton* button = m_sapPositionToButtonMap[position];
-        button->setEnabled(positionEnabled);
-    }
 
     selectionActionsBarBehaviorComboBox->setEnabled(enabled);
     selectionActionsBarBehaviorLabel->setEnabled(enabled);
@@ -3059,16 +3046,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
 
         cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior) m_general->selectionActionsBarBehaviorComboBox->currentIndex());
-
-        QPushButton* sapCurrentPositionButton = qobject_cast<QPushButton*>(m_general->m_sapPositionGroup.checkedButton());
-        if (sapCurrentPositionButton) {
-            // since there is no containsKey() function on QMap...
-            KisConfig::SelectionActionsBarPosition position = m_general->m_sapPositionToButtonMap.key(sapCurrentPositionButton, KisConfig::SelectionActionsBarPosition::Top);
-            if (m_general->m_sapPositionToButtonMap.contains(position) && m_general->m_sapPositionToButtonMap[position] == sapCurrentPositionButton) {
-                cfg.setSelectionActionBarPosition(position);
-            }
-        }
-
+        cfg.setSelectionActionBarPosition((KisConfig::SelectionActionsBarPosition)m_general->m_sapPositionGroup.checkedId());
         cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->selectionActionsBarOrietationComboBox->currentIndex());
 
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());

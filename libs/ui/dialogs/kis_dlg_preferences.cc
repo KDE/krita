@@ -414,7 +414,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     selectionActionsBarOrietationLabel->setEnabled(sabEnabled);
 
     connect(selectionActionsBarBehaviorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
+#if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
     connect(chkEnableSelectionActionBar, SIGNAL(checkStateChanged(Qt::CheckState)), this, SLOT(selectionActionsBarCheckboxChanged(Qt::CheckState)));
+#else
+    connect(chkEnableSelectionActionBar, SIGNAL(stateChanged(int)), this, SLOT(selectionActionsBarCheckboxChanged(int)));
+#endif
 
     //
     // File handling
@@ -902,8 +906,11 @@ void GeneralTab::selectionActionsBarBehaviorChanged(int index)
     selectionActionsBarPositionComboBox->setEnabled(enabled);
     selectionActionsBarPositionLabel->setEnabled(enabled);
 }
-
+#if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
 void GeneralTab::selectionActionsBarCheckboxChanged(Qt::CheckState value)
+#else
+void GeneralTab::selectionActionsBarCheckboxChanged(int value)
+#endif
 {
     bool enabled = value == Qt::CheckState::Checked;
 

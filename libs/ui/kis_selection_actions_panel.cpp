@@ -595,8 +595,8 @@ void KisSelectionActionsPanel::configChanged()
 {
     KisConfig cfg(true);
 
-    setOrientation(cfg.selectionActionBarOrientation()) ;
     setHandleEnabled(cfg.selectionActionBarBehavior() != Behavior::Fixed);
+    setOrientation(cfg.selectionActionBarOrientation()) ;
     d->behavior = cfg.selectionActionBarBehavior();
     d->position = cfg.selectionActionBarPosition();
 

@@ -397,7 +397,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     bool sapEnabled = cfg.selectionActionBar();
 
     chkEnableSelectionActionBar->setChecked(sapEnabled);
-    selectionActionsBarOrietationComboBox->setCurrentIndex(cfg.selectionActionBarOrientation());
+    selectionActionsBarOrientationComboBox->setCurrentIndex(cfg.selectionActionBarOrientation());
 
     m_sapBehaviourGroup.addButton(sapFixedButton, KisConfig::SelectionActionsBarBehavior::Fixed);
     m_sapBehaviourGroup.addButton(sapFreeFloatingButton, KisConfig::SelectionActionsBarBehavior::FreeFloating);
@@ -411,9 +411,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     bool positionEnabled = sapEnabled && cfg.selectionActionBarBehavior() == KisConfig::SelectionActionsBarBehavior::Fixed;
 
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
-
-    selectionActionsBarOrietationComboBox->setEnabled(sapEnabled);
-    selectionActionsBarOrietationLabel->setEnabled(sapEnabled);
+    selectionActionsBarOrientationComboBox->setEnabled(sapEnabled);
+    selectionActionsBarOrientationLabel->setEnabled(sapEnabled);
 
     connect(&m_sapBehaviourGroup, SIGNAL(idClicked(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
 
@@ -949,8 +948,8 @@ void GeneralTab::selectionActionsBarCheckboxChanged(int value)
     setButtonGroupEnabled(m_sapBehaviourGroup, enabled);
     selectionActionsBarBehaviorLabel->setEnabled(enabled);
 
-    selectionActionsBarOrietationComboBox->setEnabled(enabled);
-    selectionActionsBarOrietationLabel->setEnabled(enabled);
+    selectionActionsBarOrientationComboBox->setEnabled(enabled);
+    selectionActionsBarOrientationLabel->setEnabled(enabled);
 }
 
 void GeneralTab::setButtonGroupEnabled(const QButtonGroup &buttonGroup, bool value)
@@ -3048,7 +3047,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
 
         cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior)m_general->m_sapBehaviourGroup.checkedId());
         cfg.setSelectionActionBarPosition((KisConfig::SelectionActionsBarPosition)m_general->m_sapPositionGroup.checkedId());
-        cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->selectionActionsBarOrietationComboBox->currentIndex());
+        cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->selectionActionsBarOrientationComboBox->currentIndex());
 
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());

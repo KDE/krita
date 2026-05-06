@@ -397,22 +397,26 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     bool sapEnabled = cfg.selectionActionBar();
 
     chkEnableSelectionActionBar->setChecked(sapEnabled);
-    selectionActionsBarBehaviorComboBox->setCurrentIndex(cfg.selectionActionBarBehavior());
     selectionActionsBarOrietationComboBox->setCurrentIndex(cfg.selectionActionBarOrientation());
 
-    bool positionEnabled = (KisConfig::SelectionActionsBarBehavior)selectionActionsBarBehaviorComboBox->currentIndex()
-            == KisConfig::SelectionActionsBarBehavior::Fixed
-        && sapEnabled;
+    m_sapBehaviourGroup.addButton(sapFixedButton, KisConfig::SelectionActionsBarBehavior::Fixed);
+    m_sapBehaviourGroup.addButton(sapFreeFloatingButton, KisConfig::SelectionActionsBarBehavior::FreeFloating);
+    if (m_sapBehaviourGroup.button(cfg.selectionActionBarBehavior())) {
+        m_sapBehaviourGroup.button(cfg.selectionActionBarBehavior())->setChecked(true);
+    }
+
+    selectionActionsBarBehaviorLabel->setEnabled(sapEnabled);
+    setButtonGroupEnabled(m_sapBehaviourGroup, sapEnabled);
+
+    bool positionEnabled = sapEnabled && cfg.selectionActionBarBehavior() == KisConfig::SelectionActionsBarBehavior::Fixed;
 
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
-
-    selectionActionsBarBehaviorComboBox->setEnabled(sapEnabled);
-    selectionActionsBarBehaviorLabel->setEnabled(sapEnabled);
 
     selectionActionsBarOrietationComboBox->setEnabled(sapEnabled);
     selectionActionsBarOrietationLabel->setEnabled(sapEnabled);
 
-    connect(selectionActionsBarBehaviorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
+    connect(&m_sapBehaviourGroup, SIGNAL(idClicked(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
+
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
     connect(chkEnableSelectionActionBar, SIGNAL(checkStateChanged(Qt::CheckState)), this, SLOT(selectionActionsBarCheckboxChanged(Qt::CheckState)));
 #else
@@ -922,9 +926,9 @@ void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
 }
 
-void GeneralTab::selectionActionsBarBehaviorChanged(int index)
+void GeneralTab::selectionActionsBarBehaviorChanged(int buttonId)
 {
-    bool enabled = (KisConfig::SelectionActionsBarBehavior)index == KisConfig::SelectionActionsBarBehavior::Fixed;
+    bool enabled = (KisConfig::SelectionActionsBarBehavior)buttonId == KisConfig::SelectionActionsBarBehavior::Fixed;
 
     setButtonGroupEnabled(m_sapPositionGroup, enabled);
     selectionActionsBarPositionLabel->setEnabled(enabled);
@@ -937,15 +941,12 @@ void GeneralTab::selectionActionsBarCheckboxChanged(int value)
 #endif
 {
     bool enabled = value == Qt::CheckState::Checked;
-
-    bool positionEnabled = (KisConfig::SelectionActionsBarBehavior)selectionActionsBarBehaviorComboBox->currentIndex()
-            == KisConfig::SelectionActionsBarBehavior::Fixed
-        && enabled;
+    bool positionEnabled = enabled && (m_sapBehaviourGroup.checkedId() == KisConfig::SelectionActionsBarBehavior::Fixed);
 
     setButtonGroupEnabled(m_sapPositionGroup, positionEnabled);
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
 
-    selectionActionsBarBehaviorComboBox->setEnabled(enabled);
+    setButtonGroupEnabled(m_sapBehaviourGroup, enabled);
     selectionActionsBarBehaviorLabel->setEnabled(enabled);
 
     selectionActionsBarOrietationComboBox->setEnabled(enabled);
@@ -3045,7 +3046,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
 
-        cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior) m_general->selectionActionsBarBehaviorComboBox->currentIndex());
+        cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior)m_general->m_sapBehaviourGroup.checkedId());
         cfg.setSelectionActionBarPosition((KisConfig::SelectionActionsBarPosition)m_general->m_sapPositionGroup.checkedId());
         cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->selectionActionsBarOrietationComboBox->currentIndex());
 

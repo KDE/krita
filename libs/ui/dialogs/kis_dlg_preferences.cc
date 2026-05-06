@@ -928,6 +928,15 @@ void GeneralTab::selectionActionsBarCheckboxChanged(int value)
     selectionActionsBarOrietationLabel->setEnabled(enabled);
 }
 
+void GeneralTab::setButtonGroupEnabled(const QButtonGroup &buttonGroup, bool value)
+{
+    Q_FOREACH(QAbstractButton* button, buttonGroup.buttons()) {
+        if (button) {
+            button->setEnabled(value);
+        }
+    }
+}
+
 CursorStyle GeneralTab::cursorStyle()
 {
     return (CursorStyle)m_cmbCursorShape->currentIndex();

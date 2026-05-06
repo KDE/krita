@@ -215,6 +215,14 @@ void KisUpdaterContext::waitForDone()
     }
 }
 
+bool KisUpdaterContext::isIdle() const
+{
+    std::unique_lock<QMutex> locker(m_runningThreadsMutex, std::try_to_lock);
+    if (!locker.owns_lock()) return false;
+
+    return m_numRunningThreads == 0;
+}
+
 bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                             const KisUpdateJobItem* job)
 {

@@ -646,6 +646,13 @@ bool KisStrokesQueue::isEmpty() const
     return m_d->strokesQueue.isEmpty();
 }
 
+bool KisStrokesQueue::isIdle() const
+{
+    std::unique_lock<QMutex> locker(m_d->mutex, std::try_to_lock);
+    if (!locker.owns_lock()) return false;
+    return m_d->strokesQueue.isEmpty();
+}
+
 qint32 KisStrokesQueue::sizeMetric() const
 {
     QMutexLocker locker(&m_d->mutex);

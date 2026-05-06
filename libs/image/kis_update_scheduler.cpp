@@ -308,6 +308,18 @@ void KisUpdateScheduler::unlock(bool resetLodLevels)
 
 bool KisUpdateScheduler::isIdle()
 {
+    /**
+     * First check the low-cost signs of the image not being
+     * idle to avoid contending over locks with the worker
+     * threads.
+     */
+    if(!m_d->updatesQueue.isIdle() ||
+        !m_d->strokesQueue.isIdle() ||
+        !m_d->updaterContext.isIdle()) {
+
+        return false;
+    }
+
     bool result = false;
 
     if (tryBarrierLock()) {

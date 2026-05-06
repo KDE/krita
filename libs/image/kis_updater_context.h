@@ -99,6 +99,15 @@ public:
     void waitForDone();
 
     /**
+     * Returns true if there are no jobs running in the context
+     *
+     * If there is any contestion on the context's mutex, the function
+     * will simply return false, whatever context's state really is.
+     * Obviosly, if there is a contestion, the object is not "idle" :)
+     */
+    bool isIdle() const;
+
+    /**
      * Locks the context to guarantee an exclusive access
      * to the context
      */
@@ -149,7 +158,7 @@ protected:
     QReadWriteLock m_exclusiveJobLock;
 
     QMutex m_lock;
-    QMutex m_runningThreadsMutex;
+    mutable QMutex m_runningThreadsMutex;
     int m_numRunningThreads = 0;
     QWaitCondition m_waitForDoneCondition;
     QVector<KisUpdateJobItem*> m_jobs;

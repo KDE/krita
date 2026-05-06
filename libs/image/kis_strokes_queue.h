@@ -44,7 +44,21 @@ public:
     void processQueue(KisUpdaterContext &updaterContext,
                       bool externalJobsPending);
     bool needsExclusiveAccess() const;
+
+    /**
+     * Returns true if the strokes queue is empty, i.e. there are
+     * no stroke jobs pending
+     */
     bool isEmpty() const;
+
+    /**
+     * Works in the same way as isEmpty(), except that it will not
+     * wait on the mutex in case there is any contestion on the queue.
+     *
+     * If some other threads are contending on the queue, it will just
+     * return `false`, whatever the state of the queue is.
+     */
+    bool isIdle() const;
 
     qint32 sizeMetric() const;
     KUndo2MagicString currentStrokeName() const;

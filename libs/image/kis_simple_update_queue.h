@@ -42,7 +42,21 @@ public:
 
     void optimize();
 
+    /**
+     * Returns true if the update queue is empty, i.e. there are
+     * no update or spontaneous jobs pending
+     */
     bool isEmpty() const;
+
+    /**
+     * Works in the same way as isEmpty(), except that it will not
+     * wait on the mutex in case there is any contestion on the queue.
+     *
+     * If some other threads are contending on the queue, it will just
+     * return `false`, whatever the state of the queue is.
+     */
+    bool isIdle() const;
+
     qint32 sizeMetric() const;
 
     void updateSettings();

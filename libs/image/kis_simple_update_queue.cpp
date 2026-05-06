@@ -268,6 +268,13 @@ bool KisSimpleUpdateQueue::isEmpty() const
     return m_updatesList.isEmpty() && m_spontaneousJobsList.isEmpty();
 }
 
+bool KisSimpleUpdateQueue::isIdle() const
+{
+    std::unique_lock<QMutex> locker(m_lock, std::try_to_lock);
+    if (!locker.owns_lock()) return false;
+    return m_updatesList.isEmpty() && m_spontaneousJobsList.isEmpty();
+}
+
 qint32 KisSimpleUpdateQueue::sizeMetric() const
 {
     QMutexLocker locker(&m_lock);

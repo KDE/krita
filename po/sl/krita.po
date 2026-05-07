@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2026-04-28 08:28+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -46724,7 +46724,7 @@ msgstr "Odstrani funkcijo."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -69431,49 +69431,49 @@ msgstr ""
 "V tem računalniku manjka družina pisav »%1«. Ta prednastavitev sloga morda "
 "ne bo delovala pravilno."
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Značka"
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Dodeli znački"
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Ime nove značke ..."
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Odstrani iz te značke"
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Odstrani iz druge značke"
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Išči po značkah"
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Uvozi %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

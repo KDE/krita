@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -47148,7 +47148,7 @@ msgstr "Премахване на шаблон"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, fuzzy, kde-format
 #| msgid "Search"
 msgctxt "@info:placeholder"
@@ -69858,41 +69858,41 @@ msgid ""
 "work correctly."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, fuzzy, kde-format
 #| msgid "Tag"
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Етикет"
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, fuzzy, kde-format
 #| msgid "New Name:"
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Ново име:"
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, fuzzy, kde-format
 #| msgid "Remove from tag"
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Премахване от етикета"
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, fuzzy, kde-format
 #| msgid "Remove from tag"
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Премахване от етикета"
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, fuzzy, kde-format
 #| msgctxt "Search Radius in Magnetic Selection's Tool options"
 #| msgid "Search Radius: "
@@ -69900,14 +69900,14 @@ msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Радиус на търсене:"
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, fuzzy, kde-format
 #| msgid "Import"
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Импортиране"
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, fuzzy, kde-format
 #| msgid "Remove"
 msgctxt "@info:tooltip, %1 is resource type name"

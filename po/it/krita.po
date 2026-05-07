@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2026-04-23 17:45+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -46958,7 +46958,7 @@ msgstr "Rimuovi funzionalità."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -69827,49 +69827,49 @@ msgstr ""
 "La famiglia di caratteri «%1» non è presente in questo computer. Questa "
 "preimpostazione di stile potrebbe non funzionare correttamente."
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Tag"
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Assegna al tag"
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Nome del nuovo tag..."
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Rimuovi da questo tag"
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Rimuovi da altro tag"
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Ricerca in tag"
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Importa %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

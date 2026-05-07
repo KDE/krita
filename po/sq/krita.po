@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -45662,7 +45662,7 @@ msgstr "Shtresat"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -67914,49 +67914,49 @@ msgid ""
 "work correctly."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Shtresat"
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "&Përzgjidhni"
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Imazhi"
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Shtresat"
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Shtresat"
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Përzgjedhje"
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "Pre"
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, fuzzy, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

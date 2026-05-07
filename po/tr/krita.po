@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2026-05-05 11:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -46672,7 +46672,7 @@ msgstr "Özelliği kaldırın."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -69366,49 +69366,49 @@ msgid ""
 msgstr ""
 "Bu makinede “%1” yazıtipi ailesi yok. Bu biçem önayarı düzgün çalışmayabilir."
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Künye"
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Künyeye Ata"
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Yeni künye adı…"
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Bu Künyeden Kaldır"
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Diğer Künyeden Kaldır"
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "Künyede ara"
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "İçe aktar: %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

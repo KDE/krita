@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -46421,7 +46421,7 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
@@ -68941,49 +68941,49 @@ msgid ""
 "work correctly."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr ""
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

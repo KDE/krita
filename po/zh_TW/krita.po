@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-06 02:44+0000\n"
+"POT-Creation-Date: 2026-05-07 02:39+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -46751,7 +46751,7 @@ msgstr "移除範本"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#: qmlmodules/components/qml/ResourceView.qml:315
+#: qmlmodules/components/qml/ResourceView.qml:322
 #, fuzzy, kde-format
 #| msgid "Search"
 msgctxt "@info:placeholder"
@@ -69425,49 +69425,49 @@ msgid ""
 "work correctly."
 msgstr "這台裝置上缺乏字型系列「%1」。這個樣式預設檔可能無法正常運作。"
 
-#: qmlmodules/components/qml/ResourceView.qml:142
+#: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "標籤"
 
-#: qmlmodules/components/qml/ResourceView.qml:185
+#: qmlmodules/components/qml/ResourceView.qml:192
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "設定標籤"
 
-#: qmlmodules/components/qml/ResourceView.qml:210
+#: qmlmodules/components/qml/ResourceView.qml:217
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "新標籤名稱…"
 
-#: qmlmodules/components/qml/ResourceView.qml:235
+#: qmlmodules/components/qml/ResourceView.qml:242
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "移除出此標籤"
 
-#: qmlmodules/components/qml/ResourceView.qml:244
+#: qmlmodules/components/qml/ResourceView.qml:251
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "移除出其他標籤"
 
-#: qmlmodules/components/qml/ResourceView.qml:323
+#: qmlmodules/components/qml/ResourceView.qml:330
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
 msgstr "在標籤中搜尋"
 
-#: qmlmodules/components/qml/ResourceView.qml:342
+#: qmlmodules/components/qml/ResourceView.qml:349
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
 msgstr "匯入 %1"
 
-#: qmlmodules/components/qml/ResourceView.qml:366
+#: qmlmodules/components/qml/ResourceView.qml:373
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"

@@ -1,3 +1,4 @@
+
 /*
  *  SPDX-FileCopyrightText: 2016 Eugene Ingerman <geneing at gmail dot com>
  *
@@ -92,7 +93,7 @@ QMap<float, float> calculateLogGridLines(int width, qreal maximumValue) {
         if (qFuzzyCompare(mainLine, 0.f)) {
             gridLines.insert(0.0, 0.0);
         } else {
-            gridLines.insert(mainLine, std::log(mainLine+1)*(width/std::log(mainLines.last()+1)));
+            gridLines.insert(mainLine, std::log10(mainLine*10)*0.1*(width/(std::log10(mainLines.last()*10)*0.1)));
         }
     }
 
@@ -164,7 +165,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 
         painter.setCompositionMode(QPainter::CompositionMode_Plus);
         const float barWidth = float(this->width()-1) / float(nBins);
-        float logVerticalMax = std::log(vertGrid.keys().last()+1);
+        float logVerticalMax = std::log10(vertGrid.keys().last()*10)*0.1;
 
         for (int chan = 0; chan < (int)nChannels; chan++) {
             if (channels.at(chan)->channelType() != KoChannelInfo::ALPHA) {
@@ -203,7 +204,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
                     for (qint32 i = 0; i < nBins; ++i) {
 
                         const float curBinEnd = 1.0+(i*barWidth)+barWidth;
-                        const float curBinVertical = m_logarithmic? std::log(m_histogramDataLog[chan][i] +1): m_histogramData[chan][i];
+                        const float curBinVertical = m_logarithmic? std::log10(m_histogramDataLog[chan][i] *10)*0.1: m_histogramData[chan][i];
                         const float maxBin = m_logarithmic? logVerticalMax: highest;
                         if (curBinVertical > 0) {
                             const int v = std::max(qRound((curBinVertical/maxBin)*gridHeight), 1);

@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-07 02:39+0000\n"
-"PO-Revision-Date: 2026-05-02 08:41+0300\n"
+"PO-Revision-Date: 2026-05-07 10:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1391,11 +1391,11 @@ msgid "L_Leaf_3"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/MZ_leaves.gbr"
 msgid "MZ_leaves"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "מז_עלים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1461,11 +1461,11 @@ msgid "M_09"
 msgstr "מ_09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Arrow.gbr"
 msgid "M_Arrow"
-msgstr "כחול"
+msgstr "מ_חץ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1511,33 +1511,33 @@ msgid "M Pipe whiteflat"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oil_Soft.gbr"
 msgid "O_Oil Soft"
-msgstr "&לבן"
+msgstr "ש_שמן רך"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_1.gbr"
 msgid "O_Oils 1"
-msgstr "&לבן"
+msgstr "ש_שמנים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_1_GP.gbr"
 msgid "O_Oils 1 GP"
-msgstr "&לבן"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_Softer."
 "gbr"
 msgid "O_Oils Softer"
-msgstr "&לבן"
+msgstr "ש_שמנים רכים יותר"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1622,11 +1622,11 @@ msgid "Sc_Scratches3"
 msgstr "&בוחר צבעים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/T_Texture_1.gbr"
 msgid "T_Texture_1"
-msgstr "תבניות"
+msgstr "מ_מרקם_1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1832,12 +1832,12 @@ msgid "Basic circle"
 msgstr "עיגול בסיסי"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_mix.kpp"
 msgid "Basic mix"
-msgstr "אטימות"
+msgstr "תערובת בסיסית"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1872,12 +1872,12 @@ msgid "Basic tip soft"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_wet.kpp"
 msgid "Basic wet"
-msgstr "אטימות"
+msgstr "רטוב בסיסי"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1888,12 +1888,12 @@ msgid "Basic wet soft"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Blender_Blur.kpp"
 msgid "Blender Blur"
-msgstr "&שכבה"
+msgstr "טשטוש מערבל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2064,12 +2064,12 @@ msgid "Brush textured"
 msgstr "תבניות"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Clone_tool.kpp"
 msgid "Clone tool"
-msgstr "שכבה חדשה"
+msgstr "כלי שכפול"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2827,20 +2827,20 @@ msgid "Textured tilt"
 msgstr "תבניות"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "ink_precision_03.kpp"
 msgid "ink precision 03"
-msgstr "הזז בחירה"
+msgstr "דיוק דיו 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
 "kpp"
 msgid "pixel1"
-msgstr "&תמונה"
+msgstr "פיקסל1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3847,18 +3847,18 @@ msgid "square rough lightgrey"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/starfield.png"
 msgid "starfield"
-msgstr "כלי &עט"
+msgstr "שדה כוכבים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/triangle.svg"
 msgid "triangle"
-msgstr "מלבן"
+msgstr "משולש"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6836,11 +6836,11 @@ msgstr "צינור מכחול GIMP"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/floor.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/floor.gih"
 msgid "A-4 Forest"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "א-4 יער"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain.gih:1

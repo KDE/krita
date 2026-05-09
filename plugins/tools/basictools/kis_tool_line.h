@@ -88,6 +88,7 @@ private:
     QPointF m_lastUpdatedPoint;
 
     bool m_strokeIsRunning {false};
+    bool m_altInitiallyHeld {false};
 
 
     QCheckBox *m_chkUseSensors {nullptr};

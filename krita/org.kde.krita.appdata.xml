@@ -706,6 +706,7 @@
       <description xml:lang="ka">ახალი გამოცემა ისეთი ფუნქციებით, როგორიცაა ახალი ტილოზე წერის ხელსაწყო, დაშორების დახურვის ფუნქციები, მონიშვნის ხელსაწყოთა პანელი და ახალი დანის ხელსაწყო</description>
       <description xml:lang="nl">Een nieuwe, belangrijke uitgave met de nieuwe hulpmiddelen voor tekst op het werkveld, functies voor het sluiten van openingen, een selectiebord voor hulpmiddelen en het nieuwe hulpmiddel mes.</description>
       <description xml:lang="pt-BR">Uma nova versão principal com a nova ferramenta de texto na tela, recursos de fechamento de lacunas, painel de seleção e a nova ferramenta de faca</description>
+      <description xml:lang="ru">Крупный выпуск, включающий текстовый инструмент на холсте, функции автоматического закрытия промежутков при заливке, панель инструментов выделения и новый инструмент «Нож»</description>
       <description xml:lang="sk">A new major release featuring the new on-canvas text tool, gap-closing features, selection toolboar and the new knife tool</description>
       <description xml:lang="sl">Nova osrednja izdaja, ki vključuje novo orodje za besedilo na platnu, funkcije za zapolnjevanje vrzeli, orodno vrstico za izbiranje in novo orodje za rezanje</description>
       <description xml:lang="tr">Yeni tuval üzeri metin aracı, boşluk doldurma aracı, seçim araç çubuğu ve yeni bıçak aracını içeren büyük bir yayım!</description>

@@ -12,7 +12,7 @@
 # Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2006.
 # Robert Gomulka <rgom@o2.pl>, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2009, 2013.
-# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2023, 2024, 2025, 2026 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# SPDX-FileCopyrightText: 2011-2016, 2023-2026 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 # Daniel Wit Preuss <danpre@tlen.pl>, 2004.
 # Robert Gomulka <carramba@epf.pl>, 2005, 2008, 2009.
 # Robert Gomulka <rgom@o2.pl>, 2006.
@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-07 02:39+0000\n"
-"PO-Revision-Date: 2026-04-11 09:01+0200\n"
+"PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
 "Language: pl\n"
@@ -101,7 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16206,7 +16206,7 @@ msgstr "Szczegóły o &KDE"
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
-msgstr "O KDE"
+msgstr "Opis KDE"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1974
@@ -41340,7 +41340,7 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format
 msgid "About KDE"
-msgstr "O KDE"
+msgstr "Opis KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:39
 #, kde-format
@@ -65967,10 +65967,9 @@ msgid "Mirror"
 msgstr "Lustro"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
-#, fuzzy, kde-format
-#| msgid "Translate"
+#, kde-format
 msgid "Translate"
-msgstr "Przemieść"
+msgstr "Przetłumacz"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
@@ -66008,7 +66007,7 @@ msgstr "Narzędzie przesuwania"
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
-msgstr "Narysuj krzywa Beziera"
+msgstr "Narysuj krzywą Beziera"
 
 #: plugins/tools/basictools/kis_tool_path.h:84
 #, kde-format
@@ -66195,7 +66194,7 @@ msgstr "Uaktualnij barwę"
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "Wygląd okna na płótnie do porównywania pobranych barw"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:42

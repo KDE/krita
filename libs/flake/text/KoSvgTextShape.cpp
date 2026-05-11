@@ -2324,7 +2324,7 @@ KoShape * KoSvgTextShape::textOutline() const
 
 KoSvgTextShape::TextType KoSvgTextShape::textType() const
 {
-    KoSvgText::AutoValue inlineSize = d->textData.childBegin()->properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    KoSvgText::AutoValue inlineSize = this->textProperties().propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
     if (!d->shapesInside.isEmpty()) {
         return TextType::TextInShape;
     } else if (!inlineSize.isAuto) {

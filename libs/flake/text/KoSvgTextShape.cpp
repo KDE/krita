@@ -325,13 +325,13 @@ int KoSvgTextShape::lineStart(int pos)
     if (pos < 0 || d->cursorPos.isEmpty() || d->result.isEmpty()) {
         return pos;
     }
-    CursorPos p = d->cursorPos.at(pos);
+    CursorPos p = d->getCursorPos(pos);
     if (d->result.at(p.cluster).anchored_chunk && p.offset == 0) {
         return pos;
     }
     int candidate = 0;
     for (int i = 0; i < pos; i++) {
-        CursorPos p2 = d->cursorPos.at(i);
+        CursorPos p2 = d->getCursorPos(i);
         if (d->result.at(p2.cluster).anchored_chunk && p2.offset == 0) {
             candidate = i;
         }
@@ -348,7 +348,7 @@ int KoSvgTextShape::lineEnd(int pos)
         return d->cursorPos.size() - 1;
     }
     int candidate = 0;
-    int posCluster = d->cursorPos.at(pos).cluster;
+    int posCluster = d->getCursorPos(pos).cluster;
     for (int i = pos; i < d->cursorPos.size(); i++) {
         CursorPos p = d->cursorPos.at(i);
         if (d->result.at(p.cluster).anchored_chunk && i > pos && posCluster != p.cluster) {
@@ -391,7 +391,7 @@ int KoSvgTextShape::nextIndex(int pos)
     if (d->cursorPos.isEmpty()) {
         return pos;
     }
-    int currentIndex = d->cursorPos.at(qBound(0, pos, d->cursorPos.size())).index;
+    int currentIndex = d->getCursorPos(pos).index;
 
     for (int i = pos; i < d->cursorPos.size(); i++) {
         if (d->cursorPos.at(i).index > currentIndex) {
@@ -406,10 +406,10 @@ int KoSvgTextShape::previousIndex(int pos)
     if (d->cursorPos.isEmpty()) {
         return pos;
     }
-    const int currentIndex = d->cursorPos.at(qBound(0, pos, d->cursorPos.size())).index;
+    const int currentIndex = d->getCursorPos(pos).index;
 
     for (int i = pos; i >= 0; i--) {
-        if (d->cursorPos.at(i).index < currentIndex) {
+        if (d->getCursorPos(i).index < currentIndex) {
             return i;
         }
     }
@@ -452,7 +452,7 @@ int KoSvgTextShape::nextLine(int pos)
 
     int nextLineStart = lineEnd(pos)+1;
     int nextLineEnd = lineEnd(nextLineStart);
-    CursorPos cursorPos = d->cursorPos.at(pos);
+    CursorPos cursorPos = d->getCursorPos(pos);
     if (!this->shapesInside().isEmpty()) {
         LineBox nextLineBox;
         for (int i = 0; i < d->lineBoxes.size(); ++i) {
@@ -509,7 +509,7 @@ int KoSvgTextShape::previousLine(int pos)
     }
     int previousLineStart = lineStart(currentLineStart-1);
 
-    CursorPos cursorPos = d->cursorPos.at(pos);
+    CursorPos cursorPos = d->getCursorPos(pos);
     if (!this->shapesInside().isEmpty()) {
         LineBox previousLineBox;
         for (int i = 0; i < d->lineBoxes.size(); ++i) {
@@ -606,7 +606,7 @@ int KoSvgTextShape::wordStart(int pos)
     int wordStart = pos;
     for (int i = pos; i >= 0; i--) {
         wordStart = i;
-        CursorPos cursorPos = d->cursorPos.at(i);
+        CursorPos cursorPos = d->getCursorPos(i);
         const CharacterResult res = d->result.at(cursorPos.cluster);
         if (res.breakType != BreakType::NoBreak
                 && (cursorPos.offset == 0 || cursorPos.offset+1 == res.cursorInfo.offsets.size())
@@ -615,7 +615,7 @@ int KoSvgTextShape::wordStart(int pos)
         }
         // Also test the previous cluster on whether it is a hardbreak. This is because hardbreaks by default get hidden.
         if (i > 1 && i < pos) {
-            const CursorPos prevCursorPos = d->cursorPos.at(i-1);
+            const CursorPos prevCursorPos = d->getCursorPos(i-1);
             bool found = false;
             for (int j = cursorPos.cluster; j > prevCursorPos.cluster; j--) {
                 if (d->result.at(j).breakType == BreakType::HardBreak && d->result.at(j).addressable) {
@@ -657,7 +657,7 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, QColor &color,
     }
     QPainterPath p;
 
-    CursorPos cursorPos = d->cursorPos.at(pos);
+    CursorPos cursorPos = d->getCursorPos(pos);
 
     CharacterResult res = d->result.at(cursorPos.cluster);
 
@@ -703,7 +703,7 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     QPainterPath p;
     p.setFillRule(Qt::WindingFill);
     for (int i = start+1; i <= end; i++) {
-        CursorPos cursorPos = d->cursorPos.at(i);
+        CursorPos cursorPos = d->getCursorPos(i);
         CharacterResult res = d->result.at(cursorPos.cluster);
         const QTransform tf = res.finalTransform();
         QLineF first = res.cursorInfo.caret;
@@ -751,7 +751,7 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     qint32 strokeWidth = 0;
     QPointF inset = mode == KoSvgText::HorizontalTB? QPointF(minimum*0.5, 0): QPointF(0, minimum*0.5);
     for (int i = start+1; i <= end; i++) {
-        CursorPos pos = d->cursorPos.at(i);
+        CursorPos pos = d->getCursorPos(i);
         CharacterResult res = d->result.at(pos.cluster);
         strokeWidth += res.metrics.underlineThickness;
         const QTransform tf = res.finalTransform();
@@ -822,7 +822,7 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlap
     double closest = std::numeric_limits<double>::max();
     int candidate = 0;
     for (int i = a; i < b; i++) {
-        CursorPos pos = d->cursorPos.at(i);
+        CursorPos pos = d->getCursorPos(i);
         CharacterResult res = d->result.at(pos.cluster);
         QPointF cursorStart = res.finalPosition;
         cursorStart += res.cursorInfo.offsets.value(pos.offset, res.advance);
@@ -911,7 +911,7 @@ int KoSvgTextShape::indexForPos(int pos) const
         return -1;
     }
 
-    return d->cursorPos.at(qMin(d->cursorPos.size()-1, pos)).index;
+    return d->getCursorPos(pos).index;
 }
 
 QPointF KoSvgTextShape::initialTextPosition() const
@@ -930,7 +930,7 @@ bool KoSvgTextShape::insertText(int pos, QString text)
     int elementIndex = 0;
     int insertionIndex = 0;
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-        CursorPos cursorPos = d->cursorPos.at(pos);
+        CursorPos cursorPos = d->getCursorPos(pos);
         CharacterResult res = d->result.at(cursorPos.cluster);
         elementIndex = res.plaintTextIndex;
         insertionIndex = cursorPos.index;
@@ -1020,9 +1020,8 @@ QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos
         props = {KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties()};
         return props;
     }
-    const int finalPos = d->cursorPos.size() - 1;
-    const int startIndex = d->cursorPos.at(qBound(0, startPos, finalPos)).index;
-    const int endIndex = d->cursorPos.at(qBound(0, endPos, finalPos)).index;
+    const int startIndex = d->getCursorPos(startPos).index;
+    const int endIndex = d->getCursorPos(endPos).index;
     int sought = startIndex;
     if (startIndex == endIndex) {
         int currentIndex = 0;
@@ -1077,7 +1076,7 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
         shapeChangedPriv(ContentChanged);
         return;
     }
-    CursorPos cursorPos = d->cursorPos.at(pos);
+    CursorPos cursorPos = d->getCursorPos(pos);
     CharacterResult res = d->result.at(cursorPos.cluster);
     int currentIndex = 0;
     auto it = d->findTextContentElementForIndex(d->textData, currentIndex, res.plaintTextIndex);
@@ -1119,8 +1118,8 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
         }
         return;
     }
-    const int startIndex = d->cursorPos.at(startPos).index;
-    const int endIndex = d->cursorPos.at(endPos).index;
+    const int startIndex =d->getCursorPos(startPos).index;
+    const int endIndex = d->getCursorPos(endPos).index;
     if (startIndex != endIndex) {
         KoSvgTextShape::Private::splitContentElement(d->textData, startIndex);
         KoSvgTextShape::Private::splitContentElement(d->textData, endIndex);
@@ -1193,7 +1192,7 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText, boo
     }
 
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-        CursorPos cursorPos = d->cursorPos.at(qMin(d->cursorPos.size()-1, pos));
+        CursorPos cursorPos = d->getCursorPos(pos);
         CharacterResult res = d->result.at(cursorPos.cluster);
         elementIndex = res.plaintTextIndex;
         insertionIndex = cursorPos.index;
@@ -1255,9 +1254,8 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
     if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
         return false;
     }
-    const int finalPos = d->cursorPos.size()-1;
-    const int startIndex = d->cursorPos.at(qBound(0, qMin(startPos, endPos), finalPos)).index;
-    int endIndex = d->cursorPos.at(qBound(0, qMax(startPos, endPos), finalPos)).index;
+    const int startIndex = d->getCursorPos(qMin(startPos, endPos)).index;
+    int endIndex = d->getCursorPos(qMax(startPos, endPos)).index;
     if (startIndex == endIndex) {
         endIndex += 1;
         while(d->result.at(endIndex).middle) {
@@ -1450,8 +1448,8 @@ QList<KoSvgTextCharacterInfo> KoSvgTextShape::getPositionsAndRotationsForRange(c
         return infos;
     }
     const int finalPos = d->cursorPos.size()-1;
-    const int startIndex = d->cursorPos.at(qBound(0, qMin(startPos, endPos), finalPos)).index;
-    const int endIndex = d->cursorPos.at(qBound(0, qMax(startPos, endPos), finalPos)).index;
+    const int startIndex = d->getCursorPos(qMin(startPos, endPos)).index;
+    const int endIndex = d->getCursorPos(qMax(startPos, endPos)).index;
 
     for (int i = startIndex; i < endIndex; i++) {
         CharacterResult res = d->result.value(i);
@@ -1475,9 +1473,8 @@ void KoSvgTextShape::removeTransformsFromRange(const int startPos, const int end
     if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
         return;
     }
-    const int finalPos = d->cursorPos.size()-1;
-    const int startIndex = d->cursorPos.at(qBound(0, qMin(startPos, endPos), finalPos)).index;
-    const int endIndex = d->cursorPos.at(qBound(0, qMax(startPos, endPos), finalPos)).index;
+    const int startIndex = d->getCursorPos(qMin(startPos, endPos)).index;
+    const int endIndex = d->getCursorPos(qMax(startPos, endPos)).index;
 
     d->removeTransforms(d->textData, startIndex, endIndex-startIndex);
 
@@ -1534,8 +1531,7 @@ KoSvgTextNodeIndex KoSvgTextShape::topLevelNodeForPos(int pos) const
     if (childBegin(d->textData.childBegin()) != childEnd(d->textData.childBegin())) {
         candidate = childBegin(d->textData.childBegin());
     }
-    const int finalPos = d->cursorPos.size() - 1;
-    const int index = d->cursorPos.at(qBound(0, pos, finalPos)).index;
+    const int index = d->getCursorPos(pos).index;
     int currentIndex = 0;
 
     auto e = Private::findTextContentElementForIndex(d->textData, currentIndex, index, true);
@@ -2440,8 +2436,8 @@ void KoSvgTextShape::moveShapeInsideToIndex(KoShape *shapeInside, const int inde
 bool KoSvgTextShape::setTextPathOnRange(KoShape *textPath, const int startPos, const int endPos)
 {
     const int finalPos = d->cursorPos.size() - 1;
-    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->cursorPos.at(qBound(0, startPos, finalPos)).index;
-    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->cursorPos.at(qBound(0, endPos, finalPos)).index;
+    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->getCursorPos(startPos).index;
+    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->getCursorPos(endPos).index;
 
     Private::splitTree(d->textData, startIndex, false);
     Private::splitTree(d->textData, endIndex, true);
@@ -2519,8 +2515,8 @@ bool KoSvgTextShape::setTextPathOnRange(KoShape *textPath, const int startPos, c
 QList<KoShape *> KoSvgTextShape::textPathsAtRange(const int startPos, const int endPos)
 {
     const int finalPos = d->cursorPos.size() - 1;
-    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->cursorPos.at(qBound(0, startPos, finalPos)).index;
-    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->cursorPos.at(qBound(0, endPos, finalPos)).index;
+    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->getCursorPos(startPos).index;
+    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->getCursorPos(endPos).index;
     QList<KoShape*> textPaths;
     int currentIndex = 0;
     auto startElement = Private::findTextContentElementForIndex(d->textData, currentIndex, startIndex, true);

@@ -575,6 +575,11 @@ public:
         return it != textPaths.end()? *it: nullptr;
     }
 
+    // Convenience function to ensure the bounds checking is in place.
+    CursorPos getCursorPos(int pos) {
+        return cursorPos.at(qBound(0, pos, cursorPos.size()-1));
+    }
+
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.
 

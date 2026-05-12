@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 02:39+0000\n"
+"POT-Creation-Date: 2026-05-12 02:40+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -20647,32 +20647,32 @@ msgid "Character Variant %1"
 msgstr "प्रतिशतता:"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2640
+#: libs/flake/text/KoSvgTextShape.cpp:2636
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2615
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2617
+#: libs/flake/text/KoSvgTextShape.cpp:2625
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "SVG Text Shape"
 msgstr "आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2627
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2650
+#: libs/flake/text/KoSvgTextShape.cpp:2646
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -37585,7 +37585,7 @@ msgid ""
 msgstr "उँचाइ"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:294
+#: plugins/tools/basictools/kis_tool_line.cc:313
 #: plugins/tools/basictools/kis_tool_multihand.cpp:545
 #, kde-format
 msgid ""
@@ -64650,20 +64650,20 @@ msgstr "पूर्वावलोकन"
 msgid "Show Guideline"
 msgstr "गाइड देखाबू"
 
-#: plugins/tools/basictools/kis_tool_line.cc:446
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, fuzzy, kde-format
 #| msgid "Length:"
 msgid "Length: %1 px"
 msgstr "नमाइः "
 
-#: plugins/tools/basictools/kis_tool_line.cc:464
+#: plugins/tools/basictools/kis_tool_line.cc:483
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
 "+Drag will force you to draw straight lines"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_line.h:115
+#: plugins/tools/basictools/kis_tool_line.h:116
 #, fuzzy, kde-format
 msgid "Line Tool"
 msgstr "पोलीलैन"

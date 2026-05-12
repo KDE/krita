@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 02:39+0000\n"
+"POT-Creation-Date: 2026-05-12 02:40+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -20742,7 +20742,7 @@ msgid "Character Variant %1"
 msgstr "變種 (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2640
+#: libs/flake/text/KoSvgTextShape.cpp:2636
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -20750,24 +20750,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>佔位文字</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2615
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2617
+#: libs/flake/text/KoSvgTextShape.cpp:2625
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形狀"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2627
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2650
+#: libs/flake/text/KoSvgTextShape.cpp:2646
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -37919,7 +37919,7 @@ msgstr ""
 "高：%2 px"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:294
+#: plugins/tools/basictools/kis_tool_line.cc:313
 #: plugins/tools/basictools/kis_tool_multihand.cpp:545
 #, kde-format
 msgid ""
@@ -65127,12 +65127,12 @@ msgstr "顯示預覽"
 msgid "Show Guideline"
 msgstr "顯示引導線"
 
-#: plugins/tools/basictools/kis_tool_line.cc:446
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid "Length: %1 px"
 msgstr "長度：%1 px"
 
-#: plugins/tools/basictools/kis_tool_line.cc:464
+#: plugins/tools/basictools/kis_tool_line.cc:483
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -65140,7 +65140,7 @@ msgid ""
 msgstr ""
 "Alt + 拖曳可移動目前顯示線條的基點，Shift + 拖曳將強制在特殊角度上繪製直線"
 
-#: plugins/tools/basictools/kis_tool_line.h:115
+#: plugins/tools/basictools/kis_tool_line.h:116
 #, kde-format
 msgid "Line Tool"
 msgstr "直線工具"

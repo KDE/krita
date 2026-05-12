@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 02:39+0000\n"
+"POT-Creation-Date: 2026-05-12 02:40+0000\n"
 "PO-Revision-Date: 2026-03-31 22:28+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -20498,30 +20498,30 @@ msgid "Character Variant %1"
 msgstr "%1. karakterváltozat"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2640
+#: libs/flake/text/KoSvgTextShape.cpp:2636
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Helykitöltő szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2615
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2617
+#: libs/flake/text/KoSvgTextShape.cpp:2625
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG szövegalakzat"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2627
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2650
+#: libs/flake/text/KoSvgTextShape.cpp:2646
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -37789,7 +37789,7 @@ msgstr ""
 "Magasság: %2 px"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:294
+#: plugins/tools/basictools/kis_tool_line.cc:313
 #: plugins/tools/basictools/kis_tool_multihand.cpp:545
 #, kde-format
 msgid ""
@@ -65225,12 +65225,12 @@ msgstr "Előnézet"
 msgid "Show Guideline"
 msgstr "Segédvonal megjelenítése"
 
-#: plugins/tools/basictools/kis_tool_line.cc:446
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Hossz: %1 px"
 
-#: plugins/tools/basictools/kis_tool_line.cc:464
+#: plugins/tools/basictools/kis_tool_line.cc:483
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -65239,7 +65239,7 @@ msgstr ""
 "Az Alt+húzás áthelyezi a megjelenített vonal kezdőpontját, a Shift+húzás "
 "pedig egyenes vonalak rajzolására kényszeríti az eszközt"
 
-#: plugins/tools/basictools/kis_tool_line.h:115
+#: plugins/tools/basictools/kis_tool_line.h:116
 #, kde-format
 msgid "Line Tool"
 msgstr "Vonal eszköz"

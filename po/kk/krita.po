@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 02:39+0000\n"
+"POT-Creation-Date: 2026-05-12 02:40+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -21095,33 +21095,33 @@ msgid "Character Variant %1"
 msgstr "Варианті (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2640
+#: libs/flake/text/KoSvgTextShape.cpp:2636
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Мәтін"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2615
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Мәтін"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2617
+#: libs/flake/text/KoSvgTextShape.cpp:2625
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Мәтін қалыпы"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2627
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Мәтіні:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2650
+#: libs/flake/text/KoSvgTextShape.cpp:2646
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -38645,7 +38645,7 @@ msgid ""
 msgstr "Басатын биіктігі:"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:294
+#: plugins/tools/basictools/kis_tool_line.cc:313
 #: plugins/tools/basictools/kis_tool_multihand.cpp:545
 #, kde-format
 msgid ""
@@ -66731,13 +66731,13 @@ msgstr "Нобайы"
 msgid "Show Guideline"
 msgstr "Бағыттауыштарын көрсету"
 
-#: plugins/tools/basictools/kis_tool_line.cc:446
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, fuzzy, kde-format
 #| msgid "Length:"
 msgid "Length: %1 px"
 msgstr "Ұзындығы:"
 
-#: plugins/tools/basictools/kis_tool_line.cc:464
+#: plugins/tools/basictools/kis_tool_line.cc:483
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -66746,7 +66746,7 @@ msgstr ""
 "Alt пернені басып тұрып сызықтың бастау нүктесін сүйреп жылжытуға болады, "
 "Shift-ті басып тұрып сүйреу - түзу сызықты салып береді"
 
-#: plugins/tools/basictools/kis_tool_line.h:115
+#: plugins/tools/basictools/kis_tool_line.h:116
 #, fuzzy, kde-format
 msgid "Line Tool"
 msgstr "&Суретшінің құралдары"

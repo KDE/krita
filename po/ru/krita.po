@@ -82,7 +82,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-07 02:39+0000\n"
+"POT-Creation-Date: 2026-05-12 02:40+0000\n"
 "PO-Revision-Date: 2026-05-07 16:27+0300\n"
 "Last-Translator: Mariya Shikunova <maremarie@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -20732,31 +20732,31 @@ msgid "Character Variant %1"
 msgstr "Вариант символа %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2640
+#: libs/flake/text/KoSvgTextShape.cpp:2636
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Замещающий текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2619
+#: libs/flake/text/KoSvgTextShape.cpp:2615
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2621
-#: libs/flake/text/KoSvgTextShape.cpp:2629
+#: libs/flake/text/KoSvgTextShape.cpp:2617
+#: libs/flake/text/KoSvgTextShape.cpp:2625
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма текста SVG"
 
 # ?
-#: libs/flake/text/KoSvgTextShape.cpp:2627
+#: libs/flake/text/KoSvgTextShape.cpp:2623
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2650
+#: libs/flake/text/KoSvgTextShape.cpp:2646
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -38394,7 +38394,7 @@ msgstr ""
 "Высота: %2 пикс."
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:294
+#: plugins/tools/basictools/kis_tool_line.cc:313
 #: plugins/tools/basictools/kis_tool_multihand.cpp:545
 #, kde-format
 msgid ""
@@ -66132,12 +66132,12 @@ msgstr "Предварительный просмотр"
 msgid "Show Guideline"
 msgstr "Показать направляющие"
 
-#: plugins/tools/basictools/kis_tool_line.cc:446
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Длина: %1 пикс."
 
-#: plugins/tools/basictools/kis_tool_line.cc:464
+#: plugins/tools/basictools/kis_tool_line.cc:483
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -66146,7 +66146,7 @@ msgstr ""
 "Для перемещения линии, вовремя её рисования, зажмите Alt. Для рисования "
 "прямых линий зажмите Shift."
 
-#: plugins/tools/basictools/kis_tool_line.h:115
+#: plugins/tools/basictools/kis_tool_line.h:116
 #, kde-format
 msgid "Line Tool"
 msgstr "Линия"

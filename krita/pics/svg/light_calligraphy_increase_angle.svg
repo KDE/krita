@@ -1,0 +1,45 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+<dc:description>Based on the calligraphy icon by Timothée Giet, 2017</dc:description> 
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<g clip-path="url(#clip0_311_23)">
+<path d="M14 6.5L13 12L10.5 12.5L5 16L4 15L8.27051 10.7295C8.34483 10.7433 8.42169 10.75 8.5 10.75C9.19036 10.75 9.75 10.1904 9.75 9.5C9.74987 8.80976 9.19027 8.25 8.5 8.25C7.80973 8.25 7.25013 8.80976 7.25 9.5C7.25 9.57817 7.25678 9.6553 7.27051 9.72949L3 14L2 13L5.5 7.5L6 5L11.5 4L14 6.5ZM16 5V6H15L12 3V2H13L16 5Z" fill="#D2D2D2"/>
+<path d="M1 9C1 5.13401 4.13401 2 8 2" stroke="#D2D2D2"/>
+<path d="M8 0V4L11 2L8 0Z" fill="#D2D2D2"/>
+</g>
+<defs>
+<clipPath id="clip0_311_23">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -3,7 +3,7 @@
   <Actions category="tool-shortcuts">
     <text>Tool Shortcuts</text>
  <Action name="calligraphy_increase_width">
-  <icon></icon>
+  <icon>calligraphy_increase_width</icon>
   <text>Calligraphy: increase width</text>
   <whatsThis></whatsThis>
   <toolTip>Calligraphy: increase width</toolTip>
@@ -13,7 +13,7 @@
   <statusTip></statusTip>
  </Action>
  <Action name="calligraphy_increase_angle">
-  <icon></icon>
+  <icon>calligraphy_increase_angle</icon>
   <text>Calligraphy: increase angle</text>
   <whatsThis></whatsThis>
   <toolTip>Calligraphy: increase angle</toolTip>
@@ -23,7 +23,7 @@
   <statusTip></statusTip>
  </Action>
  <Action name="calligraphy_decrease_width">
-  <icon></icon>
+  <icon>calligraphy_decrease_width</icon>
   <text>Calligraphy: decrease width</text>
   <whatsThis></whatsThis>
   <toolTip>Calligraphy: decrease width</toolTip>
@@ -33,7 +33,7 @@
   <statusTip></statusTip>
  </Action>
  <Action name="calligraphy_decrease_angle">
-  <icon></icon>
+  <icon>calligraphy_decrease_angle</icon>
   <text>Calligraphy: decrease angle</text>
   <whatsThis></whatsThis>
   <toolTip>Calligraphy: decrease angle</toolTip>

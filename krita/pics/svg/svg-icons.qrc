@@ -4,6 +4,14 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_calligraphy_decrease_width.svg</file>
+        <file>light_calligraphy_decrease_width.svg</file>
+        <file>dark_calligraphy_decrease_angle.svg</file>
+        <file>light_calligraphy_decrease_angle.svg</file>
+        <file>light_calligraphy_increase_angle.svg</file>
+        <file>dark_calligraphy_increase_angle.svg</file>
+        <file>dark_calligraphy_increase_width.svg</file>
+        <file>light_calligraphy_increase_width.svg</file>
         <file>dark_show_crash_log.svg</file>
         <file>light_show_crash_log.svg</file>
         <file>dark_show_android_log.svg</file>

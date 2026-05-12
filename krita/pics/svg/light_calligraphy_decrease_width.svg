@@ -1,0 +1,37 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+<dc:description>Based on the calligraphy icon by Timothée Giet, 2017</dc:description> 
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M12 4.5L11 10L8.5 10.5L3 14L2 13L6.27051 8.72949C6.34483 8.74327 6.42169 8.75 6.5 8.75C7.19036 8.75 7.75 8.19036 7.75 7.5C7.74987 6.80976 7.19027 6.25 6.5 6.25C5.80973 6.25 5.25013 6.80976 5.25 7.5C5.25 7.57817 5.25678 7.6553 5.27051 7.72949L1 12L0 11L3.5 5.5L4 3L9.5 2L12 4.5ZM14 3V4H13L10 1V0H11L14 3Z" fill="#D2D2D2"/>
+<rect x="10" y="12" width="6" height="2" fill="#D2D2D2"/>
+</svg>

@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-12 02:40+0000\n"
-"PO-Revision-Date: 2026-05-07 10:11+0300\n"
+"PO-Revision-Date: 2026-05-12 22:19+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -379,16 +379,16 @@ msgid "Hexacol BW By Tarkan"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "&שכבה"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
 msgid "HR Wall Paper"
-msgstr "&שכבה"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -577,10 +577,10 @@ msgid "02b WoofTissue"
 msgstr "02b מרקם כותנה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/03_default-paper.png"
 msgid "03 default-paper"
-msgstr "ב&רירת מחדל"
+msgstr "03 נייר ברירת מחדל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -751,10 +751,10 @@ msgid "Rough Wall With Impasto"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Sand_fine.png"
 msgid "Sand fine"
-msgstr "אינ&דקס"
+msgstr "חול עדין"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1050,11 +1050,11 @@ msgid "Krita Brush Preset Icon Library"
 msgstr "מאפייני שכבה..."
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_brush.png"
 msgid "3 brush"
-msgstr "&מברשת"
+msgstr "3 מכחול"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1087,11 +1087,11 @@ msgid "3 splat"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_texture.png"
 msgid "3 texture"
-msgstr "תבניות"
+msgstr "3 מרקם"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2905,11 +2905,11 @@ msgid "VFX Paint"
 msgstr "ציור עם אפקטים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "&תבנית"
+msgstr "01 משטח ציור"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2928,12 +2928,12 @@ msgid "02b WoofTissue"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/03_default-"
 "paper.png"
 msgid "03 default-paper"
-msgstr "ב&רירת מחדל"
+msgstr "03 נייר ברירת מחדל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3260,20 +3260,20 @@ msgid "Grid05"
 msgstr "רשת05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "&שכבה"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/HR_Wall_Paper."
 "pat"
 msgid "HR Wall Paper"
-msgstr "&שכבה"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3472,28 +3472,28 @@ msgid "Zigzag04"
 msgstr "זיגזג04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "תבניות"
+msgstr "תבנית פרקטל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "כללי"
+msgstr "נייר כללי 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "כללי"
+msgstr "נייר כללי 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3527,11 +3527,11 @@ msgid "U Circle shape 5"
 msgstr "יצירת תבנית"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bristle.png"
 msgid "bristle"
-msgstr "כחול"
+msgstr "זיף"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3736,12 +3736,12 @@ msgid "rake sparse"
 msgstr "מצבע הקידמה לשקוף"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "random_particles.png"
 msgid "random particles"
-msgstr "צייר עם תבנית"
+msgstr "חלקיקים אקראיים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5826,11 +5826,11 @@ msgid "DA Triangle grain"
 msgstr "בודד"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/Mountain_Brush_01.png"
 msgid "Mountain Brush 01"
-msgstr "ציור"
+msgstr "מכחול הר 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: file: ./krita/data/bundles/RGBA_brushes.bundle:brushes/RGBA anim 01.gih:1
@@ -6666,27 +6666,27 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl:2
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl"
 msgid "Default"
-msgstr "ב&רירת מחדל"
+msgstr "ברירת מחדל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/gradient.gpl:2
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/gradient.gpl"
 msgid "Gradient"
-msgstr "עירובים"
+msgstr "מדרג"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl:2
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
 msgid "Markers"
-msgstr "מקושר"
+msgstr "סמנים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16.gpl:2
@@ -9785,20 +9785,20 @@ msgstr "ה&סר שכבה"
 
 #. i18n: context: text @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "כחול"
+msgstr "טשטוש &גאוסי…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1140 krita/krita.action:1141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Gaussian Blur"
-msgstr "כחול"
+msgstr "טשטוש גאוסי"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1150
@@ -9955,10 +9955,10 @@ msgstr "&תמונה"
 
 #. i18n: context: text @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1258
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Emboss (&Laplacian)"
-msgstr "אלכסוני הפוך"
+msgstr "הבלטה (&לפלסיאן)"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
@@ -15632,10 +15632,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1661 krita/kritamenu.action:1663
 #: krita/kritamenu.action:1664
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Adjust"
-msgstr "מצב צבעים"
+msgstr "כוונון"
 
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
@@ -15645,10 +15645,10 @@ msgstr "מצב צבעים"
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1671 krita/kritamenu.action:1673
 #: krita/kritamenu.action:1674
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Artistic"
-msgstr "כלי מי&לוי"
+msgstr "אומנותי"
 
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
@@ -15671,10 +15671,10 @@ msgstr "צבעים"
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1701 krita/kritamenu.action:1703
 #: krita/kritamenu.action:1704
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Edge Detection"
-msgstr "הזז בחירה"
+msgstr "זיהוי קצוות"
 
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
@@ -15982,20 +15982,20 @@ msgstr "איפוס ההגדרות"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1907
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
-msgstr "&צבע"
+msgstr "הגדרת מקשי &קיצור…"
 
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1909 krita/kritamenu.action:1910
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
-msgstr "&צבע"
+msgstr "הגדרת מקשי קיצור"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1919
@@ -16105,24 +16105,24 @@ msgstr "מדרגים"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1987
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Patterns"
-msgstr "&תבנית"
+msgstr "ת&בניות"
 
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1989 krita/kritamenu.action:1990
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Patterns"
 msgstr "תבניות"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1997
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Color"
 msgstr "&צבע"
@@ -16132,27 +16132,27 @@ msgstr "&צבע"
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1999 krita/kritamenu.action:2000
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Color"
-msgstr "&צבע"
+msgstr "צבע"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2007
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
-msgstr "צבע &טקסט"
+msgstr "בחירת צבע &חזית"
 
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2009 krita/kritamenu.action:2010
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr "צבע &טקסט"
+msgstr "בחירת צבע חזית"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2017
@@ -16244,10 +16244,10 @@ msgstr "מחוון אפשרויות מכחול 5"
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2077 krita/kritamenu.action:2079
 #: krita/kritamenu.action:2080
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Mirror"
-msgstr "שכבה לתמונה"
+msgstr "שיקוף"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2087
@@ -16258,10 +16258,10 @@ msgstr "פריסות"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2089
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select layout"
-msgstr "בחר גופן"
+msgstr "בחירת פריסה"
 
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16284,10 +16284,10 @@ msgstr "© 1999–2026 מפתחי Krita"
 
 #: krita/main.cc:820 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:822
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
-msgstr "Krita"
+msgstr "Krita: אזהרה"
 
 #: krita/main.cc:821
 #, kde-format
@@ -16315,33 +16315,33 @@ msgstr "הסר שכבה"
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:294
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Precision:"
-msgstr "&בוחר צבעים"
+msgstr "דיוק:"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:296
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr "אפרפר"
+msgstr "גולמי"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curve"
-msgstr "כלי מי&לוי"
+msgstr "עקום"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "Straight"
-msgstr "בודד"
+msgstr "ישר"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:307
 #: libs/basicflakes/tools/KoPencilTool.cpp:314
-#, fuzzy, kde-format
+#, kde-format
 msgid "Optimize"
-msgstr "הסר ערוץ"
+msgstr "מיטוב"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:321
 #, kde-format
@@ -16350,17 +16350,17 @@ msgstr "שטיחות:"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:354
 #: libs/basicflakes/tools/KoPencilTool.cpp:355
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pencil"
-msgstr "כלי אלי&פסה"
+msgstr "עיפרון"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
 #: libs/basicflakes/tools/KoPencilTool.cpp:360
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:17
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line"
-msgstr "&שכבה"
+msgstr "קו"
 
 #: libs/brush/kis_auto_brush.cpp:451 libs/brush/KisBrushModel.cpp:81
 #, kde-format
@@ -16387,28 +16387,28 @@ msgid "Could not access brush tip metadata"
 msgstr "הזז בחירה"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
-msgstr "בטל: %1"
+msgstr "הסגה"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #: libs/ui/KisUndoActionsUpdateManager.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undo %1"
-msgstr "&בטל: %1"
+msgstr "הסגת %1"
 
 #: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
-msgstr "אדום"
+msgstr "ביצוע מחדש"
 
 #: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #: libs/ui/KisUndoActionsUpdateManager.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Redo %1"
-msgstr "בצע שוב: %1"
+msgstr "ביצוע %1 מחדש"
 
 #: libs/command/kundo2model.cpp:54
 #: plugins/dockers/historydocker/KisUndoModel.cpp:57
@@ -16418,131 +16418,113 @@ msgstr "<ריק>"
 
 #: libs/command/kundo2stack.cpp:1397 libs/ui/input/KisTouchGestureAction.cpp:22
 #: libs/widgetutils/xmlgui/kundoactions.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Redo"
-msgstr "אדום"
+msgstr "ביצוע מחדש"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
 #: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:50
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1930
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undo"
-msgstr "בטל: %1"
+msgstr "הסגה"
 
 #: libs/flake/commands/KoMultiPathPointJoinCommand.cpp:18
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "צירוף תת־נתיבים"
 
 #: libs/flake/commands/KoMultiPathPointMergeCommand.cpp:38
 #: libs/flake/commands/KoPathPointMergeCommand.cpp:135
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge points"
-msgstr "שוליים"
+msgstr "מיזוג נקודות"
 
 #: libs/flake/commands/KoParameterHandleMoveCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change parameter"
-msgstr "שינוי טאבולטור"
+msgstr "החלפת משתנה"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
 #: libs/flake/tools/KoPathTool.cpp:314
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
-msgstr "המר ליוונית"
+msgstr "המרה לנתיב"
 
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "יעד:"
+msgstr "פירוק תת־נתיב בנקודות"
 
 #: libs/flake/commands/KoPathCombineCommand.cpp:54
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Combine paths"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "שילוב נתיבים"
 
 #: libs/flake/commands/KoPathControlPointMoveCommand.cpp:30
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move control point"
-msgstr "שוליים"
+msgstr "הזזת נקודת בקרה"
 
 #: libs/flake/commands/KoPathFillRuleCommand.cpp:31
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
-msgstr "מאפייני שכבה..."
+msgstr "הגדרת כלל מילוי"
 
 #: libs/flake/commands/KoPathPointInsertCommand.cpp:67
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert points"
-msgstr "הוספת קישור"
+msgstr "הוספת נקודות"
 
 #: libs/flake/commands/KoPathPointMoveCommand.cpp:31
 #: libs/flake/commands/KoPathPointMoveCommand.cpp:47
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move points"
-msgstr "הסר קישור"
+msgstr "הזזת נקודות"
 
 #: libs/flake/commands/KoPathPointRemoveCommand.cpp:91
 #: libs/flake/commands/KoPathPointRemoveCommand.cpp:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove points"
-msgstr "הסר קישור"
+msgstr "הסרת נקודות"
 
 #: libs/flake/commands/KoPathPointTypeCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set point type"
-msgstr "בחר גופן"
+msgstr "הגדרת סוג נקודה"
 
 #: libs/flake/commands/KoPathReverseCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
-msgstr "הסרת קבוצה"
+msgstr "היפוך נתיבים"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr "יעד:"
+msgstr "פירוק תת־נתיב"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr "שינוי סגנון תו"
+msgstr "החלפת מקטעים לעקומות"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:123
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr "שינוי סגנון תו"
+msgstr "החלפת מקטעים לקווים"
 
 #: libs/flake/commands/KoPathShapeMarkerCommand.cpp:29
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set marker"
-msgstr "שנייה"
+msgstr "הגדרת סמן"
 
 #: libs/flake/commands/KoShapeAlignCommand.cpp:71
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Align shapes"
-msgstr "יישור לשמאל"
+msgstr "יישור צורות"
 
 #: libs/flake/commands/KoShapeBackgroundCommand.cpp:53
 #: libs/flake/commands/KoShapeBackgroundCommand.cpp:64
@@ -16553,10 +16535,9 @@ msgstr "הגדרת רקע"
 
 #: libs/flake/commands/KoShapeClipCommand.cpp:57
 #: libs/flake/commands/KoShapeClipCommand.cpp:72
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
-msgstr "גלי"
+msgstr "חיתוך צורה"
 
 #: libs/flake/commands/KoShapeCreateCommand.cpp:50
 #, fuzzy, kde-format
@@ -16569,10 +16550,9 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
-msgstr "מחיקת טקסט"
+msgstr "מחיקת צורה"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:56
 #, fuzzy
@@ -16585,87 +16565,73 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
-msgstr "מחיקת טקסט"
+msgstr "פיזור צורות"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1608
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "הפרק הנוכחי"
+msgstr "קיבוץ צורות"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:69
-#, fuzzy
-#| msgid "Add Group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr "הוספת קבוצה"
+msgstr "הוספת צורות לקבוצה"
 
 #: libs/flake/commands/KoShapeKeepAspectRatioCommand.cpp:14
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Keep Aspect Ratio"
-msgstr "תבניות"
+msgstr "שמירה על יחס גובה־רוחב"
 
 #: libs/flake/commands/KoShapeLockCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr "יישור לשמאל"
+msgstr "נעילת צורות"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:27
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr "מאפייני שכבה..."
+msgstr "שינוי מאפייני צורת טקסט"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:26
 #: libs/flake/commands/KoShapeMoveCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
-msgstr "מחיקת טקסט"
+msgstr "הזזת צורות"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "בחר גופן"
+msgstr "הגדרת סדר צביעה"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
-msgstr "יצירת תבנית"
+msgstr "שינוי שם צורה"
 
 #: libs/flake/commands/KoShapeReorderCommand.cpp:53
 #: libs/flake/commands/KoShapeReorderCommand.cpp:66
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
-msgstr "מחיקת טקסט"
+msgstr "סידור צורות מחדש"
 
 #: libs/flake/commands/KoShapeResizeCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "שנה גודל"
+msgstr "שינוי גודל"
 
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "מחיקת טקסט"
+msgstr ""
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
-msgstr "מחיקת טקסט"
+msgstr "שינוי גודל צורות"
 
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:55
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:74
@@ -16677,47 +16643,40 @@ msgstr "הגדרת משיכה"
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:36
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:47
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:60
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
-msgstr "Script"
+msgstr "הגדרת אטימות"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr "יצירת תבנית"
+msgstr "ביטול חיתוך צורה"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:92
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr "יישור לשמאל"
+msgstr "ביטול חיתוך צורות"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1636
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "יישור לשמאל"
+msgstr "פירוק צורות"
 
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:45
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
-msgstr "הסרת קבוצה"
+msgstr "סגירת תת־נתיב"
 
 #: libs/flake/commands/KoSubpathRemoveCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
-msgstr "הסרת קבוצה"
+msgstr "הסרת תת־נתיב"
 
 #: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:15
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr "הוס&פת תמונה בתור שכבה..."
+msgstr "המרת סוג טקסט"
 
 #: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -16756,39 +16715,39 @@ msgstr ""
 "הודעת שגיאה: %3"
 
 #: libs/flake/KoPathShapeFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simple path shape"
-msgstr "יצירת תבנית"
+msgstr "צורת נתיב פשוטה"
 
 #: libs/flake/KoPathShapeFactory.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "A simple path shape"
-msgstr "יצירת תבנית"
+msgstr "צורת נתיב פשוטה"
 
 #: libs/flake/KoShapeController.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 Options"
-msgstr "יוצאים מן הכלל"
+msgstr "אפשרויות %1"
 
 #: libs/flake/KoToolManager.cpp:605
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active tool: %1"
-msgstr "בחירה"
+msgstr "כלי פעיל: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit View"
-msgstr "העמוד הבא"
+msgstr "התאמה לתצוגה"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit Width"
-msgstr "העמוד הבא"
+msgstr "התאמה לרוחב"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit Height"
-msgstr "העמוד הבא"
+msgstr "התאמה לגובה"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:33
 #, fuzzy, kde-format
@@ -16806,46 +16765,46 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr "אטימות"
+msgstr "לטינית בסיסית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin-1 Supplement"
-msgstr "שינוי יישור"
+msgstr "השלמה ללטינית-1"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-A"
-msgstr "אפשרויות עירוב"
+msgstr "לטינית מורחבת א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-B"
-msgstr "אפשרויות עירוב"
+msgstr "לטינית מורחבת ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "IPA Extensions"
-msgstr "יוצאים מן הכלל"
+msgstr "הרחבות לאלפבית הפונטי הבינלאומי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Spacing Modifier Letters"
-msgstr "אמצע:"
+msgstr "אותיות משנות רווח"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "סימני ניקוד מחברים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:28
 #, kde-format
@@ -16860,10 +16819,10 @@ msgid "Cyrillic"
 msgstr "קירילית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Supplement"
-msgstr "הסר בחירה"
+msgstr "השלמה לקירילית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:31
 #, kde-format
@@ -16878,10 +16837,10 @@ msgid "Hebrew"
 msgstr "עברית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic"
-msgstr "תכול"
+msgstr "ערבית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:34
 #, kde-format
@@ -16890,10 +16849,10 @@ msgid "Syriac"
 msgstr "סורית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Supplement"
-msgstr "שינוי יישור"
+msgstr "השלמה לערבית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:36
 #, kde-format
@@ -16902,10 +16861,10 @@ msgid "Thaana"
 msgstr "ת׳אנה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "NKo"
-msgstr "ללא"
+msgstr "נ׳קו"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:38
 #, kde-format
@@ -16920,22 +16879,22 @@ msgid "Mandaic"
 msgstr "מנדאית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Syriac Supplement"
-msgstr "שינוי יישור"
+msgstr "השלמה לסורית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-B"
-msgstr "אפשרויות עירוב"
+msgstr "ערבית מורחבת ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-A"
-msgstr "אפשרויות עירוב"
+msgstr "ערבית מורחבת א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:43
 #, kde-format
@@ -16968,10 +16927,10 @@ msgid "Oriya"
 msgstr "אורייה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tamil"
-msgstr "גופן:"
+msgstr "טמילית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:49
 #, kde-format
@@ -16998,22 +16957,22 @@ msgid "Sinhala"
 msgstr "סינהלית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Thai"
-msgstr "חאקי"
+msgstr "תאית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Lao"
-msgstr "העבר אחורה"
+msgstr "לאו"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tibetan"
-msgstr "שעה"
+msgstr "טיבטית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:56
 #, kde-format
@@ -17022,10 +16981,10 @@ msgid "Myanmar"
 msgstr "מיאנמרית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Georgian"
-msgstr "אפשרויות עירוב"
+msgstr "גאורגית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:58
 #, kde-format
@@ -17040,10 +16999,10 @@ msgid "Ethiopic"
 msgstr "אתיופית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ethiopic Supplement"
-msgstr "הסר בחירה"
+msgstr "השלמה לכתב אתיופי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:61
 #, kde-format
@@ -17118,10 +17077,10 @@ msgid "Limbu"
 msgstr "לימבו"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tai Le"
-msgstr "מקושר"
+msgstr "טאי לה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:74
 #, kde-format
@@ -17130,16 +17089,16 @@ msgid "New Tai Lue"
 msgstr "טאי לה חדש"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Khmer Symbols"
-msgstr "מצב צבעים"
+msgstr "סמלים חמרים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Buginese"
-msgstr "מברשות"
+msgstr "בוגינית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:77
 #, kde-format
@@ -17148,16 +17107,16 @@ msgid "Tai Tham"
 msgstr "טאי טם"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Extended"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "סימני ניקוד מחברים מורחב"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Balinese"
-msgstr "מקושר"
+msgstr "באלית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:80
 #, kde-format
@@ -17184,52 +17143,52 @@ msgid "Ol Chiki"
 msgstr "אול צ׳יקי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-C"
-msgstr "אפשרויות עירוב"
+msgstr "קירילית מורחבת ג׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Georgian Extended"
-msgstr "אפשרויות עירוב"
+msgstr "הרחבה של גאורגית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Sundanese Supplement"
-msgstr "שינוי יישור"
+msgstr "תוספות לסונדנית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vedic Extensions"
-msgstr "יוצאים מן הכלל"
+msgstr "הרחבות ודיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr "תמונה חדשה"
+msgstr "הרחבות פונטיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions Supplement"
-msgstr "תמונה חדשה"
+msgstr "השלמה של הרחבות פונטיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Supplement"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "השלמה של סימנים מבחינים מתחברים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended Additional"
-msgstr "אפשרויות עירוב"
+msgstr "הרחבות לטיניות נוספות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
 #, kde-format
@@ -17238,10 +17197,10 @@ msgid "Greek Extended"
 msgstr "יוונית מורחבת"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "הגדרות"
+msgstr "פיסוק כללי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
@@ -17256,10 +17215,10 @@ msgid "Currency Symbols"
 msgstr "סמלי מטבע"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks for Symbols"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "סימנים מבחינים מתחברים בשביל סמלים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:97
 #, kde-format
@@ -17268,10 +17227,10 @@ msgid "Letterlike Symbols"
 msgstr "סמלים דמויי אותיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr "כפתור איפוס"
+msgstr "צורות מספרים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
 #, kde-format
@@ -17280,10 +17239,10 @@ msgid "Arrows"
 msgstr "חיצים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
-msgstr "פעולה בוליאנית"
+msgstr "סימנים מתמטיים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
 #, kde-format
@@ -17292,10 +17251,10 @@ msgid "Miscellaneous Technical"
 msgstr "טכניים שונים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Control Pictures"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "תמונות של תווי בקרה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
 #, kde-format
@@ -17304,16 +17263,16 @@ msgid "Optical Character Recognition"
 msgstr "זיהוי תווים אופטי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumerics"
-msgstr "גוו&ני אפור"
+msgstr "תווים אלפאנומריים ממוסגרים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr "ריווח:"
+msgstr "ציור תיבות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
 #, fuzzy, kde-format
@@ -17322,10 +17281,10 @@ msgid "Block Elements"
 msgstr "הבא %1 נוכחי קדימה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr "אפשרויות עירוב"
+msgstr "צורות הנדסיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
 #, kde-format
@@ -17352,10 +17311,10 @@ msgid "Supplemental Arrows-A"
 msgstr "השלמה של חצים א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Braille Patterns"
-msgstr "תבניות"
+msgstr "תרשימי כתב ברייל"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:113
 #, kde-format
@@ -17388,10 +17347,10 @@ msgid "Glagolitic"
 msgstr "גלגוליטי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-C"
-msgstr "אפשרויות עירוב"
+msgstr "לטינית מורחבת ג׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:119
 #, kde-format
@@ -17400,10 +17359,10 @@ msgid "Coptic"
 msgstr "קופטי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:120
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Georgian Supplement"
-msgstr "שינוי יישור"
+msgstr "השלמה לגאורגית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:121
 #, kde-format
@@ -17412,34 +17371,34 @@ msgid "Tifinagh"
 msgstr "טיפינג"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended"
-msgstr "אפשרויות עירוב"
+msgstr "אתיופית מורחבת"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-A"
-msgstr "אפשרויות עירוב"
+msgstr "קירילית מורחבת א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Supplemental Punctuation"
-msgstr "הגדרות"
+msgstr "השלמה של סימני פיסוק"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:125
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "CJK Radicals Supplement"
-msgstr "שינוי יישור"
+msgstr "שורשים נוספים בסינית, יפנית וקוריאנית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:126
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Kangxi Radicals"
-msgstr "סובב &90"
+msgstr "שורשי קנגשי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:127
 #, kde-format
@@ -17448,10 +17407,10 @@ msgid "Ideographic Description Characters"
 msgstr "תווים לתיאור אידיאוגרפי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "CJK Symbols and Punctuation"
-msgstr "הגדרות"
+msgstr "סמלים וסימני פיסוק לסינית, יפנית וקוריאנית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:129
 #, kde-format
@@ -17496,10 +17455,10 @@ msgid "CJK Strokes"
 msgstr "משיכות בסינית, יפנית וקוריאנית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Katakana Phonetic Extensions"
-msgstr "תמונה חדשה"
+msgstr "הרחבות פונטיות לקאטאקאנה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:137
 #, kde-format
@@ -17538,10 +17497,10 @@ msgid "Yi Syllables"
 msgstr "הברות יי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:143
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Yi Radicals"
-msgstr "סובב &90"
+msgstr "שורשי יי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:144
 #, kde-format
@@ -17556,10 +17515,10 @@ msgid "Vai"
 msgstr "ואי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-B"
-msgstr "אפשרויות עירוב"
+msgstr "קירילית מורחבת ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:147
 #, kde-format
@@ -17568,16 +17527,16 @@ msgid "Bamum"
 msgstr "במום"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr "אמצע:"
+msgstr "אותיות שינוי טון"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-D"
-msgstr "אפשרויות עירוב"
+msgstr "לטינית מורחבת ד׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:150
 #, kde-format
@@ -17586,10 +17545,10 @@ msgid "Syloti Nagri"
 msgstr "סילוטי נאגרי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Common Indic Number Forms"
-msgstr "כפתור איפוס"
+msgstr "צורות מספרים משותפות לשפות הודו אירופאיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:152
 #, kde-format
@@ -17604,10 +17563,10 @@ msgid "Saurashtra"
 msgstr "סוראשטרה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended"
-msgstr "אפשרויות עירוב"
+msgstr "הרחבה של דוונגארי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:155
 #, kde-format
@@ -17622,22 +17581,22 @@ msgid "Rejang"
 msgstr "רג׳אנג"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo Extended-A"
-msgstr "אפשרויות עירוב"
+msgstr "ג׳אמו (יסודות מתחברים) של הנגול מורחבת א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:158
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Javanese"
-msgstr "מקושר"
+msgstr "ג׳אווה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-B"
-msgstr "אפשרויות עירוב"
+msgstr "מיאנמרית מורחבת ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:160
 #, kde-format
@@ -17646,40 +17605,40 @@ msgid "Cham"
 msgstr "צ׳אם"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-A"
-msgstr "אפשרויות עירוב"
+msgstr "מיאנמרית מורחבת א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:162
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tai Viet"
-msgstr "מקושר"
+msgstr "טאי וייט"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:163
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek Extensions"
-msgstr "יוצאים מן הכלל"
+msgstr "הרחבות של מיטיי מאייק"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:164
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-A"
-msgstr "אפשרויות עירוב"
+msgstr "אתיופית מורחבת א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-E"
-msgstr "אפשרויות עירוב"
+msgstr "לטינית מורחבת ה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr "הסר בחירה"
+msgstr "השלמות לצ׳רוקי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
@@ -17694,22 +17653,22 @@ msgid "Hangul Syllables"
 msgstr "הברות הנגול"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo Extended-B"
-msgstr "אפשרויות עירוב"
+msgstr "ג׳אמו (יסודות מתחברים) של הנגול מורחבת ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:170
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "High Surrogates"
-msgstr "עובי קו:"
+msgstr "ממלאי מקום גבוהים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr "עובי קו:"
+msgstr "ממלאי מקום גבוהים לשימוש פרטי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
@@ -17718,10 +17677,10 @@ msgid "Low Surrogates"
 msgstr "ממלאי מקום נמוכים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:173
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Private Use Area"
-msgstr "עובי קו:"
+msgstr "אזור שימוש פרטי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:174
 #, kde-format
@@ -17730,34 +17689,34 @@ msgid "CJK Compatibility Ideographs"
 msgstr "אידיאוגרמות סיניות, יפניות וקוריאניות לתאימות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alphabetic Presentation Forms"
-msgstr "כלי ציור"
+msgstr "צורות תצוגה לאלפבית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:176
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-A"
-msgstr "כלי ציור"
+msgstr "צורות תצוגה לערבית א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr "הדבקת בחירה"
+msgstr "בוררי צורות משנה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "גל משולש"
+msgstr "צורות אנכיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "רוחב שורה מותאם אישית"
+msgstr "חצאי סימנים מתחברים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
@@ -17772,10 +17731,10 @@ msgid "Small Form Variants"
 msgstr "צורות משנה קטנות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-B"
-msgstr "כלי ציור"
+msgstr "צורות תצוגה לערבית ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:183
 #, kde-format
@@ -17784,40 +17743,40 @@ msgid "Halfwidth and Fullwidth Forms"
 msgstr "צורות לרוחב חצוי ורוחב מלא"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Specials"
-msgstr "אטימות:"
+msgstr "מיוחדים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr "שינוי גבולות"
+msgstr "הברות של קווי ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr "שינוי גבולות"
+msgstr "אידאוגרמות של קווי ב׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr "שם:"
+msgstr "מספרים אגאיים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Numbers"
-msgstr "שם:"
+msgstr "מספרים יווניים עתיקים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr "מצב צבעים"
+msgstr "סמלים עתיקים"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
@@ -17863,10 +17822,10 @@ msgid "Old Permic"
 msgstr "נטוי:"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "כלול אוטומטית"
+msgstr "אוגריתית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
@@ -17875,10 +17834,10 @@ msgid "Old Persian"
 msgstr "פרסית עתיקה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr "בחירה"
+msgstr "דזרט"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
@@ -17923,22 +17882,22 @@ msgid "Todhri"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr "&שכבה"
+msgstr "קווי א׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr "אפשרויות עירוב"
+msgstr "לטינית מורחבת ו׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr "שינוי גבולות"
+msgstr "הברות קפריסאיות"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
@@ -18039,10 +17998,10 @@ msgid "Psalter Pahlavi"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr "נטוי:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
@@ -18141,10 +18100,10 @@ msgid "Mahajani"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr "שינוי שם התמונה"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
@@ -18159,10 +18118,10 @@ msgid "Khojki"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr "מברשות"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
@@ -18201,10 +18160,10 @@ msgid "Siddham"
 msgstr "סידהם"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr "אמצע:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
@@ -18297,10 +18256,10 @@ msgid "Bhaiksuki"
 msgstr "בהיקסוקי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr "מברשות"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
@@ -18453,22 +18412,22 @@ msgid "Tangut"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr "זוויות:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr "אפק&טים"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr "שינוי יישור"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
 #, fuzzy, kde-format
@@ -20253,10 +20212,10 @@ msgid "Adjusts the position of glyphs so they cursively connect."
 msgstr "כיוון מקום הגליפים כך שיתחברו בכתב מחובר."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr "גל משולש"
+msgstr "צורות סופיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -20267,10 +20226,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr "גל משולש"
+msgstr "צורה סופית מס׳ 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -20281,10 +20240,10 @@ msgid ""
 msgstr "החלפת הגליף אָלַף בסוף מילים סוריות בצורה המתאימה שלו."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr "גל משולש"
+msgstr "צורה סופית מס׳ 3"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -20298,11 +20257,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
-#, fuzzy, kde-format
-#| msgid "Initials:"
+#, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "ראשי תיבות:"
+msgstr "צורות התחלתיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -20321,11 +20279,10 @@ msgid ""
 msgstr "החלפת גליף ברצף של גליפים בכתב מחובר בצורה המבודדת שלו."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr "חלופה"
+msgstr "חלופות גליף משמאל לימין"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
@@ -20334,22 +20291,22 @@ msgid "Replaces glyphs with their left-to-right alternates."
 msgstr "החלפת גליפים עם חלופות ה„שמאל לימין” שלהן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "בודד"
+msgstr "צורות משוקפות משמאל לימין"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr "בודד"
+msgstr "החלפת גליפים בצורות המשוקפות שלהם משמאל לימין."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr "גל משולש"
+msgstr "צורות אמצעיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -20360,10 +20317,10 @@ msgid ""
 msgstr "החלפת גליפים באמצע רצף של גליפים בכתב מחובר בצורות האמצעיות שלהם."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr "גל משולש"
+msgstr "צורות אמצעיות מס׳ 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20388,11 +20345,10 @@ msgid ""
 msgstr "הצגת סימני התחברות בערבית בגופנים ל־Windows 95 באמצעות החלפת גליפים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left glyph alternates"
-msgstr "חלופה"
+msgstr "חלופות גליף מימין לשמאל"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
 #, kde-format
@@ -20401,16 +20357,16 @@ msgid "Replaces glyphs with their right-to-left alternates."
 msgstr "החלפת גליפים עם חלופות ה„ימין לשמאל” שלהן."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr "הזחה ימנית"
+msgstr "צורות משוקפות מימין לשמאל"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr "הזחה ימנית"
+msgstr "החלפת גליפים בצורות המשוקפות שלהם מימין לשמאל."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
@@ -20439,10 +20395,10 @@ msgid "Replaces glyphs with alternates."
 msgstr "החלפת גליפים בחלופות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "הגוון תו %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
 #: libs/flake/text/KoSvgTextShape.cpp:2636
@@ -21167,9 +21123,9 @@ msgid "Other"
 msgstr "אחר"
 
 #: libs/image/generator/kis_generator_layer.cpp:202
-#, fuzzy, kde-format
+#, kde-format
 msgid "Generator"
-msgstr "כללי"
+msgstr "מייצר"
 
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 #, fuzzy
@@ -21517,15 +21473,15 @@ msgid "Layer Style"
 msgstr "סגנון שכבה"
 
 #: libs/image/kis_layer_properties_icons.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inherit Alpha"
-msgstr "&בוחר צבעים"
+msgstr "קבלת שקיפות בירושה"
 
 #: libs/image/kis_layer_properties_icons.cpp:27
 #: libs/image/kis_paint_layer.cc:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alpha Locked"
-msgstr "מקושר"
+msgstr "שקיפות נעולה"
 
 #: libs/image/kis_layer_properties_icons.cpp:28
 #: libs/image/kis_paint_layer.cc:218
@@ -21659,10 +21615,9 @@ msgid "Flatten Image"
 msgstr "שיטוח תמונה"
 
 #: libs/image/kis_layer_utils.cpp:2420
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
-msgstr "אלפא"
+msgstr "פיצול שקיפות למסכה"
 
 #: libs/image/kis_layer_utils.cpp:2446
 msgctxt "(qtundo-format)"
@@ -21897,10 +21852,10 @@ msgid "Effect"
 msgstr "אפקט"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Tones"
-msgstr "מקושר"
+msgstr "גוונים"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:74
 #, kde-format
@@ -24922,17 +24877,17 @@ msgstr ""
 "כגון Kdenlive‏ (https://kdenlive.org)."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:234
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
 "file suffix."
 msgid "Extracted %1 frames from %2 video."
-msgstr "מלבן"
+msgstr "חולצו %1 תמוניות מהסרטון %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to export frames from video"
-msgstr "מלבן"
+msgstr "ייצוא תמוניות מהסרטון נכשל"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:352
 #, kde-format
@@ -25175,9 +25130,9 @@ msgstr "לוחות צבעים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "חזרה:"
+msgstr "קצב סיביות (מסל״ש):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -25193,9 +25148,9 @@ msgstr "ללא אובדן איכות"
 #: libs/ui/animation/video_export_options_dialog.ui:286
 #: libs/ui/animation/video_export_options_dialog.ui:373
 #: libs/ui/animation/video_export_options_dialog.ui:443
-#, fuzzy, kde-format
+#, kde-format
 msgid "Loop Animation"
-msgstr "סובב &90"
+msgstr "הנפשה בלולאה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
 #: libs/ui/animation/video_export_options_dialog.ui:293
@@ -35042,15 +34997,12 @@ msgid "Finished autosaving %1"
 msgstr "השמירה האוטומטית של %1 הסתיימה"
 
 #: libs/ui/KisDocument.cpp:1965
-#, fuzzy, kde-format
-#| msgid ""
-#| "Malformed URL\n"
-#| "%1"
+#, kde-format
 msgid ""
 "Malformed Path\n"
 "%1"
 msgstr ""
-"כתובת שגויה\n"
+"נתיב במבנה שגוי\n"
 "%1"
 
 #: libs/ui/KisDocument.cpp:2037
@@ -39412,10 +39364,10 @@ msgid "Name"
 msgstr "שם"
 
 #: libs/widgets/kis_palette_view.cpp:172
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"
-msgstr "הסר שכבה"
+msgstr "הסרת קבוצה"
 
 #: libs/widgets/kis_spacing_selection_widget.cpp:51
 #, kde-format
@@ -40068,7 +40020,7 @@ msgstr ""
 "למידע נוסף על KDE והתוכנות שאנו יוצרים.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
 "However, you - the user - must tell us when something does not work as "
@@ -40078,13 +40030,13 @@ msgid ""
 "improvement then you are welcome to use the bug tracking system to register "
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
-"<html> תוכנה תמיד אפשר לשפר, והצוות של KDE מוכן תמיד לעשות זאת. אבל, אתה - "
-"המשתמש - צריך לומר לנו כאשר משהו לא פועל כצפוי או כאשר ניתן לעשות אותו טוב "
-"יותר. <br /><br /> סביבת שולחן העבודה KDE משתמשת במערכת למעקב אחר באגים. בקר "
-"ב־<a href=\"%1\">%1</a> או השתמש בדו־שיח \"דיווח על באג...\" מתוך התפריט "
-"\"עזרה\" כדי לדווח על באגים. <br /><br /> אם יש לך הצעה לשיפור, אתה מוזמן "
-"להשתמש במערכת למעקב אחר באגים כדי לרשום את המשאלה שלך. ודא שאתה משתמש בדרגת "
-"החומרה הנקראת \"משאלה\". </html>"
+"<html>תוכנות תמיד ניתן לשפר, והצוות של KDE ערוך לזה. ובכל זאת, המשתמשים "
+"מוכרחים לדווח לנו כשדברים לא עובדים כמצופה שיכלו לעבוד טוב יותר.<br /><br /"
+">ל־KDE יש מערכת מעקב אחר תקלות. אפשר לגשת אל <a href=\"%1\">%1</a> או להשתמש "
+"בחלונית „דיווח על תקלה…” דרך תפריט„עזרה” כדי לדווח על תקלות.<br /><br />אם "
+"יש לך הצעות לשיפור אנחנו יותר ממזמינים אותך להשתמש במערכת מעקב התקלות כדי "
+"לתעד את המשאלה שלך. נא לוודא שבחרת במידת החומרה „Wishlist” (רשימת משאלות).</"
+"html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:90
 #, kde-format
@@ -44828,16 +44780,16 @@ msgid "Percentage (%)"
 msgstr "אחוז (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "מאפייני שכבה..."
+msgstr "עריכת ערכת סגנון"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "הסר ערוץ"
+msgstr "גודל אופטי"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
 #, kde-format
@@ -44853,11 +44805,10 @@ msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #: plugins/dockers/textproperties/LocaleHandler.cpp:36
-#, fuzzy, kde-format
-#| msgid "Picture"
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %2"
-msgstr "תמונה"
+msgstr "%1, הגוון: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, fuzzy, kde-format
@@ -44872,10 +44823,10 @@ msgid "Off"
 msgstr "כבוי"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr "&צבע"
+msgstr "תגית יכולת OpenType"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:12
 #, fuzzy, kde-format
@@ -44988,10 +44939,10 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Mathematical"
-msgstr "פעולה בוליאנית"
+msgstr "מתמטי"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:95
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:93
@@ -45030,10 +44981,10 @@ msgid "Align to the descender."
 msgstr "יישור אוטומטי"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "הזחת קו בסיס"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
 #, kde-format
@@ -45066,11 +45017,10 @@ msgstr "אורך"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:133
 #: plugins/dockers/textproperties/qml/OTPosition.qml:79
-#, fuzzy, kde-format
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Super"
-msgstr "כתב עילי"
+msgstr "עילי"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:134
 #: plugins/dockers/textproperties/qml/OTPosition.qml:80
@@ -45338,10 +45288,10 @@ msgid "Add Fallback Family"
 msgstr "הוספת משפחה לגיבוי"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Font Kerning"
-msgstr "הדפסה אחרונה"
+msgstr "ריווח גופן פנימי"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, kde-format
@@ -49703,7 +49653,7 @@ msgstr "שמירת תגיות לתיקייה"
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
 #, kde-format
 msgid "ID:"
-msgstr ""
+msgstr "מזהה:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:233
@@ -49715,7 +49665,7 @@ msgstr "שם הקובץ:"
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:254
 #, kde-format
 msgid "Tags:"
-msgstr ""
+msgstr "תגיות:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/wdgresourcepreview.ui:107
@@ -49750,13 +49700,13 @@ msgid "Mirror Image Horizontally"
 msgstr "היפוך התמונה אופקית"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "ה&סר שכבה"
-msgstr[1] "ה&סר שכבה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "סיבוב שכבה"
+msgstr[1] "סיבוב שתי שכבות"
+msgstr[2] "סיבוב %1 שכבות"
+msgstr[3] "סיבוב %1 שכבות"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -50621,13 +50571,13 @@ msgstr "&בהירות"
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:61
 #, kde-format
 msgid "Luminosity (ITU-R BT.&709)"
-msgstr ""
+msgstr "הארה (ITU-R BT.&709)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLuminosityBT601)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:68
 #, kde-format
 msgid "Luminosity (ITU-R BT.&601)"
-msgstr ""
+msgstr "הארה (ITU-R BT.&601)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAverage)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
@@ -51602,7 +51552,7 @@ msgstr "שיקופי:"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:138
 #, kde-format
 msgid "Shinyness exponent:"
-msgstr ""
+msgstr "מעריך נצנוץ:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, diffuseReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:186
@@ -52616,31 +52566,31 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "גל משולש"
-msgstr[1] "גל משולש"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "כל חזרה אופקית"
+msgstr[1] "כל {n} חזרות אופקיות"
+msgstr[2] "כל {n} חזרות אופקיות"
+msgstr[3] "כל {n} חזרות אופקיות"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "בחירה"
-msgstr[1] "בחירה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "כל חזרה אנכית"
+msgstr[1] "כל שתי חזרות אנכיות"
+msgstr[2] "כל {n} חזרות אנכיות"
+msgstr[3] "כל {n} חזרות אנכיות"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -52690,31 +52640,31 @@ msgstr "יישור לרשת פיקסלים:"
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
 "generator"
 msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
-msgstr[0] "גל משולש"
-msgstr[1] "גל משולש"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "כל תא אופקית"
+msgstr[1] "כל שני תאים אופקית"
+msgstr[2] "כל {n} תאים אופקית"
+msgstr[3] "כל {n} תאים אופקית"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
 "generator"
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
-msgstr[0] "בחירה"
-msgstr[1] "בחירה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "כל תא אנכית"
+msgstr[1] "כל שני תאים אנכית"
+msgstr[2] "כל {n} תאים אנכית"
+msgstr[3] "כל {n} תאים אנכית"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, kde-format
@@ -53677,7 +53627,7 @@ msgstr "מדורג"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:146
 #, kde-format
 msgid "Force convert to sRGB"
-msgstr ""
+msgstr "אילוץ המרה ל־sRGB"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -53768,14 +53718,14 @@ msgstr "מיטוב"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:833
 #, kde-format
 msgid "Formats:"
-msgstr ""
+msgstr "תסדירים:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, iptc)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:284
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1049
 #, kde-format
 msgid "IPTC"
-msgstr ""
+msgstr "IPTC"
 
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
@@ -53784,7 +53734,7 @@ msgstr ""
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
 msgid "XMP"
-msgstr ""
+msgstr "XMP"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:333
@@ -54037,17 +53987,16 @@ msgid "Zero"
 msgstr "אפס"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
-#, fuzzy, kde-format
-#| msgid "Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
-msgstr "שמאלה"
+msgstr "שמאל"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
-msgstr "קבוצה:"
+msgstr "עליון"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
 #, kde-format
@@ -54074,24 +54023,22 @@ msgid "Weighted"
 msgstr "גובה:"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:127
-#, fuzzy, kde-format
-#| msgid "Top Right"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
-msgstr "למעלה מימין"
+msgstr "ימין למעלה"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
-msgstr "הזז בחירה"
+msgstr "שמאל למעלה"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left left"
-msgstr "הזחה שמאלית"
+msgstr "שמאל שמאל"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
 #, kde-format
@@ -54124,10 +54071,10 @@ msgid "Gradient + Weighted"
 msgstr "עירובים"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:135
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
-msgstr "הדבקת בחירה"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:192
 #, kde-format
@@ -54212,17 +54159,17 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lossy encoding"
-msgstr "מאפייני שכבה..."
+msgstr "קידוד מאבד איכות"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:110
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "High"
-msgstr "גובה:"
+msgstr "גבוהה"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, lossyQuality)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:124
@@ -54236,9 +54183,9 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:140
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Low"
-msgstr "העבר אחורה"
+msgstr "נמוכה"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:151
@@ -54280,9 +54227,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblFaster)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:183
 #: plugins/impex/webp/kis_wdg_options_webp.ui:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Faster"
-msgstr "תאריך"
+msgstr "מהיר יותר"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowerBetter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:190
@@ -54352,9 +54299,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:305
-#, fuzzy, kde-format
+#, kde-format
 msgid "HDR conversion"
-msgstr "יצירת תבנית"
+msgstr "המרת HDR (טווח דינמי רחב)"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:311
@@ -55055,12 +55002,12 @@ msgstr "לתמונה אין שם."
 #: plugins/impex/libkra/kis_kra_loader.cpp:215
 #, kde-format
 msgid "Image does not specify a width."
-msgstr ""
+msgstr "התמונה לא מציינת רוחב."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:221
 #, kde-format
 msgid "Image does not specify a height."
-msgstr ""
+msgstr "התמונה לא מציינת גובה."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:271
 #, fuzzy, kde-format
@@ -55948,7 +55895,7 @@ msgstr "ריווח:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Method:"
-msgstr ""
+msgstr "שיטה:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:462
 #, kde-format
@@ -56000,6 +55947,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<title>Temperature</title><p>Set here the color temperature in Kelvin.</p>"
 msgstr ""
+"<title>טמפרטורה</title><p>כאן אפשר להגדיר את טמפרטורת הצבע בקלווין.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
 #, kde-format
@@ -56030,7 +55978,7 @@ msgstr "לבן אחיד"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Unclip"
-msgstr ""
+msgstr "ביטול חיתוך"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
 #, kde-format
@@ -65851,16 +65799,16 @@ msgid "Debug"
 msgstr "ניפוי שגיאות"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "בחירה"
+msgstr "הצגת תיבות תוחמות לתווים"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "רוחב:"
+msgstr "הצגת תיבות שוורת"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -66685,7 +66633,7 @@ msgstr "גבוה/איטי"
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:98
 #, kde-format
 msgid "Accuracy:"
-msgstr ""
+msgstr "דיוק:"
 
 #. i18n: ectx: property (text), widget (QLabel, patchRadiusLabel)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:115
@@ -66723,7 +66671,7 @@ msgstr "מברשות"
 #, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
-msgstr ""
+msgstr "כלוב"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, kde-format
@@ -66750,12 +66698,12 @@ msgstr "שיקוף אנכי"
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, kde-format
 msgid "Rotate 90 degrees Clockwise"
-msgstr ""
+msgstr "סיבוב ב־90 מעלות עם כיוון השעון"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, kde-format
 msgid "Rotate 90 degrees CounterClockwise"
-msgstr ""
+msgstr "סיבוב ב־90 מעלות נגד כיוון השעון"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, kde-format
@@ -66765,7 +66713,7 @@ msgstr "שמירת יחס גובה־רוחב"
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Apply"
-msgstr ""
+msgstr "החלה"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:425
 #, kde-format

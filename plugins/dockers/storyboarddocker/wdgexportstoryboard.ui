@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>384</width>
-    <height>397</height>
+    <height>525</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,278 +19,391 @@
   <property name="windowTitle">
    <string>Export Storyboard</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
+    <number>8</number>
+   </property>
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <property name="leftMargin">
-      <number>8</number>
+    <widget class="QGroupBox" name="pageSetupGroupBox">
+     <property name="title">
+      <string>Page Setup</string>
      </property>
-     <property name="rightMargin">
-      <number>8</number>
+     <layout class="QGridLayout" name="pageSetupLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="pageSizeLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="pageSizeComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="currentIndex">
+         <number>4</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>A0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>US Letter</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="pageOrientationLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Orientation:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="pageOrientationComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Portrait</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Landscape</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="boardLayoutGroupBox">
+     <property name="title">
+      <string>Board Layout</string>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="pageSizeLabel">
-       <property name="text">
-        <string>Page Size:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="pageSizeComboBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="currentIndex">
-        <number>4</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>A0</string>
+     <layout class="QGridLayout" name="boardLayoutGrid">
+      <item row="0" column="0">
+       <widget class="QLabel" name="boardLayoutLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
         </property>
-       </item>
-       <item>
         <property name="text">
-         <string>A1</string>
+         <string>Arrange By:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="boardLayoutComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Rows</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Columns</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Grid</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>SVG Template</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="gridLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>A2</string>
+         <string>Rows x Columns:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="rowsColumnsInlineLayout">
+        <property name="spacing">
+         <number>4</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="gridRowsSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>8</number>
+          </property>
+          <property name="value">
+           <number>3</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="rowsColumnsXLabel">
+          <property name="text">
+           <string>x</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="gridColumnsSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>8</number>
+          </property>
+          <property name="value">
+           <number>3</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="rowsLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>A3</string>
+         <string>Rows:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="rowsSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>8</number>
+        </property>
+        <property name="value">
+         <number>3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="columnsLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>A4</string>
+         <string>Columns:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="columnsSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>8</number>
+        </property>
+        <property name="value">
+         <number>3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="svgTemplatePathLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>A5</string>
+         <string>Template File:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="KisFileNameRequester" name="svgTemplatePathFileRequester" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="textGroupBox">
+     <property name="title">
+      <string>Text</string>
+     </property>
+     <layout class="QGridLayout" name="textLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="fontSizeLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>US Letter</string>
+         <string>Font Size:</string>
         </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="pageOrientationLabel">
-       <property name="text">
-        <string>Page Orientation:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="pageOrientationComboBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="fontSizeSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="exportGroupBox">
+     <property name="title">
+      <string>Export</string>
+     </property>
+     <layout class="QGridLayout" name="exportLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="exportPathLabel">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>Portrait</string>
+         <string>Path:</string>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Landscape</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="boardLayoutLabel">
-       <property name="text">
-        <string>Board Layout:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QComboBox" name="boardLayoutComboBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <item>
-        <property name="text">
-         <string>Rows</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Columns</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Grid</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>SVG Template</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="rowsLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Rows:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QSpinBox" name="rowsSpinBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-       <property name="value">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="columnsLabel">
-       <property name="text">
-        <string>Columns:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QSpinBox" name="columnsSpinBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-       <property name="value">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <spacer name="verticalSpacer_1">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="svgTemplatePathLabel">
-       <property name="text">
-        <string>SVG Template Path:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="KisFileNameRequester" name="svgTemplatePathFileRequester" native="true"/>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="fontSizeLabel">
-       <property name="text">
-        <string>Font Size:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QSpinBox" name="fontSizeSpinBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="9" column="1">
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="exportPathLabel">
-       <property name="text">
-        <string>Export Path:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="KisFileNameRequester" name="exportPathFileRequester" native="true"/>
-     </item>
-    </layout>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KisFileNameRequester" name="exportPathFileRequester" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

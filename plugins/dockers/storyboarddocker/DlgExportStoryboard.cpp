@@ -35,6 +35,8 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, QSharedPointer<Sto
     connect(m_page->pageOrientationComboBox, SIGNAL(activated(int)), this, SLOT(slotPageSettingsChanged(int)));
     connect(m_page->rowsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(slotPageSettingsChanged(int)));
     connect(m_page->columnsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(slotPageSettingsChanged(int)));
+    connect(m_page->gridRowsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(slotPageSettingsChanged(int)));
+    connect(m_page->gridColumnsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(slotPageSettingsChanged(int)));
 
     KisConfig cfg(true);
     m_page->boardLayoutComboBox->setCurrentIndex(cfg.readEntry<int>("storyboard/layoutType", ExportLayout::ROWS));
@@ -44,7 +46,9 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, QSharedPointer<Sto
     m_page->fontSizeSpinBox->setValue(cfg.readEntry<int>("storyboard/fontSize", 15));
     m_page->svgTemplatePathFileRequester->setFileName(cfg.readEntry<QString>("storyboard/svgLayoutFileName", ""));
     m_page->exportPathFileRequester->setFileName(cfg.readEntry<QString>("storyboard/exportFilePath"));
-
+    m_page->gridRowsSpinBox->setValue(cfg.readEntry<int>("storyboard/rows", 3));
+    m_page->gridColumnsSpinBox->setValue(cfg.readEntry<int>("storyboard/columns", 3));
+    
     if (format == ExportFormat::PDF) {
         QStringList mimeTypes;
         mimeTypes << "application/pdf";
@@ -76,6 +80,9 @@ int DlgExportStoryboard::rows() const
     if (layoutIndex == ExportLayout::COLUMNS || layoutIndex == ExportLayout::SVG_TEMPLATE) {
         return 1;
     }
+    else if (layoutIndex == ExportLayout::GRID) {
+        return qMax(m_page->gridRowsSpinBox->value(), 1);
+    }
     else {
         return qMax(m_page->rowsSpinBox->value(), 1);
     }
@@ -86,6 +93,9 @@ int DlgExportStoryboard::columns() const
     const int layoutIndex = m_page->boardLayoutComboBox->currentIndex();
     if (layoutIndex == ExportLayout::ROWS || layoutIndex == ExportLayout::SVG_TEMPLATE) {
         return 1;
+    }
+    else if (layoutIndex == ExportLayout::GRID) {
+        return qMax(m_page->gridColumnsSpinBox->value(), 1);
     }
     else {
         return qMax(m_page->columnsSpinBox->value(), 1);
@@ -223,8 +233,13 @@ void DlgExportStoryboard::slotExportClicked()
     KisConfig cfg(false);
     cfg.writeEntry("storyboard/layoutType", m_page->boardLayoutComboBox->currentIndex());
     cfg.writeEntry("storyboard/pageOrientation", m_page->pageOrientationComboBox->currentIndex());
-    cfg.writeEntry("storyboard/rows", m_page->rowsSpinBox->value());
-    cfg.writeEntry("storyboard/columns", m_page->columnsSpinBox->value());
+    if (exportLayout() == ExportLayout::GRID) {
+        cfg.writeEntry("storyboard/rows", m_page->gridRowsSpinBox->value());
+        cfg.writeEntry("storyboard/columns", m_page->gridColumnsSpinBox->value());
+    } else {
+        cfg.writeEntry("storyboard/rows", m_page->rowsSpinBox->value());
+        cfg.writeEntry("storyboard/columns", m_page->columnsSpinBox->value());
+    }
     cfg.writeEntry("storyboard/svgLayoutFileName", m_page->svgTemplatePathFileRequester->fileName());
     cfg.writeEntry("storyboard/exportFilePath", m_page->exportPathFileRequester->fileName());
     cfg.writeEntry("storyboard/fontSize", m_page->fontSizeSpinBox->value());
@@ -234,42 +249,35 @@ void DlgExportStoryboard::slotExportClicked()
 
 void DlgExportStoryboard::slotLayoutChanged(int state)
 {
+    m_page->rowsLabel->hide();
+    m_page->rowsSpinBox->hide();
+    m_page->columnsLabel->hide();
+    m_page->columnsSpinBox->hide();
+    m_page->gridLabel->hide();
+    m_page->gridRowsSpinBox->hide();
+    m_page->gridColumnsSpinBox->hide();
+    m_page->rowsColumnsXLabel->hide();
+    m_page->svgTemplatePathLabel->hide();
+    m_page->svgTemplatePathFileRequester->hide();
+
     switch (state) {
     case ExportLayout::COLUMNS:
-        m_page->rowsLabel->hide();
-        m_page->rowsSpinBox->hide();
-        m_page->svgTemplatePathFileRequester->hide();
-        m_page->svgTemplatePathLabel->hide();
-
-        m_page->columnsSpinBox->show();
         m_page->columnsLabel->show();
+        m_page->columnsSpinBox->show();
         break;
     case ExportLayout::ROWS:
-        m_page->columnsLabel->hide();
-        m_page->columnsSpinBox->hide();
-        m_page->svgTemplatePathFileRequester->hide();
-        m_page->svgTemplatePathLabel->hide();
-
-        m_page->rowsSpinBox->show();
         m_page->rowsLabel->show();
+        m_page->rowsSpinBox->show();
         break;
     case ExportLayout::GRID:
-        m_page->svgTemplatePathFileRequester->hide();
-        m_page->svgTemplatePathLabel->hide();
-
-        m_page->columnsLabel->show();
-        m_page->columnsSpinBox->show();
-        m_page->rowsSpinBox->show();
-        m_page->rowsLabel->show();
+        m_page->gridLabel->show();
+        m_page->gridRowsSpinBox->show();
+        m_page->rowsColumnsXLabel->show();
+        m_page->gridColumnsSpinBox->show();
         break;
     case ExportLayout::SVG_TEMPLATE:
-        m_page->columnsLabel->hide();
-        m_page->columnsSpinBox->hide();
-        m_page->rowsSpinBox->hide();
-        m_page->rowsLabel->hide();
-
-        m_page->svgTemplatePathFileRequester->show();
         m_page->svgTemplatePathLabel->show();
+        m_page->svgTemplatePathFileRequester->show();
         break;
     }
 }

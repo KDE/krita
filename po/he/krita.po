@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-12 02:40+0000\n"
-"PO-Revision-Date: 2026-05-12 22:19+0300\n"
+"PO-Revision-Date: 2026-05-14 21:37+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8746,7 +8746,7 @@ msgstr "צביעה"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color lighter"
-msgstr "הבהרת צבע המברשת"
+msgstr "הבהרת צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_darker), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_darker), Actions (Painting), ActionCollection (Krita)
@@ -8758,7 +8758,7 @@ msgstr "הבהרת צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color darker"
-msgstr "הכהיית צבע המברשת"
+msgstr "הכהיית צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_saturated), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_saturated), Actions (Painting), ActionCollection (Krita)
@@ -8818,7 +8818,7 @@ msgstr "הזחת גוון צבע המכחול נגד כיוון השעון"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more red"
-msgstr "להאדים את צבע המברשת"
+msgstr "להאדים את צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_greener), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_greener), Actions (Painting), ActionCollection (Krita)
@@ -8830,7 +8830,7 @@ msgstr "להאדים את צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more green"
-msgstr "להוריק את צבע המברשת"
+msgstr "להוריק את צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_bluer), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_bluer), Actions (Painting), ActionCollection (Krita)
@@ -8842,7 +8842,7 @@ msgstr "להוריק את צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more blue"
-msgstr "להכחיל את צבע המברשת"
+msgstr "להכחיל את צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_yellower), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_yellower), Actions (Painting), ActionCollection (Krita)
@@ -8854,7 +8854,7 @@ msgstr "להכחיל את צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more yellow"
-msgstr "להצהיב את צבע המברשת"
+msgstr "להצהיב את צבע המכחול"
 
 #. i18n: context: text @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
@@ -8871,7 +8871,7 @@ msgstr "הגברת האטימות"
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Opacity"
-msgstr "הגברת אטימות המברשת"
+msgstr "הגברת אטימות המכחול"
 
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
@@ -8888,7 +8888,7 @@ msgstr "הפחתת האטימות"
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Opacity"
-msgstr "הפחתת אטימות המברשת"
+msgstr "הפחתת אטימות המכחול"
 
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
@@ -8902,10 +8902,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:476
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Flow"
-msgstr "&מברשת"
+msgstr "הגברת זרימת מכחול"
 
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
@@ -8919,10 +8919,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:488
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Flow"
-msgstr "מברשות"
+msgstr "האטת זרימת מכחול"
 
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
@@ -8936,10 +8936,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:500
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "&מברשת"
+msgstr "הגדלת עמעום מכחול"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
@@ -8953,10 +8953,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:512
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "מברשות"
+msgstr "הפחתת עמעום מכחול"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
@@ -9370,7 +9370,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Disabled"
-msgstr "החלקת מברשת: כבויה"
+msgstr "החלקת מכחול: כבויה"
 
 #. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9382,7 +9382,7 @@ msgstr "החלקת מברשת: כבויה"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "החלקת מברשת: פיקסל"
+msgstr "החלקת מכחול: פיקסל"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9394,7 +9394,7 @@ msgstr "החלקת מברשת: פיקסל"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "החלקת מברשת: מייצב"
+msgstr "החלקת מכחול: מייצב"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9406,7 +9406,7 @@ msgstr "החלקת מברשת: מייצב"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Brush Size"
-msgstr "הקטנת גודל המברשת"
+msgstr "הקטנת גודל המכחול"
 
 #. i18n: context: text @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9418,7 +9418,7 @@ msgstr "הקטנת גודל המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Basic"
-msgstr "החלקת מברשת: בסיסית"
+msgstr "החלקת מכחול: בסיסית"
 
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9430,7 +9430,7 @@ msgstr "החלקת מברשת: בסיסית"
 #, kde-format
 msgctxt "action"
 msgid "Increase Brush Size"
-msgstr "הגדלת גודל המברשת"
+msgstr "הגדלת גודל המכחול"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9442,7 +9442,7 @@ msgstr "הגדלת גודל המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "סיבוב קצה המברשת עם כיוון השעון"
+msgstr "סיבוב קצה המכחול עם כיוון השעון"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9466,7 +9466,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "סיבוב קצה המברשת נגד כיוון השעון"
+msgstr "סיבוב קצה המכחול נגד כיוון השעון"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9478,7 +9478,7 @@ msgstr "סיבוב קצה המברשת נגד כיוון השעון"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "סיבוב קצה המברשת נגד כיוון השעון (מדויק)"
+msgstr "סיבוב קצה המכחול נגד כיוון השעון (מדויק)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -13322,7 +13322,7 @@ msgstr "עריכה"
 #: krita/krita5.xmlgui:442
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr "מברשות וכו׳"
+msgstr "מכחולים וכו׳"
 
 #: krita/krita5.xmlgui:459
 #, kde-format
@@ -16540,14 +16540,14 @@ msgid "Clip Shape"
 msgstr "חיתוך צורה"
 
 #: libs/flake/commands/KoShapeCreateCommand.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
-msgstr[0] "יצירת תבנית"
-msgstr[1] "יצירת תבנית"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "יצירת צורה"
+msgstr[1] "יצירת שתי צורות"
+msgstr[2] "יצירת %1 צורות"
+msgstr[3] "יצירת %1 צורות"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 msgctxt "(qtundo-format) Delete one shape"
@@ -16555,14 +16555,13 @@ msgid "Delete shape"
 msgstr "מחיקת צורה"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:56
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
-msgstr[0] "מחיקת טקסט"
-msgstr[1] "מחיקת טקסט"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מחיקת צורה"
+msgstr[1] "מחיקת צורות"
+msgstr[2] "מחיקת צורות"
+msgstr[3] "מחיקת צורות"
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
 msgctxt "(qtundo-format)"
@@ -21303,14 +21302,14 @@ msgid "Change Image Resolution"
 msgstr "כפתור איפוס"
 
 #: libs/image/kis_image.cc:1080
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] "שינוי קנה מידה של שכבה..."
-msgstr[1] "שינוי קנה מידה של שכבה..."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שינוי קנה מידה של שכבה"
+msgstr[1] "שינוי קנה מידה של שכבות"
+msgstr[2] "שינוי קנה מידה של %1 שכבות"
+msgstr[3] "שינוי קנה מידה של %1 שכבות"
 
 #: libs/image/kis_image.cc:1219
 #, fuzzy
@@ -21325,14 +21324,14 @@ msgid "Rotate Mask"
 msgstr "זוויות:"
 
 #: libs/image/kis_image.cc:1232
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "ה&סר שכבה"
-msgstr[1] "ה&סר שכבה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "סיבוב שכבה"
+msgstr[1] "סיבוב שתי שכבות"
+msgstr[2] "סיבוב %1 שכבות"
+msgstr[3] "סיבוב %1 שכבות"
 
 #: libs/image/kis_image.cc:1333
 #, fuzzy
@@ -27219,13 +27218,13 @@ msgstr "להשתמש בחותמות הזמן של מנהל התקן לוח הצ�
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1698
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "מברשות"
-msgstr[1] "מברשות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מהירות מכחול מרבית: פיקסל למ״ש"
+msgstr[1] "מהירות מכחול מרבית: שני פיקסלים למ״ש"
+msgstr[2] "מהירות מכחול מרבית: {n} פיקסלים למ״ש"
+msgstr[3] "מהירות מכחול מרבית: {n} פיקסלים למ״ש"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -31092,7 +31091,7 @@ msgstr "שינוי קנה מידה של שכבה..."
 #: libs/ui/forms/wdgpaintopsettings.ui:871
 #, kde-format
 msgid "Fill area with brush preset icon"
-msgstr "מילוי האזור בסמל ערכת מברשות"
+msgstr "מילוי האזור בסמל ערכת מכחולים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
 #: libs/ui/forms/wdgpaintopsettings.ui:890
@@ -39661,7 +39660,7 @@ msgstr "פרטי קשר:"
 #: libs/widgets/KoDialog.cpp:250
 #, kde-format
 msgid "&Try"
-msgstr ""
+msgstr "ל&נסות"
 
 #: libs/widgets/KoDialog.cpp:471
 #, kde-format
@@ -41770,7 +41769,7 @@ msgstr "לאפשר גלילה"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "הפרדת היסטוריית צבעים לכל מסמך."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -42106,28 +42105,28 @@ msgstr "&צבעים"
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
-msgstr ""
+msgstr "תמוניות שהושמטו אינן זמינות בעותק הזה של Krita"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "הוספת תמונית ריקה"
+msgstr[1] "הוספת שתי תמוניות ריקות"
+msgstr[2] "הוספת %1 תמוניות ריקות"
+msgstr[3] "הוספת %1 תמוניות ריקות"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
-msgstr[0] "הבא שכבה מעלה"
-msgstr[1] "הבא שכבה מעלה"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "הוספת תמונית"
+msgstr[1] "הוספת שתי תמוניות"
+msgstr[2] "הוספת %1 תמוניות"
+msgstr[3] "הוספת %1 תמוניות"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, kde-format
@@ -45075,7 +45074,7 @@ msgstr "פסקה"
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr ""
+msgstr "הסגנון תלוי פיקסלים"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
@@ -45160,7 +45159,7 @@ msgstr "מימין לשמאל"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "יוניקוד-דו־כיווניות"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
 #: plugins/dockers/textproperties/qml/FontStyle.qml:386
@@ -45793,13 +45792,13 @@ msgstr "כותרת:"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr ""
+msgstr "גליפים: מזרח אסייתיים"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
-msgstr ""
+msgstr "הפעלת צורות גליפים שקשורות לפריסת טקסט מזרח אסייתית"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -45928,13 +45927,13 @@ msgstr "זוויות:"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr ""
+msgstr "גליפים: מספרִיִים"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "הפעלת צורות גליפים שקשורות במספרים על הטקסט."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -50965,10 +50964,10 @@ msgstr "עובי קו:"
 
 #. i18n: context: text @ Action (krita_filter_gradientmap), Actions (Filters), ActionCollection (Krita)
 #: plugins/filters/gradientmap/gradientmap.action:7
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "gradientmap Filter"
-msgstr "עירובים"
+msgstr "מסנן מפת מדרגים"
 
 #. i18n: context: toolTip @ Action (krita_filter_gradientmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gradientmap), Actions (Filters), ActionCollection (Krita)
@@ -51017,15 +51016,15 @@ msgstr "מצב צבע"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxColorMode)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blend"
-msgstr "תצוגה"
+msgstr "מיזוג"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxColorMode)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Nearest"
-msgstr "תמונה חדשה"
+msgstr "הקרוב ביותר"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxColorMode)
 #. i18n: ectx: property (title), widget (QGroupBox, ditherGroupBox)
@@ -51033,9 +51032,9 @@ msgstr "תמונה חדשה"
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:119
 #: plugins/filters/palettize/palettize.ui:80
 #: plugins/filters/palettize/palettize.ui:191
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dither"
-msgstr "שכבה"
+msgstr "טשטוש ללא דיגיטציה"
 
 #. i18n: context: text @ Action (krita_filter_halftone), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_halftone), Actions (Filters), ActionCollection (Krita)
@@ -51177,14 +51176,14 @@ msgid "Index Colors"
 msgstr "&צבע"
 
 #: plugins/filters/indexcolors/kiswdgindexcolors.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
-msgstr[0] "&צבע"
-msgstr[1] "&צבע"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " צבע"
+msgstr[1] " צבעים"
+msgstr[2] " צבעים"
+msgstr[3] " צבעים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -54952,9 +54951,9 @@ msgid "Could not load profile: %1."
 msgstr "לא ניתן לטעון את הפרופיל: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:689
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not filter configuration %1."
-msgstr "זוויות:"
+msgstr "לא ניתן לסנן את ההגדרות %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:730
 #, kde-format
@@ -57822,7 +57821,7 @@ msgstr "זיפים"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
-msgstr "מברשת זיפים (הקווים יהיו דקים יותר מאשר בתצוגה המקדימה)"
+msgstr "מכחול זיפים (הקווים יהיו דקים יותר מאשר בתצוגה המקדימה)"
 
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format
@@ -58644,10 +58643,10 @@ msgstr "מצב תוויית מרקם:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Texture lightness range cutoff range slider"
 msgid "Cutoff:"
-msgstr "מברשות"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:217
@@ -58880,9 +58879,9 @@ msgid "Linear Height (Photoshop)"
 msgstr "גובה קווי (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cut Off Brush"
-msgstr "&מברשת"
+msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
 #, fuzzy, kde-format
@@ -58918,14 +58917,14 @@ msgid "Plain color"
 msgstr "צבע רגיל"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Uniform random"
-msgstr "טוען..."
+msgstr "אקראי אחוד"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Total random"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "אקראי לחלוטין"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:21
 #, kde-format
@@ -59468,10 +59467,10 @@ msgid "MyPaint Brush Presets"
 msgstr "ערכות מכחולי MyPaint"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:186
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Option Category"
 msgid "Basic"
-msgstr "אטימות"
+msgstr "בסיסי"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:192
 #, kde-format
@@ -60129,10 +60128,10 @@ msgstr "ריווח:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr "הסר בחירה"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
@@ -60248,9 +60247,9 @@ msgid "Texture:"
 msgstr "מרקם:"
 
 #: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_plugin.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tangent Normal"
-msgstr "&לבן"
+msgstr "משיק רגיל"
 
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:54
 #, fuzzy, kde-format
@@ -61696,9 +61695,8 @@ msgid "Artistic director"
 msgstr "הדבקת בחירה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Associated name"
-msgstr "יצירת שכבה חדשה"
+msgstr "שם משויך"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
@@ -61803,9 +61801,8 @@ msgid "Illustrator"
 msgstr "איור"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Illuminator"
-msgstr "כפתור איפוס"
+msgstr "תאורה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Inscriber"
@@ -61824,9 +61821,8 @@ msgid "Lithographer"
 msgstr "ליתוגרפיה"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Metadata contact"
-msgstr "לוחות צבעים"
+msgstr "פרטי קשר לנתוני על"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Owner"
@@ -61837,9 +61833,8 @@ msgid "Patron"
 msgstr "מימון"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
-#, fuzzy
 msgid "Publishing director"
-msgstr "מלבן"
+msgstr "הפקת הוצאה לאור"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Printer"
@@ -62338,9 +62333,9 @@ msgstr "שינוי תיקיית סימוכין"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:157
 #: plugins/python/photobash_images/photobash_images_docker.py:229
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Image Scale: {0}%"
-msgstr "גודל דף"
+msgstr "קנה מידה של תמונה: {0}%"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:331
 #, python-brace-format
@@ -65697,16 +65692,16 @@ msgid "Always paste rich text when using paste action."
 msgstr "תמיד להדביק טקסט עשיר בעת שימוש בפעולת ההדבקה."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "בחירה"
+msgstr "מצב עימוד"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "הגדרות"
+msgstr "הפעלת מצב עימוד."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
@@ -66662,10 +66657,10 @@ msgid "Liquify"
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
-msgstr "מברשות"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
@@ -67288,9 +67283,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mesh size"
-msgstr "מברשות"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2207

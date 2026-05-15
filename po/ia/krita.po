@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-12 02:40+0000\n"
-"PO-Revision-Date: 2026-02-19 17:32+0100\n"
+"PO-Revision-Date: 2026-05-14 11:21+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -63,7 +63,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11008,10 +11008,10 @@ msgstr "Animation"
 #. i18n: context: text @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1908 krita/krita.action:1911
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Previous Frame"
-msgstr "Precedente"
+msgstr "Previe quadro"
 
 #. i18n: context: toolTip @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1910
@@ -11025,10 +11025,10 @@ msgstr "Precedente"
 #. i18n: context: text @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1920 krita/krita.action:1923
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Next Frame"
-msgstr "Remove strato (layer)"
+msgstr "Proxime quadro"
 
 #. i18n: context: toolTip @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1922
@@ -14258,10 +14258,10 @@ msgstr "Colla"
 
 #. i18n: context: text @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:373
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste at Cursor"
-msgstr "Mascara de &filtro..."
+msgstr "Colla a Cursor"
 
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
@@ -14271,7 +14271,7 @@ msgstr "Mascara de &filtro..."
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paste at cursor"
-msgstr "Mascara de &filtro..."
+msgstr "Colla a Cursor"
 
 #. i18n: context: text @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
@@ -22070,7 +22070,7 @@ msgstr "Actualisa"
 #, fuzzy, kde-format
 #| msgid "Split into Layers"
 msgid "Edit Key Strokes"
-msgstr "Divide in stratos (Layers)"
+msgstr "Modifica pressiones de clave"
 
 #: libs/image/kis_layer_properties_icons.cpp:35
 #, fuzzy, kde-format
@@ -23115,7 +23115,7 @@ msgstr ""
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:172
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "Operation indefinite in spatio de color alpha"
 
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:28
 #: libs/pigment/colorspaces/KoLabColorSpace.h:66
@@ -28709,7 +28709,7 @@ msgstr "Largessa de linea"
 #: libs/ui/forms/KisDetailsPaneBase.ui:156
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr ""
+msgstr "Usa sempre iste patrono al startar del application"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: libs/ui/forms/KisDetailsPaneBase.ui:159
@@ -33113,7 +33113,7 @@ msgstr "Scala selection"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:16
 #, fuzzy, kde-format
 msgid "Canvas Size"
-msgstr "&Telas (canvas)"
+msgstr "Grandor de tela (canva)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupNewSize)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -33526,14 +33526,14 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_change_frame_action.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Next Frame"
-msgstr "Remove strato (layer)"
+msgstr "Proxime quadro"
 
 #: libs/ui/input/kis_change_frame_action.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Previous Frame"
-msgstr "Precedente"
+msgstr "Previe quadro"
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
 #, fuzzy, kde-format
@@ -35238,7 +35238,7 @@ msgstr "Selige opac"
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr ""
+msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
@@ -35647,9 +35647,9 @@ msgid "Too many templates found for: %1"
 msgstr "Il trovava nimie patronos pro: %1"
 
 #: libs/ui/KisApplication.cpp:1237
-#, fuzzy, kde-format
+#, kde-format
 msgid "Template %1 failed to load."
-msgstr "Selige disposition (Layer)"
+msgstr "Patrono %1 falleva a cargar."
 
 #: libs/ui/KisApplication.cpp:1269
 #, kde-format
@@ -35732,10 +35732,9 @@ msgid "Start Krita in full-screen mode"
 msgstr ""
 
 #: libs/ui/KisApplicationArguments.cpp:91
-#, fuzzy, kde-format
-#| msgid "Grid Spacing"
+#, kde-format
 msgid "Override display DPI"
-msgstr "Spatiamento de grillia"
+msgstr "Superscribe DPI de monstrator"
 
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
@@ -35781,16 +35780,16 @@ msgid "Discard All"
 msgstr "Abandona toto"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:184
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr "Le file  non poteva esser aperite."
+msgstr ""
+"Le sequente file de salveguardar automaticamente pote esser recuperate:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr "Le file  non poteva esser aperite."
+msgstr ""
+"Le sequente files de salveguardar automaticamente pote esser recuperate:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:241
 #, kde-format
@@ -36798,10 +36797,9 @@ msgid "&Select..."
 msgstr "&Selige..."
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
-#, fuzzy, kde-format
-#| msgid "Create Template"
+#, kde-format
 msgid "Use the new template as default"
-msgstr "Crea patrono"
+msgstr "Usa le nove patrono como predefinite"
 
 #: libs/ui/KisTemplateCreateDia.cpp:153
 #, fuzzy, kde-format
@@ -36810,10 +36808,9 @@ msgid "Use the new template every time Krita starts"
 msgstr "Crea patrono"
 
 #: libs/ui/KisTemplateCreateDia.cpp:285
-#, fuzzy, kde-format
-#| msgid "Could not create the output document"
+#, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Il non pote crear le documento de exito"
+msgstr "Tu vole vermente superscriber le patrono existente '%1'?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
@@ -36867,9 +36864,9 @@ msgid "Could not load picture."
 msgstr "Il non pote cargar pictura."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
-#, fuzzy, kde-format
+#, kde-format
 msgid "No picture available."
-msgstr "Disponibile"
+msgstr "Nulle imagine disponibile"
 
 #: libs/ui/KisTemplatesPane.cpp:39
 #, kde-format
@@ -40279,12 +40276,12 @@ msgstr "Lisiar:"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:93
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Butt cap (punctal)"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Round cap"
-msgstr "&Indiciza Colores..."
+msgstr "Round cap (tappo circular)"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:107
 #, kde-format
@@ -40292,21 +40289,19 @@ msgid "Square cap"
 msgstr "Capsula quadrate"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:118
-#, fuzzy, kde-format
-#| msgid "Miter limit"
+#, kde-format
 msgid "Miter join"
-msgstr "Delimitator (Miter limit)"
+msgstr "Juncto mitra"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:125
-#, fuzzy, kde-format
+#, kde-format
 msgid "Round join"
-msgstr "&Indiciza Colores..."
+msgstr "Juncto circular"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:132
-#, fuzzy, kde-format
-#| msgid "Miter limit"
+#, kde-format
 msgid "Bevel join"
-msgstr "Delimitator (Miter limit)"
+msgstr "Juncto blasate"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:142
 #, kde-format
@@ -40633,7 +40628,7 @@ msgstr "Selige filtro"
 #: libs/widgets/KoConfigAuthorPage.cpp:65
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr ""
+msgstr "Adde nove profilo de autor (initia como un copia del currente)"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:69
 #, kde-format
@@ -40694,7 +40689,7 @@ msgstr "Anonyme"
 #: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
 msgid "Name (not duplicate or blank name):"
-msgstr ""
+msgstr "Nomine (non duplicate o nomine vacue)"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:279
 #, kde-format
@@ -53899,7 +53894,7 @@ msgstr "Quadrato"
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
-msgstr ""
+msgstr "Conic"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
 #: plugins/tools/basictools/kis_tool_gradient.cc:249
@@ -57047,7 +57042,7 @@ msgstr "Non es un valide file de Calligra: %1"
 #: plugins/impex/libkra/kra_converter.cpp:91
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr ""
+msgstr "Documento invalide:necun file 'maindoc.xml'."
 
 #: plugins/impex/libkra/kra_converter.cpp:147
 #, kde-format
@@ -57057,7 +57052,7 @@ msgstr "Il non pote crear le file per salveguardar"
 #: plugins/impex/libkra/kra_converter.cpp:226
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr ""
+msgstr "Incapace a scriber '%1'. Partition plen?"
 
 #: plugins/impex/libkra/kra_converter.cpp:318
 #, kde-format
@@ -59730,10 +59725,9 @@ msgid "Grid"
 msgstr "Grillia"
 
 #: plugins/paintops/gridbrush/kis_grid_paintop_settings.cpp:211
-#, fuzzy, kde-format
-#| msgid "Jaison Lee"
+#, kde-format
 msgid "Division Level"
-msgstr "Jaison Lee"
+msgstr "NIvello de division"
 
 #: plugins/paintops/gridbrush/KisGridShapeOptionWidget.cpp:44
 #, kde-format
@@ -59751,10 +59745,9 @@ msgstr "In senso &horari"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:42
-#, fuzzy, kde-format
-#| msgid "height:"
+#, kde-format
 msgid "Grid height:"
-msgstr "altessa:"
+msgstr "Altessa de grillia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:52
@@ -59779,17 +59772,16 @@ msgstr "Horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:108
-#, fuzzy, kde-format
-#| msgid "Border width:"
+#, kde-format
 msgid "Grid width:"
-msgstr "Largessa de bordo:"
+msgstr "Largessa de grillia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:121
 #, fuzzy, kde-format
 #| msgid "Jaison Lee"
 msgid "Division level:"
-msgstr "Jaison Lee"
+msgstr "NIvello de division"
 
 #. i18n: ectx: property (text), widget (QCheckBox, jitterBorderCHBox)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:131
@@ -59800,10 +59792,9 @@ msgstr "Vertical:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
-#, fuzzy, kde-format
-#| msgid "Horizontal:"
+#, kde-format
 msgid "Horizontal offset:"
-msgstr "Horizontal:"
+msgstr "Displaciamento Horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:160
@@ -60717,10 +60708,9 @@ msgstr "Displaciamento aleatori"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:291
-#, fuzzy, kde-format
-#| msgid "Horizontal:"
+#, kde-format
 msgid "Horizontal Offset:"
-msgstr "Horizontal:"
+msgstr "Displaciamento Horizontal:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304
@@ -65090,10 +65080,9 @@ msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
 #: plugins/python/tenscripts/tenscripts.py:54
-#, fuzzy, python-brace-format
-#| msgid "Create object"
+#, python-brace-format
 msgid "Execute Script {num}"
-msgstr "Crea objecto"
+msgstr "Executa script {num}"
 
 #: plugins/python/tenscripts/tenscripts.py:77
 #, python-brace-format
@@ -65114,10 +65103,8 @@ msgid "Python files (*.py)"
 msgstr "Files de Python (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
-#| msgid "Custom Options:"
 msgid "Custom icon"
-msgstr "Optiones personalisate:"
+msgstr "Icone personalisate:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Tool icon"
@@ -65159,76 +65146,56 @@ msgid "Delete selected workflow button"
 msgstr "Duplica action"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
-#, fuzzy
-#| msgid "Selection mode:"
 msgid "Select icon mode:"
-msgstr "Modo de Selection:"
+msgstr "Selige modo de icone:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
-#, fuzzy
 msgid "Select a custom icon:"
-msgstr "Selige opac"
+msgstr "Seligeun icone personalisate:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
-#, fuzzy
-#| msgid "Custom Bullet"
 msgid "Custom icon path"
-msgstr "Symbolo personalisate"
+msgstr "Percurso de icone personalisate"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
-#| msgid "Selected Bundle"
 msgid "Select the custom icon"
-msgstr "Insimul Seligite"
+msgstr "Selige un icone personalisate"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
-#, fuzzy
 msgid "Enter a Tooltip:"
-msgstr "Error interne"
+msgstr "Inserta un consilio:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 msgid "Tooltip text"
 msgstr "Texto de consilio"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
-#, fuzzy
 msgid "Select a tool:"
-msgstr "Selige opac"
+msgstr "Selige un instrumento:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
-#, fuzzy
-#| msgid "Choose screen resolution"
 msgid "Select a brush preset:"
-msgstr "Selige resolution deschermo"
+msgstr "Selige un predefinition del brossa o pincel:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
-#, fuzzy
 msgid "Brush preset name"
-msgstr "Reportator de fracasso de Krita"
+msgstr "Nomine del predefinition del brossa o pincel "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
-#| msgid "Choose screen resolution"
 msgid "Select the brush preset"
-msgstr "Selige resolution deschermo"
+msgstr "Selige le predefinition del brossa o pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select foreground color:"
-msgstr "Selige le color de fundo"
+msgstr "Selige le color de prime plano:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
-#, fuzzy
-#| msgid "Add foreground color"
 msgid "Load current foreground color"
-msgstr "Adde color de prime plano"
+msgstr "Carga le color de prime plano currente"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
-#, fuzzy
-#| msgid "Add foreground color"
 msgid "Clear foreground color"
-msgstr "Adde color de prime plano"
+msgstr "Clara le color de prime plano"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgid "Color model ; depth ; profile ; components"
@@ -65239,50 +65206,32 @@ msgid "Select background color:"
 msgstr "Selige le color de fundo:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
-#, fuzzy
-#| msgid "Select background color"
 msgid "Load current background color"
-msgstr "Selige le color de fundo"
+msgstr "Carga le color de fundo currente"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
-#, fuzzy
-#| msgid "Select background color"
 msgid "Clear background color"
-msgstr "Selige le color de fundo"
+msgstr "Clara le color de fundo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
-#, fuzzy
-#| msgid "Select the script"
 msgid "Select a script file:"
-msgstr "Selectiona le script"
+msgstr "Selectiona un file de script"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
-#, fuzzy
-#| msgid "Select path"
 msgid "Script path"
-msgstr "Selige percurso"
+msgstr "Percurso de script"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
-#, fuzzy
-#| msgctxt ""
-#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
-#| "number of buttons in that list."
-#| msgid "%1 Button"
-#| msgid_plural "%1 Buttons"
 msgid "Buttons size:"
-msgstr "%1 Button"
+msgstr "Grandor de Button:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
-#, fuzzy
-#| msgid "Sort by position"
 msgid "Settings button position:"
-msgstr "Ordina per position"
+msgstr "Preferentias de  position de button"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
-#, fuzzy
-#| msgid "Bottom"
 msgid "Bottom bar"
-msgstr "Basso"
+msgstr "Barra a basso"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 msgid "Inline"
@@ -65290,16 +65239,12 @@ msgstr "Incorporate (In linea)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
-#, fuzzy
-#| msgid "Color:"
 msgid "Color info: "
-msgstr "Color:"
+msgstr "Information de color: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
-#, fuzzy
-#| msgid "Python files (*.py)"
 msgid "Script files "
-msgstr "Files de Python (*.py)"
+msgstr "Files de Script"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:26
 #, fuzzy
@@ -65320,29 +65265,24 @@ msgid "Freehand Brush Stroke"
 msgstr "Percurso de mano libere"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:216
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Simple"
+msgstr "Computo Simple al Maxime Velocitate:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:226
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Simple"
+msgstr "Computo Simple al Minime Velocitate:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:236
-#, fuzzy, kde-format
-#| msgid "Distance:"
+#, kde-format
 msgid "Distance at Max Speed:"
-msgstr "Distantia:"
+msgstr "Distantia al Maxime Velocitate:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:246
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Min Speed:"
-msgstr "Extension de D&istantia:"
+msgstr "Distantia al Minime Velocitate:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
@@ -65713,11 +65653,13 @@ msgstr "Reimple con color de fundo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
-msgstr "Reimple con color de fundo"
+msgstr ""
+"Include le strato active in regiones trovate per le fusion de stratos con "
+"etiquettas de color specific."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, fuzzy, kde-format
@@ -65752,11 +65694,10 @@ msgid "Fill mode"
 msgstr "Modo simple"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:691
-#, fuzzy, kde-format
-#| msgid "Add Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "Adde Ressources"
+msgstr "Reimple fonte"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:710
 #, kde-format
@@ -65765,11 +65706,10 @@ msgid "Reference"
 msgstr "Referentia"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:719
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "Extension de  file:"
+msgstr "Reimple  extension"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:732
 #, kde-format
@@ -65917,16 +65857,14 @@ msgid "Snowflake"
 msgstr "Nive"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:453
-#, fuzzy, kde-format
-#| msgid "Translate"
+#, kde-format
 msgid "Copy Translate"
-msgstr "Traduce"
+msgstr "Copia e translata"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:454
-#, fuzzy, kde-format
-#| msgid "Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Traduce"
+msgstr "Copiar e translatar a intervallos"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:565
 #, kde-format
@@ -65956,17 +65894,14 @@ msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_pencil.cc:133
-#, fuzzy
-#| msgid "Freehand path"
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
-msgstr "Percurso de mano libere"
+msgstr "Designa percurso de mano libere"
 
 #: plugins/tools/basictools/kis_tool_pencil.h:76
-#, fuzzy, kde-format
-#| msgid "Freehand path"
+#, kde-format
 msgid "Freehand Path Tool"
-msgstr "Percurso de mano libere"
+msgstr "Instrumento de percurso de mano libere"
 
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
@@ -66005,11 +65940,10 @@ msgstr ""
 #: plugins/tools/basictools/KisToolPencil.action:7
 #: plugins/tools/basictools/KisToolPencil.action:9
 #: plugins/tools/basictools/KisToolPencil.action:10
-#, fuzzy, kde-format
-#| msgid "Freehand path"
+#, kde-format
 msgctxt "action"
 msgid "Freehand Path Tool"
-msgstr "Percurso de mano libere"
+msgstr "Instrumento de percurso de mano libere"
 
 #: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
 msgctxt "(qtundo-format)"
@@ -66026,10 +65960,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:70
-#, fuzzy, kde-format
-#| msgid "Add to Favorites"
+#, kde-format
 msgid "Add to palette:"
-msgstr "Adde a Favoritos"
+msgstr "Adde a paletta:"
 
 #. i18n: ectx: property (text), widget (QLabel, blendLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:87
@@ -66057,15 +65990,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample All Visible Layers"
-msgstr "Selige Ellipse"
+msgstr "Omne stratos (layers) visibile de exemplo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample Current Layer"
-msgstr "Tonde strato (layer)"
+msgstr "Strato (layer) currente de exemplo"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:170
@@ -66090,9 +66023,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:210
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show colors as percentages"
-msgstr "Cela selection de color"
+msgstr "Monstra colores como  percentages"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
 #: plugins/tools/basictools/wdgcolorsampler.ui:233
@@ -66190,10 +66123,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:127
-#, fuzzy, kde-format
-#| msgid "Multiply"
+#, kde-format
 msgid "Multiplier:"
-msgstr "Multiplica"
+msgstr "Multiplicator:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:143
@@ -68681,18 +68613,16 @@ msgid "Target regions"
 msgstr "Transparente"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:621
-#, fuzzy, kde-format
-#| msgid "Add Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "Adde Ressources"
+msgstr "Reimple fonte"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:635
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "Extension de  file:"
+msgstr "Reimple  extension"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:645
 #, kde-format
@@ -68993,11 +68923,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Netta: "
+msgstr "Netta: {n}%"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
@@ -69021,10 +68950,9 @@ msgstr "Actualisa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
-#, fuzzy, kde-format
-#| msgid "Edit kernel"
+#, kde-format
 msgid "Edit key strokes"
-msgstr "Modifica kernel"
+msgstr "Modifica pressiones de clave"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowOutput)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:46
@@ -69040,9 +68968,9 @@ msgstr "Move strato (layer)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Key Strokes"
-msgstr "Forte"
+msgstr "Pressiones de claves"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTransparent)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:149
@@ -70120,11 +70048,10 @@ msgid "Assign to Tag"
 msgstr "Assigna a etiquetta"
 
 #: qmlmodules/components/qml/ResourceView.qml:217
-#, fuzzy, kde-format
-#| msgid "New Name:"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
-msgstr "Nove Nomine:"
+msgstr "Nove Nomine de Etiquetta..."
 
 #: qmlmodules/components/qml/ResourceView.qml:242
 #, kde-format

@@ -54,14 +54,30 @@ private Q_SLOTS:
     void disableSelectionActionsPanel();
     void configureSelectionActionsPanel();
     void configChanged();
-    void canvasSizeChanged(const QSize &size);
+    void canvasStateChanged();
 
 private:
-    QPoint getFixedPosition() const;
     void recalculateDimensions();
+
+    /// Positioning ///
+    QPoint getFixedPosition() const;
+
+    QRectF getWidgetSelectionRect() const;
+
+    QPoint horizontalFreeFloatingTopLeftPosition(bool calculateOnlyAnchor = false) const;
+    QPoint verticalFreeFloatingTopLeftPosition(bool calculateOnlyAnchor = false) const;
+    QPoint freeFloatingInitialTopLeftPosition(bool calculateOnlyAnchor = false) const;
+
     QPoint clipPositionToCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
-    QPoint initialTopLeftPosition() const;
+    QPoint currentTopLeftPosition() const;
+    /// End of positioning ///
+
+
+    void drawAnchorWhileMoving(QPainter &painter) const;
     void drawActionBarBackground(QPainter &gc) const;
+
+    void drawDebugRectangle(QPainter &painter, Position position);
+    void drawDebugRectanglesForFreeFloatingBehaviour(QPainter &painter);
 
     bool handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button = Qt::LeftButton);
     bool handleMove(QEvent *event, const QPoint &pos);

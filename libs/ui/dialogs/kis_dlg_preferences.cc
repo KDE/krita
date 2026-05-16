@@ -412,15 +412,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     }
 
     selectionActionsBarBehaviorLabel->setEnabled(sapEnabled);
+
     setButtonGroupEnabled(m_sapBehaviourGroup, sapEnabled);
+    selectionActionsBarPositionLabel->setEnabled(sapEnabled);
 
-    bool positionEnabled = sapEnabled && cfg.selectionActionBarBehavior() == KisConfig::SelectionActionsBarBehavior::Fixed;
-
-    selectionActionsBarPositionLabel->setEnabled(positionEnabled);
     setButtonGroupEnabled(m_sapOrientationGroup, sapEnabled);
     selectionActionsBarOrientationLabel->setEnabled(sapEnabled);
-
-    connect(&m_sapBehaviourGroup, SIGNAL(idClicked(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
 
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
     connect(chkEnableSelectionActionBar, SIGNAL(checkStateChanged(Qt::CheckState)), this, SLOT(selectionActionsBarCheckboxChanged(Qt::CheckState)));
@@ -451,7 +448,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     if (m_sapPositionGroup.button(cfg.selectionActionBarPosition())) {
         m_sapPositionGroup.button(cfg.selectionActionBarPosition())->setChecked(true);
     }
-    setButtonGroupEnabled(m_sapPositionGroup, positionEnabled);
+
+    setButtonGroupEnabled(m_sapPositionGroup, sapEnabled);
+
     //
     // File handling
     //
@@ -931,14 +930,6 @@ void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
 }
 
-void GeneralTab::selectionActionsBarBehaviorChanged(int buttonId)
-{
-    bool enabled = (KisConfig::SelectionActionsBarBehavior)buttonId == KisConfig::SelectionActionsBarBehavior::Fixed;
-
-    setButtonGroupEnabled(m_sapPositionGroup, enabled);
-    selectionActionsBarPositionLabel->setEnabled(enabled);
-
-}
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
 void GeneralTab::selectionActionsBarCheckboxChanged(Qt::CheckState value)
 #else
@@ -946,10 +937,9 @@ void GeneralTab::selectionActionsBarCheckboxChanged(int value)
 #endif
 {
     bool enabled = value == Qt::CheckState::Checked;
-    bool positionEnabled = enabled && (m_sapBehaviourGroup.checkedId() == KisConfig::SelectionActionsBarBehavior::Fixed);
 
-    setButtonGroupEnabled(m_sapPositionGroup, positionEnabled);
-    selectionActionsBarPositionLabel->setEnabled(positionEnabled);
+    setButtonGroupEnabled(m_sapPositionGroup, enabled);
+    selectionActionsBarPositionLabel->setEnabled(enabled);
 
     setButtonGroupEnabled(m_sapBehaviourGroup, enabled);
     selectionActionsBarBehaviorLabel->setEnabled(enabled);

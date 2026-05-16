@@ -26742,7 +26742,7 @@ msgstr ""
 "vele vertaalteams wereldwijd.</p><p>Kijk voor meer informatie op de "
 "Nederlandstalige KDE-pagina http://www.kde.nl. Algemene informatie over de "
 "vertaling van KDE is te vinden op http://l10n.kde.org/.</p> <p> Komt u een "
-"foutje tegen in een vertaling? Meld dit op http://www.kde.nl/bugs</p>"
+"foutje tegen in een vertaling? Meld dit op https://bugs.kde.org</p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:93
 #, kde-format

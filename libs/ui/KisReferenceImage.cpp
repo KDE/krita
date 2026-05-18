@@ -353,9 +353,6 @@ void KisReferenceImage::setFilename(const QString &filename)
     d->externalFilename = filename;
 }
 
-<<<<<<< HEAD
-KoColor KisReferenceImage::getPixel(QPointF position)
-=======
 QPoint KisReferenceImage::documentToPixel(const QPointF &docPoint)
 {
     QSizeF shapeSize = size();
@@ -367,8 +364,7 @@ QPoint KisReferenceImage::documentToPixel(const QPointF &docPoint)
     return localPosition.toPoint();
 }
 
-QColor KisReferenceImage::getPixel(QPointF position)
->>>>>>> 208309fd88 (Fix rotation. Fix zoom inaccuracies by switching to full size QImage instead of small scale mimap)
+KoColor KisReferenceImage::getPixel(QPointF position)
 {
     KoColor transparent;
     transparent.setOpacity(0.0);

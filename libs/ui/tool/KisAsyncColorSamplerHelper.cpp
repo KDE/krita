@@ -507,15 +507,6 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     if (needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
         m_d->cacheRotation = canvasRotationAngle;
 
-        QColor backgroundColor = colorWithAlpha(qApp->palette().color(QPalette::Base), OPACITY_OPAQUE_U8 / 2 + 1);
-        qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
-        QPen pen = QPen(backgroundColor, penWidth);
-        if (m_d->circlePreviewOutlineEnabled) {
-            cachePainter.setPen(pen);
-        } else {
-            cachePainter.setPen(Qt::NoPen);
-        }
-
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
 
         if (needsDualColor) {
@@ -582,7 +573,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     // Or fill with an opaque color to hide normal view when zooming at edge of canvas
     cachePainter.setPen(Qt::NoPen);
     // If the cached block don't run, no brush is set. So set it
-    cachePainter.setBrush(qApp->palette().color(QPalette::ColorRole::Base));
+    cachePainter.setBrush(m_d->backgroundColor);
     if (m_d->circleZoomPreviewScale > 1){
         cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     }

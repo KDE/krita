@@ -60,7 +60,9 @@ public:
     KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
     KisResourceStorageSP storageForId(const int storageId) const;
 
-    bool importStorage(QString filename, StorageImportOption importOption) const;
+    bool importStorage(const QString &filename, StorageImportOption importOption) const;
+    bool importStorageData(const QString &filename, StorageImportOption importOption, const QByteArray &data) const;
+    bool canImportStorage(const QString &filename) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
@@ -87,6 +89,11 @@ private Q_SLOTS:
     void slotStoragesBulkSynchronizationFinished();
 
 private :
+    static bool importStorageInternal(const QString &filename,
+                                      StorageImportOption importOption,
+                                      bool dryRun,
+                                      const QByteArray &data);
+
     void resetQuery();
 
     static QImage getThumbnailFromQuery(const QSqlQuery &query);

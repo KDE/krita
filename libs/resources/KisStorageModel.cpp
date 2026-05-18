@@ -16,6 +16,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisResourceThumbnailCache.h>
 #include <QFileInfo>
+#include <QSaveFile>
 #include <kis_assert.h>
 
 #include <kconfig.h>
@@ -417,7 +418,27 @@ QString findUnusedName(QString location, QString filename)
 
 }
 
-bool KisStorageModel::importStorage(QString filename, StorageImportOption importOption) const
+bool KisStorageModel::importStorage(const QString &filename, StorageImportOption importOption) const
+{
+    return importStorageInternal(filename, importOption, false, QByteArray());
+}
+
+bool KisStorageModel::importStorageData(const QString &filename,
+                                        StorageImportOption importOption,
+                                        const QByteArray &data) const
+{
+    return !data.isEmpty() && importStorageInternal(filename, importOption, false, data);
+}
+
+bool KisStorageModel::canImportStorage(const QString &filename) const
+{
+    return importStorageInternal(filename, None, true, QByteArray());
+}
+
+bool KisStorageModel::importStorageInternal(const QString &filename,
+                                            StorageImportOption importOption,
+                                            bool dryRun,
+                                            const QByteArray &data)
 {
     // 1. Copy the bundle/storage to the resource folder
     QFileInfo oldFileInfo(filename);
@@ -438,7 +459,25 @@ bool KisStorageModel::importStorage(QString filename, StorageImportOption import
             return false;
         }
     }
-    QFile::copy(filename, newLocation);
+
+    // Don't actually import, just check if we could.
+    if (dryRun) {
+        return true;
+    }
+
+    if (data.isEmpty()) {
+        QFile::copy(filename, newLocation);
+    } else {
+        QSaveFile f(newLocation);
+        f.setDirectWriteFallback(false);
+
+        if (!f.open(QIODevice::WriteOnly) || f.write(data) != data.size() || !f.flush()) {
+            qWarning() << "Error writing" << data.size() << "bytes to" << newLocation << "storage:" << f.errorString();
+            return false;
+        }
+
+        f.commit();
+    }
 
     // 2. Add the bundle as a storage/update database
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);

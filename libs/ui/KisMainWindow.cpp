@@ -99,6 +99,8 @@
 #include <KisPlaybackEngine.h>
 
 #ifdef Q_OS_ANDROID
+#include "KisAndroidDonations.h"
+#include "dialogs/KisDonationManagementDialog.h"
 #include <QtAndroid>
 #include <KisAndroidUtils.h>
 #endif
@@ -254,7 +256,10 @@ public:
     KisAction *toggleDockers {nullptr};
     KisAction *resetConfigurations {nullptr};
     KisAction *toggleDockerTitleBars {nullptr};
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+    KisAction *showDonationManagementDialog {nullptr};
+    KisAction *manageSubscriptions {nullptr};
+#else
     KisAction *toggleDetachCanvas {nullptr};
     KisAction *newWindow {nullptr};
 #endif
@@ -1637,6 +1642,13 @@ void KisMainWindow::showEvent(QShowEvent *event)
     }
 #ifdef Q_OS_ANDROID
     Q_EMIT sigFullscreenOnShow(true); // Android defaults to fullscreen.
+    // The user can conceivably purchase a product from the splash screen while
+    // Krita is still loading. In that case, the "pending" flag will be set. The
+    // dialog in question will clear the flag.
+    KisAndroidDonations *androidDonations = KisAndroidDonations::instance();
+    if (androidDonations && androidDonations->isShowDonationManagementDialogPending()) {
+        QTimer::singleShot(0, this, &KisMainWindow::slotShowDonationManagementDialog);
+    }
 #endif
     return KXmlGuiWindow::showEvent(event);
 }
@@ -1851,6 +1863,39 @@ void KisMainWindow::slotExportAdvance()
 void KisMainWindow::slotShowSessionManager() {
     KisPart::instance()->showSessionManager();
 }
+
+#ifdef Q_OS_ANDROID
+void KisMainWindow::slotShowDonationManagementDialog()
+{
+    // Don't show the donation management dialog on top of another dialog
+    // that may have triggered a donation flow, such as the bundle manager.
+    QWidget *win = qApp->activeWindow();
+    if (win && !qobject_cast<KisMainWindow *>(win) && (win->isModal() || win->windowModality() != Qt::NonModal)) {
+        return;
+    }
+
+    // We don't use `exec` here because the purchase stuff runs in Android's
+    // event loop, so it's legitimately possible that we get hit by another
+    // request to show the donation management dialog while it's already up
+    // and it's more convenient for the dialog to handle the deduplication.
+    QString objectName = QStringLiteral("kisdonationmanagementdialog");
+    KisDonationManagementDialog *dlg = findChild<KisDonationManagementDialog *>(objectName, Qt::FindDirectChildrenOnly);
+    if (dlg) {
+        dlg->reshow();
+    } else {
+        dlg = new KisDonationManagementDialog(this);
+
+        QAction *action = actionCollection()->action("manage_supporter_bundles");
+        if (action) {
+            connect(dlg, &KisDonationManagementDialog::sigShowSupporterBundles, action, &QAction::trigger);
+        }
+
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setObjectName(objectName);
+        dlg->show();
+    }
+}
+#endif
 
 KoCanvasResourceProvider *KisMainWindow::resourceManager() const
 {
@@ -3050,7 +3095,27 @@ void KisMainWindow::createActions()
     d->mdiPreviousWindow = actionManager->createAction("windows_previous");
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+    d->showDonationManagementDialog = actionManager->createAction("manage_donations");
+    connect(d->showDonationManagementDialog,
+            &QAction::triggered,
+            this,
+            &KisMainWindow::slotShowDonationManagementDialog);
+
+    KisAndroidDonations *androidDonations = KisAndroidDonations::instance();
+    if (androidDonations) {
+        d->manageSubscriptions = actionManager->createAction("manage_subscriptions");
+        connect(d->manageSubscriptions,
+                &QAction::triggered,
+                androidDonations,
+                &KisAndroidDonations::slotManageSubscriptions);
+        connect(androidDonations,
+                &KisAndroidDonations::sigShowDonationManagementDialogRequested,
+                this,
+                &KisMainWindow::slotShowDonationManagementDialog,
+                Qt::QueuedConnection);
+    }
+#else
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 #endif

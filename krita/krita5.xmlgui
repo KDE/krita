@@ -386,6 +386,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="options_configure"/>
       <Action name="manage_bundles"/>
       <Action name="manage_resources"/>
+      <Action name="manage_supporter_bundles"/>
+      <Action name="manage_donations"/>
+      <Action name="manage_subscriptions"/>
       <Separator/>
       <Action name="options_configure_toolbars"/>
       <Merge name="StandardToolBarMenuHandler" />

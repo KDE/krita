@@ -496,6 +496,10 @@ void KisApplication::loadPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations::showDonationDialog(true);
+#endif
+
     KisConfig cfg(false);
 
 #if defined(Q_OS_WIN)
@@ -536,12 +540,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // only show the mainWindow when no command-line mode option is passed
     bool showmainWindow = (!exportAs && !exportSequence); // would be !batchRun;
 
+#ifndef Q_OS_ANDROID
     const bool showSplashScreen = !d->batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
         processEvents();
     }
+#endif
 
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
 #ifndef Q_OS_HAIKU
@@ -635,6 +641,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 
     setSplashScreenLoadingText(QString()); // done loading, so clear out label
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations::setLoaded(true);
+#endif
     processEvents();
 
     //configure the unit manager
@@ -871,10 +880,16 @@ void KisApplication::setSplashScreenLoadingText(const QString &textToLoad)
         d->splashScreen->setLoadingText(textToLoad);
         d->splashScreen->repaint();
     }
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations::setLoadingText(textToLoad);
+#endif
 }
 
 void KisApplication::hideSplashScreen()
 {
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations::setLoaded(true);
+#endif
     if (d->splashScreen) {
         // hide the splashscreen to see the dialog
         d->splashScreen->hide();
@@ -1159,7 +1174,7 @@ void KisApplication::checkAutosaveFiles()
     if (autosaveFiles.size() > 0) {
         if (d->splashScreen) {
             // hide the splashscreen to see the dialog
-            d->splashScreen->hide();
+            hideSplashScreen();
         }
         d->autosaveDialog = new KisAutoSaveRecoveryDialog(autosaveFiles, activeWindow());
         QDialog::DialogCode result = (QDialog::DialogCode) d->autosaveDialog->exec();

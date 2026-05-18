@@ -12,4 +12,25 @@
 	<string name="cancelled">Cancelled</string>
     <string name="save_notification_text">Saving Document</string>
     <string name="cancel_save_notification">Cancel</string>
+	<string name="donation_dialog_loading">Krita is loading…</string>
+	<string name="donation_dialog_loaded">Krita is ready!</string>
+	<string name="donation_dialog_button_back">Back</string>
+	<string name="donation_dialog_button_close">Close</string>
+	<string name="donation_dialog_header_support">Support Krita</string>
+	<string name="donation_dialog_header_button">♥︎ Show Supporter Options</string>
+	<string name="donation_dialog_supporter_text">Thank you for supporting Krita! Your contribution helps to keep its continued development going.</string>
+	<string name="product_donations_description"><![CDATA[<h2>Donations</h2><p>Help Krita\'s continued development with a direct donation through PayPal, via credit or debit card and many other payment methods.</p>]]></string>
+	<string name="product_donations_button">Donate</string>
+	<string name="product_development_fund_description"><![CDATA[<h2>Development Fund</h2><p>Join Krita\'s development fund and help its continued development with a monthly contribution. Different tiers with benefits are available.</p>]]></string>
+	<string name="product_development_fund_button">Join the Fund</string>
+	<string name="product_button_subscribe">Subscribe</string>
+	<string name="product_button_subscribe_for_month">Subscribe for %s/month</string>
+	<string name="product_button_buy">Buy</string>
+	<string name="product_button_buy_for">Buy for %s</string>
+	<string name="product_supporter_badge_title">Supporter Badge</string>
+	<string name="product_supporter_badge_description"><![CDATA[<p>A badge for early supporters of Krita on Android.</p>]]></string>
+	<string name="product_subscription_title">Supporter Subscription</string>
+	<string name="product_subscription_description"><![CDATA[<p>Support Krita\'s development with a monthly contribution. While subscribed, you get access to <strong>all</strong> supporter benefits as they are released. You currently receive %1$d resource bundles together containing over %2$d brushes, including the paid Digital Atelier bundle, with more planned in the future.</p>]]></string>
+	<string name="product_onetime_title">Krita 5.3 Supporter Pack</string>
+	<string name="product_onetime_description"><![CDATA[<p>In this pack you will receive %1$d resource bundles together containing over %2$d brushes, including the paid Digital Atelier bundle. This is a <strong>one-time purchase</strong>, you won\'t be entered into a subscription.</p>]]></string>
 </resources>

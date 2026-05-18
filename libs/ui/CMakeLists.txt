@@ -503,6 +503,11 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         dialogs/KisDlgCustomTabletResolution.cpp
         )
+elseif(ANDROID)
+    list(APPEND kritaui_LIB_SRCS
+        dialogs/KisDonationManagementDialog.cpp
+        widgets/KisDonationManagementWidget.cpp
+    )
 endif()
 
     set(kritaui_LIB_SRCS
@@ -660,6 +665,11 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 if(WIN32)
     ki18n_wrap_ui(kritaui_LIB_SRCS
         dialogs/KisDlgCustomTabletResolution.ui
+    )
+elseif(ANDROID)
+    ki18n_wrap_ui(kritaui_LIB_SRCS
+        dialogs/KisDonationManagementDialog.ui
+        widgets/KisDonationManagementWidget.ui
     )
 endif()
 

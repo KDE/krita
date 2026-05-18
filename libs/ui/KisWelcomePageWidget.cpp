@@ -83,6 +83,11 @@
 
 #ifdef Q_OS_ANDROID
 #include "KisAndroidDonations.h"
+#include <QFontMetrics>
+#include <QPaintDevice>
+#include <QPainter>
+#include <QPainterPath>
+#include <QRandomGenerator>
 #endif
 
 // Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
@@ -167,7 +172,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     btnNewsOptions->setMenu(newsOptionsMenu);
 
     labelSupportText->setFont(largerFont());
-    donationLink->setFont(largerFont());
 
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
@@ -180,7 +184,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
 #endif
 
-    donationLink->hide();
     supporterBadge->hide();
 #ifdef Q_OS_ANDROID
     initDonations();
@@ -395,11 +398,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     updateVersionUpdaterFrame(); // updater frame
 #endif
 
-#ifdef Q_OS_ANDROID
-    donationLink->setText(
-        QStringLiteral("<a href=\"#\">%1</a>").arg(QString(i18n("Get your Krita Supporter Badge here!"))));
-#endif
-
 #ifdef Q_OS_MACOS
     // macOS store version should not contain external links containing donation buttons or forms
     if (KisMacosEntitlements().sandbox()) {
@@ -408,7 +406,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
         labelSupportText->hide();
         kritaWebsiteLink->hide();
         kritaWebsiteIcon->hide();
-        donationLink->hide();
     }
 #endif
 }
@@ -479,7 +476,6 @@ void KisWelcomePageWidget::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         labelSupportText->setFont(largerFont());
-        donationLink->setFont(largerFont());
     }
 }
 
@@ -795,14 +791,158 @@ void KisWelcomePageWidget::initDonations()
         return;
     }
 
-    connect(donationLink, SIGNAL(linkActivated(QString)), androidDonations, SLOT(slotStartDonationFlow()));
+    // Pick a random banner. Note that the second number is *exclusive*.
+    int bannerIndex = QRandomGenerator::global()->bounded(1, 5);
 
-    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
-    QPixmap pixmap(bannerPath);
-    if (pixmap.isNull()) {
-        qWarning("KisWelcomePage::initDonations: failed to load banner from '%s'", qUtf8Printable(bannerPath));
+    // Banners have space where we can place text, but this varies by banner.
+    // These are the relative locations where that space is.
+    qreal ry = 0.02; // Vertical offset, always the same.
+    qreal rh = 1.0 - ry * 2.0; // Height, dito.
+    qreal rwpad = 0.02; // Horizontal padding.
+    qreal rx, rw; // Horizontal offset and width, vary by banner.
+    switch (bannerIndex) {
+    case 1: // Kiki winking on the left.
+    case 3: // Stargazers on the left.
+        rx = 0.4;
+        rw = 1.0 - rx - rwpad;
+        break;
+    case 2: // Cat holding brush in its mouth on the right.
+    case 4: // Person holding digital palette on the right.
+        rx = rwpad;
+        rw = 0.6 - rx;
+        break;
+    default: // Shouldn't happen, punt to using the entire width minus padding.
+        qWarning("Unhandled banner index %d", bannerIndex);
+        rx = rwpad;
+        rw = 1.0 - rwpad * 2.0;
+        break;
+    }
+
+    QString welcomeBannerPath =
+        QStandardPaths::locate(QStandardPaths::AppDataLocation,
+                               QStringLiteral("share/krita/donation/welcomebanner%1.jpg").arg(bannerIndex));
+    QPixmap welcomeBannerPixmap(welcomeBannerPath);
+
+    if (welcomeBannerPixmap.isNull()) {
+        qWarning("KisWelcomePage::initDonations: failed to load welcome banner from '%s'",
+                 qUtf8Printable(welcomeBannerPath));
+        // Leave the button alone, it will just say "Support Krita!"
     } else {
-        supporterBadge->setPixmap(QPixmap(bannerPath));
+        QVector<QString> headlines = {
+            i18n("Become a Supporter!"),
+            i18n("Support Krita!"),
+        };
+        QVector<QString> subtitles = {
+            i18n("Supporters get brush packs and more."),
+            i18n("Contributions keep development going."),
+        };
+        QString headline = headlines[QRandomGenerator::global()->bounded(headlines.size())];
+        QString subtitle = subtitles[QRandomGenerator::global()->bounded(subtitles.size())];
+
+        // We want some text on the banner, which unfortunately requires some
+        // manual layout. We're going to write a top line in a larger font and
+        // a bottom line in a smaller font. They're going to be separated by a
+        // few pixels, centered horizontally and fit into predefined bounds on
+        // the banner depending on which image we're using. The text will be
+        // white with a black outline, so we'll use QPainterPath. Math time.
+        QPainter painter(&welcomeBannerPixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setRenderHint(QPainter::TextAntialiasing);
+
+        QPen pen(Qt::black, 12.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+        QBrush brush(Qt::white);
+
+        qreal verticalSeparation = 40.0;
+
+        // Top line, the heading.
+        QFont currentFont = font();
+        currentFont.setPointSize(100);
+        currentFont.setBold(false);
+        QPainterPath topPath;
+        topPath.addText(0, 0, currentFont, headline);
+        QRectF topBounds = topPath.boundingRect();
+
+        // Bottom line, smaller text for more words.
+        currentFont.setPointSize(60);
+        currentFont.setBold(true);
+        QPainterPath bottomPath;
+        bottomPath.addText(0, 0, currentFont, subtitle);
+        QRectF bottomBounds = bottomPath.boundingRect();
+
+        // Stick those two lines into a combined path, horizontally centered,
+        // separated a bit so that the text doesn't get glued together.
+        qreal maxWidth = qMax(topBounds.width(), bottomBounds.width());
+        qreal topOffsetX = (maxWidth - topBounds.width()) / 2.0;
+        qreal bottomOffsetX = (maxWidth - bottomBounds.width()) / 2.0;
+
+        QTransform topTransform;
+        topTransform.translate(topOffsetX - topBounds.left(), -topBounds.top());
+        topPath = topTransform.map(topPath);
+        topPath.setFillRule(Qt::WindingFill);
+
+        QTransform bottomTransform;
+        bottomTransform.translate(bottomOffsetX - bottomBounds.left(),
+                                  topBounds.height() + verticalSeparation - bottomBounds.top());
+        bottomPath = bottomTransform.map(bottomPath);
+        bottomPath.setFillRule(Qt::WindingFill);
+
+        QPainterPath combinedPath;
+        combinedPath.addPath(topPath);
+        combinedPath.addPath(bottomPath);
+
+        // Determine the rectangle on the banner that we want to fit the text
+        // into. Taking a detour through the paint device just in case high-DPI
+        // scaling messes with the dimensions somehow.
+        qreal w = painter.device()->width();
+        qreal h = painter.device()->height();
+        QRect rect(w * rx, h * ry, w * rw, h * rh);
+
+        QRectF combinedBounds = combinedPath.boundingRect();
+        qreal scaleX = rect.width() / combinedBounds.width();
+        qreal scaleY = rect.height() / combinedBounds.height();
+        qreal scale = qMin(scaleX, scaleY);
+        qreal combinedOffsetX = (rect.width() - (combinedBounds.width() * scale)) / 2.0;
+        qreal combinedOffsetY = (rect.height() - (combinedBounds.height() * scale)) / 2.0;
+
+        QTransform combinedTransform;
+        combinedTransform.translate(rect.left() + combinedOffsetX, rect.top() + combinedOffsetY);
+        combinedTransform.scale(scale, scale);
+        combinedTransform.translate(-combinedBounds.left(), -combinedBounds.top());
+        combinedPath = combinedTransform.map(combinedPath);
+        combinedPath.setFillRule(Qt::WindingFill);
+
+        // And finally, draw the text onto the banner. First stroking the
+        // outside, then filling the inside, otherwise there's weird effects
+        // with strokes inside of letters overlapping with the fill.
+        painter.setPen(pen);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPath(combinedPath);
+
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(brush);
+        painter.drawPath(combinedPath);
+
+        QSize welcomeBannerSize = welcomeBannerPixmap.size().scaled(500, 100, Qt::KeepAspectRatio);
+        bnAndroidSupport->setFlat(false);
+        bnAndroidSupport->setText(QString());
+        bnAndroidSupport->setContentsMargins(0, 0, 0, 0);
+        bnAndroidSupport->setIcon(QIcon(welcomeBannerPixmap));
+        bnAndroidSupport->setIconSize(welcomeBannerSize);
+        bnAndroidSupport->setFixedSize(welcomeBannerSize);
+    }
+
+    connect(bnAndroidSupport, &QPushButton::clicked, androidDonations, &KisAndroidDonations::slotStartDonationFlow);
+    connect(bnAndroidSupporterManage,
+            &QPushButton::clicked,
+            androidDonations,
+            &KisAndroidDonations::sigShowDonationManagementDialogRequested);
+
+    QString badgePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
+    QPixmap badgePixmap(badgePath);
+    if (badgePixmap.isNull()) {
+        qWarning("KisWelcomePage::initDonations: failed to load badge from '%s'", qUtf8Printable(badgePath));
+    } else {
+        supporterBadge->setPixmap(badgePixmap);
     }
 
     connect(androidDonations, SIGNAL(sigStateChanged()), this, SLOT(slotUpdateDonationState()));
@@ -811,18 +951,35 @@ void KisWelcomePageWidget::initDonations()
 
 void KisWelcomePageWidget::slotUpdateDonationState()
 {
-    bool linkVisible = false;
     bool badgeVisible = false;
+    QWidget *pageVisible = pgSupportMessage;
 
     KisAndroidDonations *androidDonations = KisAndroidDonations::instance();
     if (androidDonations) {
-        linkVisible = androidDonations->shouldShowDonationLink();
         badgeVisible = androidDonations->shouldShowSupporterBadge();
+        switch (androidDonations->state()) {
+        case KisAndroidDonations::State::Supporter:
+            pageVisible = pgAndroidSupporter;
+            break;
+        case KisAndroidDonations::State::NoSupport:
+            pageVisible = nullptr;
+            break;
+        default:
+            break;
+        }
     } else {
         qWarning("KisWelcomePageWidget::slotUpdateDonationState: android donations is null");
     }
 
-    donationLink->setVisible(linkVisible);
+    if(pageVisible) {
+        stkSupport->setCurrentWidget(pageVisible);
+        wdgAndroidSupportBanner->hide();
+        stkSupport->show();
+    } else {
+        stkSupport->hide();
+        wdgAndroidSupportBanner->show();
+    }
+
     supporterBadge->setVisible(badgeVisible);
 }
 #endif

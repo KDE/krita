@@ -31,6 +31,18 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
     wdgtagpreview.ui
 )
 
+if(ANDROID)
+    list(APPEND kritaresourcemanager_SOURCES
+        KisSupporterBundlesDialog.cpp
+        KisSupporterBundlesFetcher.cpp
+        KisSupporterBundleWidget.cpp
+    )
+    ki18n_wrap_ui(kritaresourcemanager_SOURCES
+        KisSupporterBundlesDialog.ui
+        KisSupporterBundleWidget.ui
+    )
+endif()
+
 kis_add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})
 target_link_libraries(kritaresourcemanager kritawidgets kritaui kritalibpaintop kritaresources kritaresourcewidgets)
 install(TARGETS kritaresourcemanager  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

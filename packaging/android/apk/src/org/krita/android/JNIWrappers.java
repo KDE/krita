@@ -10,7 +10,8 @@ package org.krita.android;
 class JNIWrappers {
     public static native void saveState();
     public static native boolean hasMainWindowLoaded();
-    public static native void donationStateUpdated(int state);
+    public static native void donationStateUpdated(int state, long ownedProductFlags);
     public static native void openFileFromIntent(String uri);
+    public static native void showDonationManagementDialog();
 }
 

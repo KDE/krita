@@ -106,19 +106,8 @@ void KisSplashScreen::updateSplashImage()
     const int marginTop = splashHeight * 0.05;
     const int marginRight = splashHeight * 0.1;
 
-    QString splashName = QStringLiteral(":/splash/0.png");
-    QString splashArtist = i18nc("Normal splash artist name", "Tyson Tan");
-    // TODO: Re-add the holiday splash...
-#if 0
-    QDate currentDate = QDate::currentDate();
-    if (currentDate > QDate(currentDate.year(), 12, 4) ||
-            currentDate < QDate(currentDate.year(), 1, 9)) {
-        splashName = QStringLiteral(":/splash/1.png");
-        splashArtist = QStringLiteral("???");
-    }
-#endif
-
-    QPixmap img(splashName);
+    Source source = getImageSource();
+    QPixmap img(source.resourcePath);
 
     if (img.isNull() || img.height() == 0) return;
 
@@ -152,11 +141,7 @@ void KisSplashScreen::updateSplashImage()
     m_loadingTextLabel->setFixedWidth(m_bannerSvg->geometry().right() - marginRight);
 
     // Place credits text on bottom right with similar margins.
-    if (splashArtist.isEmpty()) {
-        m_artCreditsLabel->setText(QString());
-    } else {
-        m_artCreditsLabel->setText(i18nc("splash image credit", "Artwork by: %1", splashArtist));
-    }
+    m_artCreditsLabel->setText(source.artistCredit);
     m_artCreditsLabel->setFixedWidth(m_loadingTextLabel->width());
     m_artCreditsLabel->setFixedHeight(20);
     m_artCreditsLabel->move(m_loadingTextLabel->x(), height - marginTop - m_artCreditsLabel->height());
@@ -283,6 +268,33 @@ void KisSplashScreen::setLoadingText(QString text)
     m_loadingTextLabel->setText(htmlText);
 }
 
+KisSplashScreen::Source KisSplashScreen::getImageSource()
+{
+    QString artistCredit = i18nc("Normal splash artist name", "Tyson Tan");
+    // Loading the ginormous 4K PNG splash image increases the startup time on
+    // Android by several seconds and at the same time looks really bad when
+    // scaled down to a dinky size. Instead of overengineering this into an
+    // Enterprise Splash Screen Solution where we choose the image based on
+    // screen size or something, we'll just use a HD JPEG instead. It's fine.
+#ifdef Q_OS_ANDROID
+    QString resourcePath = QStringLiteral(":/splash/hd.jpg");
+#else
+    QString resourcePath = QStringLiteral(":/splash/0.png");
+    // TODO: Re-add the holiday splash...
+#if 0
+    QDate currentDate = QDate::currentDate();
+    if (currentDate > QDate(currentDate.year(), 12, 4) ||
+            currentDate < QDate(currentDate.year(), 1, 9)) {
+        resourcePath = QStringLiteral(":/splash/1.png");
+        artistCredit = QStringLiteral("???")};
+    }
+#endif
+#endif
+    if (!artistCredit.isEmpty()) {
+        artistCredit = i18nc("splash image credit", "Artwork by: %1", artistCredit);
+    }
+    return Source{resourcePath, artistCredit};
+}
 
 
 QString KisSplashScreen::colorString() const

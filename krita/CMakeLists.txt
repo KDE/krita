@@ -100,6 +100,13 @@ ecm_install_icons(ICONS
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/1024-mimetypes-application-x-krita.png"
     DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 
+# Android has a different splash screen.
+if(ANDROID)
+    set(krita_splash_qrc splash-android.qrc)
+else()
+    set(krita_splash_qrc splash.qrc)
+endif()
+
 # separate listing, both used by Krita and KritaSketch
 set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/krita/krita.qrc
@@ -122,7 +129,7 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/krita/data/gamutmasks/gamutmasks.qrc
     ${CMAKE_SOURCE_DIR}/plugins/paintops/defaultpresets/defaultpresets.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/branding/${BRANDING}/branding.qrc
-    ${CMAKE_SOURCE_DIR}/krita/data/splash/splash.qrc
+    ${CMAKE_SOURCE_DIR}/krita/data/splash/${krita_splash_qrc}
     ${CMAKE_SOURCE_DIR}/krita/pics/sponsors/sponsors.qrc
     CACHE INTERNAL "krita_QRCS"
 )
@@ -214,7 +221,16 @@ else()
     install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
 install(FILES org.kde.krita.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES  krita.action kritamenu.action DESTINATION ${KDE_INSTALL_DATADIR}/krita/actions)
+
+set(actions_files krita.action kritamenu.action)
+if (ANDROID)
+    # In-app-purchase-related actions are only relevant on Android. They
+    # wouldn't show up in the menu anyway because the application doesn't
+    # instantiate them, but they'd still appear in the keyboard shortcuts.
+    list(APPEND actions_files kritamenu_android.action)
+endif()
+install(FILES ${actions_files} DESTINATION ${KDE_INSTALL_DATADIR}/krita/actions)
+
 install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 
 install(DIRECTORY DESTINATION ${KDE_INSTALL_DATADIR}/krita/shortcuts)

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TODO: use newer theme -->
-    <style name = "DefaultTheme" parent="android:Theme.Holo.Light">
+    <style name="DefaultTheme" parent="android:Theme.Material">
         <item name="android:windowBackground">@android:color/black</item>
         <!-- TODO: remove after updating to anroid-36 and uptating to Qt6 -->
         <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>

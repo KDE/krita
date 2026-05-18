@@ -21,6 +21,11 @@ class KRITAUI_EXPORT KisSplashScreen : public QWidget, public Ui::WdgSplash
 {
     Q_OBJECT
 public:
+    struct Source {
+        QString resourcePath;
+        QString artistCredit;
+    };
+
     explicit KisSplashScreen(bool themed = false, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     void repaint();
@@ -30,6 +35,8 @@ public:
     void displayRecentFiles(bool show);
 
     void setLoadingText(QString text);
+
+    static Source getImageSource();
 
 private Q_SLOTS:
 

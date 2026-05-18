@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Supporter Benefits">
+  <Actions category="Resources">
+    <text>Resources</text>
+    <Action name="manage_supporter_bundles">
+      <icon></icon>
+      <text>Get More Resources...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Get More Resources</toolTip>
+      <iconText>Get More Resources</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+  <Actions category="Management">
+    <text>Management</text>
+    <Action name="manage_donations">
+      <icon></icon>
+      <text>Manage Supporter Benefits...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage Supporter Benefits</toolTip>
+      <iconText>Manage Supporter Benefits</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="manage_subscriptions">
+      <icon></icon>
+      <text>Manage Subscriptions...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage Subscriptions</toolTip>
+      <iconText>Manage Subscriptions</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>
+

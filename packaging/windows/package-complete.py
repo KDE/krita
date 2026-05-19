@@ -636,8 +636,21 @@ if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
 if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 'on']:
     print("\nSplitting debug info from binaries...")
 
+    def has_debug_section(objdumpOutput):
+        for line in objdumpOutput.splitlines():
+            if '.debug_' in line:
+                return True
+        return False
+
+
     def split_debug(arg1, arg2):
         print(f"Splitting debug info of {arg2}")
+
+        result = subprocess.run([OBJDUMP, "-h", arg1], capture_output=True, text=True, check=True)
+        if not has_debug_section(result.stdout):
+            print(f"Skip stripping {arg2}: has no debug sections")
+            return 0
+
         commandToRun = f"objcopy --only-keep-debug {arg1} {arg1}.debug"
         try:
             subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)

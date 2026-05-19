@@ -230,12 +230,11 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", context.getID(path));
 
     SvgUtil::writeTransformAttributeLazy("transform", path->transformation(), context.shapeWriter());
-    SvgStyleWriter::saveMetadata(path, context);
-
     SvgStyleWriter::saveSvgStyle(path, context);
 
     context.shapeWriter().addAttribute("d", path->toString(context.userSpaceTransform()));
     context.shapeWriter().addAttribute("sodipodi:nodetypes", path->nodeTypes());
+    SvgStyleWriter::saveMetadata(path, context);
     context.shapeWriter().endElement();
 }
 

@@ -6,6 +6,16 @@ import os
 import subprocess
 import warnings
 import sys
+
+has_pefile = False
+
+try:
+    import pefile
+    has_pefile = True
+except:
+    pass
+
+
 glob_patterns = ['*.dll', '*.exe', '*.com', '*.pyd']
 
 def find_files(directory):
@@ -21,8 +31,17 @@ def has_debug_section(objdumpOutput):
             return True
     return False
 
+def has_certificate_entry(filePath):
+    # NOTE: we do **not** verify the signature itself here,
+    # we just check if the entry is present in the PE-structure
+    pe = pefile.PE(filePath, fast_load=True)
+    address = pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_SECURITY"]
+    return pe.OPTIONAL_HEADER.DATA_DIRECTORY[address].Size > 0
+
 parser = argparse.ArgumentParser(description=f'Searches for {', '.join(glob_patterns)} files with DEBUG section present.')
 parser.add_argument('-d', '--directory', default=os.getcwd(), help='Directory to search (default: current directory)')
+if has_pefile:
+    parser.add_argument('-s', '--signature', action='store_true', default=False, help='Verify that all modules in the directory has signature entry (no signature validation happens)')
 args = parser.parse_args()
 
 OBJDUMP = False
@@ -36,9 +55,14 @@ if not OBJDUMP:
     sys.exit(1)
 
 anyLibsWithDebugFound = False
+anyUnsignedFound = False
 
 for file in find_files(args.directory):
     try:
+        if has_pefile and args.signature:
+            if not has_certificate_entry(file):
+              anyUnsignedFound = True
+              print(f"File is not signed: {file}")
         result = subprocess.run([OBJDUMP, '-h', file], capture_output=True, text=True, check=True)
         if has_debug_section(result.stdout):
             anyLibsWithDebugFound = True
@@ -47,5 +71,5 @@ for file in find_files(args.directory):
         warnings.warn(f"ERROR: Failed to parse: {file}")
         raise e
 
-if anyLibsWithDebugFound:
+if anyLibsWithDebugFound or anyUnsignedFound:
     sys.exit(2)

@@ -69,8 +69,12 @@ struct KisAsyncColorSamplerHelper::Private
     qreal circlePreviewThickness {0.12};
     bool circlePreviewOutlineEnabled {true};
     bool circlePreviewExtraCircles {true};
-    qreal circleZoomPreviewScale {2};
     QRectF previewDocRect;
+
+    bool circleZoomPreviewEnabled {true};
+    qreal circleZoomPreviewScale {5};
+    int circlePreviewHorizontalOffset {0};
+    int circlePreviewVerticalOffset {-100};
 
     QPainterPath cacheCircleInnerClip;
     QVector<KisReferenceImage*> cacheReferenceImageList; // Sorted reference images by zIndex
@@ -170,6 +174,12 @@ struct KisAsyncColorSamplerHelper::Private
                 colorPreviewViewRect = colorPreviewRectForRectangle();
             }
             break;
+        }
+
+        // If zoom preview enabled, it's possible to offset the color sampler preview and still be accurate
+        // This can help when sampling color using finger gesture
+        if (circleZoomPreviewEnabled) {
+            colorPreviewViewRect.translate(QPointF(circlePreviewHorizontalOffset, circlePreviewVerticalOffset));
         }
 
         const QRectF colorPreviewDocumentRect = converter().viewToDocument(colorPreviewViewRect);
@@ -570,11 +580,11 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     }
 
     // Clear the center if no zoom
-    // Or fill with an opaque color to hide normal view when zooming at edge of canvas
+    // Or fill with a solid color to hide the underneath view when zooming at edge of canvas
     cachePainter.setPen(Qt::NoPen);
-    // If the cached block don't run, no brush is set. So set it
+    // If the cache update don't run, no brush is set. So set it
     cachePainter.setBrush(m_d->backgroundColor);
-    if (m_d->circleZoomPreviewScale > 1){
+    if (m_d->circleZoomPreviewEnabled){
         cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     }
     else {
@@ -583,15 +593,26 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
 
     // Draw zoom preview
-    if (m_d->circleZoomPreviewScale > 1) {
+    if (m_d->circleZoomPreviewEnabled) {
         QRectF sampleDocRectF = m_d->previewDocRect;
+
         // Sample a rect with size that is (zoomPreviewScale) times smaller than (previewDocRect size)
         sampleDocRectF.setSize(sampleDocRectF.size() / m_d->circleZoomPreviewScale);
         sampleDocRectF.moveCenter(m_d->previewDocRect.center());
 
+        // Invert the preview offset to find the actual position sampled
+        QPointF invertOffsetDocPoint = m_d->canvas->coordinatesConverter()->viewToDocument(QPointF(-m_d->circlePreviewHorizontalOffset, -m_d->circlePreviewVerticalOffset));
+        sampleDocRectF.translate(invertOffsetDocPoint);
+
         paintCircleCanvasPreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
         paintCircleReferenceImagePreview(cachePainter, cacheRect, sampleDocRectF, tf.map(m_d->cacheCircleInnerClip));
+
+        // Draw crosshair
+        cachePainter.setPen(Qt::black);
+        cachePainter.setBrush(Qt::black);
+        cachePainter.drawLine(cacheCenter + QPointF(-10,0), cacheCenter + QPointF(10,0));
+        cachePainter.drawLine(cacheCenter + QPointF(0,-10), cacheCenter + QPointF(0,10));
     }
 
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);
@@ -599,6 +620,9 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     gc.restore();
 }
 
+// Return a cached QImage of canvas.
+// The returned QImage is the whole cached area (because it wouldn't make sense to copy the requested area from the cached QImage only to draw it later?)
+// The cached area max size is the canvas size
 QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
     KisImageWSP canvasImage = m_d->canvas->image();
 
@@ -652,6 +676,7 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     gc.setClipPath(clip);
 
     // QtDoc: The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
+
     // Since the piece of canvas is (zoomPreviewScale) times smaller than cacheRect
     // drawImage will scale it up that many times, thus achieving the zoom effect
     gc.drawImage(viewRectF, cachedImage, canvasPixelRectF);
@@ -674,7 +699,7 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         gc.save();
 
         QImage image = refImage->getCachedImage();
-        // image.convertTo(QImage::Format_ARGB32); Do this in KisReferenceImage to avoid having to copy? and convert
+        // image.convertTo(QImage::Format_ARGB32); Do this in KisReferenceImage to avoid having to copy?
 
         QPointF sampleRefPointF = refImage->documentToPixel(sampleDocRectF.center());
 

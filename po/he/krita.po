@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-12 00:42+0000\n"
-"PO-Revision-Date: 2026-05-15 10:39+0300\n"
+"PO-Revision-Date: 2026-05-19 09:04+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -31095,7 +31095,7 @@ msgstr "מנוע:"
 #: libs/ui/forms/wdgpaintopsettings.ui:643
 #, kde-format
 msgid "Erase mode will use a separate brush size"
-msgstr ""
+msgstr "מצב מחיקה ישתמש בגודל מכחול נפרד"
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushSizeCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:646
@@ -31107,7 +31107,7 @@ msgstr "אטימות:"
 #: libs/ui/forms/wdgpaintopsettings.ui:662
 #, kde-format
 msgid "Erase mode will use a separate brush opacity"
-msgstr ""
+msgstr "מצב מחיקה ישתמש באטימות מכחול נפרדת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushOpacityCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:665
@@ -35601,6 +35601,8 @@ msgid ""
 "There are no brush presets available. Please enable a bundle that has "
 "presets before continuing.\n"
 msgstr ""
+"\n"
+"אין ערכות מכחולים זמינות. נא להפעיל מאגד שיש בו ערכות לפני המשך הפעילות.\n"
 
 #: libs/ui/KisMainWindow.cpp:2001
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201

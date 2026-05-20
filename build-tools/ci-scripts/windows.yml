@@ -36,7 +36,6 @@
     - . venv\Scripts\Activate.ps1
     - pip install -r krita-deps-management/requirements.txt
     - pip install -r ci-notary-service/requirements.txt
-    - pip install -r build-tools/ci-scripts/requirements-windows.txt
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $EFFECTIVE_DEPS_BRANCH_NAME

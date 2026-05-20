@@ -642,7 +642,6 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
                 return True
         return False
 
-
     def split_debug(arg1, arg2):
         print(f"Splitting debug info of {arg2}")
 
@@ -692,6 +691,8 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
     split_debug(fr"{pkg_root}\bin\krita.com", r"bin\krita.com")
     split_debug(fr"{pkg_root}\bin\kritarunner.exe", r"bin\kritarunner.exe")
     split_debug(fr"{pkg_root}\bin\kritarunner.com", r"bin\kritarunner.com")
+    split_debug(fr"{pkg_root}\bin\ffmpeg.exe", r"bin\ffmpeg.exe")
+    split_debug(fr"{pkg_root}\bin\ffprobe.exe", r"bin\ffmprobe.exe")
     # Find all DLLs
     files = glob.glob(fr"{pkg_root}\**\*.dll", recursive=True)
     for f in files:

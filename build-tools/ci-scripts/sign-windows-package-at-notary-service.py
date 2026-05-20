@@ -3,6 +3,14 @@ import os.path
 from os import environ
 import subprocess
 import sys
+import pefile
+
+def has_certificate_entry(filePath):
+    # NOTE: we do **not** verify the signature itself here,
+    # we just check if the entry is present in the PE-structure
+    pe = pefile.PE(filePath, fast_load=True)
+    address = pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_SECURITY"]
+    return pe.OPTIONAL_HEADER.DATA_DIRECTORY[address].Size > 0
 
 # command-line args parsing
 parser = argparse.ArgumentParser()
@@ -28,7 +36,10 @@ with open("files-to-sign.txt", 'w') as toSign:
         for fileName in files:
             if fileName.endswith(('.exe', '.com', '.dll', '.pyd')):
                 filePath = os.path.join(rootPath, fileName)
-                print(filePath, file=toSign)
+                if (has_certificate_entry(filePath)):
+                    print(f"INFO: skip signing for {filePath} (already signed!)")
+                else:
+                    print(filePath, file=toSign)
 
 commandToRun = f"{sys.executable} -u ci-notary-service/signwindowsbinaries.py --config {KRITACI_WINDOWS_SIGN_CONFIG} --files-from files-to-sign.txt"
 subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )

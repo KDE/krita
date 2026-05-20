@@ -34,6 +34,7 @@
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoColorProfileQuery.h>
 #include <KoColor.h>
 #include <KoUnit.h>
 
@@ -567,33 +568,52 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     bool loadedImageIsHDR = false;
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
-        QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), proflen);
-        profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
-        if (profile) {
-            if (!profile->isSuitableForWorkspace()) {
-                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile";
-            }
-        }
+    bool loadedCICP = false;
 
-        loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
-    }
-    else if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
-        // Ask the user which color profile to use
-        KisConfig cfg(true);
-        quint32 behaviour = cfg.pasteBehaviour();
-        if (behaviour == KisClipboard::PASTE_ASK) {
-            KisDlgPngImport dlg(m_path, csName.first, csName.second);
-            KisCursorOverrideHijacker hijacker;
-            Q_UNUSED(hijacker);
-            dlg.exec();
-            if (!dlg.profile().isEmpty()) {
-                profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
-            }
+#if defined(PNG_cICP_SUPPORTED)
+    png_byte primaries = 0;
+    png_byte transfer = 0;
+    png_byte matrix = 0;
+    png_byte fullrange = 0;
+    if (png_get_cICP(png_ptr, info_ptr, &primaries, &transfer, &matrix, &fullrange)) {
+        // TODO: in theory we could use chroma chunk here if non-zero.
+        const KoColorProfile *cicpProfile = KoColorSpaceRegistry::instance()->profileFor(KoColorProfileQuery(ColorPrimaries(primaries), TransferCharacteristics(transfer)), true);
+        if (cicpProfile && cicpProfile->isSuitableForWorkspace()) {
+            profile = cicpProfile;
+            loadedCICP = true;
         }
     }
-    else {
-        dbgFile << "no embedded profile, will use the default sRGB profile";
+#endif
+
+    if (!loadedCICP) {
+        if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
+            QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), proflen);
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
+            if (profile) {
+                if (!profile->isSuitableForWorkspace()) {
+                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile";
+                }
+            }
+
+            loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
+        }
+        else if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
+            // Ask the user which color profile to use
+            KisConfig cfg(true);
+            quint32 behaviour = cfg.pasteBehaviour();
+            if (behaviour == KisClipboard::PASTE_ASK) {
+                KisDlgPngImport dlg(m_path, csName.first, csName.second);
+                KisCursorOverrideHijacker hijacker;
+                Q_UNUSED(hijacker);
+                dlg.exec();
+                if (!dlg.profile().isEmpty()) {
+                    profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
+                }
+            }
+        }
+        else {
+            dbgFile << "no embedded profile, will use the default sRGB profile";
+        }
     }
 
     const QString colorSpaceId =

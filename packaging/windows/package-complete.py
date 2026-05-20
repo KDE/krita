@@ -646,6 +646,15 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
     def split_debug(arg1, arg2):
         print(f"Splitting debug info of {arg2}")
 
+        # The objcopy implementation included in llvm-21 and later has some weird
+        # implementation of --only-keep-debug, it manages to strip binaries, even
+        # when they have no .debug sections, which makes these binaries invalid for
+        # signtool. The problem might also be related to the fact that these
+        # binaries are built with MSVC (python3.dll, dbgcore.dll, d3dcompiler_47.dll
+        # and the like).
+        #
+        # That is why we manually check if the libraries have any `.debug` sections
+        # included and strip them only in case such sections are found
         result = subprocess.run([OBJDUMP, "-h", arg1], capture_output=True, text=True, check=True)
         if not has_debug_section(result.stdout):
             print(f"Skip stripping {arg2}: has no debug sections")

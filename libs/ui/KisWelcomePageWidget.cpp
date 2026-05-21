@@ -346,13 +346,11 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     btnNewsOptions->setFlat(true);
 
     supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
-    const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));
-    userManualIcon->setIcon(linkIcon);
-    gettingStartedIcon->setIcon(linkIcon);
-    userCommunityIcon->setIcon(linkIcon);
-    kritaWebsiteIcon->setIcon(linkIcon);
-    sourceCodeIcon->setIcon(linkIcon);
-
+    userManualIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("bookmarks")));
+    gettingStartedIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("get_started")));
+    userCommunityIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("comunity")));
+    kritaWebsiteIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("website")));
+    sourceCodeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("code")));
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change

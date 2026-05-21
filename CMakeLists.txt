@@ -131,13 +131,13 @@ endif()
 #######################
 ######################
 if (BUILD_WITH_QT6)
-set(KRITA_VERSION_STRING "6.0.2-prealpha")
+set(KRITA_VERSION_STRING "6.0.2")
 set(KRITA_STABLE_VERSION_MAJOR 6)
 set(KRITA_STABLE_VERSION_MINOR 0)
 else()
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.3.2-prealpha")
+set(KRITA_VERSION_STRING "5.3.2")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
@@ -154,7 +154,7 @@ set(KRITA_VERSION_REVISION 0)
 # Uncomment the following if this is currently in the "stable" branch.
 # Do not uncomment for master branch.
 #set(KRITA_STABLE_BRANCH 1)
-set(KRITA_ALPHA 1) # uncomment only for Alpha
+#set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
 

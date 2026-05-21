@@ -65,8 +65,9 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         doc->setCurrentImage(image);
 
         KisPropertiesConfigurationSP exportConfiguration = new KisPropertiesConfiguration();
-        exportConfiguration->setProperty("saveAsHDR", true);
-        exportConfiguration->setProperty("saveSRGBProfile", false);
+        exportConfiguration->setProperty("floatingPointConversionOption", "Rec2100PQ");
+        exportConfiguration->setProperty("writeCicpIfPossible", true);
+        exportConfiguration->setProperty("storeColorSpaceInfo", true);
         exportConfiguration->setProperty("forceSRGB", false);
         doc->exportDocumentSync("test.png", "image/png", exportConfiguration);
     }

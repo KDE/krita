@@ -1123,12 +1123,13 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     const bool sRGB = *device->colorSpace()->profile() == *KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    const bool colorProfilePQ = *device->colorSpace()->profile() == *KoColorSpaceRegistry::instance()->p2020PQProfile();
     /*
      * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
      * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
      * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
      */
-    if (!options.storeExtraColorChunks && options.storeColorSpaceInfo && sRGB) {
+    if (options.storeExtraColorChunks && options.storeColorSpaceInfo && sRGB) {
         png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
     }
 
@@ -1142,18 +1143,24 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
      *  the iCCP chunk instead and interpret it according to [ICC-1] and [ICC-1A]"
      */
 
-#if 0
-    if (options.saveAsHDR) {
+    if (options.storeExtraColorChunks && options.storeColorSpaceInfo && !sRGB) {
         // https://www.w3.org/TR/PNG/#11gAMA
 #if defined(PNG_GAMMA_SUPPORTED)
-        // the values are set in accordance of HDR-PNG standard:
-        // https://www.w3.org/TR/png-hdr-pq/
 
-        png_set_gAMA_fixed(png_ptr, info_ptr, 15000);
-        dbgFile << "gAMA" << "(Rec 2100)";
+
+        if (colorProfilePQ) {
+            // the values are set in accordance of HDR-PNG standard:
+            // https://www.w3.org/TR/png-hdr-pq/
+            png_set_gAMA_fixed(png_ptr, info_ptr, 15000);
+            dbgFile << "gAMA" << "(Rec 2100)";
+        } else {
+            double gamma = device->colorSpace()->profile()->getEstimatedTRC().first();
+            png_set_gAMA(png_ptr, info_ptr, gamma);
+        }
 #endif
 
 #if defined PNG_cHRM_SUPPORTED
+        if (colorProfilePQ) {
         png_set_cHRM_fixed(png_ptr, info_ptr,
                            31270, 32900, // white point
                            70800, 29200, // red
@@ -1161,9 +1168,17 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
                            13100, 4600 // blue
                            );
         dbgFile << "cHRM" << "(Rec 2100)";
+        } else {
+            const QVector<KoColorimetryUtils::xyY> colorants = device->colorSpace()->profile()->getColorantsxyY();
+            const KoColorimetryUtils::xyY whitePoint = device->colorSpace()->profile()->getWhitePointxyY();
+            png_set_cHRM(png_ptr, info_ptr,
+                         whitePoint.x, whitePoint.y,
+                         colorants[0].x, colorants[0].y,
+                         colorants[1].x, colorants[1].y,
+                         colorants[2].x, colorants[2].y);
+        }
 #endif
     }
-#endif
 
 
     // we should ensure we don't access non-existing palette object
@@ -1210,7 +1225,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
 
     if (options.storeColorSpaceInfo && !(sRGB && options.storeExtraColorChunks)) {
 
-        bool colorProfilePQ = *colorProfile == *KoColorSpaceRegistry::instance()->p2020PQProfile();
+
         const bool cicpPossible = (colorProfile->getColorPrimaries() != PRIMARIES_UNSPECIFIED && colorProfile->getTransferCharacteristics() != TRC_UNSPECIFIED
                                    && colorProfile->getColorPrimaries() < 256 && colorProfile->getTransferCharacteristics() < 256);
         dbgFile << options.writeCicpIfPossible << cicpPossible << colorProfilePQ << colorProfile->name();

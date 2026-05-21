@@ -76,7 +76,8 @@ public:
 
     KoColor getPixel(QPointF position);
 
-    QPoint documentToPixel(const QPointF &docPoint);
+    QPointF documentToPixel(const QPointF &docPoint);
+    QPoint documentToPixelFloored(const QPointF &docPoint);
 
     void saveXml(QDomDocument &document, QDomElement &parentElement, int id);
     bool saveImage(KoStore *store) const;

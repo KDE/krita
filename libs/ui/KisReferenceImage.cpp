@@ -353,7 +353,7 @@ void KisReferenceImage::setFilename(const QString &filename)
     d->externalFilename = filename;
 }
 
-QPoint KisReferenceImage::documentToPixel(const QPointF &docPoint)
+QPointF KisReferenceImage::documentToPixel(const QPointF &docPoint)
 {
     QSizeF shapeSize = size();
     QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
@@ -361,7 +361,14 @@ QPoint KisReferenceImage::documentToPixel(const QPointF &docPoint)
     QTransform transform = absoluteTransformation().inverted() * scale;
     QPointF localPosition = docPoint * transform;
 
-    return localPosition.toPoint();
+    return localPosition;
+}
+
+
+QPoint KisReferenceImage::documentToPixelFloored(const QPointF &docPoint)
+{
+    QPointF localPoint = documentToPixel(docPoint);
+    return QPoint(qFloor(localPoint.x()), qFloor(localPoint.y()));
 }
 
 KoColor KisReferenceImage::getPixel(QPointF position)

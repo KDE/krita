@@ -39,7 +39,7 @@ with open("files-to-sign.txt", 'w') as toSign:
                 if (has_certificate_entry(filePath)):
                     print(f"INFO: skip signing for {filePath} (already signed!)")
                 else:
-                    toSign.write(f"{filePath}\n")
+                    print(filePath, file=toSign)
 
 commandToRun = f"{sys.executable} -u ci-notary-service/signwindowsbinaries.py --config {KRITACI_WINDOWS_SIGN_CONFIG} --files-from files-to-sign.txt"
 subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )

@@ -60,6 +60,7 @@ packageName = 'krita-x64-{}{}'.format(kritaVersionString, unstablePackageSuffix)
 hookFile = os.path.join(srcPath, 'build-tools', 'ci-scripts', 'sign-windows-package-at-notary-service.py')
 
 commandToRun = ' '.join([sys.executable,
+                         '-u',
                          'packaging\windows\package-complete.py',
                          '--no-interactive',
                          '--package-name', packageName,

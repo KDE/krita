@@ -577,7 +577,9 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     png_byte fullrange = 0;
     if (png_get_cICP(png_ptr, info_ptr, &primaries, &transfer, &matrix, &fullrange)) {
         // TODO: in theory we could use chroma chunk here if non-zero.
+        dbgFile << "load cicp" << primaries << transfer << matrix << fullrange;
         const KoColorProfile *cicpProfile = KoColorSpaceRegistry::instance()->profileFor(KoColorProfileQuery(ColorPrimaries(primaries), TransferCharacteristics(transfer)), true);
+
         if (cicpProfile && cicpProfile->isSuitableForWorkspace()) {
             profile = cicpProfile;
             loadedCICP = true;
@@ -949,16 +951,20 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
     QString dstModel = device->colorSpace()->colorModelId().id();
     QString dstDepth = device->colorSpace()->colorDepthId().id();
+    const bool isFloatingPoint = device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
+        || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
+        || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID;
     const KoColorProfile *dstProfile = device->colorSpace()->profile();
     bool needColorTransform = false;
 
-    if (options.convertFloatToRec2020 || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
+    dbgFile << "Converting to... sRgb" << options.forceSRGB << "rec2020" << options.convertFloatToRec2020 << "policy" << int(options.floatingPointConversion);
+    if ((options.convertFloatToRec2020 & isFloatingPoint) || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         dstModel = RGBAColorModelID.id();
         dstProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
         needColorTransform = true;
 
-        if (options.convertFloatToRec2020) {
+        if (options.convertFloatToRec2020 && isFloatingPoint) {
             if (options.floatingPointConversion == ConversionPolicy::ApplyPQ) {
                 dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
             } else {
@@ -968,9 +974,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     }
 
     if (options.downsample
-            || device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
+            || isFloatingPoint) {
         dstDepth = Integer16BitsColorDepthID.id();
 
         needColorTransform = true;
@@ -1206,11 +1210,18 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
 
     if (options.storeColorSpaceInfo && !(sRGB && options.storeExtraColorChunks)) {
 
+        bool colorProfilePQ = *colorProfile == *KoColorSpaceRegistry::instance()->p2020PQProfile();
+        const bool cicpPossible = (colorProfile->getColorPrimaries() != PRIMARIES_UNSPECIFIED && colorProfile->getTransferCharacteristics() != TRC_UNSPECIFIED
+                                   && colorProfile->getColorPrimaries() < 256 && colorProfile->getTransferCharacteristics() < 256);
+        dbgFile << options.writeCicpIfPossible << cicpPossible << colorProfilePQ << colorProfile->name();
         bool wroteCICP = false;
-        if (options.writeCicpIfPossible && colorProfile->getColorPrimaries() != PRIMARIES_UNSPECIFIED && colorProfile->getTransferCharacteristics() != TRC_UNSPECIFIED
-            && colorProfile->getColorPrimaries() < 256 && colorProfile->getTransferCharacteristics() < 256) {
+        if (options.writeCicpIfPossible && (cicpPossible || colorProfilePQ)) {
             png_byte primaries = colorProfile->getColorPrimaries();
             png_byte transfer = colorProfile->getTransferCharacteristics();
+            if (colorProfilePQ) {
+                transfer = TRC_ITU_R_BT_2100_0_PQ;
+                primaries = PRIMARIES_ITU_R_BT_2020_2_AND_2100_0;
+            }
             if (options.floatingPointConversion == ConversionPolicy::ApplyPQ) {
                 transfer = TRC_ITU_R_BT_2100_0_PQ;
             } else if (options.floatingPointConversion == ConversionPolicy::ApplyHLG) {
@@ -1220,6 +1231,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
             }
             png_byte matrixCoef = 0;
             png_byte fullRange = 1;
+            dbgFile << "Writing cicp" << primaries << transfer << matrixCoef << fullRange;
             png_set_cICP(png_ptr, info_ptr, primaries, transfer, matrixCoef, fullRange);
             wroteCICP = true;
         }

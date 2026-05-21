@@ -66,6 +66,7 @@ KisImportExportErrorCode KisPNGExport::convert(KisDocument *document, QIODevice 
     options.storeExtraColorChunks = configuration->getBool("storeExtraColorChunks", false);
 
     const QString conversionOption = configuration->getString("floatingPointConversionOption", "KeepSame");
+    options.convertFloatToRec2020 = false;
     if (conversionOption == "Rec2100PQ") {
         options.convertFloatToRec2020 = true;
         options.floatingPointConversion = ConversionPolicy::ApplyPQ;

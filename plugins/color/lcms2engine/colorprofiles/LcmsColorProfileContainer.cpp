@@ -476,7 +476,7 @@ QVector <double> LcmsColorProfileContainer::getWhitePointxyY() const
 QVector <double> LcmsColorProfileContainer::getEstimatedTRC() const
 {
     QVector <double> TRCtriplet(3);
-    if (d->hasColorants) {
+    if (d->hasColorants && hasTRC()) {
         if (cmsIsToneCurveLinear(d->redTRC)) {
             TRCtriplet[0] = 1.0;
         } else {
@@ -509,7 +509,7 @@ QVector <double> LcmsColorProfileContainer::getEstimatedTRC() const
 
 void LcmsColorProfileContainer::LinearizeFloatValue(QVector <double> & Value) const
 {
-    if (d->hasColorants) {
+    if (d->hasColorants && hasTRC()) {
         if (!cmsIsToneCurveLinear(d->redTRC)) {
             Value[0] = cmsEvalToneCurveFloat(d->redTRC, Value[0]);
         }
@@ -529,7 +529,7 @@ void LcmsColorProfileContainer::LinearizeFloatValue(QVector <double> & Value) co
 
 void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) const
 {
-    if (d->hasColorants) {
+    if (d->hasColorants && hasTRC()) {
         if (!cmsIsToneCurveLinear(d->redTRC)) {
             Value[0] = cmsEvalToneCurveFloat(*d->redTRCReverse, Value[0]);
         }
@@ -552,7 +552,7 @@ void LcmsColorProfileContainer::LinearizeFloatValueFast(QVector <double> & Value
     const qreal scale = 65535.0;
     const qreal invScale = 1.0 / scale;
 
-    if (d->hasColorants) {
+    if (d->hasColorants && hasTRC()) {
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
@@ -579,7 +579,7 @@ void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector <double> & Val
     const qreal scale = 65535.0;
     const qreal invScale = 1.0 / scale;
 
-    if (d->hasColorants) {
+    if (d->hasColorants && hasTRC()) {
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {

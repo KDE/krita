@@ -885,7 +885,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
         options.interlace = false;
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
-        options.saveSRGBProfile = false;
+        options.storeColorSpaceInfo = true;
         options.downsample = false;
 
         if (dev->colorSpace()->id() != "RGBA") {
@@ -942,7 +942,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         device = tmp;
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
+    KIS_SAFE_ASSERT_RECOVER(!options.convertFloatToRec2020 || !options.forceSRGB) {
         options.forceSRGB = false;
     }
 
@@ -952,14 +952,18 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     const KoColorProfile *dstProfile = device->colorSpace()->profile();
     bool needColorTransform = false;
 
-    if (options.saveAsHDR || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
+    if (options.convertFloatToRec2020 || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         dstModel = RGBAColorModelID.id();
         dstProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
         needColorTransform = true;
 
-        if (options.saveAsHDR) {
-            dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+        if (options.convertFloatToRec2020) {
+            if (options.floatingPointConversion == ConversionPolicy::ApplyPQ) {
+                dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+            } else {
+                dstProfile = KoColorSpaceRegistry::instance()->p2020G10Profile();
+            }
         }
     }
 
@@ -987,7 +991,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         device->convertTo(dstCs);
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
+    KIS_SAFE_ASSERT_RECOVER(!options.convertFloatToRec2020 || !options.tryToSaveAsIndexed) {
         options.tryToSaveAsIndexed = false;
     }
 
@@ -1120,9 +1124,9 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
      * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
      * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
      */
-    /*if (!options.saveSRGBProfile && sRGB) {
+    if (!options.storeExtraColorChunks && options.storeColorSpaceInfo && sRGB) {
         png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
-    }*/
+    }
 
 
     /** TODO: Firefox still opens the image incorrectly if there is gAMA+cHRM tags
@@ -1199,18 +1203,37 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     // Save the color profile
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
-    if (!sRGB || options.saveSRGBProfile) {
 
+    if (options.storeColorSpaceInfo && !(sRGB && options.storeExtraColorChunks)) {
+
+        bool wroteCICP = false;
+        if (options.writeCicpIfPossible && colorProfile->getColorPrimaries() != PRIMARIES_UNSPECIFIED && colorProfile->getTransferCharacteristics() != TRC_UNSPECIFIED
+            && colorProfile->getColorPrimaries() < 256 && colorProfile->getTransferCharacteristics() < 256) {
+            png_byte primaries = colorProfile->getColorPrimaries();
+            png_byte transfer = colorProfile->getTransferCharacteristics();
+            if (options.floatingPointConversion == ConversionPolicy::ApplyPQ) {
+                transfer = TRC_ITU_R_BT_2100_0_PQ;
+            } else if (options.floatingPointConversion == ConversionPolicy::ApplyHLG) {
+                transfer = TRC_ITU_R_BT_2100_0_HLG;
+            } else if (options.floatingPointConversion == ConversionPolicy::ApplySMPTE428) {
+                transfer = TRC_SMPTE_ST_428_1;
+            }
+            png_byte matrixCoef = 0;
+            png_byte fullRange = 1;
+            png_set_cICP(png_ptr, info_ptr, primaries, transfer, matrixCoef, fullRange);
+            wroteCICP = true;
+        }
+        if (!wroteCICP) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        const char *typeString = !options.saveAsHDR ? "icc" : "ITUR_2100_PQ_FULL";
+        const char *typeString = "icc";
         png_set_iCCP(png_ptr, info_ptr, (png_const_charp)typeString, PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
         // older version of libpng has a problem with constness on the parameters
         char typeStringICC[] = "icc";
-        char typeStringHDR[] = "ITUR_2100_PQ_FULL";
-        char *typeString = !options.saveAsHDR ? typeStringICC : typeStringHDR;
+        char *typeString = typeStringICC;
         png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
+        }
     }
 
     // save comments from the document information

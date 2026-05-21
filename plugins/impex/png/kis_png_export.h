@@ -24,7 +24,6 @@ public:
 
 private Q_SLOTS:
     void on_alpha_toggled(bool checked);
-    void slotUseHDRChanged(bool value);
 };
 
 class KisPNGExport : public KisImportExportFilter

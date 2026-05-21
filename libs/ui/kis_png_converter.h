@@ -11,6 +11,7 @@
 
 #include <QColor>
 
+#include "KoColorTransferFunctions.h"
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
@@ -37,11 +38,14 @@ struct KisPNGOptions {
         , iptc(true)
         , xmp(true)
         , tryToSaveAsIndexed(true)
-        , saveSRGBProfile(false)
         , forceSRGB(false)
         , storeMetaData(false)
         , storeAuthor(false)
-        , saveAsHDR(false)
+        , storeColorSpaceInfo(true)
+        , writeCicpIfPossible(false)
+        , floatingPointConversion(ConversionPolicy::KeepTheSame)
+        , convertFloatToRec2020(false)
+        , storeExtraColorChunks(false)
         , transparencyFillColor(Qt::white)
         , downsample(false)
     {}
@@ -53,11 +57,14 @@ struct KisPNGOptions {
     bool iptc;
     bool xmp;
     bool tryToSaveAsIndexed;
-    bool saveSRGBProfile;
     bool forceSRGB;
     bool storeMetaData;
     bool storeAuthor;
-    bool saveAsHDR;
+    bool storeColorSpaceInfo;
+    bool writeCicpIfPossible;
+    ConversionPolicy floatingPointConversion;
+    bool convertFloatToRec2020;
+    bool storeExtraColorChunks;
     QList<const KisMetaData::Filter*> filters;
     QColor transparencyFillColor;
     bool downsample; // Converts to 8 bit on export

@@ -425,7 +425,7 @@ KisImportExportErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* 
     options.compression = 8;
     options.tryToSaveAsIndexed = false;
     options.transparencyFillColor = QColor(0,0,0);
-    options.saveSRGBProfile = true;                 //TVPaint can use only sRGB
+    options.storeColorSpaceInfo = true;               //TVPaint can use only sRGB
     options.forceSRGB = false;
 
     KisPNGConverter kpc(exportDoc);

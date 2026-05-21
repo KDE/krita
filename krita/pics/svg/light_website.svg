@@ -1,0 +1,36 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M10 9V16L12 13.5L15 13L10 9Z" fill="#D2D2D2"/>
+<path d="M8.21191 1.00488C11.9798 1.11694 15 4.20491 15 8C15 9.12459 14.733 10.1863 14.2617 11.1279L13.3477 10.3975C13.3906 10.4145 13.4338 10.4308 13.4766 10.4482C13.8114 9.70035 14 8.87245 14 8C14 7.12723 13.8116 6.29889 13.4766 5.55078C12.6655 5.88214 11.8301 6.13653 10.9814 6.31445C11.1087 7.06889 11.1467 7.83653 11.1016 8.59961L10.625 8.21875L10.1182 7.8125C10.1091 7.36802 10.0699 6.92412 9.99609 6.48535C8.67184 6.66881 7.32718 6.6689 6.00293 6.48535C5.83457 7.48586 5.83468 8.51314 6.00293 9.51367C6.99613 9.37602 8.00098 9.34133 9 9.41016V10.4131C8.07463 10.3446 7.14347 10.3703 6.22266 10.4922C6.56363 11.6849 7.1569 12.8088 8 13.7666C8.38719 13.3267 8.71864 12.8502 9 12.3496V14.9268C8.67329 14.9735 8.33964 15 8 15C4.13401 15 1 11.866 1 8C1 4.20557 4.01911 1.11795 7.78613 1.00488H7.78711C7.85783 1.00277 7.92877 1 8 1C8.07091 1 8.14151 1.00279 8.21191 1.00488ZM5.23242 10.6611C4.47685 10.819 3.73258 11.0423 3.00879 11.3311C3.87254 12.6227 5.22464 13.5591 6.80078 13.8789C6.06961 12.9061 5.54704 11.8101 5.23242 10.6611ZM2.52246 5.55078C2.18749 6.29879 2 7.12737 2 8C2 8.87231 2.18771 9.70045 2.52246 10.4482C3.33338 10.1167 4.16904 9.86252 5.01758 9.68457C4.82981 8.57101 4.82971 7.428 5.01758 6.31445C4.16899 6.13648 3.33345 5.88222 2.52246 5.55078ZM8 2.23242C7.15686 3.19014 6.56374 4.31419 6.22266 5.50684C7.40162 5.66285 8.5974 5.66277 9.77637 5.50684C9.43527 4.31429 8.84308 3.19007 8 2.23242ZM6.80176 2.12012C5.22541 2.43963 3.87276 3.37635 3.00879 4.66797C3.73266 4.95656 4.47681 5.17999 5.23242 5.33789C5.54718 4.18881 6.07027 3.09292 6.80176 2.12012ZM9.19727 2.12012C9.92861 3.09302 10.4518 4.18874 10.7666 5.33789C11.5222 5.18004 12.2663 4.95648 12.9902 4.66797C12.1261 3.37632 10.7738 2.43941 9.19727 2.12012Z" fill="#D2D2D2"/>
+</svg>

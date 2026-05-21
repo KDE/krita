@@ -4,6 +4,14 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_get_started.svg</file>
+        <file>light_get_started.svg</file>
+        <file>dark_code.svg</file>
+        <file>light_code.svg</file>
+        <file>dark_comunity.svg</file>
+        <file>light_comunity.svg</file>
+        <file>dark_website.svg</file>
+        <file>light_website.svg</file>
         <file>dark_calligraphy_decrease_width.svg</file>
         <file>light_calligraphy_decrease_width.svg</file>
         <file>dark_calligraphy_decrease_angle.svg</file>

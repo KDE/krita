@@ -1,0 +1,37 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M8.00002 9C9.38073 9 10.5 7.88071 10.5 6.5C10.5 5.11929 9.38073 4 8.00002 4C6.61931 4 5.50002 5.11929 5.50002 6.5C5.50002 7.88071 6.61931 9 8.00002 9Z" fill="#D2D2D2"/>
+<path d="M8 10C10.216 10 12 10.892 12 12V14H4V12C4 10.892 5.784 10 8 10Z" fill="#D2D2D2"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 8C4.29553 8 4.58339 8.01577 4.86035 8.0459C5.09726 8.52534 5.44031 8.94297 5.85938 9.26758C5.44779 9.3771 5.0646 9.51897 4.72168 9.69043C3.88962 10.1065 3 10.8652 3 12H0V10C0 8.892 1.784 8 4 8ZM12 8C14.216 8 16 8.892 16 10V12H13C13 10.8652 12.1104 10.1065 11.2783 9.69043C10.9351 9.51884 10.5516 9.37714 10.1396 9.26758C10.5588 8.94302 10.9016 8.52524 11.1387 8.0459C11.4159 8.0157 11.7041 8 12 8ZM4 2C5.00829 2 5.87416 2.59829 6.26953 3.45801C5.21285 4.06041 4.5 5.19664 4.5 6.5C4.5 6.64989 4.51001 6.79749 4.52832 6.94238C4.35791 6.97907 4.18138 7 4 7C2.6193 6.99999 1.5 5.88071 1.5 4.5C1.5 3.11929 2.6193 2.00001 4 2ZM12 2C13.3807 2 14.5 3.11929 14.5 4.5C14.5 5.88071 13.3807 7 12 7C11.8183 7 11.6414 6.9792 11.4707 6.94238C11.489 6.79746 11.5 6.64994 11.5 6.5C11.5 5.19633 10.7866 4.0603 9.72949 3.45801C10.1248 2.59809 10.9916 2.00001 12 2Z" fill="#D2D2D2"/>
+</svg>

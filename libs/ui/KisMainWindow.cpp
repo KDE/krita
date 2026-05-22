@@ -1329,6 +1329,11 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         saveas = true;
     }
 
+    QFile target(document->path());
+    if (!target.exists()) { // Possible when file is moved/unmounted during Krita session.
+        saveas = true;
+    }
+
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(document, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 

@@ -650,11 +650,13 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 
     // Read resolution
     int unit_type;
-    png_uint_32 x_resolution, y_resolution;
+    png_uint_32 x_resolution = 0, y_resolution = 0;
 
     png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
     if (x_resolution > 0 && y_resolution > 0 && unit_type == PNG_RESOLUTION_METER) {
         m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from point-per-inch to points
+    } else if (unit_type == PNG_RESOLUTION_UNKNOWN) {
+        m_image->setResolution(100.0, 100.0);
     }
 
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);

@@ -192,6 +192,9 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 
 void KisZoomAction::inputEvent( QEvent* event )
 {
+    if(!event) {
+        return;
+    }
     switch (event->type()) {
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);

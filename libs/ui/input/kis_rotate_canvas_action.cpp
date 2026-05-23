@@ -167,6 +167,10 @@ void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const Q
 
 void KisRotateCanvasAction::inputEvent(QEvent* event)
 {
+    if(!event) {
+        return;
+    }
+
     switch (event->type()) {
         case QEvent::NativeGesture: {
             QNativeGestureEvent *gevent = static_cast<QNativeGestureEvent*>(event);

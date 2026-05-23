@@ -214,6 +214,10 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event)
 
 QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
 
+    if(!event) {
+        return QPoint();
+    }
+
     switch (event->type()) {
     case QEvent::MouseMove:
     case QEvent::MouseButtonPress:

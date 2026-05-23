@@ -125,6 +125,9 @@ void KisPanAction::end(QEvent *event)
 
 void KisPanAction::inputEvent(QEvent *event)
 {
+    if(!event) {
+        return;
+    }
     switch (event->type()) {
         case QEvent::Gesture: {
             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
@@ -164,6 +167,10 @@ void KisPanAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &p
 
 QPointF KisPanAction::Private::averagePoint( QTouchEvent* event, int *outCount )
 {
+    if(!event) {
+        return QPointF();
+    }
+
     QPointF result;
     int count = 0;
 

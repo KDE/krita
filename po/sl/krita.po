@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-12 00:42+0000\n"
+"POT-Creation-Date: 2026-05-23 00:41+0000\n"
 "PO-Revision-Date: 2026-05-10 11:23+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -21740,7 +21740,7 @@ msgstr "Obdelovanje"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1435
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1440
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22506,8 +22506,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Slika RGBE Radiance"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2132
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2137
+#: libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid "Import frames"
 msgstr "Uvozi sličice"
@@ -23860,9 +23860,9 @@ msgstr "Krajevni viri"
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/KisMainWindow.cpp:1216 libs/ui/KisMainWindow.cpp:1313
-#: libs/ui/KisMainWindow.cpp:1992 libs/ui/KisMainWindow.cpp:2001
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2199
-#: libs/ui/KisMainWindow.cpp:2218 libs/ui/KisMainWindow.cpp:2850
+#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:192 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24409,7 +24409,7 @@ msgid "Delete resource"
 msgstr "Izbriši vir"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2647
+#: libs/ui/KisMainWindow.cpp:2652
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24862,7 +24862,7 @@ msgstr ""
 "Upodabljanje sličic animacije ni uspelo! Izhodne datoteke so nepopolne."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2245
 #, kde-format
 msgid "Render Animation"
 msgstr "Izriši animacijo"
@@ -26985,7 +26985,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Vnesite novo ime sloga"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -36100,29 +36100,29 @@ msgstr ""
 "\n"
 "Izberite mesto, kjer prvotna datoteka ne bo prepisana!"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1375
 #, kde-format
 msgid "Exporting"
 msgstr "Izvažanje"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1375
 #, kde-format
 msgid "Saving As"
 msgstr "Shranjevanje pod drugim imenom"
 
-#: libs/ui/KisMainWindow.cpp:1961
+#: libs/ui/KisMainWindow.cpp:1966
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Plasti/maske"
 
-#: libs/ui/KisMainWindow.cpp:1987
+#: libs/ui/KisMainWindow.cpp:1992
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Nimate omogočenih svežnjev virov."
 
-#: libs/ui/KisMainWindow.cpp:1991
+#: libs/ui/KisMainWindow.cpp:1996
 #, kde-format
 msgid ""
 "\n"
@@ -36133,7 +36133,7 @@ msgstr ""
 "Prednastavitev čopiča ni na voljo. Pred nadaljevanjem omogočite sveženj, ki "
 "vsebuje prednastavitve.\n"
 
-#: libs/ui/KisMainWindow.cpp:2001
+#: libs/ui/KisMainWindow.cpp:2006
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36144,7 +36144,7 @@ msgstr ""
 "\n"
 "Na voljo so samo vaši krajevni viri."
 
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36153,40 +36153,40 @@ msgstr ""
 "Animacije ni bilo mogoče do konca uvoziti:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2199
+#: libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Ustvarjanje novega dokumenta ni uspelo. Uvoz animacije je prekinjen."
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2643
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Uvozi delovne površine ..."
 
-#: libs/ui/KisMainWindow.cpp:2653
+#: libs/ui/KisMainWindow.cpp:2658
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nova delovna površina ..."
 
-#: libs/ui/KisMainWindow.cpp:2657
+#: libs/ui/KisMainWindow.cpp:2662
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nova delovna površina ..."
 
-#: libs/ui/KisMainWindow.cpp:2701
+#: libs/ui/KisMainWindow.cpp:2706
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2704
+#: libs/ui/KisMainWindow.cpp:2709
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2878
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36195,19 +36195,19 @@ msgstr ""
 "Vstavek za upravljanje barv Krita LittleCMS ni nameščen. Krita se bo zdaj "
 "zaprla."
 
-#: libs/ui/KisMainWindow.cpp:2889
+#: libs/ui/KisMainWindow.cpp:2894
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Napaka pri namestitvi"
 
-#: libs/ui/KisMainWindow.cpp:2999
+#: libs/ui/KisMainWindow.cpp:3004
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teme"
 
-#: libs/ui/KisMainWindow.cpp:3058
+#: libs/ui/KisMainWindow.cpp:3063
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Razširitveni razmikalnik"

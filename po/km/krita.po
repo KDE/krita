@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-12 00:42+0000\n"
+"POT-Creation-Date: 2026-05-23 00:41+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -21992,7 +21992,7 @@ msgstr "ក្រោយ​ដំណើរការ"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1435
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1440
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22761,8 +22761,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "បំបែក​រូបភាព"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2132
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2137
+#: libs/ui/KisMainWindow.cpp:2216
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "នាំ​ចូល​រូបភាព"
@@ -24138,9 +24138,9 @@ msgstr "ឯកសារ​ប្រភព ៖"
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/KisMainWindow.cpp:1216 libs/ui/KisMainWindow.cpp:1313
-#: libs/ui/KisMainWindow.cpp:1992 libs/ui/KisMainWindow.cpp:2001
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2199
-#: libs/ui/KisMainWindow.cpp:2218 libs/ui/KisMainWindow.cpp:2850
+#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:192 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24704,7 +24704,7 @@ msgid "Delete resource"
 msgstr "លុប​ទាំងអស់"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2647
+#: libs/ui/KisMainWindow.cpp:2652
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -25153,7 +25153,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "បង្កើត​សកម្មភាព​បាន​បរាជ័យ ។"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2245
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "ទិស"
@@ -27224,7 +27224,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "ជក់​ដែល​បានកំណត់​ជា​ស្រេច"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -36120,29 +36120,29 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1375
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "កា​របង្ហាញ"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1375
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "បើក​នៅ​ក្នុង​ឯកសារ​ថ្មី"
 
-#: libs/ui/KisMainWindow.cpp:1961
+#: libs/ui/KisMainWindow.cpp:1966
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "រក្សា​ទុក​ស្រទាប់​ជា​រូបភាព..."
 
-#: libs/ui/KisMainWindow.cpp:1987
+#: libs/ui/KisMainWindow.cpp:1992
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: libs/ui/KisMainWindow.cpp:1991
+#: libs/ui/KisMainWindow.cpp:1996
 #, kde-format
 msgid ""
 "\n"
@@ -36150,7 +36150,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2001
+#: libs/ui/KisMainWindow.cpp:2006
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36159,48 +36159,48 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ្មី %1"
 
-#: libs/ui/KisMainWindow.cpp:2199
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "បង្កើត​សកម្មភាព​បាន​បរាជ័យ ។"
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2643
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "តំបន់​ធ្វើ​ការ​"
 
-#: libs/ui/KisMainWindow.cpp:2653
+#: libs/ui/KisMainWindow.cpp:2658
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "តំបន់​ធ្វើ​ការ​"
 
-#: libs/ui/KisMainWindow.cpp:2657
+#: libs/ui/KisMainWindow.cpp:2662
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "តំបន់​ធ្វើ​ការ​"
 
-#: libs/ui/KisMainWindow.cpp:2701
+#: libs/ui/KisMainWindow.cpp:2706
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2704
+#: libs/ui/KisMainWindow.cpp:2709
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2878
 #, fuzzy, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36208,19 +36208,19 @@ msgid ""
 msgstr ""
 "កម្មវិធី​​អំពី​ការ​គ្រប់គ្រង​ពណ៌​ Calligra LittleCMS ​គឺ​មិន​ត្រូវ​បាន​ដំឡើង ។ Krita នឹង​បោះ​បង់​ឥឡូវ​នេះ ។"
 
-#: libs/ui/KisMainWindow.cpp:2889
+#: libs/ui/KisMainWindow.cpp:2894
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "កំហុស​ក្នុង​ការ​ដំឡើង​"
 
-#: libs/ui/KisMainWindow.cpp:2999
+#: libs/ui/KisMainWindow.cpp:3004
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3058
+#: libs/ui/KisMainWindow.cpp:3063
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-12 00:42+0000\n"
+"POT-Creation-Date: 2026-05-23 00:41+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -21952,7 +21952,7 @@ msgstr "Memproses"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1435
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1440
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22750,8 +22750,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr ""
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2132
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2137
+#: libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid "Import frames"
 msgstr "Impor frame"
@@ -24176,9 +24176,9 @@ msgstr "Sumber Daya Lokal"
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/KisMainWindow.cpp:1216 libs/ui/KisMainWindow.cpp:1313
-#: libs/ui/KisMainWindow.cpp:1992 libs/ui/KisMainWindow.cpp:2001
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2199
-#: libs/ui/KisMainWindow.cpp:2218 libs/ui/KisMainWindow.cpp:2850
+#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:192 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24754,7 +24754,7 @@ msgid "Delete resource"
 msgstr "Hapus sumber daya"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2647
+#: libs/ui/KisMainWindow.cpp:2652
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25221,7 +25221,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Gagal merender frame animasi!"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2245
 #, kde-format
 msgid "Render Animation"
 msgstr "Render Animasi"
@@ -27316,7 +27316,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -36309,22 +36309,22 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1375
 #, kde-format
 msgid "Exporting"
 msgstr "Pengeksporan"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1375
 #, kde-format
 msgid "Saving As"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1961
+#: libs/ui/KisMainWindow.cpp:1966
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lapisan/Mask"
 
-#: libs/ui/KisMainWindow.cpp:1987
+#: libs/ui/KisMainWindow.cpp:1992
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
@@ -36336,7 +36336,7 @@ msgstr ""
 "Anda sama sekali tidak memiliki\n"
 "dokumen yang dibuka baru-baru ini"
 
-#: libs/ui/KisMainWindow.cpp:1991
+#: libs/ui/KisMainWindow.cpp:1996
 #, kde-format
 msgid ""
 "\n"
@@ -36344,7 +36344,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2001
+#: libs/ui/KisMainWindow.cpp:2006
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -36353,7 +36353,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not render animation:\n"
@@ -36365,62 +36365,62 @@ msgstr ""
 "Tidak bisa merender animasi:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2199
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Gagal merender frame animasi!"
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2643
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Impor Ruang Kerja..."
 
-#: libs/ui/KisMainWindow.cpp:2653
+#: libs/ui/KisMainWindow.cpp:2658
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Ruang Kerja &Baru..."
 
-#: libs/ui/KisMainWindow.cpp:2657
+#: libs/ui/KisMainWindow.cpp:2662
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ruang Kerja Baru..."
 
-#: libs/ui/KisMainWindow.cpp:2701
+#: libs/ui/KisMainWindow.cpp:2706
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2704
+#: libs/ui/KisMainWindow.cpp:2709
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2878
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2889
+#: libs/ui/KisMainWindow.cpp:2894
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Galat Penginstalan"
 
-#: libs/ui/KisMainWindow.cpp:2999
+#: libs/ui/KisMainWindow.cpp:3004
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Tema-tema"
 
-#: libs/ui/KisMainWindow.cpp:3058
+#: libs/ui/KisMainWindow.cpp:3063
 #, fuzzy, kde-format
 #| msgid "Fill Patterns"
 msgid "Expanding Spacer"

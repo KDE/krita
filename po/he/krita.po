@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-23 02:38+0000\n"
-"PO-Revision-Date: 2026-05-22 23:11+0300\n"
+"PO-Revision-Date: 2026-05-23 17:03+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -5292,11 +5292,11 @@ msgid "HR Wall Paper"
 msgstr "&שכבה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Maze_lines.png"
 msgid "Maze lines"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "קווי מבוך"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5802,7 +5802,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/bundles/RGBA_brushes.bundle:brushes/Craig_02.png"
 msgid "Craig 02"
-msgstr ""
+msgstr "קרייג 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5909,7 +5909,7 @@ msgstr "1. חזית לשקיפות"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_eroded.gih"
 msgid "3_eroded"
-msgstr ""
+msgstr "3_נסחף"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_bamboo-leaves.gih:1
@@ -5944,34 +5944,34 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_distant-"
 "mountain.gih"
 msgid "A-4 distant-mountain"
-msgstr ""
+msgstr "א-4 הר-מרוחק"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dynamic-brush.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dynamic-"
 "brush.gih"
 msgid "A - 2 Dynamic Brush"
-msgstr "שכפל תמונה"
+msgstr "א - 2 מכחול דינמי"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dynamic-brush3.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dynamic-"
 "brush3.gih"
 msgid "A-2 Dynamic brush 2"
-msgstr "שכפל תמונה"
+msgstr "א-2 מכחול דינמי 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-brush2.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-"
 "brush2.gih"
 msgid "A -2 Eroded Brush 2"
-msgstr "&לבן"
+msgstr "א -2 מכחול שנסחף 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-cercle-anim.gih:1
@@ -5993,12 +5993,12 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-dirtybrush-anim.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-"
 "dirtybrush-anim.gih"
 msgid "A - 2 Dirty Brush"
-msgstr "&לבן"
+msgstr "א - 2 מכחול מלוכלך"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-knife-anim.gih:1
@@ -6011,12 +6011,12 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-dust.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-dust."
 "gih"
 msgid "A-4 Fairy Dust"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "א-4 אבק פיות"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_floor.gih:1
@@ -6024,7 +6024,7 @@ msgstr "שינוי קנה מידה של שכבה..."
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_floor.gih"
 msgid "A-4 Floor"
-msgstr "A-4 רצפה"
+msgstr "א-4 רצפה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_flowers.gih:1
@@ -6032,7 +6032,7 @@ msgstr "A-4 רצפה"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_flowers.gih"
 msgid "A-4 Flower"
-msgstr "A-4 פרח"
+msgstr "א-4 פרח"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_forest.gih:1
@@ -6040,7 +6040,7 @@ msgstr "A-4 פרח"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_forest.gih"
 msgid "A-4 Forest"
-msgstr "A-4 יער"
+msgstr "א-4 יער"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fur.gih:1
@@ -6048,16 +6048,16 @@ msgstr "A-4 יער"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fur.gih"
 msgid "A-4 Fur"
-msgstr "A-4 פרווה"
+msgstr "א-4 פרווה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-floor.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-floor."
 "gih"
 msgid "A-4 Grass-Floor"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "א-4 רצפת-דשא"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_herbs.gih:1
@@ -6065,7 +6065,7 @@ msgstr "שינוי קנה מידה של שכבה..."
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_herbs.gih"
 msgid "A-4 herbs"
-msgstr "A-4 צמחים"
+msgstr "א-4 צמחים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_leaves-mapple.gih:1
@@ -6074,7 +6074,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_leaves-"
 "mapple.gih"
 msgid "A-4 Leaves Mapples"
-msgstr "A-4 עלי מייפל"
+msgstr "א-4 עלי מייפל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_leaves.gih:1
@@ -6082,7 +6082,7 @@ msgstr "A-4 עלי מייפל"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_leaves.gih"
 msgid "A-4 Leaves"
-msgstr "A-4 עלים"
+msgstr "א-4 עלים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_mineral-cristal.gih:1
@@ -6091,7 +6091,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_mineral-"
 "cristal.gih"
 msgid "A-3 minerals"
-msgstr "A-3 מינרלים"
+msgstr "א-3 מינרלים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_pin.gih:1
@@ -6099,7 +6099,7 @@ msgstr "A-3 מינרלים"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_pin.gih"
 msgid "A-4 Pin"
-msgstr "A-4 נעץ"
+msgstr "א-4 נעץ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_random-vegetal.gih:1
@@ -6134,7 +6134,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_rocks.gih"
 msgid "A-3 Rocks"
-msgstr "A-3 סלעים"
+msgstr "א-3 סלעים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_snow-pack.gih:1
@@ -6146,19 +6146,19 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_splat2.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_splat2.gih"
 msgid "A-2 Splat"
-msgstr "ציור קו על ידי עט"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_starfield.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_starfield.gih"
 msgid "A-4 starfield intense"
-msgstr "כלי &עט"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-texture.gih:1
@@ -6167,7 +6167,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-texture."
 "gih"
 msgid "A-4 Wall"
-msgstr "A-4 קיר"
+msgstr "א-4 קיר"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/D_Dust_Particles.gih:1
@@ -28640,7 +28640,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:159
 #, kde-format
 msgid "Color profile for imported EXR files:"
-msgstr ""
+msgstr "פרופיל צבע לקובצי EXR מיובאים:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:178
@@ -28652,7 +28652,7 @@ msgstr "להשתמש בפרופיל צג מערכת"
 #: libs/ui/forms/wdgcolorsettings.ui:188
 #, kde-format
 msgid "The icm profile for your calibrated monitor"
-msgstr ""
+msgstr "פרופיל ה־icm לצג המכויל שלך"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:191

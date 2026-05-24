@@ -352,7 +352,7 @@ public:
      * Find a KoColorProfile that matches a given QColorSpace.
      * This will use the QColorSpace::IccProfile function as a
      * last resort, preferring to use preexisting profiles in the
-     * registery.
+     * registry.
      * @param space -- space to return the profile for.
      * @return A Profile for the given QColorSpace, may be null if nothing was found.
      */

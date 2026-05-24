@@ -169,7 +169,7 @@ public:
      * Try create a layer of this type from multiple layers (of the same type).
      *
      * The implementation will check if all the layers passed as \p layer have
-     * the same type, verify if they could be merged in a non-rasterizing fasion,
+     * the same type, verify if they could be merged in a non-rasterizing fashion,
      * merge them and return the layer of the proper type.
      *
      * Currently only used for merging a set of shape layers into a single shape
@@ -338,7 +338,7 @@ protected:
      * For KisLayer classes change rect transformation consists of two
      * parts: incoming and outgoing.
      *
-     * 1) incomingChangeRect(rect) chande rect transformation
+     * 1) incomingChangeRect(rect) change rect transformation
      *    performed by the transformations done basing on global
      *    projection. It is performed in KisAsyncMerger +
      *    KisUpdateOriginalVisitor classes. It happens before data

@@ -332,7 +332,7 @@ struct CFColorBurn : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<
         using namespace Arithmetic;
 
         /**
-         * dst-unit is a stable point of color-burn belndmode,
+         * dst-unit is a stable point of color-burn blendmode,
          * it never changes, whatever the value of src channel
          */
         if (isUnitValueStrict(dst)) {

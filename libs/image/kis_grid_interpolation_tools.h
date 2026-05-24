@@ -326,7 +326,7 @@ struct PaintDevicePolygonOp
 
     /**
      * IMPORTANT: When setCanMergeRects() is set to `true`,
-     * the caller should calls finalilze() in the end of
+     * the caller should calls finalize() in the end of
      * the processing action to actually copy all the lazily
      * postponed rects.
      */
@@ -500,7 +500,7 @@ struct QImagePolygonOp
 
     /**
      * IMPORTANT: When setCanMergeRects() is set to `true`,
-     * the caller should calls finalilze() in the end of
+     * the caller should calls finalize() in the end of
      * the processing action to actually copy all the lazily
      * postponed rects.
      */

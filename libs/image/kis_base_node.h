@@ -338,7 +338,7 @@ public:
      *
      * If thumbnail generator notices a slowdown it switches the layer's
      * thumbnail generation into `Coarse` mode, which will force thumbnails
-     * to be genrated from extent() of the device instead.
+     * to be generated from extent() of the device instead.
      */
     KisThumbnailBoundsMode preferredThumbnailBoundsMode() const;
 

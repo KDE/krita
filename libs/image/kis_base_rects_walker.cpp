@@ -11,7 +11,7 @@ void KisBaseRectsWalker::addCloneSourceRegenerationJobs()
 {
     /**
      * Copy all suitable clone layers' jobs into a separate
-     * vector to make sure we don't have hangling iterators
+     * vector to make sure we don't have dangling iterators
      * caused by calling to visitSubtreeTopToBottom() in the
      * loop
      */

@@ -27,7 +27,7 @@ struct KoAdditiveBlendingPolicy
 };
 
 /**
- * @brief a plending policy used for subtractive color spaces (e.g. CMYK)
+ * @brief a blending policy used for subtractive color spaces (e.g. CMYK)
  *
  * In CMYK we should first invert the colors to make them "additive",
  * and then blend.

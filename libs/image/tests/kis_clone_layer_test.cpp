@@ -533,7 +533,7 @@ void KisCloneLayerTest::testUpdatesWhileHidden()
         /**
          * TODO: We have some issues with updating a layer outside the image bounds
          * when its clone is hidden. When the clone is made visible again, this hidden
-         * area is not vidible. To fix this, we need to perform "change-rect-based"-
+         * area is not visible. To fix this, we need to perform "change-rect-based"-
          * update instead of "dirty-rect-based"-update. In the current terms, it means
          * that we should do refreshGraphAsync() on any visibility change. But our system
          * is not fully designed to incorporate that. We usually keep the content of the

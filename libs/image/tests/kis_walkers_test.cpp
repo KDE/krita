@@ -133,7 +133,7 @@ QString nodeTypeString(KisMergeWalker::NodePosition position)
     else if(position & KisMergeWalker::N_FILTHY_PROJECTION)
         string+="_PROJE*";
     else if(position & KisMergeWalker::N_FILTHY_ORIGINAL)
-        string+="_ORIGI*_WARNINIG!!!: NOT USED";
+        string+="_ORIGI*_WARNING!!!: NOT USED";
     else if(position & KisMergeWalker::N_BELOW_FILTHY)
         string+="_BELOW ";
     else if(position & KisMergeWalker::N_EXTRA)

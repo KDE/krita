@@ -489,7 +489,7 @@ void TestColorConversionSystem::testCmykBitnessConversion()
 //    qDebug() << ppVar(color2);
 
     /**
-     * For some reason out CMYK color spaces don't support rount-tripping
+     * For some reason out CMYK color spaces don't support round-tripping
      * to-from 16-bit representation. So the code that relies on that should
      * use KoOptimizedCmykPixelDataScalerU8ToU16Factory::create().
      */

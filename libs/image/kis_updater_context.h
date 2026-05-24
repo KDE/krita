@@ -103,7 +103,7 @@ public:
      *
      * If there is any contestion on the context's mutex, the function
      * will simply return false, whatever context's state really is.
-     * Obviosly, if there is a contestion, the object is not "idle" :)
+     * Obviously, if there is a contention, the object is not "idle" :)
      */
     bool isIdle() const;
 

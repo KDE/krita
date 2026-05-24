@@ -49,7 +49,7 @@ public:
 
 
     /**
-     * Set the generator to produce simpile outline, skipping outline that are fully enclosed
+     * Set the generator to produce simple outline, skipping outline that are fully enclosed
      * @param simple set simple mode, if true enclosed outline will be skipped
      **/
     void setSimpleOutline(bool simple);

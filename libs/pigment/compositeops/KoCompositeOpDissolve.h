@@ -34,7 +34,7 @@ public:
     void composite(const KoCompositeOp::ParameterInfo& params) const override {
         /**
          * Initialize local per-thread random generator from the global one, it will
-         * reduce contestion over the global generator in the main compositing loop.
+         * reduce contention over the global generator in the main compositing loop.
          *
          * KisRandomSource is automatically initialized from QRandomGenerator::global()
          * internally.

@@ -778,14 +778,12 @@ void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)
     if (!m_d->strokeId) return;
 
     KisImageSP image = m_d->canvas->image();
-
-    dbgUI << "Original doc point in slotAddSamplingJob:" << docPoint;
     const QPoint imagePoint = image->documentToImagePixelFloored(docPoint);
 
     if (!m_d->sampleCurrentLayer) {
         KisSharedPtr<KisReferenceImagesLayer> referencesLayer = m_d->canvas->imageView()->document()->referenceImagesLayer();
         if (referencesLayer && m_d->canvas->referenceImagesDecoration()->visible()) {
-            KoColor color = referencesLayer->getPixel(imagePoint);
+            KoColor color = referencesLayer->getPixel(docPoint);
             if (color.opacityU8() > 0) {
                 slotColorSamplingFinished(color);
                 return;

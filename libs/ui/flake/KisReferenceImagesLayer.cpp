@@ -251,19 +251,18 @@ QRectF KisReferenceImagesLayer::boundingImageRect() const
     return converter()->documentToView(boundingRect());
 }
 
-KoColor KisReferenceImagesLayer::getPixel(QPointF position) const
+KoColor KisReferenceImagesLayer::getPixel(QPointF docPosition) const
 {
     KoColor transparent;
     transparent.setOpacity(0.0);
-    const QPointF docPoint = converter()->viewToDocument(position);
 
-    KoShape *shape = shapeManager()->shapeAt(docPoint);
+    KoShape *shape = shapeManager()->shapeAt(docPosition);
 
     if (shape) {
         auto *reference = dynamic_cast<KisReferenceImage*>(shape);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, transparent);
 
-        return reference->getPixel(docPoint);
+        return reference->getPixel(docPosition);
     }
 
     return transparent;

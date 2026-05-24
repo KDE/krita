@@ -648,6 +648,10 @@
       <url>https://krita.org/en/posts/2026/krita-5.3.2-released/</url>
       <description>
         <p>A minor bugfix release for the Krita Stable channel</p>
+        <p xml:lang="es">Una versión de corrección de fallos menores para el canal estable de Krita.</p>
+        <p xml:lang="nl">Een minder belangrijke uitgave met reparaties van fouten voor het kanaal Krita Stabiel</p>
+        <p xml:lang="pt-BR">Uma pequena atualização com correções de bugs para o canal estável do Krita</p>
+        <p xml:lang="uk">Проміжний випуск із виправленнями вад для каналу Krita Stable</p>
       </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">

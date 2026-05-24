@@ -377,7 +377,7 @@ KoColor KisReferenceImage::getPixel(QPointF position)
     transparent.setOpacity(0.0);
     if (transparency() == 1.0) return transparent;
 
-    const QPointF localPosition = documentToPixel(position);
+    const QPoint localPosition = documentToPixelFloored(position);
 
     if (d->cachedImage.isNull()) {
         d->updateCache();
@@ -391,7 +391,7 @@ KoColor KisReferenceImage::getPixel(QPointF position)
 #endif
 
     KoColor c(cs);
-    QColor pixel = d->cachedImage.pixelColor(localPosition.toPoint());
+    QColor pixel = d->cachedImage.pixelColor(localPosition);
     QVector<float> channels = {
         static_cast<float>(pixel.blueF()),
         static_cast<float>(pixel.greenF()),

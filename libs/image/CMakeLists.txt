@@ -131,6 +131,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_transform_processing_visitor.cpp
    processing/kis_mirror_processing_visitor.cpp
    processing/KisSelectionBasedProcessingHelper.cpp
+   processing/KisContentLightLevelProcessingVistor.cpp
    filter/kis_filter.cc
    filter/kis_filter_category_ids.cpp
    filter/kis_filter_configuration.cc

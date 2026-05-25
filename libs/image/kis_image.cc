@@ -20,6 +20,7 @@
 
 #include <klocalizedstring.h>
 
+#include "KisContentLightLevelProcessingVistor.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorProfile.h"
@@ -100,6 +101,7 @@
 #include "KisBusyWaitBroker.h"
 #include <KisStaticInitializer.h>
 #include "KisImageGlobalSelectionManagementInterface.h"
+#include "kis_hdr_metadata.h"
 
 
 // #define SANITY_CHECKS
@@ -277,6 +279,10 @@ public:
     QAtomicInt disableDirtyRequests;
 
     KisCompositeProgressProxy compositeProgressProxy;
+
+    std::optional<KisContentLightLevelInformation> contentLightLevelInformation;
+    std::optional<KisColorVolumeInformation> colorVolumeInformation;
+    std::optional<double> diffuseWhiteLightLevel;
 
     QPointF axesCenter;
     bool allowMasksOnRootNode = false;
@@ -2077,6 +2083,58 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
     endStroke(id);
 
     return true;
+}
+
+std::optional<KisContentLightLevelInformation> KisImage::contentLightLevelInformation() const
+{
+    return m_d->contentLightLevelInformation;
+}
+
+void KisImage::calculateContentLightLevelInformation()
+{
+
+    KisImageSignalVector emitSignals;
+    KUndo2MagicString actionName;
+    KisProcessingApplicator::ProcessingFlags signalFlags = KisProcessingApplicator::NO_UI_UPDATES;
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE | signalFlags,
+                                       emitSignals, actionName);
+
+    KisSharedPtr<KisContentLightLevelProcessingVistor> visitor = new KisContentLightLevelProcessingVistor();
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
+    applicator.end();
+
+    waitForDone();
+    m_d->contentLightLevelInformation = std::make_optional(visitor->contentLightLevelInformation());
+    emit sigContentLightLevelInformationChanged();
+}
+
+std::optional<KisColorVolumeInformation> KisImage::colorVolumeInformation() const
+{
+    return m_d->colorVolumeInformation;
+}
+
+void KisImage::setColorVolumeInformation(const std::optional<KisColorVolumeInformation> cvi)
+{
+    if (!m_d->colorVolumeInformation ||
+        !(*m_d->colorVolumeInformation == *cvi)) {
+        m_d->colorVolumeInformation = cvi;
+        emit sigColorVolumeInformationChanged();
+    }
+}
+
+std::optional<double> KisImage::diffuseWhiteLightLevel() const
+{
+    return m_d->diffuseWhiteLightLevel;
+}
+
+void KisImage::setDiffuseWhiteLightLevel(const std::optional<double> cdm2)
+{
+    if (!m_d->diffuseWhiteLightLevel ||
+        !qFuzzyCompare(*m_d->diffuseWhiteLightLevel, *cdm2)) {
+        m_d->diffuseWhiteLightLevel = cdm2;
+        emit sigDiffuseWhiteLightLevelChanged();
+    }
 }
 
 void KisImage::stopIsolatedMode()

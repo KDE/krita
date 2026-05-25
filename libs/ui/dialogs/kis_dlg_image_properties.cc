@@ -19,6 +19,7 @@
 #include <kis_config.h>
 #include <kis_signal_compressor.h>
 #include <kis_image_config.h>
+#include "kis_hdr_metadata.h"
 #include "kis_layer_utils.h"
 #include <kis_display_color_converter.h>
 #include <KisWidgetConnectionUtils.h>
@@ -29,6 +30,7 @@ struct KisDlgImageProperties::Private {
     Private(KisDisplayColorConverter *colorConverter)
         : compressor(KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
         , colorConverter(colorConverter)
+        , colorVolumeCompressor(KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
     {
     }
     KisImageWSP image;
@@ -37,6 +39,7 @@ struct KisDlgImageProperties::Private {
     QLabel *colorWarningLabel {0};
     KisSignalCompressor compressor ;
     KisDisplayColorConverter *colorConverter;
+    KisSignalCompressor colorVolumeCompressor;
 };
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorConverter *colorConverter, QWidget *parent, const char *name)
@@ -108,6 +111,33 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
             &KisProofingOptionsWidget::sigProofingConfigChanged,
             this,
             &KisDlgImageProperties::setProofingConfigToImage);
+
+    updateHDRLightLevels();
+    updateHDRColorVolume();
+    connect(m_page->btnCalculateClli, &QPushButton::clicked, d->image, &KisImage::calculateContentLightLevelInformation);
+    connect(d->image, &KisImage::sigContentLightLevelInformationChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
+    connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
+    connect(d->image, &KisImage::sigColorVolumeInformationChanged, this, &KisDlgImageProperties::updateHDRColorVolume);
+
+    connect(m_page->gbxDiffuseWhite, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
+    connect(m_page->spnDiffuseWhite, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
+
+    m_page->cmbColorVolumePresets->addItem(i18n("Rec. 2100 PQ"), "p2100-pq");
+    m_page->cmbColorVolumePresets->addItem(i18n("DCI-P3 D65"), "dci-p3-d65");
+
+    connect(m_page->cmbColorVolumePresets, &QComboBox::activated, this, &KisDlgImageProperties::changeColorVolumePreset);
+    connect(m_page->gbxColorVolume, &QGroupBox::clicked, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnWhiteX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnWhiteY, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnRedX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnRedY, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnGreenX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnGreenY, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnBlueX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnBlueX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnMinLuminance, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(m_page->spnMaxLuminance, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
+    connect(&d->colorVolumeCompressor, &KisSignalCompressor::timeout, this, &KisDlgImageProperties::setHDRColorVolumeOnImage);
 
     //annotations
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
@@ -195,6 +225,120 @@ void KisDlgImageProperties::setProofingConfigToImage()
 void KisDlgImageProperties::updateDisplayConfigInfo()
 {
     m_page->wdgProofingOptions->setDisplayConfigOptions(d->colorConverter->conversionOptions());
+}
+
+void KisDlgImageProperties::updateHDRLightLevels()
+{
+    if (d->image->diffuseWhiteLightLevel()) {
+        m_page->gbxDiffuseWhite->setChecked(true);
+        m_page->spnDiffuseWhite->setValue(*d->image->diffuseWhiteLightLevel());
+    } else {
+        m_page->gbxDiffuseWhite->setChecked(false);
+        m_page->spnDiffuseWhite->setValue(80);
+    }
+    if (d->image->contentLightLevelInformation()) {
+        double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
+        KisContentLightLevelInformation clli = *d->image->contentLightLevelInformation();
+        m_page->lblMaxCll->setText(i18n("%1 cd/m²").arg(QString::number(diffuseWhite*clli.maxContentLightLevel)));
+        m_page->lblMaxFall->setText(i18n("%1 cd/m²").arg(QString::number(diffuseWhite*clli.maxFrameAverageLightLevel)));
+    } else {
+        m_page->lblMaxCll->setText(i18n("Unknown"));
+        m_page->lblMaxFall->setText(i18n("Unknown"));
+    }
+}
+
+void KisDlgImageProperties::updateHDRColorVolume()
+{
+    if (d->image->colorVolumeInformation()) {
+        m_page->gbxColorVolume->setChecked(true);
+        KisColorVolumeInformation cvi = *d->image->colorVolumeInformation();
+        m_page->spnWhiteX->setValue(cvi.white.x());
+        m_page->spnWhiteY->setValue(cvi.white.y());
+
+        m_page->spnRedX->setValue(cvi.red.x());
+        m_page->spnRedY->setValue(cvi.red.y());
+
+        m_page->spnGreenX->setValue(cvi.green.x());
+        m_page->spnGreenY->setValue(cvi.green.y());
+
+        m_page->spnBlueX->setValue(cvi.blue.x());
+        m_page->spnBlueY->setValue(cvi.blue.y());
+
+        m_page->spnMaxLuminance->setValue(cvi.maxLuminance);
+        m_page->spnMinLuminance->setValue(cvi.minLuminance);
+
+    } else {
+        m_page->gbxColorVolume->setChecked(false);
+    }
+}
+
+void KisDlgImageProperties::setHDRLightLevelsOnImage()
+{
+    if (m_page->gbxDiffuseWhite->isChecked()) {
+        d->image->setDiffuseWhiteLightLevel(std::make_optional(m_page->spnDiffuseWhite->value()));
+    } else {
+        d->image->setDiffuseWhiteLightLevel(std::nullopt);
+    }
+}
+
+void KisDlgImageProperties::setHDRColorVolumeOnImage()
+{
+    if (m_page->gbxColorVolume->isChecked()) {
+        KisColorVolumeInformation cvi;
+
+        cvi.white = QPointF(m_page->spnWhiteX->value(), m_page->spnWhiteY->value());
+
+        cvi.red = QPointF(m_page->spnRedX->value(), m_page->spnRedY->value());
+        cvi.green = QPointF(m_page->spnGreenX->value(), m_page->spnGreenY->value());
+        cvi.blue = QPointF(m_page->spnBlueX->value(), m_page->spnBlueY->value());
+
+        cvi.maxLuminance = m_page->spnMaxLuminance->value();
+        cvi.minLuminance = m_page->spnMinLuminance->value();
+
+        d->image->setColorVolumeInformation(std::make_optional(cvi));
+    } else {
+        d->image->setColorVolumeInformation(std::nullopt);
+    }
+}
+
+void KisDlgImageProperties::changeColorVolumePreset()
+{
+    const QString displayId = m_page->cmbColorVolumePresets->currentData().toString();
+
+    if (displayId == "p2100-pq") {
+        m_page->spnRedX->setValue(0.708);
+        m_page->spnRedY->setValue(0.292);
+
+        m_page->spnGreenX->setValue(0.170);
+        m_page->spnGreenY->setValue(0.797);
+
+        m_page->spnBlueX->setValue(0.131);
+        m_page->spnBlueY->setValue(0.046);
+
+        m_page->spnWhiteX->setValue(0.3127);
+        m_page->spnWhiteY->setValue(0.3290);
+
+        m_page->spnMinLuminance->setValue(0.005);
+        m_page->spnMaxLuminance->setValue(1000);
+
+    } else if (displayId == "dci-p3-d65") {
+
+        m_page->spnRedX->setValue(0.680);
+        m_page->spnRedY->setValue(0.320);
+
+        m_page->spnGreenX->setValue(0.265);
+        m_page->spnGreenY->setValue(0.690);
+
+        m_page->spnBlueX->setValue(0.150);
+        m_page->spnBlueY->setValue(0.060);
+
+        m_page->spnWhiteX->setValue(0.3127);
+        m_page->spnWhiteY->setValue(0.3290);
+
+        m_page->spnMinLuminance->setValue(0.005);
+        m_page->spnMaxLuminance->setValue(1000);
+
+    }
 }
 
 void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)

@@ -45,6 +45,14 @@ private Q_SLOTS:
     void setProofingConfigToImage();
     void updateDisplayConfigInfo();
 
+    void updateHDRLightLevels();
+    void updateHDRColorVolume();
+
+    void setHDRLightLevelsOnImage();
+    void setHDRColorVolumeOnImage();
+
+    void changeColorVolumePreset();
+
     void slotColorSpaceChanged(const KoColorSpace*);
 private:
 

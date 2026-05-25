@@ -43,6 +43,9 @@ class KisProofingConfiguration;
 class KisPaintDevice;
 class KisImageGlobalSelectionManagementInterface;
 
+struct KisContentLightLevelInformation;
+struct KisColorVolumeInformation;
+
 namespace KisMetaData
 {
 class MergeStrategy;
@@ -801,8 +804,42 @@ public:
 
     bool startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup);
 
+    /**
+     * @brief contentLightLevelInformation
+     * This returns (optionally) a KisContentLightLevelInformation with the
+     * MaxCLL and MaxFALL of the image. Note that MaxCLL and MaxFALL will
+     * not be in cd/m², but rather in linear XYZ Y. To get the cd/m², multiply
+     * these values with diffuseWhiteLightLevel().
+     */
+    std::optional<KisContentLightLevelInformation> contentLightLevelInformation() const;
+
+    /**
+     * @brief colorVolumeInformation
+     * @return the KisColorVolumeInformation of the image.
+     * When this is missing, the image color space is assumed, with
+     * 0 as the minimum luminance and 10K as the max luminance.
+     */
+    std::optional<KisColorVolumeInformation> colorVolumeInformation() const;
+
+    /// Set the color volume information.
+    void setColorVolumeInformation(const std::optional<KisColorVolumeInformation> cvi);
+
+    /**
+     * @brief diffuseWhiteLightLevel
+     * @return the cd/m² value of diffuseWhite.
+     * When this is missing, 80cd/m² is assumed.
+     */
+    std::optional<double> diffuseWhiteLightLevel() const;
+
+    /// Set the diffuse white light level, in cd/m²
+    void setDiffuseWhiteLightLevel(const std::optional<double> cdm2);
+
 public Q_SLOTS:
     void stopIsolatedMode();
+
+    /// Calculates the content light level inside a stroke.
+    void calculateContentLightLevelInformation();
+
 
 public:
     KisNodeSP isolationRootNode() const;
@@ -974,6 +1011,10 @@ Q_SIGNALS:
      * outside KisImage, use sigIsolatedModeChanged() instead.
      */
     void sigInternalStopIsolatedModeRequested();
+
+    void sigContentLightLevelInformationChanged();
+    void sigColorVolumeInformationChanged();
+    void sigDiffuseWhiteLightLevelChanged();
 
 public:
     KisCompositeProgressProxy* compositeProgressProxy();

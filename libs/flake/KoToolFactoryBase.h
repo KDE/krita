@@ -25,13 +25,13 @@ class QAction;
  * Each tool has a "section" which it uses to be grouped in the toolbox.
  */
 namespace ToolBoxSection {
-    static const QString Main {"main"};                   ///< Tools that only work on vector shapes
-    static const QString Shape {"0 Krita/Shape"};         ///< Freehand and shapes like ellipses and lines
+    static const QString Main {"0 main"};                   ///< Tools that only work on vector shapes
+    static const QString Shape {"1 Krita/Shape"};         ///< Freehand and shapes like ellipses and lines
     static const QString Transform {"2 Krita/Transform"}; ///< Tools that transform the layer
     static const QString Fill {"3 Krita/Fill"};           ///< Tools that fill parts of the canvas
     static const QString View {"4 Krita/View"};           ///< Assistance tools: guides, reference, etc.
     static const QString Select {"5 Krita/Select"};       ///< Tools that select pixels
-    static const QString Navigation {"navigation"};       ///< Tools that affect the canvas: pan, zoom, etc.
+    static const QString Navigation {"6 navigation"};       ///< Tools that affect the canvas: pan, zoom, etc.
 }
 
 /**

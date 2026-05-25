@@ -120,6 +120,7 @@ private:
     void loadStoryboardItemList(const QDomElement& elem);
     void loadStoryboardCommentList(const QDomElement& elem);
     void loadAudioXML(QDomDocument& xmlDoc, QDomElement &xmlElement, KisDocument* kisDoc);
+    void loadHDRMetadata(const QDomElement& elem, KisImageSP image);
     QList<KoColor> loadKoColors(const QDomElement& elem) const;
 private:
 

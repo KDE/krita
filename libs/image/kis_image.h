@@ -813,6 +813,7 @@ public:
      */
     std::optional<KisContentLightLevelInformation> contentLightLevelInformation() const;
 
+    void setContentLightLevelInformation(const std::optional<KisContentLightLevelInformation> clli);
     /**
      * @brief colorVolumeInformation
      * @return the KisColorVolumeInformation of the image.

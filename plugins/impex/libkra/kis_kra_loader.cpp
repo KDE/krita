@@ -43,6 +43,7 @@
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
 #include <kis_transform_mask.h>
+#include "kis_hdr_metadata.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include <kis_group_layer.h>
 #include <kis_image.h>
@@ -337,6 +338,10 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             if(e.tagName() == COLORHISTORY) {
                 QList<KoColor> colors = loadKoColors(e);
                 m_d->document->setColorHistoryColors(colors);
+            }
+
+            if (e.tagName() == HDRMETADATA) {
+                loadHDRMetadata(e, image);
             }
 
             if(e.tagName() == GLOBALASSISTANTSCOLOR) {
@@ -1539,6 +1544,42 @@ void KisKraLoader::loadAudioXML(QDomDocument &xmlDoc, QDomElement &xmlElement, K
 
         kisDoc->setAudioTracks(clipFiles);
         kisDoc->setAudioVolume(volume);
+    }
+}
+
+void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
+{
+    QDomElement child;
+    for (child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+        if (child.tagName() == DIFFUSEWHITE) {
+            double diffWhite = 0.0;
+            KisDomUtils::loadValue(child, &diffWhite);
+            std::optional<double> dW = std::make_optional(diffWhite);
+            image->setDiffuseWhiteLightLevel(dW);
+        }
+        if (child.tagName() == CONTENTLIGHTLEVEL) {
+            KisContentLightLevelInformation clli;
+            clli.maxContentLightLevel = child.attribute(MAXCLL, "0.0").toDouble();
+            clli.maxFrameAverageLightLevel = child.attribute(MAXFALL, "0.0").toDouble();
+            std::optional<KisContentLightLevelInformation> ci = std::make_optional(clli);
+            image->setContentLightLevelInformation(ci);
+        }
+        if (child.tagName() == COLORVOLUME) {
+            KisColorVolumeInformation cv;
+            cv.maxLuminance = child.attribute(COLORVOLUMEMAXLUMINANCE, "0.0").toDouble();
+            cv.minLuminance = child.attribute(COLORVOLUMEMINLUMINANCE, "0.0").toDouble();
+
+            QDomElement red = child.firstChildElement(COLORVOLUMERED);
+            QDomElement green = child.firstChildElement(COLORVOLUMEGREEN);
+            QDomElement blue = child.firstChildElement(COLORVOLUMEBLUE);
+            QDomElement white = child.firstChildElement(COLORVOLUMEWHITE);
+            KisDomUtils::loadValue(red, &cv.red);
+            KisDomUtils::loadValue(green, &cv.green);
+            KisDomUtils::loadValue(blue, &cv.blue);
+            KisDomUtils::loadValue(white, &cv.white);
+            std::optional<KisColorVolumeInformation> cvi = std::make_optional(cv);
+            image->setColorVolumeInformation(cvi);
+        }
     }
 }
 

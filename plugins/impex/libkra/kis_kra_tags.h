@@ -140,6 +140,18 @@ const QString RESOURCES = "resources";
 const QString MIRROR_AXIS = "MirrorAxis";
 const QString ANNOTATIONS = "Annotations";
 const QString ANNOTATION = "Annotation";
+const QString HDRMETADATA = "HdrMetadata";
+const QString CONTENTLIGHTLEVEL = "ContentLightLevel";
+const QString MAXCLL = "max-content-light-level";
+const QString MAXFALL = "max-avarage-frame-light-level";
+const QString DIFFUSEWHITE = "DiffuseWhite";
+const QString COLORVOLUME = "ColorVolume";
+const QString COLORVOLUMERED = "Red";
+const QString COLORVOLUMEGREEN = "Green";
+const QString COLORVOLUMEBLUE = "Blue";
+const QString COLORVOLUMEWHITE = "White";
+const QString COLORVOLUMEMAXLUMINANCE = "max-luminance";
+const QString COLORVOLUMEMINLUMINANCE = "min-luminance";
 }
 
 

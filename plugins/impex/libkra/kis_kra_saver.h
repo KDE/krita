@@ -64,6 +64,7 @@ private:
     void saveStoryboardToXML(QDomDocument& doc, QDomElement &element);
     void saveAnimationMetadataToXML(QDomDocument& doc, QDomElement &element, KisImageSP image);
     void saveColorHistory(QDomDocument &doc, QDomElement &element);
+    void saveHDRMetadata(QDomDocument &doc, QDomElement &element, KisImageSP image);
 
     bool saveKoColors(QDomDocument& doc, QDomElement &element, const QList<KoColor> &colors) const;
 

@@ -501,6 +501,10 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
         m_d->isolateLayer = rhs.m_d->isolateLayer;
         m_d->isolateGroup = rhs.m_d->isolateGroup;
 
+        m_d->colorVolumeInformation = rhs.m_d->colorVolumeInformation;
+        m_d->contentLightLevelInformation = rhs.m_d->contentLightLevelInformation;
+        m_d->diffuseWhiteLightLevel = rhs.m_d->diffuseWhiteLightLevel;
+
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
                                            [&linearizedNodes](KisNodeSP node) {
@@ -2088,6 +2092,15 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
 std::optional<KisContentLightLevelInformation> KisImage::contentLightLevelInformation() const
 {
     return m_d->contentLightLevelInformation;
+}
+
+void KisImage::setContentLightLevelInformation(const std::optional<KisContentLightLevelInformation> clli)
+{
+    if (!m_d->contentLightLevelInformation ||
+        !(*m_d->contentLightLevelInformation == *clli)) {
+        m_d->contentLightLevelInformation = clli;
+        emit sigContentLightLevelInformationChanged();
+    }
 }
 
 void KisImage::calculateContentLightLevelInformation()

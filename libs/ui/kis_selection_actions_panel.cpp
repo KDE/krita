@@ -90,7 +90,8 @@ struct KisSelectionActionsPanel::Private {
             {"krita_tool_color_fill", i18n("Fill Selection with Color"), &KisSelectionManager::fillForegroundColor},
             {"draw-eraser", i18n("Clear Selection"), &KisSelectionManager::clear},
             {"duplicatelayer", i18n("Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
-            {"tool_crop", i18n("Crop to Selection"), &KisSelectionManager::imageResizeToSelection}};
+            {"tool_crop", i18n("Crop to Selection"), &KisSelectionManager::imageResizeToSelection},
+            {"krita_tool_reference_images", i18n("Toggle pin selection actions bar"), &KisSelectionManager::toggleSAPpin}};
         return data;
     }
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle

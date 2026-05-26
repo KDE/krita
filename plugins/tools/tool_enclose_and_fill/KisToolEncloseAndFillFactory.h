@@ -21,6 +21,7 @@ public:
         : KisToolPaintFactoryBase("KisToolEncloseAndFill")
     {
         setToolTip(i18n("Enclose and Fill Tool"));
+        setToolName(i18n("Enclose and Fill Tool"));
         setSection(ToolBoxSection::Fill);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_enclose_and_fill"));

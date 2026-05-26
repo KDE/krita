@@ -97,6 +97,7 @@ public:
         : KisToolBrushFactory("KritaShape/KisToolMultiBrush") {
 
         setToolTip(i18n("Multibrush Tool"));
+        setToolName(i18n("Multibrush Tool"));
 
         // Temporarily
         setSection(ToolBoxSection::Shape);

@@ -18,6 +18,7 @@ KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
     : KoToolFactoryBase("KarbonCalligraphyTool")
 {
     setToolTip(i18n("Calligraphy"));
+    setToolName(i18n("Calligraphy"));
     setSection(ToolBoxSection::Main);
     setIconName(koIconNameCStr("calligraphy"));
     setPriority(6);

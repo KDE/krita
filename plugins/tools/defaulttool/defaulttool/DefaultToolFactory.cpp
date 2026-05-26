@@ -17,6 +17,7 @@ DefaultToolFactory::DefaultToolFactory()
     : KoToolFactoryBase(KoInteractionTool_ID)
 {
     setToolTip(i18n("Select Shapes Tool"));
+    setToolName(i18n("Select Shapes Tool"));
     setSection(ToolBoxSection::Main);
     setPriority(0);
     setIconName(koIconNameCStr("select"));

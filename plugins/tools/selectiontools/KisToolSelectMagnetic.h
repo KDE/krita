@@ -100,6 +100,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectMagnetic")
     {
         setToolTip(i18n("Magnetic Selection Tool"));
+        setToolName(i18n("Magnetic Selection Tool"));
         setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_magnetic_selection"));
         setPriority(8);

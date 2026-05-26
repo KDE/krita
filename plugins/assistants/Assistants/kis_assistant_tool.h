@@ -188,6 +188,7 @@ public:
     KisAssistantToolFactory()
             : KoToolFactoryBase("KisAssistantTool") {
         setToolTip(i18n("Assistant Tool"));
+        setToolName(i18n("Assistant Tool"));
         setSection(ToolBoxSection::View);
         setIconName(koIconNameCStr("krita_tool_assistant"));
         setPriority(0);

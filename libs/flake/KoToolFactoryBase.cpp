@@ -29,6 +29,7 @@ public:
     QString tooltip;
     QString activationId;
     QString iconName;
+    QString toolName;
     const QString id;
     QKeySequence shortcut;
 };
@@ -150,6 +151,11 @@ QString KoToolFactoryBase::toolTip() const
     return d->tooltip;
 }
 
+QString KoToolFactoryBase::toolName() const
+{
+    return d->toolName;
+}
+
 QString KoToolFactoryBase::iconName() const
 {
     return d->iconName;
@@ -173,6 +179,11 @@ void KoToolFactoryBase::setActivationShapeId(const QString &activationShapeId)
 void KoToolFactoryBase::setToolTip(const QString & tooltip)
 {
     d->tooltip = tooltip;
+}
+
+void KoToolFactoryBase::setToolName(const QString & toolName)
+{
+    d->toolName = toolName;
 }
 
 void KoToolFactoryBase::setSection(const QString & section)

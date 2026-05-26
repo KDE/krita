@@ -368,6 +368,7 @@ public:
     KisToolTransformFactory()
             : KisToolPaintFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
+        setToolName(i18n("Transform Tool"));
         setSection(ToolBoxSection::Transform);
         setIconName(koIconNameCStr("krita_tool_transform"));
         setShortcut(QKeySequence(Qt::CTRL | Qt::Key_T));

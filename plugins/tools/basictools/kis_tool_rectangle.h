@@ -48,6 +48,7 @@ public:
     KisToolRectangleFactory()
             : KisToolPaintFactoryBase("KritaShape/KisToolRectangle") {
         setToolTip(i18n("Rectangle Tool"));
+        setToolName(i18n("Rectangle Tool"));
 
         setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

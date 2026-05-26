@@ -47,6 +47,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectElliptical")
     {
         setToolTip(i18n("Elliptical Selection Tool"));
+        setToolName(i18n("Elliptical Selection Tool"));
         setSection(ToolBoxSection::Select);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_elliptical_selection"));

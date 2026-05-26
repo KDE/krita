@@ -82,6 +82,7 @@ public:
             : KisToolPaintFactoryBase("KritaShape/KisToolLazyBrush") {
 
         setToolTip(i18n("Colorize Mask Editing Tool"));
+        setToolName(i18n("Colorize Mask Editing Tool"));
 
         // Temporarily
         setSection(ToolBoxSection::Fill);

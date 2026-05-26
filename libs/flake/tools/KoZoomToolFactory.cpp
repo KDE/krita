@@ -15,6 +15,7 @@ KoZoomToolFactory::KoZoomToolFactory()
         : KoToolFactoryBase("ZoomTool")
 {
     setToolTip(i18n("Zoom"));
+    setToolName(i18n("Zoom Tool"));
     setSection(ToolBoxSection::Navigation);
     setPriority(0);
     setIconName(koIconNameCStr("tool_zoom"));

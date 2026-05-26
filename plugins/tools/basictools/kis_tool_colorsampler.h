@@ -106,6 +106,7 @@ public:
     KisToolColorSamplerFactory()
             : KoToolFactoryBase("KritaSelected/KisToolColorSampler") {
         setToolTip(i18n("Color Sampler Tool"));
+        setToolName(i18n("Color Sampler Tool"));
         setSection(ToolBoxSection::Fill);
         setPriority(2);
         setIconName(koIconNameCStr("krita_tool_color_sampler"));

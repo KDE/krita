@@ -50,6 +50,11 @@ QString KoToolAction::toolTip() const
     return d->toolFactory->toolTip();
 }
 
+QString KoToolAction::toolName() const
+{
+    return d->toolFactory->toolName();
+}
+
 QString KoToolAction::id() const
 {
     return d->toolFactory->id();

@@ -69,6 +69,7 @@ public:
     {
 
         setToolTip(i18n("Comic Panel Editing Tool"));
+        setToolName(i18n("Comic Panel Editing Tool"));
 
         setSection(ToolBoxSection::Main);
         setIconName(koIconNameCStr("tool_comic_panel"));

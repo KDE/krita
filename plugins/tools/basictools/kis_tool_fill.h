@@ -240,6 +240,7 @@ public:
     KisToolFillFactory()
             : KisToolPaintFactoryBase("KritaFill/KisToolFill") {
         setToolTip(i18n("Fill Tool"));
+        setToolName(i18n("Fill Tool"));
         setSection(ToolBoxSection::Fill);
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

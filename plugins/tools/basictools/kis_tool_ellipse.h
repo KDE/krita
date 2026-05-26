@@ -92,6 +92,7 @@ public:
     KisToolEllipseFactory()
             : KisToolPaintFactoryBase("KritaShape/KisToolEllipse") {
         setToolTip(i18n("Ellipse Tool"));
+        setToolName(i18n("Ellipse Tool"));
         setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_ellipse"));

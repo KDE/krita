@@ -95,6 +95,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectContiguous")
     {
         setToolTip(i18n("Contiguous Selection Tool"));
+        setToolName(i18n("Contiguous Selection Tool"));
         setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_contiguous_selection"));
         setPriority(4);

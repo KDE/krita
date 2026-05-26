@@ -48,6 +48,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectRectangular")
     {
         setToolTip(i18n("Rectangular Selection Tool"));
+        setToolName(i18n("Rectangular Selection Tool"));
         setSection(ToolBoxSection::Select);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_rect_selection"));

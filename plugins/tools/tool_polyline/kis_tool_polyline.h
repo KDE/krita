@@ -42,6 +42,7 @@ public:
     KisToolPolylineFactory()
             : KisToolPolyLineFactoryBase("KisToolPolyline") {
         setToolTip(i18n("Polyline Tool: Shift-mouseclick ends the polyline."));
+        setToolName(i18n("Polyline Tool"));
         setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("polyline"));

@@ -49,6 +49,7 @@ public:
     QString id() const;             ///< The id of the tool
     QString iconText() const;       ///< The icontext of the tool
     QString toolTip() const;        ///< The tooltip of the tool
+    QString toolName() const;        ///< The localized tool name
     QString iconName() const;       ///< The icon name of the tool
     QKeySequence shortcut() const;     ///< The shortcut to activate the tool
 

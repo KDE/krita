@@ -114,6 +114,7 @@ public:
     KisToolLineFactory()
             : KisToolPaintFactoryBase("KritaShape/KisToolLine") {
         setToolTip(i18n("Line Tool"));
+        setToolName(i18n("Line Tool"));
         // Temporarily
         setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

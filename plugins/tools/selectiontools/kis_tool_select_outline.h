@@ -50,6 +50,7 @@ public:
         : KisSelectionToolFactoryBase("KisToolSelectOutline")
     {
         setToolTip(i18n("Freehand Selection Tool"));
+        setToolName(i18n("Freehand Selection Tool"));
         setSection(ToolBoxSection::Select);
         setIconName(koIconNameCStr("tool_outline_selection"));
         setPriority(3);

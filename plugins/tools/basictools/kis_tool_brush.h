@@ -144,6 +144,7 @@ public:
             : KisToolPaintFactoryBase("KritaShape/KisToolBrush") {
 
         setToolTip(i18n("Freehand Brush Tool"));
+        setToolName(i18n("Freehand Brush Tool"));
 
         // Temporarily
         setSection(ToolBoxSection::Shape);

@@ -93,6 +93,7 @@ KisToolPanFactory::KisToolPanFactory()
     : KoToolFactoryBase("PanTool")
 {
     setToolTip(i18n("Pan Tool"));
+    setToolName(i18n("Pan Tool"));
     setSection(ToolBoxSection::Navigation);
     setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     setPriority(2);

@@ -47,6 +47,7 @@ namespace ToolBoxSection {
  *   MyToolFactory(const QStringList&)
  *       : KoToolFactoryBase("MyTool") {
  *       setToolTip(i18n("Create object"));
+ *       setToolName(i18n("Create Object Tool"));
  *       setSection("main");
  *       setPriority(5);
  *   }
@@ -104,6 +105,13 @@ public:
      * @return a translated tooltip Text
      */
     QString toolTip() const;
+
+    /**
+     * return the translated tool name
+     * @return the translated tool name
+     */
+    QString toolName() const;
+
     /**
      * return the basename of the icon for this tool
      * @return the basename of the icon for this tool
@@ -141,6 +149,12 @@ protected:
      * @param tooltip the tooltip
      */
     void setToolTip(const QString &tooltip);
+
+    /**
+     * Set the tool name to be used for this tool
+     * @param toolName the tool name
+     */
+    void setToolName(const QString &toolName);
 
     /**
      * Set the section used to group tools in the toolbox

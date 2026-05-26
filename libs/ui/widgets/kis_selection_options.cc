@@ -292,6 +292,7 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
 
 
     appendWidget("checkBoxMoveSelectedContent", m_d->checkBoxMoveSelectedContent);
+    appendWidget("sapCheckBox", m_d->checkBoxSelectionActionsPanel);
 
     KisOptionCollectionWidgetWithHeader *sectionAdjustments =
         new KisOptionCollectionWidgetWithHeader(
@@ -304,7 +305,6 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
                                      m_d->sliderFeatherSelection);
     appendWidget("sectionAdjustments", sectionAdjustments);
 
-    appendWidget("sapChckBox", m_d->checkBoxSelectionActionsPanel);
 
     // Make connections
     connect(m_d->optionButtonStripMode,

@@ -62,7 +62,7 @@ class WorkflowButtons(DockWidget):
 
         self.settingsAction = QAction(self)
         self.settingsAction.setIcon(INSTANCE.icon('view-choose-22'))
-        self.settingsAction.setToolTip(i18n("Open workflow buttons settings dialog"))
+        self.settingsAction.setToolTip(i18nc("@info:tooltip", "Open workflow buttons settings dialog"))
         self.settingsAction.triggered.connect(self.openSettingsDialog)
 
         self.bottomBarButton.setDefaultAction(self.settingsAction)

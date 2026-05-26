@@ -18,7 +18,7 @@ except:
 from krita import Krita, PresetChooser, ManagedColor, FileDialog
 from .flow_layout import FlowLayout
 import copy
-from builtins import i18n
+from builtins import i18n, i18nc
 
 INSTANCE = Krita.instance()
 
@@ -101,7 +101,7 @@ class ButtonsSettingsDialog(QDialog):
         controlsSize = QSize(22,22)
 
         # label to show selected button id:
-        selectedButtonIDLabelTitle = QLabel(i18n("Selected button:"), self)
+        selectedButtonIDLabelTitle = QLabel(i18nc("@label", "Selected button:"), self)
         self.selectedButtonIDLabel = QLabel(str(self.selectedButtonID), self)
         layoutForSelectorControls.addWidget(selectedButtonIDLabelTitle)
         layoutForSelectorControls.addWidget(self.selectedButtonIDLabel)
@@ -114,7 +114,7 @@ class ButtonsSettingsDialog(QDialog):
         addButtonButton = QToolButton(self)
         addButtonButton.setIconSize(controlsSize)
         addButtonButton.setIcon(INSTANCE.icon('addlayer'))
-        addButtonButton.setToolTip(i18n("Add a workflow button"))
+        addButtonButton.setToolTip(i18nc("@info:tooltip", "Add a workflow button"))
         addButtonButton.clicked.connect(self.addButton)
         layoutForSelectorControls.addWidget(addButtonButton)
 
@@ -122,13 +122,13 @@ class ButtonsSettingsDialog(QDialog):
         moveButtonLeftButton = QToolButton(self)
         moveButtonLeftButton.setIconSize(controlsSize)
         moveButtonLeftButton.setIcon(INSTANCE.icon('arrow-left'))
-        moveButtonLeftButton.setToolTip(i18n("Move selected workflow button to the left"))
+        moveButtonLeftButton.setToolTip(i18nc("@info:tooltip", "Move selected workflow button to the left"))
         moveButtonLeftButton.clicked.connect(self.moveButtonLeft)
         layoutForSelectorControls.addWidget(moveButtonLeftButton)
         moveButtonRightButton = QToolButton(self)
         moveButtonRightButton.setIconSize(controlsSize)
         moveButtonRightButton.setIcon(INSTANCE.icon('arrow-right'))
-        moveButtonRightButton.setToolTip(i18n("Move selected workflow button to the right"))
+        moveButtonRightButton.setToolTip(i18nc("@info:tooltip", "Move selected workflow button to the right"))
         moveButtonRightButton.clicked.connect(self.moveButtonRight)
         layoutForSelectorControls.addWidget(moveButtonRightButton)
 
@@ -136,14 +136,14 @@ class ButtonsSettingsDialog(QDialog):
         deleteButtonButton = QToolButton(self)
         deleteButtonButton.setIconSize(controlsSize)
         deleteButtonButton.setIcon(INSTANCE.icon('deletelayer'))
-        deleteButtonButton.setToolTip(i18n("Delete selected workflow button"))
+        deleteButtonButton.setToolTip(i18nc("@info:tooltip", "Delete selected workflow button"))
         deleteButtonButton.clicked.connect(self.deleteButton)
         layoutForSelectorControls.addWidget(deleteButtonButton)
         mainLayout.addLayout(layoutForSelectorControls)
 
         # set selected button's icon mode
         layoutForIconMode = QHBoxLayout()
-        iconModeLabel = QLabel(i18n("Select icon mode:"), self)
+        iconModeLabel = QLabel(i18nc("@label:listbox", "Select icon mode:"), self)
         layoutForIconMode.addWidget(iconModeLabel)
         self.iconModeSelector = QComboBox(self)
         self.populateIconModeList()
@@ -159,15 +159,15 @@ class ButtonsSettingsDialog(QDialog):
         # set selected button's custom icon
         layoutForIconSelection = QHBoxLayout()
 
-        addIconLabel = QLabel(i18n("Select a custom icon:"), self)
+        addIconLabel = QLabel(i18nc("@label:chooser", "Select a custom icon:"), self)
         layoutForIconSelection.addWidget(addIconLabel)
         self.iconPathInput = QLineEdit(self)
-        self.iconPathInput.setToolTip(i18n("Custom icon path"))
+        self.iconPathInput.setToolTip(i18nc("@info:tooltip", "Custom icon path"))
         self.iconPathInput.editingFinished.connect(self.iconPathChanged)
         layoutForIconSelection.addWidget(self.iconPathInput)
 
-        iconPathDialogButton = QPushButton(i18n("..."), self)
-        iconPathDialogButton.setToolTip(i18n("Select the custom icon"))
+        iconPathDialogButton = QPushButton(i18nc("@action:button", "..."), self)
+        iconPathDialogButton.setToolTip(i18nc("@info:tooltip", "Select the custom icon"))
         iconPathDialogButton.clicked.connect(self.selectIcon)
         layoutForIconSelection.addWidget(iconPathDialogButton)
 
@@ -175,10 +175,10 @@ class ButtonsSettingsDialog(QDialog):
 
         # set custom button's tooltip
         layoutForToolTip = QHBoxLayout()
-        toolTipLabel = QLabel(i18n("Enter a Tooltip:"), self)
+        toolTipLabel = QLabel(i18nc("@label:textbox", "Enter a Tooltip:"), self)
         layoutForToolTip.addWidget(toolTipLabel)
         self.toolTipInput = QLineEdit(self)
-        self.toolTipInput.setToolTip(i18n("Tooltip text"))
+        self.toolTipInput.setToolTip(i18nc("@info:tooltip", "Tooltip text"))
         self.toolTipInput.editingFinished.connect(self.toolTipChanged)
         layoutForToolTip.addWidget(self.toolTipInput)
 
@@ -186,7 +186,7 @@ class ButtonsSettingsDialog(QDialog):
 
         # set custom button's' toolName
         layoutForToolSelector = QHBoxLayout()
-        toolSelectorLabel = QLabel(i18n("Select a tool:"), self)
+        toolSelectorLabel = QLabel(i18nc("@label:listbox", "Select a tool:"), self)
         layoutForToolSelector.addWidget(toolSelectorLabel)
         self.toolSelector = QComboBox(self)
         self.populateToolList()
@@ -201,15 +201,15 @@ class ButtonsSettingsDialog(QDialog):
 
         # set custom button's presetName
         layoutForPresetSelector = QHBoxLayout()
-        presetSelectorLabel = QLabel(i18n("Select a brush preset:"), self)
+        presetSelectorLabel = QLabel(i18nc("@label:chooser", "Select a brush preset:"), self)
         layoutForPresetSelector.addWidget(presetSelectorLabel)
         self.presetSelectorInput = QLineEdit(self)
-        self.presetSelectorInput.setToolTip(i18n("Brush preset name"))
+        self.presetSelectorInput.setToolTip(i18nc("@info:tooltip", "Brush preset name"))
         self.presetSelectorInput.editingFinished.connect(self.presetChanged)
         layoutForPresetSelector.addWidget(self.presetSelectorInput)
 
-        presetDialogButton = QPushButton(i18n("..."), self)
-        presetDialogButton.setToolTip(i18n("Select the brush preset"))
+        presetDialogButton = QPushButton(i18nc("@action:button", "..."), self)
+        presetDialogButton.setToolTip(i18nc("@info:tooltip", "Select the brush preset"))
         presetDialogButton.clicked.connect(self.selectPreset)
         layoutForPresetSelector.addWidget(presetDialogButton)
 
@@ -217,12 +217,12 @@ class ButtonsSettingsDialog(QDialog):
 
         # set custom button's FGColorValues
         layoutForFGColorInput = QHBoxLayout()
-        FGColorLabel = QLabel(i18n("Select foreground color:"), self)
+        FGColorLabel = QLabel(i18nc("@label", "Select foreground color:"), self)
         layoutForFGColorInput.addWidget(FGColorLabel)
-        FGColorInputSelector = QPushButton(i18n("Load current foreground color"), self)
+        FGColorInputSelector = QPushButton(i18nc("@action:button", "Load current foreground color"), self)
         FGColorInputSelector.clicked.connect(self.selectFGColor)
         layoutForFGColorInput.addWidget(FGColorInputSelector)
-        FGColorClear = QPushButton(i18n("Clear foreground color"), self)
+        FGColorClear = QPushButton(i18nc("@action:button", "Clear foreground color"), self)
         FGColorClear.clicked.connect(self.clearFGColor)
         layoutForFGColorInput.addWidget(FGColorClear)
 
@@ -232,7 +232,7 @@ class ButtonsSettingsDialog(QDialog):
 
         mainLayout.addLayout(layoutForFGColorInput)
 
-        colorInfoToolTip = i18n("Color model ; depth ; profile ; components")
+        colorInfoToolTip = i18nc("@info:tooltip", "Color model ; depth ; profile ; components")
 
         layoutForFGColorInfo = QHBoxLayout()
         self.FGColorPreview = SelectedColorPreview(self, self.defaultButtonContent["FGColorValues"])
@@ -249,12 +249,12 @@ class ButtonsSettingsDialog(QDialog):
 
         # set custom button's BGColorValues
         layoutForBGColorInput = QHBoxLayout()
-        BGColorLabel = QLabel(i18n("Select background color:"), self)
+        BGColorLabel = QLabel(i18nc("@label", "Select background color:"), self)
         layoutForBGColorInput.addWidget(BGColorLabel)
-        BGColorInputSelector = QPushButton(i18n("Load current background color"), self)
+        BGColorInputSelector = QPushButton(i18nc("@action:button", "Load current background color"), self)
         BGColorInputSelector.clicked.connect(self.selectBGColor)
         layoutForBGColorInput.addWidget(BGColorInputSelector)
-        BGColorClear = QPushButton(i18n("Clear background color"), self)
+        BGColorClear = QPushButton(i18nc("@action:button", "Clear background color"), self)
         BGColorClear.clicked.connect(self.clearBGColor)
         layoutForBGColorInput.addWidget(BGColorClear)
 
@@ -280,15 +280,15 @@ class ButtonsSettingsDialog(QDialog):
         # set custom button's extra script
         layoutForScriptSelection = QHBoxLayout()
 
-        scriptLabel = QLabel(i18n("Select a script file:"), self)
+        scriptLabel = QLabel(i18nc("@label", "Select a script file:"), self)
         layoutForScriptSelection.addWidget(scriptLabel)
         self.scriptPathInput = QLineEdit(self)
-        self.scriptPathInput.setToolTip(i18n("Script path"))
+        self.scriptPathInput.setToolTip(i18nc("@info:tooltip", "Script path"))
         self.scriptPathInput.editingFinished.connect(self.scriptPathChanged)
         layoutForScriptSelection.addWidget(self.scriptPathInput)
 
-        scriptPathDialogButton = QPushButton(i18n("..."), self)
-        scriptPathDialogButton.setToolTip(i18n("Select the script"))
+        scriptPathDialogButton = QPushButton(i18nc("@action:button", "..."), self)
+        scriptPathDialogButton.setToolTip(i18nc("@info:tooltip", "Select the script"))
         scriptPathDialogButton.clicked.connect(self.selectScript)
         layoutForScriptSelection.addWidget(scriptPathDialogButton)
 
@@ -302,7 +302,7 @@ class ButtonsSettingsDialog(QDialog):
 
         # button's size selector
         layoutForButtonsSize = QHBoxLayout()
-        buttonsSizeLabel = QLabel(i18n("Buttons size:"), self)
+        buttonsSizeLabel = QLabel(i18nc("@label:listbox", "Buttons size:"), self)
         self.buttonsSizeSelector = QComboBox(self)
         self.populateSizeList()
         self.buttonsSizeSelector.setCurrentIndex(self.sizeIndex)
@@ -318,10 +318,10 @@ class ButtonsSettingsDialog(QDialog):
 
         # layout for settings button position option
         layoutForSettingsButtonOption = QHBoxLayout()
-        settingsButtonOptionLabel = QLabel(i18n("Settings button position:"), self)
+        settingsButtonOptionLabel = QLabel(i18nc("@label:listbox", "Settings button position:"), self)
         self.settingsButtonPositionSelector = QComboBox(self)
-        self.settingsButtonPositionSelector.insertItem(0, i18n("Bottom bar"))
-        self.settingsButtonPositionSelector.insertItem(1, i18n("Inline"))
+        self.settingsButtonPositionSelector.insertItem(0, i18nc("@item:inlistbox Workflow Buttons settings button position", "Bottom bar"))
+        self.settingsButtonPositionSelector.insertItem(1, i18nc("@item:inlistbox Workflow Buttons settings button position", "Inline"))
         self.settingsButtonPositionSelector.setCurrentIndex(self.settingsButtonPosition)
         self.settingsButtonPositionSelector.activated.connect(self.settingsButtonPositionChanged)
         layoutForSettingsButtonOption.addWidget(settingsButtonOptionLabel)
@@ -509,7 +509,7 @@ class ButtonsSettingsDialog(QDialog):
             self.refreshButtons()
 
     def setFGColorInfoLabel(self, values):
-        colorInfoLabel = i18n("Color info: ")
+        colorInfoLabel = i18nc("@label", "Color info: ")
         colorModel = values["model"]
         if colorModel == "":
             self.FGColorInfoLabel.setText(colorInfoLabel)
@@ -542,7 +542,7 @@ class ButtonsSettingsDialog(QDialog):
         self.setFGColorInfoLabel(self.buttonsContentList[self.selectedButtonID - 1]["FGColorValues"])
 
     def setBGColorInfoLabel(self, values):
-        colorInfoLabel = i18n("Color info: ")
+        colorInfoLabel = i18nc("@label", "Color info: ")
         colorModel = values["model"]
         if colorModel == "":
             self.BGColorInfoLabel.setText(colorInfoLabel)

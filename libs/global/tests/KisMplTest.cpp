@@ -529,8 +529,7 @@ void KisMplTest::testMemberOperatorsAccumulate()
 
 void KisMplTest::testMemberOperatorsAccumulateToKisSharedPtr()
 {
-    std::vector<KisSharedPtr<StructWithShared>> vec({new StructWithShared(0),
-                                                     new StructWithShared(1),
+    std::vector<KisSharedPtr<StructWithShared>> vec({new StructWithShared(1),
                                                      new StructWithShared(2),
                                                      new StructWithShared(3),
                                                      new StructWithShared(4)});

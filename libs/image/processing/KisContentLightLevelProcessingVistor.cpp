@@ -70,7 +70,7 @@ KisContentLightLevelInformation KisContentLightLevelProcessingVistor::calculateF
     for (int y = 0; y < imageBounds.height(); y++) {
         for (int x = 0; x < imageBounds.width(); x++) {
             const KoXyzF32Traits::Pixel* pixel = reinterpret_cast<const KoXyzF32Traits::Pixel*> (it->rawDataConst());
-            clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, pixel->y);
+            clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, double(pixel->y));
             average += pixel->y;
             divider ++;
             it->nextPixel();

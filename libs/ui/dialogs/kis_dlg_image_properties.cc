@@ -133,7 +133,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     m_page->cmbLumiCalcType->addItem(i18n("Rec 2020 Per Component"), KisContentLightLevelInformation::Rec2020Component);
     m_page->cmbLumiCalcType->addItem(i18n("RGB Per Component"), KisContentLightLevelInformation::RGBComponent);
 
-    connect(m_page->cmbColorVolumePresets, &QComboBox::activated, this, &KisDlgImageProperties::changeColorVolumePreset);
+    connect(m_page->cmbColorVolumePresets, SIGNAL(activated(int)), this, SLOT(changeColorVolumePreset()));
     connect(m_page->gbxColorVolume, &QGroupBox::clicked, &d->colorVolumeCompressor, &KisSignalCompressor::start);
     connect(m_page->spnWhiteX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
     connect(m_page->spnWhiteY, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);

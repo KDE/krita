@@ -386,7 +386,6 @@ set(kritaui_LIB_SRCS
     animation/KisAnimationRender.cpp
     animation/KisDlgAnimationRenderer.cpp
     animation/VideoExportOptionsDialog.cpp
-    animation/VideoHDRMetadataOptionsDialog.cpp
     animation/KisHDRMetadataOptions.cpp
     animation/KisDlgImportVideoAnimation.cpp
     animation/KisFrameDisplayProxy.cpp
@@ -669,7 +668,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     animation/wdg_animationrenderer.ui
     animation/video_export_options_dialog.ui
-    animation/VideoHDRMetadataOptionsDialog.ui
     animation/VideoImportDialog.ui
 
     imagesize/wdg_imagesize.ui

@@ -36,6 +36,7 @@
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
 #include <KoDialog.h>
+#include "animation/KisHDRMetadataOptions.h"
 #include "kis_slider_spin_box.h"
 #include "kis_acyclic_signal_connector.h"
 #include "KisVideoSaver.h"
@@ -402,7 +403,7 @@ void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeT
             KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
     QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
-        new KisVideoExportOptionsDialog(containerType, availableEncoders,   0));
+        new KisVideoExportOptionsDialog(containerType, availableEncoders, KisHDRMetadataOptions(), 0));
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -555,7 +556,23 @@ bool KisDlgAnimationRenderer::supportsAudio(const QString &videoType)
 #endif
 }
 
+KisHDRMetadataOptions KisDlgAnimationRenderer::optionsFromImage()
+{
+    KisHDRMetadataOptions hdrOptions;
+    if (m_image->contentLightLevelInformation()) {
+        hdrOptions.clli = *m_image->contentLightLevelInformation();
+    }
+    if (m_image->colorVolumeInformation()) {
+        hdrOptions.cvi = *m_image->colorVolumeInformation();
+    }
+    if (m_image->diffuseWhiteLightLevel()) {
+        hdrOptions.diffuseWhite = *m_image->diffuseWhiteLightLevel();
+    }
+    return hdrOptions;
+}
+
 #ifndef Q_OS_ANDROID
+
 void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
     // Let's START with the assumption that user-specified ffmpeg path is invalid
     // and clear out all of the ffmpeg-specific fields to fill post-validation...
@@ -789,8 +806,10 @@ void KisDlgAnimationRenderer::selectRenderOptions()
         encodersPresent << ffmpegEncoderTypes[key];
     }
 
+    KisHDRMetadataOptions hdrOptions = optionsFromImage();
+
     KisVideoExportOptionsDialog *encoderConfigWidget =
-        new KisVideoExportOptionsDialog(containerType, encodersPresent, this);
+        new KisVideoExportOptionsDialog(containerType, encodersPresent, hdrOptions, this);
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);

@@ -11,7 +11,6 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include "VideoHDRMetadataOptionsDialog.h"
 #include "KisHDRMetadataOptions.h"
 
 
@@ -137,7 +136,7 @@ void populateComboWithKoIds(QComboBox *combo, const QVector<KoID> &ids, int defa
     combo->setEnabled(combo->count() > 1);
 }
 
-KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, QWidget *parent)
+KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, KisHDRMetadataOptions hdrOptions, QWidget *parent)
     : KisConfigWidget(parent),
       ui(new Ui::VideoExportOptionsDialog),
       m_d(new Private(containerType, validEncoders))
@@ -210,14 +209,11 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     connect(ui->txtCustomLine, SIGNAL(editingFinished()), SLOT(slotSaveCustomLine()));
     connect(ui->btnResetCustomLine, SIGNAL(clicked()), SLOT(slotResetCustomLine()));
 
-    connect(ui->chkUseHDRMetadata, SIGNAL(toggled(bool)),
-            ui->btnHdrMetadata, SLOT(setEnabled(bool)));
     connect(ui->cmbProfileH265,
             SIGNAL(currentIndexChanged(int)),
             SLOT(slotH265ProfileChanged(int)));
     slotH265ProfileChanged(ui->cmbProfileH265->currentIndex());
 
-    connect(ui->btnHdrMetadata, SIGNAL(clicked()), SLOT(slotEditHDRMetadata()));
 
     connect(ui->cmbPaletteuseDitherGIF, 
             SIGNAL(currentIndexChanged(int)),
@@ -226,6 +222,7 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     slotBayerFilterSelected(ui->cmbPaletteuseDitherGIF->currentIndex());
     
     setSupportsHDR(false);
+    m_d->hdrMetadataOptions = hdrOptions;
 }
 
 KisVideoExportOptionsDialog::~KisVideoExportOptionsDialog()
@@ -447,10 +444,6 @@ void KisVideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurat
     slotCodecSelected(index);
 
     slotH265ProfileChanged(ui->cmbProfileH265->currentIndex());
-
-    KisPropertiesConfigurationSP metadataProperties = new KisPropertiesConfiguration();
-    cfg->getPrefixedProperties("hdrMetadata/", metadataProperties);
-    m_d->hdrMetadataOptions.fromProperties(metadataProperties);
 }
 
 QStringList KisVideoExportOptionsDialog::generateCustomLine() const
@@ -572,7 +565,6 @@ void KisVideoExportOptionsDialog::slotH265ProfileChanged(int index)
         m_d->profilesXH265[index].id() == "main10";
 
     ui->chkUseHDRMetadata->setEnabled(enableHDR);
-    ui->btnHdrMetadata->setEnabled(enableHDR && ui->chkUseHDRMetadata->isChecked());
 
     QString hdrToolTip;
 
@@ -583,17 +575,6 @@ void KisVideoExportOptionsDialog::slotH265ProfileChanged(int index)
     }
 
     ui->chkUseHDRMetadata->setToolTip(hdrToolTip);
-    ui->btnHdrMetadata->setToolTip(hdrToolTip);
-}
-
-void KisVideoExportOptionsDialog::slotEditHDRMetadata()
-{
-    VideoHDRMetadataOptionsDialog dlg(this);
-    dlg.setHDRMetadataOptions(m_d->hdrMetadataOptions);
-
-    if (dlg.exec() == QDialog::Accepted) {
-        m_d->hdrMetadataOptions = dlg.hdrMetadataOptions();
-    }
 }
 
 void KisVideoExportOptionsDialog::slotBayerFilterSelected(int index)

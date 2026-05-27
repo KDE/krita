@@ -8,7 +8,6 @@ set(kritaanimation_LIB_SRCS
     KisAnimationRender.cpp
     KisDlgAnimationRenderer.cpp
     VideoExportOptionsDialog.cpp
-    VideoHDRMetadataOptionsDialog.cpp
     KisHDRMetadataOptions.cpp
     KisDlgImportVideoAnimation.cpp
 )
@@ -16,7 +15,6 @@ set(kritaanimation_LIB_SRCS
 ki18n_wrap_ui(kritaanimation_LIB_SRCS
     wdg_animationrenderer.ui
     video_export_options_dialog.ui
-    VideoHDRMetadataOptionsDialog.ui
     VideoImportDialog.ui
     
 )

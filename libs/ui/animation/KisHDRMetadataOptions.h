@@ -9,6 +9,7 @@
 
 #include <QString>
 #include "kis_types.h"
+#include <kis_hdr_metadata.h>
 
 struct KisHDRMetadataOptions
 {
@@ -16,23 +17,11 @@ struct KisHDRMetadataOptions
 
     QString predefinedMasterDisplayId;
 
-    qreal redX = 0.708;
-    qreal redY = 0.292;
+    KisColorVolumeInformation cvi;
 
-    qreal greenX = 0.170;
-    qreal greenY = 0.797;
+    KisContentLightLevelInformation clli;
 
-    qreal blueX = 0.131;
-    qreal blueY = 0.046;
-
-    qreal whiteX = 0.3127;
-    qreal whiteY = 0.3290;
-
-    qreal minLuminance = 0.005;
-    qreal maxLuminance = 1000;
-
-    qreal maxCLL = 1000;
-    qreal maxFALL = 400;
+    double diffuseWhite = 80;
 
     KisPropertiesConfigurationSP toProperties() const;
     void fromProperties(KisPropertiesConfigurationSP config);

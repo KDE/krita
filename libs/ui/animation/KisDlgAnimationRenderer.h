@@ -26,6 +26,7 @@ class QButtonGroup;
 class QHBoxLayout;
 class KisAnimationVideoSaver;
 class KisAnimationRenderingOptions;
+struct KisHDRMetadataOptions;
 
 class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimationRenderer
 {
@@ -129,6 +130,8 @@ private:
     static bool supportsAudio(const QString &videoType);
 
 private:
+    KisHDRMetadataOptions optionsFromImage();
+
     KisImageSP m_image;
     KisDocument *m_doc;
 

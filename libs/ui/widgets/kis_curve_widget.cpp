@@ -195,7 +195,7 @@ QPixmap KisCurveWidget::getPixmap()
 
 bool KisCurveWidget::pointSelected() const
 {
-    return d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_curve.curvePoints().count();
+    return d->m_grab_point_index >= 0 && d->m_grab_point_index < d->m_curve.curvePoints().count();
 }
 
 void KisCurveWidget::keyPressEvent(QKeyEvent *e)

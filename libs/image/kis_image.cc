@@ -2103,7 +2103,7 @@ void KisImage::setContentLightLevelInformation(const std::optional<KisContentLig
     }
 }
 
-void KisImage::calculateContentLightLevelInformation()
+void KisImage::calculateContentLightLevelInformation(int type)
 {
 
     KisImageSignalVector emitSignals;
@@ -2113,7 +2113,8 @@ void KisImage::calculateContentLightLevelInformation()
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
-    KisSharedPtr<KisContentLightLevelProcessingVistor> visitor = new KisContentLightLevelProcessingVistor();
+    KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
+        new KisContentLightLevelProcessingVistor(KisContentLightLevelInformation::CalculationType(type));
     applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
     applicator.end();
 

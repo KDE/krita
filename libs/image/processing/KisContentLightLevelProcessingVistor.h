@@ -9,8 +9,8 @@
 #include "kis_types.h"
 #include <kis_do_nothing_processing_visitor.h>
 #include <QScopedPointer>
+#include <kis_hdr_metadata.h>
 
-struct KisContentLightLevelInformation;
 /**
  * @brief The KisContentLightLevelProcessingVistor class
  * This processing visitor checks the projection of the root level node,
@@ -20,7 +20,7 @@ class KisContentLightLevelProcessingVistor : public KisDoNothingProcessingVisito
 {
 
 public:
-    KisContentLightLevelProcessingVistor();
+    KisContentLightLevelProcessingVistor(KisContentLightLevelInformation::CalculationType type = KisContentLightLevelInformation::XYZLuminance);
     ~KisContentLightLevelProcessingVistor() override;
 
     using KisDoNothingProcessingVisitor::visit;

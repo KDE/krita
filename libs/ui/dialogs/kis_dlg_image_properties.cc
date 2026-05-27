@@ -114,16 +114,24 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
 
     updateHDRLightLevels();
     updateHDRColorVolume();
-    connect(m_page->btnCalculateClli, &QPushButton::clicked, d->image, &KisImage::calculateContentLightLevelInformation);
+    connect(m_page->btnCalculateClli, &QPushButton::clicked, this, &KisDlgImageProperties::slotCalculateLightLevels);
     connect(d->image, &KisImage::sigContentLightLevelInformationChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
     connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
     connect(d->image, &KisImage::sigColorVolumeInformationChanged, this, &KisDlgImageProperties::updateHDRColorVolume);
 
-    connect(m_page->gbxDiffuseWhite, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
-    connect(m_page->spnDiffuseWhite, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
+    connect(m_page->gbxDiffuseWhite, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRDiffuseLevelOnImage);
+    connect(m_page->spnDiffuseWhite, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRDiffuseLevelOnImage);
+
+    connect(m_page->gbxContentLightLevel, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
+    connect(m_page->spnMaxCll, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
+    connect(m_page->spnMaxFall, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
 
     m_page->cmbColorVolumePresets->addItem(i18n("Rec. 2100 PQ"), "p2100-pq");
     m_page->cmbColorVolumePresets->addItem(i18n("DCI-P3 D65"), "dci-p3-d65");
+
+    m_page->cmbLumiCalcType->addItem(i18n("XYZ Luminance"), KisContentLightLevelInformation::XYZLuminance);
+    m_page->cmbLumiCalcType->addItem(i18n("Rec 2020 Per Component"), KisContentLightLevelInformation::Rec2020Component);
+    m_page->cmbLumiCalcType->addItem(i18n("RGB Per Component"), KisContentLightLevelInformation::RGBComponent);
 
     connect(m_page->cmbColorVolumePresets, &QComboBox::activated, this, &KisDlgImageProperties::changeColorVolumePreset);
     connect(m_page->gbxColorVolume, &QGroupBox::clicked, &d->colorVolumeCompressor, &KisSignalCompressor::start);
@@ -237,13 +245,13 @@ void KisDlgImageProperties::updateHDRLightLevels()
         m_page->spnDiffuseWhite->setValue(80);
     }
     if (d->image->contentLightLevelInformation()) {
+        m_page->gbxContentLightLevel->setChecked(true);
         double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
         KisContentLightLevelInformation clli = *d->image->contentLightLevelInformation();
-        m_page->lblMaxCll->setText(i18n("%1 cd/m²").arg(QString::number(diffuseWhite*clli.maxContentLightLevel)));
-        m_page->lblMaxFall->setText(i18n("%1 cd/m²").arg(QString::number(diffuseWhite*clli.maxFrameAverageLightLevel)));
+        m_page->spnMaxCll->setValue(clli.maxContentLightLevel*diffuseWhite);
+        m_page->spnMaxFall->setValue(clli.maxFrameAverageLightLevel*diffuseWhite);
     } else {
-        m_page->lblMaxCll->setText(i18n("Unknown"));
-        m_page->lblMaxFall->setText(i18n("Unknown"));
+        m_page->gbxContentLightLevel->setChecked(false);
     }
 }
 
@@ -273,6 +281,19 @@ void KisDlgImageProperties::updateHDRColorVolume()
 }
 
 void KisDlgImageProperties::setHDRLightLevelsOnImage()
+{
+    if (m_page->gbxContentLightLevel->isChecked()) {
+        double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
+        KisContentLightLevelInformation clli;
+        clli.maxContentLightLevel = m_page->spnMaxCll->value() / diffuseWhite;
+        clli.maxFrameAverageLightLevel = m_page->spnMaxFall->value() / diffuseWhite;
+        d->image->setContentLightLevelInformation(std::make_optional(clli));
+    } else {
+        d->image->setContentLightLevelInformation(std::nullopt);
+    }
+}
+
+void KisDlgImageProperties::setHDRDiffuseLevelOnImage()
 {
     if (m_page->gbxDiffuseWhite->isChecked()) {
         d->image->setDiffuseWhiteLightLevel(std::make_optional(m_page->spnDiffuseWhite->value()));
@@ -339,6 +360,12 @@ void KisDlgImageProperties::changeColorVolumePreset()
         m_page->spnMaxLuminance->setValue(1000);
 
     }
+}
+
+void KisDlgImageProperties::slotCalculateLightLevels()
+{
+    int type = m_page->cmbLumiCalcType->currentData().toInt();
+    d->image->calculateContentLightLevelInformation(type);
 }
 
 void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)

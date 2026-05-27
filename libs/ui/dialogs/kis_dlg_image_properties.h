@@ -48,10 +48,12 @@ private Q_SLOTS:
     void updateHDRLightLevels();
     void updateHDRColorVolume();
 
+    void setHDRDiffuseLevelOnImage();
     void setHDRLightLevelsOnImage();
     void setHDRColorVolumeOnImage();
 
     void changeColorVolumePreset();
+    void slotCalculateLightLevels();
 
     void slotColorSpaceChanged(const KoColorSpace*);
 private:

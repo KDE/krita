@@ -30,6 +30,12 @@ struct KisContentLightLevelInformation: public boost::equality_comparable<KisCon
         return qFuzzyCompare(maxContentLightLevel, other.maxContentLightLevel)
             && qFuzzyCompare(maxFrameAverageLightLevel, other.maxFrameAverageLightLevel);
     };
+
+    enum CalculationType {
+        XYZLuminance, ///< Calculate luminance by converting to xyz.
+        Rec2020Component, ///< Calculate luminance by converting to rec2020
+        RGBComponent ///< Calculate luminance on the RGB components if possible.
+    };
 };
 
 /**

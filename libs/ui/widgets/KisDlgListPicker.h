@@ -9,13 +9,19 @@
 
 #include <QScopedPointer>
 #include <QDialog>
-
-#include "kis_types.h"
-
+#include <QListWidget>
 
 namespace Ui {
 class KisDlgListPicker;
 }
+
+//Custom list picker item for proper sorting of tools
+class KisDlgListPickerItem : public QListWidgetItem
+{
+public:
+    KisDlgListPickerItem(const QString &text);
+    bool operator<(const QListWidgetItem &other) const override;
+};
 
 class KisDlgListPicker : public QDialog
 {
@@ -23,10 +29,15 @@ class KisDlgListPicker : public QDialog
 
 public:
     explicit KisDlgListPicker(QString windowTitle, QString availableString, QString currentString,
-                              QList<QString> available, QList<QVariant> availableData,
-                              QList<QString> chosen, QList<QVariant> currentData,
-                              QWidget *parent = 0);
+                              QList<QString> available, QList<QVariant> availableData, QList<QIcon> availableIcons,
+                              QList<QString> chosen, QList<QVariant> currentData, QList<QIcon> currentIcons,
+                              QWidget *parent = 0, bool useaDataSorting = false);
     ~KisDlgListPicker() override;
+
+    /// Enables/Disables vertical move buttons
+    void enable_vertical(bool enable);
+    /// Enables/Disables sorting of items
+    void enable_sorting(bool enable);
 
 public Q_SLOTS:
     QList<QVariant> getChosenData();

@@ -7,20 +7,23 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include "KisDlgListPicker.h"
+#include "KisMainWindow.h"
 #include "KoToolBoxDocker_p.h"
-#include "KoToolBox_p.h"
 #include "KoToolBoxScrollArea_p.h"
+#include "kis_icon_utils.h"
 
-#include <QLabel>
+#include <QActionGroup>
 #include <QFontMetrics>
 #include <QFrame>
-#include <QAction>
+#include <QLabel>
 #include <QMenu>
-#include <QActionGroup>
 
-#include <klocalizedstring.h>
+#include <algorithm>
 #include <kconfiggroup.h>
+#include <klocalizedstring.h>
 #include <ksharedconfig.h>
+#include <KisPart.h>
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : QDockWidget(i18n("Toolbox"))
@@ -45,7 +48,7 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     w->setMinimumSize(titleSize, titleSize);
     setTitleBarWidget(w);
 
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KoToolBox");
     const int layoutDirUnchecked = cfg.readEntry<int>("layoutDir", Qt::LayoutDirectionAuto);
     switch (layoutDirUnchecked) {
     case Qt::LayoutDirectionAuto:
@@ -73,6 +76,10 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     if (m_orientation != Auto) {
         setToolBoxOrientation(static_cast<Qt::Orientation>(m_orientation));
     }
+
+
+    QList<QString> disabledTools = cfg.readEntry("disabledTools", QStringList());
+    m_toolBox->disableButtonsByName(disabledTools);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
@@ -180,6 +187,10 @@ void KoToolBoxDocker::contextMenuEvent(QContextMenuEvent *event)
     if (!m_contextMenu) {
         m_contextMenu = new QMenu(this);
 
+        QAction* configAction = m_contextMenu->addAction(i18n("Customize Disabled Tools"));
+
+        connect(configAction, SIGNAL(triggered()), SLOT(customizeDisabledTools()));
+
         QAction *compact = m_contextMenu->addAction(i18n("Compact"));
         compact->setCheckable(true);
         compact->setChecked(m_toolBox->isCompact());
@@ -262,4 +273,99 @@ void KoToolBoxDocker::contextMenuEvent(QContextMenuEvent *event)
     }
 
     m_contextMenu->exec(event->globalPos());
+}
+
+void KoToolBoxDocker::customizeDisabledTools()
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KoToolBox");
+    // List of tool names
+    QList<QString> cfgDisabledTools = cfg.readEntry("disabledTools", QStringList());
+
+    QList<KoToolAction *> tools = KoToolManager::instance()->toolActionList();
+    std::map<QString, std::map<int, KoToolAction *>> priorities;
+
+    // Sort by section -> priority, to ensure that the tools are arranged in the same order they are in the toolbox
+    Q_FOREACH (KoToolAction *tool, tools) {
+        priorities[tool->section()][tool->priority()] = tool;
+    }
+
+    std::vector<QString> toolNames(tools.length());
+    std::vector<QVariant> toolIds(tools.length());
+    std::vector<QIcon> toolIcons(tools.length());
+
+    unsigned int i = 0;
+    for (auto sections = priorities.begin(); sections != priorities.end(); ++sections) {
+        for (auto section = sections->second.begin(); section != sections->second.end(); ++section) {
+            toolNames[i] = section->second->toolName();
+            QString id = sections->first;
+            toolIds[i] = id.append(
+                QString("_").append(QString::number(section->first).append("_")).append(section->second->id()));
+            toolIcons[i] = KisIconUtils::loadIcon(section->second->iconName());
+            i++;
+        }
+    }
+
+    std::vector<QString> disabledToolNames(cfgDisabledTools.length());
+    std::vector<QVariant> disabledToolIds(cfgDisabledTools.length());
+    std::vector<QIcon> disabledToolIcons(cfgDisabledTools.length());
+
+    // Yes iterating over the other array every time is inefficient BUT this code is ran very very rarely,
+    // and even then there are currently 37 tools total so it DOES NOT matter
+    i = 0;
+    Q_FOREACH (auto tool, cfgDisabledTools) {
+
+        //Can probably simplify to remove this variable, but this should be able to better handle broken configs
+        bool found = false;
+        unsigned int j = 0;
+        Q_FOREACH (auto toolId, toolIds) {
+            if (toolId.toString().contains(tool)) {
+                found = true;
+                break;
+            }
+            j++;
+        }
+
+        if (found) {
+            disabledToolNames[i] = toolNames[j];
+            disabledToolIds[i] = toolIds[j];
+            disabledToolIcons[i] = toolIcons[j];
+
+            toolNames.erase(toolNames.begin() + j);
+            toolIds.erase(toolIds.begin() + j);
+            toolIcons.erase(toolIcons.begin() + j);
+
+            i++;
+        }
+    }
+
+    QWidget *mainWindow = KisPart::instance()->currentMainwindow()->widget();
+
+    KisDlgListPicker list = KisDlgListPicker(i18n("Customize Toolbox"),
+                                             i18n("Enabled tools"),
+                                             i18n("Disabled tools"),
+                                             QList(toolNames.begin(), toolNames.end()),
+                                             QList(toolIds.begin(), toolIds.end()),
+                                             QList(toolIcons.begin(), toolIcons.end()),
+                                             QList(disabledToolNames.begin(), disabledToolNames.end()),
+                                             QList(disabledToolIds.begin(), disabledToolIds.end()),
+                                             QList(disabledToolIcons.begin(), disabledToolIcons.end()),
+                                             mainWindow,
+                                             true);
+    list.enable_vertical(false);
+    list.enable_sorting(true);
+
+    list.exec();
+
+    QList<QVariant> chosen = list.getChosenData();
+    std::vector<QString> chosen_string(chosen.length());
+
+    std::transform(chosen.begin(), chosen.end(), chosen_string.begin(), [](QVariant i) {
+        return i.toString().split(QRegularExpression("_"))[2];
+    });
+
+    // Store tool names
+    cfg.writeEntry<QStringList>("disabledTools", QList<QString>(chosen_string.begin(), chosen_string.end()));
+
+    m_toolBox->resetButtonVisibility();
+    m_toolBox->disableButtonsByName(QList(chosen_string.begin(), chosen_string.end()));
 }

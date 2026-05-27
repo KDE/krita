@@ -382,4 +382,30 @@ KoToolBoxLayout *KoToolBox::toolBoxLayout() const
     return d->layout;
 }
 
+void KoToolBox::resetButtonVisibility()
+{
+    Q_FOREACH (auto b, d->buttons) {
+        b->setEnabled(true);
+        b->setVisible(true);
+    }
+
+    layout()->invalidate();
+    update();
+}
+
+void KoToolBox::disableButtonsByName(QList<QString> names)
+{
+    Q_FOREACH (QString name, names) {
+        if (d->buttonsByToolId.contains(name)) {
+            auto b = d->buttonsByToolId[name];
+
+            b->setEnabled(false);
+            b->setVisible(false);
+        }
+    }
+
+    layout()->invalidate();
+    update();
+}
+
 #include "moc_KoToolBoxScrollArea_p.cpp"

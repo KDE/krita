@@ -40,6 +40,7 @@ protected:
 protected Q_SLOTS:
     void updateToolBoxOrientation(Qt::DockWidgetArea);
     void updateFloating(bool);
+    void customizeDisabledTools();
 
 private:
     enum Orientation {

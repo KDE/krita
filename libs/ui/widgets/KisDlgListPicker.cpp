@@ -6,21 +6,38 @@
 
 #include "KisDlgListPicker.h"
 #include "ui_KisDlgListPicker.h"
-
-#include <QListWidgetItem>
-
 #include <kstandardguiitem.h>
-
 
 struct KisDlgListPicker::Private
 {
     
 };
 
+KisDlgListPickerItem::KisDlgListPickerItem(const QString &text)
+    : QListWidgetItem(text)
+{
+}
+
+bool KisDlgListPickerItem::operator<(const QListWidgetItem &other) const
+{
+    auto data = this->data(Qt::UserRole);
+    auto other_data = other.data(Qt::UserRole);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    if (data.type() != QVariant::String || other_data.type() != QVariant::String)
+#else
+    if (data.metaType().id() != QMetaType::QString || other_data.metaType().id() != QMetaType::QString)
+#endif
+        return false;
+
+    return data.toString() < other_data.toString();
+}
+
 KisDlgListPicker::KisDlgListPicker(QString windowTitle, QString availableString, QString currentString,
-                                   QList<QString> available, QList<QVariant> availableData,
-                                   QList<QString> chosen, QList<QVariant> chosenData,
-                                   QWidget *parent) :
+                                   QList<QString> available, QList<QVariant> availableData, QList<QIcon> availableIcons,
+                                   QList<QString> chosen, QList<QVariant> chosenData, QList<QIcon> chosenIcons,
+                                   QWidget *parent, bool useDataSorting
+                                   ) :
     QDialog(parent),
     ui(new Ui::KisDlgListPicker),
     m_d(new Private)
@@ -35,15 +52,40 @@ KisDlgListPicker::KisDlgListPicker(QString windowTitle, QString availableString,
     KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
 
     int i = 0;
-    Q_FOREACH(QString name, available) {
-        QListWidgetItem *item = new QListWidgetItem(name);
+    Q_FOREACH (QString name, available) {
+        QListWidgetItem *item;
+
+        if (useDataSorting) {
+            item = new KisDlgListPickerItem(name);
+        } else {
+            item = new QListWidgetItem(name);
+        }
+
+        // Set icons only if icons are provided
+        if (availableIcons.length() == available.length()) {
+            item->setIcon(availableIcons[i]);
+        }
+
         item->setData(Qt::UserRole, availableData[i]);
         ui->lstAvailable->addItem(item);
         i++;
     }
+
     i = 0;
-    Q_FOREACH(QString name, chosen) {
-        QListWidgetItem *item = new QListWidgetItem(name);
+    Q_FOREACH (QString name, chosen) {
+        QListWidgetItem *item;
+
+        if (useDataSorting) {
+            item = new KisDlgListPickerItem(name);
+        } else {
+            item = new QListWidgetItem(name);
+        }
+
+        // Set icons only if icons are provided
+        if (chosenIcons.length() == chosen.length()) {
+            item->setIcon(chosenIcons[i]);
+        }
+
         item->setData(Qt::UserRole, chosenData[i]);
         ui->lstCurrent->addItem(item);
         i++;
@@ -61,6 +103,20 @@ KisDlgListPicker::KisDlgListPicker(QString windowTitle, QString availableString,
 KisDlgListPicker::~KisDlgListPicker()
 {
     delete ui;
+}
+
+void KisDlgListPicker::enable_vertical(bool enable)
+{
+    ui->btnUp->setEnabled(enable);
+    ui->btnUp->setVisible(enable);
+    ui->btnDown->setEnabled(enable);
+    ui->btnDown->setVisible(enable);
+}
+
+void KisDlgListPicker::enable_sorting(bool enable)
+{
+    ui->lstAvailable->setSortingEnabled(enable);
+    ui->lstCurrent->setSortingEnabled(enable);
 }
 
 QList<QVariant> KisDlgListPicker::getChosenData()

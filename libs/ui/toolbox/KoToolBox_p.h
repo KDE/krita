@@ -84,6 +84,11 @@ private:
      */
     void addButton(KoToolAction *toolAction);
 
+    /// Resets visibility of all buttons
+    void resetButtonVisibility();
+    /// Disables all buttons who's names are in the provided list
+    void disableButtonsByName(QList<QString> names);
+
 private Q_SLOTS:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 

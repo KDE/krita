@@ -20,6 +20,7 @@
 #include <CompositionsCheck.h>
 #include <ExifCheck.h>
 #include <FillLayerTypeCheck.h>
+#include <HdrMetaDataCheck.h>
 #include <ImageSizeCheck.h>
 #include <IntegralFrameDuration.h>
 #include <LayerOpacityCheck.h>
@@ -85,6 +86,9 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     add(chkFactory->id(), chkFactory);
 
     chkFactory = new LayerOpacityCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    chkFactory = new HdrMetaDataCheckFactory();
     add(chkFactory->id(), chkFactory);
 
     QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);

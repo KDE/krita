@@ -99,7 +99,7 @@ struct KisReferenceImage::Private : public QSharedData
 #else
         image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
 #endif
-        // It should be ok to covert to ARGB as it's saved as PNG anyways?
+        // Need to convert ref image to ARGB to draw the zoom preview when color sampling
         image.convertTo(QImage::Format_ARGB32);
 
         return (!image.isNull());
@@ -120,10 +120,8 @@ struct KisReferenceImage::Private : public QSharedData
                 gc2.drawImage(QPoint(), image);
             }
         } else {
-            // Since loading saved reference images from file skip the load...() codepath
-            // Convert here make sure
-            image.convertTo(QImage::Format_ARGB32);
-            cachedImage = image;
+            // Convert here to make sure already loaded ref images are converted
+            cachedImage = image.convertToFormat(QImage::Format_ARGB32);
         }
 
         mipmap = KisQImagePyramid(cachedImage, false);

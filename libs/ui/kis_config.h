@@ -153,14 +153,28 @@ public:
     qreal colorSamplerPreviewCircleThickness(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleThickness(qreal thickness);
 
-    qreal colorSamplerZoomPreviewScale(bool defaultValue = false) const;
-    void setColorSamplerZoomPreviewScale(qreal scale);
-
     bool colorSamplerPreviewCircleOutlineEnabled(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleOutlineEnabled(bool enabled);
 
     bool colorSamplerPreviewCircleExtraCirclesEnabled(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled);
+
+    bool colorSamplerZoomPreviewEnabled(bool defaultValue = false) const;
+    void setColorSamplerZoomPreviewEnabled(bool enabled);
+
+    qreal colorSamplerZoomPreviewScale(bool defaultValue = false) const;
+    void setColorSamplerZoomPreviewScale(qreal scale);
+
+    enum class ColorSamplerPreviewCirclePosition {
+        Center,
+        Top,
+        TopLeft,
+        TopRight,
+        Count,
+    };
+
+    ColorSamplerPreviewCirclePosition colorSamplerPreviewCirclePosition(bool defaultValue = false) const;
+    void setColorSamplerPreviewCirclePosition(ColorSamplerPreviewCirclePosition position);
 
     /**
      * Controls if the canvas should have a separate color managed surface.

@@ -569,19 +569,6 @@ void KisConfig::setColorSamplerPreviewCircleThickness(qreal thickness)
     m_cfg.writeEntry("colorSamplerPreviewCircleThickness", thickness);
 }
 
-
-qreal KisConfig::colorSamplerZoomPreviewScale(bool defaultValue) const {
-    qreal def = 500;
-    if (!defaultValue) {
-        return m_cfg.readEntry("colorSamplerZoomPreviewScale", def);
-    }
-    return def;
-}
-
-void KisConfig::setColorSamplerZoomPreviewScale(qreal scale) {
-    m_cfg.writeEntry("colorSamplerZoomPreviewScale", scale);
-}
-
 bool KisConfig::colorSamplerPreviewCircleOutlineEnabled(bool defaultValue) const
 {
     bool def = true;
@@ -608,6 +595,43 @@ bool KisConfig::colorSamplerPreviewCircleExtraCirclesEnabled(bool defaultValue) 
 void KisConfig::setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled)
 {
     m_cfg.writeEntry("colorSamplerPreviewCircleExtraCirclesEnabled", enabled);
+}
+
+bool KisConfig::colorSamplerZoomPreviewEnabled(bool defaultValue) const {
+    bool def = true;
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerZoomPreviewEnabled", def);
+    }
+    return def;
+}
+void KisConfig::setColorSamplerZoomPreviewEnabled(bool enabled) {
+    m_cfg.writeEntry("colorSamplerZoomPreviewEnabled", enabled);
+}
+
+qreal KisConfig::colorSamplerZoomPreviewScale(bool defaultValue) const {
+    qreal def = 500;
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerZoomPreviewScale", def);
+    }
+    return def;
+}
+
+void KisConfig::setColorSamplerZoomPreviewScale(qreal scale) {
+    m_cfg.writeEntry("colorSamplerZoomPreviewScale", scale);
+}
+
+KisConfig::ColorSamplerPreviewCirclePosition KisConfig::colorSamplerPreviewCirclePosition(bool defaultValue) const {
+    if (!defaultValue) {
+        int pos = m_cfg.readEntry("colorSamplerPreviewCirclePosition", int(ColorSamplerPreviewCirclePosition::Center));
+        if (pos >= 0 && pos < int(ColorSamplerPreviewCirclePosition::Count)) {
+            return ColorSamplerPreviewCirclePosition(pos);
+        }
+    }
+    return ColorSamplerPreviewCirclePosition::Center;
+}
+
+void KisConfig::setColorSamplerPreviewCirclePosition(KisConfig::ColorSamplerPreviewCirclePosition position) {
+    m_cfg.writeEntry("colorSamplerPreviewCirclePosition", int(position));
 }
 
 bool KisConfig::useDirtyPresets(bool defaultValue) const

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:41+0000\n"
+"POT-Creation-Date: 2026-05-27 00:42+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -40643,7 +40643,7 @@ msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "&Алмаштириш:"
 
-#: libs/ui/widgets/kis_selection_options.cc:299
+#: libs/ui/widgets/kis_selection_options.cc:300
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgctxt "The 'adjustments' section label in selection tools options"

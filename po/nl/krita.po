@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:41+0000\n"
+"POT-Creation-Date: 2026-05-27 00:42+0000\n"
 "PO-Revision-Date: 2026-05-06 16:56+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -39792,7 +39792,7 @@ msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Referentie"
 
-#: libs/ui/widgets/kis_selection_options.cc:299
+#: libs/ui/widgets/kis_selection_options.cc:300
 #, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"

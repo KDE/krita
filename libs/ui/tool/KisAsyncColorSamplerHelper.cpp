@@ -78,7 +78,6 @@ struct KisAsyncColorSamplerHelper::Private
     QPointF sampleDocPoint;
 
     QPainterPath cacheCircleInnerClip;
-    QVector<KisReferenceImage*> cacheReferenceImageList; // Sorted reference images by zIndex
     QRect cacheCanvasPreviewRect;
     QImage cacheCanvasPreviewImage;
 
@@ -219,20 +218,6 @@ struct KisAsyncColorSamplerHelper::Private
         return colorPreviewDocumentRect.translated(outlineDocPoint);
     }
 
-    void updateCachedReferenceImages() {
-        KisDocument *doc = canvas->viewManager()->document();
-        if (!doc || !doc->referenceImagesLayer()) {
-            cacheReferenceImageList.clear();
-            return;
-        }
-
-        cacheReferenceImageList = doc->referenceImagesLayer()->referenceImages();
-        // Sort by zIndex to show correct order
-        std::sort(cacheReferenceImageList.begin(), cacheReferenceImageList.end(), [](KisReferenceImage *a, KisReferenceImage *b){
-            return a->zIndex() < b->zIndex();
-        });
-    }
-
     QRect standardizeZoomPreviewPixelRect(QRect pixelRect) {
         // If width and height get rounded to different number, the center will be stuck between pixel border
         if (pixelRect.width() != pixelRect.height()) {
@@ -303,9 +288,6 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
     m_d->circleZoomPreviewEnabled = cfg.colorSamplerZoomPreviewEnabled();
     m_d->circleZoomPreviewScale = cfg.colorSamplerZoomPreviewScale();
     m_d->circlePreviewPosition = cfg.colorSamplerPreviewCirclePosition();
-
-    // Update and sort the list of current reference images currently on canvas
-    m_d->updateCachedReferenceImages();
 
     m_d->activationDelayTimer.start();
 }
@@ -748,15 +730,20 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
 // Won't show opacity because the color sampled doesn't respect opacity either
 // TODO: Test if reference image still show when not visible, opacity = 0. Maybe we need to cover that too
 void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip) {
+    KisDocument *document = m_d->canvas->viewManager()->document();
+    if (!document || !document->referenceImagesLayer()) return;
+
     gc.save();
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     gc.setClipPath(clip);
 
-    Q_FOREACH(KisReferenceImage *refImage, m_d->cacheReferenceImageList) {
-        // Check if sampleRect intersect with reference image
-        QPolygonF outline = refImage->absoluteTransformation().map(refImage->outlineRect());
-        if (!outline.intersects(QPolygonF(zoomDocRectF))) continue;
+    QList<KoShape*> shapeList = document->referenceImagesLayer()->shapeManager()->shapesAt(zoomDocRectF);
+    if (shapeList.size() > 1) std::sort(shapeList.begin(), shapeList.end(), KoShape::compareShapeZIndex);
+
+    Q_FOREACH(KoShape *shape, shapeList) {
+        KisReferenceImage *refImage = dynamic_cast<KisReferenceImage*>(shape);
+        if (!refImage) continue;
 
         gc.save();
 

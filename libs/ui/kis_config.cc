@@ -598,7 +598,7 @@ void KisConfig::setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled)
 }
 
 bool KisConfig::colorSamplerZoomPreviewEnabled(bool defaultValue) const {
-    bool def = true;
+    bool def = false;
     if (!defaultValue) {
         return m_cfg.readEntry("colorSamplerZoomPreviewEnabled", def);
     }
@@ -609,7 +609,7 @@ void KisConfig::setColorSamplerZoomPreviewEnabled(bool enabled) {
 }
 
 qreal KisConfig::colorSamplerZoomPreviewScale(bool defaultValue) const {
-    qreal def = 500;
+    qreal def = 5;
     if (!defaultValue) {
         return m_cfg.readEntry("colorSamplerZoomPreviewScale", def);
     }

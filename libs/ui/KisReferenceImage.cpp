@@ -99,14 +99,13 @@ struct KisReferenceImage::Private : public QSharedData
 #else
         image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
 #endif
-        // Need to convert ref image to ARGB to draw the zoom preview when color sampling
-        image.convertTo(QImage::Format_ARGB32);
 
         return (!image.isNull());
     }
 
     bool loadFromQImage(const QImage &img) {
-        image = img.convertToFormat(QImage::Format_ARGB32);
+        image = img;
+
         return !image.isNull();
     }
 
@@ -120,8 +119,10 @@ struct KisReferenceImage::Private : public QSharedData
                 gc2.drawImage(QPoint(), image);
             }
         } else {
+            // Need to convert ref image to ARGB to draw the zoom preview when color sampling
             // Convert here to make sure already loaded ref images are converted
-            cachedImage = image.convertToFormat(QImage::Format_ARGB32);
+            cachedImage = image;
+            cachedImage.convertTo(QImage::Format_ARGB32);
         }
 
         mipmap = KisQImagePyramid(cachedImage, false);

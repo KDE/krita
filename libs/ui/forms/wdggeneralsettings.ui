@@ -1044,16 +1044,19 @@
                  <item row="0" column="1">
                   <widget class="KisSliderSpinBox" name="m_ssbColorSamplerZoomPreviewScale">
                    <property name="suffix">
-                    <string>%</string>
+                    <string>x</string>
                    </property>
                    <property name="minimum">
-                    <number>100</number>
+                    <number>1</number>
                    </property>
                    <property name="maximum">
-                    <number>1000</number>
+                    <number>20</number>
                    </property>
                    <property name="singleStep">
-                    <number>25</number>
+                    <number>1</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
                    </property>
                   </widget>
                  </item>

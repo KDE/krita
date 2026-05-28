@@ -331,8 +331,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_grpColorSamplerZoomPreview->setChecked(cfg.colorSamplerZoomPreviewEnabled());
 
-    m_ssbColorSamplerZoomPreviewScale->setRange(100, 2000);
-    m_ssbColorSamplerZoomPreviewScale->setSingleStep(100);
+    m_ssbColorSamplerZoomPreviewScale->setRange(1, 20);
+    m_ssbColorSamplerZoomPreviewScale->setSingleStep(1);
     m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale());
 
     m_cmbColorSamplerPreviewCirclePosition->addItem(i18n("Center"));

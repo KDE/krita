@@ -91,6 +91,5 @@ QString KisHDRMetadataOptions::generateFFMpegOptions() const
         "transfer=smpte2084:"
         "range=full");
 
-    qDebug() << x265Params;
     return x265Params;
 }

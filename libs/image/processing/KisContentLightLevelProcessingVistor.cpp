@@ -58,7 +58,6 @@ KisContentLightLevelInformation KisContentLightLevelProcessingVistor::calculateF
     double average = 0.0;
     int divider = 0;
     const QRectF imageBounds = dev->extent();
-    qDebug() << "preparing frame" << imageBounds;
 
     bool canConvertLinear = dev->colorSpace()->colorModelId() == RGBAColorModelID && dev->colorSpace()->profile()->getColorPrimaries() != PRIMARIES_UNSPECIFIED;
 
@@ -118,6 +117,5 @@ KisContentLightLevelInformation KisContentLightLevelProcessingVistor::calculateF
     }
 
     clli.maxFrameAverageLightLevel = average / divider;
-    qDebug() << "handled frame" << clli.maxContentLightLevel << clli.maxFrameAverageLightLevel;
     return clli;
 }

@@ -133,6 +133,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     m_page->cmbLumiCalcType->addItem(i18n("Rec 2020 Per Component"), KisContentLightLevelInformation::Rec2020Component);
     m_page->cmbLumiCalcType->addItem(i18n("RGB Per Component"), KisContentLightLevelInformation::RGBComponent);
 
+    m_page->cmbLumiCalcType->setItemData(0, i18nc("@tooltip", "Calculate the brightness in nits against XYZ luminance."), Qt::ToolTipRole);
+    m_page->cmbLumiCalcType->setItemData(1, i18nc("@tooltip", "Calculate the brightness in nits by testing the components in linear rec 2020."), Qt::ToolTipRole);
+    m_page->cmbLumiCalcType->setItemData(2, i18nc("@tooltip", "Calculate the brightness in nits by testing the components in linear RGB, if possible, falls back to using XYZ luminance."), Qt::ToolTipRole);
+
     connect(m_page->cmbColorVolumePresets, SIGNAL(activated(int)), this, SLOT(changeColorVolumePreset()));
     connect(m_page->gbxColorVolume, &QGroupBox::clicked, &d->colorVolumeCompressor, &KisSignalCompressor::start);
     connect(m_page->spnWhiteX, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);

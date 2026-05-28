@@ -1445,6 +1445,23 @@ namespace Private {
         }
     }
 
+    void updateFrameJobsNonRecursive(FrameJobs *jobs, KisNodeSP rootNode, bool frameTimesRecursive)
+    {
+        if (frameTimesRecursive) {
+            QSet<int> frames = fetchLayerFramesRecursive(rootNode);
+
+            if (frames.isEmpty()) {
+                (*jobs)[0].insert(rootNode);
+            } else {
+                foreach (int frame, frames) {
+                    (*jobs)[frame].insert(rootNode);
+                }
+            }
+        } else {
+            updateFrameJobs(jobs, rootNode);
+        }
+    }
+
     /**
      * \see a comment in mergeMultipleLayersImpl()
      */

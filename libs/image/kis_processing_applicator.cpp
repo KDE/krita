@@ -369,11 +369,18 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
 
     // TODO: implement a nonrecursive case when !m_flags.testFlag(RECURSIVE)
     //       (such case is not yet used anywhere)
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
+    //KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
 
     if (!m_nodes.isEmpty()) {
-        Q_FOREACH(KisNodeSP node, m_nodes) {
-            KisLayerUtils::updateFrameJobsRecursive(&jobs, node);
+
+        if (m_flags.testFlag(RECURSIVE)) {
+            Q_FOREACH(KisNodeSP node, m_nodes) {
+                KisLayerUtils::updateFrameJobsRecursive(&jobs, node);
+            }
+        } else {
+            Q_FOREACH(KisNodeSP node, m_nodes) {
+                KisLayerUtils::updateFrameJobsNonRecursive(&jobs, node, m_flags.testFlag(RECURSIVE_FRAME_TIMES));
+            }
         }
     }
 

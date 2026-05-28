@@ -2108,9 +2108,9 @@ void KisImage::calculateContentLightLevelInformation(int type)
 
     KisImageSignalVector emitSignals;
     KUndo2MagicString actionName;
-    KisProcessingApplicator::ProcessingFlags signalFlags = KisProcessingApplicator::NO_UI_UPDATES;
+    KisProcessingApplicator::ProcessingFlags signalFlags = KisProcessingApplicator::NO_UI_UPDATES | KisProcessingApplicator::RECURSIVE_FRAME_TIMES;
     KisProcessingApplicator applicator(this, m_d->rootLayer,
-                                       KisProcessingApplicator::RECURSIVE | signalFlags,
+                                       signalFlags,
                                        emitSignals, actionName);
 
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =

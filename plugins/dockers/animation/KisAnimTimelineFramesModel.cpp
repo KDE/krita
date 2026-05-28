@@ -1081,7 +1081,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
         }
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.get(),
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.release(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
     return true;

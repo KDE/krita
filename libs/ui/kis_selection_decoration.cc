@@ -194,8 +194,12 @@ void KisSelectionDecoration::antsAttackEvent()
     }
 }
 
-void KisSelectionDecoration::toggleSlectionVisibility() {
+void KisSelectionDecoration::toggleSelectionVisibility() {
     m_selectionVisibility = !m_selectionVisibility;
+}
+
+bool KisSelectionDecoration::selectionVisible() {
+    return m_selectionVisibility;
 }
 
 void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)

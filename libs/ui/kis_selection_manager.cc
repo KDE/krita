@@ -587,9 +587,9 @@ void KisSelectionManager::toggleDisplaySelection()
 {
     KIS_ASSERT_RECOVER_RETURN(m_selectionDecoration);
 
-    m_selectionDecoration->toggleSlectionVisibility();
+    m_selectionDecoration->toggleSelectionVisibility();
     m_toggleDisplaySelection->blockSignals(true);
-    m_toggleDisplaySelection->setChecked(m_selectionDecoration->visible());
+    m_toggleDisplaySelection->setChecked(m_selectionDecoration->selectionVisible());
     m_toggleDisplaySelection->blockSignals(false);
 
     Q_EMIT displaySelectionChanged();

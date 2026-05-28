@@ -342,7 +342,6 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
 bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index, FT_LibrarySP freeTypeLibrary) {
 
     FontFamilyNode fontFamily;
-    const QLocale english(QLocale::English);
     fontFamily.fileName = filename;
     fontFamily.fileIndex = index;
     for (auto it = d->fontFamilyCollection.begin(); it != d->fontFamilyCollection.end(); it++) {
@@ -538,7 +537,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
                 }
             }
         }
-
+        QLocale english(QLocale::English);
         if (!typographicFamilyNames.isEmpty()) {
             typographicFamily.fontFamily = typographicFamilyNames.value(english, typographicFamilyNames.values().first());
             typographicFamily.localizedFontFamilies = typographicFamilyNames;
@@ -587,35 +586,23 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
                 break;
             }
         }
-
-        auto setupWwsFamily = [fontFamily, typographicFamily, isWWSFamilyWithoutName, english] (FontFamilyNode &wwsFamily) {
-            /**
-             * When isWWSFamilyWithoutName is active, we need to assume that...
-             *              * 1. The font is indicating it follows a WWS format only.
-             * 2. The font has no wws family name.
-             * 3. Probably this means that the font family is the
-             *    typographic family, unless the typographic family is the
-             *    exact same as the RIBBI family.
-             * 4. We also need to do this for families without a wws, because we might have a bigger
-             *    family that has both wws-only and not-wws-only activated (eg. Calibri)
-             */
-            if (!typographicFamily.fontFamily.isEmpty()) {
-
-                wwsFamily.fontFamily = typographicFamily.fontFamily;
-                wwsFamily.localizedFontFamilies = typographicFamily.localizedFontFamilies;
-                if (isWWSFamilyWithoutName) {
-                    wwsFamily.fontStyle = fontFamily.localizedTypographicStyle.value(english, fontFamily.localizedTypographicStyle.values().first());
-                    wwsFamily.localizedTypographicStyle = fontFamily.localizedFontStyle;
-                }
-            } else {
-                wwsFamily.fontFamily = fontFamily.fontFamily;
-                wwsFamily.localizedFontFamilies = fontFamily.localizedFontFamilies;
-            }
-        };
-
         if (it != d->fontFamilyCollection.childEnd()) {
-            if ((isWWSFamilyWithoutName || wwsFamily.fontFamily.isEmpty()) && fontFamily.pixelSizes.isEmpty()) {
-                setupWwsFamily(wwsFamily);
+
+            if (isWWSFamilyWithoutName) {
+                /**
+                 * When isWWSFamilyWithoutName is active, we need to assume that...
+                 *
+                 * 1. The font is indicating it follows a WWS format only.
+                 * 2. The font has no wws family name.
+                 * 3. Probably this means that the font family is the
+                 *    typographic family, unless the typographic family is the
+                 *    exact same as the RIBBI family.
+                 */
+                if (!typographicFamily.fontFamily.isEmpty() && typographicFamily.fontFamily != fontFamily.fontFamily) {
+                    wwsFamily.fontFamily = typographicFamily.fontFamily;
+                } else {
+                    wwsFamily.fontFamily = fontFamily.fontFamily;
+                }
             }
             if (!wwsFamily.fontFamily.isEmpty()) {
                 // sort into wws family
@@ -654,8 +641,12 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             }
         } else {
             auto typographic = d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), typographicFamily);
-            if (isWWSFamilyWithoutName || wwsFamily.fontFamily.isEmpty()) {
-                setupWwsFamily(wwsFamily);
+            if (isWWSFamilyWithoutName) {
+                if (!typographicFamily.fontFamily.isEmpty() && typographicFamily.fontFamily != fontFamily.fontFamily) {
+                    wwsFamily.fontFamily = typographicFamily.fontFamily;
+                } else {
+                    wwsFamily.fontFamily = fontFamily.fontFamily;
+                }
             }
             if (!wwsFamily.fontFamily.isEmpty()) {
                 auto wwsNew = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);

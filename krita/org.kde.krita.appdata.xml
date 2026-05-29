@@ -639,11 +639,40 @@
     <id>org.kde.krita.desktop</id>
   </provides>
   <content_rating type="oars-1.1"/>
-  <bundle type="appimage">krita-5.3.2</bundle>
+  <bundle type="appimage">krita-5.3.2.1</bundle>
   <releases>
     <!-- Note: website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the
                last actual release -->
+    <release date="2026-06-02" version="5.3.2.1">
+      <url>https://krita.org/en/posts/2026/krita-5.3.2.1-released/</url>
+      <description>
+        <p>A hotfix release fixing two regressions in for 5.3.2</p>
+      </description>
+      <artifacts>
+        <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
+          <location>https://download.kde.org/stable/krita/5.3.2.1/krita-5.3.2.1-x86_64.AppImage</location>
+        </artifact>
+        <artifact type="binary" platform="macOS">
+          <location>https://download.kde.org/stable/krita/5.3.2.1/krita-5.3.2.1-signed.dmg</location>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/5.3.2.1/krita-x64-5.3.2.1-setup.exe</location>
+        </artifact>
+        <artifact type="binary" platform="android-x86_64">
+          <location>https://download.kde.org/stable/krita/5.3.2.1/krita-x86_64-5.3.2.1-release-signed.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-arm64_v8a">
+          <location>https://download.kde.org/stable/krita/5.3.2.1/krita-arm64-v8a-5.3.2.1-release-signed.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-armeabi_v7a">
+          <location>https://download.kde.org/stable/krita/5.3.2.1/krita-armeabi-v7a-5.3.2.1-release-signed.apk</location>
+        </artifact>
+        <artifact type="source">
+          <location>https://download.kde.org/stable/krita/6.0.2.1/krita-6.0.2.1.tar.xz</location>
+        </artifact>
+      </artifacts>
+    </release>
     <release date="2026-05-27" version="5.3.2">
       <url>https://krita.org/en/posts/2026/krita-5.3.2-released/</url>
       <description>

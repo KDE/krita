@@ -105,7 +105,7 @@ if arguments.build_installers:
     shutil.move(os.path.join(installerFolder, 'krita-nsis', installerFileName), os.getcwd())
 
     if signPackages:
-        commandToRun = ' '.join([sys.executable,
+        commandToRun = ' '.join([sys.executable, '-u',
                                 os.path.join('ci-notary-service', 'signwindowsbinaries.py'),
                                 '--config', os.environ['KRITACI_WINDOWS_SIGN_CONFIG'],
                                 installerFileName
@@ -118,6 +118,18 @@ if arguments.build_installers:
         except Exception:
             print("## Failed to sign the installer")
             sys.exit(1)
+
+        if arguments.release_package_naming:
+            try:
+                print("## Verify that the installer is signed")
+                commandToRun = ' '.join([sys.executable, '-u',
+                                    os.path.join('packaging', 'windows', 'find-libs-with-debug.py'),
+                                    '-s', '-f', installerFileName
+                                    ])
+                subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
+            except Exception:
+                print("## Failed to verify the installer signature")
+                sys.exit(1)
 
     msixFolder = os.path.join(os.getcwd(), '_msix')
     os.makedirs(msixFolder)

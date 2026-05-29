@@ -71,10 +71,10 @@ QString KisHDRMetadataOptions::generateFFMpegOptions() const
 
     const QString x265Params =
             QString("-x265-params "
-                "master-display=R(%1,%2)G(%3,%4)B(%5,%6)WP(%7,%8)L(%9,%10):"
+                "master-display=G(%3,%4)B(%5,%6)R(%1,%2)WP(%7,%8)L(%9,%10):"
                 "max-cll=%11,%12:"
                 "colorprim=bt2020:"
-                "colormatrix=bt2020c:"
+                "colormatrix=bt2020nc:"
                 "transfer=smpte2084:"
                 "range=full")
             .arg(cprim(redX)).arg(cprim(redY))

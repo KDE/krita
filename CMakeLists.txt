@@ -151,6 +151,17 @@ set(KRITA_VERSION_RELEASE 0)
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
 set(KRITA_VERSION_REVISION 0)
+
+# In MSI packages we cannot use the fourth digit for release numbering,
+# since this digit is used by Microsoft Store internally. Hence we cannot
+# release hotfix releases (like 6.0.1.1, 6.0.1.2) on Windows. Therefore we
+# use the same approach as on Android, we just number all the official
+# releases in the same X.Y.* branch sequentially.
+#
+# Krita 5.3.2.1 was released with version '3', increment on releasing
+#
+set(KRITA_MSI_VERSION_RELEASE_TRANSITIONAL 3)
+
 # Uncomment the following if this is currently in the "stable" branch.
 # Do not uncomment for master branch.
 #set(KRITA_STABLE_BRANCH 1)

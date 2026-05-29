@@ -50,10 +50,13 @@ if args.directory is None and args.file is None:
 
 OBJDUMP = False
 for arg in ("objdump", "llvm-objdump"):
-    commandToRun = f"{arg} --version"
-    ret = subprocess.call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
-    if ret != 1:
-        OBJDUMP = arg
+    try:
+        ret = subprocess.call([arg, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if ret != 1:
+            OBJDUMP = arg
+    except FileNotFoundError:
+        pass
+
 if not OBJDUMP:
     warnings.warn("ERROR: objdump is not working.")
     sys.exit(1)

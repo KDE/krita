@@ -67,8 +67,7 @@ commandToRun = ' '.join([sys.executable,
                          packagesFolder])
 try:
     print( "## RUNNING: " + commandToRun )
-    subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr,
-                          shell=True)
+    subprocess.check_call(commandToRun)
 except Exception:
     print("## Failed to upload packages")
     sys.exit(1)

@@ -1,0 +1,38 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 6L8 14H9L9.625 12H12.375L13 14H14L11.5 6H10.5ZM9.9375 11L11 7.6L12.0625 11H9.9375Z" fill="#D2D2D2"/>
+<path d="M10.5 4H2V5H9H10.5V4Z" fill="#D2D2D2"/>
+<path d="M8.99316 4.58203C8.75144 6.03236 7.97943 7.34699 7.03906 8.43945C7.47326 8.80392 7.93396 9.11765 8.39746 9.37695L8.0918 10.3516C7.49536 10.0356 6.90491 9.63714 6.35352 9.16895C5.32531 10.1803 4.17444 10.9719 3.22363 11.4473L2.77637 10.5527C3.62685 10.1275 4.67915 9.40661 5.62402 8.4834C4.94215 7.77133 4.35337 6.93462 3.9502 6H5.05469C5.38246 6.63958 5.81303 7.22889 6.30859 7.75293C7.15782 6.75802 7.80661 5.61908 8.00684 4.41797L8.99316 4.58203Z" fill="#D2D2D2"/>
+<path d="M7 3H6L7 1H8L7 3Z" fill="#D2D2D2"/>
+</svg>

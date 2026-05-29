@@ -285,7 +285,7 @@ for arg in ("objdump", "llvm-objdump"):
 if not OBJDUMP:
     warnings.warn("ERROR: objdump is not working.")
     sys.exit(1)
-output = subprocess.check_output(fr"{OBJDUMP} -f {KRITA_INSTALL_DIR}\bin\krita.exe", shell=True, text=True)
+output = subprocess.check_output(fr"{OBJDUMP} -f {KRITA_INSTALL_DIR}\bin\krita.exe", text=True)
 targetArchLines = output.splitlines()
 
 TARGET_ARCH_LINE = ""
@@ -375,7 +375,7 @@ elif IS_LLVM_MINGW:
         asanLibName = 'libclang_rt.asan_dynamic-x86_64'
         os.environ['STDLIBS_DIR'] = fr"{os.environ['MINGW_BIN_DIR']}\..\x86_64-w64-mingw32\bin"
 
-    output = subprocess.check_output(fr"{OBJDUMP} -p {KRITA_INSTALL_DIR}\bin\krita.exe", shell=True, text=True)
+    output = subprocess.check_output(fr"{OBJDUMP} -p {KRITA_INSTALL_DIR}\bin\krita.exe", text=True)
 
     if re.search(asanLibName, output):
         print('The package contains ASAN, packaging the ASAN runtime as well!')
@@ -661,7 +661,7 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
 
         commandToRun = f"objcopy --only-keep-debug {arg1} {arg1}.debug"
         try:
-            subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+            subprocess.check_call(commandToRun)
         except subprocess.CalledProcessError as status:
             return status.returncode
         # If the debug file is small enough then consider there being no debug info.
@@ -675,14 +675,14 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
             os.mkdir(debugDir)
         shutil.move(f"{arg1}.debug", debugDir+"\\")
         commandToRun = f"strip --strip-debug {arg1}"
-        subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+        subprocess.check_call(commandToRun)
         # Add debuglink
         # FIXME: There is a problem with gdb that cause it to output this warning
         # FIXME: "warning: section .gnu_debuglink not found in xxx.debug"
         # FIXME: I tried adding a link to itself but this kills drmingw :(
         commandToRun = fr'objcopy --add-gnu-debuglink="{debugDir}\{os.path.basename(arg1)}.debug" {arg1}'
         try:
-            subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+            subprocess.check_call(commandToRun)
         except subprocess.CalledProcessError as status:
             return status.returncode
         return 0
@@ -713,10 +713,10 @@ if args.pre_zip_hook:
     print("Running pre-zip hook...")
     if args.pre_zip_hook.endswith('.cmd'):
         subprocess.run(["cmd", "/c", args.pre_zip_hook,
-                       f"{pkg_root}\\"], stdout=sys.stdout, stderr=sys.stderr, shell=True, check=True)
+                       f"{pkg_root}\\"], check=True)
     elif args.pre_zip_hook.endswith('.py'):
         subprocess.run([sys.executable, "-u", args.pre_zip_hook,
-                       f"{pkg_root}\\"], stdout=sys.stdout, stderr=sys.stderr, shell=True, check=True)
+                       f"{pkg_root}\\"], check=True)
     else:
         warnings.warn("ERROR: pre-zip hook has unknown format!")
         sys.exit(102)

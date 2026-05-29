@@ -72,7 +72,7 @@ commandToRun = ' '.join([sys.executable,
 # Run the command
 try:
     print( "## RUNNING: " + commandToRun )
-    subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
+    subprocess.check_call(commandToRun)
 except Exception:
     print("## Failed to build zip package")
     sys.exit(1)
@@ -95,8 +95,7 @@ if arguments.build_installers:
     # Run the command
     try:
         print( "## RUNNING: " + commandToRun )
-        subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                              cwd=installerFolder )
+        subprocess.check_call(commandToRun, cwd=installerFolder)
     except Exception:
         print("## Failed to build the installer")
         sys.exit(1)
@@ -113,7 +112,7 @@ if arguments.build_installers:
         # Run the command
         try:
             print( "## RUNNING: " + commandToRun )
-            subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
+            subprocess.check_call(commandToRun)
         except Exception:
             print("## Failed to sign the installer")
             sys.exit(1)
@@ -125,7 +124,7 @@ if arguments.build_installers:
                                     os.path.join('packaging', 'windows', 'find-libs-with-debug.py'),
                                     '-s', '-f', installerFileName
                                     ])
-                subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
+                subprocess.check_call(commandToRun)
             except Exception:
                 print("## Failed to verify the installer signature")
                 sys.exit(1)
@@ -150,8 +149,7 @@ if arguments.build_installers:
     # Run the command
     try:
         print( "## RUNNING: " + commandToRun )
-        subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True,
-                               env=msixEnvironment, cwd=msixFolder )
+        subprocess.check_call(commandToRun, env=msixEnvironment, cwd=msixFolder)
     except Exception:
         print("## Failed to build the MSIX package")
         sys.exit(1)

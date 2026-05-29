@@ -53,7 +53,7 @@ for rootPath, dirs, files in os.walk(pkg_root):
                     print(f"Signing {filePath}")
                     try:
                         commandToRun = f'"{environ["SIGNTOOL"]}" sign {environ["SIGNTOOL_SIGN_FLAGS"]} "{filePath}"'
-                        subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+                        subprocess.check_call(commandToRun)
                     except subprocess.CalledProcessError as status:
                         print(f"ERROR: Got exit code {status.returncode} from signtool!")
                         sys.exit(1)

@@ -487,7 +487,7 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
             ui->chkUseHDRMetadata->isChecked();
 
         if (enableHDR) {
-            options << "-colorspace" << "bt2020c"
+            options << "-colorspace" << "bt2020nc"
                     << "-color_trc" << "smpte2084"
                     << "-color_primaries" << "bt2020";
         }

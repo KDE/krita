@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 02:38+0000\n"
+"POT-Creation-Date: 2026-05-29 02:41+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -45792,7 +45792,7 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "(qtundo-format)"
@@ -45801,8 +45801,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "ਸਫ਼ਾ ਹਟਾਓ"
 msgstr[1] "ਸਫ਼ਾ ਹਟਾਓ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "(qtundo-format)"
@@ -45823,34 +45823,34 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Edit Frames:"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "@item:inmenu"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 02:38+0000\n"
+"POT-Creation-Date: 2026-05-29 02:41+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -43292,7 +43292,7 @@ msgstr ""
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -43300,8 +43300,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] ""
 msgstr[1] ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, fuzzy, kde-format
 #| msgid "Insert name"
 msgctxt "(qtundo-format)"
@@ -43321,7 +43321,7 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Remove Hold Frame"
@@ -43329,7 +43329,7 @@ msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Премахване на задържащата рамка"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, fuzzy, kde-format
 #| msgctxt "@label:spinbox"
 #| msgid "Number of frames:"
@@ -43337,20 +43337,20 @@ msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Брой на кадрите:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, fuzzy, kde-format
 #| msgid "Edit Layers:"
 msgid "Edit Frames:"
 msgstr "Редактиране на слоеве:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, fuzzy, kde-format
 #| msgid "frame"
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "кадър"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Remove Hold Frame"
@@ -69922,538 +69922,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Decrease Font Size"
-#~ msgctxt "action"
-#~ msgid "Decrease Flow Shape Index"
-#~ msgstr "Намаляване размера на шрифта"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Increase Font Size"
-#~ msgctxt "action"
-#~ msgid "Increase Flow Shape Index"
-#~ msgstr "Увеличаване кегела на шрифта"
-
-#~ msgctxt "Lightness HSI"
-#~ msgid "Lightness"
-#~ msgstr "Светлост"
-
-#, fuzzy
-#~| msgid "Light Sources"
-#~ msgid "Edit SVG Source"
-#~ msgstr "Светлинни източници"
-
-#, fuzzy
-#~| msgid "Text Tool"
-#~ msgid "Text Type"
-#~ msgstr "Текст"
-
-#, fuzzy
-#~| msgid "Performance"
-#~ msgid "Preformatted"
-#~ msgstr "Производителност"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Underline"
-#~ msgid "Inline Wrapped"
-#~ msgstr "Подчертаване"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgid "Prepositioned"
-#~ msgstr "Позиция"
-
-#, fuzzy
-#~| msgid "Palette"
-#~ msgid "Glyph Palette"
-#~ msgstr "Палитра"
-
-#~ msgid "Anchor text to the left."
-#~ msgstr "Закотвяне на текста в дясно"
-
-#~ msgid "Anchor text to the middle."
-#~ msgstr "Закотвяне на текста в средата"
-
-#~ msgid "Anchor text to the right."
-#~ msgstr "Закотвяне на текста в ляво"
-
-#, fuzzy
-#~| msgctxt "Context: dynamic sensors"
-#~| msgid "Tilt direction"
-#~ msgid "Right to left text direction."
-#~ msgstr "Посока на наклон"
-
-#, fuzzy
-#~| msgid "Line Tool"
-#~ msgid "Knife Tool"
-#~ msgstr "Линии"
-
-#, fuzzy
-#~| msgid "Image Properties"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Shape RunAround"
-#~ msgstr "Информация за изображението"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Shadow"
-#~ msgstr "Хвърляне на сянка"
-
-#, fuzzy
-#~| msgid "Enable Effects"
-#~ msgctxt "resource type"
-#~ msgid "Filter Effects"
-#~ msgstr "Активиране ефекти"
-
-#~ msgid "Change the color of the shadow"
-#~ msgstr "Промяна на цвета на сянката"
-
-#~ msgid "Blur:"
-#~ msgstr "Замъгляване:"
-
-#~ msgid "Cross"
-#~ msgstr "Кръст"
-
-#~ msgid "A cross"
-#~ msgstr "Кръст"
-
-#~ msgid "An arrow"
-#~ msgstr "Стрелка"
-
-#~ msgid "Callout"
-#~ msgstr "Речеви балон"
-
-#~ msgid "A callout"
-#~ msgstr "Речеви балон"
-
-#~ msgid "Smiley"
-#~ msgstr "Усмивка"
-
-#~ msgid "Gearhead"
-#~ msgstr "Ентусиасти"
-
-#~ msgid "A gearhead"
-#~ msgstr "Ентусиаст"
-
-#, fuzzy
-#~| msgid "in Transform Tool"
-#~ msgid "Proofing transform"
-#~ msgstr " в инструмента Трансформиране"
-
-#~ msgid "Adaptation State:"
-#~ msgstr "Състояние на адаптация:"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Set how much you wish to correct the adaptation "
-#~ "state. This will affect how <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span> changes the whites of your image. In Layman's terms: "
-#~ "how much do you wish to have the color management correct the paper-color "
-#~ "to screen white while using <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span>?</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Задава степента на корекция на състоянието на "
-#~ "адаптацията Това определя, как методът <span style=\" font-style:italic;"
-#~ "\">Абсолютно колориметрично</span> променя бялото в изображението. Или с "
-#~ "други думи: в каква степен искате да коригирате цвета на хартията към "
-#~ "бялото на екрана при използване на  <span style=\" font-style:italic;"
-#~ "\">Абсолютно колориметрично</span>?</p></body></html>"
-
-#, fuzzy
-#~| msgid "Clone %1, %2"
-#~ msgctxt "language, region"
-#~ msgid "%1, %2"
-#~ msgstr "Клониране %1, %2"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "Filter:"
-#~ msgstr "Филтър:"
-
-#~ msgid "Alpha Mask"
-#~ msgstr "Маска на Алфа"
-
-#~ msgid "Font"
-#~ msgstr "Шрифт"
-
-#~ msgid "Text Color"
-#~ msgstr "Цвят на текста"
-
-#~ msgctxt "Default line height for text"
-#~ msgid "Normal"
-#~ msgstr "Нормално"
-
-#~ msgctxt "line height for text"
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#~ msgctxt "action"
-#~ msgid "Text Color"
-#~ msgstr "Цвят на текста"
-
-#~ msgctxt "action"
-#~ msgid "Text Color..."
-#~ msgstr "Цвят на текста..."
-
-#~ msgctxt "action"
-#~ msgid "Background"
-#~ msgstr "Фон"
-
-#~ msgctxt "action"
-#~ msgid "Background Color..."
-#~ msgstr "Цвят на фон..."
-
-#~ msgctxt "action"
-#~ msgid "Font..."
-#~ msgstr "Шрифт..."
-
-#~ msgid "&Insert"
-#~ msgstr "&Вмъкване"
-
-#~ msgid "&Format"
-#~ msgstr "&Форматиране"
-
-#~ msgid "Font Settings"
-#~ msgstr "Настройки на шрифта"
-
-#~ msgid "Fonts"
-#~ msgstr "Шрифтове"
-
-#, fuzzy
-#~| msgid "Select All"
-#~ msgctxt "tooltip"
-#~ msgid "Select All"
-#~ msgstr "Маркиране на всичко"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Invert Selection"
-#~ msgctxt "tooltip"
-#~ msgid "Invert Selection"
-#~ msgstr "Обръщане на селекцията"
-
-#, fuzzy
-#~| msgid "Deselect"
-#~ msgctxt "tooltip"
-#~ msgid "Deselect"
-#~ msgstr "Размаркиране"
-
-#, fuzzy
-#~| msgid "Flatten the &image"
-#~ msgid "Flatten the image"
-#~ msgstr "Обединяване на изоб&ражението"
-
-#, fuzzy
-#~| msgid "Icon Size"
-#~ msgid "Icon files "
-#~ msgstr "Размер на икона"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
-#~ msgstr "Не може да се запише файл %1 на палитра. Може би е само за четене."
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "Фатална грешка"
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1x%2 отместване: %3,%4"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Изберете резолюция на екрана"
-
-#~ msgctxt ""
-#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-#~ msgid "Distance:"
-#~ msgstr "Разстояние:"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "ляв бутон"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "среден бутон"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "десен бутон"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "невалиден бутон"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "Задръжте %1 и тогава натиснете %2"
-
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html> Софтуерът KDE е и винаги ще бъде достъпен безплатен, но "
-#~ "създаването му не е безплатно. <br /> <br /> В подкрепа на развитието на "
-#~ "KDE общността е сформирала KDE e.V., организация с нестопанска цел, "
-#~ "законно основана в Германия. KDE e.V. представлява общността на KDE в "
-#~ "юридическо и финансово отношение . Вижте <a href=\"%1\"> %1 </a> за "
-#~ "информация относно KDE e.V. <br /> <br /> KDE се възползва от много "
-#~ "видове подкрепа, включително финансова. Ние използваме средствата за "
-#~ "възстановяване на разходите на членовете и други за разходите, които те "
-#~ "правят в процеса на допринасянето. Допълнителни средства се използват за "
-#~ "правна подкрепа и организиране конференции и срещи. <br /> <br /> Бихме "
-#~ "искали да Ви насърчим да подкрепите нашите усилия с финансово дарение, "
-#~ "използвайки един от начините описано на <a href=\"%2\"> %2 </a>. <br /> "
-#~ "<br /> Много ви благодарим предварително за вашата поддръжка. </html>"
-
-#~ msgid "Fit View Width"
-#~ msgstr "Напасване на изгледа по широчина"
-
-#~ msgid "&Open..."
-#~ msgstr "&Отваряне..."
-
-#~ msgid "Open &Recent"
-#~ msgstr "Отваряне на скорошни"
-
-#~ msgid "Save document"
-#~ msgstr "Запазване на документа"
-
-#~ msgid "Save &As..."
-#~ msgstr "Запазване като..."
-
-#~ msgid "Save document under a new name"
-#~ msgstr "Запазване на документа под ново име"
-
-#~ msgid "Re&vert"
-#~ msgstr "Връ&щане"
-
-#~ msgid "Revert unsaved changes made to document"
-#~ msgstr "Връщане на незаписаните промени, направени в документа"
-
-#~ msgid "&Print..."
-#~ msgstr "&Печат..."
-
-#~ msgid "Print document"
-#~ msgstr "Печат на документ"
-
-#~ msgid "Print Previe&w"
-#~ msgstr "Предварителен преглед"
-
-#~ msgid "Show a print preview of document"
-#~ msgstr "Показване на предварителен преглед преди печат на документ"
-
-#~ msgid "&Mail..."
-#~ msgstr "&Поща..."
-
-#~ msgid "Send document by mail"
-#~ msgstr "Изпращане на документ по пощата"
-
-#~ msgid "&Quit"
-#~ msgstr "&Изход"
-
-#~ msgid "Quit application"
-#~ msgstr "Изход от приложението"
-
-#~ msgid "&Undo"
-#~ msgstr "&Отмяна"
-
-#~ msgid "Undo last action"
-#~ msgstr "Отмяна на последното действие"
-
-#~ msgid "Re&do"
-#~ msgstr "&Повторение"
-
-#~ msgid "Redo last undone action"
-#~ msgstr "Повтаряне на последно отменено действие"
-
-#~ msgid "Cu&t"
-#~ msgstr "&Изрязване"
-
-#~ msgid "&Copy"
-#~ msgstr "&Копиране"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "Копиране на селекцията в клипборда"
-
-#~ msgid "&Paste"
-#~ msgstr "&Поставяне"
-
-#~ msgid "Paste clipboard content"
-#~ msgstr "Поставяне съдържанието на клипборда"
-
-#~ msgid "C&lear"
-#~ msgstr "Из&чистване"
-
-#~ msgid "Select &All"
-#~ msgstr "Из&биране на всичко"
-
-#~ msgid "Dese&lect"
-#~ msgstr "Отмяна на избирането"
-
-#~ msgid "&Find..."
-#~ msgstr "&Намиране..."
-
-#~ msgid "Find Pre&vious"
-#~ msgstr "Намиране на &предишен"
-
-#~ msgid "&Replace..."
-#~ msgstr "&Заместване..."
-
-#~ msgid "&Actual Size"
-#~ msgstr "&Действителен размер"
-
-#~ msgid "View document at its actual size"
-#~ msgstr "Преглед на документа в действителния му размер"
-
-#~ msgid "&Fit to Page"
-#~ msgstr "Мащабиране до &размера на страницата"
-
-#~ msgid "Zoom to fit page in window"
-#~ msgstr "Увеличаване до побиране на цялата страница в прозореца"
-
-#~ msgid "Fit to Page &Width"
-#~ msgstr "Мащабиране до &широчината на страницата"
-
-#~ msgid "Zoom to fit page width in window"
-#~ msgstr "Увеличаване до побиране на ширината на страницата в прозореца"
-
-#~ msgid "Fit to Page &Height"
-#~ msgstr "Мащабиране до &височината на страницата"
-
-#~ msgid "Zoom to fit page height in window"
-#~ msgstr "Увеличаване до побиране на височината на страницата в прозореца"
-
-#~ msgid "Zoom &In"
-#~ msgstr "У&величаване на мащаба"
-
-#~ msgid "Zoom &Out"
-#~ msgstr "Нама&ляване на мащаба"
-
-#~ msgid "&Zoom..."
-#~ msgstr "&Мащабиране..."
-
-#~ msgid "&Redisplay"
-#~ msgstr "&Повторно показване"
-
-#~ msgid "Redisplay document"
-#~ msgstr "Повторно показване на документа"
-
-#~ msgid "&Up"
-#~ msgstr "&Нагоре"
-
-#~ msgid "Go up"
-#~ msgstr "Отиване нагоре"
-
-#~ msgid "&Previous Page"
-#~ msgstr "&Предишна страница"
-
-#~ msgid "&Next Page"
-#~ msgstr "&Следваща страница"
-
-#~ msgid "&Go To..."
-#~ msgstr "&Отиване на..."
-
-#~ msgid "&Go to Page..."
-#~ msgstr "&Отиване на страница..."
-
-#~ msgid "&Go to Line..."
-#~ msgstr "&Отиване на ред..."
-
-#~ msgid "&First Page"
-#~ msgstr "&Първа страница"
-
-#~ msgid "Go to first page"
-#~ msgstr "Отиване на първата страница"
-
-#~ msgid "&Last Page"
-#~ msgstr "&Последна страница"
-
-#~ msgid "Go to last page"
-#~ msgstr "Отиване на последната страница"
-
-#~ msgid "&Back"
-#~ msgstr "Назад"
-
-#~ msgid "Go back in document"
-#~ msgstr "Връщане назад в документа"
-
-#~ msgid "&Forward"
-#~ msgstr "&Препращане"
-
-#~ msgid "Go forward in document"
-#~ msgstr "Отиване напред в документа"
-
-#~ msgid "&Add Bookmark"
-#~ msgstr "&Добавяне на отметка"
-
-#~ msgid "&Edit Bookmarks..."
-#~ msgstr "&Редактиране на отметки..."
-
-#~ msgid "&Spelling..."
-#~ msgstr "&Правопис..."
-
-#~ msgid "Check spelling in document"
-#~ msgstr "Проверка на правописа в документа"
-
-#~ msgid "Show or hide menubar"
-#~ msgstr "Показване или скриване на меню лентата"
-
-#~ msgid "Show &Toolbar"
-#~ msgstr "Показване на лентата с инстр&ументи"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "Показване или скриване на лентата с инструменти"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "Показване или скриване на лентата на състоянието"
-
-#~ msgid "F&ull Screen Mode"
-#~ msgstr "Режим на ц&ял екран"
-
-#~ msgid "&Save Settings"
-#~ msgstr "&Запазване на настройките"
-
-#~ msgid "Configure S&hortcuts..."
-#~ msgstr "Настройки на бързи &клавиши..."
-
-#~ msgid "Configure Tool&bars..."
-#~ msgstr "Конфигуриране на лентата с  инстр&ументи..."
-
-#~ msgid "Configure &Notifications..."
-#~ msgstr "Конфигуриране на известия..."
-
-#~ msgid "%1 &Handbook"
-#~ msgstr "%1 &Наръчник"
-
-#~ msgid "What's &This?"
-#~ msgstr "Какво е това?"
-
-#~ msgid "Tip of the &Day"
-#~ msgstr "Съвет на деня"
-
-#~ msgid "&Report Bug..."
-#~ msgstr "&Подаване на сигнал за грешка..."
-
-#~ msgid "Switch Application &Language..."
-#~ msgstr "Превключване на езика на приложението..."
-
-#~ msgid "&About %1"
-#~ msgstr "&Относно %1"
-
-#~ msgid "About &KDE"
-#~ msgstr "Относно &KDE"
-
-#~ msgid "--- separator ---"
-#~ msgstr "--- сепаратор ---"

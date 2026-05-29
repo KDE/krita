@@ -4,6 +4,8 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_preferences-desktop-locale.svg</file>
+        <file>light_preferences-desktop-locale.svg</file>
         <file>dark_get_started.svg</file>
         <file>light_get_started.svg</file>
         <file>dark_code.svg</file>

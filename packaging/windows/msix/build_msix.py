@@ -88,7 +88,7 @@ if not environ['KRITA_DIR']:
     os.mkdir(fr"{environ['OUTPUT_DIR']}\installer_content")
     commandToRun = f"{environ['SEVENZIP_EXE']} x {environ['KRITA_INSTALLER']}"
     try:
-        subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+        subprocess.check_call(commandToRun)
     except subprocess.CalledProcessError:
         warnings.warn(f"ERROR failed to extract installer {environ['KRITA_INSTALLER']}")
         sys.exit(1)
@@ -171,7 +171,7 @@ print("\n=== Step 1: Generate resources.pri ===")
 
 commandToRun = fr'"{environ["MAKEPRI"]}" new /pr "{scriptDir}\pkg" /mn "{scriptDir}\manifest.xml" /cf "{scriptDir}\priconfig.xml" /o /of "{environ["OUTPUT_DIR"]}\resources.pri"'
 try:
-    subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+    subprocess.check_call(commandToRun)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR running makepri")
     sys.exit(1)
@@ -233,7 +233,7 @@ The arguments stands for:
 
 commandToRun = fr'"{environ["MAKEAPPX"]}" pack /v /f "{environ["OUTPUT_DIR"]}\mapping.txt" /p "{environ["OUTPUT_DIR"]}\krita.msix" /o'
 try:
-    subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+    subprocess.check_call(commandToRun)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR running makeappx")
     sys.exit(1)
@@ -244,7 +244,7 @@ if environ.get('SIGNTOOL_SIGN_FLAGS'):
     print("Signing MSIX...")
     commandToRun = fr'"{environ["SIGNTOOL"]}" sign {environ["SIGNTOOL_SIGN_FLAGS"]} /fd sha256 "{environ["OUTPUT_DIR"]}\krita.msix"'
 try:
-    subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+    subprocess.check_call(commandToRun)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR running signtool\n" +
                   "If you need to specify a PFX keyfile and its password, run:\n" +

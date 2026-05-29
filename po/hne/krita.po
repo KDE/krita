@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-27 00:42+0000\n"
+"POT-Creation-Date: 2026-05-29 00:41+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -42898,7 +42898,7 @@ msgstr "परत मेटाव"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -42906,8 +42906,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "परत के नाम:"
 msgstr[1] "परत के नाम:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -42926,31 +42926,31 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "परत के नाम:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "समूह नाम भरव:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "अभी हाल के चयन मं जोड़व (&A)"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "परत के नाम:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

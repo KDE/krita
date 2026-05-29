@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-27 00:42+0000\n"
+"POT-Creation-Date: 2026-05-29 00:41+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -43165,7 +43165,7 @@ msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 "Överhoppade bildrutor är inte tillgängliga i den här instansen av Krita"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -43173,8 +43173,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "Lägg till tom bildruta"
 msgstr[1] "Lägg till %1 tomma bildrutor"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -43193,30 +43193,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Zooma tidslinje. Håll nere och dra åt vänster eller höger."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Infoga eller ta bort hållbilder"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Ange antal bildrutor"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Redigera bildrutor:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Nyckelbilder"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

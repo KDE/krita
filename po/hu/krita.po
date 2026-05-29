@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-27 00:42+0000\n"
+"POT-Creation-Date: 2026-05-29 00:41+0000\n"
 "PO-Revision-Date: 2026-03-31 22:30+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -43139,7 +43139,7 @@ msgstr "Eldobott képkockák:\t%1%"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Az eldobott képkockák nem érhetőek el ebben a Krita példányban"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -43147,8 +43147,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "Üres képkocka hozzáadása"
 msgstr[1] "%1 üres képkocka hozzáadása"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -43167,30 +43167,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Idővonal nagyítása. Tartsa lenyomva és húzza balra vagy jobbra."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Tartott képkockák beszúrása vagy eltávolítása"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Adja meg a képkockák számát"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Képkockák szerkesztése:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Kulcskockák"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

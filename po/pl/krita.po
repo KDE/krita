@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-27 00:42+0000\n"
+"POT-Creation-Date: 2026-05-29 00:41+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -43648,7 +43648,7 @@ msgstr "Upuszczonych klatek:\t%1%"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Upuszczone klatki nie są dostępne w tym wystąpieniu Krity"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -43657,8 +43657,8 @@ msgstr[0] "Dodaj pustą klatkę"
 msgstr[1] "Dodaj %1 puste klatki"
 msgstr[2] "Dodaj %1 pustych klatek"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -43678,30 +43678,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Powiększanie osi czasu. Przytrzymaj i przeciągnij w lewo lub prawo."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Wstaw lub usuń klatki zatrzymania"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Podaj liczbę klatek"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Edytuj klatki:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Klatki kluczowe"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

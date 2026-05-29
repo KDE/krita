@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-27 00:42+0000\n"
+"POT-Creation-Date: 2026-05-29 00:41+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -44745,7 +44745,7 @@ msgstr "손실된 프레임:\t%1\\%"
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "이 Krita 인스턴스에서는 손실된 프레임을 사용할 수 없습니다"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:886
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Add blank frame"
@@ -44754,8 +44754,8 @@ msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "빈 프레임 추가"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:931
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:979
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -44775,30 +44775,30 @@ msgstr ""
 "타임라인 크기를 조정합니다. 마우스 단추를 누르고 왼쪽이나 오른쪽으로 드래그하"
 "십시오."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1525
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "고정 프레임 삽입 또는 삭제"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1526
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "프레임 개수를 입력하십시오"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
 #, kde-format
 msgid "Edit Frames:"
 msgstr "프레임 편집:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "키프레임"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1668
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

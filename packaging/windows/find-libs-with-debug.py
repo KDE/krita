@@ -39,10 +39,14 @@ def has_certificate_entry(filePath):
     return pe.OPTIONAL_HEADER.DATA_DIRECTORY[address].Size > 0
 
 parser = argparse.ArgumentParser(description=f'Searches for {', '.join(glob_patterns)} files with DEBUG section present.')
-parser.add_argument('-d', '--directory', default=os.getcwd(), help='Directory to search (default: current directory)')
+parser.add_argument('-d', '--directory', default=None, help='Directory to search (default: current directory)')
+parser.add_argument('-f', '--file', default=None, help='Executable file to check')
 if has_pefile:
     parser.add_argument('-s', '--signature', action='store_true', default=False, help='Verify that all modules in the directory has signature entry (no signature validation happens)')
 args = parser.parse_args()
+
+if args.directory is None and args.file is None:
+    args.directory = os.getcwd()
 
 OBJDUMP = False
 for arg in ("objdump", "llvm-objdump"):
@@ -57,7 +61,9 @@ if not OBJDUMP:
 anyLibsWithDebugFound = False
 anyUnsignedFound = False
 
-for file in find_files(args.directory):
+def verify_one_file(file):
+    global anyLibsWithDebugFound
+    global anyUnsignedFound
     try:
         if has_pefile and args.signature:
             if not has_certificate_entry(file):
@@ -70,6 +76,13 @@ for file in find_files(args.directory):
     except Exception as e:
         warnings.warn(f"ERROR: Failed to parse: {file}")
         raise e
+
+if args.directory is not None:
+    for file in find_files(args.directory):
+        verify_one_file(file)
+
+if args.file is not None:
+    verify_one_file(args.file)
 
 if anyLibsWithDebugFound or anyUnsignedFound:
     sys.exit(2)

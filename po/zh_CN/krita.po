@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-29 02:41+0000\n"
+"POT-Creation-Date: 2026-05-30 02:44+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23697,7 +23697,7 @@ msgstr "本地资源"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:679 libs/ui/KisView.cpp:1166
-#: libs/ui/KisWelcomePageWidget.cpp:725 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:723 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: libs/ui/widgets/kis_custom_image_widget.cc:433
@@ -28049,7 +28049,7 @@ msgid "Start"
 msgstr "开始创作"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:614
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:612
 #, kde-format
 msgid "DEV BUILD"
 msgstr "正在运行测试版本"
@@ -28089,43 +28089,43 @@ msgid "Community"
 msgstr "社区资源"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:364
 #, kde-format
 msgid "User Manual"
 msgstr "使用手册"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:367
 #, kde-format
 msgid "Support Krita"
 msgstr "捐款支持"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:378
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:376
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Krita 由 KDE 社区开发维护"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:375
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:373
 #, kde-format
 msgid "Source Code"
 msgstr "源代码库"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:361
 #, kde-format
 msgid "Getting Started"
 msgstr "新手入门"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:358
 #, kde-format
 msgid "User Community"
 msgstr "用户社区"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:372
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:370
 #, kde-format
 msgid "Krita Website"
 msgstr "官方网站"
@@ -28182,7 +28182,7 @@ msgid "Show details"
 msgstr "显示详情"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:380
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:378
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -36265,28 +36265,28 @@ msgstr "语言"
 msgid "English news is always up to date."
 msgstr "英文资讯内容更加及时和齐全。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/KisWelcomePageWidget.cpp:400
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr "获取 Krita 支持者徽章"
 
-#: libs/ui/KisWelcomePageWidget.cpp:637
+#: libs/ui/KisWelcomePageWidget.cpp:635
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "忘记“%1”"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:742
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Krita 已经推出了新版本。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:771
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "更新时发生错误"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:777
 #, kde-format
 msgid "Restart is required."
 msgstr "需要重启软件。"
@@ -37903,7 +37903,7 @@ msgstr "不可用"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This profile has no colorants."
-msgstr "此特性文件不含色料信息。"
+msgstr "此特性文件不含原色色度信息。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:157
 #, kde-format
@@ -37914,13 +37914,13 @@ msgstr "本分类没有特性文件"
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:158
 #, kde-format
 msgid "Colorant in d50-adapted xyY."
-msgstr "D50-适应型 xyY 色料。"
+msgstr "D50-适应型 xyY 原色色度信息。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:171
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This profile has the following xyY colorants:"
-msgstr "此特性文件包含下列 xyY 色料："
+msgstr "此特性文件包含下列 xyY 原色色度信息："
 
 #. i18n: ectx: property (text), widget (QLabel, RedLabel)
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
@@ -38043,8 +38043,8 @@ msgstr ""
 "机以及其他运用色料产生图像的媒体使用的色彩模型。<br/>CMYK 是一种减色模型，颜"
 "色在相互叠加时结果变暗。每台打印机的 CMYK 特性文件都有差异，因此我们推荐先使"
 "用 RGB 色彩模型绘制作品，然后再把图像用目标打印机的 CMYK 特性文件来进行转换。"
-"<br/>我们<b>不建议</b> 把 CMYK 用于绘画过程。Krita 也无法获取此色彩空间的色料"
-"特性或阶调响应曲线 (TRC) 信息。"
+"<br/>我们<b>不建议</b> 把 CMYK 用于绘画过程。Krita 也无法获取此色彩空间的原色"
+"色度信息或阶调响应曲线 (TRC) 信息。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
@@ -53745,7 +53745,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
-msgstr "保持颜色，PQ 编码"
+msgstr "保持原色色度信息，PQ 编码"
 
 #: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
@@ -53764,7 +53764,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
-msgstr "保持颜色，HLG 编码"
+msgstr "保持原色色度信息，HLG 编码"
 
 #: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
@@ -53782,7 +53782,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
-msgstr "保持颜色，SMPTE ST 428 编码"
+msgstr "保持原色色度信息，SMPTE ST 428 编码"
 
 #: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230

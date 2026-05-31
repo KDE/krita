@@ -74,7 +74,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
 
     KisHLineConstIteratorSP srcIt = src->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
 
-    for (int i = rect.y(); i < rect.height(); i++) {
+    for (int i = rect.y(); i < rect.bottom(); i++) {
         float *dstIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
         do {
             const quint8* v1 = srcIt->oldRawData();
@@ -137,7 +137,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
         return;
 
     KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
-    for (int i = rect.y(); i < rect.height(); i++) {
+    for (int i = rect.y(); i < rect.bottom(); i++) {
         float *srcIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
         do {
             quint8* v1 = dstIt->rawData();

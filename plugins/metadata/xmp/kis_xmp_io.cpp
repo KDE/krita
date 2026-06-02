@@ -136,8 +136,10 @@ bool KisXMPIO::saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, Head
             } else {
                 dbgMetaData << ppVar(key.key().c_str());
                 Exiv2::Value *v = kmdValueToExivXmpValue(value);
-                if (v) {
+                if (v && v->typeId() != Exiv2::TypeId::invalidTypeId) {
                     xmpData_.add(key, v);
+                } else {
+                    warnMetaData << "Invalid metadata value " << value << "for: " << entry.name();
                 }
             }
         }

@@ -50,7 +50,7 @@ Value DateParser::parse(const QString& _v) const
 
 Value RationalParser::parse(const QString& _v) const
 {
-    QRegularExpression regexp("(\\-?\\d+)/(\\d+)");
+    QRegularExpression regexp("(\\-?\\d+)[ ]*/[ ]*(\\d+)");
     QRegularExpressionMatch match = regexp.match(_v);
 
     if (match.capturedTexts().size() > 2)

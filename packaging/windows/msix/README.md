@@ -96,3 +96,9 @@ Self-signing the package for testing purposes
 4. Go to 'Manage Computer Certificates' (needs Administrator rights)
 5. Import your .ppk file into "Trusted Root Certificates" storage.
 6. Copy the certificate (by Ctrl+D&D) into "Trusted Publishers" section.
+
+> [!warning]
+> If you want to sign an MSIX package locally, please make sure that you use
+> `signtool.exe` from `\Windows Kits\10\App Certification Kit`, and **not**
+> from `Windows Kits\10\bin\10.0.*.*\x64\`! The latter one may not work with
+> MSIX packages.

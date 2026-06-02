@@ -68,14 +68,15 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-30 00:43+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 19:37-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14656,7 +14657,7 @@ msgid ""
 "cause subtle performance slowdown"
 msgstr ""
 "سىزغۇچ چاشقىنەك نىشانلىغۇچنىڭ ھازىرقى ئورنىنى ئىزلايدۇ ۋە ئېكراندا "
-"كۆرسىتىدۇ. ئۇ ئۈنۈمگە ئازراق تەسىر كۆرسىتىشى مۇمكىن."
+"كۆرسىتىدۇ. ئۇ ئۈنۈمگە ئازراق تەسىر كۆرسىتىشى مۇمكىن"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -16342,7 +16343,7 @@ msgid ""
 msgstr ""
 "ئىجرا قىلىۋاتقىنىڭىز قوللىمايدىغان Windows نەشرى: %1.\n"
 "بۇ تەۋسىيە قىلىنمايدۇ. ھەر قانداق كەمتۈك مەلۇم قىلماڭ.\n"
-"قوللايدىغان Windows نەشرىگە يېڭىلاڭ: Windows 7، 8، 8.1 ياكى 10"
+"قوللايدىغان Windows نەشرىگە يېڭىلاڭ: Windows 7، 8، 8.1 ياكى 10."
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:566
 #, kde-format
@@ -16591,7 +16592,7 @@ msgstr "قىرقىم شەكلى"
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
-msgstr[0] ""
+msgstr[0] "%1 شەكىل قۇر"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 msgctxt "(qtundo-format) Delete one shape"
@@ -16804,7 +16805,7 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 "بۇ پۈتۈكتە Krita 4.x قۇرۇلغان ۋېكتور تېكىست بار. پۈتۈك ساقلانغاندا، تېكىست "
-"Krita 5 پىچىمىغا ئايلاندۇرۇلىدۇ شۇنىڭدىن كېيىن Krita 4.x بىلەن ماسلاشمايدۇ. "
+"Krita 5 پىچىمىغا ئايلاندۇرۇلىدۇ شۇنىڭدىن كېيىن Krita 4.x بىلەن ماسلاشمايدۇ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
 #, kde-format
@@ -23930,7 +23931,7 @@ msgstr ""
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "md5sum"
-msgstr ""
+msgstr "md5sum"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
@@ -24131,7 +24132,7 @@ msgstr "تۈرى"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:88
 #, kde-format
 msgid "Creation Date"
-msgstr ""
+msgstr "قۇرغان ۋاقىت"
 
 #: libs/resources/KisStorageModel.cpp:471
 #, kde-format
@@ -24804,7 +24805,7 @@ msgstr ""
 #, kde-format
 msgctxt "Import video to Current Document"
 msgid "Current Document"
-msgstr ""
+msgstr "نۆۋەتتىكى پۈتۈك"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:105
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:614
@@ -25568,7 +25569,7 @@ msgstr ""
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
-msgstr ""
+msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -27125,18 +27126,15 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1386
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Diagonal"
+#, kde-format
 msgid "Diagram:"
-msgstr "دىئاگونال"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1389
-#, fuzzy, kde-format
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@info:radiobutton"
 msgid "Preferred Space"
-msgstr "مايىللىق"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1391
 #, kde-format
@@ -27145,11 +27143,10 @@ msgid "This is the space preferred by the operating system."
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1394
-#, fuzzy, kde-format
-#| msgid "Reset Display"
+#, kde-format
 msgctxt "@info:radiobutton"
 msgid "Current Display"
-msgstr "كۆرسەتكۈچنى ئەسلىگە قايتۇر"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1397
 #, kde-format
@@ -27209,7 +27206,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
-msgstr " گىگابايت"
+msgstr " GiB"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
@@ -28328,7 +28325,7 @@ msgstr ""
 #: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
-msgstr ""
+msgstr "ئىجازەتنامە"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
 #: libs/ui/forms/wdgaboutapplication.ui:111
@@ -28657,7 +28654,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color model"
 msgid "Model"
-msgstr ""
+msgstr "ئەندىزە"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:76
@@ -30470,7 +30467,7 @@ msgstr ""
 #: libs/ui/forms/wdgimportimagesequence.ui:115
 #, kde-format
 msgid "Step"
-msgstr ""
+msgstr "Step"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, spinStep)
 #: libs/ui/forms/wdgimportimagesequence.ui:122
@@ -30891,7 +30888,7 @@ msgstr ""
 #: libs/ui/forms/wdgnodequerypatheditor.ui:31
 #, kde-format
 msgid "path"
-msgstr ""
+msgstr "يول"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
 #: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
@@ -34503,7 +34500,7 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:725
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "MIME تىپى تېپىلمىدى، -mimetype تاللانمىسىنى ئىشلىتىپ كۆرۈڭ"
+msgstr "mime تۈرى تېپىلمىدى، -mimetype تاللانمىسىنى ئىشلىتىپ كۆرۈڭ"
 
 #: libs/ui/KisApplication.cpp:786
 #, kde-format
@@ -35114,7 +35111,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
-msgstr ""
+msgstr "ئۈن ئاچ"
 
 #: libs/ui/KisImportExportManager.cpp:401
 #, kde-format
@@ -38340,11 +38337,10 @@ msgid "No Preview for this engine"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:190
-#, fuzzy, kde-format
-#| msgid "Remove Selected"
+#, kde-format
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
-msgstr "تاللىغاننى چىقىرىۋەت"
+msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:193
 #: plugins/tools/basictools/kis_tool_fill.cc:591
@@ -38413,11 +38409,10 @@ msgid "Symmetric Difference"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:249
-#, fuzzy, kde-format
-#| msgid "Remove Selected"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
-msgstr "تاللىغاننى چىقىرىۋەت"
+msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:252
 #, kde-format
@@ -38535,7 +38530,7 @@ msgstr "توختا"
 #: libs/ui/widgets/kis_transport_controls.cpp:54
 #, kde-format
 msgid "Play/Pause"
-msgstr "قويۇش/توختىتىش"
+msgstr "ياڭرات/ۋاقىتلىق توختا"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:63
 #, kde-format
@@ -39390,7 +39385,7 @@ msgstr "ئېلخەت"
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #, kde-format
 msgid "Fax"
-msgstr "فاكىس"
+msgstr "فاكس"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
@@ -39935,7 +39930,7 @@ msgid ""
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 "كەمتۈك دوكلاتى ئەۋەتىدىغان پىروگرامما. ئەگەر توغرا بولمىسا، توغرا بولغان "
-"پىروگراممىنىڭ كەمتۈك يوللا دېگەن تىزىملىكىنى تاللاڭ."
+"پىروگراممىنىڭ كەمتۈك يوللا دېگەن تىزىملىكىنى تاللاڭ"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
@@ -39949,7 +39944,7 @@ msgid ""
 "available before sending a bug report"
 msgstr ""
 "پىروگراممىنىڭ نەشرى. كەمتۈك دوكلاتىنى ئەۋەتىشتىن بۇرۇن يېڭى نەشرى بارمۇ يوق "
-"تەكشۈرۈپ كۆرۈڭ."
+"تەكشۈرۈپ كۆرۈڭ"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:305
@@ -43304,7 +43299,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Recorder"
-msgstr ""
+msgstr "خاتىرىلىگۈچ"
 
 #. i18n: context: iconText @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: text @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
@@ -43579,7 +43574,7 @@ msgstr ""
 #, kde-format
 msgctxt "Caption: Video exporting finished"
 msgid "Done!"
-msgstr ""
+msgstr "تامام!"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonWatchIt)
 #: plugins/dockers/recorder/recorder_export.ui:961
@@ -43665,7 +43660,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_profile_settings.ui:196
 #, kde-format
 msgid "Profile name:"
-msgstr "Profile نامى:"
+msgstr "سەپلىمە ھۆججەت ئاتى:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:216
@@ -43750,7 +43745,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:272
 #, kde-format
 msgid "0 B"
-msgstr ""
+msgstr "0 B"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -44009,7 +44004,7 @@ msgstr ""
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
-msgstr ""
+msgstr "خاتىرىلىگۈچ"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
@@ -44026,7 +44021,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
-msgstr ""
+msgstr "خاتىرىلىگۈچ"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:749
 #, kde-format
@@ -44597,7 +44592,7 @@ msgstr "ئوچۇق"
 #, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "تاقا"
+msgstr "تاقاق"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
@@ -46677,7 +46672,7 @@ msgstr "سىيرىش:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:866
 #, kde-format
 msgid "Patches"
-msgstr "ياماقلار"
+msgstr "ياماق"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -47128,37 +47123,37 @@ msgstr ""
 #: plugins/extensions/colorrange/wdg_colorrange.ui:27
 #, kde-format
 msgid "Reds"
-msgstr ""
+msgstr "قىزىل"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:32
 #, kde-format
 msgid "Yellows"
-msgstr ""
+msgstr "سېرىق"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:37
 #, kde-format
 msgid "Greens"
-msgstr ""
+msgstr "يېشىل"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
 #, kde-format
 msgid "Cyans"
-msgstr ""
+msgstr "كۆكۈچ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:47
 #, kde-format
 msgid "Blues"
-msgstr "ھاۋا رەڭ"
+msgstr "كۆك"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:52
 #, kde-format
 msgid "Magentas"
-msgstr ""
+msgstr "ھال رەڭ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonHighlights)
 #. i18n: ectx: property (text), widget (QLabel, label_16)
@@ -49186,7 +49181,7 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 #, kde-format
 msgid "Summary:"
-msgstr "ئۈزۈندى:"
+msgstr "ئۈزۈندە:"
 
 #. i18n: ectx: property (text), widget (QLabel, bundleName)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:46
@@ -50213,7 +50208,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:233
 #, kde-format
 msgid "Green-Red"
-msgstr ""
+msgstr "يېشىل-قىزىل"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
@@ -55012,7 +55007,7 @@ msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
 #: plugins/impex/libkra/kra_converter.cpp:226
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "‹%1› غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+msgstr "«%1» غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
 
 #: plugins/impex/libkra/kra_converter.cpp:318
 #, kde-format
@@ -60162,7 +60157,7 @@ msgstr ""
 
 #: plugins/python/channels2layers/channels2layers.py:103
 msgid "Unchanged"
-msgstr ""
+msgstr "ئۆزگەرمىگەن"
 
 #: plugins/python/channels2layers/channels2layers.py:1038
 msgid "Processing layer"
@@ -60225,7 +60220,7 @@ msgstr ""
 
 #: plugins/python/colorspace/uicolorspace.py:72
 msgid "Color depth:"
-msgstr ""
+msgstr "رەڭ چوڭقۇرلۇقى:"
 
 #: plugins/python/colorspace/uicolorspace.py:73
 msgid "Color profile:"
@@ -60931,7 +60926,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:253
 msgid "New Project"
-msgstr ""
+msgstr "يېڭى قۇرۇلۇش"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:255
 msgid "Open Project"
@@ -60960,7 +60955,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "Remove Page"
-msgstr ""
+msgstr "بەتنى چىقىرىۋەت"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Batch Resize"
@@ -61230,7 +61225,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 msgid "templates"
-msgstr "قېلىپلار"
+msgstr "قېلىپ"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "The name for the folder where the page templates are sought in."
@@ -63138,7 +63133,7 @@ msgstr ""
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
-msgstr ""
+msgstr "%1°"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:177
 #, kde-format
@@ -63189,7 +63184,7 @@ msgstr "تەسۋىر"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Translate"
-msgstr "تەرجىمە قىلىڭ"
+msgstr "تەرجىمە"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
@@ -66884,7 +66879,7 @@ msgstr "ئالدىن كۆزەت"
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
-msgstr ""
+msgstr "ھەقىقىي"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2089

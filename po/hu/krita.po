@@ -1,21 +1,72 @@
-# Copyright (C) 2026 This file is copyright:
-# This file is distributed under the same license as the krita package.
 #
-# SPDX-FileCopyrightText: 2026 Kristof Kiszel <ulysses@fsf.hu>
+# --- kritalibs
+#
+# --- krita_shape_text
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# --- kritacolorspaces
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# --- krita-dockers
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# --- kritafiltereffects
+#
+# --- krita_flaketools
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# --- krita_karbontools
+#
+# --- krita_shape_artistictext
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# --- krita_shape_paths
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# --- krita_shape_vector
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Tamas Szanto <tszanto@mol.hu>, 2000.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012, 2014.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+# MARTON, JOZSEF <jmarton@linux.gyakg.u-szeged.hu>, 2000.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012, 2015.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2012.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010.
+# Balázs Úr <urbalazs@gmail.com>, 2012.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2013.
+# Tamas Szanto <tszanto@mol.hu>, 2002.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2011, 2012, 2015.
+# Balázs Úr <urbalazs@gmail.com>, 2013, 2014.
+# Kiszel Kristóf <ulysses@kubuntu.org>, 2010, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2014.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2014.
+# SPDX-FileCopyrightText: 2022, 2026 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
-"Project-Id-Version: krita\n"
+"Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-30 00:43+0000\n"
-"PO-Revision-Date: 2026-03-31 22:30+0200\n"
-"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
+"PO-Revision-Date: 2026-06-01 15:33+0200\n"
+"Last-Translator: Benedek Péter <benedekppeter@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12893,7 +12944,7 @@ msgstr "Hisztogram"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr "Réteg &színterének átalakítása..."
+msgstr "Réteg &színterének konvertálása..."
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
@@ -12903,7 +12954,7 @@ msgstr "Réteg &színterének átalakítása..."
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
-msgstr "Réteg színterének átalakítása"
+msgstr "Réteg színterének konvertálása"
 
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
@@ -15576,19 +15627,17 @@ msgstr "Simítás"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
-msgstr "Kijelölési műveletek sáv engedélyezése"
+msgstr "Kijelölési műveletsáv engedélyezése"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Kijelölési műveletek sáv engedélyezése"
+msgstr "Kijelölési műveletsáv konfigurálása"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -16420,7 +16469,7 @@ msgstr "Visszavonás"
 #: libs/ui/KisUndoActionsUpdateManager.cpp:44
 #, kde-format
 msgid "Undo %1"
-msgstr "%1 visszavonása"
+msgstr "%1 visszavonás"
 
 #: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #, kde-format
@@ -21467,7 +21516,7 @@ msgstr "Kép nyírása"
 #: libs/image/kis_image.cc:1362
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
-msgstr "Réteg színterének átalakítása"
+msgstr "Réteg színterének konvertálása"
 
 #: libs/image/kis_image.cc:1413
 msgctxt "(qtundo-format)"
@@ -22759,7 +22808,7 @@ msgstr "Vörös"
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:67
 #, kde-format
 msgid "Undefined operation in the %1 space"
-msgstr "Nem definiált művelet a(z) %1 térben"
+msgstr "Nem definiált művelet a(z) %1 színtérben"
 
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:84
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:89
@@ -23791,6 +23840,7 @@ msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
 msgstr "Hő-Ragyogás és Fagyasztás-Tükröződés hibrid"
 
+# Abban az esetben, ha az inch rövidítése
 #: libs/pigment/KoCompositeOpRegistry.cpp:217
 #, kde-format
 msgid "In"
@@ -26609,7 +26659,7 @@ msgstr "<html><head/><body><h1 align=\"center\">Készítették</h1></p><p>"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Benedek Péter"
+msgstr "Kiszel Kristóf, Benedek Péter"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
 #, kde-format
@@ -27361,7 +27411,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1342
 #, kde-format
 msgid "Canvas surface color space:"
-msgstr "Rajzvászon felületének színtere:"
+msgstr "Vászonfelület színtere:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1345
 #, kde-format
@@ -27450,41 +27500,33 @@ msgstr ""
 "%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1386
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagram:"
-msgstr "Átlós:"
+msgstr "Diagram:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1389
-#, fuzzy, kde-format
-#| msgid "Preferred Output Format:"
+#, kde-format
 msgctxt "@info:radiobutton"
 msgid "Preferred Space"
-msgstr "Preferált kimeneti formátum:"
+msgstr "Előnyben részesített munkaszíntér"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1391
-#, fuzzy, kde-format
-#| msgid ""
-#| "Color space preferred by the operating system:\n"
-#| "%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space preferred by the operating system."
-msgstr ""
-"Az operációs rendszer által preferált színtér:\n"
-"%1"
+msgstr "Ez az operációs rendszer által előnyben részesített színprofil."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1394
-#, fuzzy, kde-format
-#| msgid "Current Display Format"
+#, kde-format
 msgctxt "@info:radiobutton"
 msgid "Current Display"
-msgstr "Jelenlegi megjelenítési formátum"
+msgstr "Aktív kijelző"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1397
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space representing the currently active display."
-msgstr ""
+msgstr "Ez a terület a jelenleg aktív kijelzőt jelöli."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1488
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -34841,10 +34883,9 @@ msgid "Crop to Selection"
 msgstr "Vágás a kijelölésre"
 
 #: libs/ui/kis_selection_actions_panel.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "Kijelölési műveletek sáv engedélyezése"
+msgstr "Kijelölési műveletsáv letiltása"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format
@@ -35841,10 +35882,9 @@ msgstr ""
 "más néven vagy más helyre."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "A fájl megnyitása sikertelen."
+msgstr "A(z) %1 nem nyitható meg"
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -36059,8 +36099,8 @@ msgid ""
 "please select a space to convert to for editing: \n"
 msgstr ""
 "A képhez olyan profil van csatolva (\"%1\"), melyben a Krita nem tud képeket "
-"szerkeszteni. Válasszon egy színteret a szerkesztéshez való "
-"konvertáláshoz: \n"
+"szerkeszteni. Válasszon egy színteret, amelyre át szeretné alakítani a "
+"szerkesztéshez: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:31
 msgctxt "(qtundo-format)"
@@ -39212,7 +39252,7 @@ msgstr "Feloldás (jelenlegi beállítások megtartása)"
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:660
 #, kde-format
 msgid "Uncalibrated color space"
-msgstr "Nem kalibrált színtér"
+msgstr "Kalibrálatlan színtér"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:666
 #, kde-format
@@ -39266,16 +39306,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"Nem sikerült menteni: %1\n"
-"Indoklás: %2"
+"Nem sikerült menteni: %1.\n"
+"Indoklás: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
@@ -39286,7 +39323,7 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"A dokumentum mérete %1 x %2 képpont lesz a(z) %3 színtérben. A színmélység "
+"A dokumentum mérete %1 x %2 pixel lesz a(z) %3 színtérben. A színmélység "
 "csatornánként %4 bit. Egyetlen festőréteg %5 memóriát fog használni."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:155
@@ -39477,12 +39514,10 @@ msgid "No Preview for this engine"
 msgstr "Ehhez a motorhoz nincs előnézet"
 
 #: libs/ui/widgets/kis_selection_options.cc:190
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
-msgstr "Kijelölés mozgatása"
+msgstr "Kijelölt tartalom áthelyezése"
 
 #: libs/ui/widgets/kis_selection_options.cc:193
 #: plugins/tools/basictools/kis_tool_fill.cc:591
@@ -39551,12 +39586,10 @@ msgid "Symmetric Difference"
 msgstr "Szimmetrikus különbség"
 
 #: libs/ui/widgets/kis_selection_options.cc:249
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
-msgstr "Kijelölés mozgatása"
+msgstr "Kijelölt tartalom áthelyezése"
 
 #: libs/ui/widgets/kis_selection_options.cc:252
 #, kde-format
@@ -39732,7 +39765,7 @@ msgstr "Felülírás"
 #: libs/ui/widgets/kis_workspace_chooser.cpp:208
 #, kde-format
 msgid "Save current workspace."
-msgstr "Jelenlegi munkaterület mentése."
+msgstr "Aktuális munkaterület mentése."
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:252
 #, kde-format
@@ -44282,8 +44315,8 @@ msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr ""
-"Válassza ki a megjelenítés gammamódosításának mértékét. Ez nem érinti a kép "
-"képpontjait."
+"Válassza ki a megjelenítés gamma módosításának mértékét. Ez nem érinti a kép "
+"pixeleit."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:258
 #, kde-format
@@ -47712,7 +47745,7 @@ msgstr "Függőleges jobb"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "White Space"
-msgstr "Üreshely"
+msgstr "Üres hely"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:15
 #, kde-format
@@ -47721,7 +47754,7 @@ msgid ""
 "The CSS white space rule controls how multiples of spaces are handled, and "
 "whether the text can wrap."
 msgstr ""
-"A CSS üreshely szabály határozza meg a szóközök kezelését és a szöveg "
+"A CSS üres hely szabály határozza meg a szóközök kezelését és a szöveg "
 "tördelhetőségét."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
@@ -47730,7 +47763,7 @@ msgctxt ""
 "comma separated search terms for the white-space property, matching is case-"
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
-msgstr "üreshely, összevonás, előformázott"
+msgstr "üres hely, összevonás, előformázott"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -47754,7 +47787,7 @@ msgstr "Előtördelés"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
-msgstr "Törhető szóköz"
+msgstr "Törhető szóközök"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
 #, kde-format
@@ -47835,7 +47868,7 @@ msgctxt ""
 "comma separated search terms for the word-spacing property, matching is case-"
 "insensitive"
 msgid "word-spacing, tracking, white space,"
-msgstr "szóköz, karakterköz, üreshely,"
+msgstr "szóköz, betűköz, üres hely,"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -51690,7 +51723,7 @@ msgid ""
 "be used. All curves will be reset."
 msgstr ""
 "A jelenlegi konfiguráció egy másik színtérhez készült, és nem használható. "
-"Minden görbe alaphelyzetbe áll."
+"Minden görbe alaphelyzetbe kerül."
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
@@ -52451,7 +52484,7 @@ msgid ""
 msgstr ""
 "A jelenlegi beállítások egy másik színtérhez készültek, így nem "
 "használhatók.\n"
-"A csatornák alaphelyzetbe állnak."
+"A csatornák alaphelyzetbe kerülnek."
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:621
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:672
@@ -54613,7 +54646,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:324
 #, kde-format
 msgid "Space:"
-msgstr "Színtér:"
+msgstr "Szóköz:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: plugins/impex/heif/WdgHeifExport.ui:96
@@ -56974,10 +57007,7 @@ msgstr "Váltottsoros"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The compression will take a long time; saving the file will be slow."
-#| msgid "Small File Size"
+#, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small file size"
 msgstr "Kis fájlméret"
@@ -60064,6 +60094,7 @@ msgstr "Tollbeállítások engedélyezése"
 msgid "Y Range:"
 msgstr "Y-tartomány:"
 
+# Tartományt jelöl: -tól -ig
 #. i18n: ectx: property (text), widget (QLabel, toLabel2)
 #. i18n: ectx: property (text), widget (QLabel, toLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -60985,7 +61016,7 @@ msgstr "Élesség"
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:41
 #, kde-format
 msgid "Align the brush preview outline to the pixel grid"
-msgstr ""
+msgstr "Ecset előnézeti körvonalának igazítása a pixelrácshoz"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
 #, kde-format
@@ -62909,6 +62940,7 @@ msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "Ha ez egy sorozat része, adja meg a sorozat nevét és a számát."
 
+# Sorszám vagy Nem
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
 msgid "No. "
 msgstr "Sorszám "

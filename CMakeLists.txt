@@ -156,11 +156,9 @@ set(KRITA_VERSION_REVISION 0)
 # since this digit is used by Microsoft Store internally. Hence we cannot
 # release hotfix releases (like 6.0.1.1, 6.0.1.2) on Windows. Therefore we
 # use the same approach as on Android, we just number all the official
-# releases in the same X.Y.* branch sequentially.
-#
-# Krita 5.3.2.1 was released with version '3', increment on releasing
-#
-set(KRITA_MSI_VERSION_RELEASE_TRANSITIONAL 3)
+# releases in the same X.Y.* branch sequentially. We use a simple formula
+# for that, e.g. 5.4.2.3 will be released as 5.4.10203.0.
+math(EXPR KRITA_MSI_VERSION_RELEASE_TRANSITIONAL "10000 + 100 * ${KRITA_VERSION_RELEASE} + ${KRITA_VERSION_REVISION}")
 
 # Uncomment the following if this is currently in the "stable" branch.
 # Do not uncomment for master branch.

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-30 00:43+0000\n"
+"POT-Creation-Date: 2026-06-03 00:52+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -23653,11 +23653,11 @@ msgstr ""
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:224
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:229
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:431
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:440
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
@@ -25609,10 +25609,12 @@ msgid "Display"
 msgstr "Čájet"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
 #: libs/ui/kis_paintop_box.cc:319
 #: plugins/dockers/recorder/recorder_export.ui:497
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, kde-format
 msgid "x"
 msgstr ""
@@ -26212,7 +26214,7 @@ msgstr "Vurke dása:"
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: libs/ui/canvas/kis_guides_manager.cpp:776
 #: plugins/dockers/griddocker/grid_config_widget.ui:43
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:140
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:177
 #, kde-format
 msgid "Grid"
 msgstr "Ruvttodat"
@@ -28112,7 +28114,9 @@ msgid "Description:"
 msgstr "Válddahus:"
 
 #. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
+#. i18n: ectx: property (text), widget (QLabel, exportPathLabel)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:171
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:385
 #, kde-format
 msgid "Path:"
 msgstr "Bálggis:"
@@ -28908,10 +28912,12 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
+#. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
 #: libs/ui/kis_paintop_box.cc:275
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
@@ -30636,7 +30642,7 @@ msgstr "&Allodat:"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
 #: libs/ui/forms/wdgnewimage.ui:270
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:108
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:130
 #, kde-format
 msgid "Landscape"
 msgstr ""
@@ -30644,7 +30650,7 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPortrait)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
 #: libs/ui/forms/wdgnewimage.ui:289
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:103
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:125
 #, kde-format
 msgid "Portrait"
 msgstr ""
@@ -38933,7 +38939,7 @@ msgstr ""
 #: libs/ui/widgets/KoFillConfigWidget.ui:376
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:749
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:966
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:159
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:264
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:309
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:610
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:817
@@ -38951,7 +38957,7 @@ msgstr "Gurgadusa:"
 #: libs/ui/widgets/KoFillConfigWidget.ui:394
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:769
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:296
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2184
 #, kde-format
@@ -43304,9 +43310,11 @@ msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
 #: plugins/dockers/recorder/recorder_export.cpp:373
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
@@ -44077,27 +44085,27 @@ msgctxt "Export storyboard dialog caption"
 msgid "Export Storyboard as SVG"
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #, kde-format
 msgid "Please enter a file name to export to."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #, kde-format
 msgid "Please enter a directory to export to."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
 #, kde-format
 msgid "Please enter an existing directory."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:207
 #, kde-format
 msgid "Existing files with similar naming scheme"
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:198
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:208
 #, kde-format
 msgid ""
 "Files with the same naming scheme exist in the destination directory. They "
@@ -44107,12 +44115,12 @@ msgid ""
 "Files: %2"
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:224
 #, kde-format
 msgid "Please choose svg file to specify the layout for exporting."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
+#: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:229
 #, kde-format
 msgid ""
 "The SVG file to specify layout doesn't exist. Please choose an existing SVG "
@@ -44287,100 +44295,122 @@ msgstr ""
 msgid "Export Storyboard"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:34
-#, kde-format
-msgid "Page Size:"
-msgstr ""
+#. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
+#, fuzzy, kde-format
+#| msgid "Image Size"
+msgid "Page Setup"
+msgstr "Govvasturrodat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:51
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
 #, kde-format
 msgid "A0"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:56
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:72
 #, kde-format
 msgid "A1"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:61
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:77
 #, kde-format
 msgid "A2"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:66
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:82
 #, kde-format
 msgid "A3"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:71
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:87
 #, kde-format
 msgid "A4"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:76
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:92
 #, kde-format
 msgid "A5"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:81
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:97
 #, kde-format
 msgid "US Letter"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#. i18n: ectx: property (text), widget (QLabel, label_22)
 #. i18n: ectx: property (text), widget (QLabel, pageOrientationLabel)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:89
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:111
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:568
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:775
 #, kde-format
-msgid "Page Orientation:"
+msgid "Orientation:"
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
+#, fuzzy, kde-format
+#| msgid "Layout"
+msgid "Board Layout"
+msgstr "Fárda"
+
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:116
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
 #, kde-format
-msgid "Board Layout:"
+msgid "Arrange By:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:130
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
 #, kde-format
 msgid "Rows"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:135
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:172
 #, kde-format
 msgid "Columns"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:182
 #, kde-format
 msgid "SVG Template"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
+#. i18n: ectx: property (text), widget (QLabel, gridLabel)
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
 #, kde-format
-msgid "SVG Template Path:"
+msgid "Rows x Columns:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
+#, fuzzy, kde-format
+#| msgid "Open File"
+msgid "Template File:"
+msgstr "Raba fiilla"
+
+#. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2317
+#, kde-format
+msgid "Text"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:353
 #, kde-format
 msgid "Font Size:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, exportPathLabel)
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:286
-#, kde-format
-msgid "Export Path:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, btnComment)
@@ -46553,16 +46583,6 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:547
 #, kde-format
 msgid "Color Patches"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#. i18n: ectx: property (text), widget (QLabel, label_11)
-#. i18n: ectx: property (text), widget (QLabel, label_22)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:568
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:775
-#, kde-format
-msgid "Orientation:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
@@ -63693,11 +63713,6 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2287
 #, kde-format
 msgid "Logical Operations"
-msgstr ""
-
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2317
-#, kde-format
-msgid "Text"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19

@@ -124,11 +124,11 @@ void Imagesplit::slotImagesplit()
 
     for (int i = 0; i< xGuides.size(); i++) {
         qreal line = xGuides[i];
-        xGuides[i] = documentToImage.map(QPointF(line, line)).x();
+        xGuides[i] = qRound(documentToImage.map(QPointF(line, line)).x());
     }
     for (int i = 0; i< yGuides.size(); i++) {
         qreal line = yGuides[i];
-        yGuides[i] = documentToImage.map(QPointF(line, line)).y();
+        yGuides[i] = qRound(documentToImage.map(QPointF(line, line)).y());
     }
 
     qreal thumbnailRatio = qreal(200)/qMax(image->width(), image->height());

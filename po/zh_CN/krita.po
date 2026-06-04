@@ -57746,7 +57746,7 @@ msgstr "预处理滤镜"
 msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
 "progressive decoding."
-msgstr "log2(标记分区数目)，数值为 0 到 3。默认值为 0 以便进行渐进式解码。"
+msgstr "log2 (标记分区数目)，数值为 0 到 3。默认值为 0 以便进行渐进式解码。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:574

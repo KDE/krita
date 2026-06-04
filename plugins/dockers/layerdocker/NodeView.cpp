@@ -612,4 +612,6 @@ void NodeView::setExclusiveActiveItem(QModelIndex index)
 
     d->ignoreDataChanged = true;
     mdl->setData(index, true, KisNodeModel::ActiveRole);
+
+    selectionModel()->setCurrentIndex(index, QItemSelectionModel::NoUpdate);
 }

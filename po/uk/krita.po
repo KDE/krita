@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-03 00:52+0000\n"
-"PO-Revision-Date: 2026-05-06 10:52+0300\n"
+"PO-Revision-Date: 2026-06-03 09:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -46311,10 +46311,9 @@ msgstr "Експорт розкадрування"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
-#, fuzzy, kde-format
-#| msgid "Page Size:"
+#, kde-format
 msgid "Page Setup"
-msgstr "Розмір сторінки:"
+msgstr "Параметри сторінки"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -46372,17 +46371,15 @@ msgstr "Орієнтація:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
-#, fuzzy, kde-format
-#| msgid "Board Layout:"
+#, kde-format
 msgid "Board Layout"
-msgstr "Компонування дошки:"
+msgstr "Компонування дошки"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange By:"
-msgstr "Компонування"
+msgstr "Критерій упорядкування:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -46404,17 +46401,15 @@ msgstr "Шаблон SVG"
 
 #. i18n: ectx: property (text), widget (QLabel, gridLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Rows x Columns:"
-msgstr "Стовпчики:"
+msgstr "Рядки x стовпчики:"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "Template File:"
-msgstr "Тека шаблонів:"
+msgstr "Файл шаблону:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341

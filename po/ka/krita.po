@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-03 00:52+0000\n"
-"PO-Revision-Date: 2026-05-06 04:49+0200\n"
+"PO-Revision-Date: 2026-06-03 05:38+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -27366,7 +27366,7 @@ msgstr "მიმდინარე ეკრანი"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space representing the currently active display."
-msgstr ""
+msgstr "ეს არის სივრცე, რომელიც წარმოადგენს ამჟამად აქტიურ ეკრანს."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1488
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -28649,6 +28649,8 @@ msgid ""
 "Within and outside gamut; same as Absolute Colorimetric. White point changed "
 "to result in neutral grays."
 msgstr ""
+"გამის შიგნით და გარეთ. იგივეა, რაც აბსოლუტური კოლორიმეტრიული. თეთრი წერტილი "
+"შეიცვალა, რომ შედეგად ნეიტრალური ნაცრისფერი იყოს."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
@@ -44995,10 +44997,9 @@ msgstr "დეკუპაჟის გატანა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
-#, fuzzy, kde-format
-#| msgid "Page Size:"
+#, kde-format
 msgid "Page Setup"
-msgstr "გვერდის ზომა:"
+msgstr "გვერდის მორგება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -45056,17 +45057,15 @@ msgstr "ორიენტაცია:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
-#, fuzzy, kde-format
-#| msgid "Board Layout:"
+#, kde-format
 msgid "Board Layout"
-msgstr "დაფის განლაგება:"
+msgstr "დაფის განლაგება"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange By:"
-msgstr "დალაგება"
+msgstr "დალაგების პირობა:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -45088,17 +45087,15 @@ msgstr "SVG შაბლონი"
 
 #. i18n: ectx: property (text), widget (QLabel, gridLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Rows x Columns:"
-msgstr "სვეტი:"
+msgstr "მწკრივები x სვეტები:"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "Template File:"
-msgstr "ნიმუშების საქაღალდე:"
+msgstr "ნიმუშების ფაილი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341

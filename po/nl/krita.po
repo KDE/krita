@@ -63,14 +63,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-03 00:52+0000\n"
-"PO-Revision-Date: 2026-05-06 16:56+0200\n"
+"PO-Revision-Date: 2026-06-03 10:37+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -45851,10 +45851,9 @@ msgstr "Storyboard exporteren"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
-#, fuzzy, kde-format
-#| msgid "Page Size:"
+#, kde-format
 msgid "Page Setup"
-msgstr "Paginagrootte :"
+msgstr "Opzet van pagina"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -45912,17 +45911,15 @@ msgstr "Oriëntatie:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
-#, fuzzy, kde-format
-#| msgid "Board Layout:"
+#, kde-format
 msgid "Board Layout"
-msgstr "Paginaindeling:"
+msgstr "Indeling van het bord"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange By:"
-msgstr "Arrangeer"
+msgstr "Gerangschikt op:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -45944,17 +45941,15 @@ msgstr "SVG-sjabloon"
 
 #. i18n: ectx: property (text), widget (QLabel, gridLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Rows x Columns:"
-msgstr "Kolommen:"
+msgstr "Rijen x kolommen:"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "Template File:"
-msgstr "Map met sjablonen:"
+msgstr "Sjabloonbestand:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341

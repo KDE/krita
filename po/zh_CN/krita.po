@@ -45049,10 +45049,9 @@ msgstr "导出分镜头脚本"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
-#, fuzzy, kde-format
-#| msgid "Page Size:"
+#, kde-format
 msgid "Page Setup"
-msgstr "页面大小："
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -45110,17 +45109,15 @@ msgstr "方向："
 
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
-#, fuzzy, kde-format
-#| msgid "Board Layout:"
+#, kde-format
 msgid "Board Layout"
-msgstr "版面布局："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange By:"
-msgstr "矢量图形排列控制"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -45142,17 +45139,15 @@ msgstr "SVG 模板"
 
 #. i18n: ectx: property (text), widget (QLabel, gridLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Rows x Columns:"
-msgstr "列数："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "Template File:"
-msgstr "模板文件夹："
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341
@@ -57888,7 +57883,7 @@ msgstr "预处理滤镜"
 msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
 "progressive decoding."
-msgstr "log2(标记分区数目)，数值为 0 到 3。默认值为 0 以便进行渐进式解码。"
+msgstr "log2 (标记分区数目)，数值为 0 到 3。默认值为 0 以便进行渐进式解码。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:574
@@ -68640,12 +68635,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgid "Page Orientation:"
-#~ msgstr "页面方向："
-
-#~ msgid "SVG Template Path:"
-#~ msgstr "SVG 模板路径："
-
-#~ msgid "Export Path:"
-#~ msgstr "导出路径："

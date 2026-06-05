@@ -115,6 +115,11 @@ KisNodeSP KisDummiesFacadeBase::lastActivatedNode() const
     return m_d->lastActivatedNode;
 }
 
+void KisDummiesFacadeBase::setLastActivatedNode(KisNodeSP node) 
+{
+    m_d->lastActivatedNode = node;
+}
+
 KisImageWSP KisDummiesFacadeBase::image() const
 {
     return m_d->image;

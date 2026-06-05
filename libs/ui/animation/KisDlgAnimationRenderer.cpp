@@ -234,8 +234,17 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
-    m_page->shouldExportOnlyVideo->setChecked(lastUsedOptions.shouldEncodeVideo);
-    m_page->shouldExportOnlyImageSequence->setChecked(!lastUsedOptions.shouldDeleteSequence);
+    if constexpr (PLATFORM_SUPPORTS_FFMPEG) {
+        m_page->shouldExportOnlyVideo->setChecked(lastUsedOptions.shouldEncodeVideo);
+        m_page->shouldExportOnlyImageSequence->setChecked(!lastUsedOptions.shouldDeleteSequence);
+    } else {
+        m_page->shouldExportOnlyVideo->setChecked(false);
+        m_page->shouldExportOnlyVideo->setEnabled(false);
+        m_page->shouldExportOnlyVideo->setVisible(false);
+        m_page->shouldExportOnlyImageSequence->setChecked(true);
+        m_page->shouldExportOnlyImageSequence->setCheckable(false);
+    }
+
     slotExportTypeChanged();
 
     {
@@ -682,8 +691,13 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.lastFrame = m_page->intEnd->value();
     options.sequenceStart = m_page->sequenceStart->value();
 
-    options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
-    options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
+    if constexpr (PLATFORM_SUPPORTS_FFMPEG) {
+        options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
+        options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
+    } else {
+        options.shouldEncodeVideo = false;
+        options.shouldDeleteSequence = false;
+    }
     options.includeAudio = m_page->chkIncludeAudio->isChecked();
     options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
@@ -740,7 +754,7 @@ KisDlgAnimationRenderer::FFmpegValidationResult KisDlgAnimationRenderer::validat
 
 void KisDlgAnimationRenderer::slotButtonClicked(int button)
 {
-    if (button == KoDialog::Ok && !m_page->shouldExportOnlyImageSequence->isChecked()) {
+    if (button == KoDialog::Ok && (PLATFORM_SUPPORTS_FFMPEG && !m_page->shouldExportOnlyImageSequence->isChecked())) {
         QString fileName = m_page->videoFilename->fileName();
 
         if (fileName.isEmpty()) {
@@ -776,23 +790,24 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
 
 void KisDlgAnimationRenderer::slotExportTypeChanged()
 {
-    KisConfig cfg(false);
+    if constexpr (PLATFORM_SUPPORTS_FFMPEG) {
+        // if a video format needs to be outputted
+        if (m_page->shouldExportOnlyVideo->isChecked()) {
+             // videos always uses PNG for creating video, so disable the ability to change the format
+             m_page->cmbMimetype->setEnabled(false);
+             m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
+        }
 
-    const bool willEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
+        /**
+         * A fallback fix for a case when both checkboxes are unchecked
+         */
+        if (!m_page->shouldExportOnlyVideo->isChecked() &&
+            !m_page->shouldExportOnlyImageSequence->isChecked()) {
 
-    // if a video format needs to be outputted
-    if (willEncodeVideo) {
-         // videos always uses PNG for creating video, so disable the ability to change the format
-         m_page->cmbMimetype->setEnabled(false);
-         m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
-    }
-
-    /**
-     * A fallback fix for a case when both checkboxes are unchecked
-     */
-    if (!m_page->shouldExportOnlyVideo->isChecked() &&
-        !m_page->shouldExportOnlyImageSequence->isChecked()) {
-
+             KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
+             m_page->shouldExportOnlyImageSequence->setChecked(true);
+        }
+    } else {
          KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
          m_page->shouldExportOnlyImageSequence->setChecked(true);
     }

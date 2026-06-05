@@ -71,6 +71,12 @@ protected Q_SLOTS:
 
 
 private: 
+#ifdef Q_OS_ANDROID
+    static constexpr bool PLATFORM_SUPPORTS_FFMPEG = false;
+#else
+    static constexpr bool PLATFORM_SUPPORTS_FFMPEG = true;
+#endif
+
     enum FFmpegValidationResult {
         VALID = 1,
         INVALID = 0,

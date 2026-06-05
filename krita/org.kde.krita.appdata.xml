@@ -636,6 +636,16 @@
       <url>https://krita.org/en/posts/2026/krita-5.3.2.1-released/</url>
       <description>
         <p>A minor bugfix release for the Krita Stable channel</p>
+        <p xml:lang="ca">Una versió menor de correcció d'errors per al canal «Stable» del Krita</p>
+        <p xml:lang="ca-valencia">Una versió menor d'esmena d'errors per al canal «Stable» de Krita</p>
+        <p xml:lang="es">Una versión de corrección de fallos menores para el canal estable de Krita.</p>
+        <p xml:lang="fr">Une version de correction de bogues mineurs pour le canal stable de Krita</p>
+        <p xml:lang="ka">მცირე შეცდომების გასწორების გამოშვება არხისთვის Krita Stable</p>
+        <p xml:lang="nl">Een minder belangrijke uitgave met reparaties van fouten voor het kanaal Krita Stabiel</p>
+        <p xml:lang="pt-BR">Uma pequena atualização com correções de bugs para o canal estável do Krita</p>
+        <p xml:lang="tr">Krita Kararlı kanalı için küçük bir hata düzeltme yayımı</p>
+        <p xml:lang="uk">Проміжний випуск із виправленнями вад для каналу Krita Stable</p>
+        <p xml:lang="zh-CN">Krita 稳定分支的小缺陷修复版本</p>
       </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">
@@ -665,6 +675,16 @@
       <url>https://krita.org/en/posts/2026/krita-5.3.2-released/</url>
       <description>
         <p>A minor bugfix release for the Krita Stable channel</p>
+        <p xml:lang="ca">Una versió menor de correcció d'errors per al canal «Stable» del Krita</p>
+        <p xml:lang="ca-valencia">Una versió menor d'esmena d'errors per al canal «Stable» de Krita</p>
+        <p xml:lang="es">Una versión de corrección de fallos menores para el canal estable de Krita.</p>
+        <p xml:lang="fr">Une version de correction de bogues mineurs pour le canal stable de Krita</p>
+        <p xml:lang="ka">მცირე შეცდომების გასწორების გამოშვება არხისთვის Krita Stable</p>
+        <p xml:lang="nl">Een minder belangrijke uitgave met reparaties van fouten voor het kanaal Krita Stabiel</p>
+        <p xml:lang="pt-BR">Uma pequena atualização com correções de bugs para o canal estável do Krita</p>
+        <p xml:lang="tr">Krita Kararlı kanalı için küçük bir hata düzeltme yayımı</p>
+        <p xml:lang="uk">Проміжний випуск із виправленнями вад для каналу Krita Stable</p>
+        <p xml:lang="zh-CN">Krita 稳定分支的小缺陷修复版本</p>
       </description>
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage" bundle="appimage">

@@ -2150,6 +2150,8 @@ void KisMainWindow::importAnimation()
 
 void KisMainWindow::importVideoAnimation()
 {
+    // Importing video requires ffmpeg, which is not available on Android.
+#ifndef Q_OS_ANDROID
     KisDocument *document;
     KisDlgImportVideoAnimation dlg(this, activeView());
 
@@ -2228,6 +2230,7 @@ void KisMainWindow::importVideoAnimation()
         document->image()->waitForDone();
 
     }
+#endif
 }
 
 void KisMainWindow::renderAnimation()
@@ -2972,9 +2975,12 @@ void KisMainWindow::createActions()
     d->importAnimation  = actionManager->createAction("file_import_animation");
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
+    // Importing video requires ffmpeg, which is not available on Android.
+#ifndef Q_OS_ANDROID
     d->importVideoAnimation = actionManager->createAction("file_import_video_animation");
     connect(d->importVideoAnimation, SIGNAL(triggered()), this, SLOT(importVideoAnimation()));
-    
+#endif
+
     d->renderAnimation = actionManager->createAction("render_animation");
     d->renderAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect( d->renderAnimation, SIGNAL(triggered()), this, SLOT(renderAnimation()));

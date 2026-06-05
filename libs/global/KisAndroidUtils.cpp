@@ -36,4 +36,18 @@ bool looksLikeXiaomiDevice()
     return result;
 }
 
+bool isLowMemoryKillReportSupported()
+{
+    // The support is device-bound and will never change, so cache the JNI call.
+    static bool checked;
+    static bool result;
+    if (!checked) {
+        checked = true;
+        result = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity",
+                                                               "isLowMemoryKillReportSupported",
+                                                               "()Z");
+    }
+    return result;
+}
+
 } // namespace KisAndroidUtils

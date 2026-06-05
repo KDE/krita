@@ -18,6 +18,10 @@ KRITAGLOBAL_EXPORT void performInitialSetup();
 // on what's actually needed.
 KRITAGLOBAL_EXPORT bool looksLikeXiaomiDevice();
 
+// Check whether the device supports reporting low-memory situations as an exit
+// reason. Devices that don't will instead report a SIGKILL.
+KRITAGLOBAL_EXPORT bool isLowMemoryKillReportSupported();
+
 } // namespace KisAndroidUtils
 
 #endif // __KISANDROIDUTILS_H_

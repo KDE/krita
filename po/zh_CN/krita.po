@@ -45051,7 +45051,7 @@ msgstr "导出分镜头脚本"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
 #, kde-format
 msgid "Page Setup"
-msgstr ""
+msgstr "页面设置"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -45111,13 +45111,13 @@ msgstr "方向："
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
 #, kde-format
 msgid "Board Layout"
-msgstr ""
+msgstr "版面布局"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
 #, kde-format
 msgid "Arrange By:"
-msgstr ""
+msgstr "布局方式："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -45141,13 +45141,13 @@ msgstr "SVG 模板"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
 #, kde-format
 msgid "Rows x Columns:"
-msgstr ""
+msgstr "行 x 列："
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
 #, kde-format
 msgid "Template File:"
-msgstr ""
+msgstr "模板文件："
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341

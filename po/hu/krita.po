@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-03 00:52+0000\n"
-"PO-Revision-Date: 2026-06-01 15:33+0200\n"
+"PO-Revision-Date: 2026-06-04 20:00+0200\n"
 "Last-Translator: Benedek Péter <benedekppeter@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
@@ -45693,10 +45693,9 @@ msgstr "Sztoribord exportálása"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
-#, fuzzy, kde-format
-#| msgid "Page Size:"
+#, kde-format
 msgid "Page Setup"
-msgstr "Oldalméret:"
+msgstr "Lapbeállítás"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -45754,17 +45753,15 @@ msgstr "Tájolás:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
-#, fuzzy, kde-format
-#| msgid "Board Layout:"
+#, kde-format
 msgid "Board Layout"
-msgstr "Sztoribord elrendezése:"
+msgstr "Rajztábla elrendezése"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange By:"
-msgstr "Rendezés"
+msgstr "Rendezés alapja:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -45786,17 +45783,15 @@ msgstr "SVG sablon"
 
 #. i18n: ectx: property (text), widget (QLabel, gridLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Rows x Columns:"
-msgstr "Oszlopok:"
+msgstr "Sorok x oszlopok:"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "Template File:"
-msgstr "Sablonmappa:"
+msgstr "Sablon fájl:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341
@@ -69674,11 +69669,21 @@ msgstr ""
 "Teljes tartomány: [%1, %2]\n"
 "Részleges tartomány: [%3, %4]"
 
+#~ msgid "Export Path:"
+#~ msgstr "Exportálási útvonal:"
+
+#~ msgid "Page Size:"
+#~ msgstr "Oldalméret:"
+
 #~ msgid "Page Orientation:"
 #~ msgstr "Oldal tájolása:"
+
+#~ msgid "Board Layout:"
+#~ msgstr "Sztoribord elrendezése:"
 
 #~ msgid "SVG Template Path:"
 #~ msgstr "SVG sablon útvonala:"
 
-#~ msgid "Export Path:"
-#~ msgstr "Exportálási útvonal:"
+#~ msgctxt "@label:inlistbox"
+#~ msgid "Proportional"
+#~ msgstr "Arányos"

@@ -53,6 +53,7 @@ public:
      * value on connection.
      */
     KisNodeSP lastActivatedNode() const;
+    void setLastActivatedNode(KisNodeSP node);
 
 protected:
     KisImageWSP image() const;

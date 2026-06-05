@@ -804,6 +804,7 @@ void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
         Q_EMIT sigNodeActivated(node);
         nodesUpdated();
         if (node) {
+            dummiesFacade->setLastActivatedNode(node);
             bool toggled =  m_d->view->actionCollection()->action("view_show_canvas_only")->isChecked();
             if (toggled) {
                 m_d->view->showFloatingMessage( node->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);

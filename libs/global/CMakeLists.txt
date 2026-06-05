@@ -58,6 +58,7 @@ endif(WIN32)
 if (ANDROID)
     list(APPEND kritaglobal_LIB_SRCS
         KisAndroidCrashHandler.cpp
+        KisAndroidExitInfo.cpp
         KisAndroidLogHandler.cpp
         KisAndroidUtils.cpp
     )

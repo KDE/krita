@@ -32,6 +32,7 @@
 #endif
 
 #ifdef Q_OS_ANDROID
+#include <KisAndroidExitInfo.h>
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QtAndroidExtras/QtAndroid>
 #endif
@@ -279,6 +280,12 @@ void KisUsageLogger::writeHeader()
         .arg(qApp->style()->objectName(),
              QStyleFactory::keys().join(", ")));
 
+#ifdef Q_OS_ANDROID
+    KisAndroidExitInfo androidExitInfo = KisAndroidExitInfo::getLast();
+    if (androidExitInfo.isValid()) {
+        log(QStringLiteral("Last exit: %1").arg(androidExitInfo.buildLogString()));
+    }
+#endif
 }
 
 QString KisUsageLogger::screenInformation()

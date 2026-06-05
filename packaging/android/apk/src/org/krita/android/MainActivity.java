@@ -7,6 +7,8 @@
 
 package org.krita.android;
 
+import android.app.ActivityManager;
+import android.app.ApplicationExitInfo;
 import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.ServiceStartNotAllowedException;
 import android.content.Intent;
@@ -20,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
 import androidx.annotation.RequiresApi;
+
+import java.util.List;
 
 import org.qtproject.qt5.android.QtNative;
 import org.qtproject.qt5.android.QtInputEventDispatcher;
@@ -203,5 +207,34 @@ public class MainActivity extends QtActivity {
 
     private static boolean containsXiaomi(String s) {
         return s != null && s.toLowerCase().contains("xiaomi");
+    }
+
+    public ApplicationExitInfo getLastApplicationExitInfo() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                ActivityManager activityManager = getSystemService(ActivityManager.class);
+                if (activityManager != null) {
+                    List<ApplicationExitInfo> exitReasons =
+                        activityManager.getHistoricalProcessExitReasons(null, 0, 1);
+                    if (exitReasons != null && !exitReasons.isEmpty()) {
+                        return exitReasons.get(0);
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Exception getting last application exit info", e);
+            }
+        }
+        return null;
+    }
+
+    public static boolean isLowMemoryKillReportSupported() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                return ActivityManager.isLowMemoryKillReportSupported();
+            } catch (Exception e) {
+                Log.e(TAG, "Exception getting low memory kill report support", e);
+            }
+        }
+        return false;
     }
 }

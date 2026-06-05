@@ -69,6 +69,11 @@ private Q_SLOTS:
 
 private:
     Q_DISABLE_COPY(RecorderDockerDock)
+#ifdef Q_OS_ANDROID
+    static constexpr bool PLATFORM_SUPPORTS_FFMPEG = false;
+#else
+    static constexpr bool PLATFORM_SUPPORTS_FFMPEG = true;
+#endif
     class Private;
     RecorderExportSettings *const exportSettings;
     Private *const d;

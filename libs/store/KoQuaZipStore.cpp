@@ -71,11 +71,25 @@ KoQuaZipStore::~KoQuaZipStore()
         finalize();
     }
 
-    delete dd->archive;
+
+    // NOTE:
+    //   If the dd->currentFile is corrupt (and ->getZipError() returns an error code)
+    // QuaZip cannot really close it properly (and I don't see an accessible function to reset the error code).
+    // Therefore the destructor thinks the file is open and tries to close it.
+    // And closing the file means checking if the zip archive associated with the file is open or not.
+    // Therefore the archive must exist when the file is being closed, therefore also when it's being deleted.
+    // In comparison, the archive can be deleted whenever and it doesn't check the current file.
+    // Therefore we gotta delete the file first, then the zip archive.
+
+    //   From QuaZip code comments for `QuaZipFile(QuaZip *zip, QObject *parent =nullptr);`:
+    // "* Summary: do not close \c zip object or change its current file as
+    // * long as QuaZipFile is open."
 
     if (dd->currentFile) {
         delete dd->currentFile;
     }
+    delete dd->archive;
+
 }
 
 void KoQuaZipStore::setCompressionEnabled(bool enabled)

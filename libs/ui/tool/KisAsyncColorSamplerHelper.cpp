@@ -73,13 +73,14 @@ struct KisAsyncColorSamplerHelper::Private
 
     bool circleZoomPreviewEnabled {false};
     qreal circleZoomPreviewScale {5};
-    int circleZoomPreviewCrosshairSize {15};
     KisConfig::ColorSamplerPreviewCirclePosition circlePreviewPosition = KisConfig::ColorSamplerPreviewCirclePosition::Center;
     QPointF sampleDocPoint;
 
     QPainterPath cacheCircleInnerClip;
     QRect cacheCanvasPreviewRect;
     QImage cacheCanvasPreviewImage;
+    QImage cacheCrosshairImage;
+    int cacheCirclePreviewDiameter;
 
     QColor currentColor;
     QColor baseColor;
@@ -184,7 +185,16 @@ struct KisAsyncColorSamplerHelper::Private
                 break;
             }
 
-            return circleRect.translated(QPointF(x, y));
+            QTransform tf;
+
+            qreal canvasRotationAngle = canvas->rotationAngle();
+            if (!qFuzzyIsNull(canvasRotationAngle)) {
+                tf.rotate(mirrored ? canvasRotationAngle : -canvasRotationAngle);
+            }
+
+            QPointF offset = tf.map(QPointF(x,y));
+
+            circleRect.translate(offset.x(), offset.y());
         }
 
         return circleRect;
@@ -234,6 +244,40 @@ struct KisAsyncColorSamplerHelper::Private
         if (pixelRect.width() < 3 || pixelRect.height() < 3) pixelRect.setSize(QSize(3, 3));
 
         return pixelRect;
+    }
+
+    QImage crosshairForOffsettedCircle() {
+        if (!cacheCrosshairImage.isNull() && cacheCirclePreviewDiameter == circlePreviewDiameter) return cacheCrosshairImage;
+
+        cacheCirclePreviewDiameter = circlePreviewDiameter;
+
+        int gap = 4;
+        int crosshairRadius = circlePreviewDiameter / 2 * 0.3;
+        cacheCrosshairImage = QImage(crosshairRadius * 2 + 1, crosshairRadius * 2 + 1, QImage::Format_ARGB32);
+        cacheCrosshairImage.fill(Qt::transparent);
+
+        QPainter painter(&cacheCrosshairImage);\
+        painter.translate(crosshairRadius + 1, crosshairRadius + 1);
+
+        painter.setBrush(Qt::NoBrush);
+
+        painter.setPen(Qt::black);
+        painter.drawLine(QLine(-crosshairRadius, 0, crosshairRadius, 0));
+        painter.drawLine(QLine(0, -crosshairRadius, 0, crosshairRadius));
+
+        painter.setPen(Qt::white);
+        painter.drawLine(QLine(-crosshairRadius, 1, crosshairRadius, 1));
+        painter.drawLine(QLine(1, -crosshairRadius, 1, crosshairRadius));
+
+        painter.drawLine(QLine(-crosshairRadius, -1, crosshairRadius, -1));
+        painter.drawLine(QLine(-1, -crosshairRadius, -1, crosshairRadius));
+
+        painter.setCompositionMode(QPainter::CompositionMode_Clear);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Qt::transparent);
+        painter.drawRect(QRect(QPoint(-gap, -gap), QPoint(gap, gap)));
+
+        return cacheCrosshairImage;
     }
 };
 
@@ -531,15 +575,6 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     QPainter cachePainter(&m_d->cache);
     cachePainter.setRenderHint(QPainter::Antialiasing);
 
-    QColor backgroundColor = colorWithAlpha(m_d->backgroundColor, OPACITY_OPAQUE_U8 / 2 + 1);
-    qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
-    QPen pen = QPen(backgroundColor, penWidth);
-    if (m_d->circlePreviewOutlineEnabled) {
-        cachePainter.setPen(pen);
-    } else {
-        cachePainter.setPen(Qt::NoPen);
-    }
-
     QRectF cacheRect = m_d->cache.rect();
 
     // The color sampler preview is an outline and those rotate along
@@ -554,6 +589,15 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
     bool needsDualColor = currentColor != baseColor;
     if (needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
         m_d->cacheRotation = canvasRotationAngle;
+
+        QColor backgroundColor = colorWithAlpha(m_d->backgroundColor, OPACITY_OPAQUE_U8 / 2 + 1);
+        qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
+        QPen pen = QPen(backgroundColor, penWidth);
+        if (m_d->circlePreviewOutlineEnabled) {
+            cachePainter.setPen(pen);
+        } else {
+            cachePainter.setPen(Qt::NoPen);
+        }
 
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
 
@@ -644,17 +688,21 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 
         // Draw crosshair if preview is offseted
         if (m_d->circlePreviewPosition != KisConfig::ColorSamplerPreviewCirclePosition::Center) {
-            QColor crosshairColor = Qt::black;
-            // Apparently this fomular is outdated and inaccurate. But the accurate version require calculating power, probably overkill anyway
-            qreal luminance = (0.299 * currentColor.redF() + 0.587 * currentColor.greenF() + 0.114 * currentColor.blueF());
-            if (luminance < 0.5) crosshairColor = Qt::white;
+            QImage crosshairImage = m_d->crosshairForOffsettedCircle();
 
-            cachePainter.setPen(crosshairColor);
-            cachePainter.setBrush(crosshairColor);
-            cachePainter.drawLine(cacheCenter + QPointF(-m_d->circleZoomPreviewCrosshairSize, 0), cacheCenter + QPointF(-5, 0));
-            cachePainter.drawLine(cacheCenter + QPointF(5, 0), cacheCenter + QPointF(m_d->circleZoomPreviewCrosshairSize, 0));
-            cachePainter.drawLine(cacheCenter + QPointF(0, -m_d->circleZoomPreviewCrosshairSize), cacheCenter + QPointF(0, -5));
-            cachePainter.drawLine(cacheCenter + QPointF(0, 5), cacheCenter + QPointF(0, m_d->circleZoomPreviewCrosshairSize));
+            QRectF targetRect = crosshairImage.rect();
+            targetRect.moveCenter(cacheCenter);
+
+            cachePainter.save();
+            cachePainter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+            cachePainter.translate(cacheCenter);
+            cachePainter.rotate(-m_d->cacheRotation);
+            cachePainter.translate(-cacheCenter);
+
+            cachePainter.drawImage(targetRect, crosshairImage);
+
+            cachePainter.restore();
         }
     }
 
@@ -702,8 +750,6 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
 }
 
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip) {
-    gc.save();
-
     KisImageWSP image = m_d->canvas->image();
 
     QRect canvasPixelRect = image->documentToPixel(zoomDocRectF).toRect();
@@ -715,6 +761,7 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     QImage cachedImage = cacheCanvasImage(canvasPixelRect);
     if (cachedImage.isNull()) return;
 
+    gc.save();
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
     gc.setClipPath(clip);

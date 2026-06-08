@@ -146,6 +146,9 @@ include:
   - local: /build-tools/ci-scripts/windows.yml
   - local: /build-tools/ci-scripts/android.yml
   - local: /build-tools/ci-scripts/macos.yml
-  - project: sysadmin/ci-utilities
-    file:
-      - /gitlab-templates/cppcheck.yml
+  # TODO: For some reason cppcheck doesn't work in our MR pipelines (no GUI visible),
+  #       we should recover this job only when the MR pipelines are fixed. There is
+  #       no use to generate HTML report for every commit when noone looks at it.
+  # - project: sysadmin/ci-utilities
+  #   file:
+  #     - /gitlab-templates/cppcheck.yml

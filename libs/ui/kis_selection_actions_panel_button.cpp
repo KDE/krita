@@ -48,14 +48,16 @@ void KisSelectionActionsPanelButton::draw(QPainter &painter, const KoColorDispla
     }
 
     int padding = ICON_SIZE_OFFSET / 2;
-    QImage ic = displayRendererInterface->convertImageToDisplayColorSpace(icon().pixmap(rect.width()-(padding*2), rect.height()-(padding*2)).toImage());
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRect target = QRect(QPoint(0, 0), ic.size()/ic.devicePixelRatioF());
+    icon().paint(&painter, rect.marginsRemoved(QMargins(padding, padding, padding, padding)));
 #else
+    QImage ic = displayRendererInterface->convertImageToDisplayColorSpace(icon().pixmap(rect.width()-(padding*2), rect.height()-(padding*2)).toImage());
     QRect target = QRect(QPoint(0, 0), ic.deviceIndependentSize().toSize());
-#endif
     target.moveCenter(rect.center());
     painter.drawImage(target.intersected(rect.marginsRemoved(QMargins(padding, padding, padding, padding))), ic);
+#endif
+
 }
 
 

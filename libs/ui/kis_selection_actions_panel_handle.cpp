@@ -55,14 +55,15 @@ void KisSelectionActionsPanelHandle::draw(QPainter& painter, const KoColorDispla
     painter.fillRect(rect.marginsAdded(QMargins(-3, 4, 1, 4)), renderInterface->systemPaletteForDisplayColorSpace().window().color());
 
     // Adjusting the icon location a bit to be properly centered
-    QImage ic = renderInterface->convertImageToDisplayColorSpace(d->handle_icon.pixmap(d->size, d->size).toImage());
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRect target = QRect(QPoint(0, 0), ic.size()/ic.devicePixelRatioF());
+    d->handle_icon.paint(&painter, QRect(rect.x() + 3, rect.y(), d->size, d->size));
 #else
+    QImage ic = renderInterface->convertImageToDisplayColorSpace(d->handle_icon.pixmap(d->size, d->size).toImage());
     QRect target = QRect(QPoint(0, 0), ic.deviceIndependentSize().toSize());
-#endif
     target.moveCenter(rect.center() + QPoint(3, 0));
     painter.drawImage(target, ic);
+#endif
 }
 
 void KisSelectionActionsPanelHandle::contextMenuEvent(QContextMenuEvent *event)

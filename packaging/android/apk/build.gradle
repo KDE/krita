@@ -248,7 +248,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:8.0.0'
-    implementation 'androidx.annotation:annotation:1.9.0'
+    implementation 'com.android.billingclient:billing:9.0.0'
+    implementation 'androidx.annotation:annotation:1.10.0'
     implementation files("libs/SDL2Android.jar")
 }

@@ -154,7 +154,7 @@ struct WritableLocationValidator : public QValidator {
     {
         QFileInfo fi(line);
         if (!fi.isWritable()) {
-            return Invalid;
+            return Intermediate;
         }
         return Acceptable;
     }
@@ -543,7 +543,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         m_urlResourceFolder->setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     }
     QValidator *writableValidator = new WritableLocationValidator(m_urlResourceFolder);
-    txtBackupFileSuffix->setValidator(writableValidator);
+    m_urlResourceFolder->setValidator(writableValidator);
     connect(m_urlResourceFolder, SIGNAL(textChanged(QString)), SLOT(checkResourcePath()));
     checkResourcePath();
 

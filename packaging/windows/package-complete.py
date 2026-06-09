@@ -15,7 +15,7 @@ import pathlib
 import shutil
 import subprocess
 import sys
-import warnings
+import logging
 from components import MergeFolders
 
 # Subroutines
@@ -57,11 +57,6 @@ def prompt_for_dir(prompt):
     else:
         return os.path.realpath(user_input)
 
-def run_subprocess_checked(argList):
-    print(f"Run: {' '.join(argList)}")
-    subprocess.run(argList, check=True)
-
-
 # command-line args parsing
 parser = argparse.ArgumentParser()
 
@@ -89,6 +84,28 @@ args = parser.parse_args()
 
 useVerbosePackagingLog = (os.environ.get('KRITACI_VERBOSE_PACKAGING', '0').lower() in ['true', '1', 't', 'y', 'yes'])
 
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+fileFormatter = logging.Formatter("## %(asctime)s %(levelname)s: %(message)s")
+
+fileHandler = logging.FileHandler("package_complete.log", mode='w')
+fileHandler.setLevel(logging.DEBUG)
+fileHandler.setFormatter(fileFormatter)
+
+stdoutFormatter = logging.Formatter("## %(levelname)s: %(message)s")
+
+stdoutHandler = logging.StreamHandler(sys.stdout)
+stdoutHandler.setLevel(logging.DEBUG if useVerbosePackagingLog else logging.INFO)
+stdoutHandler.setFormatter(stdoutFormatter)
+
+logger.addHandler(fileHandler)
+logger.addHandler(stdoutHandler)
+
+def run_subprocess_checked(argList):
+    logger.info(f"Run: {' '.join(argList)}")
+    subprocess.run(argList, check=True)
+
 if os.environ.get("SEVENZIP_EXE") is None:
     find_on_path("SEVENZIP_EXE", "7z.exe")
 if os.environ.get("SEVENZIP_EXE") is None:
@@ -99,9 +116,9 @@ if os.environ.get("SEVENZIP_EXE") is None:
         os.environ["SEVENZIP_EXE"] = "{}\\7-Zip\\7z.exe".format(
             os.environ["ProgramFiles(x86)"])
     if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
-        warnings.warn("7-Zip not found!")
+        logger.error("7-Zip not found!")
         sys.exit(102)
-print(f"7-Zip: {os.environ['SEVENZIP_EXE']}")
+logger.info(f"7-Zip: {os.environ['SEVENZIP_EXE']}")
 
 if not os.environ.get("MINGW_BIN_DIR"):
     find_on_path("MINGW_BIN_DIR_MAKE_EXE", "mingw32-make.exe")
@@ -109,22 +126,22 @@ if not os.environ.get("MINGW_BIN_DIR"):
         if not args.no_interactive:
             os.environ['MINGW_BIN_DIR_MAKE_EXE'] = prompt_for_file("Provide path to mingw32-make.exe of mingw-w64")
         if not os.environ.get('MINGW_BIN_DIR_MAKE_EXE'):
-            warnings.warn("ERROR: mingw-w64 not found!")
+            logger.error("mingw-w64 not found!")
             sys.exit(102)
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
     else:
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
-        print(f"Found mingw on PATH: {os.environ['MINGW_BIN_DIR_MAKE_EXE']}")
+        logger.info(f"Found mingw on PATH: {os.environ['MINGW_BIN_DIR_MAKE_EXE']}")
         if not args.no_interactive:
             status = choice("Is this correct?")
             if not status:
                 os.environ['MINGW_BIN_DIR_MAKE_EXE'] = prompt_for_dir("Provide path to mingw32-make.exe of mingw-w64")
             if not os.environ['MINGW_BIN_DIR_MAKE_EXE']:
-                warnings.warn("ERROR: mingw-w64 not found!")
+                logger.error("mingw-w64 not found!")
                 sys.exit(102)
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
-print(f"mingw-w64: {os.environ['MINGW_BIN_DIR']}")
-        
+logger.info(f"mingw-w64: {os.environ['MINGW_BIN_DIR']}")
+
 # Windows SDK is needed for windeployqt to get d3dcompiler_xx.dll
 # If we don't define this variable, windeployqt will fetch the library
 # from  %WINDIR%\system32, which is not supposed to be redistributable
@@ -144,15 +161,15 @@ if KRITA_SRC_DIR is None:
         if os.path.isfile(f"{_base.parents[2]}\\CMakeLists.txt"):
             if os.path.isfile(f"{_base.parents[2]}\\libs\\version\\kritaversion.h.cmake"):
                 KRITA_SRC_DIR = os.path.realpath(_base.parents[2])
-                print("Script is running inside Krita source dir")
+                logger.info("Script is running inside Krita source dir")
 
 if KRITA_SRC_DIR is None:
     if args.no_interactive:
         KRITA_SRC_DIR = prompt_for_dir("Provide path of Krita src dir")
     if KRITA_SRC_DIR is None:
-        warnings.warn("ERROR: Krita src dir not found!")
+        logger.error("Krita src dir not found!")
         sys.exit(102)
-print(f"Krita src: {KRITA_SRC_DIR}")
+logger.info(f"Krita src: {KRITA_SRC_DIR}")
 
 DEPS_INSTALL_DIR = None
 
@@ -160,16 +177,16 @@ if args.deps_install_dir is not None:
     DEPS_INSTALL_DIR = args.deps_install_dir
 if DEPS_INSTALL_DIR is None:
     DEPS_INSTALL_DIR = f"{os.getcwd()}\\_install"
-    print(f"Using default deps install dir: {DEPS_INSTALL_DIR}")
+    logger.info(f"Using default deps install dir: {DEPS_INSTALL_DIR}")
     if not args.no_interactive:
         status = choice()
         if not status:
             DEPS_INSTALL_DIR = prompt_for_dir(
                 "Provide path of deps install dir")
     if DEPS_INSTALL_DIR is None:
-        warnings.warn("ERROR: Deps install dir not set!")
+        logger.error("Deps install dir not set!")
         sys.exit(102)
-print(f"Deps install dir: {DEPS_INSTALL_DIR}")
+logger.info(f"Deps install dir: {DEPS_INSTALL_DIR}")
 
 KRITA_INSTALL_DIR = None
 
@@ -177,42 +194,42 @@ if args.krita_install_dir is not None:
     KRITA_INSTALL_DIR = args.krita_install_dir
 if KRITA_INSTALL_DIR is None:
     KRITA_INSTALL_DIR = f"{os.getcwd()}\\_install"
-    print(f"Using default Krita install dir: {KRITA_INSTALL_DIR}")
+    logger.info(f"Using default Krita install dir: {KRITA_INSTALL_DIR}")
     if not args.no_interactive:
         status = choice()
         if not status:
             KRITA_INSTALL_DIR = prompt_for_dir(
                 "Provide path of Krita install dir")
     if KRITA_INSTALL_DIR is None:
-        warnings.warn("ERROR: Krita install dir not set!")
+        logger.error("Krita install dir not set!")
         sys.exit(102)
-print(f"Krita install dir: {KRITA_INSTALL_DIR}")
+logger.info(f"Krita install dir: {KRITA_INSTALL_DIR}")
 
 # Simple checking
 if not os.path.isdir(DEPS_INSTALL_DIR):
-    warnings.warn("ERROR: Cannot find the deps install folder!")
+    logger.error("Cannot find the deps install folder!")
     sys.exit(1)
 if not os.path.isdir(KRITA_INSTALL_DIR):
-    warnings.warn("ERROR: Cannot find the krita install folder!")
+    logger.error("Cannot find the krita install folder!")
     sys.exit(1)
 # Amyspark: paths with spaces are automagically handled by Python!
 
 pkg_name = args.package_name
-print(f"Package name is {pkg_name}")
+logger.info(f"Package name is {pkg_name}")
 
 pkg_root = f"{os.getcwd()}\\{pkg_name}"
-print(f"Packaging dir is {pkg_root}\n")
+logger.info(f"Packaging dir is {pkg_root}\n")
 if os.path.isdir(pkg_root):
-    warnings.warn(
-        "ERROR: Packaging dir already exists! Please remove or rename it first.")
+    logger.error(
+        "Packaging dir already exists! Please remove or rename it first.")
     sys.exit(1)
 if os.path.isfile(f"{pkg_root}.zip"):
-    warnings.warn(
-        "ERROR: Packaging zip already exists! Please remove or rename it first.")
+    logger.error(
+        "Packaging zip already exists! Please remove or rename it first.")
     sys.exit(1)
 if os.path.isfile(f"{pkg_root}-dbg.zip"):
-    warnings.warn(
-        "ERROR: Packaging debug zip already exists! Please remove or rename it first.")
+    logger.error(
+        "Packaging debug zip already exists! Please remove or rename it first.")
     sys.exit(1)
 
 if not args.no_interactive:
@@ -226,20 +243,21 @@ os.environ["PATH"] = fr"{os.environ['SystemRoot']}\system32;{os.environ['SystemR
 os.environ["PATH"] = fr"{os.environ['MINGW_BIN_DIR']};{DEPS_INSTALL_DIR}\bin;{os.environ['PATH']}"
 
 
-print("\nTrying to guess compiler version...")
+logger.info("")
+logger.info("Trying to guess compiler version...")
 for arg in ("g++", "clang++"):
     commandToRun = f"{arg} --version"
     ret = subprocess.call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
     if ret != 1:
         os.environ['CC'] = arg
 if not os.environ.get('CC'):
-    warnings.warn("ERROR: No working compiler.")
+    logger.error("No working compiler.")
     sys.exit(1)
 output = subprocess.check_output(f"{os.environ['CC']} --version", shell=True, text=True)
 GCCversionLines = output.splitlines()
 GCC_VERSION_LINE = ""
 for versionLine in GCCversionLines:
-    if re.search("g\+\+", versionLine):
+    if re.search("g\\+\\+", versionLine):
         GCC_VERSION_LINE = versionLine
 # The space in "clang " is essential to detect
 # the version line and not the InstalledDir
@@ -248,23 +266,23 @@ if not GCC_VERSION_LINE:
         if re.search("clang ", versionLine):
             GCC_VERSION_LINE = versionLine
 if not GCC_VERSION_LINE:
-    warnings.warn("ERROR: Failed to get version of g++.")
+    logger.error("Failed to get version of g++.")
     sys.exit(1)
-print(f"-- {GCC_VERSION_LINE}")
+logger.info(f"-- {GCC_VERSION_LINE}")
 IS_TDM = False
 IS_MSYS = False
 IS_CLANG = False
 if re.search("tdm64", GCC_VERSION_LINE):
-    print("Compiler looks like TDM64-GCC")
+    logger.info("Compiler looks like TDM64-GCC")
     IS_TDM = True
 if re.search("MSYS", GCC_VERSION_LINE):
-    print("Compiler looks like MSYS GCC")
+    logger.info("Compiler looks like MSYS GCC")
     IS_MSYS = True
 if re.search("clang", GCC_VERSION_LINE):
-    print("Compiler looks like Clang")
+    logger.info("Compiler looks like Clang")
     IS_CLANG = True
 else:
-    print("Compiler looks like plain old MinGW64")
+    logger.info("Compiler looks like plain old MinGW64")
 IS_LLVM_MINGW = False
 IS_MSYS_CLANG = False
 if IS_CLANG:
@@ -272,13 +290,14 @@ if IS_CLANG:
     # no surefire way to detect a llvm-mingw toolchain.
     if os.path.isdir(f"{os.environ['MINGW_BIN_DIR']}\\..\\i686-w64-mingw32\\bin\\") and \
        os.path.isdir(f"{os.environ['MINGW_BIN_DIR']}\\..\\x86_64-w64-mingw32\\bin\\"):
-            print("Toolchain looks like llvm-mingw")
+            logger.info("Toolchain looks like llvm-mingw")
             IS_LLVM_MINGW = True
     else:
-        print("Toolchain does not look like llvm-mingw, assuming MSYS Clang")
+        logger.info("Toolchain does not look like llvm-mingw, assuming MSYS Clang")
         IS_MSYS_CLANG = True
 
-print("\nTrying to guess target architecture...")
+logger.info("")
+logger.info("Trying to guess target architecture...")
 OBJDUMP = False
 for arg in ("objdump", "llvm-objdump"):
     commandToRun = f"{arg} --version"
@@ -286,7 +305,7 @@ for arg in ("objdump", "llvm-objdump"):
     if ret != 1:
         OBJDUMP = arg
 if not OBJDUMP:
-    warnings.warn("ERROR: objdump is not working.")
+    logger.error("objdump is not working.")
     sys.exit(1)
 output = subprocess.check_output(fr"{OBJDUMP} -f {KRITA_INSTALL_DIR}\bin\krita.exe", text=True)
 targetArchLines = output.splitlines()
@@ -296,42 +315,46 @@ for archLine in targetArchLines:
     if re.search("i386", archLine):
         TARGET_ARCH_LINE = archLine
     if not TARGET_ARCH_LINE:
-        print("Possible LLVM objdump, trying to detect architecture...")
+        logger.info("Possible LLVM objdump, trying to detect architecture...")
         if re.search("coff", archLine):
             TARGET_ARCH_LINE = archLine
-print(f"-- {TARGET_ARCH_LINE}")
+logger.info(f"-- {TARGET_ARCH_LINE}")
 IS_x64 = False
 if not re.search("x86-64", TARGET_ARCH_LINE):
-    print("Target looks like x86")
+    logger.info("Target looks like x86")
 else:
-    print("Target looks like x86_64")
+    logger.info("Target looks like x86_64")
     IS_x64 = True
 
-print("\nTesting for objcopy...")
+logger.info("")
+logger.info("Testing for objcopy...")
 commandToRun = "objcopy --version"
 try:
     subprocess.check_call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
 except subprocess.CalledProcessError:
-    warnings.warn("ERROR: objcopy is not working.")
+    logger.error("objcopy is not working.")
     sys.exit(1)
 
-print("\nTesting for strip...")
+logger.info("")
+logger.info("Testing for strip...")
 commandToRun = "strip --version"
 try:
     subprocess.check_call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
 except subprocess.CalledProcessError:
-    warnings.warn("ERROR: strip is not working.")
+    logger.error("strip is not working.")
     sys.exit(1)
 
-print("\nTrying to guess Qt version...", end = "")
+logger.info("")
+logger.info("Trying to guess Qt version...")
 useQt6Build = False
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\Qt6Core.dll"):
-    print(" Found Qt6")
+    logger.info("    Found Qt6")
     useQt6Build = True
 else:
-    print(" Found Qt5")
+    logger.info("    Found Qt5")
 
-print("\nCreating base directories...")
+logger.info("")
+logger.info("Creating base directories...")
 
 try:
     os.makedirs(f"{pkg_root}", exist_ok=True)
@@ -340,10 +363,11 @@ try:
     os.makedirs(f"{pkg_root}\\lib", exist_ok=True)
     os.makedirs(f"{pkg_root}\\share", exist_ok=True)
 except:
-    warnings.warn("ERROR: Cannot create packaging dir tree!")
+    logger.error("Cannot create packaging dir tree!")
     sys.exit(1)
 
-print("\nCopying GCC libraries...")
+logger.info("")
+logger.info("Copying GCC libraries...")
 os.environ['STDLIBS_DIR'] = os.environ['MINGW_BIN_DIR']
 if IS_TDM:
     if not IS_x64:
@@ -381,17 +405,17 @@ elif IS_LLVM_MINGW:
     output = subprocess.check_output(fr"{OBJDUMP} -p {KRITA_INSTALL_DIR}\bin\krita.exe", text=True)
 
     if re.search(asanLibName, output):
-        print('The package contains ASAN, packaging the ASAN runtime as well!')
+        logger.info('The package contains ASAN, packaging the ASAN runtime as well!')
         os.environ['STDLIBS'] = f'{os.environ["STDLIBS"]} {asanLibName}'
 
         symbolizerBinaries = ['libLLVM-18.dll', 'llvm-symbolizer.exe']
         for file in symbolizerBinaries:
             filePath = os.path.join(os.environ['MINGW_BIN_DIR'], file)
 
-            print(f'Copying symbolizer lib: {filePath}')
+            logger.info(f'Copying symbolizer lib: {filePath}')
             shutil.copy(filePath, fr"{pkg_root}\bin")
     else:
-        print('No ASAN was found in the Krita binary, skipping its packaging...')
+        logger.info('No ASAN was found in the Krita binary, skipping its packaging...')
 
 else:
     if not IS_x64:
@@ -407,7 +431,8 @@ for lib in os.environ['STDLIBS'].split(" "):
     if lib != 'libssp-0' or os.path.isfile(libPath):
         shutil.copy(libPath, fr"{pkg_root}\bin")
 
-print("\nCopying files...")
+logger.info("")
+logger.info("Copying files...")
 # krita.exe
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.exe", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.com", f"{pkg_root}\\bin\\")
@@ -428,7 +453,7 @@ if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
 # qt.conf -- to specify the location to Qt translations
 shutil.copy(fr"{KRITA_SRC_DIR}\packaging\windows\qt.conf", fr"{pkg_root}\bin")
 # DLLs from bin/
-print("INFO: Copying all DLLs except Qt5/Qt6 * from bin/")
+logger.info("Copying all DLLs except Qt5/Qt6 * from bin/")
 files = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.dll")
 pdbs = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.pdb")
 for f in itertools.chain(files, pdbs):
@@ -444,7 +469,7 @@ for f in files:
 # symsrv.yes for Dr. Mingw
 shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\symsrv.yes", f"{pkg_root}\\bin")
 # DLLs from lib/
-print("INFO: Copying all DLLs from lib/ (deps)")
+logger.info("Copying all DLLs from lib/ (deps)")
 files = glob.glob(fr"{DEPS_INSTALL_DIR}\lib\*.dll")
 for f in files:
     shutil.copy(f, fr"{pkg_root}\bin")
@@ -538,15 +563,15 @@ QMLDIR_ARGS = ["--qmldir", fr"{KRITA_SRC_DIR}\plugins\dockers\textproperties"]
 # root.
 
 if os.path.isdir(fr"{KRITA_INSTALL_DIR}\lib\qml"):
-    print("ERROR: some of Krita's QML modules were installed in an incorrect location")
-    print(fr"    actual path: {KRITA_INSTALL_DIR}\lib\qml")
-    print(fr"    expected path: {KRITA_INSTALL_DIR}\qml")
+    logger.error("Some of Krita's QML modules were installed in an incorrect location")
+    logger.error(fr"    actual path: {KRITA_INSTALL_DIR}\lib\qml")
+    logger.error(fr"    expected path: {KRITA_INSTALL_DIR}\qml")
     exit(103)
 
 if os.path.isdir(fr"{DEPS_INSTALL_DIR}\lib\qml"):
-    print("ERROR: some of Deps' QML modules were installed in an incorrect location")
-    print(fr"    actual path: {DEPS_INSTALL_DIR}\lib\qml")
-    print(fr"    expected path: {DEPS_INSTALL_DIR}\qml")
+    logger.error("Some of Deps' QML modules were installed in an incorrect location")
+    logger.error(fr"    actual path: {DEPS_INSTALL_DIR}\lib\qml")
+    logger.error(fr"    expected path: {DEPS_INSTALL_DIR}\qml")
     exit(103)
 
 # windeployqt
@@ -587,14 +612,16 @@ if os.path.exists(f"{pkg_root}\\python\\pythonw.exe"):
     os.remove(f"{pkg_root}\\python\\pythonw.exe")
 
 # Remove Python cache files
+logger.info("")
+logger.info("Deleting python cache...")
 for d in os.walk(pkg_root):
     pycache = f"{d[0]}\\__pycache__"
     if os.path.isdir(pycache):
-        print(f"Deleting Python cache {pycache}")
+        logger.debug(f"Deleting Python cache {pycache}")
         shutil.rmtree(pycache)
 
 if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
-    print(f"Deleting unnecessary Python packages")
+    logger.info(f"Deleting unnecessary Python packages")
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\packaging*"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\pip*"):
@@ -619,7 +646,8 @@ if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
         os.remove(f)
 
 if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 'on']:
-    print("\nSplitting debug info from binaries...")
+    logger.info("")
+    logger.info("Splitting debug info from binaries...")
 
     def has_debug_section(objdumpOutput):
         for line in objdumpOutput.splitlines():
@@ -628,7 +656,7 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
         return False
 
     def split_debug(arg1, arg2):
-        print(f"Splitting debug info of {arg2}")
+        logger.debug(f"Splitting debug info of {arg2}")
 
         # The objcopy implementation included in llvm-21 and later has some weird
         # implementation of --only-keep-debug, it manages to strip binaries, even
@@ -641,7 +669,7 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
         # included and strip them only in case such sections are found
         result = subprocess.run([OBJDUMP, "-h", arg1], capture_output=True, text=True, check=True)
         if not has_debug_section(result.stdout):
-            print(f"Skip stripping {arg2}: has no debug sections")
+            logger.info(f"Skip stripping {arg2}: has no debug sections")
             return 0
 
         commandToRun = f"objcopy --only-keep-debug {arg1} {arg1}.debug"
@@ -652,7 +680,7 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
         # If the debug file is small enough then consider there being no debug info.
         # Discard these files since they somehow make gdb crash.
         if os.path.getsize(f"{arg1}.debug") <= 2048:
-            print(f"Discarding {arg2}.debug")
+            logger.info(f"Discarding {arg2}.debug")
             os.remove(f"{arg1}.debug")
             return 0
         debugDir = os.path.dirname(arg1)+".debug"
@@ -695,7 +723,7 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
 
 
 if args.pre_zip_hook:
-    print("Running pre-zip hook...")
+    logger.info("Running pre-zip hook...")
     if args.pre_zip_hook.endswith('.cmd'):
         run_subprocess_checked(
             ["cmd", "/c", args.pre_zip_hook, f"{pkg_root}\\"])
@@ -703,30 +731,30 @@ if args.pre_zip_hook:
         run_subprocess_checked(
             [sys.executable, "-u", args.pre_zip_hook, f"{pkg_root}\\"])
     else:
-        warnings.warn("ERROR: pre-zip hook has unknown format!")
+        logger.error("pre-zip hook has unknown format!")
         sys.exit(102)
 
-print("\nPackaging stripped binaries...")
+logger.info("")
+logger.info("Packaging stripped binaries...")
 run_subprocess_checked(
     [os.environ["SEVENZIP_EXE"], "a", "-tzip",
     f"{pkg_name}.zip", f"{pkg_root}\\", "-xr!*.debug"])
-print("--------\n")
 
 if not os.environ.get('KRITACI_SKIP_DEBUG_PACKAGE', '0').lower() in ['true', '1', 'on']:
-    print("Packaging debug info...")
+    logger.info("")
+    logger.info("Packaging debug info...")
     # (note that the top-level package dir is not included)
     run_subprocess_checked(
         [os.environ["SEVENZIP_EXE"], "a", "-tzip",
         f"{pkg_name}-dbg.zip", "-r", f"{pkg_root}\\*.debug"])
-    print("--------\n")
 
-print("\n")
-print(f"Krita packaged as {pkg_name}.zip")
+logger.info("")
+logger.info(f"Krita packaged as {pkg_name}.zip")
 if os.path.isfile(f"{pkg_name}-dbg.zip"):
-    print(f"Debug info packaged as {pkg_name}-dbg.zip")
-print(f"Packaging dir is {pkg_root}")
-print("NOTE: Do not create installer with packaging dir. Extract from")
-print(f"      {pkg_name}.zip instead")
-print("and do _not_ run krita inside the extracted directory because it will")
-print("       create extra unnecessary files.\n")
-print("Please remember to actually test the package before releasing it.\n")
+    logger.info(f"Debug info packaged as {pkg_name}-dbg.zip")
+logger.info(f"Packaging dir is {pkg_root}")
+logger.info("NOTE: Do not create installer with packaging dir. Extract from")
+logger.info(f"      {pkg_name}.zip instead")
+logger.info("and do _not_ run krita inside the extracted directory because it will")
+logger.info("       create extra unnecessary files.\n")
+logger.info("Please remember to actually test the package before releasing it.\n")

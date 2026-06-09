@@ -57,8 +57,9 @@ def prompt_for_dir(prompt):
     else:
         return os.path.realpath(user_input)
 
-
-print(f"Krita Windows packaging script")
+def run_subprocess_checked(argList):
+    print(f"Run: {' '.join(argList)}")
+    subprocess.run(argList, check=True)
 
 
 # command-line args parsing
@@ -85,6 +86,8 @@ special_options.add_argument("--pre-zip-hook", action='store',
 args = parser.parse_args()
 
 # Check environment config
+
+useVerbosePackagingLog = (os.environ.get('KRITACI_VERBOSE_PACKAGING', '0').lower() in ['true', '1', 't', 'y', 'yes'])
 
 if os.environ.get("SEVENZIP_EXE") is None:
     find_on_path("SEVENZIP_EXE", "7z.exe")
@@ -550,14 +553,20 @@ if os.path.isdir(fr"{DEPS_INSTALL_DIR}\lib\qml"):
 if useQt6Build:
     # NOTE: we don't pass `--release` option to activate autodetection of the build type
     #       (which will effectively accept any kind of the binaries unless on MSVC)
-    subprocess.run(["windeployqt.exe", *QMLDIR_ARGS,
-                    "-gui", "-core", "-core5compat", "-openglwidgets", "-svgwidgets", "-opengl",
-                    "-concurrent", "-network", "-printsupport", "-svg",
-                    "-xml", "-sql", "-qml", "-quick", "-quickwidgets", "-verbose", "2",
-                    f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+
+    verboseOption = ["-verbose", "2"] if useVerbosePackagingLog else []
+    run_subprocess_checked(
+        ["windeployqt.exe", *QMLDIR_ARGS,
+        "-gui", "-core", "-core5compat", "-openglwidgets", "-svgwidgets", "-opengl",
+        "-concurrent", "-network", "-printsupport", "-svg",
+        "-xml", "-sql", "-qml", "-quick", "-quickwidgets", *verboseOption,
+        f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"])
 else:
-    subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-                    "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+    verboseOption = ["-verbose", "2"] if useVerbosePackagingLog else []
+    run_subprocess_checked(
+        ["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
+        "-xml", "-sql", "-qml", "-quick", "-quickwidgets", *verboseOption,
+        f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"])
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):
@@ -688,25 +697,27 @@ if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 
 if args.pre_zip_hook:
     print("Running pre-zip hook...")
     if args.pre_zip_hook.endswith('.cmd'):
-        subprocess.run(["cmd", "/c", args.pre_zip_hook,
-                       f"{pkg_root}\\"], check=True)
+        run_subprocess_checked(
+            ["cmd", "/c", args.pre_zip_hook, f"{pkg_root}\\"])
     elif args.pre_zip_hook.endswith('.py'):
-        subprocess.run([sys.executable, "-u", args.pre_zip_hook,
-                       f"{pkg_root}\\"], check=True)
+        run_subprocess_checked(
+            [sys.executable, "-u", args.pre_zip_hook, f"{pkg_root}\\"])
     else:
         warnings.warn("ERROR: pre-zip hook has unknown format!")
         sys.exit(102)
 
 print("\nPackaging stripped binaries...")
-subprocess.run([os.environ["SEVENZIP_EXE"], "a", "-tzip",
-               f"{pkg_name}.zip", f"{pkg_root}\\", "-xr!*.debug"], check=True)
+run_subprocess_checked(
+    [os.environ["SEVENZIP_EXE"], "a", "-tzip",
+    f"{pkg_name}.zip", f"{pkg_root}\\", "-xr!*.debug"])
 print("--------\n")
 
 if not os.environ.get('KRITACI_SKIP_DEBUG_PACKAGE', '0').lower() in ['true', '1', 'on']:
     print("Packaging debug info...")
     # (note that the top-level package dir is not included)
-    subprocess.run([os.environ["SEVENZIP_EXE"], "a", "-tzip",
-                f"{pkg_name}-dbg.zip", "-r", f"{pkg_root}\\*.debug"], check=True)
+    run_subprocess_checked(
+        [os.environ["SEVENZIP_EXE"], "a", "-tzip",
+        f"{pkg_name}-dbg.zip", "-r", f"{pkg_root}\\*.debug"])
     print("--------\n")
 
 print("\n")

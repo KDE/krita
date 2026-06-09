@@ -22,6 +22,8 @@ if environ.get('KRITA_INSTALLER'):
         print("ERROR: KRITA_SHELLEX must not be set if using KRITA_INSTALLER.")
         sys.exit(1)
 
+useVerbosePackagingLog = (os.environ.get('KRITACI_VERBOSE_PACKAGING', '0').lower() in ['true', '1', 't', 'y', 'yes'])
+
 # Subroutines
 
 def find_on_path(variable, executable):
@@ -231,7 +233,7 @@ The arguments stands for:
     /p <output package name>: Specifies the app package or bundle.
 """
 
-commandToRun = fr'"{environ["MAKEAPPX"]}" pack /v /f "{environ["OUTPUT_DIR"]}\mapping.txt" /p "{environ["OUTPUT_DIR"]}\krita.msix" /o'
+commandToRun = fr'"{environ["MAKEAPPX"]}" pack {"/v" if useVerbosePackagingLog else ""} /f "{environ["OUTPUT_DIR"]}\mapping.txt" /p "{environ["OUTPUT_DIR"]}\krita.msix" /o'
 try:
     subprocess.check_call(commandToRun)
 except subprocess.CalledProcessError:

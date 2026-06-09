@@ -10,6 +10,7 @@
 # Shizuku Hagoromo <Lemonade.flash.1164@gmail.com>, 2023.
 # Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022, 2023, 2024.
 # Jun Shiozawa <haresecret@gmail.com>, 2025.
+# SPDX-FileCopyrightText: 2026 Mint <5602mint@gmail.com>
 # --- kritalibs
 # Translation of koffice into Japanese.
 # This file is distributed under the same license as the koffice package.
@@ -35,14 +36,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-30 02:44+0000\n"
-"PO-Revision-Date: 2024-02-07 14:53-0800\n"
-"Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
-"Language-Team: Japanese <kde-jp@kde.org>\n"
+"PO-Revision-Date: 2026-06-07 12:10+0900\n"
+"Last-Translator: Mint <5602mint@gmail.com>\n"
+"Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 26.04.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -22326,10 +22327,9 @@ msgid "Drop Shadow (style)"
 msgstr "影を落とす (レイヤースタイル)"
 
 #: libs/image/layerstyles/kis_ls_overlay_filter.cpp:38
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay (style)"
-msgstr "オーバーレイモード"
+msgstr "オーバーレイ (レイヤースタイル)"
 
 #: libs/image/layerstyles/kis_ls_satin_filter.cpp:34
 #, kde-format
@@ -23376,12 +23376,10 @@ msgid "Burn"
 msgstr "焼き込み"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "Blending mode - Linear Burn"
 msgid "Linear Burn"
-msgstr "リニア"
+msgstr "焼き込み (リニア)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:63
 #, kde-format
@@ -23747,9 +23745,7 @@ msgid "Allanon"
 msgstr "アラノン"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
 msgstr "幾何平均"
@@ -33780,9 +33776,7 @@ msgid "Left"
 msgstr "左"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "Right Mouse Button"
-#| msgid "Right"
+#, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "右"
@@ -36720,12 +36714,10 @@ msgid "Group:"
 msgstr "グループ:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "Group as Color Group in a Palette"
-#| msgid "Add Group"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
-msgstr "グループを追加"
+msgstr "グループを追加(&A)..."
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
@@ -36776,9 +36768,7 @@ msgid "Select an image"
 msgstr "画像を選択"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407 libs/ui/KisTemplateCreateDia.cpp:410
-#, fuzzy, kde-format
-#| msgctxt "Group as Color Group in a Palette"
-#| msgid "Add Group"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "Add Group"
 msgstr "グループを追加"
@@ -37020,7 +37010,7 @@ msgstr "英語のお知らせが更新されています"
 #: libs/ui/KisWelcomePageWidget.cpp:400
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
-msgstr ""
+msgstr "あなたの支援者の証はここにあります!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:635
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
@@ -41186,8 +41176,9 @@ msgstr "KDE について"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:39
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
-msgstr "<html><font size=\"5\">KDE - 自由たれ!</font></html>"
+msgstr "<html><font size=\"5\">KDE - Be Free!</font></html>"
 
+# kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:53
 #, kde-format
 msgid ""
@@ -41201,16 +41192,16 @@ msgid ""
 ">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
 "and the software we produce.</html>"
 msgstr ""
-"<html><b>KDE</b> は<a href=\"%1\">フリーソフトウェア</a>の開発に関わるソフト"
-"ウェアエンジニア、アーティスト、文筆家および調整係からなる世界規模のネット"
-"ワークです。このコミュニティは数百個のフリーソフトウェアアプリケーションを "
-"KDE フレームワーク、ワークスペースそしてアプリケーションの一部として製作して"
-"きました。<br /><br />KDE は協同事業体であり、特定のグループや企業、組織が排"
-"他的に KDE の成果や製品をコントロールしているわけではありません。誰もが自由"
-"に KDE に加わり貢献することができます。もちろん、皆さんもです。<br /><br /"
-">KDE コミュニティと KDE ソフトウェアについての詳細は <a href=\"%2\">%2</a> を"
-"ご覧ください。</html>"
+"<html><b>KDE</b> はソフトウェアエンジニア、アーティスト、作家、翻訳者などの"
+"<a href=\"%1\">フリーソフトウェア</a>の開発に協力する人々による世界的なコミュ"
+"ニティです。KDE は KDE Frameworks やワークスペースの一部として多くのアプリ"
+"ケーションを作り出しています。<br /><br />KDE はみなさんによる共同プロジェク"
+"トです。単一の企業が方向性や製品をコントロールすることはありません。あなたを"
+"含め誰でも、自由に KDE に参加･貢献することができます。<br /><br />KDE コミュ"
+"ニティとそのソフトウェアについては、<a href=\"%2\">%2</a> をご覧ください。</"
+"html>"
 
+# kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:72
 #, kde-format
 msgid ""
@@ -41222,15 +41213,15 @@ msgid ""
 "improvement then you are welcome to use the bug tracking system to register "
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
-"<html>ソフトウェアは常に進化しており、KDE チームも日々改良に努めていますが、"
-"それには皆さんユーザの協力が必要です。上手く動作しないところを発見したり、改"
-"善できる個所に気付いた時はぜひ我々にそれをお伝えください。<br /><br />KDE に"
-"はバグ追跡システムがあります。ウェブサイト<a href=\"%1\">%1</a>または「ヘル"
-"プ」メニューの「バグを報告...」を使って不具合を報告してください。<br /><br />"
-"改善のための良いアイディアをお持ちの場合もバグ追跡システムを使って皆さんの要"
-"望をぜひお寄せください。この場合、重要度 (severity) には「要望 (Wishlist)」を"
-"指定するようお願いします。</html>"
+"<html>ソフトウェアの改善に終わりはありません。KDE チームも日々改良に努めてい"
+"ますが、それにはユーザーであるあなたの協力が必要です。不具合や改善点を見つけ"
+"た場合は、ぜひ教えてください。<br /><br />KDE にはバグ追跡システムがありま"
+"す。<a href=\"%1\">%1</a> または「ヘルプ」メニューの「バグを報告...」画面から"
+"不具合を報告してください。<br /><br />改良のためのいいアイデアをお持ちの場合"
+"も、バグ追跡システムを使ってご要望をどしどしお寄せください。このとき、重要度"
+"には \"Wishlist\" (要望) を指定してください。</html>"
 
+# kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:90
 #, kde-format
 msgid ""
@@ -41242,13 +41233,14 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>KDE チームに加わるには必ずしもソフトウェア開発者である必要はありませ"
-"ん。プログラムのインターフェースを翻訳する各言語の翻訳チームに参加したり、グ"
-"ラフィック、テーマ、サウンドあるいはドキュメントの改良で貢献することもできま"
-"す。さあ、あとは皆さん次第です!<br /><br />参加できそうなプロジェクトを探すに"
-"は<a href=\"%1\">%1</a>をご覧ください<br /><br />さらに詳しい情報やドキュメン"
-"トが必要な場合は<a href=\"%2\">%2</a>をご覧ください。</html>"
+"<html>KDE チームに加わる際に、ソフトウェア開発者である必要はありません。プロ"
+"グラムの UI を翻訳する各言語の翻訳チームに参加したり、グラフィック、テーマ、"
+"サウンドやドキュメントの改善で貢献していただくこともできます。さあ、あとはあ"
+"なた次第です！<br /><br /><a href=\"%1\">%1</a> から参加できそうなプロジェク"
+"トを探すことができます。<br /><br />さらに詳しい情報やドキュメントについては "
+"<a href=\"%2\">%2</a> をご覧ください。</html>"
 
+# kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:115
 #, kde-format
 msgid ""
@@ -41258,7 +41250,13 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>KDE のソフトウェアは無償で配布されていますが、開発には費用がかかります。"
+"<br /><br />KDE コミュニティはドイツの Tuebingen で KDE e.V. という非営利組織"
+"を法的に設立しています。KDE e.V. は法的･財務的な仕事を、KDE プロジェクトを代"
+"表して担っています。KDE e.V. については <a href=\"%1\">%1</a> をご覧くださ"
+"い。</p>"
 
+# kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:121
 #, kde-format
 msgid ""
@@ -41267,13 +41265,19 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE チームは経済的な援助も必要としています。いただいた資金は、メンバーやそ"
+"の他の人々が KDE に貢献する際にかかった費用の払い戻しをはじめ、法的支援、カン"
+"ファレンス、ミーティングの開催にも充てられます。</p>"
 
+# kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:125
 #, kde-format
 msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>KDE の活動を維持･発展させるため、ぜひ寄付による支援をご検討ください。寄付"
+"の方法については <a href=\"%1\">%1</a> をご覧ください。</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:134
 #, kde-format
@@ -41284,12 +41288,12 @@ msgstr "KDE について(&A)"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
 #, kde-format
 msgid "&Report Bugs or Wishes"
-msgstr "バグもしくはこうしてほしいという希望を報告(&X)"
+msgstr "バグや要望を報告(&R)"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
 msgid "&Join KDE"
-msgstr "KDE に参加する(&J)"
+msgstr "KDE に参加(&J)"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
@@ -41403,11 +41407,9 @@ msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>アクセラレータ追加 (情報提供のためのみ)</h2>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change SvgTextTool"
+#, kde-format
 msgid "Change Text"
-msgstr "SvgTextTool に変更"
+msgstr "文字を変更"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:369
 #, kde-format
@@ -44389,8 +44391,7 @@ msgid "Mathematics and calculations"
 msgstr "計算や演算関係"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:172
-#, fuzzy, kde-format
-#| msgid "Image Rendering"
+#, kde-format
 msgid "Image Rendering"
 msgstr "画像レンダリング"
 
@@ -45157,11 +45158,10 @@ msgid "Size"
 msgstr "サイズ"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:144
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
-msgstr "更新日:"
+msgstr "更新日"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:182
 #, kde-format
@@ -48671,9 +48671,7 @@ msgid "Wide Gamut Color Selector"
 msgstr "広色域セレクター"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "Wide Gamut Color Selector"
-#| msgid "Configure..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "設定..."
@@ -58331,8 +58329,7 @@ msgid "Reset to default value"
 msgstr "デフォルトの値に戻す"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:362
-#, fuzzy, kde-format
-#| msgid "Browse..."
+#, kde-format
 msgid "Browse..."
 msgstr "ブラウズ..."
 
@@ -60805,19 +60802,25 @@ msgstr ""
 "回転を0.0に設定"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "中間点:"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "明度:"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "コントラスト:"
@@ -61380,9 +61383,7 @@ msgid "More saturation"
 msgstr "彩度高"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:132
-#, fuzzy, kde-format
-#| msgctxt "Lower HSV brightness"
-#| msgid "Lower value "
+#, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
 msgstr "明度低 "
@@ -65779,10 +65780,9 @@ msgid "Mirror"
 msgstr "鏡像反転"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
-#, fuzzy, kde-format
-#| msgid "Translator"
+#, kde-format
 msgid "Translate"
-msgstr "翻訳者"
+msgstr "平行移動"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
@@ -66717,10 +66717,9 @@ msgid "Use tablet &pressure"
 msgstr "タブレットの筆圧を使用する(&P)"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Thinning:"
-msgstr "タッチによる描画を有効化"
+msgstr "細くする:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
@@ -66866,9 +66865,7 @@ msgid "Calligraphy"
 msgstr "カリグラフィー"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Calligraphy"
+#, kde-format
 msgid "Calligraphy"
 msgstr "カリグラフィー"
 
@@ -70121,334 +70118,3 @@ msgstr ""
 "全範囲と部分範囲を切り替えます。\n"
 "全範囲: [%1, %2]\n"
 "部分範囲: [%3, %4]"
-
-#~ msgid "Remove from tag"
-#~ msgstr "タグから削除"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Decrease Flow"
-#~ msgctxt "action"
-#~ msgid "Decrease Flow Shape Index"
-#~ msgstr "流量を下げる"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Increase Flow"
-#~ msgctxt "action"
-#~ msgid "Increase Flow Shape Index"
-#~ msgstr "流量を上げる"
-
-#, fuzzy
-#~| msgctxt ""
-#~| "h264 profile name, check simplescreenrecorder for standard translations"
-#~| msgid "baseline"
-#~ msgctxt "@label"
-#~ msgid "Baseline-Shift"
-#~ msgstr "baseline"
-
-#~ msgctxt "Lightness HSI"
-#~ msgid "Lightness"
-#~ msgstr "輝度"
-
-#~ msgid "Edit SVG Source"
-#~ msgstr "SVG ソースコードを編集する"
-
-#, fuzzy
-#~| msgid "Text Tool"
-#~ msgid "Text Type"
-#~ msgstr "テキストツール"
-
-#, fuzzy
-#~| msgid "Performance"
-#~ msgid "Preformatted"
-#~ msgstr "パフォーマンス"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p>Use the tilt of the tablet to determine the "
-#~| "normals.</p></body></html>"
-#~ msgid ""
-#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#~ "lines are preserved. New lines are not removed.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></"
-#~ "body></html>"
-
-#, fuzzy
-#~| msgctxt "Screentone Pattern - Sine Wave Lines"
-#~| msgid "Sine Wave"
-#~ msgid "Inline Wrapped"
-#~ msgstr "正弦波"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgid "Prepositioned"
-#~ msgstr "位置"
-
-#, fuzzy
-#~| msgid "Palette"
-#~ msgid "Glyph Palette"
-#~ msgstr "パレット"
-
-#~ msgid "Create new texts with..."
-#~ msgstr "新しいテキストを作成..."
-
-#~ msgid "Anchor text to the left."
-#~ msgstr "テキストを左にアンカーします。"
-
-#~ msgid "Anchor text to the middle."
-#~ msgstr "テキストを中央にアンカーします。"
-
-#~ msgid "Anchor text to the right."
-#~ msgstr "テキストを右にアンカーします。"
-
-#~ msgid "Letter Spacing"
-#~ msgstr "文字の間隔"
-
-#~ msgid "Text flows horizontal, top to bottom."
-#~ msgstr "テキストは水平方向に上から下に流れます。"
-
-#~ msgid "Text flows vertical, right to left."
-#~ msgstr "テキストは垂直方向に右から左に流れます。"
-
-#~ msgid "Text flows vertical, left to right."
-#~ msgstr "テキストは垂直方向に左から右に流れます。"
-
-#~ msgid "Left to right text direction."
-#~ msgstr "テキストの方向:左から右"
-
-#~ msgid "Right to left text direction."
-#~ msgstr "テキストの方向:右から左"
-
-#, fuzzy
-#~| msgid "Line Tool"
-#~ msgid "Knife Tool"
-#~ msgstr "直線ツール"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Shape RunAround"
-#~ msgstr "シェイプの回転を変更"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Shadow"
-#~ msgstr "影を設定"
-
-#~ msgctxt "resource type"
-#~ msgid "Filter Effects"
-#~ msgstr "フィルタ効果"
-
-#~ msgid "Change the color of the shadow"
-#~ msgstr "影の色を変更"
-
-#~ msgid "Blur:"
-#~ msgstr "ぼかし:"
-
-#~ msgid "An enhanced path shape"
-#~ msgstr "高度なパス図形"
-
-#~ msgid "An enhanced path"
-#~ msgstr "高度なパス"
-
-#~ msgid "Cross"
-#~ msgstr "十字形"
-
-#~ msgid "A cross"
-#~ msgstr "十字形"
-
-#~ msgid "An arrow"
-#~ msgstr "矢印"
-
-#~ msgid "Callout"
-#~ msgstr "吹き出し"
-
-#~ msgid "A callout"
-#~ msgstr "吹き出し"
-
-#~ msgid "Smiley"
-#~ msgstr "ニコちゃんマーク"
-
-#~ msgid "Circular Arrow"
-#~ msgstr "Uターン矢印"
-
-#~ msgid "A circular-arrow"
-#~ msgstr "Uターン矢印"
-
-#~ msgid "Gearhead"
-#~ msgstr "歯車"
-
-#~ msgid "A gearhead"
-#~ msgstr "歯車"
-
-#, fuzzy
-#~| msgid "Pattern Transform"
-#~ msgid "Proofing transform"
-#~ msgstr "パターン変形"
-
-# normal distance + absolute value
-#~ msgid "Adaptation State:"
-#~ msgstr "順応状態:"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Set how much you wish to correct the adaptation "
-#~ "state. This will affect how <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span> changes the whites of your image. In Layman's terms: "
-#~ "how much do you wish to have the color management correct the paper-color "
-#~ "to screen white while using <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span>?</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>順応状態をどの程度補正したいかを設定します。これは"
-#~ "<span style=\" font-style:italic;\">絶対的な色彩を保持</span>で画像の白色"
-#~ "をどのように変化するかに影響を与えます。分かりやすく言えば、<span style="
-#~ "\" font-style:italic;\">絶対的な色彩を保持色</span>を色空間変換の方法とし"
-#~ "て使っている際、カラーマネジメントにどの程度紙の白色を画面の白色に補正させ"
-#~ "たいかということです。</p></body></html>"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "フルスクリーンの切り替え"
-
-#, fuzzy
-#~| msgid "Clone %1, %2"
-#~ msgctxt "language, region"
-#~ msgid "%1, %2"
-#~ msgstr "複製 %1,%2"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "Filter:"
-#~ msgstr "フィルタ:"
-
-#~ msgid "Neutral Point:"
-#~ msgstr "中間点:"
-
-#~ msgid "Alpha Mask"
-#~ msgstr "アルファマスク"
-
-#~ msgid "Animated Image"
-#~ msgstr "アニメーション画像"
-
-#~ msgid "Rich text"
-#~ msgstr "リッチテキスト"
-
-#~ msgid "SVG Source"
-#~ msgstr "SVG ソース"
-
-#~ msgid "Font"
-#~ msgstr "フォント"
-
-#~ msgid "Text Color"
-#~ msgstr "テキスト色"
-
-#~ msgid "Sample a Color"
-#~ msgstr "色をサンプリング"
-
-#~ msgid "Line height"
-#~ msgstr "ライン幅"
-
-#~ msgctxt "Default line height for text"
-#~ msgid "Normal"
-#~ msgstr "通常"
-
-#~ msgctxt "line height for text"
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#~ msgctxt "action"
-#~ msgid "Text Color"
-#~ msgstr "テキスト色"
-
-#~ msgctxt "action"
-#~ msgid "Text Color..."
-#~ msgstr "テキスト色..."
-
-#~ msgctxt "action"
-#~ msgid "Background"
-#~ msgstr "背景"
-
-#~ msgctxt "action"
-#~ msgid "Background Color..."
-#~ msgstr "背景色..."
-
-#~ msgctxt "action"
-#~ msgid "Font..."
-#~ msgstr "フォント..."
-
-#~ msgctxt "action"
-#~ msgid "Change character size, font, boldface, italics etc."
-#~ msgstr "文字の大きさ、フォント、太字、イタリックなどを変更します。"
-
-#~ msgctxt "action"
-#~ msgid "Change the attributes of the currently selected characters."
-#~ msgstr "現在選択されている文字の属性を変更します。"
-
-#~ msgctxt "action"
-#~ msgid "Special Character..."
-#~ msgstr "特殊文字..."
-
-#~ msgctxt "action"
-#~ msgid "Line Height in em"
-#~ msgstr "線の高さ (em)"
-
-#~ msgctxt "action"
-#~ msgid "Legacy Hard Wrap"
-#~ msgstr "従来のハードラップ"
-
-#~ msgctxt "action"
-#~ msgid ""
-#~ "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
-#~ "are explicitly positioned, but the line height may be slightly inaccurate."
-#~ msgstr ""
-#~ "従来のハードラップモードを使用します (Krita 5.1 以前と同じ)。各行は明示的"
-#~ "に配置されますが、行の高さがわずかに不正確になることがあります。"
-
-#~ msgctxt "action"
-#~ msgid "SVG Hard Wrap"
-#~ msgstr "SVG ハードラップ"
-
-#~ msgctxt "action"
-#~ msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-#~ msgstr "SVG の CSS `white-space: pre` ハードラップモードを使用します。"
-
-#~ msgctxt "action"
-#~ msgid "SVG Auto Wrap with Fixed Width"
-#~ msgstr "固定幅の SVG 自動ラップ"
-
-#~ msgctxt "action"
-#~ msgid ""
-#~ "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
-#~ "defining the text width."
-#~ msgstr ""
-#~ "SVG の CSS `white-space: pre-wrap` ラップモードを使用し、`inline-size` で"
-#~ "テキストの幅を定義します。"
-
-#~ msgid "&Insert"
-#~ msgstr "挿入(&I)"
-
-#~ msgid "&Format"
-#~ msgstr "フォーマット(&F)"
-
-#~ msgid "&Weight"
-#~ msgstr "幅(&W)"
-
-#~ msgid "Text W&rapping"
-#~ msgstr "テキストの自動改行(&R)"
-
-#~ msgid "Font Settings"
-#~ msgstr "フォントの設定"
-
-#~ msgid "SVG source"
-#~ msgstr "SVG のソース"
-
-#~ msgid "Edit Text"
-#~ msgstr "テキスト編集"
-
-#~ msgid "Fonts"
-#~ msgstr "フォント"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Which writing system should the fonts chooser show "
-#~ "the fonts of? No writing system selected will have all fonts shown.</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>フォント選択ダイアログに表示されるフォントの表記形式"
-#~ "はどれですか？表記形式を選択しないと、すべてのフォントが表示されます。</"
-#~ "p></body></html>"

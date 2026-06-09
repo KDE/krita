@@ -16,7 +16,7 @@ import shutil
 import subprocess
 import sys
 import warnings
-
+from components import MergeFolders
 
 # Subroutines
 
@@ -420,8 +420,7 @@ if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe"):
                 f"{pkg_root}\\bin\\")
 if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
     shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe", f"{pkg_root}\\bin\\")
-    subprocess.run(["xcopy", "/S", "/Y", "/I",
-                   f"{DEPS_INSTALL_DIR}\\bin\\data\\", f"{pkg_root}\\bin\\data\\"])
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\bin\\data\\", f"{pkg_root}\\bin\\data\\")
 
 # qt.conf -- to specify the location to Qt translations
 shutil.copy(fr"{KRITA_SRC_DIR}\packaging\windows\qt.conf", fr"{pkg_root}\bin")
@@ -449,21 +448,16 @@ for f in files:
 for f in files:
     shutil.copy(f, fr"{pkg_root}\bin")
 # KF5/KF6 plugins may be placed at different locations depending on how Qt is built
-subprocess.run(["xcopy", "/S", "/Y", "/I",
-               f"{DEPS_INSTALL_DIR}\\lib\\plugins\\imageformats\\", f"{pkg_root}\\bin\\imageformats\\"])
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\imageformats\\".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\imageformats\\"])
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\lib\\plugins\\imageformats\\", f"{pkg_root}\\bin\\imageformats\\")
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\plugins\\imageformats\\", f"{pkg_root}\\bin\\imageformats\\")
 
 if useQt6Build:
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf6\\".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf6\\"])
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\plugins\\kf6\\", f"{pkg_root}\\bin\\kf6\\")
 else:
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\plugins\\kf5\\", f"{pkg_root}\\bin\\kf5\\")
 
 # Copy the sql drivers explicitly
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\sqldrivers\\".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\sqldrivers"], check=True)
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\plugins\\sqldrivers\\", f"{pkg_root}\\bin\\sqldrivers")
 
 # Qt Translations
 # it seems that windeployqt does these, but only * some * of these???
@@ -475,56 +469,39 @@ for f in files:
         shutil.copy(f, f"{pkg_root}\\bin\\translations")
 
 # Krita plugins
-subprocess.run(["xcopy", "/Y", "{}\\lib\\kritaplugins\\*.dll".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\lib\\kritaplugins\\"], check=True)
-subprocess.run(["xcopy", "/Y", "{}\\lib\\kritaplugins\\*.pdb".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\lib\\kritaplugins\\"], check=True)
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\lib\\kritaplugins\\", f"{pkg_root}\\lib\\kritaplugins\\")
+
 if os.path.isdir(f"{DEPS_INSTALL_DIR}\\lib\\krita-python-libs"):
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\krita-python-libs".format(DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\krita-python-libs"], check=True)
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\lib\\krita-python-libs", f"{pkg_root}\\lib\\krita-python-libs")
 if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\krita-python-libs"):
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\krita-python-libs".format(
-        KRITA_INSTALL_DIR), f"{pkg_root}\\lib\\krita-python-libs"], check=True)
+    MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\lib\\krita-python-libs", f"{pkg_root}\\lib\\krita-python-libs")
 if os.path.isdir(f"{DEPS_INSTALL_DIR}\\lib\\site-packages"):
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\site-packages".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\site-packages"], check=True)
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\lib\\site-packages", f"{pkg_root}\\lib\\site-packages")
 
 # MLT plugins and their data
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\mlt".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\mlt"], check=True)
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mlt".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mlt"], check=True)
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\lib\\mlt", f"{pkg_root}\\lib\\mlt")
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\share\\mlt", f"{pkg_root}\\share\\mlt")
 
 # Fontconfig
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\etc\\fonts".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\etc\\fonts"], check=True)
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\etc\\fonts", f"{pkg_root}\\etc\\fonts")
 
 # Share
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\color".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\share\\color"], check=True)
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\color-schemes".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\share\\color-schemes"], check=True)
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\icons".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\share\\icons"], check=True)
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\krita".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\share\\krita"])
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kritaplugins".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\share\\kritaplugins"], check=True)
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\share\\color", f"{pkg_root}\\share\\color")
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\share\\color-schemes", f"{pkg_root}\\share\\color-schemes")
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\share\\icons", f"{pkg_root}\\share\\icons")
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\share\\krita", f"{pkg_root}\\share\\krita")
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\share\\kritaplugins", f"{pkg_root}\\share\\kritaplugins")
 
 if useQt6Build:
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf6".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf6"], check=True)
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\share\\kf6", f"{pkg_root}\\share\\kf6")
 else:
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
+    MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\share\\kf5", f"{pkg_root}\\share\\kf5")
 
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mime".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mime"], check=True)
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\share\\mime", f"{pkg_root}\\share\\mime")
 # Python libs are copied by share\krita above
 # Copy locale to bin
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\locale".format(
-    KRITA_INSTALL_DIR), f"{pkg_root}\\bin\\locale"])
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\locale".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\locale"], check=True)
+MergeFolders.merge_folders(f"{KRITA_INSTALL_DIR}\\share\\locale", f"{pkg_root}\\bin\\locale")
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\share\\locale", f"{pkg_root}\\bin\\locale")
 
 # Copy shortcut link from source (can't create it dynamically)
 shutil.copy(f"{KRITA_SRC_DIR}\\packaging\\windows\\krita.lnk", pkg_root)
@@ -594,8 +571,7 @@ if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):
                     f"{pkg_root}\\bin")
 
 # Copy embedded Python
-subprocess.run(["xcopy", "/S", "/Y", "/I",
-               f"{DEPS_INSTALL_DIR}\\python", f"{pkg_root}\\python"], check=True)
+MergeFolders.merge_folders(f"{DEPS_INSTALL_DIR}\\python", f"{pkg_root}\\python")
 if os.path.exists(f"{pkg_root}\\python\\python.exe"):
     os.remove(f"{pkg_root}\\python\\python.exe")
 if os.path.exists(f"{pkg_root}\\python\\pythonw.exe"):

@@ -248,14 +248,14 @@ print(f"\nMSIX generated as {environ['OUTPUT_DIR']}\\krita.msix")
 if environ.get('SIGNTOOL_SIGN_FLAGS'):
     print("Signing MSIX...")
     commandToRun = fr'"{environ["SIGNTOOL"]}" sign {environ["SIGNTOOL_SIGN_FLAGS"]} /fd sha256 "{environ["OUTPUT_DIR"]}\krita.msix"'
-try:
-    subprocess.check_call(commandToRun)
-except subprocess.CalledProcessError:
-    warnings.warn("ERROR running signtool\n" +
-                  "If you need to specify a PFX keyfile and its password, run:\n" +
-                 r'    set SIGNTOOL_SIGN_FLAGS=/f "absolute_path_to_keyfile.pfx" /p password')
-    sys.exit(1)
-
+    try:
+        print(f"Running: {commandToRun}")
+        subprocess.check_call(commandToRun)
+    except subprocess.CalledProcessError:
+        warnings.warn("ERROR running signtool\n" +
+                      "If you need to specify a PFX keyfile and its password, run:\n" +
+                       r'    set SIGNTOOL_SIGN_FLAGS=/f "absolute_path_to_keyfile.pfx" /p password')
+        sys.exit(1)
 
 print("=== Step 3 done. ===")
 

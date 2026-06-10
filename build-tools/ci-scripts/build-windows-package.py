@@ -143,7 +143,7 @@ if arguments.build_installers:
     if os.path.exists(os.path.join(packageFolder, 'shellex')):
         shutil.rmtree(os.path.join(packageFolder, 'shellex'))
 
-    commandToRun = ' '.join([sys.executable,
+    commandToRun = ' '.join([sys.executable, '-u',
                             os.path.join(depsPath, 'krita-msix', 'build_msix.py')
                             ])
 

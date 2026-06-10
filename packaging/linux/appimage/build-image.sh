@@ -56,6 +56,7 @@ if [ -d $DEPS_INSTALL_PREFIX/appimage-tools/bin ]; then
 fi
 
 source ${KRITA_SOURCES}/packaging/linux/appimage/override_compiler.sh.inc
+source ${KRITA_SOURCES}/packaging/linux/appimage/kritaci-utils.sh.inc
 
 if [[ $ARCH == "arm64" ]]; then
   APPIMAGE_ARCHITECTURE="aarch64"
@@ -382,13 +383,18 @@ if [ -f $DEPS_INSTALL_PREFIX/appimage-tools/share/runtime-x86_64 ]; then
   EXTRA_RUNTIME_ARGUMENT=-runtime-file=$DEPS_INSTALL_PREFIX/appimage-tools/share/runtime-x86_64
 fi
 
+EXTRA_VERBOSE_ARGUMENT=
+if [ $useVerbosePackagingLog -eq 1 ]; then
+  EXTRA_VERBOSE_ARGUMENT=-verbose=2
+fi
+
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
   ${MLT_BINARIES} \
   ${FFMPEG_BINARIES} \
   -qmldir=$KRITA_SOURCES/plugins/dockers/textproperties \
-  -verbose=2 \
+  ${EXTRA_VERBOSE_ARGUMENT} \
   -bundle-non-qt-libs \
   -extra-plugins=$EXTRA_PLUGINS_LIST \
   -updateinformation="${ZSYNC_URL}" \

@@ -450,6 +450,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     }
 
     setButtonGroupEnabled(m_sapPositionGroup, sapEnabled);
+    connect(&m_sapPositionGroup, SIGNAL(idClicked(int)), this, SLOT(selectionActionsBarPositionChanged(int)));
 
     //
     // File handling
@@ -928,6 +929,35 @@ void GeneralTab::colorSamplePreviewThicknessChanged(qreal value)
 void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
 {
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
+}
+
+void GeneralTab::selectionActionsBarPositionChanged(int buttonId)
+{
+    KisConfig::SelectionActionsBarPosition position = (KisConfig::SelectionActionsBarPosition)buttonId;
+    KisConfig::SelectionActionsBarOrientation currentOrientation = (KisConfig::SelectionActionsBarOrientation)m_sapOrientationGroup.checkedId();
+
+    switch (position) {
+        case KisConfig::SelectionActionsBarPosition::Top:
+        case KisConfig::SelectionActionsBarPosition::Bottom:
+            // set to horizontal
+            if (currentOrientation != KisConfig::SelectionActionsBarOrientation::Horizontal) {
+                sapHorizontalButton->click();
+            }
+        break;
+        case KisConfig::SelectionActionsBarPosition::Left:
+        case KisConfig::SelectionActionsBarPosition::Right:
+            // set to vertical
+            if (currentOrientation != KisConfig::SelectionActionsBarOrientation::Vertical) {
+                sapVerticalButton->click();
+            }
+        break;
+        case KisConfig::SelectionActionsBarPosition::TopLeft:
+        case KisConfig::SelectionActionsBarPosition::TopRight:
+        case KisConfig::SelectionActionsBarPosition::BottomLeft:
+        case KisConfig::SelectionActionsBarPosition::BottomRight:
+            // nothing to do
+        break;
+    }
 }
 
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))

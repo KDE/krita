@@ -126,6 +126,7 @@ private Q_SLOTS:
     void colorSamplePreviewThicknessChanged(qreal value);
     void colorSamplePreviewOutlineEnabledChanged(int value);
 
+    void selectionActionsBarPositionChanged(int buttonId);
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
     void selectionActionsBarCheckboxChanged(Qt::CheckState value);
 #else

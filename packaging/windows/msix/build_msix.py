@@ -236,9 +236,11 @@ The arguments stands for:
 commandToRun = fr'"{environ["MAKEAPPX"]}" pack {"/v" if useVerbosePackagingLog else ""} /f "{environ["OUTPUT_DIR"]}\mapping.txt" /p "{environ["OUTPUT_DIR"]}\krita.msix" /o'
 try:
     print(f"Running: {commandToRun}")
-    subprocess.check_call(commandToRun)
+    logPath = os.path.join(os.getcwd(), 'makeappx.log')
+    with open(logPath, 'wb') as logFile:
+        subprocess.run(commandToRun, stdout=logFile, stderr=subprocess.STDOUT, check=True)
 except subprocess.CalledProcessError:
-    warnings.warn("ERROR running makeappx")
+    warnings.warn(f"ERROR running makeappx, see {logPath}")
     sys.exit(1)
     
 print(f"\nMSIX generated as {environ['OUTPUT_DIR']}\\krita.msix")

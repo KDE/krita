@@ -314,7 +314,7 @@ if [[ $ARCH == "amd64" ]]; then
     UPDATER_SHA256=414f10d9ab2dc72dc6874dbdb99454227124473a7ae691db2288d60f14f810fe
 
     if ! test -f "AppImageUpdate" || ! echo -n "$UPDATER_SHA256 AppImageUpdate" | sha256sum -c -; then
-        wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
+        wget --no-verbose "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
         echo -n "$UPDATER_SHA256 AppImageUpdate" | sha256sum -c -
     fi
 

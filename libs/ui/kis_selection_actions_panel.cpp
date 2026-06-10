@@ -100,13 +100,17 @@ struct KisSelectionActionsPanel::Private {
     int m_actionBarHeight = BUTTON_SIZE;
     int m_innerActionBarWidth = (m_buttonCount - 1) * BUTTON_SIZE;
     int m_innerActionBarHeight = BUTTON_SIZE;
+
     KisAction* disable_action  = nullptr;
     KisAction* configure_action  = nullptr;
+
     Orientation orientation = Orientation::Horizontal;
     Position position = Position::Bottom;
     Behavior behavior = Behavior::FreeFloating;
 
     const QString dragOffsetConfigName = "selectionActionBarDragOffset";
+
+    int sapPinButtonIndex = {-1};
 };
 
 
@@ -118,11 +122,18 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
     d->m_selectionManager = viewManager->selectionManager();
 
     // Setup buttons...
-    for (const ActionButtonData &buttonData : Private::buttonData()) {
+    QVector<ActionButtonData> data = Private::buttonData();
+    for (int i = 0; i  < data.length(); i++) {
+        const ActionButtonData &buttonData = data[i];
         KisSelectionActionsPanelButton *button = new KisSelectionActionsPanelButton(buttonData.iconName, buttonData.tooltip, BUTTON_SIZE, viewManager->canvas());
         connect(button, &QAbstractButton::clicked, d->m_selectionManager, buttonData.slot);
         connect(button, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
         d->m_buttons.append(button);
+
+        if (buttonData.slot == &KisSelectionManager::toggleSAPpin) {
+            d->sapPinButtonIndex = i;
+            button->setCheckable(true);
+        }
     }
 
     d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, viewManager->canvas());
@@ -830,6 +841,10 @@ void KisSelectionActionsPanel::configChanged(bool skipResettingOffset)
     if (d->behavior == Behavior::Fixed) {
         d->m_dragHandle.position = currentTopLeftPosition();
         movePanelWidgets();
+    }
+
+    if (d->sapPinButtonIndex >= 0 && d->m_buttons[d->sapPinButtonIndex] && d->m_buttons[d->sapPinButtonIndex]->isCheckable()) {
+        d->m_buttons[d->sapPinButtonIndex]->setChecked(cfg.selectionActionBarBehavior() == Behavior::Fixed);
     }
 }
 

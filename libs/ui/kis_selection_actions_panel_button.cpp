@@ -36,14 +36,28 @@ void KisSelectionActionsPanelButton::draw(QPainter &painter)
 {
     QRect rect = geometry();
     //Draw an outline when the button is pressed
-    if(this->isDown()) {
-        QPainterPath path;
-        path.addRoundedRect(rect, 3, 3);
+
+    QPainterPath rectAroundButton;
+    rectAroundButton.addRoundedRect(rect, 3, 3);
+
+    if (isCheckable() && isChecked()) {
+        painter.save();
+        QBrush brush  = qApp->palette().base();
+        QColor color = brush.color();
+        color.setAlphaF(0.5);
+        brush.setColor(color);
+        painter.setBrush(brush);
+        painter.setPen(Qt::NoPen);
+        painter.drawPath(rectAroundButton);
+        painter.restore();
+    }
+
+    if (!isCheckable() && isDown()) {
         QPen pen = qApp->palette().highlight().color();
         pen.setWidth(2);
 
         painter.setPen(pen);
-        painter.drawPath(path)  ;
+        painter.drawPath(rectAroundButton);
     }
 
     int padding = ICON_SIZE_OFFSET / 2;

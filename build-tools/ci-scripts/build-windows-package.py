@@ -6,6 +6,7 @@ import subprocess
 import argparse
 import shutil
 import copy
+import glob
 
 # Capture our command line parameters
 parser = argparse.ArgumentParser(description='A script for building Krita Windows package on CI')
@@ -157,3 +158,7 @@ if arguments.build_installers:
 
     shutil.move(os.path.join(msixFolder, 'krita.msix'),
                 os.path.join(os.getcwd(), '{}-unsigned.msix'.format(packageName)))
+
+    for f in glob.iglob(os.path.join(msixFolder, '*.log')):
+        shutil.move(f, os.getcwd())
+

@@ -53,7 +53,7 @@ private Q_SLOTS:
     void showContextMenu(const QPoint& pos);
     void disableSelectionActionsPanel();
     void configureSelectionActionsPanel();
-    void configChanged();
+    void configChanged(bool skipResettingOffset = false);
     void canvasStateChanged();
 
 private:
@@ -81,7 +81,7 @@ private:
 
     bool handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button = Qt::LeftButton);
     bool handleMove(QEvent *event, const QPoint &pos);
-    bool handleRelease(QEvent *event, const QPoint &pos);
+    bool handleRelease(QEvent *event);
 
     ///Moves all the widgets that are a part of the panel
     void movePanelWidgets();

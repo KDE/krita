@@ -559,7 +559,7 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QP
  * we potentially could make some of these inline to speed up performance
 */
 
-void drawSingleState(QPainter& gc, const QIcon &icon, QSizeF iconSize, QRect maxRect, const QPoint &position, const KoColorDisplayRendererInterface *renderInterface, QPoint additional = QPoint()) {
+void drawSingleState(QPainter& gc, const QIcon &icon, const QSize &iconSize, QRect maxRect, const QPoint &position, const KoColorDisplayRendererInterface *renderInterface, QPoint additional = QPoint()) {
     maxRect.moveTopLeft(position+additional);
     const QMargins m(2, 2, 2, 2);
 
@@ -578,7 +578,7 @@ void drawSingleState(QPainter& gc, const QIcon &icon, QSizeF iconSize, QRect max
 #endif
 }
 
-void drawDoubleState(QPainter& gc, const QIcon &icon, QSizeF iconSize, const QIcon &icon2, QRect maxRect, const QPoint &position, const bool state, const KoColorDisplayRendererInterface *renderInterface) {
+void drawDoubleState(QPainter& gc, const QIcon &icon, const QSize &iconSize, const QIcon &icon2, QRect maxRect, const QPoint &position, const bool state, const KoColorDisplayRendererInterface *renderInterface) {
     maxRect.moveTopLeft(position);
     const QMargins m(2, 2, 2, 2);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -678,22 +678,22 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     //loop over all visible buttons and render them
     if (globalEditorWidgetData.moveButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.moveIconPosition).toPoint();
-        drawSingleState(gc, globalEditorWidgetData.m_iconMove, QSizeF(globalEditorWidgetData.buttonSize+10, globalEditorWidgetData.buttonSize+10), buttonRect, pos, renderInterface, QPoint(5, 5));
+        drawSingleState(gc, globalEditorWidgetData.m_iconMove, QSize(globalEditorWidgetData.buttonSize+10, globalEditorWidgetData.buttonSize+10), buttonRect, pos, renderInterface, QPoint(5, 5));
     }
     if (globalEditorWidgetData.snapButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.snapIconPosition).toPoint();
-        drawDoubleState(gc, globalEditorWidgetData.m_iconSnapOn, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconSnapOff, buttonRect, pos, assistant->isSnappingActive(), renderInterface);
+        drawDoubleState(gc, globalEditorWidgetData.m_iconSnapOn, QSize(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconSnapOff, buttonRect, pos, assistant->isSnappingActive(), renderInterface);
     }
     if (globalEditorWidgetData.lockButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.lockedIconPosition).toPoint();
-        drawDoubleState(gc, globalEditorWidgetData.m_iconLockOn, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconLockOff, buttonRect, pos, assistant->isLocked(), renderInterface);
+        drawDoubleState(gc, globalEditorWidgetData.m_iconLockOn, QSize(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconLockOff, buttonRect, pos, assistant->isLocked(), renderInterface);
     }
     if (globalEditorWidgetData.duplicateButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.duplicateIconPosition).toPoint();
-        drawDoubleState(gc, globalEditorWidgetData.m_iconDuplicate, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconDuplicate, buttonRect, pos, !assistant->isDuplicating(), renderInterface);
+        drawDoubleState(gc, globalEditorWidgetData.m_iconDuplicate, QSize(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconDuplicate, buttonRect, pos, !assistant->isDuplicating(), renderInterface);
     }
     if (globalEditorWidgetData.deleteButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.deleteIconPosition).toPoint();
-        drawSingleState(gc, globalEditorWidgetData.m_iconDelete, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), buttonRect, pos, renderInterface);
+        drawSingleState(gc, globalEditorWidgetData.m_iconDelete, QSize(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), buttonRect, pos, renderInterface);
     }
 }

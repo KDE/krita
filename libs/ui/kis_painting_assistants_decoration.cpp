@@ -559,29 +559,54 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QP
  * we potentially could make some of these inline to speed up performance
 */
 
-void drawSingleState(QPainter& gc, const QImage &icon, QRect maxRect, const QPoint &position, const KoColorDisplayRendererInterface *renderInterface, QPoint additional = QPoint()) {
+void drawSingleState(QPainter& gc, const QIcon &icon, QSizeF iconSize, QRect maxRect, const QPoint &position, const KoColorDisplayRendererInterface *renderInterface, QPoint additional = QPoint()) {
     maxRect.moveTopLeft(position+additional);
     const QMargins m(2, 2, 2, 2);
-    QRect target(QPoint(), (icon.size()/icon.devicePixelRatioF()));
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QRect target(QPoint(), iconSize);
     target.moveCenter(maxRect.center());
     target = target.marginsRemoved(m);
-    gc.drawImage(target.intersected(maxRect), renderInterface->convertImageToDisplayColorSpace(icon));
+    icon.paint(&gc, target);
+#else
+
+    QImage ic = icon.pixmap(iconSize.width(), iconSize.height()).toImage();
+    QRect target(QPoint(), (ic.size()/ic.devicePixelRatioF()));
+    target.moveCenter(maxRect.center());
+    target = target.marginsRemoved(m);
+    gc.drawImage(target.intersected(maxRect), renderInterface->convertImageToDisplayColorSpace(ic));
+#endif
 }
 
-void drawDoubleState(QPainter& gc, const QImage &icon, const QImage &icon2, QRect maxRect, const QPoint &position, const bool state, const KoColorDisplayRendererInterface *renderInterface) {
+void drawDoubleState(QPainter& gc, const QIcon &icon, QSizeF iconSize, const QIcon &icon2, QRect maxRect, const QPoint &position, const bool state, const KoColorDisplayRendererInterface *renderInterface) {
     maxRect.moveTopLeft(position);
     const QMargins m(2, 2, 2, 2);
-    QRect target(QPoint(), (icon.size()/icon.devicePixelRatioF()));
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QRect target(QPoint(), iconSize);
     target.moveCenter(maxRect.center());
     target = target.marginsRemoved(m);
     if (state) {
-        gc.drawImage(target.intersected(maxRect), renderInterface->convertImageToDisplayColorSpace(icon));
+        icon.paint(&gc, target);
     } else {
         gc.save();
         gc.setOpacity(0.35);
-        gc.drawImage(target.intersected(maxRect.marginsRemoved(m)), renderInterface->convertImageToDisplayColorSpace(icon2));
+        icon2.paint(&gc, target);
         gc.restore();
     }
+#else
+    QImage ic = state? icon.pixmap(iconSize.width(), iconSize.height()).toImage(): icon2.pixmap(iconSize.width(), iconSize.height()).toImage();
+    QRect target(QPoint(), (ic.size()/ic.devicePixelRatioF()));
+    target.moveCenter(maxRect.center());
+    target = target.marginsRemoved(m);
+    if (state) {
+        gc.drawImage(target.intersected(maxRect), renderInterface->convertImageToDisplayColorSpace(ic));
+    } else {
+        gc.save();
+        gc.setOpacity(0.35);
+        gc.drawImage(target.intersected(maxRect.marginsRemoved(m)), renderInterface->convertImageToDisplayColorSpace(ic));
+        gc.restore();
+    }
+#endif
 }
 
 void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter, const KoColorDisplayRendererInterface *renderInterface)
@@ -653,22 +678,22 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     //loop over all visible buttons and render them
     if (globalEditorWidgetData.moveButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.moveIconPosition).toPoint();
-        drawSingleState(gc, globalEditorWidgetData.m_iconMove, buttonRect, pos, renderInterface, QPoint(5, 5));
+        drawSingleState(gc, globalEditorWidgetData.m_iconMove, QSizeF(globalEditorWidgetData.buttonSize+10, globalEditorWidgetData.buttonSize+10), buttonRect, pos, renderInterface, QPoint(5, 5));
     }
     if (globalEditorWidgetData.snapButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.snapIconPosition).toPoint();
-        drawDoubleState(gc, globalEditorWidgetData.m_iconSnapOn, globalEditorWidgetData.m_iconSnapOff, buttonRect, pos, assistant->isSnappingActive(), renderInterface);
+        drawDoubleState(gc, globalEditorWidgetData.m_iconSnapOn, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconSnapOff, buttonRect, pos, assistant->isSnappingActive(), renderInterface);
     }
     if (globalEditorWidgetData.lockButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.lockedIconPosition).toPoint();
-        drawDoubleState(gc, globalEditorWidgetData.m_iconLockOn, globalEditorWidgetData.m_iconLockOff, buttonRect, pos, assistant->isLocked(), renderInterface);
+        drawDoubleState(gc, globalEditorWidgetData.m_iconLockOn, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconLockOff, buttonRect, pos, assistant->isLocked(), renderInterface);
     }
     if (globalEditorWidgetData.duplicateButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.duplicateIconPosition).toPoint();
-        drawDoubleState(gc, globalEditorWidgetData.m_iconDuplicate, globalEditorWidgetData.m_iconDuplicate, buttonRect, pos, !assistant->isDuplicating(), renderInterface);
+        drawDoubleState(gc, globalEditorWidgetData.m_iconDuplicate, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), globalEditorWidgetData.m_iconDuplicate, buttonRect, pos, !assistant->isDuplicating(), renderInterface);
     }
     if (globalEditorWidgetData.deleteButtonActivated) {
         QPoint pos = QPointF(actionsPosition + globalEditorWidgetData.deleteIconPosition).toPoint();
-        drawSingleState(gc, globalEditorWidgetData.m_iconDelete, buttonRect, pos, renderInterface);
+        drawSingleState(gc, globalEditorWidgetData.m_iconDelete, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize), buttonRect, pos, renderInterface);
     }
 }

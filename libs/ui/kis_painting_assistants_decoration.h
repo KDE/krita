@@ -50,13 +50,13 @@ struct AssistantEditorData {
     //size of the side drag decoration
     const int dragDecorationWidth = 15;
     //QPixMaps representing icons for buttons
-    const QImage m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(buttonSize+10, buttonSize+10).toImage();
-    const QImage m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(buttonSize, buttonSize).toImage();
-    const QImage m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(buttonSize, buttonSize).toImage();
-    const QImage m_iconLockOn = KisIconUtils::loadIcon("layer-locked").pixmap(buttonSize, buttonSize).toImage();
-    const QImage m_iconLockOff = KisIconUtils::loadIcon("layer-unlocked").pixmap(buttonSize, buttonSize).toImage();
-    const QImage m_iconDuplicate = KisIconUtils::loadIcon("duplicateitem").pixmap(buttonSize, buttonSize).toImage();
-    const QImage m_iconDelete = KisIconUtils::loadIcon("deletelayer").pixmap(buttonSize, buttonSize).toImage();
+    const QIcon m_iconMove = KisIconUtils::loadIcon("transform-move");
+    const QIcon m_iconSnapOn = KisIconUtils::loadIcon("visible");
+    const QIcon m_iconSnapOff = KisIconUtils::loadIcon("novisible");
+    const QIcon m_iconLockOn = KisIconUtils::loadIcon("layer-locked");
+    const QIcon m_iconLockOff = KisIconUtils::loadIcon("layer-unlocked");
+    const QIcon m_iconDuplicate = KisIconUtils::loadIcon("duplicateitem");
+    const QIcon m_iconDelete = KisIconUtils::loadIcon("deletelayer");
     //how many buttons fit horizontally before extending to the next row
     const int horizontalButtonLimit = 3;
 };

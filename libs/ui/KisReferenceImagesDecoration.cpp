@@ -150,7 +150,8 @@ void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &/*
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             gc.drawImage(d->buffer.position, d->buffer.image);
 #else
-            gc.drawImage(d->buffer.position, canvas->displayRendererInterface()->convertImageToDisplayColorSpace(d->buffer.image));
+            // In qt5, don't bother trying to fix the buffer cs, as this slows things down too much.
+            gc.drawImage(d->buffer.position, d->buffer.image);
 #endif
         }
     }

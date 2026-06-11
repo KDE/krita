@@ -750,6 +750,7 @@ static QMap<QColorSpace::TransferFunction, TransferCharacteristics> mapQColorSpa
 
 const KoColorProfile *KoColorSpaceRegistry::profileForQColorSpace(const QColorSpace &space)
 {
+    if (!space.isValid()) return p709SRGBProfile();
     const KoColorProfile *profile = nullptr;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     ColorPrimaries primaries = mapQColorSpaceColorPrimaries.value(space.primaries(), PRIMARIES_UNSPECIFIED);

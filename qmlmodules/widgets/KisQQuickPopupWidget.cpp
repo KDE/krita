@@ -60,6 +60,14 @@ void KisQQuickPopupWidget::setLayoutMargins(const QMargins margins)
     this->layout()->setContentsMargins(margins);
 }
 
+void KisQQuickPopupWidget::prepareVisibility(bool visible)
+{
+    if (rootObject()) {
+        rootObject()->setVisible(visible);
+    }
+    this->setVisible(visible);
+}
+
 void KisQQuickPopupWidget::keyPressEvent(QKeyEvent *event)
 {
     if (event->matches(QKeySequence::Cancel)) {

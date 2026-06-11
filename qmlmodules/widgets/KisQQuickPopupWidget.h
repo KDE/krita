@@ -41,6 +41,13 @@ public:
      * calls layout()->setContentMargins(margins);
      */
     void setLayoutMargins(const QMargins margins);
+
+    /**
+     * @brief prepareVisibility
+     * Use this to set the visibility on the popup, as it will
+     * also hide the root object, preventing animations from triggering.
+     */
+    void prepareVisibility(bool visible);
 Q_SIGNALS:
     void signalRootObjectReady();
 protected:

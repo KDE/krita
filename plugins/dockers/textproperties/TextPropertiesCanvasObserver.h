@@ -41,6 +41,7 @@ class TextPropertiesCanvasObserver : public QObject, public KisMainwindowObserve
      *  resource provider (hasFocus = false).
      */
     Q_PROPERTY(bool hasFocus READ hasFocus WRITE setHasFocus NOTIFY hasFocusChanged)
+    Q_PROPERTY(bool dockVisible READ dockVisible NOTIFY dockVisibleChanged)
 public:
     explicit TextPropertiesCanvasObserver(QObject *parent = nullptr);
     ~TextPropertiesCanvasObserver();
@@ -59,11 +60,14 @@ public:
     bool hasFocus() const;
     void setHasFocus(const bool focus);
 
+    bool dockVisible() const;
+
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotCanvasCharacterPropertiesChanged();
     void slotTextPropertiesChanged();
     void slotCharacterPropertiesChanged();
+    void slotSetDockVisible(const bool visible);
 
     void callModalTextPropertyConfigDialog();
 
@@ -78,6 +82,7 @@ Q_SIGNALS:
     void textPropertyConfigChanged();
     void characterPropertiesChanged();
     void hasFocusChanged();
+    void dockVisibleChanged();
 private:
     struct Private;
     const QScopedPointer<Private> d;

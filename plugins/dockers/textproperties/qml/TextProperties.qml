@@ -20,7 +20,7 @@ Control {
         target: canvasObserver;
         function onTextPropertyConfigChanged() {updatePropertyVisibilityState()}
         function onTextPropertiesChanged() {setProperties()}
-
+        function onDockVisibleChanged() {root.visible = canvasObserver.dockVisible}
     }
 
     Kis.WindowFocusChecker {

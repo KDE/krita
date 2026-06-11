@@ -38,6 +38,7 @@ struct TextPropertiesCanvasObserver::Private {
     qreal currentDpi{72.0};
     QStringList locales;
     bool hasFocus {true};
+    bool dockVisible {true};
 };
 
 TextPropertiesCanvasObserver::TextPropertiesCanvasObserver(QObject *parent)
@@ -152,6 +153,11 @@ void TextPropertiesCanvasObserver::setHasFocus(const bool focus)
     Q_EMIT hasFocusChanged();
 }
 
+bool TextPropertiesCanvasObserver::dockVisible() const
+{
+    return d->dockVisible;
+}
+
 void TextPropertiesCanvasObserver::slotCanvasTextPropertiesChanged()
 {
     KoSvgTextPropertyData data = d->provider->textPropertyData();
@@ -187,6 +193,14 @@ void TextPropertiesCanvasObserver::slotCharacterPropertiesChanged()
     debugFlake << Q_FUNC_INFO << characterData;
     if (d->provider && d->provider->characterTextPropertyData() != characterData) {
         d->provider->setCharacterPropertyData(characterData);
+    }
+}
+
+void TextPropertiesCanvasObserver::slotSetDockVisible(const bool visible)
+{
+    if (d->dockVisible != visible) {
+        d->dockVisible = visible;
+        emit dockVisibleChanged();
     }
 }
 

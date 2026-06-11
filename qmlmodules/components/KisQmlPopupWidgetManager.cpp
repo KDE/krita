@@ -184,7 +184,7 @@ void KisQmlPopupWidgetManager::open()
         return;
     }
     d->popup->raise();
-    d->popup->show();
+    d->popup->prepareVisibility(true);
     d->popup->move(d->itemParent->mapToGlobal(QPointF(d->x, d->y)).toPoint());
     // The following is probably causing issues with keyboard focus :(
     d->popup->activateWindow();
@@ -193,7 +193,7 @@ void KisQmlPopupWidgetManager::open()
 
 void KisQmlPopupWidgetManager::close()
 {
-    d->popup->hide();
+    d->popup->prepareVisibility(false);
     Q_EMIT visibleChanged();
 }
 

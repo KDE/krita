@@ -49,6 +49,8 @@ TextPropertiesDock::TextPropertiesDock()
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
     } else {
         m_quickWidget->rootObject()->setProperty("canvasObserver", QVariant::fromValue(d->canvasObserver));
+        connect(this, SIGNAL(visibilityChanged(bool)), d->canvasObserver, SLOT(slotSetDockVisible(bool)));
+        d->canvasObserver->slotSetDockVisible(this->isVisible());
     }
 
     m_quickWidget->setPalette(this->palette());

@@ -31,7 +31,7 @@ struct HistogramComputationStrokeStrategy::Private
     KisImageSP image;
     std::vector<HistVector> results;
     std::vector<HistVector> resultsLog;
-    float maximumValue;
+    float maximumValue = 0.0f;
 };
 
 

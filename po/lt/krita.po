@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-30 02:44+0000\n"
+"POT-Creation-Date: 2026-06-12 02:37+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -22985,7 +22985,7 @@ msgid "Radiance RGBE Image"
 msgstr "Keisti paveikslėlio dydį"
 
 #: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/ui/KisMainWindow.cpp:2218
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Paveikslėliams"
@@ -24377,7 +24377,7 @@ msgstr "Iš"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -24413,9 +24413,9 @@ msgstr "Valyti resursų failus"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:118
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:761
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:767
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:770
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:64
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:172
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:289
@@ -24440,8 +24440,8 @@ msgstr "Valyti resursų failus"
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/KisMainWindow.cpp:1216 libs/ui/KisMainWindow.cpp:1313
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2206
+#: libs/ui/KisMainWindow.cpp:2225 libs/ui/KisMainWindow.cpp:2858
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -25016,7 +25016,7 @@ msgid "Delete resource"
 msgstr "Trinti resursą"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2652
+#: libs/ui/KisMainWindow.cpp:2655
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -25494,7 +25494,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Nepavyko sukurti veiksmo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2248
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Orientacija"
@@ -25537,18 +25537,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:419
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:428
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:500
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:509
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:516
 #, fuzzy, kde-format
 #| msgid "<html><head/><body><p><br/></p></body></html>"
 msgctxt "ffmpeg warning checks"
@@ -25557,26 +25557,26 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:523
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Dėmesio"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:761
 #, fuzzy, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Išsaugoti dokumentą"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:767
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:770
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -27589,7 +27589,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Įveskite grupės pavadinimą:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2666
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -36508,7 +36508,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2225
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36517,62 +36517,62 @@ msgstr ""
 "Nepavyko atverti\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2206
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Nepavyko sukurti veiksmo."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2646
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2661
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2665
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2706
+#: libs/ui/KisMainWindow.cpp:2709
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2712
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2881
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2897
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Diegimo klaida"
 
-#: libs/ui/KisMainWindow.cpp:3004
+#: libs/ui/KisMainWindow.cpp:3010
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3063
+#: libs/ui/KisMainWindow.cpp:3069
 #, fuzzy, kde-format
 msgid "Expanding Spacer"
 msgstr "Šablonas"
@@ -45500,38 +45500,38 @@ msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Įrašymas"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:634
 #, fuzzy, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Pažymėti nepermatomumą"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:761
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Įrašymas"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:756
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:767
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45540,7 +45540,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:769
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "

@@ -222,8 +222,8 @@ def fix_bundle(bundle_root: pathlib.Path, bundle_version: str="", for_store: boo
 
 def fix_krita_plists(krita_app: pathlib.Path, bundle_id: str, version: str, build_version: str):
 
-    macosx_deployment_target = '10.14' if version.startswith('5') else '12'
-    appex_plugins_deployment_target = '10.15' # if user is in 10.14 the old thumbnailer will be used.
+    macosx_deployment_target = '10.15' if version.startswith('5') else '12'
+    appex_plugins_deployment_target = '10.15'
 
     kritaspotlight = pathlib.Path(krita_app, 'Contents', 'Library','Spotlight', 'kritaspotlight.mdimporter', 'Contents')
     kritaquicklook = pathlib.Path(krita_app, 'Contents', 'Library', 'Quicklook', 'kritaquicklook.qlgenerator', 'Contents')

@@ -359,7 +359,7 @@ def kritaDeploy(from_install: pathlib.Path, dst: pathlib.Path, source: pathlib.P
         qt_version = 5
 
     print(f"Found qt version: {qt_version}")
-    osx_deployment_target = "12" if qt_version[0] == 6 else "10.14"
+    osx_deployment_target = "12" if qt_version[0] == 6 else "10.15"
     kisenv['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target
     kisenv['QMAKE_MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target
 

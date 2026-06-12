@@ -12,8 +12,8 @@
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-macos
     EXTERNALS_DOWNLOAD_DIR: /Users/gitlab/caches/krita-macos/downloads
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
-    MACOSX_DEPLOYMENT_TARGET: "10.14"
-    QMAKE_MACOSX_DEPLOYMENT_TARGET: "10.14"
+    MACOSX_DEPLOYMENT_TARGET: "10.15"
+    QMAKE_MACOSX_DEPLOYMENT_TARGET: "10.15"
     CMAKE_TOOLCHAIN_FILE: $CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF

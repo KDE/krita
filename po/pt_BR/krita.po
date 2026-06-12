@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-03 00:52+0000\n"
+"POT-Creation-Date: 2026-06-12 00:41+0000\n"
 "PO-Revision-Date: 2026-06-03 07:15-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -22556,7 +22556,7 @@ msgid "Radiance RGBE Image"
 msgstr "Imagem RGBE Radiance"
 
 #: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/ui/KisMainWindow.cpp:2218
 #, kde-format
 msgid "Import frames"
 msgstr "Importar quadros"
@@ -23848,7 +23848,7 @@ msgstr "Saída"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1163
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1163
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23884,9 +23884,9 @@ msgstr "Recursos locais"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:118
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:761
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:767
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:770
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:64
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:172
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:289
@@ -23911,8 +23911,8 @@ msgstr "Recursos locais"
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/KisMainWindow.cpp:1216 libs/ui/KisMainWindow.cpp:1313
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2206
+#: libs/ui/KisMainWindow.cpp:2225 libs/ui/KisMainWindow.cpp:2858
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:192 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24462,7 +24462,7 @@ msgid "Delete resource"
 msgstr "Excluir recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2652
+#: libs/ui/KisMainWindow.cpp:2655
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24918,7 +24918,7 @@ msgstr ""
 "incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2248
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderizar animação"
@@ -24959,12 +24959,12 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/D"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:419
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:428
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Nenhum binário do FFmpeg válido fornecido..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:500
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:509
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
@@ -24972,7 +24972,7 @@ msgstr ""
 "O FFmpeg deve ter pelo menos a versão 4.2+ para que a transparência GIF "
 "funcione"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:516
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -24982,18 +24982,18 @@ msgstr ""
 "Imagens GIF animadas não podem ter uma taxa de quadros superior a 50. A taxa "
 "de quadros será reduzida para 50 quadros por segundo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:523
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2394
 #, kde-format
 msgid "Warning(s):"
 msgstr "Aviso(s):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:761
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Insira um nome de arquivo para a renderização."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:753
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:767
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -25002,7 +25002,7 @@ msgstr ""
 "O FFmpeg que você nos forneceu parece estar compactado. Tente extrair o "
 "FFmpeg do arquivo primeiro."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:756
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:770
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -27047,7 +27047,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Indique o nome do novo estilo"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2666
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -36242,7 +36242,7 @@ msgstr ""
 "\n"
 "Apenas seus recursos locais estão disponíveis."
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2225
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36251,40 +36251,40 @@ msgstr ""
 "Não foi possível concluir a importação da animação:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2206
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Falha ao criar novo documento. A importação da animação foi abortada."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2646
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importar espaços de trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2661
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Novo espaço de trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2665
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Novo espaço de trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2706
+#: libs/ui/KisMainWindow.cpp:2709
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2712
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2881
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36293,19 +36293,19 @@ msgstr ""
 "O plugin de gerenciamento de cor LittleCMS do Krita não está instalado. O "
 "Krita será fechado agora."
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2897
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Erro de instalação"
 
-#: libs/ui/KisMainWindow.cpp:3004
+#: libs/ui/KisMainWindow.cpp:3010
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temas"
 
-#: libs/ui/KisMainWindow.cpp:3063
+#: libs/ui/KisMainWindow.cpp:3069
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expansão do espaçador"
@@ -45387,24 +45387,24 @@ msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Gravador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "Seu sistema não é eficiente o suficiente para esse recurso"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:627
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:634
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Selecione uma pasta para gravações"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:748
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:754
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:761
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Gravador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:749
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:756
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45413,7 +45413,7 @@ msgstr ""
 "O gravador foi interrompido devido a uma falha ao gravar um quadro. "
 "Verifique o espaço livre em disco e reinicie o gravador."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
@@ -45421,7 +45421,7 @@ msgstr ""
 "Provavelmente o Krita não conseguiu parar o gravador. Tente reiniciar o "
 "Krita."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:760
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:767
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45434,7 +45434,7 @@ msgstr ""
 "Tente reduzir a taxa de quadros para a exportação ffmpeg ou reduzir a "
 "filtragem de escala nas configurações de aceleração da tela de pintura."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:769
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "

@@ -800,11 +800,18 @@ void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 
     KIS_ASSERT_RECOVER_RETURN(node != activeNode());
     if (m_d->activateNodeImpl(node)) {
+        if (node) {
+            /**
+             * Notify the dummies facade about the lastly
+             * activated node. This information may be used
+             * when a new view is created for the image.
+             */
+            dummiesFacade->setLastActivatedNode(node);
+        }
         Q_EMIT sigUiNeedChangeActiveNode(node);
         Q_EMIT sigNodeActivated(node);
         nodesUpdated();
         if (node) {
-            dummiesFacade->setLastActivatedNode(node);
             bool toggled =  m_d->view->actionCollection()->action("view_show_canvas_only")->isChecked();
             if (toggled) {
                 m_d->view->showFloatingMessage( node->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);

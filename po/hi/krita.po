@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 02:37+0000\n"
+"POT-Creation-Date: 2026-06-13 02:34+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -22486,7 +22486,7 @@ msgid "Clone Layer"
 msgstr "प्रतिरूप परत"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22530,7 +22530,7 @@ msgid "Transform Mask"
 msgstr "रूपांतरण मास्क"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24207,8 +24207,8 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
@@ -34562,32 +34562,32 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "छवि में परत जोड़ा नहीं जा सका."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "अनुकृति नोड्स"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "नोड उठाएँ"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "नोड निचे कीजिए"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "बिंदुओं को हटाएँ"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -34595,7 +34595,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "क्षैतिज रूप से पलटें"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34603,7 +34603,7 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "मास्क को आड़े में प्रतिबिम्ब बनाएं"
 msgstr[1] "मास्क को आड़े में प्रतिबिम्ब बनाएं"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -34611,7 +34611,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "लंबवत रूप से पलटें"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34619,7 +34619,7 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "मास्क को खड़े में प्रतिबिम्ब बनाएं"
 msgstr[1] "मास्क को खड़े में प्रतिबिम्ब बनाएं"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -34627,7 +34627,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "सभी परतों को आड़े में प्रतिबिंबित करें"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -34635,89 +34635,89 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "सभी परतों को खडे रूप से पलटें"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr "निर्यात \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "परत सहेजा नहीं जा सका। %1"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "परत में कोई पिक्सेल डेटा नहीं है"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "एसवीजी में निर्यात करें"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "एसवीजी में सहेजा नहीं जा सका : %1"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "परत %1 संपादन योग्य नहीं है"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr "मूल परत \"%1\" के अल्फा चैनल को लिखना संभव नहीं है।कार्रवाई रद्द कर दी जाएगी।"
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "अल्फा को एक परत में लिखें"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "नोड काटें"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "द्रुत समुह"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "त्वरित क्लिपिंग समुह"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "क्लिपिंग समुह"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "मास्क परत"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "त्वरित असमूहीकृत"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 02:37+0000\n"
+"POT-Creation-Date: 2026-06-13 02:34+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -22030,7 +22030,7 @@ msgid "Clone Layer"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22074,7 +22074,7 @@ msgid "Transform Mask"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23742,8 +23742,8 @@ msgstr ""
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
@@ -33842,19 +33842,19 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 #, fuzzy
 #| msgid "Duplicate"
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "o tu e lipu"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Raise"
@@ -33862,7 +33862,7 @@ msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "o sewi"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Lower"
@@ -33870,18 +33870,18 @@ msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "o anpa"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -33891,13 +33891,13 @@ msgstr[1] "o kulupu"
 msgstr[2] "o kulupu"
 msgstr[3] "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -33907,103 +33907,103 @@ msgstr[1] "o kulupu"
 msgstr[2] "o kulupu"
 msgstr[3] "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "o kulupu"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "o suli e wile tawa ijo ale"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Ungroup"

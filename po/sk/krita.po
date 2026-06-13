@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 02:37+0000\n"
+"POT-Creation-Date: 2026-06-13 02:34+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -22133,7 +22133,7 @@ msgid "Clone Layer"
 msgstr "Klonovať vrstvu"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22177,7 +22177,7 @@ msgid "Transform Mask"
 msgstr "Maska transformácie"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23832,8 +23832,8 @@ msgstr "Lokálne zdroje"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
@@ -34328,37 +34328,37 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Nebolo možné vytvoriť referenčný obrázok z viditeľného plátna."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Cibuľové šupky vyžadujú vrstvu s priehľadným pozadím."
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplikovať uzly"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Presunúť uzly dopredu"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Presunúť uzly dozadu"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Odstrániť uzly"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Zrkadliť masku horizontálne"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34367,12 +34367,12 @@ msgstr[0] "Zrkadliť Vrstva Horizontally"
 msgstr[1] "Zrkadliť %1 Vrstvy Horizontally"
 msgstr[2] "Zrkadliť %1 Vrstvy Horizontally"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Zrkadliť masku vertikálne"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34381,50 +34381,50 @@ msgstr[0] "Zrkadliť Vrstva Vertically"
 msgstr[1] "Zrkadliť %1 Vrstvy Vertically"
 msgstr[2] "Zrkadliť %1 Vrstvy Vertically"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Zrkadliť všetky vrstvy horizontálne"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Zrkadliť všetky vrstvy vertikálne"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exportovať \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Nebolo možné uložiť vrstvu. %1"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Vrstva nemá žiadne pixelové dáta"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportovať do SVG"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Nebolo možné uložiť do svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Skupina %1 needitovateľná"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -34433,49 +34433,49 @@ msgstr ""
 "Nemôžem zapísať alfa kanál rodičovskej vrstvy \"%1\".\n"
 "Operácia bude zrušená."
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Zapísať alfu do vrstvy"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Vystrihnúť uzly"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Rýchle zoskupenie"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Rýchla skupina orezania"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Skupina orezania"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Vrstva masiek"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Cannot move layer \"%1\" into new parent \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Vrstvu „%1” nie je možné presunúť do koreňovej vrstvy"
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rýchle zrušenie zoskupenia"

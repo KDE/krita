@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 02:37+0000\n"
+"POT-Creation-Date: 2026-06-13 02:34+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -22237,7 +22237,7 @@ msgid "Clone Layer"
 msgstr "Yangi &obʼekt qatlami"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -22283,7 +22283,7 @@ msgid "Transform Mask"
 msgstr "Boshqa shaklga almashtirish"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23937,8 +23937,8 @@ msgstr "Qatlamni &olib tashlash"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
@@ -34101,160 +34101,160 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Asboblar nusxasini koʻpaytirish"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Koʻchirish vositasi"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Koʻchirish vositasi"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Koʻchirish vositasi"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Ufq 1"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Ufq 1"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Uskuna:"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Uskuna:"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Ufq 1"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Uskuna:"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Ekspozitsiya:"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Qatlam qulflangan yoki koʻrinmaydigan."
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Ekspozitsiya:"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Qatlamni rasmga qoʻshib boʻlmadi."
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Qatlam qulflangan yoki koʻrinmaydigan."
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Yangi qatlam yaratish"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Asboblar nusxasini koʻpaytirish"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Choʻtkani koʻpaytirish"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Choʻtkani koʻpaytirish"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Qatlamni olib tashlash"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Qatlam"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"

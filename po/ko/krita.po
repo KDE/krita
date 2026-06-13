@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 02:37+0000\n"
+"POT-Creation-Date: 2026-06-13 02:34+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -23391,7 +23391,7 @@ msgid "Clone Layer"
 msgstr "복제 레이어"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -23435,7 +23435,7 @@ msgid "Transform Mask"
 msgstr "변형 마스크"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -25114,8 +25114,8 @@ msgstr "로컬 리소스"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1217
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1217
 #: libs/ui/KisApplication.cpp:1220 libs/ui/KisApplication.cpp:1236
 #: libs/ui/KisApplication.cpp:1268 libs/ui/KisApplication.cpp:1282
 #: libs/ui/KisApplication.cpp:1310 libs/ui/KisDocument.cpp:1055
@@ -35837,32 +35837,32 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "클립보드에서 참조 이미지를 불러올 수 없음"
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "어니언 스킨을 사용하려면 투명한 배경이 있는 레이어가 필요합니다."
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "노드 복제"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "노드 앞으로 가져오기"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "노드 뒤로 보내기"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "노드 삭제"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -35870,7 +35870,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "좌우 반전"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -35879,7 +35879,7 @@ msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "레이어 좌우 반전"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -35887,7 +35887,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "상하 반전"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -35896,7 +35896,7 @@ msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "레이어 상하 반전"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -35904,7 +35904,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "모든 레이어 좌우 반전"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -35912,40 +35912,40 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "모든 레이어 상하 반전"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr "\"%1\" 내보내기"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "레이어를 저장할 수 없습니다. %1"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "레이어에 픽셀 데이터가 없음"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "SVG로 내보내기"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "SVG로 저장할 수 없습니다: %1"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "%1 레이어를 편집할 수 없음"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -35954,51 +35954,51 @@ msgstr ""
 "부모 레이어 \"%1\"의 알파 채널에 쓸 수 없습니다.\n"
 "작업이 취소됩니다."
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "알파값을 레이어에 기록"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "노드 자르기"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "빠른 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "빠른 클리핑 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "클리핑 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "마스크 레이어"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "개별 레이어를 각각의 그룹 레이어 아래에 두기"
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "개별 레이어를 각각의 그룹 레이어 아래에 두기"
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "빠른 그룹 해제"

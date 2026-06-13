@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -20823,6 +20823,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "उपपथ ल ए बिन्दु मं तोड़ें"
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, fuzzy, kde-format
 msgid "Edit Shapes Tool"
 msgstr "दीर्घवृत्त"
@@ -21010,9 +21011,6 @@ msgstr "जूम आउट"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -22439,7 +22437,7 @@ msgid "Clone Layer"
 msgstr "परत के प्रतिरूप बनाव (&C)"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -22485,7 +22483,7 @@ msgid "Transform Mask"
 msgstr "रूपांतरन"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24170,8 +24168,8 @@ msgstr "स्रोत फाइल मन ल:"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -34040,6 +34038,7 @@ msgstr "प्रिव्यू"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, fuzzy, kde-format
 msgid "Color Sampler"
@@ -34067,6 +34066,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "मुक्तहस्त औजार"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, fuzzy, kde-format
 msgid "Freehand Selection Tool"
@@ -34538,42 +34538,42 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "फोटू मं परत जोड़े नइ जा सकिस."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "अनुकृति"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "पेंटर के औजार (&P)"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "पेंटर के औजार (&P)"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "पेंटर के औजार (&P)"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "मास्क ल आड़े मं प्रतिबिम्ब बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34581,13 +34581,13 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "मास्क ल आड़े मं प्रतिबिम्ब बनाव"
 msgstr[1] "मास्क ल आड़े मं प्रतिबिम्ब बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "मास्क ल खड़े मं प्रतिबिम्ब बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34595,107 +34595,107 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "मास्क ल खड़े मं प्रतिबिम्ब बनाव"
 msgstr[1] "मास्क ल खड़े मं प्रतिबिम्ब बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "मास्क ल आड़े मं प्रतिबिम्ब बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "मास्क ल खड़े मं प्रतिबिम्ब बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "निर्यात"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "फोटू मं परत जोड़े नइ जा सकिस."
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "परत आकार"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "निर्यात"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "फोटू मं परत जोड़े नइ जा सकिस."
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "परत आकार"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "नवा मास्क या परत बनाव"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "अनुकृति"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 #, fuzzy
 #| msgid "Quick search:"
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "जल्दी खोज:"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 #, fuzzy
 #| msgid "Quick search:"
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "जल्दी खोज:"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "परत मेटाव"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "फिल्टर परत (&F)"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 #, fuzzy
 #| msgid "Quick search:"
 msgctxt "(qtundo-format)"
@@ -41800,6 +41800,7 @@ msgid "Minor Subdivisions: "
 msgstr "उपविभाजन:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "सहायक:"
@@ -43729,17 +43730,23 @@ msgstr "गाइड देखाव"
 msgid "Grid and Guides"
 msgstr "गाइड लुकाव"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 #, fuzzy
 #| msgid "Histogram"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "हिस्टोग्राम"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, kde-format
 msgid "Histogram"
 msgstr "हिस्टोग्राम"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "छोटा रंग चुनइया"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, fuzzy, kde-format
@@ -64513,7 +64520,6 @@ msgid "Selected path"
 msgstr "चयन मोड:"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 #, fuzzy
 #| msgid "&Add to current selection"
 msgid "Select the script"
@@ -64524,6 +64530,193 @@ msgstr "अभी हाल के चयन मं जोड़व (&A)"
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
 msgstr "छोटी टाइलें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Select Shapes Tool"
+msgstr "चयन मोड:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, fuzzy, kde-format
+msgid "Text Tool"
+msgstr "लकीर औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, fuzzy, kde-format
+msgid "Calligraphy"
+msgstr "कैलिग्राफी औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, fuzzy, kde-format
+msgid "Freehand Brush Tool"
+msgstr "मुक्तहस्त औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, fuzzy, kde-format
+msgid "Line Tool"
+msgstr "पेंटर के औजार (&P)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, fuzzy, kde-format
+msgid "Rectangle Tool"
+msgstr "चतुर्भुज"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, fuzzy, kde-format
+msgid "Ellipse Tool"
+msgstr "दीर्घवृत्त"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+msgid "Polygon Tool"
+msgstr "बहुभुज"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+msgid "Polyline Tool"
+msgstr "पालिलाईन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+msgid "Bezier Curve Tool"
+msgstr "बेजियर चयन औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, fuzzy, kde-format
+msgid "Freehand Path Tool"
+msgstr "मुक्तहस्त औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, fuzzy, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "गतिसील ब्रस"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, fuzzy, kde-format
+msgid "Multibrush Tool"
+msgstr "ब्रुस"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+msgid "Transform Tool"
+msgstr "रूपांतरन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, fuzzy, kde-format
+msgid "Move Tool"
+msgstr "पेंटर के औजार (&P)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, fuzzy, kde-format
+msgid "Crop Tool"
+msgstr "फोटू मं कांट-छांट करव"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, fuzzy, kde-format
+msgid "Gradient Tool"
+msgstr "अनुपात"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+msgid "Colorize Mask Tool"
+msgstr "रंगः (&C)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, fuzzy, kde-format
+msgid "Smart Patch Tool"
+msgstr "मुक्तहस्त औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, fuzzy, kde-format
+msgid "Fill Tool"
+msgstr "दीर्घवृत्त"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, fuzzy, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "सक्रिय परत"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+msgid "Measurement Tool"
+msgstr "मापक"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, fuzzy, kde-format
+msgid "Reference Images Tool"
+msgstr "संदर्भ फोटू:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, fuzzy, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "चतुर्भुज चयन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, fuzzy, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "दीर्घवृत्तीय चयन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, fuzzy, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "बहुभुज चयन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, fuzzy, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "कंटीगुअस छेत्र चयन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, fuzzy, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "एक जइसन चयन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, fuzzy, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "बेजियर चयन औजार"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, fuzzy, kde-format
+#| msgid "Magnetic Outline Selection"
+msgid "Magnetic Selection Tool"
+msgstr "चुंबकीय आउटलाइन चयन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+#| msgid "Zoom to All"
+msgid "Zoom Tool"
+msgstr "सब्बो जूम करव"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, fuzzy, kde-format
+msgid "Pan Tool"
+msgstr "मुक्तहस्त औजार"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
@@ -64549,142 +64742,192 @@ msgstr "रंग सेटिंग"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "रेडियोबटन"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr ""
+msgstr "रंग सेटिंग"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "परत या मास्क ल मेटाव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "परत या मास्क ल मेटाव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 #, fuzzy
 #| msgid "Delete the layer or mask"
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "परत या मास्क ल मेटाव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
 #| msgid "Selection mode:"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "चयन मोड:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "चयन मोड:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 #, fuzzy
 #| msgid "Custom Gradient"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "मनमाफिक अनुपात"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "अभी हाल के चयन मं जोड़व (&A)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 #, fuzzy
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "इंटीग्रल चरन:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "औजार (&T)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "चयन मोड:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "प्रीसेट संपादित करव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "प्रीसेट:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "प्रीसेट संपादित करव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "पिछोत अंगना सेट करव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "आगू तरफ के रंग"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "आगू तरफ के रंग"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 #, fuzzy
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "पिछोत अंगना सेट करव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "पिछोत अंगना सेट करव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "पिछोत अंगना सेट करव"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "&Add to current selection"
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "अभी हाल के चयन मं जोड़व (&A)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "चयन मोड:"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+#| msgid "&Add to current selection"
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "अभी हाल के चयन मं जोड़व (&A)"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "रेडियोबटन"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "कम्पोजिट मोड"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
 #| msgid "Bottom"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "नीचे"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "बीस्प्लाइन"
 
@@ -64692,6 +64935,7 @@ msgstr "बीस्प्लाइन"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
 #| msgid "Coloring:"
+msgctxt "@label"
 msgid "Color info: "
 msgstr "रंग:"
 
@@ -64709,8 +64953,11 @@ msgid "Workflow Buttons"
 msgstr "रंग सेटिंग"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "रंग सेटिंग"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 #, fuzzy
@@ -64873,11 +65120,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, fuzzy, kde-format
-msgid "Freehand Brush Tool"
-msgstr "मुक्तहस्त औजार"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, fuzzy, kde-format
 msgid "Color Sampler Tool"
@@ -64888,11 +65130,6 @@ msgstr "छोटा रंग चुनइया"
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "दीर्घवृत्त बनाव"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, fuzzy, kde-format
-msgid "Ellipse Tool"
-msgstr "दीर्घवृत्त"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -65176,11 +65413,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, fuzzy, kde-format
-msgid "Fill Tool"
-msgstr "दीर्घवृत्त"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -65199,11 +65431,6 @@ msgstr "उलटा"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "अन्य"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, fuzzy, kde-format
-msgid "Gradient Tool"
-msgstr "अनुपात"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 #, fuzzy
@@ -65239,11 +65466,6 @@ msgid ""
 "+Drag will force you to draw straight lines"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, fuzzy, kde-format
-msgid "Line Tool"
-msgstr "पेंटर के औजार (&P)"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, fuzzy, kde-format
 #| msgid "°"
@@ -65276,11 +65498,6 @@ msgstr ""
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, fuzzy, kde-format
-msgid "Move Tool"
-msgstr "पेंटर के औजार (&P)"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 #, fuzzy
@@ -65325,16 +65542,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, fuzzy, kde-format
-msgid "Multibrush Tool"
-msgstr "ब्रुस"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, fuzzy, kde-format
-msgid "Pan Tool"
-msgstr "मुक्तहस्त औजार"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -65352,21 +65559,11 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "एक रस्ता बनाव."
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, fuzzy, kde-format
-msgid "Freehand Path Tool"
-msgstr "मुक्तहस्त औजार"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "चतुर्भुज बनाव"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, fuzzy, kde-format
-msgid "Rectangle Tool"
-msgstr "चतुर्भुज"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -65873,11 +66070,6 @@ msgstr "सदिस चयन"
 msgid "Logical Operations"
 msgstr "बूलिए आपरेसन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, fuzzy, kde-format
-msgid "Select Shapes Tool"
-msgstr "चयन मोड:"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -66046,11 +66238,6 @@ msgstr "संदर्भ फोटू:"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:335
 #, fuzzy, kde-format
 msgid "Reference Image Actions"
-msgstr "संदर्भ फोटू:"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, fuzzy, kde-format
-msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
@@ -66354,11 +66541,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "कैलिग्राफी औजार"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, fuzzy, kde-format
-msgid "Calligraphy"
-msgstr "कैलिग्राफी औजार"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
@@ -66445,11 +66627,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "रेंडरिंग इंटेंट"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, fuzzy, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "कंटीगुअस छेत्र चयन"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
@@ -66461,11 +66638,6 @@ msgstr "दीर्घवृत्तीय चयन"
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "सब्बो चुनव"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, fuzzy, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "दीर्घवृत्तीय चयन"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, fuzzy, kde-format
@@ -66491,11 +66663,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr "बेजियर वक्र"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, fuzzy, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "बेजियर चयन औजार"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
@@ -66508,11 +66675,6 @@ msgctxt "(qtundo-format)"
 msgid "Select Polygon"
 msgstr "चयन"
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, fuzzy, kde-format
-msgid "Polygonal Selection Tool"
-msgstr "बहुभुज चयन"
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, kde-format
 msgid "Rectangular Selection"
@@ -66524,11 +66686,6 @@ msgstr "चतुर्भुज चयन"
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
 msgstr "कोई चतुर्भुजीय छेत्र चुनव"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, fuzzy, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "चतुर्भुज चयन"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
@@ -66565,11 +66722,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "रेंडरिंग इंटेंट"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, fuzzy, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "एक जइसन चयन"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66714,12 +66866,6 @@ msgstr "चयन दिखाव"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "स्मीयरी ब्रस"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, fuzzy, kde-format
-#| msgid "Magnetic Outline Selection"
-msgid "Magnetic Selection Tool"
-msgstr "चुंबकीय आउटलाइन चयन"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66933,11 +67079,6 @@ msgstr "अभी हाल के चयन मं जोड़व (&A)"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "पिक्सेल चौड़ाई"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-msgid "Text Tool"
-msgstr "लकीर औजार"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, fuzzy, kde-format
@@ -67746,11 +67887,6 @@ msgid ""
 "Height: %2"
 msgstr "छापा ऊँचाईः"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, fuzzy, kde-format
-msgid "Crop Tool"
-msgstr "फोटू मं कांट-छांट करव"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, fuzzy, kde-format
@@ -67897,11 +68033,6 @@ msgstr "पिक्सेल चौड़ाई"
 #, fuzzy, kde-format
 msgid "Width range:"
 msgstr "दूरी सीमा:"
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, fuzzy, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "गतिसील ब्रस"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -68128,11 +68259,6 @@ msgstr "पिछोत अंगना रंग"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "पिछोत अंगना रंग"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, fuzzy, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "सक्रिय परत"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -68480,11 +68606,6 @@ msgstr "कोई चतुर्भुजीय छेत्र चुनव"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "तारा"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, fuzzy, kde-format
-msgid "Smart Patch Tool"
-msgstr "मुक्तहस्त औजार"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

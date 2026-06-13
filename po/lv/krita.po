@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -20635,6 +20635,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr ""
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, fuzzy, kde-format
 msgid "Edit Shapes Tool"
 msgstr "Filtrs Darba rīks"
@@ -20823,9 +20824,6 @@ msgstr "Tālināt"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -22235,7 +22233,7 @@ msgid "Clone Layer"
 msgstr "Kustība Slānis"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -22280,7 +22278,7 @@ msgid "Transform Mask"
 msgstr "Transformēt"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23929,8 +23927,8 @@ msgstr "Avots:"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -33653,6 +33651,7 @@ msgstr "Priekšskatījums"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, fuzzy, kde-format
 msgid "Color Sampler"
@@ -33680,6 +33679,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "Iezīmējums"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, fuzzy, kde-format
 msgid "Freehand Selection Tool"
@@ -34149,42 +34149,42 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "&Monitora profils:"
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Divkāršot"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Darbarīki"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Darbarīki"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Darbarīki"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Horizontāli"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34193,13 +34193,13 @@ msgstr[0] "Horizontāli"
 msgstr[1] "Horizontāli"
 msgstr[2] "Horizontāli"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Vertikāli"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34208,105 +34208,105 @@ msgstr[0] "Vertikāli"
 msgstr[1] "Vertikāli"
 msgstr[2] "Vertikāli"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Horizontāli"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Vertikāli"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Tuvinājums:"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "&Monitora profils:"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Slānis Lielums"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Tuvinājums:"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "&Monitora profils:"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Slānis Lielums"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Izveidot jaunu slāni"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Divkāršot"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Izņemt slāni"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -41311,6 +41311,7 @@ msgid "Minor Subdivisions: "
 msgstr "Apakšvienība:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "Tukša vieta (tekstā) "
@@ -43213,16 +43214,22 @@ msgstr "Ceļvedis Līnijas"
 msgid "Grid and Guides"
 msgstr "Ceļvedis Līnijas"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "Alfa"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, fuzzy, kde-format
 msgid "Histogram"
 msgstr "Atņem�ana"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "Krāsu izvēlētājs"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, fuzzy, kde-format
@@ -63494,7 +63501,6 @@ msgid "Selected path"
 msgstr "Izvēles režīms:"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 #, fuzzy
 msgid "Select the script"
 msgstr "Pievienot"
@@ -63503,6 +63509,191 @@ msgstr "Pievienot"
 #, fuzzy
 msgid "Python files (*.py)"
 msgstr "Small"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Select Shapes Tool"
+msgstr "Izvēles režīms:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, fuzzy, kde-format
+msgid "Text Tool"
+msgstr "Izklāt Darba rīks"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, fuzzy, kde-format
+msgid "Calligraphy"
+msgstr "Kaligrāfiska ota"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, fuzzy, kde-format
+msgid "Freehand Brush Tool"
+msgstr "Iezīmējums"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, fuzzy, kde-format
+msgid "Line Tool"
+msgstr "Darbarīki"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, fuzzy, kde-format
+msgid "Rectangle Tool"
+msgstr "Taisnstūris"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, fuzzy, kde-format
+msgid "Ellipse Tool"
+msgstr "Elipse"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+msgid "Polygon Tool"
+msgstr "Daudzstūris"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+msgid "Polyline Tool"
+msgstr "Puslīnija"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+msgid "Bezier Curve Tool"
+msgstr "Bezieris Izlase Darba rīks"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, fuzzy, kde-format
+msgid "Freehand Path Tool"
+msgstr "Zīmēt"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, fuzzy, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "Divkāršot Ota"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, fuzzy, kde-format
+msgid "Multibrush Tool"
+msgstr "Ota"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+msgid "Transform Tool"
+msgstr "Transformēt"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, fuzzy, kde-format
+msgid "Move Tool"
+msgstr "Darbarīki"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, fuzzy, kde-format
+msgid "Crop Tool"
+msgstr "Attēls"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, fuzzy, kde-format
+msgid "Gradient Tool"
+msgstr "Krāsu pāreja"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+msgid "Colorize Mask Tool"
+msgstr "&Krāsa:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, fuzzy, kde-format
+msgid "Smart Patch Tool"
+msgstr "Izklāt Darba rīks"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, fuzzy, kde-format
+msgid "Fill Tool"
+msgstr "Elipse"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, fuzzy, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "Kustība Slānis"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+msgid "Measurement Tool"
+msgstr "Spiediens"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, fuzzy, kde-format
+msgid "Reference Images Tool"
+msgstr "Atsauksme:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, fuzzy, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "Taisnstūra Izlase"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, fuzzy, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "Izlase"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, fuzzy, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "Izlase"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, fuzzy, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "Laukums Izlase"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, fuzzy, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "Vienāds Izlase"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, fuzzy, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "Bezieris Izlase Darba rīks"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, fuzzy, kde-format
+msgid "Magnetic Selection Tool"
+msgstr "Kontūrs Izlase"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+msgid "Zoom Tool"
+msgstr "Aplaušanas pults T&roksnis."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, fuzzy, kde-format
+msgid "Pan Tool"
+msgstr "Izklāt Darba rīks"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
@@ -63529,140 +63720,187 @@ msgstr "Krāsu uzstādījumi"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
 #| msgid "Pressure"
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "Spiediens"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr ""
+msgstr "Krāsu uzstādījumi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "Dzēst slāni"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "Dzēst slāni"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "Dzēst slāni"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
 #| msgid "Selection mode:"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Izvēles režīms:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Izvēles režīms:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 #, fuzzy
 #| msgid "Custom Gradient"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "Izvēles gradients"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "Pievienot"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 #, fuzzy
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "Izšķi&rtspēja:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "Uz slāņiem"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Izvēles režīms:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "Pašreizējais slānis"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "Nospiediens:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "Pašreizējais slānis"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Sekunde"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "Priekšplāna krāsa"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "Priekšplāna krāsa"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 #, fuzzy
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "Sekunde"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "Sekunde"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "Sekunde"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "Pievienot"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Izvēles režīms:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "Pievienot"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 #, fuzzy
 #| msgid "Pressure"
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "Spiediens"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "Maisījums:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Automātiska izlīdzināšana"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "Saķēdēts"
 
@@ -63670,6 +63908,7 @@ msgstr "Saķēdēts"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
 #| msgid "Color:"
+msgctxt "@label"
 msgid "Color info: "
 msgstr "Krāsa:"
 
@@ -63686,8 +63925,11 @@ msgid "Workflow Buttons"
 msgstr "Krāsu uzstādījumi"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "Krāsu uzstādījumi"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 #, fuzzy
@@ -63846,11 +64088,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, fuzzy, kde-format
-msgid "Freehand Brush Tool"
-msgstr "Iezīmējums"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, fuzzy, kde-format
 msgid "Color Sampler Tool"
@@ -63861,11 +64098,6 @@ msgstr "Vienāds Izlase"
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Zīmēt"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, fuzzy, kde-format
-msgid "Ellipse Tool"
-msgstr "Elipse"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -64140,11 +64372,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, fuzzy, kde-format
-msgid "Fill Tool"
-msgstr "Elipse"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -64162,11 +64389,6 @@ msgstr "Reverss"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Citi"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, fuzzy, kde-format
-msgid "Gradient Tool"
-msgstr "Krāsu pāreja"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 #, fuzzy
@@ -64201,11 +64423,6 @@ msgid ""
 "+Drag will force you to draw straight lines"
 msgstr "Pārvietot"
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, fuzzy, kde-format
-msgid "Line Tool"
-msgstr "Darbarīki"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, fuzzy, kde-format
 #| msgid "°"
@@ -64237,11 +64454,6 @@ msgstr ""
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, fuzzy, kde-format
-msgid "Move Tool"
-msgstr "Darbarīki"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 #, fuzzy
@@ -64286,16 +64498,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, fuzzy, kde-format
-msgid "Multibrush Tool"
-msgstr "Ota"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, fuzzy, kde-format
-msgid "Pan Tool"
-msgstr "Izklāt Darba rīks"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -64313,21 +64515,11 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Zīmēt"
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, fuzzy, kde-format
-msgid "Freehand Path Tool"
-msgstr "Zīmēt"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Zīmēt"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, fuzzy, kde-format
-msgid "Rectangle Tool"
-msgstr "Taisnstūris"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -64827,11 +65019,6 @@ msgstr "Nē Izlase"
 msgid "Logical Operations"
 msgstr "&Krāsu uzņēmējs"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, fuzzy, kde-format
-msgid "Select Shapes Tool"
-msgstr "Izvēles režīms:"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -64997,11 +65184,6 @@ msgstr "Atsauksme:"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:335
 #, fuzzy, kde-format
 msgid "Reference Image Actions"
-msgstr "Atsauksme:"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, fuzzy, kde-format
-msgid "Reference Images Tool"
 msgstr "Atsauksme:"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
@@ -65293,11 +65475,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "Kaligrāfiska ota"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, fuzzy, kde-format
-msgid "Calligraphy"
-msgstr "Kaligrāfiska ota"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, fuzzy, kde-format
 msgid "Contiguous Area Selection"
@@ -65379,11 +65556,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "&Renderēšana:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, fuzzy, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "Laukums Izlase"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, fuzzy, kde-format
 msgid "Elliptical Selection"
@@ -65395,11 +65567,6 @@ msgstr "Izlase"
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "Atla&sīt Visi"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, fuzzy, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "Izlase"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, fuzzy, kde-format
@@ -65425,11 +65592,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr "Bezieris Grafiks"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, fuzzy, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "Bezieris Izlase Darba rīks"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, fuzzy, kde-format
 msgid "Polygonal Selection"
@@ -65440,11 +65602,6 @@ msgstr "Izlase"
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Polygon"
-msgstr "Izlase"
-
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, fuzzy, kde-format
-msgid "Polygonal Selection Tool"
 msgstr "Izlase"
 
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
@@ -65458,11 +65615,6 @@ msgstr "Taisnstūra Izlase"
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
 msgstr "Atlasīt"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, fuzzy, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "Taisnstūra Izlase"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
@@ -65496,11 +65648,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "&Renderēšana:"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, fuzzy, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "Vienāds Izlase"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65639,11 +65786,6 @@ msgstr "Rādīt Izlase"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "Alfa Opcijas"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, fuzzy, kde-format
-msgid "Magnetic Selection Tool"
-msgstr "Kontūrs Izlase"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65853,11 +65995,6 @@ msgstr "Pievienot"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Izmantošana"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-msgid "Text Tool"
-msgstr "Izklāt Darba rīks"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, fuzzy, kde-format
@@ -66654,11 +66791,6 @@ msgid ""
 "Height: %2"
 msgstr "Pikselis"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, fuzzy, kde-format
-msgid "Crop Tool"
-msgstr "Attēls"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, fuzzy, kde-format
@@ -66805,11 +66937,6 @@ msgstr "Pikselis"
 #, fuzzy, kde-format
 msgid "Width range:"
 msgstr "Tukša vieta (tekstā) "
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, fuzzy, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "Divkāršot Ota"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67022,11 +67149,6 @@ msgstr "Priekšplāna krāsa"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "Priekšplāna krāsa"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, fuzzy, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "Kustība Slānis"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -67364,11 +67486,6 @@ msgstr "Atlasīt"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "Zvaigzne"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, fuzzy, kde-format
-msgid "Smart Patch Tool"
-msgstr "Izklāt Darba rīks"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

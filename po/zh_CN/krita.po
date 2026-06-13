@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -20472,6 +20472,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "按 %1 在选中线段处断开路径。"
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, kde-format
 msgid "Edit Shapes Tool"
 msgstr "锚点编辑工具：对矢量图形的锚点进行操作"
@@ -20657,9 +20658,6 @@ msgstr "缩小(&M)"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -22001,7 +21999,7 @@ msgid "Clone Layer"
 msgstr "克隆图层"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22045,7 +22043,7 @@ msgid "Transform Mask"
 msgstr "变形蒙版"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23693,8 +23691,8 @@ msgstr "本地资源"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -33605,6 +33603,7 @@ msgstr "切换上一个笔刷预设"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
@@ -33632,6 +33631,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "激活手绘笔刷工具"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
@@ -34080,99 +34080,99 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "无法从可见图层创建参考图像。"
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "绘图纸外观只能在背景透明的图层上发挥作用。"
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "创建图层节点副本"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "上移图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "下移图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "移除图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "翻转蒙版 (水平)"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "翻转 %1 个图层 (水平)"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "翻转蒙版 (垂直)"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "翻转 %1 个图层 (垂直)"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "翻转所有图层 (水平)"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "翻转所有图层 (垂直)"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr "导出“%1”"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "无法保存图层。%1"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "图层不含像素数据"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "导出为 SVG"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "无法保存为 SVG：%1"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "图层 %1 不可编辑"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -34181,49 +34181,49 @@ msgstr ""
 "无法写入父图层的透明度通道“%1”。\n"
 "操作将被取消。"
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "写入透明度到图层"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "剪切图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "图层编组"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "剪贴编组"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "剪贴编组"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "蒙版图层"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "无法将图层“%1”移动到新的上级图层“%2”之下"
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "无法将图层“%1”移动到根图层之下"
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "移出编组"
@@ -41479,6 +41479,7 @@ msgid "Minor Subdivisions: "
 msgstr "刻度细分："
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
 msgstr "辅助尺工具：建立笔刷吸附所用的形状和透视等辅助尺"
@@ -43354,15 +43355,22 @@ msgstr "参考线："
 msgid "Grid and Guides"
 msgstr "网格与参考线"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "更新直方图"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, kde-format
 msgid "Histogram"
 msgstr "直方图"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+#| msgid "Show logarithmic histogram"
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "显示对数直方图"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, kde-format
@@ -63792,13 +63800,211 @@ msgid "Selected path"
 msgstr "选定路径"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 msgid "Select the script"
 msgstr "选择脚本"
 
 #: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Python 文件 (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, kde-format
+msgid "Select Shapes Tool"
+msgstr "形状选择工具：对矢量图形的整体和颜色进行操作"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, kde-format
+msgid "Text Tool"
+msgstr "文本工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, kde-format
+msgid "Calligraphy"
+msgstr "西文书法工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, kde-format
+msgid "Freehand Brush Tool"
+msgstr "手绘笔刷工具/画笔"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, kde-format
+msgid "Line Tool"
+msgstr "直线工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, kde-format
+msgid "Rectangle Tool"
+msgstr "矩形工具：可圆角"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, kde-format
+msgid "Ellipse Tool"
+msgstr "椭圆工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Polygon Tool"
+msgid "Polygon Tool"
+msgstr "多边形工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Polyline Tool"
+msgid "Polyline Tool"
+msgstr "多段线工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Bezier Curve Tool"
+msgid "Bezier Curve Tool"
+msgstr "曲线工具/钢笔"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, kde-format
+msgid "Freehand Path Tool"
+msgstr "手绘路径工具/自由钢笔"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "力学笔刷工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, kde-format
+msgid "Multibrush Tool"
+msgstr "多路笔刷工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Transform Tool"
+msgid "Transform Tool"
+msgstr "变形工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, kde-format
+msgid "Move Tool"
+msgstr "移动工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, kde-format
+msgid "Crop Tool"
+msgstr "裁剪工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, kde-format
+msgid "Gradient Tool"
+msgstr "渐变工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Colorize Mask Tool"
+msgid "Colorize Mask Tool"
+msgstr "智能填色蒙版工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, kde-format
+msgid "Smart Patch Tool"
+msgstr "智能补丁工具/仿制图章/修复画笔"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, kde-format
+msgid "Fill Tool"
+msgstr "填充工具/油漆桶"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "闭合填充工具/圈涂"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Measurement Tool"
+msgid "Measurement Tool"
+msgstr "测量工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, kde-format
+msgid "Reference Images Tool"
+msgstr "参考图像工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "矩形选区工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "椭圆选区工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "多边形选区工具/多边形套索"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "相连颜色选区工具/魔棒"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "相似颜色选区工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "曲线选区工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, kde-format
+msgid "Magnetic Selection Tool"
+msgstr "磁性选区工具/磁性套索"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Zoom Tool"
+msgid "Zoom Tool"
+msgstr "缩放工具"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, kde-format
+msgid "Pan Tool"
+msgstr "视图平移工具/抓手"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Custom icon"
@@ -63817,119 +64023,222 @@ msgid "Workflow Buttons settings"
 msgstr "自定义按钮设置"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
+#, fuzzy
+#| msgid "Selected button:"
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "选择的按钮："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgid "Add a workflow button"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
 msgstr "添加自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+#| msgid "Move selected workflow button to the left"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
 msgstr "向左移动选中的自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Move selected workflow button to the right"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
 msgstr "向右移动选中的自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
+#, fuzzy
+#| msgid "Delete selected workflow button"
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "删除选中的自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
+#, fuzzy
+#| msgid "Select icon mode:"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "选择图标模式："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select a custom icon:"
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "选择自定义图标："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
+#, fuzzy
+#| msgid "Custom icon path"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "自定义图标路径"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Select the custom icon"
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "选择自定义图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
+#, fuzzy
+#| msgid "Enter a Tooltip:"
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "输入悬停提示信息"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Tooltip text"
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "悬停提示信息"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
+#, fuzzy
+#| msgid "Select a tool:"
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "选择工具："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Select a brush preset:"
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "选择笔刷预设："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
+#, fuzzy
+#| msgid "Brush preset name"
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "笔刷预设名称"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select the brush preset"
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "选择笔刷预设"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
+#, fuzzy
+#| msgid "Select foreground color:"
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "选择前景色："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
+#, fuzzy
+#| msgid "Load current foreground color"
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "加载当前前景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
+#, fuzzy
+#| msgid "Clear foreground color"
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "清除前景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+#, fuzzy
+#| msgid "Color model ; depth ; profile ; components"
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr "色彩模型 ; 位深 ; 特性文件 ; 颜色分量"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
+#, fuzzy
+#| msgid "Select background color:"
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "选择背景色："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
+#, fuzzy
+#| msgid "Load current background color"
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "加载当前背景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
+#, fuzzy
+#| msgid "Clear background color"
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "清除背景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
+#, fuzzy
+#| msgid "Select a script file:"
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "选择脚本文件："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
+#, fuzzy
+#| msgid "Script path"
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "脚本路径"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+#| msgid "Select the script"
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "选择脚本"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
+#, fuzzy
+#| msgid "Buttons size:"
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "按钮大小："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
+#, fuzzy
+#| msgid "Settings button position:"
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "设置按钮位置："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#, fuzzy
+#| msgid "Bottom bar"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "面板底栏"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
+#, fuzzy
+#| msgid "Inline"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "与其他按钮并排"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
+#, fuzzy
+#| msgid "Color info: "
+msgctxt "@label"
 msgid "Color info: "
 msgstr "颜色信息："
 
@@ -63943,6 +64252,9 @@ msgid "Workflow Buttons"
 msgstr "自定义按钮"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+#| msgid "Open workflow buttons settings dialog"
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
 msgstr "打开自定义按钮设置对话框"
 
@@ -64101,11 +64413,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr "启用橡皮擦的吸附功能"
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, kde-format
-msgid "Freehand Brush Tool"
-msgstr "手绘笔刷工具/画笔"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
@@ -64115,11 +64422,6 @@ msgstr "拾色器工具"
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "绘制椭圆"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, kde-format
-msgid "Ellipse Tool"
-msgstr "椭圆工具"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -64395,11 +64697,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr "拖动填充有效区域"
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, kde-format
-msgid "Fill Tool"
-msgstr "填充工具/油漆桶"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 msgctxt "(qtundo-format)"
 msgid "Gradient"
@@ -64416,11 +64713,6 @@ msgstr "反向"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "抖动"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, kde-format
-msgid "Gradient Tool"
-msgstr "渐变工具"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
@@ -64456,11 +64748,6 @@ msgstr ""
 "拖动时按住 Shift 可强制直线角度为 15° 的整数倍; 拖动时按住 Alt 可保持当前直线"
 "形状并移动其位置。"
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, kde-format
-msgid "Line Tool"
-msgstr "直线工具"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, kde-format
 msgctxt "angle value in degrees"
@@ -64493,11 +64780,6 @@ msgstr "X：%1 像素，Y：%2 像素"
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr "所选区域不含像素"
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, kde-format
-msgid "Move Tool"
-msgstr "移动工具"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 msgctxt "(qtundo-format)"
@@ -64541,16 +64823,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr "多路笔刷工具不支持超过 %1 路笔画。请使用更大的笔画间隔值。"
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, kde-format
-msgid "Multibrush Tool"
-msgstr "多路笔刷工具"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, kde-format
-msgid "Pan Tool"
-msgstr "视图平移工具/抓手"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
@@ -64566,20 +64838,10 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "绘制手绘路径"
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, kde-format
-msgid "Freehand Path Tool"
-msgstr "手绘路径工具/自由钢笔"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "绘制矩形"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, kde-format
-msgid "Rectangle Tool"
-msgstr "矩形工具：可圆角"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -65064,11 +65326,6 @@ msgstr "矢量形状操作"
 msgid "Logical Operations"
 msgstr "布尔逻辑操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, kde-format
-msgid "Select Shapes Tool"
-msgstr "形状选择工具：对矢量图形的整体和颜色进行操作"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -65243,11 +65500,6 @@ msgstr "保存参考图像失败。"
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "参考图像操作"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, kde-format
-msgid "Reference Images Tool"
-msgstr "参考图像工具"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
 #, kde-format
@@ -65538,11 +65790,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "西文书法工具"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, kde-format
-msgid "Calligraphy"
-msgstr "西文书法工具"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
@@ -65625,11 +65872,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "选区边界"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "相连颜色选区工具/魔棒"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
@@ -65640,11 +65882,6 @@ msgstr "椭圆选区"
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "按椭圆建立选区"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "椭圆选区工具"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, kde-format
@@ -65668,11 +65905,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr "用曲线建立选区"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "曲线选区工具"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
@@ -65684,11 +65916,6 @@ msgctxt "(qtundo-format)"
 msgid "Select Polygon"
 msgstr "按多边形建立选区"
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, kde-format
-msgid "Polygonal Selection Tool"
-msgstr "多边形选区工具/多边形套索"
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, kde-format
 msgid "Rectangular Selection"
@@ -65699,11 +65926,6 @@ msgstr "矩形选区"
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
 msgstr "按矩形建立选区"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "矩形选区工具"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
@@ -65736,11 +65958,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "选区边界"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "相似颜色选区工具"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65878,11 +66095,6 @@ msgstr "放弃选择"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "路径选项"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, kde-format
-msgid "Magnetic Selection Tool"
-msgstr "磁性选区工具/磁性套索"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66090,11 +66302,6 @@ msgstr "当前基线"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "基线偏移"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, kde-format
-msgid "Text Tool"
-msgstr "文本工具"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
@@ -66884,11 +67091,6 @@ msgstr ""
 "宽度：%1\n"
 "高度：%2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, kde-format
-msgid "Crop Tool"
-msgstr "裁剪工具"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
@@ -67032,11 +67234,6 @@ msgstr "初始宽度："
 #, kde-format
 msgid "Width range:"
 msgstr "宽度范围："
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "力学笔刷工具"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67245,11 +67442,6 @@ msgstr "被包围区域：被透明包围"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "被包围区域：被透明、特定颜色包围"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "闭合填充工具/圈涂"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -67584,11 +67776,6 @@ msgstr "此工具只能在颜料图层上使用"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "智能补丁"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, kde-format
-msgid "Smart Patch Tool"
-msgstr "智能补丁工具/仿制图章/修复画笔"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

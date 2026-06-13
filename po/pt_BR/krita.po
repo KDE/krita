@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2026-06-03 07:15-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -20650,6 +20650,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "Pressione %1 para quebrar o caminho em segmentos selecionados."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, kde-format
 msgid "Edit Shapes Tool"
 msgstr "Ferramenta Edição de Formas"
@@ -20835,9 +20836,6 @@ msgstr "Reduzir"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -22199,7 +22197,7 @@ msgid "Clone Layer"
 msgstr "Camada de clone"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22243,7 +22241,7 @@ msgid "Transform Mask"
 msgstr "Máscara de transformação"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23901,8 +23899,8 @@ msgstr "Recursos locais"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -34023,6 +34021,7 @@ msgstr "Alternar predefinição de pincel anterior"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
@@ -34050,6 +34049,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "Ativar ferramenta de pincel à mão livre"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
@@ -34509,37 +34509,37 @@ msgstr ""
 "Não foi possível criar a imagem de referência a partir da tela de pintura "
 "visível."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "As cascas de cebola requerem uma camada com fundo transparente."
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplicar os nós"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Elevar os nós"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Baixar os nós"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Remover os nós"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Espelhar máscara horizontalmente"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34547,12 +34547,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Espelhar a camada horizontalmente"
 msgstr[1] "Espelhar %1 camadas horizontalmente"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Espelhar máscara verticalmente"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34560,50 +34560,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Espelhar a camada verticalmente"
 msgstr[1] "Espelhar %1 camadas verticalmente"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Espelhar todas as camadas horizontalmente"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Espelhar todas as camadas verticalmente"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exportar \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Não foi possível salvar a camada. %1"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "A camada não tem dados de pixel"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportar para SVG"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Não foi possível salvar para SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "A camada %1 não é editável"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -34612,49 +34612,49 @@ msgstr ""
 "Não é possível gravar o canal alfa da camada mãe \"%1\".\n"
 "A operação será cancelada."
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Gravar alfa para uma camada"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Recortar nós"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Grupo rápido"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Grupo de recorte rápido"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grupo de recorte"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Camada de máscara"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Não foi possível mover a camada \"%1\" para o novo pai \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Não foi possível mover a camada \"%1\" para a camada raiz"
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Desagrupamento Rápido"
@@ -42130,6 +42130,7 @@ msgid "Minor Subdivisions: "
 msgstr "Subdivisões menores: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Ferramenta de assistente"
@@ -44008,15 +44009,22 @@ msgstr "Guias:"
 msgid "Grid and Guides"
 msgstr "Grade e guias"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "Atualizar histograma"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, kde-format
 msgid "Histogram"
 msgstr "Histograma"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+#| msgid "Show logarithmic histogram"
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "Mostrar histograma logarítmico"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, kde-format
@@ -64836,13 +64844,211 @@ msgid "Selected path"
 msgstr "Caminho selecionado"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 msgid "Select the script"
 msgstr "Selecione o script"
 
 #: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Arquivos Python (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, kde-format
+msgid "Select Shapes Tool"
+msgstr "Ferramenta de selecionar formas"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, kde-format
+msgid "Text Tool"
+msgstr "Ferramenta de texto"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, kde-format
+msgid "Calligraphy"
+msgstr "Caligrafia"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, kde-format
+msgid "Freehand Brush Tool"
+msgstr "Ferramenta de pincel à mão livre"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, kde-format
+msgid "Line Tool"
+msgstr "Ferramenta de linha"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, kde-format
+msgid "Rectangle Tool"
+msgstr "Ferramenta de retângulo"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, kde-format
+msgid "Ellipse Tool"
+msgstr "Ferramenta de elipse"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Polygon Tool"
+msgid "Polygon Tool"
+msgstr "Ferramenta de polígonos"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Polyline Tool"
+msgid "Polyline Tool"
+msgstr "Ferramenta de linha poligonal"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Bezier Curve Tool"
+msgid "Bezier Curve Tool"
+msgstr "Ferramenta de curva Bezier"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, kde-format
+msgid "Freehand Path Tool"
+msgstr "Ferramenta de caminho à mão livre"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "Ferramenta de pincel dinâmico"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, kde-format
+msgid "Multibrush Tool"
+msgstr "Ferramenta multi-pincel"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Transform Tool"
+msgid "Transform Tool"
+msgstr "Ferramenta de transformação"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, kde-format
+msgid "Move Tool"
+msgstr "Ferramenta Movimento"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, kde-format
+msgid "Crop Tool"
+msgstr "Ferramenta de recorte"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, kde-format
+msgid "Gradient Tool"
+msgstr "Ferramenta de gradiente"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Colorize Mask Tool"
+msgid "Colorize Mask Tool"
+msgstr "Ferramenta de máscara de colorir"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, kde-format
+msgid "Smart Patch Tool"
+msgstr "Ferramenta de patch inteligente"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, kde-format
+msgid "Fill Tool"
+msgstr "Ferramenta de preenchimento"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "Ferramenta de preencher e delimitar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Measurement Tool"
+msgid "Measurement Tool"
+msgstr "Ferramenta de medição"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, kde-format
+msgid "Reference Images Tool"
+msgstr "Ferramenta Imagens de Referência"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "Ferramenta de seleção retangular"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "Ferramenta de seleção elíptica"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "Ferramenta de seleção poligonal"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "Ferramenta de seleção contígua"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "Ferramenta de seleção de cor semelhante"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "Ferramenta de seleção por curva Bezier"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, kde-format
+msgid "Magnetic Selection Tool"
+msgstr "Ferramenta de seleção magnética"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Zoom Tool"
+msgid "Zoom Tool"
+msgstr "Ferramenta de zoom"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, kde-format
+msgid "Pan Tool"
+msgstr "Ferramenta de deslocamento"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Custom icon"
@@ -64861,119 +65067,222 @@ msgid "Workflow Buttons settings"
 msgstr "Configurações de botões do fluxo de trabalho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
+#, fuzzy
+#| msgid "Selected button:"
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "Botão selecionado:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgid "Add a workflow button"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
 msgstr "Adicionar um botão de fluxo de trabalho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+#| msgid "Move selected workflow button to the left"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
 msgstr "Mover o botão de fluxo de trabalho selecionado para a esquerda"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Move selected workflow button to the right"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
 msgstr "Mover o botão de fluxo de trabalho selecionado para a direita"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
+#, fuzzy
+#| msgid "Delete selected workflow button"
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "Excluir o botão de fluxo de trabalho selecionado"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
+#, fuzzy
+#| msgid "Select icon mode:"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Selecionar modo de ícone:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select a custom icon:"
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Selecionar um ícone personalizado:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
+#, fuzzy
+#| msgid "Custom icon path"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "Caminho do ícone personalizado"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Select the custom icon"
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "Selecionar o ícone personalizado"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
+#, fuzzy
+#| msgid "Enter a Tooltip:"
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "Digitar uma Dica:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Tooltip text"
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "Texto da Dica"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
+#, fuzzy
+#| msgid "Select a tool:"
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Selecionar uma ferramenta:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Select a brush preset:"
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "Selecionar uma predefinição de pincel:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
+#, fuzzy
+#| msgid "Brush preset name"
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "Nome da predefinição do pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select the brush preset"
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "Selecionar a predefinição de pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
+#, fuzzy
+#| msgid "Select foreground color:"
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Selecionar cor do primeiro plano:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
+#, fuzzy
+#| msgid "Load current foreground color"
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "Carregar o cor do primeiro plano atual"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
+#, fuzzy
+#| msgid "Clear foreground color"
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "Limpar a cor do primeiro plano"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+#, fuzzy
+#| msgid "Color model ; depth ; profile ; components"
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr "Modelo de cor; profundidade; perfil; componentes"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
+#, fuzzy
+#| msgid "Select background color:"
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "Selecionar cor do plano de fundo:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
+#, fuzzy
+#| msgid "Load current background color"
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "Carregar cor do plano de fundo atual"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
+#, fuzzy
+#| msgid "Clear background color"
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "Limpar cor do plano de fundo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
+#, fuzzy
+#| msgid "Select a script file:"
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "Selecionar um arquivo de script:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
+#, fuzzy
+#| msgid "Script path"
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Caminho do script"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+#| msgid "Select the script"
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "Selecione o script"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
+#, fuzzy
+#| msgid "Buttons size:"
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "Tamanho dos botões:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
+#, fuzzy
+#| msgid "Settings button position:"
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "Configurações de posição do botão:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#, fuzzy
+#| msgid "Bottom bar"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Barra de botões"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
+#, fuzzy
+#| msgid "Inline"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "Em linha"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
+#, fuzzy
+#| msgid "Color info: "
+msgctxt "@label"
 msgid "Color info: "
 msgstr "Informações de cor: "
 
@@ -64987,6 +65296,9 @@ msgid "Workflow Buttons"
 msgstr "Botões de fluxo de trabalho"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+#| msgid "Open workflow buttons settings dialog"
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
 msgstr "Abra a janela de configurações dos botões do fluxo de trabalho"
 
@@ -65148,11 +65460,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr "Habilitar ajuste ao usar borrachas"
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, kde-format
-msgid "Freehand Brush Tool"
-msgstr "Ferramenta de pincel à mão livre"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
@@ -65162,11 +65469,6 @@ msgstr "Ferramenta de amostragem de cor"
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Desenhar uma elipse"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, kde-format
-msgid "Ellipse Tool"
-msgstr "Ferramenta de elipse"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -65453,11 +65755,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr "Modo de arrasto de preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, kde-format
-msgid "Fill Tool"
-msgstr "Ferramenta de preenchimento"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 msgctxt "(qtundo-format)"
 msgid "Gradient"
@@ -65474,11 +65771,6 @@ msgstr "Inverter"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Pontilhamento"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, kde-format
-msgid "Gradient Tool"
-msgstr "Ferramenta de gradiente"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
@@ -65514,11 +65806,6 @@ msgstr ""
 "O Alt+Arrasto irá mover a origem da linha apresentada atualmente, enquanto o "
 "Shift+Arrasto obrigá-lo-á a desenhar linhas diretas"
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, kde-format
-msgid "Line Tool"
-msgstr "Ferramenta de linha"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, kde-format
 msgctxt "angle value in degrees"
@@ -65551,11 +65838,6 @@ msgstr "X: %1 px, Y: %2 px"
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr "A área selecionada não contém pixels"
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, kde-format
-msgid "Move Tool"
-msgstr "Ferramenta Movimento"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 msgctxt "(qtundo-format)"
@@ -65601,16 +65883,6 @@ msgstr ""
 "A ferramenta Multi-pincéis não suporta mais de %1 pincéis; use um intervalo "
 "maior."
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, kde-format
-msgid "Multibrush Tool"
-msgstr "Ferramenta multi-pincel"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, kde-format
-msgid "Pan Tool"
-msgstr "Ferramenta de deslocamento"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
@@ -65628,20 +65900,10 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Desenhar um caminho à mão livre"
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, kde-format
-msgid "Freehand Path Tool"
-msgstr "Ferramenta de caminho à mão livre"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Desenhar retângulo"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, kde-format
-msgid "Rectangle Tool"
-msgstr "Ferramenta de retângulo"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -66147,11 +66409,6 @@ msgstr "Ações da forma vetorial"
 msgid "Logical Operations"
 msgstr "Operações Lógicas"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, kde-format
-msgid "Select Shapes Tool"
-msgstr "Ferramenta de selecionar formas"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -66330,11 +66587,6 @@ msgstr "Falha ao salvar imagens de referência."
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Ações de imagem de referência"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, kde-format
-msgid "Reference Images Tool"
-msgstr "Ferramenta Imagens de Referência"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
 #, kde-format
@@ -66625,11 +66877,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "Caligrafia"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, kde-format
-msgid "Calligraphy"
-msgstr "Caligrafia"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
@@ -66716,11 +66963,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Extensão da seleção"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "Ferramenta de seleção contígua"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
@@ -66731,11 +66973,6 @@ msgstr "Seleção Elíptica"
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "Selecionar elipse"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "Ferramenta de seleção elíptica"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, kde-format
@@ -66759,11 +66996,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr "Selecionar por curva Bezier"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "Ferramenta de seleção por curva Bezier"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
@@ -66775,11 +67007,6 @@ msgctxt "(qtundo-format)"
 msgid "Select Polygon"
 msgstr "Selecionar polígono"
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, kde-format
-msgid "Polygonal Selection Tool"
-msgstr "Ferramenta de seleção poligonal"
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, kde-format
 msgid "Rectangular Selection"
@@ -66790,11 +67017,6 @@ msgstr "Seleção retangular"
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
 msgstr "Retângulo da seleção"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "Ferramenta de seleção retangular"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
@@ -66827,11 +67049,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Extensão da seleção"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "Ferramenta de seleção de cor semelhante"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66970,11 +67187,6 @@ msgstr "Descartar seleção"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "Opções de caminho"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, kde-format
-msgid "Magnetic Selection Tool"
-msgstr "Ferramenta de seleção magnética"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67183,11 +67395,6 @@ msgstr "Linha base atual"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Deslocamento da linha base"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, kde-format
-msgid "Text Tool"
-msgstr "Ferramenta de texto"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
@@ -67993,11 +68200,6 @@ msgstr ""
 "Largura: %1\n"
 "Altura: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, kde-format
-msgid "Crop Tool"
-msgstr "Ferramenta de recorte"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
@@ -68141,11 +68343,6 @@ msgstr "Largura inicial:"
 #, kde-format
 msgid "Width range:"
 msgstr "Intervalo da largura:"
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "Ferramenta de pincel dinâmico"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -68356,11 +68553,6 @@ msgstr "Qualquer região cercada por transparência"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "Qualquer região cercada por uma cor específica ou transparência"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "Ferramenta de preencher e delimitar"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -68712,11 +68904,6 @@ msgstr "Selecione uma camada de pintura para usar essa ferramenta"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "Caminho Inteligente"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, kde-format
-msgid "Smart Patch Tool"
-msgstr "Ferramenta de patch inteligente"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

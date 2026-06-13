@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2026-05-31 19:37-0400\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -20508,6 +20508,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr ""
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, kde-format
 msgid "Edit Shapes Tool"
 msgstr ""
@@ -20693,9 +20694,6 @@ msgstr "يىراقلات(&M)"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "…"
@@ -22022,7 +22020,7 @@ msgid "Clone Layer"
 msgstr "قەۋەت نۇسخىلا"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22066,7 +22064,7 @@ msgid "Transform Mask"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23703,8 +23701,8 @@ msgstr ""
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -33299,6 +33297,7 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
@@ -33326,6 +33325,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
@@ -33772,148 +33772,148 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] ""
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] ""
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "ھەممە قەۋەتنى توغرىسىغا ئۆرۈ"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "ھەممە قەۋەتنى بويىغا ئۆرۈ"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr ""
@@ -40841,6 +40841,7 @@ msgid "Minor Subdivisions: "
 msgstr ""
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
 msgstr ""
@@ -42696,15 +42697,21 @@ msgstr ""
 msgid "Grid and Guides"
 msgstr ""
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr ""
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, kde-format
 msgid "Histogram"
 msgstr "چاسا دىياگرامما"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr ""
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, kde-format
@@ -62487,12 +62494,209 @@ msgid "Selected path"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 msgid "Select the script"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, kde-format
+msgid "Select Shapes Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, kde-format
+msgid "Text Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, kde-format
+msgid "Calligraphy"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, kde-format
+msgid "Freehand Brush Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, kde-format
+msgid "Line Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, kde-format
+msgid "Rectangle Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, kde-format
+msgid "Ellipse Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+#| msgctxt "(qtundo-format) action"
+#| msgid "Polygon Tool"
+msgid "Polygon Tool"
+msgstr "كۆپ تەرەپلىك"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+#| msgctxt "(qtundo-format) action"
+#| msgid "Polyline Tool"
+msgid "Polyline Tool"
+msgstr "قۇر سانى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+#| msgctxt "(qtundo-format) action"
+#| msgid "Bezier Curve Tool"
+msgid "Bezier Curve Tool"
+msgstr "رەسىم قەلىمى تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, kde-format
+msgid "Freehand Path Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, kde-format
+msgid "Dynamic Brush Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, kde-format
+msgid "Multibrush Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+#| msgctxt "(qtundo-format) action"
+#| msgid "Transform Tool"
+msgid "Transform Tool"
+msgstr "سۈزۈك"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, kde-format
+msgid "Move Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, kde-format
+msgid "Crop Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, kde-format
+msgid "Gradient Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+#| msgctxt "(qtundo-format) action"
+#| msgid "Colorize Mask"
+msgid "Colorize Mask Tool"
+msgstr "بويا(&C)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, kde-format
+msgid "Smart Patch Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, kde-format
+msgid "Fill Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, kde-format
+msgid "Enclose and Fill Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+#| msgctxt "(qtundo-format) action"
+#| msgid "Measurement Tool"
+msgid "Measurement Tool"
+msgstr "تىك تۆت بۇلۇڭ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, kde-format
+msgid "Reference Images Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, kde-format
+msgid "Rectangular Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, kde-format
+msgid "Elliptical Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, kde-format
+msgid "Polygonal Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, kde-format
+msgid "Contiguous Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, kde-format
+msgid "Similar Color Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, kde-format
+msgid "Magnetic Selection Tool"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+#| msgid "Zoom to All"
+msgid "Zoom Tool"
+msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, kde-format
+msgid "Pan Tool"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
@@ -62512,121 +62716,228 @@ msgid "Workflow Buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgctxt "@label"
 msgid "Selected button:"
-msgstr ""
+msgstr "چاشقىنەك غالتىكى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Workflow Buttons"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr ""
+msgstr "ئىختىيارى توپچە كۆزنەكچە"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
+#, fuzzy
+#| msgid "Selection Mode"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
-msgstr ""
+msgstr "تاللاش ھالىتى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select a list image"
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
-msgstr ""
+msgstr "سۈرەت تاللاش:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Combine paths"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
-msgstr ""
+msgstr "يولنى بىرلەشتۈر"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "…"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Select by Outline"
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
-msgstr ""
+msgstr "مۇندەرىجە تاللاش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Interaction Tool"
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
-msgstr ""
+msgstr "تەسىرلىشىش قورالى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Tooltip"
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
-msgstr ""
+msgstr "كۆرسەتمە"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select a "
+msgctxt "@label:listbox"
 msgid "Select a tool:"
-msgstr ""
+msgstr "مۇندەرىجە تاللاش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Activate Brush Preset"
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
-msgstr ""
+msgstr "رەسىم قەلىمى تاللاش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Brush Preset History"
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
-msgstr ""
+msgstr "رەسىم قەلىمى تاللاش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Activate Brush Preset"
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
-msgstr ""
+msgstr "رەسىم قەلىمى تاللاش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
+#, fuzzy
+#| msgid "Select backround color:"
+msgctxt "@label"
 msgid "Select foreground color:"
-msgstr ""
+msgstr "تەگلىك رەڭگى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
+#, fuzzy
+#| msgid "Foreground color"
+msgctxt "@action:button"
 msgid "Load current foreground color"
-msgstr ""
+msgstr "ئالدى كۆرۈنۈش رەڭگى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
+#, fuzzy
+#| msgid "Foreground color"
+msgctxt "@action:button"
 msgid "Clear foreground color"
-msgstr ""
+msgstr "ئالدى كۆرۈنۈش رەڭگى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
+#, fuzzy
+#| msgid "Select backround color:"
+msgctxt "@label"
 msgid "Select background color:"
-msgstr ""
+msgstr "تەگلىك رەڭگى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Fill area with background color"
+msgctxt "@action:button"
 msgid "Load current background color"
-msgstr ""
+msgstr "تەگلىك رەڭگى بىلەن بوياش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
+#, fuzzy
+#| msgid "Select backround color:"
+msgctxt "@action:button"
 msgid "Clear background color"
-msgstr ""
+msgstr "تەگلىك رەڭگى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
+#, fuzzy
+#| msgid "Select a list image"
+msgctxt "@label"
 msgid "Select a script file:"
-msgstr ""
+msgstr "سۈرەت تاللاش:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Select path"
+msgctxt "@info:tooltip"
 msgid "Script path"
-msgstr ""
+msgstr "مۇندەرىجە تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Select path"
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "مۇندەرىجە تاللاش"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
+#, fuzzy
+#| msgid "Buttons"
+msgctxt "@label:listbox"
 msgid "Buttons size:"
-msgstr ""
+msgstr "توپچە"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#, fuzzy
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
-msgstr ""
+msgstr "ئاستى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
+#, fuzzy
+#| msgid "Inline"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "سىڭدۈر"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Color Engine:"
+msgctxt "@label"
 msgid "Color info: "
-msgstr ""
+msgstr "رەڭ ئاتى:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
 msgid "Script files "
@@ -62638,6 +62949,7 @@ msgid "Workflow Buttons"
 msgstr "ئىختىيارى توپچە كۆزنەكچە"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -62795,11 +63107,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, kde-format
-msgid "Freehand Brush Tool"
-msgstr ""
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
@@ -62808,11 +63115,6 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, kde-format
-msgid "Ellipse Tool"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
@@ -63087,11 +63389,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, kde-format
-msgid "Fill Tool"
-msgstr ""
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 msgctxt "(qtundo-format)"
 msgid "Gradient"
@@ -63107,11 +63404,6 @@ msgstr "ئەكسىچە"
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, kde-format
-msgid "Gradient Tool"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
@@ -63146,11 +63438,6 @@ msgid ""
 "+Drag will force you to draw straight lines"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, kde-format
-msgid "Line Tool"
-msgstr ""
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, kde-format
 msgctxt "angle value in degrees"
@@ -63180,11 +63467,6 @@ msgstr ""
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, kde-format
-msgid "Move Tool"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
@@ -63229,16 +63511,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, kde-format
-msgid "Multibrush Tool"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, kde-format
-msgid "Pan Tool"
-msgstr ""
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
@@ -63254,19 +63526,9 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, kde-format
-msgid "Freehand Path Tool"
-msgstr ""
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, kde-format
-msgid "Rectangle Tool"
 msgstr ""
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -63745,11 +64007,6 @@ msgstr ""
 msgid "Logical Operations"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, kde-format
-msgid "Select Shapes Tool"
-msgstr ""
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -63913,11 +64170,6 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:335
 #, kde-format
 msgid "Reference Image Actions"
-msgstr ""
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, kde-format
-msgid "Reference Images Tool"
 msgstr ""
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
@@ -64207,11 +64459,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr ""
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, kde-format
-msgid "Calligraphy"
-msgstr ""
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
@@ -64292,11 +64539,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, kde-format
-msgid "Contiguous Selection Tool"
-msgstr ""
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
@@ -64306,11 +64548,6 @@ msgstr ""
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
-msgstr ""
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, kde-format
-msgid "Elliptical Selection Tool"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
@@ -64335,11 +64572,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr ""
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
@@ -64351,11 +64583,6 @@ msgctxt "(qtundo-format)"
 msgid "Select Polygon"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, kde-format
-msgid "Polygonal Selection Tool"
-msgstr ""
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, kde-format
 msgid "Rectangular Selection"
@@ -64365,11 +64592,6 @@ msgstr ""
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:72
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
-msgstr ""
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, kde-format
-msgid "Rectangular Selection Tool"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
@@ -64402,11 +64624,6 @@ msgstr ""
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr ""
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, kde-format
-msgid "Similar Color Selection Tool"
 msgstr ""
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -64545,11 +64762,6 @@ msgstr ""
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "يول تاللانمىسى"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, kde-format
-msgid "Magnetic Selection Tool"
-msgstr ""
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -64754,11 +64966,6 @@ msgstr ""
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr ""
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, kde-format
-msgid "Text Tool"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
@@ -65539,11 +65746,6 @@ msgid ""
 "Height: %2"
 msgstr ""
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, kde-format
-msgid "Crop Tool"
-msgstr ""
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
@@ -65686,11 +65888,6 @@ msgstr ""
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
 #, kde-format
 msgid "Width range:"
-msgstr ""
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, kde-format
-msgid "Dynamic Brush Tool"
 msgstr ""
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65899,11 +66096,6 @@ msgstr ""
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr ""
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, kde-format
-msgid "Enclose and Fill Tool"
 msgstr ""
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
@@ -66235,11 +66427,6 @@ msgstr ""
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:174
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
-msgstr ""
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, kde-format
-msgid "Smart Patch Tool"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
@@ -67587,11 +67774,6 @@ msgstr ""
 #~ msgstr "ئارىلىق:"
 
 #~| msgid "Mouse Wheel"
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "چاشقىنەك غالتىكى"
-
-#~| msgid "Mouse Wheel"
 #~ msgctxt "middle mouse button"
 #~ msgid "middle button"
 #~ msgstr "چاشقىنەك غالتىكى"
@@ -67857,9 +68039,6 @@ msgstr ""
 #~| msgid "Filter"
 #~ msgid "Icon files (*.png, *.svg)"
 #~ msgstr "سۈزگۈچ"
-
-#~ msgid "Select backround color:"
-#~ msgstr "تەگلىك رەڭگى"
 
 #~ msgid "Button Actions"
 #~ msgstr "تاللىغان شەكلى"
@@ -69437,10 +69616,6 @@ msgstr ""
 #~ msgid "Outline Selection"
 #~ msgstr "مەنبە تاللاش"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select by Outline"
-#~ msgstr "مۇندەرىجە تاللاش"
-
 #~ msgid "Outline Selection Tool"
 #~ msgstr "مەنبە تاللاش"
 
@@ -70169,10 +70344,6 @@ msgstr ""
 #~ msgctxt "Tab follows the bullet or number"
 #~ msgid "Tab Stop"
 #~ msgstr "بەتكۈچ 1"
-
-#~| msgid "Select image"
-#~ msgid "Select a list image"
-#~ msgstr "سۈرەت تاللاش:"
 
 #~ msgid "Alignment:"
 #~ msgstr "توغرىلاش:"
@@ -71081,10 +71252,6 @@ msgstr ""
 #~ msgid "Move to Canvas Center"
 #~ msgstr "ئىسىم قىستۇر"
 
-#~ msgctxt "action"
-#~ msgid "Select a "
-#~ msgstr "مۇندەرىجە تاللاش"
-
 #~ msgid "&Normalize..."
 #~ msgstr "نورمال"
 
@@ -71490,10 +71657,6 @@ msgstr ""
 #~ msgstr "قۇر سانى"
 
 #~ msgid "Zoom to Selection"
-#~ msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
-
-#~| msgid "Zoom to Selection"
-#~ msgid "Zoom to All"
 #~ msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
 
 #~| msgid "Insert name"
@@ -72200,10 +72363,6 @@ msgstr ""
 #~ msgid "Pan"
 #~ msgstr "تاختا"
 
-#~ msgctxt "action"
-#~ msgid "Activate Brush Preset"
-#~ msgstr "رەسىم قەلىمى تاللاش"
-
 #~ msgid "More"
 #~ msgstr "تېخىمۇ كۆپ"
 
@@ -72794,10 +72953,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Adaptation State:"
 #~ msgstr "مەشغۇلات ئاتى"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fill area with background color"
-#~ msgstr "تەگلىك رەڭگى بىلەن بوياش"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Save to Presets"
@@ -74479,10 +74634,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configuration:"
 #~ msgstr "سەپلىمە:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Color Engine:"
-#~ msgstr "رەڭ ئاتى:"
 
 #~| msgid "Fit"
 #~ msgctxt "(qtundo-format)"
@@ -77272,10 +77423,6 @@ msgstr ""
 #~ msgid "Crop Tool"
 #~ msgstr "كەس"
 
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Polygon Tool"
-#~ msgstr "كۆپ تەرەپلىك"
-
 #~| msgid "References"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "References"
@@ -77331,10 +77478,6 @@ msgstr ""
 #~ msgstr "قۇر سانى"
 
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Bezier Curve Tool"
-#~ msgstr "رەسىم قەلىمى تاللاش"
-
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Ellipse Tool"
 #~ msgstr "ئېللىپس"
 
@@ -77368,10 +77511,6 @@ msgstr ""
 #~ msgstr "تاللانمىدى"
 
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Measurement Tool"
-#~ msgstr "تىك تۆت بۇلۇڭ"
-
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Rectangular Selection Tool"
 #~ msgstr "مەنبە تاللاش"
 
@@ -77394,14 +77533,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Path editing"
 #~ msgstr "بېسىش"
-
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Polyline Tool"
-#~ msgstr "قۇر سانى"
-
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Transform Tool"
-#~ msgstr "سۈزۈك"
 
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Ruler assistant editor tool"
@@ -77631,11 +77762,6 @@ msgstr ""
 #~| msgid "&Colorize"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "&Colorize Mask"
-#~ msgstr "بويا(&C)"
-
-#~| msgid "&Colorize"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Colorize Mask"
 #~ msgstr "بويا(&C)"
 
 #~ msgctxt "(qtundo-format) action"
@@ -81342,10 +81468,6 @@ msgstr ""
 #~ msgid "None"
 #~ msgstr "يوق"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Brush Preset History"
-#~ msgstr "رەسىم قەلىمى تاللاش"
-
 #~| msgid "Found no shapes in the collection! %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Found no shapes in the collection! %1"
@@ -83923,10 +84045,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Outline Selection Tool"
 #~ msgstr "مەنبە تاللاش"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select path"
-#~ msgstr "مۇندەرىجە تاللاش"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bezier Curve Selection Tool"

@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -20543,6 +20543,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr ""
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, fuzzy, kde-format
 msgid "Edit Shapes Tool"
 msgstr "&Isixhobo Somgcwalisi"
@@ -20728,9 +20729,6 @@ msgstr "Sondeza &Ngaphandle"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, fuzzy, kde-format
 msgid "..."
 msgstr "Igama"
@@ -22126,7 +22124,7 @@ msgid "Clone Layer"
 msgstr "Ulwaleko Olutsha"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -22171,7 +22169,7 @@ msgid "Transform Mask"
 msgstr "&Isixhobo Somcimi"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23822,8 +23820,8 @@ msgstr "&Susa Ulwaleko"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -33479,6 +33477,7 @@ msgstr "Yenza ngokutsha Amalaphu"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, fuzzy, kde-format
 msgid "Color Sampler"
@@ -33506,6 +33505,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "&Isixhobo Sebrashi"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, fuzzy, kde-format
 msgid "Freehand Selection Tool"
@@ -33970,42 +33970,42 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Ayikwazi ukongeza ulwaleko kumfanekiso."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Ukhuphelo Lomfanekiso"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Susa Ukhetho"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Susa Ukhetho"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Susa Ukhetho"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Iliza Elingunxantathu"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34013,13 +34013,13 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Iliza Elingunxantathu"
 msgstr[1] "Iliza Elingunxantathu"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Iliza Elingunxantathu"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34027,105 +34027,105 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Iliza Elingunxantathu"
 msgstr[1] "Iliza Elingunxantathu"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Iliza Elingunxantathu"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Iliza Elingunxantathu"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Rhweba ngaphandle Umfanekiso..."
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Ayikwazi ukongeza ulwaleko kumfanekiso."
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Umfanekiso"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Rhweba ngaphandle Umfanekiso..."
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Ayikwazi ukongeza ulwaleko kumfanekiso."
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Umfanekiso"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Yenza ulwaleko olutsha"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Ukhuphelo Lomfanekiso"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Ukhuphelo Lomfanekiso"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Ukhuphelo Lomfanekiso"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Susa Ulwaleko"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Ulwaleko"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -41084,6 +41084,7 @@ msgid "Minor Subdivisions: "
 msgstr "Susa Ukhetho"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "Nyibilikisa"
@@ -42966,16 +42967,22 @@ msgstr "Ilayini Eqinileyo"
 msgid "Grid and Guides"
 msgstr "Ilayini Eqinileyo"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "RGB + &itshanele yonobumba wokuqala wesigrike"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, fuzzy, kde-format
 msgid "Histogram"
 msgstr "Thabatha"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "Ukhetho"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, fuzzy, kde-format
@@ -63144,7 +63151,6 @@ msgid "Selected path"
 msgstr "Sukukhetha nanye"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 #, fuzzy
 msgid "Select the script"
 msgstr "Susa Ulwaleko Lwangoku"
@@ -63153,6 +63159,191 @@ msgstr "Susa Ulwaleko Lwangoku"
 #, fuzzy
 msgid "Python files (*.py)"
 msgstr "Izinto zobumnini Zolwaleko..."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Select Shapes Tool"
+msgstr "Izixhobo Zokhetho"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, fuzzy, kde-format
+msgid "Text Tool"
+msgstr "&Isixhobo Somgcwalisi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, fuzzy, kde-format
+msgid "Calligraphy"
+msgstr "&Okumilise okweqanda"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, fuzzy, kde-format
+msgid "Freehand Brush Tool"
+msgstr "&Isixhobo Sebrashi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, fuzzy, kde-format
+msgid "Line Tool"
+msgstr "&Isixhobo Somgca"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, fuzzy, kde-format
+msgid "Rectangle Tool"
+msgstr "&Isixhobo Sexande"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, fuzzy, kde-format
+msgid "Ellipse Tool"
+msgstr "Okumboxo"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+msgid "Polygon Tool"
+msgstr "&Isixhobo Somzobo onamacala amaninzi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+msgid "Polyline Tool"
+msgstr "&Isixhobo Somzobo onamacala amaninzi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+msgid "Bezier Curve Tool"
+msgstr "Susa Ukhetho"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, fuzzy, kde-format
+msgid "Freehand Path Tool"
+msgstr "&Isixhobo Sebrashi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, fuzzy, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "&Isixhobo Sebrashi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, fuzzy, kde-format
+msgid "Multibrush Tool"
+msgstr "&Isixhobo Sebrashi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+msgid "Transform Tool"
+msgstr "&Isixhobo Somcimi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, fuzzy, kde-format
+msgid "Move Tool"
+msgstr "Susa Ukhetho"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, fuzzy, kde-format
+msgid "Crop Tool"
+msgstr "&Isixhobo Somgcwalisi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, fuzzy, kde-format
+msgid "Gradient Tool"
+msgstr "Amathambeka"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+msgid "Colorize Mask Tool"
+msgstr "Umbala"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, fuzzy, kde-format
+msgid "Smart Patch Tool"
+msgstr "&Isixhobo Somgcwalisi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, fuzzy, kde-format
+msgid "Fill Tool"
+msgstr "Okumboxo"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, fuzzy, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "Susa Ulwaleko"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+msgid "Measurement Tool"
+msgstr "Izinto zobumnini Zolwaleko..."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, fuzzy, kde-format
+msgid "Reference Images Tool"
+msgstr "Umfanekiso Onikwe igama kwakhona"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, fuzzy, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "&Ukhetho Olubuxande"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, fuzzy, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "&Ukhetho Olubumbhoxo"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, fuzzy, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "&Ukhetho Lomzobo onamacala amaninzi"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, fuzzy, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "&Ukhetho Olulandelanayo"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, fuzzy, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "Ukhetho"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, fuzzy, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "Susa Ukhetho"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, fuzzy, kde-format
+msgid "Magnetic Selection Tool"
+msgstr "Ukhetho"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+msgid "Zoom Tool"
+msgstr "&Isixhobo Sokusondeza"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, fuzzy, kde-format
+msgid "Pan Tool"
+msgstr "&Isixhobo Somgcwalisi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
@@ -63176,143 +63367,189 @@ msgstr "Izicwangciso"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "Luhlaza okwengca"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr ""
+msgstr "Izicwangciso"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "Yenza ulwaleko olutsha"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "Yenza ulwaleko olutsha"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "Yenza ulwaleko olutsha"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Ukhetho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Izixhobo Zokhetho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "Amathambeka"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+msgctxt "@action:button"
+msgid "..."
+msgstr "Igama"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "Susa Ulwaleko Lwangoku"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 #, fuzzy
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "Iikona:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "&Isixhobo Sosiba"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Izixhobo Zokhetho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "Ulwaleko Lwangoku Oluphezulu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "Izinto zobumnini Zolwaleko..."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "Ulwaleko Lwangoku Oluphezulu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Umzuzwana"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "&Umbala wendawo yangaphambili"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "&Umbala wendawo yangaphambili"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 #, fuzzy
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "Umzuzwana"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "Umzuzwana"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "Umzuzwana"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "Susa Ulwaleko Lwangoku"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Sukukhetha nanye"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "Susa Ulwaleko Lwangoku"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "Luhlaza okwengca"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "Ulongezo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Gcwalisa Iinjongo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "Idityanisiwe"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
+msgctxt "@label"
 msgid "Color info: "
 msgstr "Umbala"
 
@@ -63328,8 +63565,10 @@ msgid "Workflow Buttons"
 msgstr "Izicwangciso"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "Izicwangciso"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 #, fuzzy
@@ -63487,11 +63726,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, fuzzy, kde-format
-msgid "Freehand Brush Tool"
-msgstr "&Isixhobo Sebrashi"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, fuzzy, kde-format
 msgid "Color Sampler Tool"
@@ -63502,11 +63736,6 @@ msgstr "Ukhetho"
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Uxande"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, fuzzy, kde-format
-msgid "Ellipse Tool"
-msgstr "Okumboxo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -63781,11 +64010,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, fuzzy, kde-format
-msgid "Fill Tool"
-msgstr "Okumboxo"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -63803,11 +64027,6 @@ msgstr "Susa Umfanekiso"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Ulwaleko"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, fuzzy, kde-format
-msgid "Gradient Tool"
-msgstr "Amathambeka"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 #, fuzzy
@@ -63842,11 +64061,6 @@ msgid ""
 "+Drag will force you to draw straight lines"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, fuzzy, kde-format
-msgid "Line Tool"
-msgstr "&Isixhobo Somgca"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, fuzzy, kde-format
 msgctxt "angle value in degrees"
@@ -63877,11 +64091,6 @@ msgstr ""
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, fuzzy, kde-format
-msgid "Move Tool"
-msgstr "Susa Ukhetho"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 #, fuzzy
@@ -63926,16 +64135,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, fuzzy, kde-format
-msgid "Multibrush Tool"
-msgstr "&Isixhobo Sebrashi"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, fuzzy, kde-format
-msgid "Pan Tool"
-msgstr "&Isixhobo Somgcwalisi"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -63953,21 +64152,11 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Amathambeka"
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, fuzzy, kde-format
-msgid "Freehand Path Tool"
-msgstr "&Isixhobo Sebrashi"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Uxande"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, fuzzy, kde-format
-msgid "Rectangle Tool"
-msgstr "&Isixhobo Sexande"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -64464,11 +64653,6 @@ msgstr "Susa Ukhetho"
 msgid "Logical Operations"
 msgstr "Umsebenzi we Boolean"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, fuzzy, kde-format
-msgid "Select Shapes Tool"
-msgstr "Izixhobo Zokhetho"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -64634,11 +64818,6 @@ msgstr "Umfanekiso Onikwe igama kwakhona"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:335
 #, fuzzy, kde-format
 msgid "Reference Image Actions"
-msgstr "Umfanekiso Onikwe igama kwakhona"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, fuzzy, kde-format
-msgid "Reference Images Tool"
 msgstr "Umfanekiso Onikwe igama kwakhona"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
@@ -64930,11 +65109,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "&Okumilise okweqanda"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, fuzzy, kde-format
-msgid "Calligraphy"
-msgstr "&Okumilise okweqanda"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, fuzzy, kde-format
 msgid "Contiguous Area Selection"
@@ -65016,11 +65190,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Ithambeka:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, fuzzy, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "&Ukhetho Olulandelanayo"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, fuzzy, kde-format
 msgid "Elliptical Selection"
@@ -65032,11 +65201,6 @@ msgstr "&Ukhetho Olubumbhoxo"
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "Ukhetho"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, fuzzy, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "&Ukhetho Olubumbhoxo"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, fuzzy, kde-format
@@ -65062,11 +65226,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr "&Isixhobo Somgcwalisi"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, fuzzy, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "Susa Ukhetho"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, fuzzy, kde-format
 msgid "Polygonal Selection"
@@ -65079,11 +65238,6 @@ msgctxt "(qtundo-format)"
 msgid "Select Polygon"
 msgstr "Izixhobo Zokhetho"
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, fuzzy, kde-format
-msgid "Polygonal Selection Tool"
-msgstr "&Ukhetho Lomzobo onamacala amaninzi"
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, fuzzy, kde-format
 msgid "Rectangular Selection"
@@ -65095,11 +65249,6 @@ msgstr "&Ukhetho Olubuxande"
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
 msgstr "Uxande"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, fuzzy, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "&Ukhetho Olubuxande"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
@@ -65133,11 +65282,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Ithambeka:"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, fuzzy, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "Ukhetho"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65276,11 +65420,6 @@ msgstr "Ukhetho"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "Ibrashi"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, fuzzy, kde-format
-msgid "Magnetic Selection Tool"
-msgstr "Ukhetho"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65490,11 +65629,6 @@ msgstr "Susa Ukhetho"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Sebenzisa umlinganiselo wangoku"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-msgid "Text Tool"
-msgstr "&Isixhobo Somgcwalisi"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, fuzzy, kde-format
@@ -66281,11 +66415,6 @@ msgid ""
 "Height: %2"
 msgstr "&Ubude:"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, fuzzy, kde-format
-msgid "Crop Tool"
-msgstr "&Isixhobo Somgcwalisi"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, fuzzy, kde-format
@@ -66432,11 +66561,6 @@ msgstr "&Ububanzi:"
 #, fuzzy, kde-format
 msgid "Width range:"
 msgstr "Nyibilikisa"
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, fuzzy, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "&Isixhobo Sebrashi"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66646,11 +66770,6 @@ msgstr "&Umbala wendawo yangasemva"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "&Umbala wendawo yangasemva"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, fuzzy, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "Susa Ulwaleko"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -66986,11 +67105,6 @@ msgstr "Uxande"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "&Isixhobo Sosiba"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, fuzzy, kde-format
-msgid "Smart Patch Tool"
-msgstr "&Isixhobo Somgcwalisi"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

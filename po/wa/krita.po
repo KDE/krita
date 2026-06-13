@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -20936,6 +20936,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "Tchôkî B po djoker on tchmin ås segmints tchoezis."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, fuzzy, kde-format
 #| msgid "KritaShape Tool"
 msgid "Edit Shapes Tool"
@@ -21124,9 +21125,6 @@ msgstr "Diszoumer"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -22558,7 +22556,7 @@ msgid "Clone Layer"
 msgstr "Coûtche &djermale"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -22603,7 +22601,7 @@ msgid "Transform Mask"
 msgstr "Transformer"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24292,8 +24290,8 @@ msgstr "Fitchîs sourdants:"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -34262,6 +34260,7 @@ msgstr "Prévey"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, fuzzy, kde-format
 msgid "Color Sampler"
@@ -34289,6 +34288,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "Usteye mwin libe"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, fuzzy, kde-format
 msgid "Freehand Selection Tool"
@@ -34764,42 +34764,42 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Dji n' a savou radjouter l' coûtche a l' imådje."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Dobler"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Muroe di coutchî"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34807,13 +34807,13 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Muroe di coutchî"
 msgstr[1] "Muroe di coutchî"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Muroe d' astampé"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34821,105 +34821,105 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Muroe d' astampé"
 msgstr[1] "Muroe d' astampé"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Muroe di coutchî"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Muroe d' astampé"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Ebaguer"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Dji n' a savou radjouter l' coûtche a l' imådje."
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Grandeu del coûtche"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Ebaguer"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Dji n' a savou radjouter l' coûtche a l' imådje."
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Grandeu del coûtche"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Ahiver on novea masse ou coûtche"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Dobler"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Disgrouper"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Disgrouper"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Disgrouper"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Côutche &pondeure"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -42065,6 +42065,7 @@ msgid "Minor Subdivisions: "
 msgstr "Sordivizion:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "Macrea:"
@@ -44005,17 +44006,23 @@ msgstr "Mostrer moennaedjes"
 msgid "Grid and Guides"
 msgstr "Catchî moennaedjes"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 #, fuzzy
 #| msgid "Reshape Histogram"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "Rifôrmer istograme"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, kde-format
 msgid "Histogram"
 msgstr "Istograme"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "Istwere des coleurs"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, fuzzy, kde-format
@@ -64955,7 +64962,6 @@ msgid "Selected path"
 msgstr "Tchoe&s di pådjes"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 #, fuzzy
 #| msgid "Delete the current action"
 msgid "Select the script"
@@ -64966,6 +64972,193 @@ msgstr "Disfacer l' faitindje do moumint"
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
 msgstr "Pitits cwåreas"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Select Shapes Tool"
+msgstr "Tchoe&s di pådjes"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, fuzzy, kde-format
+msgid "Text Tool"
+msgstr "Usteye roye"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, fuzzy, kde-format
+msgid "Calligraphy"
+msgstr "Usteye di caligrafeye"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, fuzzy, kde-format
+msgid "Freehand Brush Tool"
+msgstr "Usteye mwin libe"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, fuzzy, kde-format
+msgid "Line Tool"
+msgstr "Usteyes då &pondeu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, fuzzy, kde-format
+msgid "Rectangle Tool"
+msgstr "Rectangue"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, fuzzy, kde-format
+msgid "Ellipse Tool"
+msgstr "Ceke asplati"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+msgid "Polygon Tool"
+msgstr "Poligone"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+msgid "Polyline Tool"
+msgstr "Poliroye"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+msgid "Bezier Curve Tool"
+msgstr "Usteye Bezier di tchoezixhaedje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, fuzzy, kde-format
+msgid "Freehand Path Tool"
+msgstr "Usteye mwin libe"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, fuzzy, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "A - 2 Pincea dinamike"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, fuzzy, kde-format
+msgid "Multibrush Tool"
+msgstr "Pincea"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+msgid "Transform Tool"
+msgstr "Transformer"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, fuzzy, kde-format
+msgid "Move Tool"
+msgstr "Usteyes då &pondeu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, fuzzy, kde-format
+msgid "Crop Tool"
+msgstr "Côper dvins l' imådje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, fuzzy, kde-format
+msgid "Gradient Tool"
+msgstr "Gradyint"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+msgid "Colorize Mask Tool"
+msgstr "&Coleur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, fuzzy, kde-format
+msgid "Smart Patch Tool"
+msgstr "Usteye mwin libe"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, fuzzy, kde-format
+msgid "Fill Tool"
+msgstr "Ceke asplati"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, fuzzy, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "Coûtche en alaedje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+msgid "Measurement Tool"
+msgstr "Muzurer"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, fuzzy, kde-format
+msgid "Reference Images Tool"
+msgstr "Imådje di referince:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, fuzzy, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "Tchoes rectangulåre"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, fuzzy, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "Tchoes pa ceke asplati"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, fuzzy, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "Tchoes poligonå"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, fuzzy, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "Tchoes d' ene redjon avou tot c' k' est a costé"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, fuzzy, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "Tchoes k' î rshonnèt"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, fuzzy, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "Usteye Bezier di tchoezixhaedje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, fuzzy, kde-format
+#| msgid "Magnetic Outline Selection"
+msgid "Magnetic Selection Tool"
+msgstr "Tchoes magnetike do cotoû"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+#| msgid "Zoom to All"
+msgid "Zoom Tool"
+msgstr "Zoumer so ttafwait"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, fuzzy, kde-format
+msgid "Pan Tool"
+msgstr "Usteye mwin libe"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
@@ -64991,145 +65184,195 @@ msgstr "Tchuzes des coleurs"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "Botoe"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr ""
+msgstr "Tchuzes des coleurs"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "Disfacer l' coûtche ou masse"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "Disfacer l' coûtche ou masse"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 #, fuzzy
 #| msgid "Delete the layer or mask"
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "Disfacer l' coûtche ou masse"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
 #| msgid "Selection mode:"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Môde di tchoes:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Tchoe&s di pådjes"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 #, fuzzy
 #| msgid "Custom Gradient"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "Gradyint da vosse"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 #, fuzzy
 #| msgid "Delete the current action"
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "Disfacer l' faitindje do moumint"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 #, fuzzy
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "Eterlaeçaedje"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "&Usteyes"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Tchoe&s di pådjes"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 #, fuzzy
 #| msgid "Current preset"
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "Prédefinixha do moumint"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "Prédefinis"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 #, fuzzy
 #| msgid "Current preset"
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "Prédefinixha do moumint"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Defini coleur di fond"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "Coleur di dvant"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "Coleur di dvant"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 #, fuzzy
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "Defini coleur di fond"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "Defini coleur di fond"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 #, fuzzy
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "Defini coleur di fond"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Delete the current action"
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "Disfacer l' faitindje do moumint"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Tchoe&s di pådjes"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+#| msgid "Delete the current action"
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "Disfacer l' faitindje do moumint"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "Botoe"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 #, fuzzy
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "Môde compozite"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
 #| msgid "Bottom"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Valêye"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "BSpline"
 
@@ -65137,6 +65380,7 @@ msgstr "BSpline"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
 #| msgid "Coloring:"
+msgctxt "@label"
 msgid "Color info: "
 msgstr "Metaedje e coleur:"
 
@@ -65154,8 +65398,11 @@ msgid "Workflow Buttons"
 msgstr "Tchuzes des coleurs"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "Tchuzes des coleurs"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 #, fuzzy
@@ -65319,11 +65566,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, fuzzy, kde-format
-msgid "Freehand Brush Tool"
-msgstr "Usteye mwin libe"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, fuzzy, kde-format
 msgid "Color Sampler Tool"
@@ -65334,11 +65576,6 @@ msgstr "Tchoezixheu di coleur"
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Dessiner on ceke asplati"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, fuzzy, kde-format
-msgid "Ellipse Tool"
-msgstr "Ceke asplati"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -65622,11 +65859,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, fuzzy, kde-format
-msgid "Fill Tool"
-msgstr "Ceke asplati"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -65645,11 +65877,6 @@ msgstr "Mete å rvier"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Ôte"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, fuzzy, kde-format
-msgid "Gradient Tool"
-msgstr "Gradyint"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 #, fuzzy
@@ -65685,11 +65912,6 @@ msgid ""
 "+Drag will force you to draw straight lines"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, fuzzy, kde-format
-msgid "Line Tool"
-msgstr "Usteyes då &pondeu"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, fuzzy, kde-format
 #| msgid "°"
@@ -65722,11 +65944,6 @@ msgstr ""
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, fuzzy, kde-format
-msgid "Move Tool"
-msgstr "Usteyes då &pondeu"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 #, fuzzy
@@ -65772,16 +65989,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, fuzzy, kde-format
-msgid "Multibrush Tool"
-msgstr "Pincea"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, fuzzy, kde-format
-msgid "Pan Tool"
-msgstr "Usteye mwin libe"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -65799,21 +66006,11 @@ msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Dessiner on tchmin."
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, fuzzy, kde-format
-msgid "Freehand Path Tool"
-msgstr "Usteye mwin libe"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Dessiner on rectangue"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, fuzzy, kde-format
-msgid "Rectangle Tool"
-msgstr "Rectangue"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -66337,11 +66534,6 @@ msgstr "Tchoes del roye"
 msgid "Logical Operations"
 msgstr "Usteye di shuvaedje des candjmints"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, fuzzy, kde-format
-msgid "Select Shapes Tool"
-msgstr "Tchoe&s di pådjes"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -66511,11 +66703,6 @@ msgstr "Imådje di referince:"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:335
 #, fuzzy, kde-format
 msgid "Reference Image Actions"
-msgstr "Imådje di referince:"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, fuzzy, kde-format
-msgid "Reference Images Tool"
 msgstr "Imådje di referince:"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
@@ -66821,11 +67008,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "Usteye di caligrafeye"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, fuzzy, kde-format
-msgid "Calligraphy"
-msgstr "Usteye di caligrafeye"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
@@ -66912,11 +67094,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Rindou sotnou"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, fuzzy, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "Tchoes d' ene redjon avou tot c' k' est a costé"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
@@ -66928,11 +67105,6 @@ msgstr "Tchoes pa ceke asplati"
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "Tchoezi ttafwait"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, fuzzy, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "Tchoes pa ceke asplati"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, fuzzy, kde-format
@@ -66958,11 +67130,6 @@ msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr "Coube di Bezier"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, fuzzy, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "Usteye Bezier di tchoezixhaedje"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
@@ -66975,11 +67142,6 @@ msgctxt "(qtundo-format)"
 msgid "Select Polygon"
 msgstr "Tchoes"
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, fuzzy, kde-format
-msgid "Polygonal Selection Tool"
-msgstr "Tchoes poligonå"
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, kde-format
 msgid "Rectangular Selection"
@@ -66991,11 +67153,6 @@ msgstr "Tchoes rectangulåre"
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
 msgstr "Tchoezi ene redjon rectangulåre"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, fuzzy, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "Tchoes rectangulåre"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
@@ -67032,11 +67189,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Rindou sotnou"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, fuzzy, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "Tchoes k' î rshonnèt"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67182,12 +67334,6 @@ msgstr "Håyner tchoes"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "Pincea dinamike"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, fuzzy, kde-format
-#| msgid "Magnetic Outline Selection"
-msgid "Magnetic Selection Tool"
-msgstr "Tchoes magnetike do cotoû"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67402,11 +67548,6 @@ msgstr "&Radjouter å tchoes do moumint"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Lårdjeur di picsel"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-msgid "Text Tool"
-msgstr "Usteye roye"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, fuzzy, kde-format
@@ -68219,11 +68360,6 @@ msgid ""
 "Height: %2"
 msgstr "Hôteur d' imprimaedje:"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, fuzzy, kde-format
-msgid "Crop Tool"
-msgstr "Côper dvins l' imådje"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, fuzzy, kde-format
@@ -68370,11 +68506,6 @@ msgstr "Lårdjeur di cmince:"
 #, kde-format
 msgid "Width range:"
 msgstr "Fortchete di lårdjeur:"
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, fuzzy, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "A - 2 Pincea dinamike"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -68602,11 +68733,6 @@ msgstr "candjmints d' coleur del coleur di dvant"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "candjmints d' coleur del coleur di dvant"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, fuzzy, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "Coûtche en alaedje"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -68960,11 +69086,6 @@ msgstr "Tchoezi ene redjon rectangulåre"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "Cominçmint"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, fuzzy, kde-format
-msgid "Smart Patch Tool"
-msgstr "Usteye mwin libe"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

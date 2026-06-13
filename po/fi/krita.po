@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-12 00:41+0000\n"
+"POT-Creation-Date: 2026-06-13 00:41+0000\n"
 "PO-Revision-Date: 2026-01-19 18:02+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -21825,6 +21825,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "Katkaise polku valittujen lohkojen kohdalta painamalla B."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, fuzzy, kde-format
 #| msgid "Ellipse Tool"
 msgid "Edit Shapes Tool"
@@ -22013,9 +22014,6 @@ msgstr "Loitonna"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:66
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "…"
@@ -23544,7 +23542,7 @@ msgid "Clone Layer"
 msgstr "&Kopiotaso"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1631
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -23590,7 +23588,7 @@ msgid "Transform Mask"
 msgstr "Muunnosmaski"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1393
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -25359,8 +25357,8 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1310
-#: libs/ui/kis_node_manager.cpp:1373 libs/ui/KisApplication.cpp:1225
+#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1225
 #: libs/ui/KisApplication.cpp:1228 libs/ui/KisApplication.cpp:1244
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisApplication.cpp:1290
 #: libs/ui/KisApplication.cpp:1318 libs/ui/KisDocument.cpp:1055
@@ -35854,6 +35852,7 @@ msgstr "Esikatsele"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:45
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
@@ -35886,6 +35885,7 @@ msgid "Activate Freehand Brush Tool"
 msgstr "Vapaan käden sivellintyökalu"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
@@ -36410,32 +36410,32 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Viitekuvaa ei voitu ladata leikepöydältä."
 
-#: libs/ui/kis_node_manager.cpp:1023
+#: libs/ui/kis_node_manager.cpp:1031
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1050
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Monista solmut"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Nosta solmuja"
 
-#: libs/ui/kis_node_manager.cpp:1084
+#: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Laske solmuja"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Poista solmut"
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -36443,7 +36443,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Peilaa taso vaakasuunnassa"
 
-#: libs/ui/kis_node_manager.cpp:1123
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -36453,7 +36453,7 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Peilaa taso vaakasuunnassa"
 msgstr[1] "Peilaa taso vaakasuunnassa"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1142
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -36461,7 +36461,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Peilaa taso pystysuunnassa"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -36471,7 +36471,7 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Peilaa taso pystysuunnassa"
 msgstr[1] "Peilaa taso pystysuunnassa"
 
-#: libs/ui/kis_node_manager.cpp:1145
+#: libs/ui/kis_node_manager.cpp:1153
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -36479,7 +36479,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Peilaa taso vaakasuunnassa"
 
-#: libs/ui/kis_node_manager.cpp:1152
+#: libs/ui/kis_node_manager.cpp:1160
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -36487,12 +36487,12 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Peilaa taso pystysuunnassa"
 
-#: libs/ui/kis_node_manager.cpp:1284
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Vie ”%1”"
 
-#: libs/ui/kis_node_manager.cpp:1311
+#: libs/ui/kis_node_manager.cpp:1319
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -36502,7 +36502,7 @@ msgstr ""
 "Ei voitu tallentaa tiedostoa\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1337
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Layer %1 is not editable"
@@ -36510,7 +36510,7 @@ msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Taso %1 ei ole muokattavissa"
 
-#: libs/ui/kis_node_manager.cpp:1353
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Export"
@@ -36518,7 +36518,7 @@ msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Vie"
 
-#: libs/ui/kis_node_manager.cpp:1373
+#: libs/ui/kis_node_manager.cpp:1381
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -36528,13 +36528,13 @@ msgstr ""
 "Ei voitu tallentaa tiedostoa\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1398
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Taso %1 ei ole muokattavissa"
 
-#: libs/ui/kis_node_manager.cpp:1399
+#: libs/ui/kis_node_manager.cpp:1407
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -36543,51 +36543,51 @@ msgstr ""
 "Alfakanavaa ei voida kirjoittaa emotasoon ”%1”.\n"
 "Toimenpide perutaan."
 
-#: libs/ui/kis_node_manager.cpp:1430
+#: libs/ui/kis_node_manager.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Kirjoita alfa tasoon"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Leikkaa solmut"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1661
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Pikaryhmä"
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1672
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Rajaava pikaryhmä"
 
-#: libs/ui/kis_node_manager.cpp:1671
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Rajaava ryhmä"
 
-#: libs/ui/kis_node_manager.cpp:1672
+#: libs/ui/kis_node_manager.cpp:1680
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskitaso"
 
-#: libs/ui/kis_node_manager.cpp:1699
+#: libs/ui/kis_node_manager.cpp:1707
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Sijoita jokainen taso omaan erilliseen ryhmätasoonsa"
 
-#: libs/ui/kis_node_manager.cpp:1702
+#: libs/ui/kis_node_manager.cpp:1710
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Sijoita jokainen taso omaan erilliseen ryhmätasoonsa"
 
-#: libs/ui/kis_node_manager.cpp:1710
+#: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Pikapura ryhmä"
@@ -44245,6 +44245,7 @@ msgid "Minor Subdivisions: "
 msgstr "Alajako:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Avustajatyökalu"
@@ -46233,15 +46234,23 @@ msgstr "Apuviivat:"
 msgid "Grid and Guides"
 msgstr "Ruudukko ja apuviivat"
 
-#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
 msgstr "Päivitä histogrammi"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:17
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:21
 #, kde-format
 msgid "Histogram"
 msgstr "Histogrammi"
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:32
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show color history"
+msgctxt "@info:tooltip"
+msgid "Toggle logarithmic histogram."
+msgstr "Näytä värihistoria"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, kde-format
@@ -67184,13 +67193,211 @@ msgid "Selected path"
 msgstr "Valittu sijainti"
 
 #: plugins/python/tenscripts/uitenscripts.py:74
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 msgid "Select the script"
 msgstr "Valitse skripti"
 
 #: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Python-tiedostot (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#, kde-format
+msgid "Select Shapes Tool"
+msgstr "Kuvionvalintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#, kde-format
+msgid "Text Tool"
+msgstr "Tekstityökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#, kde-format
+msgid "Calligraphy"
+msgstr "Kalligrafia"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
+#: plugins/tools/basictools/kis_tool_brush.h:146
+#, kde-format
+msgid "Freehand Brush Tool"
+msgstr "Vapaan käden sivellintyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
+#: plugins/tools/basictools/kis_tool_line.h:116
+#, kde-format
+msgid "Line Tool"
+msgstr "Viivatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
+#, kde-format
+msgid "Rectangle Tool"
+msgstr "Suorakaidetyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#, kde-format
+msgid "Ellipse Tool"
+msgstr "Ellipsityökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Polygon Tool"
+msgid "Polygon Tool"
+msgstr "Monikulmiotyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Polyline Tool"
+msgid "Polyline Tool"
+msgstr "Murtoviivatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Bezier Curve Tool"
+msgid "Bezier Curve Tool"
+msgstr "Bézier-käyrätyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
+#: plugins/tools/basictools/kis_tool_pencil.h:76
+#, kde-format
+msgid "Freehand Path Tool"
+msgstr "Vapaan käden polkutyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#, kde-format
+msgid "Dynamic Brush Tool"
+msgstr "Dynaaminen sivellintyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
+#: plugins/tools/basictools/kis_tool_multihand.h:99
+#, kde-format
+msgid "Multibrush Tool"
+msgstr "Monisivellintyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Transform Tool"
+msgid "Transform Tool"
+msgstr "Muunnostyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
+#: plugins/tools/basictools/kis_tool_move.h:183
+#, kde-format
+msgid "Move Tool"
+msgstr "Siirtotyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
+#: plugins/tools/tool_crop/kis_tool_crop.h:221
+#, kde-format
+msgid "Crop Tool"
+msgstr "Rajaustyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
+#: plugins/tools/basictools/kis_tool_gradient.h:106
+#, kde-format
+msgid "Gradient Tool"
+msgstr "Liukuvärityökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Colorize Mask Tool"
+msgid "Colorize Mask Tool"
+msgstr "Väripeitetyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#, kde-format
+msgid "Smart Patch Tool"
+msgstr "Älykäs paikkaustyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
+#: plugins/tools/basictools/kis_tool_fill.h:242
+#, kde-format
+msgid "Fill Tool"
+msgstr "Täyttötyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#, kde-format
+msgid "Enclose and Fill Tool"
+msgstr "Sulje ja täytä -työkalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Measurement Tool"
+msgid "Measurement Tool"
+msgstr "Mittaustyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#, kde-format
+msgid "Reference Images Tool"
+msgstr "Viitekuvatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#, kde-format
+msgid "Rectangular Selection Tool"
+msgstr "Suorakaiteen valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#, kde-format
+msgid "Elliptical Selection Tool"
+msgstr "Ellipsin valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#, kde-format
+msgid "Polygonal Selection Tool"
+msgstr "Monikulmion valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#, kde-format
+msgid "Contiguous Selection Tool"
+msgstr "Yhtenäisen alueen valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#, kde-format
+msgid "Similar Color Selection Tool"
+msgstr "Samankaltaisten värien valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#, kde-format
+msgid "Bezier Curve Selection Tool"
+msgstr "Bézier-käyrän valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#, kde-format
+msgid "Magnetic Selection Tool"
+msgstr "Magneettinen valintatyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Zoom Tool"
+msgid "Zoom Tool"
+msgstr "Lähennystyökalu"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#, kde-format
+msgid "Pan Tool"
+msgstr "Panorointityökalu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Custom icon"
@@ -67209,120 +67416,220 @@ msgid "Workflow Buttons settings"
 msgstr "Työnkulkupainikkeiden asetukset"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
+#, fuzzy
+#| msgid "Selected button:"
+msgctxt "@label"
 msgid "Selected button:"
 msgstr "Valittu painike:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Workflow Buttons"
+msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr ""
+msgstr "Työnkulkupainikkeet"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
+#, fuzzy
+#| msgid "Delete selected workflow button"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "Poista valittu työnkulkupainike"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete selected workflow button"
+msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "Poista valittu työnkulkupainike"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
+#, fuzzy
+#| msgid "Delete selected workflow button"
+msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "Poista valittu työnkulkupainike"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
+#, fuzzy
+#| msgid "Select icon mode:"
+msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Valitse kuvaketila:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select a custom icon:"
+msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Valitse mukautettu kuvake:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
+#, fuzzy
+#| msgid "Custom icon path"
+msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "Mukautetun kuvakkeen sijainti"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#, fuzzy
+#| msgid "..."
+msgctxt "@action:button"
+msgid "..."
+msgstr "…"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Select the custom icon"
+msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "Valitse mukautettu kuvake"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
+#, fuzzy
+#| msgid "Enter a Tooltip:"
+msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "Anna työkaluvihje:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Tooltip text"
+msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "Työkaluvihjeen teksti"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
+#, fuzzy
+#| msgid "Select a tool:"
+msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Valitse työkalu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Select a brush preset:"
+msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "Valitse sivellinesiasetus:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
+#, fuzzy
+#| msgid "Brush preset name"
+msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "Sivellinesiasetuksen nimi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select the brush preset"
+msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "Valitse sivellinesiasetus"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
+#, fuzzy
+#| msgid "Select foreground color:"
+msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Valitse edustaväri:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
+#, fuzzy
+#| msgid "Load current foreground color"
+msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "Lataa nykyinen edustaväri"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
+#, fuzzy
+#| msgid "Clear foreground color"
+msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "Tyhjennä edustaväri"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
+msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
+#, fuzzy
+#| msgid "Select background color:"
+msgctxt "@label"
 msgid "Select background color:"
 msgstr "Valitse taustaväri:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
+#, fuzzy
+#| msgid "Load current background color"
+msgctxt "@action:button"
 msgid "Load current background color"
 msgstr "Lataa nykyinen taustaväri"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
+#, fuzzy
+#| msgid "Clear background color"
+msgctxt "@action:button"
 msgid "Clear background color"
 msgstr "Tyhjennä taustaväri"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
+#, fuzzy
+#| msgid "Select a script file:"
+msgctxt "@label"
 msgid "Select a script file:"
 msgstr "Valitse skriptitiedosto:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
+#, fuzzy
+#| msgid "Script path"
+msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Skriptin sijainti"
 
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
+#, fuzzy
+#| msgid "Select the script"
+msgctxt "@info:tooltip"
+msgid "Select the script"
+msgstr "Valitse skripti"
+
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
+#, fuzzy
+#| msgid "Buttons size:"
+msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "Painikekoko:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
+#, fuzzy
+#| msgid "Settings button position:"
+msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "Asetuspainikkeen sijainti:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#, fuzzy
+#| msgid "Bottom bar"
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Alapalkki"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
+msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "BSpline"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
+#, fuzzy
+#| msgid "Color info: "
+msgctxt "@label"
 msgid "Color info: "
 msgstr "Väritieto: "
 
@@ -67336,8 +67643,11 @@ msgid "Workflow Buttons"
 msgstr "Työnkulkupainikkeet"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
+#, fuzzy
+#| msgid "Workflow Buttons settings"
+msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "Työnkulkupainikkeiden asetukset"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"
@@ -67500,11 +67810,6 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:146
-#, kde-format
-msgid "Freehand Brush Tool"
-msgstr "Vapaan käden sivellintyökalu"
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
@@ -67516,11 +67821,6 @@ msgid "Draw Ellipse"
 msgstr ""
 "Piirrä ellipsi\n"
 "ellipsin piirto"
-
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
-#, kde-format
-msgid "Ellipse Tool"
-msgstr "Ellipsityökalu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:139
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
@@ -67804,11 +68104,6 @@ msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:242
-#, kde-format
-msgid "Fill Tool"
-msgstr "Täyttötyökalu"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:157
 msgctxt "(qtundo-format)"
 msgid "Gradient"
@@ -67826,11 +68121,6 @@ msgstr "Käänteinen"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Muu"
-
-#: plugins/tools/basictools/kis_tool_gradient.h:106
-#, kde-format
-msgid "Gradient Tool"
-msgstr "Liukuvärityökalu"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
@@ -67868,11 +68158,6 @@ msgstr ""
 "Alt+hiiri siirtää nyt näytetyn viivan alkupistettä, Vaihto+hiiri piirtää "
 "suoria viivoja."
 
-#: plugins/tools/basictools/kis_tool_line.h:116
-#, kde-format
-msgid "Line Tool"
-msgstr "Viivatyökalu"
-
 #: plugins/tools/basictools/kis_tool_measure.cc:77
 #, kde-format
 msgctxt "angle value in degrees"
@@ -67905,11 +68190,6 @@ msgstr "X: %1 px, Y: %2 px"
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
 msgstr ""
-
-#: plugins/tools/basictools/kis_tool_move.h:183
-#, kde-format
-msgid "Move Tool"
-msgstr "Siirtotyökalu"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
 msgctxt "(qtundo-format)"
@@ -67955,16 +68235,6 @@ msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:99
-#, kde-format
-msgid "Multibrush Tool"
-msgstr "Monisivellintyökalu"
-
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
-#, kde-format
-msgid "Pan Tool"
-msgstr "Panorointityökalu"
-
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
@@ -67984,22 +68254,12 @@ msgstr ""
 "Piirrä polku vapaalla kädellä\n"
 "vapaan käden polun piirto"
 
-#: plugins/tools/basictools/kis_tool_pencil.h:76
-#, kde-format
-msgid "Freehand Path Tool"
-msgstr "Vapaan käden polkutyökalu"
-
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr ""
 "Piirrä suorakaide\n"
 "suorakaiteen piirto"
-
-#: plugins/tools/basictools/kis_tool_rectangle.h:50
-#, kde-format
-msgid "Rectangle Tool"
-msgstr "Suorakaidetyökalu"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -68509,11 +68769,6 @@ msgstr "Vektorikuviotoiminnot"
 msgid "Logical Operations"
 msgstr "Loogiset operaatiot"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, kde-format
-msgid "Select Shapes Tool"
-msgstr "Kuvionvalintatyökalu"
-
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
@@ -68686,11 +68941,6 @@ msgstr "Viitekuvien tallentaminen epäonnistui."
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Viitekuvatoiminnot"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
-#, kde-format
-msgid "Reference Images Tool"
-msgstr "Viitekuvatyökalu"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
 #, kde-format
@@ -68982,11 +69232,6 @@ msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "Kalligrafia"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, kde-format
-msgid "Calligraphy"
-msgstr "Kalligrafia"
-
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
@@ -69070,11 +69315,6 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Valinnan ala"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
-#, kde-format
-msgid "Contiguous Selection Tool"
-msgstr "Yhtenäisen alueen valintatyökalu"
-
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
@@ -69087,11 +69327,6 @@ msgid "Select Ellipse"
 msgstr ""
 "Valitse ellipsi\n"
 "ellipsin valinta"
-
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
-#, kde-format
-msgid "Elliptical Selection Tool"
-msgstr "Ellipsin valintatyökalu"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, kde-format
@@ -69117,11 +69352,6 @@ msgstr ""
 "Valitse Bézier-käyrällä\n"
 "Bézier-käyrällä valinta"
 
-#: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, kde-format
-msgid "Bezier Curve Selection Tool"
-msgstr "Bézier-käyrän valintatyökalu"
-
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
@@ -69135,11 +69365,6 @@ msgstr ""
 "Valitse monikulmio\n"
 "monikulmion valinta"
 
-#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
-#, kde-format
-msgid "Polygonal Selection Tool"
-msgstr "Monikulmion valintatyökalu"
-
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
 #, kde-format
 msgid "Rectangular Selection"
@@ -69152,11 +69377,6 @@ msgid "Select Rectangle"
 msgstr ""
 "Valitse suorakaide\n"
 "suorakaiteen valinta"
-
-#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
-#, kde-format
-msgid "Rectangular Selection Tool"
-msgstr "Suorakaiteen valintatyökalu"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
@@ -69191,11 +69411,6 @@ msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Valinnan ala"
-
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
-#, kde-format
-msgid "Similar Color Selection Tool"
-msgstr "Samankaltaisten värien valintatyökalu"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -69333,11 +69548,6 @@ msgstr "Hylkää valinta"
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
 msgstr "Polkuvalinnat"
-
-#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, kde-format
-msgid "Magnetic Selection Tool"
-msgstr "Magneettinen valintatyökalu"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -69550,11 +69760,6 @@ msgstr "Nykyinen perusviiva"
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Perusviivan siirto"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, kde-format
-msgid "Text Tool"
-msgstr "Tekstityökalu"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
 #, kde-format
@@ -70356,11 +70561,6 @@ msgstr ""
 "Leveys: %1\n"
 "Korkeus: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.h:221
-#, kde-format
-msgid "Crop Tool"
-msgstr "Rajaustyökalu"
-
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
@@ -70507,11 +70707,6 @@ msgstr "Alkuleveys:"
 #, kde-format
 msgid "Width range:"
 msgstr "Leveysalue:"
-
-#: plugins/tools/tool_dyna/kis_tool_dyna.h:139
-#, kde-format
-msgid "Dynamic Brush Tool"
-msgstr "Dynaaminen sivellintyökalu"
 
 #. i18n: context: text @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolEncloseAndFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -70724,11 +70919,6 @@ msgstr "Kaikki läpinäkyvän alueen ympäröimät alueet"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
 msgstr "Kaikki tietyn värin tai läpinäkyvän ympäröimät"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, kde-format
-msgid "Enclose and Fill Tool"
-msgstr "Sulje ja täytä -työkalu"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:206
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219
@@ -71082,11 +71272,6 @@ msgstr "Valitse maalaustaso käyttääksesi tätä työkalua"
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
 msgstr "Älykäs paikkaus"
-
-#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, kde-format
-msgid "Smart Patch Tool"
-msgstr "Älykäs paikkaustyökalu"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27

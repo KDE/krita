@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-13 00:41+0000\n"
-"PO-Revision-Date: 2026-06-11 21:23+0300\n"
+"PO-Revision-Date: 2026-06-13 19:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -43892,11 +43892,10 @@ msgid "Histogram"
 msgstr "Histogram"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:32
-#, fuzzy, kde-format
-#| msgid "Show logarithmic histogram"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle logarithmic histogram."
-msgstr "Logaritmik histogramı göster"
+msgstr "Logaritmik histogramı aç/kapat"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, kde-format
@@ -64684,23 +64683,14 @@ msgid "Ellipse Tool"
 msgstr "Elips Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Polygon Tool"
 msgid "Polygon Tool"
 msgstr "Çokgen Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Polyline Tool"
 msgid "Polyline Tool"
 msgstr "Süren Çizgi Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Bezier Curve Tool"
 msgid "Bezier Curve Tool"
 msgstr "Bézier Eğrisi Aracı"
 
@@ -64723,9 +64713,6 @@ msgid "Multibrush Tool"
 msgstr "Çoklu Fırça Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Transform Tool"
 msgid "Transform Tool"
 msgstr "Dönüşüm Aracı"
 
@@ -64748,9 +64735,6 @@ msgid "Gradient Tool"
 msgstr "Geçiş Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Colorize Mask Tool"
 msgid "Colorize Mask Tool"
 msgstr "Renklendirme Maskesi Aracı"
 
@@ -64773,9 +64757,6 @@ msgid "Enclose and Fill Tool"
 msgstr "Çevreleme ve Dolgu Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Measurement Tool"
 msgid "Measurement Tool"
 msgstr "Ölçme Aracı"
 
@@ -64828,9 +64809,6 @@ msgid "Magnetic Selection Tool"
 msgstr "Manyetik Seçim Aracı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Zoom Tool"
 msgid "Zoom Tool"
 msgstr "Yakınlaştırma Aracı"
 
@@ -64857,57 +64835,41 @@ msgid "Workflow Buttons settings"
 msgstr "İş Akışı Düğmeleri ayarları"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
-#, fuzzy
-#| msgid "Selected button:"
 msgctxt "@label"
 msgid "Selected button:"
 msgstr "Seçili düğme:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
-#, fuzzy
-#| msgid "Add a workflow button"
 msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr "Bir iş akışı düğmesi ekle"
+msgstr "İş akışı düğmesi ekle"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
-#, fuzzy
-#| msgid "Move selected workflow button to the left"
 msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the left"
 msgstr "Seçili iş akışı düğmesini sola taşı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
-#, fuzzy
-#| msgid "Move selected workflow button to the right"
 msgctxt "@info:tooltip"
 msgid "Move selected workflow button to the right"
 msgstr "Seçili iş akışı düğmesini sağa taşı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
-#, fuzzy
-#| msgid "Delete selected workflow button"
 msgctxt "@info:tooltip"
 msgid "Delete selected workflow button"
 msgstr "Seçili iş akışı düğmesini sil"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
-#, fuzzy
-#| msgid "Select icon mode:"
 msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Simge kipini seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
-#, fuzzy
-#| msgid "Select a custom icon:"
 msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Özel bir simge seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
-#, fuzzy
-#| msgid "Custom icon path"
 msgctxt "@info:tooltip"
 msgid "Custom icon path"
 msgstr "Özel simge yolu"
@@ -64915,163 +64877,117 @@ msgstr "Özel simge yolu"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
-#, fuzzy
-#| msgid "..."
 msgctxt "@action:button"
 msgid "..."
 msgstr "…"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
-#| msgid "Select the custom icon"
 msgctxt "@info:tooltip"
 msgid "Select the custom icon"
 msgstr "Özel simgeyi seç"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
-#, fuzzy
-#| msgid "Enter a Tooltip:"
 msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
 msgstr "Bir araç ipucu gir:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
-#| msgid "Tooltip text"
 msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "Araç ipucu metni"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
-#, fuzzy
-#| msgid "Select a tool:"
 msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Bir araç seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
-#, fuzzy
-#| msgid "Select a brush preset:"
 msgctxt "@label:chooser"
 msgid "Select a brush preset:"
 msgstr "Bir fırça önayarı seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
-#, fuzzy
-#| msgid "Brush preset name"
 msgctxt "@info:tooltip"
 msgid "Brush preset name"
 msgstr "Fırça önayarı adı"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
-#| msgid "Select the brush preset"
 msgctxt "@info:tooltip"
 msgid "Select the brush preset"
 msgstr "Fırça önayarını seç"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
-#, fuzzy
-#| msgid "Select foreground color:"
 msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Ön plan rengini seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
-#, fuzzy
-#| msgid "Load current foreground color"
 msgctxt "@action:button"
 msgid "Load current foreground color"
 msgstr "Geçerli ön plan rengini yükle"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
-#, fuzzy
-#| msgid "Clear foreground color"
 msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "Ön plan rengini temizle"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
-#, fuzzy
-#| msgid "Color model ; depth ; profile ; components"
 msgctxt "@info:tooltip"
 msgid "Color model ; depth ; profile ; components"
 msgstr "Renk modeli ; derinlik ; profil ; bileşenler"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
-#, fuzzy
-#| msgid "Select background color:"
 msgctxt "@label"
 msgid "Select background color:"
 msgstr "Arka plan rengini seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
-#, fuzzy
-#| msgid "Load current background color"
 msgctxt "@action:button"
 msgid "Load current background color"
-msgstr "Geçerli arka plan rengini yükle"
+msgstr "Geçerli Arka Plan Rengini Yükle"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
-#, fuzzy
-#| msgid "Clear background color"
 msgctxt "@action:button"
 msgid "Clear background color"
-msgstr "Arka plan rengini temizle"
+msgstr "Arka Plan Rengini Temizle"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
-#, fuzzy
-#| msgid "Select a script file:"
 msgctxt "@label"
 msgid "Select a script file:"
 msgstr "Bir betik dosyası seç:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
-#, fuzzy
-#| msgid "Script path"
 msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Betik yolu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
-#, fuzzy
-#| msgid "Select the script"
 msgctxt "@info:tooltip"
 msgid "Select the script"
 msgstr "Betiği seç"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
-#, fuzzy
-#| msgid "Buttons size:"
 msgctxt "@label:listbox"
 msgid "Buttons size:"
 msgstr "Düğmeler boyutu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
-#, fuzzy
-#| msgid "Settings button position:"
 msgctxt "@label:listbox"
 msgid "Settings button position:"
 msgstr "Ayarlar düğmesi konumu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
-#, fuzzy
-#| msgid "Bottom bar"
 msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Alt çubuk"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
-#, fuzzy
-#| msgid "Inline"
 msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "Satır içi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
-#, fuzzy
-#| msgid "Color info: "
 msgctxt "@label"
 msgid "Color info: "
 msgstr "Renk bilgisi: "
@@ -65086,8 +65002,6 @@ msgid "Workflow Buttons"
 msgstr "İş Akışı Düğmeleri"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
-#, fuzzy
-#| msgid "Open workflow buttons settings dialog"
 msgctxt "@info:tooltip"
 msgid "Open workflow buttons settings dialog"
 msgstr "İş akışı düğmeleri ayarları iletişim kutusunu aç"

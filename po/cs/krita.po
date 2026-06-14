@@ -62968,9 +62968,6 @@ msgid "Ellipse Tool"
 msgstr "Nástroj pro elipsy"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Polygon Tool"
 msgid "Polygon Tool"
 msgstr "Nástroj mnohoúhelníků"
 
@@ -62982,9 +62979,6 @@ msgid "Polyline Tool"
 msgstr "Nástroj mnohoúhelníků"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Bezier Curve Tool"
 msgid "Bezier Curve Tool"
 msgstr "Nástroj pro Beziérovy křivky"
 
@@ -63188,8 +63182,6 @@ msgstr "Vlastní ikona"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
-#, fuzzy
-#| msgid "..."
 msgctxt "@action:button"
 msgid "..."
 msgstr "..."

@@ -426,16 +426,9 @@ RecorderDockerDock::RecorderDockerDock()
 
     connect(d->recordToggleAction, SIGNAL(toggled(bool)), d->ui->buttonRecordToggle, SLOT(setChecked(bool)));
     connect(d->exportAction, SIGNAL(triggered()), d->ui->buttonExport, SIGNAL(clicked()));
-
-    if constexpr (PLATFORM_SUPPORTS_FFMPEG) {
-        connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), d->ui->buttonExport, SLOT(setDisabled(bool)));
-        if (d->recordAutomatically) {
-            d->ui->buttonExport->setDisabled(true);
-        }
-    } else {
-        d->ui->buttonExport->setEnabled(false);
-        d->ui->buttonExport->setVisible(false);
-    }
+    connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), d->ui->buttonExport, SLOT(setDisabled(bool)));
+    if (d->recordAutomatically)
+        d->ui->buttonExport->setDisabled(true);
 
     // Need to register toolbar actions before attaching canvas else it wont appear after restart.
     // Is there any better way to do this?
@@ -604,7 +597,7 @@ bool RecorderDockerDock::onRecordButtonToggled(bool checked)
 
 void RecorderDockerDock::onExportButtonClicked()
 {
-    if (!PLATFORM_SUPPORTS_FFMPEG || !d->canvas)
+    if (!d->canvas)
         return;
 
     KisDocument *document = d->canvas->imageView()->document();

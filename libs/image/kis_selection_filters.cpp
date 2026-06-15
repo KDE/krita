@@ -895,7 +895,12 @@ void KisInvertSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
 {
     Q_UNUSED(rect);
 
-    const QRect imageRect = pixelSelection->defaultBounds()->bounds();
+    /**
+     * The default bounds of a selection may also include the extent
+     * of the parent device, which is not what we want here. Hence we
+     * should request imageBorderRect() directly.
+     */
+    const QRect imageRect = pixelSelection->defaultBounds()->imageBorderRect();
     const QRect selectionRect = pixelSelection->selectedExactRect();
 
     /**

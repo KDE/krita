@@ -32,7 +32,7 @@ struct KisRelativeContentLightLevelInformation: public boost::equality_comparabl
         RGBComponent ///< Calculate luminance on the RGB components if possible.
     };
 
-    CalculationType type;
+    CalculationType type = XYZLuminance;
 
     bool operator==(const KisRelativeContentLightLevelInformation & other) const {
         return qFuzzyCompare(maxContentLightLevel, other.maxContentLightLevel)

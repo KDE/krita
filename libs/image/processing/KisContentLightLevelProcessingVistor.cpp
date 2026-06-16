@@ -49,6 +49,7 @@ KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::co
         total += c.maxFrameAverageLightLevel;
     }
     clli.maxFrameAverageLightLevel = d->clli.isEmpty()? 0.0: total / d->clli.size();
+    clli.type = d->type;
     return clli;
 }
 
@@ -116,6 +117,6 @@ KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::ca
         }
     }
 
-    clli.maxFrameAverageLightLevel = average / divider;
+    clli.maxFrameAverageLightLevel = divider > 0? average / divider: 0;
     return clli;
 }

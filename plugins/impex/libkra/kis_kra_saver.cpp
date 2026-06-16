@@ -717,6 +717,13 @@ void KisKraSaver::saveHDRMetadata(QDomDocument &doc, QDomElement &element, KisIm
         QDomElement clli = doc.createElement(CONTENTLIGHTLEVEL);
         clli.setAttribute(MAXCLL, KisDomUtils::toString(c.maxContentLightLevel));
         clli.setAttribute(MAXFALL, KisDomUtils::toString(c.maxFrameAverageLightLevel));
+        if (c.type == KisRelativeContentLightLevelInformation::XYZLuminance) {
+            clli.setAttribute(CLLI_CALCTYPE, CLLI_CALC_XYZY);
+        } else if (c.type == KisRelativeContentLightLevelInformation::Rec2020Component) {
+            clli.setAttribute(CLLI_CALCTYPE, CLLI_CALC_Rec2020);
+        } else if (c.type == KisRelativeContentLightLevelInformation::RGBComponent) {
+            clli.setAttribute(CLLI_CALCTYPE, CLLI_CALC_RGB_XYZ_FALLBACK);
+        }
         hdr.appendChild(clli);
     }
     if (image->colorVolumeInformation()) {

@@ -1561,6 +1561,14 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
             KisRelativeContentLightLevelInformation clli;
             clli.maxContentLightLevel = child.attribute(MAXCLL, "0.0").toDouble();
             clli.maxFrameAverageLightLevel = child.attribute(MAXFALL, "0.0").toDouble();
+            const QString type = child.attribute(CLLI_CALCTYPE);
+            if (type == CLLI_CALC_RGB_XYZ_FALLBACK) {
+                clli.type = KisRelativeContentLightLevelInformation::RGBComponent;
+            } else if (type == CLLI_CALC_Rec2020) {
+                clli.type = KisRelativeContentLightLevelInformation::Rec2020Component;
+            } else {
+                clli.type = KisRelativeContentLightLevelInformation::XYZLuminance;
+            }
             std::optional<KisRelativeContentLightLevelInformation> ci = std::make_optional(clli);
             image->setRelativeContentLightLevelInformation(ci);
         }

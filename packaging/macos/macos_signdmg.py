@@ -223,37 +223,28 @@ def fix_bundle(bundle_root: pathlib.Path, bundle_version: str="", for_store: boo
 def fix_krita_plists(krita_app: pathlib.Path, bundle_id: str, version: str, build_version: str):
 
     macosx_deployment_target = '10.15' if version.startswith('5') else '12'
-    appex_plugins_deployment_target = '10.15'
 
     kritaspotlight = pathlib.Path(krita_app, 'Contents', 'Library','Spotlight', 'kritaspotlight.mdimporter', 'Contents')
-    kritaquicklook = pathlib.Path(krita_app, 'Contents', 'Library', 'Quicklook', 'kritaquicklook.qlgenerator', 'Contents')
     krita_thumbnailer = pathlib.Path(krita_app, 'Contents', 'Plugins', 'krita-thumbnailer.appex', 'Contents')
     krita_preview = pathlib.Path(krita_app, 'Contents', 'Plugins', 'krita-preview.appex', 'Contents')
 
     plists = dict()
     plists['krita'] = PlistBuddyModifier(pathlib.Path(krita_app, 'Contents', 'Info.plist'))
     plists['spotlight'] = PlistBuddyModifier(pathlib.Path(kritaspotlight, 'Info.plist'))
-    plists['quicklook'] = PlistBuddyModifier(pathlib.Path(kritaquicklook, 'Info.plist'))
     plists['thumbnailer'] = PlistBuddyModifier(pathlib.Path(krita_thumbnailer, 'Info.plist'))
     plists['preview'] = PlistBuddyModifier(pathlib.Path(krita_preview, 'Info.plist'))
 
     # modify plist contents
     plists['krita'].set('CFBundleIdentifier', bundle_id)
     plists['krita'].set('CFBundleLongVersionString', version)
-    plists['krita'].set('LSMinimumSystemVersion', macosx_deployment_target)
 
     plists['spotlight'].set('CFBundleIdentifier', bundle_id + '.spotlight')
-    plists['quicklook'].set('CFBundleIdentifier', bundle_id + '.kritaquicklook')
     plists['thumbnailer'].set('CFBundleIdentifier', bundle_id + '.krita-thumbnailer')
     plists['preview'].set('CFBundleIdentifier', bundle_id + '.krita-preview')
 
-    plists['spotlight'].set('LSMinimumSystemVersion', macosx_deployment_target)
-    plists['quicklook'].set('LSMinimumSystemVersion', macosx_deployment_target)
-    plists['thumbnailer'].set('LSMinimumSystemVersion', appex_plugins_deployment_target)
-    plists['preview'].set('LSMinimumSystemVersion', appex_plugins_deployment_target)
-
     # common keys
     for plist in plists.values():
+        plist.set('LSMinimumSystemVersion', macosx_deployment_target)
         plist.set('CFBundleVersion', build_version)
         plist.set('CFBundleShortVersionString', version)
 
@@ -298,7 +289,6 @@ def sign_bundle(bundle_root: pathlib.Path, signer: Codesigner, entitlements_path
     resources_root = content_root.joinpath('Resources')
     targets.extend([f for f in resources_root.rglob('*') if f.is_file() and (stat.S_IMODE(f.stat().st_mode) & 0o111 > 0)])
 
-    targets.append(content_root.joinpath('Library', 'QuickLook', 'kritaquicklook.qlgenerator'))
     targets.append(content_root.joinpath('Library', 'Spotlight', 'kritaspotlight.mdimporter'))
 
     signer.add(targets, entitlements.general)
@@ -350,7 +340,6 @@ def verify_bundle(bundle: pathlib.Path) -> bool:
         print(f'missing signature: {element}')
 
     check_pkg = [f for f in bundle.rglob('*.framework')]
-    check_pkg.append(bundle.joinpath('Contents', 'Library', 'Quicklook', 'kritaquicklook.qlgenerator'))
     check_pkg.append(bundle.joinpath('Contents', 'Library', 'Spotlight', 'kritaspotlight.mdimporter'))
     check_pkg.append(bundle.joinpath('Contents', 'PlugIns', 'krita-thumbnailer.appex'))
     check_pkg.append(bundle.joinpath('Contents', 'PlugIns', 'krita-preview.appex'))

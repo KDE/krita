@@ -429,19 +429,13 @@ def kritaDeploy(from_install: pathlib.Path, dst: pathlib.Path, source: pathlib.P
         shutil.copy2(file,krita_app['frameworks'], follow_symlinks=False)
 
     print("Copying plugins...")
-    extra_args = '--delete --delete-excluded --exclude kritaquicklook.qlgenerator --exclude kritaspotlight.mdimporter'
+    extra_args = '--delete --delete-excluded --exclude kritaspotlight.mdimporter'
     copyDirSub(krita_install_dir.joinpath('plugins'), krita_app['plugins'], extra_args=extra_args.split())
 
     plugins = []
-    krita_app_qlook = krita_app['contents'].joinpath('Library','QuickLook')
     krita_app_spotlight = krita_app['contents'].joinpath('Library', 'Spotlight')
-
-    krita_app_qlook.mkdir(parents=True)
     krita_app_spotlight.mkdir(parents=True)
 
-    plugins.append('QuickLook')
-    copyDirSub(krita_install_dir.joinpath('plugins','kritaquicklook.qlgenerator'),krita_app_qlook,
-               only_contents=False)
     plugins.append('Spotlight')
     copyDirSub(krita_install_dir.joinpath('plugins', 'kritaspotlight.mdimporter'), krita_app_spotlight,
                only_contents=False)
@@ -554,7 +548,7 @@ def kritaDeploy(from_install: pathlib.Path, dst: pathlib.Path, source: pathlib.P
 
 
     # TODO: remove after move to Qt6, those plugins are not compatible with macOS>=12
-    # fixes kritaspotlight and kritaquicklook binaries
+    # fixes kritaspotlight binaries
     filesToFix = [f for f in krita_app['contents'].joinpath('Library').rglob('*/Contents/MacOS/*') if
                   (f.is_file() and stat.S_IMODE(f.stat().st_mode) & 0o111)]
     for f in filesToFix:

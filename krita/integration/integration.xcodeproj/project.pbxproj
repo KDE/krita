@@ -17,6 +17,7 @@
 		110986472ED0DE4400C1ECC8 /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109863E2ED0DE4400C1ECC8 /* PreviewProvider.swift */; };
 		110986482ED0DE4400C1ECC8 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109863F2ED0DE4400C1ECC8 /* PreviewViewController.swift */; };
 		1109864A2ED0DE4400C1ECC8 /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 110986412ED0DE4400C1ECC8 /* PreviewViewController.xib */; };
+		1136A44C2FE1B8F700AF40E8 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 1136A44B2FE1B8F700AF40E8 /* main.c */; };
 		114946422EA3FACB00515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
 		1149465C2EA6B34D00515C4C /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7B62D25619404003662DB /* ThumbnailProvider.swift */; };
 		1149465E2EA6B34D00515C4C /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62825619404003662DB /* QuickLookThumbnailing.framework */; };
@@ -42,12 +43,7 @@
 		84D505DF256086C1005AFC55 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D5059C256056BF005AFC55 /* ioapi.c */; };
 		84D505E0256086C1005AFC55 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D505972560520B005AFC55 /* unzip.c */; };
 		84D505E2256086CA005AFC55 /* libunziptask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D505D725608693005AFC55 /* libunziptask.a */; };
-		84D505E5256086D0005AFC55 /* libunziptask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D505D725608693005AFC55 /* libunziptask.a */; };
-		84D6510E2560370B00CC2E75 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D6510D2560370B00CC2E75 /* main.c */; };
-		84D6511B2560371600CC2E75 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D6511A2560371600CC2E75 /* main.c */; };
 		84D6511D2560371600CC2E75 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D6511C2560371600CC2E75 /* GetMetadataForFile.m */; };
-		84D6513025603A1E00CC2E75 /* GenerateThumbnailForURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D6512E25603A1E00CC2E75 /* GenerateThumbnailForURL.m */; };
-		84D6513125603A1E00CC2E75 /* GeneratePreviewForURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D6512F25603A1E00CC2E75 /* GeneratePreviewForURL.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,13 +96,6 @@
 			remoteGlobalIDString = 84D505D625608693005AFC55;
 			remoteInfo = unziptask;
 		};
-		84D505E6256086D0005AFC55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84D505D625608693005AFC55;
-			remoteInfo = unziptask;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -132,16 +121,6 @@
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84D505B925607381005AFC55 /* Embed Libraries */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -153,6 +132,7 @@
 		1109863E2ED0DE4400C1ECC8 /* PreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
 		1109863F2ED0DE4400C1ECC8 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		110986402ED0DE4400C1ECC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
+		1136A44B2FE1B8F700AF40E8 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		114946412EA3FACB00515C4C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		114946472EA5593D00515C4C /* previewHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = previewHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,15 +155,9 @@
 		84D5059C256056BF005AFC55 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		84D5059D256056BF005AFC55 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
 		84D505D725608693005AFC55 /* libunziptask.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunziptask.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		84D651072560370B00CC2E75 /* kritaquicklook.qlgenerator */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = kritaquicklook.qlgenerator; sourceTree = BUILT_PRODUCTS_DIR; };
-		84D6510D2560370B00CC2E75 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		84D6510F2560370B00CC2E75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84D651172560371600CC2E75 /* kritaspotlight.mdimporter */ = {isa = PBXFileReference; explicitFileType = "wrapper.spotlight-importer"; includeInIndex = 0; path = kritaspotlight.mdimporter; sourceTree = BUILT_PRODUCTS_DIR; };
-		84D6511A2560371600CC2E75 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../main.c; sourceTree = "<group>"; };
 		84D6511C2560371600CC2E75 /* GetMetadataForFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetMetadataForFile.m; sourceTree = "<group>"; };
 		84D651222560371600CC2E75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84D6512E25603A1E00CC2E75 /* GenerateThumbnailForURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerateThumbnailForURL.m; sourceTree = "<group>"; };
-		84D6512F25603A1E00CC2E75 /* GeneratePreviewForURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratePreviewForURL.m; sourceTree = "<group>"; };
 		84D65139256043A000CC2E75 /* UnzipTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnzipTask.m; sourceTree = "<group>"; };
 		84D6513A256043A000CC2E75 /* UnzipTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnzipTask.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -242,14 +216,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84D651032560370B00CC2E75 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84D505E5256086D0005AFC55 /* libunziptask.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,7 +316,6 @@
 				114946682EA6B42B00515C4C /* krita-thumbnailer_helper */,
 				84D505AC2560726A005AFC55 /* unzipTask */,
 				84D6512A2560379A00CC2E75 /* 3rdparty */,
-				84D651082560370B00CC2E75 /* quicklook */,
 				84D651182560371600CC2E75 /* spotlight */,
 				84B7B62C25619404003662DB /* krita-thumbnailer */,
 				110986382ED0DE3F00C1ECC8 /* previewHelper */,
@@ -363,7 +328,6 @@
 		84D650F9256036F000CC2E75 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				84D651072560370B00CC2E75 /* kritaquicklook.qlgenerator */,
 				84D651172560371600CC2E75 /* kritaspotlight.mdimporter */,
 				84D505D725608693005AFC55 /* libunziptask.a */,
 				84B7B62725619404003662DB /* krita-thumbnailer.appex */,
@@ -375,33 +339,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		84D651082560370B00CC2E75 /* quicklook */ = {
-			isa = PBXGroup;
-			children = (
-				84D6512F25603A1E00CC2E75 /* GeneratePreviewForURL.m */,
-				84D6512E25603A1E00CC2E75 /* GenerateThumbnailForURL.m */,
-				84D6510F2560370B00CC2E75 /* Info.plist */,
-				84D6513F256043CC00CC2E75 /* Supporting Files */,
-			);
-			path = quicklook;
-			sourceTree = "<group>";
-		};
 		84D651182560371600CC2E75 /* spotlight */ = {
 			isa = PBXGroup;
 			children = (
+				1136A44B2FE1B8F700AF40E8 /* main.c */,
 				84D6511C2560371600CC2E75 /* GetMetadataForFile.m */,
 				84D651222560371600CC2E75 /* Info.plist */,
-				84D651192560371600CC2E75 /* Supporting Files */,
 			);
 			path = spotlight;
-			sourceTree = "<group>";
-		};
-		84D651192560371600CC2E75 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				84D6511A2560371600CC2E75 /* main.c */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		84D6512A2560379A00CC2E75 /* 3rdparty */ = {
@@ -415,14 +360,6 @@
 			path = 3rdparty;
 			sourceTree = "<group>";
 		};
-		84D6513F256043CC00CC2E75 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				84D6510D2560370B00CC2E75 /* main.c */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -433,13 +370,6 @@
 				84D505DB256086B4005AFC55 /* UnzipTask.h in Headers */,
 				84D505DD256086B4005AFC55 /* unzip.h in Headers */,
 				84D505DC256086B4005AFC55 /* ioapi.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84D651042560370B00CC2E75 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,26 +498,6 @@
 			productReference = 84D505D725608693005AFC55 /* libunziptask.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		84D651062560370B00CC2E75 /* kritaquicklook */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84D651102560370B00CC2E75 /* Build configuration list for PBXNativeTarget "kritaquicklook" */;
-			buildPhases = (
-				84D651042560370B00CC2E75 /* Headers */,
-				84D651022560370B00CC2E75 /* Sources */,
-				84D651032560370B00CC2E75 /* Frameworks */,
-				84D651052560370B00CC2E75 /* Resources */,
-				84D505B925607381005AFC55 /* Embed Libraries */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84D505E7256086D0005AFC55 /* PBXTargetDependency */,
-			);
-			name = kritaquicklook;
-			productName = quicklook;
-			productReference = 84D651072560370B00CC2E75 /* kritaquicklook.qlgenerator */;
-			productType = "com.apple.product-type.bundle";
-		};
 		84D651162560371600CC2E75 /* kritaspotlight */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84D651232560371600CC2E75 /* Build configuration list for PBXNativeTarget "kritaspotlight" */;
@@ -632,9 +542,6 @@
 					84D505D625608693005AFC55 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
-					84D651062560370B00CC2E75 = {
-						CreatedOnToolsVersion = 11.3.1;
-					};
 					84D651162560371600CC2E75 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -653,7 +560,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				84D651062560370B00CC2E75 /* kritaquicklook */,
 				84D651162560371600CC2E75 /* kritaspotlight */,
 				84D505D625608693005AFC55 /* unziptask */,
 				114946462EA5593D00515C4C /* previewHelper */,
@@ -699,13 +605,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		84B7B62525619404003662DB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84D651052560370B00CC2E75 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -775,22 +674,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84D651022560370B00CC2E75 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84D6513025603A1E00CC2E75 /* GenerateThumbnailForURL.m in Sources */,
-				84D6513125603A1E00CC2E75 /* GeneratePreviewForURL.m in Sources */,
-				84D6510E2560370B00CC2E75 /* main.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		84D651132560371600CC2E75 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				84D6511D2560371600CC2E75 /* GetMetadataForFile.m in Sources */,
-				84D6511B2560371600CC2E75 /* main.c in Sources */,
+				1136A44C2FE1B8F700AF40E8 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -831,11 +720,6 @@
 			isa = PBXTargetDependency;
 			target = 84D505D625608693005AFC55 /* unziptask */;
 			targetProxy = 84D505E3256086CA005AFC55 /* PBXContainerItemProxy */;
-		};
-		84D505E7256086D0005AFC55 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84D505D625608693005AFC55 /* unziptask */;
-			targetProxy = 84D505E6256086D0005AFC55 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1394,32 +1278,6 @@
 			};
 			name = Release;
 		};
-		84D651112560370B00CC2E75 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = quicklook/Info.plist;
-				MARKETING_VERSION = 4.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.krita.quicklook;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = qlgenerator;
-			};
-			name = Debug;
-		};
-		84D651122560370B00CC2E75 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = quicklook/Info.plist;
-				MARKETING_VERSION = 4.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.krita.quicklook;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = qlgenerator;
-			};
-			name = Release;
-		};
 		84D651242560371600CC2E75 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1514,15 +1372,6 @@
 			buildConfigurations = (
 				84D650FD256036F000CC2E75 /* Debug */,
 				84D650FE256036F000CC2E75 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84D651102560370B00CC2E75 /* Build configuration list for PBXNativeTarget "kritaquicklook" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84D651112560370B00CC2E75 /* Debug */,
-				84D651122560370B00CC2E75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

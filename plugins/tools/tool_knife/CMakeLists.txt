@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-set(kritatoolKnife_static_SRCS
+set(kritatoolKnife_static_SOURCES
     KisToolKnife.cpp
     KisToolKnifeOptionsWidget.cpp
     CutThroughShapeStrategy.cpp
@@ -16,7 +16,7 @@ set(kritatoolKnife_SOURCES
 
 ki18n_wrap_ui(kritatoolKnife_static_SOURCES KisToolKnifeOptionsWidget.ui)
 
-kis_add_library(kritatoolKnife_static STATIC ${kritatoolKnife_static_SRCS})
+kis_add_library(kritatoolKnife_static STATIC ${kritatoolKnife_static_SOURCES})
 generate_export_header(kritatoolKnife_static BASE_NAME kritatoolKnife)
 
 

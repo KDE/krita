@@ -97,8 +97,8 @@ void KisAutoBrushTest::testDabSize()
     dabSizeHelper(a, "Double",    KisDabShape(2.0, 1.0, 0.0),           20, 10);
     dabSizeHelper(a, "Halve",     KisDabShape(0.5, 1.0, 0.0),            5,  3);
     dabSizeHelper(a, "180 deg",   KisDabShape(1.0, 1.0, M_PI),          10,  5);
-    dabSizeHelper(a, "90 deg",    KisDabShape(1.0, 1.0, M_PI_2),         6, 10); // ceil rule
-    dabSizeHelper(a, "-90 deg",   KisDabShape(1.0, 1.0, -M_PI_2),        6, 11); // ceil rule
+    dabSizeHelper(a, "90 deg",    KisDabShape(1.0, 1.0, M_PI_2),         5, 10);
+    dabSizeHelper(a, "-90 deg",   KisDabShape(1.0, 1.0, -M_PI_2),        5, 10);
     dabSizeHelper(a, "45 deg",    KisDabShape(1.0, 1.0, 0.25 * M_PI),   11, 11);
     dabSizeHelper(a, "2x, 45d",   KisDabShape(2.0, 1.0, 0.25 * M_PI),   22, 22);
     dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);

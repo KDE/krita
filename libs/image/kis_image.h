@@ -838,10 +838,6 @@ public:
 public Q_SLOTS:
     void stopIsolatedMode();
 
-    /// Calculates the content light level inside a stroke.
-    /// @param type, see KisContentLightLevelInformation::CalculationType
-    void calculateContentLightLevelInformation(int type = 0);
-
 
 public:
     KisNodeSP isolationRootNode() const;

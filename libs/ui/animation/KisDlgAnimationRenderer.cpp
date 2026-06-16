@@ -559,8 +559,8 @@ bool KisDlgAnimationRenderer::supportsAudio(const QString &videoType)
 KisHDRMetadataOptions KisDlgAnimationRenderer::optionsFromImage()
 {
     KisHDRMetadataOptions hdrOptions;
-    if (m_image->contentLightLevelInformation()) {
-        hdrOptions.clli = *m_image->contentLightLevelInformation();
+    if (m_image->relativeContentLightLevelInformation()) {
+        hdrOptions.clli = *m_image->relativeContentLightLevelInformation();
     }
     if (m_image->colorVolumeInformation()) {
         hdrOptions.cvi = *m_image->colorVolumeInformation();

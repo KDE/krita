@@ -20,7 +20,6 @@
 
 #include <klocalizedstring.h>
 
-#include "KisContentLightLevelProcessingVistor.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorProfile.h"
@@ -2101,26 +2100,6 @@ void KisImage::setRelativeContentLightLevelInformation(const std::optional<KisRe
         m_d->relativeContentLightLevelInformation = clli;
         emit sigContentLightLevelInformationChanged();
     }
-}
-
-void KisImage::calculateContentLightLevelInformation(int type)
-{
-
-    KisImageSignalVector emitSignals;
-    KUndo2MagicString actionName;
-    KisProcessingApplicator::ProcessingFlags signalFlags = KisProcessingApplicator::NO_UI_UPDATES | KisProcessingApplicator::RECURSIVE_FRAME_TIMES;
-    KisProcessingApplicator applicator(this, m_d->rootLayer,
-                                       signalFlags,
-                                       emitSignals, actionName);
-
-    KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
-        new KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType(type));
-    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
-    applicator.end();
-
-    waitForDone();
-    m_d->relativeContentLightLevelInformation = std::make_optional(visitor->contentLightLevelInformation());
-    emit sigContentLightLevelInformationChanged();
 }
 
 std::optional<KisColorVolumeInformation> KisImage::colorVolumeInformation() const

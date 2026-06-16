@@ -10,13 +10,14 @@
 #include <kis_do_nothing_processing_visitor.h>
 #include <QScopedPointer>
 #include <kis_hdr_metadata.h>
+#include "kritaimage_export.h"
 
 /**
  * @brief The KisContentLightLevelProcessingVistor class
  * This processing visitor checks the projection of the root level node,
  * and calculates the Content Light Level Information for it.
  */
-class KisContentLightLevelProcessingVistor : public KisDoNothingProcessingVisitor
+class KRITAIMAGE_EXPORT KisContentLightLevelProcessingVistor : public KisDoNothingProcessingVisitor
 {
 
 public:

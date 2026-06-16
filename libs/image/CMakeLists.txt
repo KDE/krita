@@ -122,6 +122,9 @@ set(kritaimage_LIB_SRCS
    commands_new/KisLazyCreateTransformMaskKeyframesCommand.cpp
    commands_new/KisChangeCloneLayersCommand.cpp
    commands_new/KisLayerCollapseCommand.cpp
+   commands_new/KisChangeImageHdrContentLightLevelCommand.cpp
+   commands_new/KisChangeImageHdrColorVolumeCommand.cpp
+   commands_new/KisChangeImageHdrDiffuseWhiteCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp

@@ -24,6 +24,17 @@
 #include <kis_display_color_converter.h>
 #include <KisWidgetConnectionUtils.h>
 
+#include <kis_processing_applicator.h>
+#include <kis_image_signal_router.h>
+#include <kis_undo_adapter.h>
+#include <kis_types.h>
+#include <kis_group_layer.h>
+
+#include <commands_new/KisChangeImageHdrContentLightLevelCommand.h>
+#include <commands_new/KisChangeImageHdrColorVolumeCommand.h>
+#include <commands_new/KisChangeImageHdrDiffuseWhiteCommand.h>
+#include <KisContentLightLevelProcessingVistor.h>
+
 #include "KisProofingConfigModel.h"
 
 struct KisDlgImageProperties::Private {
@@ -248,12 +259,13 @@ void KisDlgImageProperties::updateHDRLightLevels()
         m_page->gbxDiffuseWhite->setChecked(false);
         m_page->spnDiffuseWhite->setValue(80);
     }
-    if (d->image->contentLightLevelInformation()) {
+    if (d->image->relativeContentLightLevelInformation()) {
         m_page->gbxContentLightLevel->setChecked(true);
         double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
-        KisRelativeContentLightLevelInformation clli = *d->image->contentLightLevelInformation();
+        KisRelativeContentLightLevelInformation clli = *d->image->relativeContentLightLevelInformation();
         m_page->spnMaxCll->setValue(clli.maxContentLightLevel*diffuseWhite);
         m_page->spnMaxFall->setValue(clli.maxFrameAverageLightLevel*diffuseWhite);
+        m_page->cmbLumiCalcType->setCurrentIndex(clli.type);
     } else {
         m_page->gbxContentLightLevel->setChecked(false);
     }
@@ -286,28 +298,38 @@ void KisDlgImageProperties::updateHDRColorVolume()
 
 void KisDlgImageProperties::setHDRLightLevelsOnImage()
 {
+    KUndo2Command *cmd;
     if (m_page->gbxContentLightLevel->isChecked()) {
         double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
         KisRelativeContentLightLevelInformation clli;
         clli.maxContentLightLevel = m_page->spnMaxCll->value() / diffuseWhite;
         clli.maxFrameAverageLightLevel = m_page->spnMaxFall->value() / diffuseWhite;
-        d->image->setRelativeContentLightLevelInformation(std::make_optional(clli));
+        clli.type = KisRelativeContentLightLevelInformation::CalculationType(m_page->cmbLumiCalcType->currentData().toInt());
+        cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, std::make_optional(clli));
     } else {
-        d->image->setRelativeContentLightLevelInformation(std::nullopt);
+        cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, std::nullopt);
+    }
+    if (cmd) {
+        d->image->undoAdapter()->addCommand(cmd);
     }
 }
 
 void KisDlgImageProperties::setHDRDiffuseLevelOnImage()
 {
+    KUndo2Command *cmd;
     if (m_page->gbxDiffuseWhite->isChecked()) {
-        d->image->setDiffuseWhiteLightLevel(std::make_optional(m_page->spnDiffuseWhite->value()));
+        cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::make_optional(m_page->spnDiffuseWhite->value()));
     } else {
-        d->image->setDiffuseWhiteLightLevel(std::nullopt);
+        cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::nullopt);
+    }
+    if (cmd) {
+        d->image->undoAdapter()->addCommand(cmd);
     }
 }
 
 void KisDlgImageProperties::setHDRColorVolumeOnImage()
 {
+    KUndo2Command *cmd;
     if (m_page->gbxColorVolume->isChecked()) {
         KisColorVolumeInformation cvi;
 
@@ -320,9 +342,12 @@ void KisDlgImageProperties::setHDRColorVolumeOnImage()
         cvi.maxLuminance = m_page->spnMaxLuminance->value();
         cvi.minLuminance = m_page->spnMinLuminance->value();
 
-        d->image->setColorVolumeInformation(std::make_optional(cvi));
+        cmd = new KisChangeImageHdrColorVolumeCommand(d->image, std::make_optional(cvi));
     } else {
-        d->image->setColorVolumeInformation(std::nullopt);
+        cmd = new KisChangeImageHdrColorVolumeCommand(d->image, std::nullopt);
+    }
+    if (cmd) {
+        d->image->undoAdapter()->addCommand(cmd);
     }
 }
 
@@ -366,10 +391,24 @@ void KisDlgImageProperties::changeColorVolumePreset()
     }
 }
 
+
 void KisDlgImageProperties::slotCalculateLightLevels()
 {
-    int type = m_page->cmbLumiCalcType->currentData().toInt();
-    d->image->calculateContentLightLevelInformation(type);
+    KisRelativeContentLightLevelInformation::CalculationType type = KisRelativeContentLightLevelInformation::CalculationType(m_page->cmbLumiCalcType->currentData().toInt());
+
+    KisProcessingApplicator::ProcessingFlags signalFlags = KisProcessingApplicator::NO_UI_UPDATES | KisProcessingApplicator::RECURSIVE_FRAME_TIMES;
+    KisProcessingApplicator applicator(d->image, d->image->rootLayer(),
+                                       signalFlags);
+
+    KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
+        new KisContentLightLevelProcessingVistor(type);
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
+    applicator.end();
+
+    d->image->waitForDone();
+
+    KUndo2Command *cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, std::make_optional(visitor->contentLightLevelInformation()));
+    d->image->undoAdapter()->addCommand(cmd);
 }
 
 void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)

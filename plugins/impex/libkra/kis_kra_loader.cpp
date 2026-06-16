@@ -1558,11 +1558,11 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
             image->setDiffuseWhiteLightLevel(dW);
         }
         if (child.tagName() == CONTENTLIGHTLEVEL) {
-            KisContentLightLevelInformation clli;
+            KisRelativeContentLightLevelInformation clli;
             clli.maxContentLightLevel = child.attribute(MAXCLL, "0.0").toDouble();
             clli.maxFrameAverageLightLevel = child.attribute(MAXFALL, "0.0").toDouble();
-            std::optional<KisContentLightLevelInformation> ci = std::make_optional(clli);
-            image->setContentLightLevelInformation(ci);
+            std::optional<KisRelativeContentLightLevelInformation> ci = std::make_optional(clli);
+            image->setRelativeContentLightLevelInformation(ci);
         }
         if (child.tagName() == COLORVOLUME) {
             KisColorVolumeInformation cv;

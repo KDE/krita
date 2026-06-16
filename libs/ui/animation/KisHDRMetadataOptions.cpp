@@ -79,7 +79,7 @@ QString KisHDRMetadataOptions::generateFFMpegOptions() const
             .arg(cprim(cvi.white.x())).arg(cprim(cvi.white.y()))
             .arg(lum(cvi.maxLuminance)).arg(lum(cvi.minLuminance));
     }
-    if (clli != KisContentLightLevelInformation()) {
+    if (clli != KisRelativeContentLightLevelInformation()) {
         x265Params += QString("max-cll=%11,%12:")
             .arg(int(clli.maxContentLightLevel*diffuseWhite))
             .arg(int(clli.maxFrameAverageLightLevel*diffuseWhite));

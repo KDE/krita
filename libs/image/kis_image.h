@@ -43,7 +43,7 @@ class KisProofingConfiguration;
 class KisPaintDevice;
 class KisImageGlobalSelectionManagementInterface;
 
-struct KisContentLightLevelInformation;
+struct KisRelativeContentLightLevelInformation;
 struct KisColorVolumeInformation;
 
 namespace KisMetaData
@@ -805,15 +805,15 @@ public:
     bool startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup);
 
     /**
-     * @brief contentLightLevelInformation
-     * This returns (optionally) a KisContentLightLevelInformation with the
+     * @brief relativeContentLightLevelInformation
+     * This returns (optionally) a KisRelativeContentLightLevelInformation with the
      * MaxCLL and MaxFALL of the image. Note that MaxCLL and MaxFALL will
      * not be in cd/m², but rather in linear XYZ Y. To get the cd/m², multiply
      * these values with diffuseWhiteLightLevel().
      */
-    std::optional<KisContentLightLevelInformation> contentLightLevelInformation() const;
+    std::optional<KisRelativeContentLightLevelInformation> relativeContentLightLevelInformation() const;
 
-    void setContentLightLevelInformation(const std::optional<KisContentLightLevelInformation> clli);
+    void setRelativeContentLightLevelInformation(const std::optional<KisRelativeContentLightLevelInformation> clli);
     /**
      * @brief colorVolumeInformation
      * @return the KisColorVolumeInformation of the image.

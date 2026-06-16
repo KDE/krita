@@ -129,9 +129,9 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     m_page->cmbColorVolumePresets->addItem(i18n("Rec. 2100 PQ"), "p2100-pq");
     m_page->cmbColorVolumePresets->addItem(i18n("DCI-P3 D65"), "dci-p3-d65");
 
-    m_page->cmbLumiCalcType->addItem(i18n("XYZ Luminance"), KisContentLightLevelInformation::XYZLuminance);
-    m_page->cmbLumiCalcType->addItem(i18n("Rec 2020 Per Component"), KisContentLightLevelInformation::Rec2020Component);
-    m_page->cmbLumiCalcType->addItem(i18n("RGB Per Component"), KisContentLightLevelInformation::RGBComponent);
+    m_page->cmbLumiCalcType->addItem(i18n("XYZ Luminance"), KisRelativeContentLightLevelInformation::XYZLuminance);
+    m_page->cmbLumiCalcType->addItem(i18n("Rec 2020 Per Component"), KisRelativeContentLightLevelInformation::Rec2020Component);
+    m_page->cmbLumiCalcType->addItem(i18n("RGB Per Component"), KisRelativeContentLightLevelInformation::RGBComponent);
 
     m_page->cmbLumiCalcType->setItemData(0, i18nc("@tooltip", "Calculate the brightness in nits against XYZ luminance."), Qt::ToolTipRole);
     m_page->cmbLumiCalcType->setItemData(1, i18nc("@tooltip", "Calculate the brightness in nits by testing the components in linear rec 2020."), Qt::ToolTipRole);
@@ -251,7 +251,7 @@ void KisDlgImageProperties::updateHDRLightLevels()
     if (d->image->contentLightLevelInformation()) {
         m_page->gbxContentLightLevel->setChecked(true);
         double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
-        KisContentLightLevelInformation clli = *d->image->contentLightLevelInformation();
+        KisRelativeContentLightLevelInformation clli = *d->image->contentLightLevelInformation();
         m_page->spnMaxCll->setValue(clli.maxContentLightLevel*diffuseWhite);
         m_page->spnMaxFall->setValue(clli.maxFrameAverageLightLevel*diffuseWhite);
     } else {
@@ -288,12 +288,12 @@ void KisDlgImageProperties::setHDRLightLevelsOnImage()
 {
     if (m_page->gbxContentLightLevel->isChecked()) {
         double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
-        KisContentLightLevelInformation clli;
+        KisRelativeContentLightLevelInformation clli;
         clli.maxContentLightLevel = m_page->spnMaxCll->value() / diffuseWhite;
         clli.maxFrameAverageLightLevel = m_page->spnMaxFall->value() / diffuseWhite;
-        d->image->setContentLightLevelInformation(std::make_optional(clli));
+        d->image->setRelativeContentLightLevelInformation(std::make_optional(clli));
     } else {
-        d->image->setContentLightLevelInformation(std::nullopt);
+        d->image->setRelativeContentLightLevelInformation(std::nullopt);
     }
 }
 

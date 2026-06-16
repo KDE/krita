@@ -20,16 +20,16 @@ class KisContentLightLevelProcessingVistor : public KisDoNothingProcessingVisito
 {
 
 public:
-    KisContentLightLevelProcessingVistor(KisContentLightLevelInformation::CalculationType type = KisContentLightLevelInformation::XYZLuminance);
+    KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType type = KisRelativeContentLightLevelInformation::XYZLuminance);
     ~KisContentLightLevelProcessingVistor() override;
 
     using KisDoNothingProcessingVisitor::visit;
     void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter) override;
 
-    KisContentLightLevelInformation contentLightLevelInformation() const;
+    KisRelativeContentLightLevelInformation contentLightLevelInformation() const;
 
 private:
-    KisContentLightLevelInformation calculateForDev(KisPaintDeviceSP dev);
+    KisRelativeContentLightLevelInformation calculateForDev(KisPaintDeviceSP dev);
     struct Private;
     QScopedPointer<Private> d;
 };

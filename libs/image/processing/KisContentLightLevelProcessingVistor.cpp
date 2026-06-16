@@ -13,11 +13,11 @@
 
 
 struct KisContentLightLevelProcessingVistor::Private {
-    KisContentLightLevelInformation::CalculationType type;
-    QList<KisContentLightLevelInformation> clli;
+    KisRelativeContentLightLevelInformation::CalculationType type;
+    QList<KisRelativeContentLightLevelInformation> clli;
 };
 
-KisContentLightLevelProcessingVistor::KisContentLightLevelProcessingVistor(KisContentLightLevelInformation::CalculationType type)
+KisContentLightLevelProcessingVistor::KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType type)
     : KisDoNothingProcessingVisitor(), d(new Private)
 {
     d->type = type;
@@ -39,12 +39,12 @@ void KisContentLightLevelProcessingVistor::visit(KisGroupLayer *layer, KisUndoAd
     d->clli.append(calculateForDev(dev));
 }
 
-KisContentLightLevelInformation KisContentLightLevelProcessingVistor::contentLightLevelInformation() const
+KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::contentLightLevelInformation() const
 {
-    KisContentLightLevelInformation clli;
+    KisRelativeContentLightLevelInformation clli;
     double total = 0.0;
     for(int i = 0; i < d->clli.size(); i++) {
-        KisContentLightLevelInformation c = d->clli.at(i);
+        KisRelativeContentLightLevelInformation c = d->clli.at(i);
         clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, c.maxContentLightLevel);
         total += c.maxFrameAverageLightLevel;
     }
@@ -52,18 +52,18 @@ KisContentLightLevelInformation KisContentLightLevelProcessingVistor::contentLig
     return clli;
 }
 
-KisContentLightLevelInformation KisContentLightLevelProcessingVistor::calculateForDev(KisPaintDeviceSP dev)
+KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::calculateForDev(KisPaintDeviceSP dev)
 {
-    KisContentLightLevelInformation clli;
+    KisRelativeContentLightLevelInformation clli;
     double average = 0.0;
     int divider = 0;
     const QRectF imageBounds = dev->extent();
 
     bool canConvertLinear = dev->colorSpace()->colorModelId() == RGBAColorModelID && dev->colorSpace()->profile()->getColorPrimaries() != PRIMARIES_UNSPECIFIED;
 
-    if ((d->type == KisContentLightLevelInformation::RGBComponent && canConvertLinear)
-        || d->type == KisContentLightLevelInformation::Rec2020Component){
-        if (d->type == KisContentLightLevelInformation::Rec2020Component) {
+    if ((d->type == KisRelativeContentLightLevelInformation::RGBComponent && canConvertLinear)
+        || d->type == KisRelativeContentLightLevelInformation::Rec2020Component){
+        if (d->type == KisRelativeContentLightLevelInformation::Rec2020Component) {
             const KoColorSpace *rec2020CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                          Float32BitsColorDepthID.id(),
                                                                                          KoColorSpaceRegistry::instance()->p2020G10Profile());

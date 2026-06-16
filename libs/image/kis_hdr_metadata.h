@@ -9,12 +9,12 @@
 #include <QPointF>
 #include <boost/operators.hpp>
 /**
- * KisContentLightLevelInformation is a struct that represents
+ * KisRelativeContentLightLevelInformation is a struct that represents
  * HDR10 metadata. It is similar to the same values in MasteringInfo in
- * KisSurfaceColorimetry.h
+ * KisSurfaceColorimetry.h, though typically relative to the diffuse white.
  */
 
-struct KisContentLightLevelInformation: public boost::equality_comparable<KisContentLightLevelInformation> {
+struct KisRelativeContentLightLevelInformation: public boost::equality_comparable<KisRelativeContentLightLevelInformation> {
     /**
      * MaxContentLightLevel or MaxCLL is the brightest pixel in the frame sequence.
      */
@@ -26,15 +26,18 @@ struct KisContentLightLevelInformation: public boost::equality_comparable<KisCon
      */
     double maxFrameAverageLightLevel = 0.0;
 
-    bool operator==(const KisContentLightLevelInformation & other) const {
-        return qFuzzyCompare(maxContentLightLevel, other.maxContentLightLevel)
-            && qFuzzyCompare(maxFrameAverageLightLevel, other.maxFrameAverageLightLevel);
-    };
-
     enum CalculationType {
         XYZLuminance, ///< Calculate luminance by converting to xyz.
         Rec2020Component, ///< Calculate luminance by converting to rec2020
         RGBComponent ///< Calculate luminance on the RGB components if possible.
+    };
+
+    CalculationType type;
+
+    bool operator==(const KisRelativeContentLightLevelInformation & other) const {
+        return qFuzzyCompare(maxContentLightLevel, other.maxContentLightLevel)
+            && qFuzzyCompare(maxFrameAverageLightLevel, other.maxFrameAverageLightLevel)
+            && (type == other.type);
     };
 };
 

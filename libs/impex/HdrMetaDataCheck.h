@@ -25,7 +25,7 @@ public:
 
     bool checkNeeded(KisImageSP image) const override
     {
-        return image->contentLightLevelInformation() && image->colorVolumeInformation() && image->diffuseWhiteLightLevel();
+        return image->relativeContentLightLevelInformation() && image->colorVolumeInformation() && image->diffuseWhiteLightLevel();
     }
 
     Level check(KisImageSP /*image*/) const override

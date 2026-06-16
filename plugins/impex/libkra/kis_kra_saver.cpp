@@ -705,15 +705,15 @@ void KisKraSaver::saveColorHistory(QDomDocument &doc, QDomElement &element)
 
 void KisKraSaver::saveHDRMetadata(QDomDocument &doc, QDomElement &element, KisImageSP image)
 {
-    if (!image->diffuseWhiteLightLevel() && !image->colorVolumeInformation() && !image->contentLightLevelInformation()) {
+    if (!image->diffuseWhiteLightLevel() && !image->colorVolumeInformation() && !image->relativeContentLightLevelInformation()) {
         return;
     }
     QDomElement hdr = doc.createElement(HDRMETADATA);
     if (image->diffuseWhiteLightLevel()) {
         KisDomUtils::saveValue(&hdr, DIFFUSEWHITE, *image->diffuseWhiteLightLevel());
     }
-    if (image->contentLightLevelInformation()) {
-        KisContentLightLevelInformation c = *image->contentLightLevelInformation();
+    if (image->relativeContentLightLevelInformation()) {
+        KisRelativeContentLightLevelInformation c = *image->relativeContentLightLevelInformation();
         QDomElement clli = doc.createElement(CONTENTLIGHTLEVEL);
         clli.setAttribute(MAXCLL, KisDomUtils::toString(c.maxContentLightLevel));
         clli.setAttribute(MAXFALL, KisDomUtils::toString(c.maxFrameAverageLightLevel));

@@ -19,7 +19,7 @@ struct KisHDRMetadataOptions
 
     KisColorVolumeInformation cvi;
 
-    KisContentLightLevelInformation clli;
+    KisRelativeContentLightLevelInformation clli;
 
     double diffuseWhite = 80;
 

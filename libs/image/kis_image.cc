@@ -280,7 +280,7 @@ public:
 
     KisCompositeProgressProxy compositeProgressProxy;
 
-    std::optional<KisContentLightLevelInformation> contentLightLevelInformation;
+    std::optional<KisRelativeContentLightLevelInformation> relativeContentLightLevelInformation;
     std::optional<KisColorVolumeInformation> colorVolumeInformation;
     std::optional<double> diffuseWhiteLightLevel;
 
@@ -502,7 +502,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
         m_d->isolateGroup = rhs.m_d->isolateGroup;
 
         m_d->colorVolumeInformation = rhs.m_d->colorVolumeInformation;
-        m_d->contentLightLevelInformation = rhs.m_d->contentLightLevelInformation;
+        m_d->relativeContentLightLevelInformation = rhs.m_d->relativeContentLightLevelInformation;
         m_d->diffuseWhiteLightLevel = rhs.m_d->diffuseWhiteLightLevel;
 
         QQueue<KisNodeSP> linearizedNodes;
@@ -2089,16 +2089,16 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
     return true;
 }
 
-std::optional<KisContentLightLevelInformation> KisImage::contentLightLevelInformation() const
+std::optional<KisRelativeContentLightLevelInformation> KisImage::relativeContentLightLevelInformation() const
 {
-    return m_d->contentLightLevelInformation;
+    return m_d->relativeContentLightLevelInformation;
 }
 
-void KisImage::setContentLightLevelInformation(const std::optional<KisContentLightLevelInformation> clli)
+void KisImage::setRelativeContentLightLevelInformation(const std::optional<KisRelativeContentLightLevelInformation> clli)
 {
-    if (!m_d->contentLightLevelInformation ||
-        !(*m_d->contentLightLevelInformation == *clli)) {
-        m_d->contentLightLevelInformation = clli;
+    if (!m_d->relativeContentLightLevelInformation ||
+        !(*m_d->relativeContentLightLevelInformation == *clli)) {
+        m_d->relativeContentLightLevelInformation = clli;
         emit sigContentLightLevelInformationChanged();
     }
 }
@@ -2114,12 +2114,12 @@ void KisImage::calculateContentLightLevelInformation(int type)
                                        emitSignals, actionName);
 
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
-        new KisContentLightLevelProcessingVistor(KisContentLightLevelInformation::CalculationType(type));
+        new KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType(type));
     applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
     applicator.end();
 
     waitForDone();
-    m_d->contentLightLevelInformation = std::make_optional(visitor->contentLightLevelInformation());
+    m_d->relativeContentLightLevelInformation = std::make_optional(visitor->contentLightLevelInformation());
     emit sigContentLightLevelInformationChanged();
 }
 

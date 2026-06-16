@@ -197,6 +197,31 @@ public:
     }
 };
 
+QIcon addDisabledStatesToIcon(const QIcon &_icon, const QSize &size) {
+
+    QIcon icon = _icon;
+    QImage imageOrig = _icon.pixmap(size).toImage();
+
+    auto makeFainter = [imageOrig] (int alphaVal) {
+        QImage image = imageOrig;
+        QImage alpha = QImage(image.size(), QImage::Format_Alpha8);
+        alpha.fill(alphaVal);
+        image.setAlphaChannel(alpha);
+        QPixmap pixmap = QPixmap();
+        pixmap.convertFromImage(image);
+        return pixmap;
+    };
+
+    QPixmap thirdOpaque = makeFainter(int(256*0.3));
+    QPixmap halfOpaque = makeFainter(int(256*0.65));
+
+    icon.addPixmap(thirdOpaque, QIcon::Mode::Disabled, QIcon::State::Off);
+    icon.addPixmap(thirdOpaque, QIcon::Mode::Disabled, QIcon::State::On);
+    icon.addPixmap(halfOpaque, QIcon::Mode::Normal, QIcon::State::Off);
+
+    return icon;
+}
+
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
 {
@@ -424,14 +449,16 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 #else
     connect(chkEnableSelectionActionBar, SIGNAL(stateChanged(int)), this, SLOT(selectionActionsBarCheckboxChanged(int)));
 #endif
-    sapRightMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
-    sapTopRightButton->setIcon(KisIconUtils::loadIcon("arrow-topright"));
-    sapTopMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-up"));
-    sapTopLeftButton->setIcon(KisIconUtils::loadIcon("arrow-topleft"));
-    sapLeftMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
-    sapBottomLeftButton->setIcon(KisIconUtils::loadIcon("arrow-downleft"));
-    sapBottomMiddleButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
-    sapBottomRightButton->setIcon(KisIconUtils::loadIcon("arrow-downright"));
+
+    QSize sapPositionIconSize = sapRightMiddleButton->iconSize();
+    sapRightMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-right"), sapPositionIconSize));
+    sapTopRightButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-topright"), sapPositionIconSize));
+    sapTopMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-up"), sapPositionIconSize));
+    sapTopLeftButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-topleft"), sapPositionIconSize));
+    sapLeftMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-left"), sapPositionIconSize));
+    sapBottomLeftButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-downleft"), sapPositionIconSize));
+    sapBottomMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-down"), sapPositionIconSize));
+    sapBottomRightButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-downright"), sapPositionIconSize));
 
 
     using Position = KisConfig::SelectionActionsBarPosition;

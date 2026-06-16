@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -22179,12 +22179,12 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Odwróć zaznaczenie"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Wygładzanie zaznaczania"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr "Zwiększ zaznaczenie do najciemniejszego piksela"

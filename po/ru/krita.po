@@ -82,7 +82,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2026-05-18 08:55+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -22165,14 +22165,14 @@ msgstr ""
 "Инвертирование выделения\n"
 "инвертирование выделения"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr ""
 "Выделение со сглаживанием\n"
 "выделение со сглаживанием"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""

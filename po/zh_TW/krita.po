@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -22025,12 +22025,12 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "反轉選取"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "反鋸齒化選取區域"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr "擴大選取區域至最暗的像素"

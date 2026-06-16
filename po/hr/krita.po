@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -21760,13 +21760,13 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Umetni odabrano"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Eliptično"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""

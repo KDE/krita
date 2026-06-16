@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2026-04-28 08:28+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -21778,12 +21778,12 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Preobrni izbor"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Glajenje robov izbora"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr "Razširi izbor do najtemnejše slikovne točke"

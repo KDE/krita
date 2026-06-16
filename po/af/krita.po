@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -21720,13 +21720,13 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Keuse"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Keuse"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""

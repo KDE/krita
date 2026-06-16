@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2026-05-14 11:21+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -22244,7 +22244,7 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Inverte selection"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Dilate Selection"
@@ -22252,7 +22252,7 @@ msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Dilata selection"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""

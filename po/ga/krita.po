@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -21907,12 +21907,12 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Inbhéartaigh an Roghnú"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Roghnú Frith-Ailias"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr "Fás an Roghnú go dtí an Picteilín is Dorcha"

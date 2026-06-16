@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-13 02:34+0000\n"
+"POT-Creation-Date: 2026-06-16 02:38+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -22473,7 +22473,7 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Obrni odabir"
 
-#: libs/image/kis_selection_filters.cpp:930
+#: libs/image/kis_selection_filters.cpp:935
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Dilate Selection"
@@ -22481,7 +22481,7 @@ msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Prošireno označavanje"
 
-#: libs/image/kis_selection_filters.cpp:1195
+#: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""

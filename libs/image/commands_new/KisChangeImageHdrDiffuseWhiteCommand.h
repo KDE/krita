@@ -9,6 +9,7 @@
 #include <kundo2command.h>
 #include <kis_types.h>
 #include "kritaimage_export.h"
+#include <optional>
 
 class KRITAIMAGE_EXPORT KisChangeImageHdrDiffuseWhiteCommand : public KUndo2Command
 {

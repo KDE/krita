@@ -10,6 +10,7 @@
 #include <kis_types.h>
 #include <kis_hdr_metadata.h>
 #include "kritaimage_export.h"
+#include <optional>
 
 class KRITAIMAGE_EXPORT KisChangeImageHdrColorVolumeCommand : public KUndo2Command
 {

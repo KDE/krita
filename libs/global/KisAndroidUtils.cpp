@@ -3,7 +3,16 @@
  */
 #include "KisAndroidUtils.h"
 #include "KisAndroidLogHandler.h"
-#include <QtAndroid>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QJniEnvironment>
+#include <QJniObject>
+#else
+#include <QAndroidJniEnvironment>
+#include <QAndroidJniObject>
+using QJniEnvironment = QAndroidJniEnvironment;
+using QJniObject = QAndroidJniObject;
+#endif
 
 namespace KisAndroidUtils
 {
@@ -12,9 +21,9 @@ void performInitialSetup()
 {
     KisAndroidLogHandler::handler_init();
 
-    QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative",
-                                                                           "activity",
-                                                                           "()Landroid/app/Activity;");
+    QJniObject activity = QJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative",
+                                                             "activity",
+                                                             "()Landroid/app/Activity;");
     if (activity.isValid()) {
         activity.callMethod<void>("copyAssets", "()V");
     } else {
@@ -29,9 +38,8 @@ bool looksLikeXiaomiDevice()
     static bool result;
     if (!checked) {
         checked = true;
-        result = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity",
-                                                               "looksLikeXiaomiDevice",
-                                                               "()Z");
+        result =
+            QJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity", "looksLikeXiaomiDevice", "()Z");
     }
     return result;
 }
@@ -43,9 +51,9 @@ bool isLowMemoryKillReportSupported()
     static bool result;
     if (!checked) {
         checked = true;
-        result = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity",
-                                                               "isLowMemoryKillReportSupported",
-                                                               "()Z");
+        result = QJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity",
+                                                        "isLowMemoryKillReportSupported",
+                                                        "()Z");
     }
     return result;
 }

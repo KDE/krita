@@ -1509,6 +1509,45 @@ set_package_properties(Poppler PROPERTIES
     PURPOSE "Required by the Krita PDF filter.")
 
 ##
+## Test for libav on Android
+##
+if(ANDROID)
+    find_package(PkgConfig REQUIRED)
+    set_package_properties(PkgConfig PROPERTIES
+        DESCRIPTION "pkg-config"
+        URL "https://www.freedesktop.org/wiki/Software/pkg-config/"
+        TYPE REQUIRED
+        PURPOSE "Needed to find ffmpeg libraries on Android."
+    )
+
+    pkg_check_modules(LibAV REQUIRED IMPORTED_TARGET GLOBAL
+        libavcodec
+        libavfilter
+        libavformat
+        libavutil
+        libswscale
+    )
+    if(TARGET PkgConfig::LibAV)
+        add_library(LibAV ALIAS PkgConfig::LibAV)
+    endif()
+
+    # The PkgConfig and FeatureSummary modules don't play nice with each other
+    # on their own, so this has to be set manually for the summary to show up.
+    if(TARGET LibAV)
+        set_property(GLOBAL APPEND PROPERTY PACKAGES_FOUND LibAV)
+    else()
+        set_property(GLOBAL APPEND PROPERTY PACKAGES_NOT_FOUND LibAV)
+    endif()
+
+    set_package_properties(LibAV PROPERTIES
+        DESCRIPTION "FFmpeg libraries"
+        URL "https://ffmpeg.org/"
+        TYPE REQUIRED
+        PURPOSE "Needed to render animations and timelapses on Android."
+    )
+endif()
+
+##
 ## Test for quazip
 ##
 find_package(QUAZIP 0.6)

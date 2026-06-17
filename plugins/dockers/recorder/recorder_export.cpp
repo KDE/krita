@@ -111,7 +111,7 @@ public:
     {
         QDir dir(settings->inputDirectory, "*." % RecorderFormatInfo::fileExtension(settings->format),
                 QDir::Name, QDir::Files | QDir::NoDotAndDotDot);
-        const QStringList &frames = dir.entryList(); // dir.count() calls entryList().count() internally
+        QStringList frames = dir.entryList(); // dir.count() calls entryList().count() internally
         settings->framesCount = frames.count();
         if (settings->framesCount != 0) {
             const QString &fileName = settings->inputDirectory % QDir::separator() % frames.last();

@@ -61,6 +61,8 @@ using Exporter = KisFFMpegWrapper;
 class RecorderExport::Private
 {
 public:
+    static constexpr int DIMENSION_LIMIT = 1920;
+
     RecorderExport *q;
     QScopedPointer<Ui::RecorderExport> ui;
     RecorderExportSettings *settings;
@@ -391,6 +393,13 @@ public:
         return result;
     }
 
+    void updateWarningVisibility()
+    {
+        ui->wdgWarnFps->setVisible(settings->fps > 30);
+        QSize size = settings->resize ? settings->size : settings->imageSize;
+        ui->wdgWarnSize->setVisible(size.width() > DIMENSION_LIMIT || size.height() > DIMENSION_LIMIT);
+    }
+
     QString requestFile(const QString &extension, const QString &defaultDir = QString())
     {
         KoFileDialog dialog(q, KoFileDialog::SaveFile, "ExportTimelapse");
@@ -448,6 +457,10 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
     d->ui->spinLastFrameSec->setEnabled(d->ui->extendResultCheckBox->isChecked());
     d->ui->spinFirstFrameSec->setEnabled(d->ui->resultPreviewCheckBox->isChecked());
+    d->ui->lblWarnFpsIcon->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(48, 48));
+    d->ui->lblWarnSizeIcon->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(48, 48));
+    d->ui->wdgWarnFps->hide();
+    d->ui->wdgWarnSize->hide();
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
     connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
@@ -576,6 +589,7 @@ void RecorderExport::onSpinFpsValueChanged(int value)
     config.setFps(value);
     d->updateFps(config, false);
     d->updateVideoDuration();
+    d->updateWarningVisibility();
 }
 
 void RecorderExport::onCheckResultPreviewToggled(bool checked)
@@ -610,6 +624,7 @@ void RecorderExport::onCheckResizeToggled(bool checked)
 {
     settings->resize = checked;
     RecorderExportConfig(false).setResize(checked);
+    d->updateWarningVisibility();
 }
 
 void RecorderExport::onSpinScaleWidthValueChanged(int value)
@@ -618,6 +633,7 @@ void RecorderExport::onSpinScaleWidthValueChanged(int value)
     if (settings->lockRatio)
         d->updateRatio(true);
     RecorderExportConfig(false).setSize(settings->size);
+    d->updateWarningVisibility();
 }
 
 void RecorderExport::onSpinScaleHeightValueChanged(int value)
@@ -626,6 +642,7 @@ void RecorderExport::onSpinScaleHeightValueChanged(int value)
     if (settings->lockRatio)
         d->updateRatio(false);
     RecorderExportConfig(false).setSize(settings->size);
+    d->updateWarningVisibility();
 }
 
 void RecorderExport::onButtonLockRatioToggled(bool checked)
@@ -638,6 +655,7 @@ void RecorderExport::onButtonLockRatioToggled(bool checked)
         config.setSize(settings->size);
     }
     d->ui->buttonLockRatio->setIcon(settings->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+    d->updateWarningVisibility();
 }
 
 void RecorderExport::onButtonLockFpsToggled(bool checked)
@@ -655,7 +673,7 @@ void RecorderExport::onButtonLockFpsToggled(bool checked)
         d->ui->spinInputFps->setMinimum(d->spinInputFPSMinValue);
         d->ui->spinInputFps->setMaximum(d->spinInputFPSMaxValue);
     }
-
+    d->updateWarningVisibility();
 }
 
 #ifndef Q_OS_ANDROID

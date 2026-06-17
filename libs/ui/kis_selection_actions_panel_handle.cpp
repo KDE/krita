@@ -85,3 +85,8 @@ void KisSelectionActionsPanelHandle::setOrientation(Orientation orientation)
 {
     d->orientation = orientation;
 }
+
+void KisSelectionActionsPanelHandle::themeChanged()
+{
+    d->handle_icon = KisIconUtils::loadIcon(d->handle_icon.name());
+}

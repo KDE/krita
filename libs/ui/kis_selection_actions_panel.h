@@ -55,6 +55,7 @@ private Q_SLOTS:
     void configureSelectionActionsPanel();
     void configChanged(bool skipResettingOffset = false);
     void canvasStateChanged();
+    void themeChanged();
 
 private:
     void recalculateDimensions();

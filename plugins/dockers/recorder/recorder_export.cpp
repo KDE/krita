@@ -8,9 +8,7 @@
 #include "ui_recorder_export.h"
 #include "recorder_export_config.h"
 #include "recorder_export_settings.h"
-#include "recorder_profile_settings.h"
 #include "recorder_directory_cleaner.h"
-#include "animation/KisFFMpegWrapper.h"
 
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
@@ -33,6 +31,15 @@
 
 #include "kis_debug.h"
 
+#ifdef Q_OS_ANDROID
+#include "animation/KisMediaEncoderFormatPreferencesDialog.h"
+#include "animation/KisMediaEncoderWrapper.h"
+#include <KisAndroidUtils.h>
+#else
+#include "animation/KisFFMpegWrapper.h"
+#include "recorder_profile_settings.h"
+#endif
+
 
 namespace
 {
@@ -42,6 +49,12 @@ enum ExportPageIndex
     PageProgress = 1,
     PageDone = 2
 };
+
+#ifdef Q_OS_ANDROID
+using Exporter = KisMediaEncoderWrapper;
+#else
+using Exporter = KisFFMpegWrapper;
+#endif
 }
 
 
@@ -52,7 +65,7 @@ public:
     QScopedPointer<Ui::RecorderExport> ui;
     RecorderExportSettings *settings;
 
-    QScopedPointer<KisFFMpegWrapper> ffmpeg;
+    QScopedPointer<Exporter> exporter;
     RecorderDirectoryCleaner *cleaner = nullptr;
 
     QElapsedTimer elapsedTimer;
@@ -67,7 +80,8 @@ public:
     {
     }
 
-    void checkFfmpeg()
+#ifndef Q_OS_ANDROID
+    void checkExporter()
     {
         const QJsonObject ffmpegJson = KisFFMpegWrapper::findFFMpeg(settings->ffmpegPath);
         const bool success = ffmpegJson["enabled"].toBool();
@@ -95,16 +109,42 @@ public:
         }
         ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(success);
     }
+#endif
 
     void fillComboProfiles()
     {
-        QSignalBlocker blocker(ui->comboProfile);
-        ui->comboProfile->clear();
-        for (const RecorderProfile &profile : settings->profiles) {
-            ui->comboProfile->addItem(profile.name);
+        int indexToSelect;
+        {
+            QSignalBlocker blocker(ui->comboProfile);
+            ui->comboProfile->clear();
+#ifdef Q_OS_ANDROID
+            const QVector<KisMediaEncoderFormat *> formats = KisMediaEncoderWrapper::getSupportedFormats();
+            int count = formats.size();
+            if (count == 0) {
+                return;
+            }
+
+            indexToSelect = -1;
+            for (int i = 0, count = formats.size(); i < count; ++i) {
+                QString key = formats[i]->key();
+                ui->comboProfile->addItem(formats[i]->title(), QVariant(key));
+                if (key == settings->selectedFormat) {
+                    indexToSelect = i;
+                }
+            }
+
+            if (indexToSelect == -1) {
+                indexToSelect = 0;
+                settings->selectedFormat = formats[0]->key();
+            }
+#else
+            for (const RecorderProfile &profile : settings->profiles) {
+                ui->comboProfile->addItem(profile.name);
+            }
+            indexToSelect = settings->profileIndex;
+#endif
         }
-        blocker.unblock();
-        ui->comboProfile->setCurrentIndex(settings->profileIndex);
+        ui->comboProfile->setCurrentIndex(indexToSelect);
     }
 
     void updateFrameInfo()
@@ -119,8 +159,19 @@ public:
             settings->imageSize.rwidth() &= ~1;
             settings->imageSize.rheight() &= ~1;
         }
+#ifdef Q_OS_ANDROID
+        // QDir::entryList is mind-bogglingly slow on Android, so we only load
+        // this once and cache the result. Not like these are supposed to change
+        // while this modal dialog is up anyway.
+        settings->inputFilePaths.clear();
+        settings->inputFilePaths.reserve(settings->framesCount);
+        for (const QString &frame : frames) {
+            settings->inputFilePaths.append(dir.filePath(frame));
+        }
+#endif
     }
 
+#ifndef Q_OS_ANDROID
     void updateVideoFilePath()
     {
         if (settings->videoDirectory.isEmpty())
@@ -134,6 +185,7 @@ public:
         QSignalBlocker blocker(ui->editVideoFilePath);
         ui->editVideoFilePath->setText(settings->videoFilePath);
     }
+#endif
 
     void updateRatio(bool widthToHeight)
     {
@@ -171,18 +223,19 @@ public:
 
     bool tryAbortExport()
     {
-        if (!ffmpeg)
+        if (!exporter)
             return true;
 
         if (QMessageBox::question(q, q->windowTitle(), i18n("Abort encoding the timelapse video?"))
             == QMessageBox::Yes) {
-            cleanupFFMpeg();
+            cleanupExporter();
             return true;
         }
 
         return false;
     }
 
+#ifndef Q_OS_ANDROID
     QStringList splitCommand(const QString &command)
     {
         QStringList args;
@@ -222,43 +275,62 @@ public:
 
         return args;
     }
+#endif
 
     void startExport()
     {
-        Q_ASSERT(ffmpeg == nullptr);
+        Q_ASSERT(exporter == nullptr);
 
+#ifndef Q_OS_ANDROID
+        // We don't do this again on Android, it's mind-bogglingly slow.
         updateFrameInfo();
+#endif
 
-        const QString &arguments = applyVariables(settings->profiles[settings->profileIndex].arguments);
+        exporter.reset(new Exporter(q));
+        QObject::connect(exporter.data(), SIGNAL(sigStarted()), q, SLOT(onExporterStarted()));
+        QObject::connect(exporter.data(), SIGNAL(sigFinished()), q, SLOT(onExporterFinished()));
+        QObject::connect(exporter.data(), SIGNAL(sigFinishedWithError(QString)), q, SLOT(onExporterFinishedWithError(QString)));
+        QObject::connect(exporter.data(), SIGNAL(sigProgressUpdated(int)), q, SLOT(onExporterProgressUpdated(int)));
 
-        ffmpeg.reset(new KisFFMpegWrapper(q));
-        QObject::connect(ffmpeg.data(), SIGNAL(sigStarted()), q, SLOT(onFFMpegStarted()));
-        QObject::connect(ffmpeg.data(), SIGNAL(sigFinished()), q, SLOT(onFFMpegFinished()));
-        QObject::connect(ffmpeg.data(), SIGNAL(sigFinishedWithError(QString)), q, SLOT(onFFMpegFinishedWithError(QString)));
-        QObject::connect(ffmpeg.data(), SIGNAL(sigProgressUpdated(int)), q, SLOT(onFFMpegProgressUpdated(int)));
+#ifdef Q_OS_ANDROID
+        KisMediaEncoderWrapperSettings exporterSettings = {
+            settings->videoFilePath,
+            settings->inputFilePaths,
+            KisMediaEncoderWrapper::getFormatByKey(settings->selectedFormat),
+            settings->formatPreferences.value(settings->selectedFormat).toMap(),
+            settings->resize ? settings->size : settings->imageSize,
+            settings->inputFps,
+            settings->fps,
+            settings->firstFrameSec,
+            settings->lastFrameSec,
+        };
+#else
+        const RecorderProfile &profile = settings->profiles[settings->profileIndex];
+        KisFFMpegWrapperSettings exporterSettings;
+        exporterSettings.processPath = settings->ffmpegPath;
+        exporterSettings.args = splitCommand(applyVariables(profile.arguments));
+        exporterSettings.outputFile = settings->videoFilePath;
+        exporterSettings.batchMode = true; //TODO: Consider renaming to 'silent' mode, meaning no window for extra window handling...
+#endif
 
-        KisFFMpegWrapperSettings FFmpegSettings;
-        KisConfig cfg(true);
-        FFmpegSettings.processPath = settings->ffmpegPath;
-        FFmpegSettings.args = splitCommand(arguments);
-        FFmpegSettings.outputFile = settings->videoFilePath;
-        FFmpegSettings.batchMode = true; //TODO: Consider renaming to 'silent' mode, meaning no window for extra window handling...
-
-        ffmpeg->startNonBlocking(FFmpegSettings);
-        ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFmpeg..."));
+        ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting exporter..."));
         ui->buttonCancelExport->setEnabled(false);
         ui->progressExport->setValue(0);
         elapsedTimer.start();
+
+        // Do this last, it may immediately emit a failure.
+        exporter->startNonBlocking(exporterSettings);
     }
 
-    void cleanupFFMpeg()
+    void cleanupExporter()
     {
-        if (ffmpeg) {
-            ffmpeg->reset();
-            ffmpeg.reset();
+        if (exporter) {
+            exporter->reset();
+            exporter.reset();
         }
     }
 
+#ifndef Q_OS_ANDROID
     QString applyVariables(const QString &templateArguments)
     {
         const QSize &outSize = settings->resize ? settings->size : settings->imageSize;
@@ -278,6 +350,7 @@ public:
                .replace("$LAST_FRAME_SEC", QString::number(resultLength))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings->format));
     }
+#endif
 
     void updateVideoDuration()
     {
@@ -317,6 +390,29 @@ public:
 
         return result;
     }
+
+    QString requestFile(const QString &extension, const QString &defaultDir = QString())
+    {
+        KoFileDialog dialog(q, KoFileDialog::SaveFile, "ExportTimelapse");
+        dialog.setCaption(i18n("Export Timelapse Video As"));
+        if (!defaultDir.isEmpty()) {
+            dialog.setDefaultDir(defaultDir);
+        }
+        dialog.setMimeTypeFilters(QStringList(KisMimeDatabase::mimeTypeForSuffix(extension)));
+        return dialog.filename();
+    }
+
+    static void desktopServicesOpenPath(const QString &path)
+    {
+#ifdef Q_OS_ANDROID
+        // QDesktopServices doesn't clear exceptions
+        KisAndroidUtils::clearJniException(QStringLiteral("before opening ") + path);
+        QDesktopServices::openUrl(QUrl(path));
+        KisAndroidUtils::clearJniException(QStringLiteral("after opening ") + path);
+#else
+        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+#endif
+    }
 };
 
 
@@ -326,16 +422,28 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     , d(new Private(this))
 {
     d->ui->setupUi(this);
+
+#ifdef Q_OS_ANDROID
+    d->ui->labelFfmpegLocation->hide();
+    d->ui->editFfmpegPath->hide();
+    d->ui->buttonBrowseFfmpeg->hide();
+    d->ui->labelExportTo->hide();
+    d->ui->editVideoFilePath->hide();
+    d->ui->buttonBrowseExport->hide();
+    d->ui->buttonShowInFolder->hide();
+#else
+    d->ui->buttonBrowseFfmpeg->setIcon(KisIconUtils::loadIcon("folder"));
+    d->ui->buttonBrowseExport->setIcon(KisIconUtils::loadIcon("folder"));
+    d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
+#endif
+
     d->spinInputFPSMaxValue = d->ui->spinInputFps->minimum();
     d->spinInputFPSMaxValue = d->ui->spinInputFps->maximum();
     d->ui->buttonBrowseDirectory->setIcon(KisIconUtils::loadIcon("view-preview"));
-    d->ui->buttonBrowseFfmpeg->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonEditProfile->setIcon(KisIconUtils::loadIcon("document-edit"));
-    d->ui->buttonBrowseExport->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonLockRatio->setIcon(settings->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->ui->buttonLockFps->setIcon(settings->lockFps ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->ui->buttonWatchIt->setIcon(KisIconUtils::loadIcon("media-playback-start"));
-    d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("edit-delete"));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
     d->ui->spinLastFrameSec->setEnabled(d->ui->extendResultCheckBox->isChecked());
@@ -353,25 +461,30 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     connect(d->ui->spinScaleHeight, SIGNAL(valueChanged(int)), SLOT(onSpinScaleHeightValueChanged(int)));
     connect(d->ui->buttonLockRatio, SIGNAL(toggled(bool)), SLOT(onButtonLockRatioToggled(bool)));
     connect(d->ui->buttonLockFps, SIGNAL(toggled(bool)), SLOT(onButtonLockFpsToggled(bool)));
-    connect(d->ui->buttonBrowseFfmpeg, SIGNAL(clicked()), SLOT(onButtonBrowseFfmpegClicked()));
     connect(d->ui->comboProfile, SIGNAL(currentIndexChanged(int)), SLOT(onComboProfileIndexChanged(int)));
     connect(d->ui->buttonEditProfile, SIGNAL(clicked()), SLOT(onButtonEditProfileClicked()));
-    connect(d->ui->editVideoFilePath, SIGNAL(textChanged(QString)), SLOT(onEditVideoPathChanged(QString)));
-    connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
     connect(d->ui->buttonBox->button(QDialogButtonBox::Save), SIGNAL(clicked()), this, SLOT(onButtonExportClicked()));
     connect(d->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(d->ui->buttonCancelExport, SIGNAL(clicked()), SLOT(onButtonCancelClicked()));
     connect(d->ui->buttonWatchIt, SIGNAL(clicked()), SLOT(onButtonWatchItClicked()));
-    connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
     connect(d->ui->buttonRemoveSnapshots, SIGNAL(clicked()), SLOT(onButtonRemoveSnapshotsClicked()));
     connect(d->ui->buttonRestart, SIGNAL(clicked()), SLOT(onButtonRestartClicked()));
     connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->spinFirstFrameSec, SLOT(setEnabled(bool)));
     connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->spinLastFrameSec, SLOT(setEnabled(bool)));
 
+#ifndef Q_OS_ANDROID
+    connect(d->ui->buttonBrowseFfmpeg, SIGNAL(clicked()), SLOT(onButtonBrowseFfmpegClicked()));
+    connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
+    connect(d->ui->editVideoFilePath, SIGNAL(textChanged(QString)), SLOT(onEditVideoPathChanged(QString)));
+    connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
+#endif
+
     if (settings->realTimeCaptureMode)
         d->ui->buttonBox->button(QDialogButtonBox::Close)->setText("OK");
     d->ui->buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Export"));
+#ifndef Q_OS_ANDROID
     d->ui->editVideoFilePath->installEventFilter(this);
+#endif
 }
 
 RecorderExport::~RecorderExport()
@@ -418,8 +531,10 @@ void RecorderExport::setup()
     d->ui->buttonLockFps->setChecked(settings->lockFps);
     d->ui->buttonLockFps->setIcon(settings->lockFps ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->fillComboProfiles();
-    d->checkFfmpeg();
+#ifndef Q_OS_ANDROID
+    d->checkExporter();
     d->updateVideoFilePath();
+#endif
     d->updateVideoDuration();
 }
 
@@ -438,7 +553,7 @@ void RecorderExport::reject()
 void RecorderExport::onButtonBrowseDirectoryClicked()
 {
     if (settings->framesCount != 0) {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(settings->inputDirectory));
+        Private::desktopServicesOpenPath(settings->inputDirectory);
     } else {
         QMessageBox::warning(this, windowTitle(), i18nc("Can't browse frames of recording because no frames have been recorded", "No frames to browse."));
         return;
@@ -543,6 +658,7 @@ void RecorderExport::onButtonLockFpsToggled(bool checked)
 
 }
 
+#ifndef Q_OS_ANDROID
 void RecorderExport::onButtonBrowseFfmpegClicked()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "SelectFFmpeg");
@@ -552,19 +668,37 @@ void RecorderExport::onButtonBrowseFfmpegClicked()
     if (!file.isEmpty()) {
         settings->ffmpegPath = file;
         RecorderExportConfig(false).setFfmpegPath(file);
-        d->checkFfmpeg();
+        d->checkExporter();
     }
 }
+#endif
 
 void RecorderExport::onComboProfileIndexChanged(int index)
 {
+#ifdef Q_OS_ANDROID
+    QString format = d->ui->comboProfile->itemData(index).toString();
+    d->settings->selectedFormat = format;
+    RecorderExportConfig(false).setSelectedFormat(format);
+#else
     settings->profileIndex = index;
     d->updateVideoFilePath();
     RecorderExportConfig(false).setProfileIndex(index);
+#endif
 }
 
 void RecorderExport::onButtonEditProfileClicked()
 {
+#ifdef Q_OS_ANDROID
+    QString key = settings->selectedFormat;
+    KisMediaEncoderFormat *format = KisMediaEncoderWrapper::getFormatByKey(key);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(format);
+
+    KisMediaEncoderPreferencesDialog dlg(format, settings->formatPreferences.value(key).toMap(), this);
+    if (dlg.exec() == QDialog::Accepted) {
+        settings->formatPreferences.insert(key, dlg.preferences());
+        RecorderExportConfig(false).setFormatPreferences(settings->formatPreferences);
+    }
+#else
     RecorderProfileSettings settingsDialog(this);
 
     connect(&settingsDialog, &RecorderProfileSettings::requestPreview, [&](const QString & arguments) {
@@ -578,8 +712,10 @@ void RecorderExport::onButtonEditProfileClicked()
         d->updateVideoFilePath();
         RecorderExportConfig(false).setProfiles(settings->profiles);
     }
+#endif
 }
 
+#ifndef Q_OS_ANDROID
 void RecorderExport::onEditVideoPathChanged(const QString &videoFilePath)
 {
     QFileInfo fileInfo(videoFilePath);
@@ -587,39 +723,45 @@ void RecorderExport::onEditVideoPathChanged(const QString &videoFilePath)
         settings->videoDirectory = fileInfo.absolutePath();
     settings->videoFileName = fileInfo.completeBaseName();
 }
+#endif
 
+#ifndef Q_OS_ANDROID
 void RecorderExport::onButtonBrowseExportClicked()
 {
-    KoFileDialog dialog(this, KoFileDialog::SaveFile, "ExportTimelapse");
-    dialog.setCaption(i18n("Export Timelapse Video As"));
-    dialog.setDefaultDir(settings->videoDirectory);
-    const QString &extension = settings->profiles[settings->profileIndex].extension;
-    dialog.setMimeTypeFilters(QStringList(KisMimeDatabase::mimeTypeForSuffix(extension)));
-    QString videoFileName = dialog.filename();
+    QString videoFileName = d->requestFile(settings->profiles[settings->profileIndex].extension, settings->videoDirectory);
     if (!videoFileName.isEmpty()) {
         QFileInfo fileInfo(videoFileName);
         settings->videoDirectory = fileInfo.absolutePath();
         settings->videoFileName = fileInfo.completeBaseName();
-        d->updateVideoFilePath();
         RecorderExportConfig(false).setVideoDirectory(settings->videoDirectory);
+        d->updateVideoFilePath();
     }
 }
+#endif
 
 void RecorderExport::onButtonExportClicked()
 {
+    if (settings->framesCount == 0) {
+        QMessageBox::warning(this, windowTitle(), i18n("No frames to export."));
+        return;
+    }
+
+#ifdef Q_OS_ANDROID
+    KisMediaEncoderFormat *format = KisMediaEncoderWrapper::getFormatByKey(settings->selectedFormat);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(format);
+    settings->videoFilePath = d->requestFile(format->extension());
+    if (settings->videoFilePath.isEmpty()) {
+        return;
+    }
+#else
     if (QFile::exists(settings->videoFilePath)) {
-        if (settings->framesCount != 0) {
-            if (QMessageBox::question(this, windowTitle(),
-                                      i18n("The video file already exists. Do you wish to overwrite it?"))
-                != QMessageBox::Yes) {
-                return;
-            }
-        } else {
-            QMessageBox::warning(this, windowTitle(), i18n("No frames to export."));
+        if (QMessageBox::question(this, windowTitle(),
+                                  i18n("The video file already exists. Do you wish to overwrite it?"))
+            != QMessageBox::Yes) {
             return;
         }
     }
-
+#endif
 
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageProgress);
     d->startExport();
@@ -639,42 +781,44 @@ void RecorderExport::onButtonCancelClicked()
 }
 
 
-void RecorderExport::onFFMpegStarted()
+void RecorderExport::onExporterStarted()
 {
     d->ui->buttonCancelExport->setEnabled(true);
     d->ui->labelStatus->setText(i18n("The timelapse video is being encoded..."));
 }
 
-void RecorderExport::onFFMpegFinished()
+void RecorderExport::onExporterFinished()
 {
     quint64 elapsed = d->elapsedTimer.elapsed();
     d->ui->labelRenderTime->setText(d->formatDuration(elapsed));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageDone);
     d->ui->labelVideoPathDone->setText(settings->videoFilePath);
-    d->cleanupFFMpeg();
+    d->cleanupExporter();
 }
 
-void RecorderExport::onFFMpegFinishedWithError(QString error)
+void RecorderExport::onExporterFinishedWithError(QString error)
 {
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
-    QMessageBox::critical(this, windowTitle(), i18n("Export failed. FFmpeg message:") % "\n\n" % error);
-    d->cleanupFFMpeg();
+    QMessageBox::critical(this, windowTitle(), i18n("Export failed. Error message:") % "\n\n" % error);
+    d->cleanupExporter();
 }
 
-void RecorderExport::onFFMpegProgressUpdated(int frameNo)
+void RecorderExport::onExporterProgressUpdated(int frameNo)
 {
     d->ui->progressExport->setValue(frameNo * 100 / (settings->framesCount * settings->fps / static_cast<float>(settings->inputFps)));
 }
 
 void RecorderExport::onButtonWatchItClicked()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(settings->videoFilePath));
+    Private::desktopServicesOpenPath(settings->videoFilePath);
 }
 
+#ifndef Q_OS_ANDROID
 void RecorderExport::onButtonShowInFolderClicked()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(settings->videoDirectory));
+    Private::desktopServicesOpenPath(settings->videoDirectory);
 }
+#endif
 
 void RecorderExport::onButtonRemoveSnapshotsClicked()
 {
@@ -709,6 +853,7 @@ void RecorderExport::onCleanUpFinished()
     d->ui->buttonRemoveSnapshots->hide();
 }
 
+#ifndef Q_OS_ANDROID
 bool RecorderExport::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == d->ui->editVideoFilePath && event->type() == QEvent::FocusOut)
@@ -716,3 +861,4 @@ bool RecorderExport::eventFilter(QObject *obj, QEvent *event)
 
     return QDialog::eventFilter(obj, event);
 }
+#endif

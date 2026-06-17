@@ -602,7 +602,9 @@ void RecorderDockerDock::onExportButtonClicked()
 
     KisDocument *document = d->canvas->imageView()->document();
 
+#ifndef Q_OS_ANDROID
     exportSettings->videoFileName = QFileInfo(document->caption().trimmed()).completeBaseName();
+#endif
     exportSettings->inputDirectory = d->outputDirectory;
     exportSettings->format = d->format;
     exportSettings->realTimeCaptureMode = d->realTimeCaptureMode;

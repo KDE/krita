@@ -12,11 +12,17 @@
 #include <QDir>
 #include <QRegularExpression>
 
+#ifdef Q_OS_ANDROID
+#include <QJsonDocument>
+#endif
+
 namespace
 {
 const QString keyAnimationExport = "ANIMATION_EXPORT";
+#ifndef Q_OS_ANDROID
 const QString keyFfmpegPath = "ffmpeg_path";
 const QString keyVideoDirectory = "recorder_export/videodirectory";
+#endif
 const QString keyInputFps = "recorder_export/inputfps";
 const QString keyFps = "recorder_export/fps";
 const QString keyResultPreview="recorder_export/resultpreview";
@@ -27,6 +33,10 @@ const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
 const QString keyLockRatio = "recorder_export/lockratio";
 const QString keyLockFps = "recorder_export/lockfps";
+#ifdef Q_OS_ANDROID
+const QString keySelectedFormat = "recorder_export/selectedformat";
+const QString keyFormatPreferences = "recorder_export/formatpreferences";
+#else
 const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
 const QString keyEditedProfiles = "recorder_export/editedprofiles";
@@ -175,6 +185,7 @@ const QList<RecorderProfile> defaultProfiles = {
     { "Custom3",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "Custom4",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" }
 };
+#endif
 }
 
 RecorderExportConfig::RecorderExportConfig(bool readOnly)
@@ -198,11 +209,16 @@ void RecorderExportConfig::loadConfiguration(RecorderExportSettings *settings, b
     settings->resize = resize();
     settings->size = size();
     settings->lockRatio = lockRatio();
+#ifdef Q_OS_ANDROID
+    settings->selectedFormat = selectedFormat();
+    settings->formatPreferences = formatPreferences();
+#else
     settings->ffmpegPath = ffmpegPath();
     settings->profiles = profiles();
     settings->defaultProfiles = defaultProfiles();
     settings->profileIndex = profileIndex();
     settings->videoDirectory = videoDirectory();
+#endif
     if (loadLockFps)
         settings->lockFps = lockFps();
 }
@@ -311,6 +327,34 @@ void RecorderExportConfig::setLockFps(bool value)
     config->writeEntry(keyLockFps, value);
 }
 
+#ifdef Q_OS_ANDROID
+QString RecorderExportConfig::selectedFormat() const
+{
+    return config->readEntry(keySelectedFormat, QString());
+}
+
+void RecorderExportConfig::setSelectedFormat(const QString &value)
+{
+    config->writeEntry(keySelectedFormat, value);
+}
+
+QVariantMap RecorderExportConfig::formatPreferences() const
+{
+    QByteArray bytes = config->readEntry(keyFormatPreferences, QByteArray());
+    if (!bytes.isEmpty()) {
+        QJsonDocument doc = QJsonDocument::fromJson(bytes);
+        if (doc.isObject()) {
+            return doc.toVariant().toMap();
+        }
+    }
+    return QVariantMap();
+}
+
+void RecorderExportConfig::setFormatPreferences(const QVariantMap &value)
+{
+    config->writeEntry(keyFormatPreferences, QJsonDocument::fromVariant(value).toJson(QJsonDocument::Compact));
+}
+#else
 int RecorderExportConfig::profileIndex() const
 {
     return config->readEntry(keyProfileIndex, 0);
@@ -437,3 +481,4 @@ bool operator!=(const RecorderProfile &left, const RecorderProfile &right)
 {
     return !(left == right);
 }
+#endif

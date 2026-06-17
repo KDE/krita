@@ -11,6 +11,7 @@
 #include <QScopedPointer>
 #include <kis_hdr_metadata.h>
 #include "kritaimage_export.h"
+#include <QRect>
 
 /**
  * @brief The KisContentLightLevelProcessingVistor class
@@ -21,7 +22,7 @@ class KRITAIMAGE_EXPORT KisContentLightLevelProcessingVistor : public KisDoNothi
 {
 
 public:
-    KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType type = KisRelativeContentLightLevelInformation::XYZLuminance);
+    KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType type = KisRelativeContentLightLevelInformation::XYZLuminance, const QRect &cropRect = QRect());
     ~KisContentLightLevelProcessingVistor() override;
 
     using KisDoNothingProcessingVisitor::visit;

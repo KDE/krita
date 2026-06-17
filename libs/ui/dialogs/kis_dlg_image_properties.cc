@@ -401,7 +401,7 @@ void KisDlgImageProperties::slotCalculateLightLevels()
                                        signalFlags);
 
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
-        new KisContentLightLevelProcessingVistor(type);
+        new KisContentLightLevelProcessingVistor(type, d->image->bounds());
     applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
     applicator.end();
 

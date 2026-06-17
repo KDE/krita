@@ -8,19 +8,20 @@
 #include <KoColorProfile.h>
 #include <KoColorProfileQuery.h>
 #include "kis_group_layer.h"
-#include "kis_iterator_ng.h"
-#include "kis_raster_keyframe_channel.h"
+#include "kis_sequential_iterator.h"
 
 
 struct KisContentLightLevelProcessingVistor::Private {
     KisRelativeContentLightLevelInformation::CalculationType type;
+    QRect cropRect;
     QList<KisRelativeContentLightLevelInformation> clli;
 };
 
-KisContentLightLevelProcessingVistor::KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType type)
+KisContentLightLevelProcessingVistor::KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType type, const QRect &cropRect)
     : KisDoNothingProcessingVisitor(), d(new Private)
 {
     d->type = type;
+    d->cropRect = cropRect;
 }
 
 KisContentLightLevelProcessingVistor::~KisContentLightLevelProcessingVistor()
@@ -43,8 +44,7 @@ KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::co
 {
     KisRelativeContentLightLevelInformation clli;
     double total = 0.0;
-    for(int i = 0; i < d->clli.size(); i++) {
-        KisRelativeContentLightLevelInformation c = d->clli.at(i);
+    Q_FOREACH(const KisRelativeContentLightLevelInformation c, d->clli) {
         clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, c.maxContentLightLevel);
         total += c.maxFrameAverageLightLevel;
     }
@@ -58,7 +58,7 @@ KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::ca
     KisRelativeContentLightLevelInformation clli;
     double average = 0.0;
     int divider = 0;
-    const QRectF imageBounds = dev->extent();
+    const QRect imageBounds = d->cropRect.isValid()? d->cropRect: dev->exactBounds();
 
     bool canConvertLinear = dev->colorSpace()->colorModelId() == RGBAColorModelID && dev->colorSpace()->profile()->getColorPrimaries() != PRIMARIES_UNSPECIFIED;
 
@@ -76,22 +76,18 @@ KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::ca
                                                                                          linP);
             dev->convertTo(linear, KoColorConversionTransformation::IntentRelativeColorimetric);
         }
-        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(imageBounds.x(), imageBounds.y(), imageBounds.width());
+        KisSequentialConstIterator srcIt(dev, imageBounds);
 
         QVector<float> channels(dev->colorSpace()->channelCount());
-        for (int y = 0; y < imageBounds.height(); y++) {
-            for (int x = 0; x < imageBounds.width(); x++) {
-                const quint8* pixel = it->rawDataConst();
-                dev->colorSpace()->normalisedChannelsValue(pixel, channels);
+        while(srcIt.nextPixel()) {
+            const quint8* pixel = srcIt.rawDataConst();
+            dev->colorSpace()->normalisedChannelsValue(pixel, channels);
 
-                const double rgbMax = qMax(channels[0], qMax(channels[1], channels[2]));
+            const double rgbMax = qMax(channels[0], qMax(channels[1], channels[2]));
 
-                average += rgbMax;
-                divider ++;
-                clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, rgbMax);
-                it->nextPixel();
-            }
-            it->nextRow();
+            average += rgbMax;
+            divider ++;
+            clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, rgbMax);
         }
     } else {
         /**
@@ -103,17 +99,13 @@ KisRelativeContentLightLevelInformation KisContentLightLevelProcessingVistor::ca
         const KoColorSpace *xyzCS = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Float32BitsColorDepthID.id());
         dev->convertTo(xyzCS, KoColorConversionTransformation::IntentRelativeColorimetric);
 
-        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(imageBounds.x(), imageBounds.y(), imageBounds.width());
+        KisSequentialConstIterator srcIt(dev, imageBounds);
 
-        for (int y = 0; y < imageBounds.height(); y++) {
-            for (int x = 0; x < imageBounds.width(); x++) {
-                const KoXyzF32Traits::Pixel* pixel = reinterpret_cast<const KoXyzF32Traits::Pixel*> (it->rawDataConst());
-                clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, double(pixel->y));
-                average += pixel->y;
-                divider ++;
-                it->nextPixel();
-            }
-            it->nextRow();
+        while (srcIt.nextPixel()) {
+            const KoXyzF32Traits::Pixel* pixel = reinterpret_cast<const KoXyzF32Traits::Pixel*> (srcIt.rawDataConst());
+            clli.maxContentLightLevel = qMax(clli.maxContentLightLevel, double(pixel->y));
+            average += pixel->y;
+            divider ++;
         }
     }
 

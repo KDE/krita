@@ -393,6 +393,37 @@ public:
         return result;
     }
 
+    void initDimensions()
+    {
+        // Video with dimensions above 1920 pixels isn't widely supported.
+        // They often fail to encode with mysterious errors, can't be played
+        // back properly and/or are rejected by websites where users attempt to
+        // upload the videos. This caps the dimensions to avoid that trap.
+        settings->resize = true;
+        settings->lockRatio = true;
+        if (settings->imageSize.isEmpty()) {
+            settings->size = QSize(1024, 1024);
+        } else {
+            int iw = settings->imageSize.width();
+            int ih = settings->imageSize.height();
+            if (iw > DIMENSION_LIMIT || ih > DIMENSION_LIMIT) {
+                int ow, oh;
+                if (iw >= ih) {
+                    ow = DIMENSION_LIMIT;
+                    oh = qRound(qreal(DIMENSION_LIMIT) / qreal(iw) * qreal(ih));
+                } else {
+                    ow = qRound(qreal(DIMENSION_LIMIT) / qreal(ih) * qreal(iw));
+                    oh = DIMENSION_LIMIT;
+                }
+                ow &= ~1;
+                oh &= ~1;
+                settings->size = QSize(ow, oh);
+            } else {
+                settings->size = settings->imageSize;
+            }
+        }
+    }
+
     void updateWarningVisibility()
     {
         ui->wdgWarnFps->setVisible(settings->fps > 30);
@@ -529,6 +560,12 @@ void RecorderExport::setup()
     config.loadConfiguration(settings, !settings->realTimeCaptureModeWasSet);
     settings->realTimeCaptureModeWasSet = false;
 
+    // Video dimensions are much more restrictive than image dimensions.
+    // Clobber them with sensible defaults instead of letting the user run into
+    // the trap of trying to export video well beyond what most encoders,
+    // devices and websites support.
+    d->initDimensions();
+
     d->ui->spinInputFps->setValue(settings->inputFps);
     d->ui->spinFps->setValue(settings->fps);
     d->ui->resultPreviewCheckBox->setChecked(settings->resultPreview);
@@ -536,9 +573,15 @@ void RecorderExport::setup()
     d->ui->extendResultCheckBox->setChecked(settings->extendResult);
     d->ui->spinLastFrameSec->setValue(settings->lastFrameSec);
     d->ui->checkResize->setChecked(settings->resize);
-    d->ui->spinScaleWidth->setValue(settings->size.width());
-    d->ui->spinScaleHeight->setValue(settings->size.height());
-    d->ui->buttonLockRatio->setChecked(settings->lockRatio);
+    {
+        // Need to block signals or else a locked ratio will mess these up.
+        QSignalBlocker spinScaleWidthBlocker(d->ui->spinScaleWidth);
+        QSignalBlocker spinScaleHeightBlocker(d->ui->spinScaleHeight);
+        QSignalBlocker buttonLockRatioBlocker(d->ui->buttonLockRatio);
+        d->ui->spinScaleWidth->setValue(settings->size.width());
+        d->ui->spinScaleHeight->setValue(settings->size.height());
+        d->ui->buttonLockRatio->setChecked(settings->lockRatio);
+    }
     d->ui->buttonLockRatio->setIcon(settings->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->ui->labelRealTimeCaptureNotion->setVisible(settings->realTimeCaptureMode);
     d->ui->buttonLockFps->setChecked(settings->lockFps);

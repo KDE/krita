@@ -394,24 +394,24 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     intZoomMarginSize->setValue(cfg.zoomMarginSize());
 
-    bool sabEnabled = cfg.selectionActionBar();
+    bool sapEnabled = cfg.selectionActionBar();
 
-    chkEnableSelectionActionBar->setChecked(sabEnabled);
+    chkEnableSelectionActionBar->setChecked(sapEnabled);
     selectionActionsBarPositionComboBox->setCurrentIndex(cfg.selectionActionBarPosition());
     selectionActionsBarBehaviorComboBox->setCurrentIndex(cfg.selectionActionBarBehavior());
     selectionActionsBarOrietationComboBox->setCurrentIndex(cfg.selectionActionBarOrientation());
 
     bool positionEnabled = (KisConfig::SelectionActionsBarBehavior)selectionActionsBarBehaviorComboBox->currentIndex()
             == KisConfig::SelectionActionsBarBehavior::Fixed
-        && sabEnabled;
+        && sapEnabled;
     selectionActionsBarPositionComboBox->setEnabled(positionEnabled);
     selectionActionsBarPositionLabel->setEnabled(positionEnabled);
 
-    selectionActionsBarBehaviorComboBox->setEnabled(sabEnabled);
-    selectionActionsBarBehaviorLabel->setEnabled(sabEnabled);
+    selectionActionsBarBehaviorComboBox->setEnabled(sapEnabled);
+    selectionActionsBarBehaviorLabel->setEnabled(sapEnabled);
 
-    selectionActionsBarOrietationComboBox->setEnabled(sabEnabled);
-    selectionActionsBarOrietationLabel->setEnabled(sabEnabled);
+    selectionActionsBarOrietationComboBox->setEnabled(sapEnabled);
+    selectionActionsBarOrietationLabel->setEnabled(sapEnabled);
 
     connect(selectionActionsBarBehaviorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionActionsBarBehaviorChanged(int)));
 #if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))

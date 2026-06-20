@@ -19,6 +19,7 @@
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_type_info.h>
 #include <kis_meta_data_value.h>
+#include <KisUsageLogger.h>
 
 
 #include <kis_debug.h>
@@ -140,6 +141,7 @@ bool KisXMPIO::saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, Head
                     xmpData_.add(key, v);
                 } else {
                     warnMetaData << "Invalid metadata value " << value << "for: " << entry.name();
+                    KisUsageLogger::log(QString("Invalid metadata value \"%1\" for key %2. The metadata key is therefore skipped during saving.").arg(value.toString(), entry.name()));
                 }
             }
         }
@@ -305,7 +307,12 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
 #endif
                     QString value = QString::fromStdString(xav->toString(i));
                     if (parser) {
-                        array.push_back(parser->parse(value));
+                        KisMetaData::Value parsed = parser->parse(value);
+                        if (parsed.type() == KisMetaData::Value::Invalid) {
+                            KisUsageLogger::log(QString("Cannot parse metadata value \"%1\" for %2. Assigning invalid value.").arg(value, tagName));
+                        }
+                        array.push_back(parsed);
+
                     } else {
                         dbgImage << "No parser " << tagName;
                         array.push_back(KisMetaData::Value(value));
@@ -344,6 +351,9 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                 QString valTxt = value->toString().c_str();
                 if (typeInfo && typeInfo->parser()) {
                     v = typeInfo->parser()->parse(valTxt);
+                    if (v.type() == KisMetaData::Value::Invalid) {
+                        KisUsageLogger::log(QString("Cannot parse metadata value \"%1\" for %2. Assigning invalid value.").arg(valTxt, tagName));
+                    }
                 } else {
                     dbgMetaData << "No parser " << tagName;
                     v = KisMetaData::Value(valTxt);

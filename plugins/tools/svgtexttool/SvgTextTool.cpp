@@ -458,7 +458,7 @@ void SvgTextTool::slotShapeSelectionChanged()
         return;
     }
     KoSvgTextShape *const shape = selectedShape();
-    if (shape != m_textCursor.shape()) {
+    if (shape != m_textCursor.shape() || shape == nullptr) {
         m_textCursor.setShape(shape);
         m_textOnPathHelper.setShape(shape);
         if (shape) {

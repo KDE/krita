@@ -60,15 +60,15 @@ for pattern in patterns:
         print( "## Found a package file: {}".format(package))
         shutil.move(package, packagesFolder)
 
-commandToRun = ' '.join([sys.executable,
-                         os.path.join('ci-notary-service', 'publishbuild.py'),
-                         '--config', os.environ['KRITACI_PUBLISH_BUILD_CONFIG'],
-                         '--platform', arguments.platform,
-                         packagesFolder])
+commandToRun = [sys.executable,
+                os.path.join('ci-notary-service', 'publishbuild.py'),
+                '--config', os.environ['KRITACI_PUBLISH_BUILD_CONFIG'],
+                '--platform', arguments.platform,
+                packagesFolder]
 try:
-    print( "## RUNNING: " + commandToRun )
+    print( "## RUNNING: " + ' '.join(commandToRun) )
     subprocess.check_call(commandToRun)
-except Exception:
-    print("## Failed to upload packages")
+except Exception as e:
+    print(f"## Failed to upload packages: {e}")
     sys.exit(1)
 

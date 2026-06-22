@@ -31,8 +31,6 @@
 #include <QMessageBox>
 #include <QProcessEnvironment>
 #include <QStringList>
-#include <QStyle>
-#include <QStyleFactory>
 #include <QSysInfo>
 #include <QTimer>
 #include <QWidget>
@@ -240,7 +238,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QStringList styles = QStringList() << "haiku" << "macintosh" << "breeze" << "fusion";
 #else
-        QStringList styles = QStringList() << "haiku" << "macos" << "breeze" << "fusion";
+        QStringList styles = QStringList() << "haiku" << "macos" << "breeze" << "fusion" << "oxygen";
 #endif
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {

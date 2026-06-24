@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-16 02:38+0000\n"
-"PO-Revision-Date: 2026-05-23 17:03+0300\n"
+"PO-Revision-Date: 2026-06-18 08:58+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -54691,9 +54691,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:739
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modular parameters"
-msgstr "שינוי טאבולטור"
+msgstr "משתנים מודולוריים"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:745
@@ -54706,9 +54706,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
-#, fuzzy, kde-format
+#, kde-format
 msgid "Progressive encoding"
-msgstr "עובי קו:"
+msgstr "קידוד מדורג"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
@@ -55000,21 +55000,18 @@ msgstr "לא ניתן לטעון תמוניות מפתח מ־%1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:840
-#, fuzzy, kde-format
-#| msgid ""
-#| "Parsing error in %1 at line %2, column %3\n"
-#| "Error message: %4"
+#, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"שגיאת פירוק ב־%1, בשורה %2, טור %3\n"
+"שגיאת פיענוח בקובץ תמונית המפתח %1, בשורה %2, עמודה %3\n"
 "הודעת שגיאה: %4"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:854
-#, fuzzy, kde-format
+#, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "סוג ערוץ תמונית מפתח לא ידוע: %1 ב־%2"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:210
 #, kde-format
@@ -55032,9 +55029,9 @@ msgid "Image does not specify a height."
 msgstr "התמונה לא מציינת גובה."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:271
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image specifies an unsupported color model: %1."
-msgstr "&תמונה"
+msgstr "התמונה מציינת דגם צבעים לא ידוע: %1."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:588
 #, kde-format
@@ -55172,9 +55169,9 @@ msgid "Failed to save the generator configuration for layer %1."
 msgstr "יצירת שכבה חדשה"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save filter mask %1. It has no filter."
-msgstr "יצירת שכבה חדשה"
+msgstr "שמירת מסכת הסינון %1 נכשלה. אין לה מסנן."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
@@ -55187,19 +55184,19 @@ msgid "Failed to save the filter configuration for filter mask %1."
 msgstr "שמירת הגדרות המסנן למסכת הסינון %1 נכשלה."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr "יצירת שכבה חדשה"
+msgstr "שמירת הבחירה למסכת השקיפות %1 נכשלה."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr "יצירת שכבה חדשה"
+msgstr "שמירת הבחירה לבחירה המקומית %1 נכשלה."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
-msgstr "יצירת שכבה חדשה"
+msgstr "שמירת נתוני בחירת הפיקסלים לשכבה %1 נכשלה."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, fuzzy, kde-format
@@ -55280,10 +55277,10 @@ msgid "Could not save image profile."
 msgstr "לא ניתן לשמור פרופיל תמונה."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:581
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "לא ניתן לשמור את פרופיל הצבע של הגהת הצבע."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:616
 #, kde-format
@@ -55718,10 +55715,10 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
-msgstr "זוויות:"
+msgstr "ערבול RGB כארבעה צבעים"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
 #, kde-format
@@ -62866,9 +62863,8 @@ msgid "Brush preset icon"
 msgstr "סמל ערכת מכחולים"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:72
-#, fuzzy
 msgid "Workflow Buttons settings"
-msgstr "הגדרות"
+msgstr "הגדרות כפתורי רצף עבודה"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 msgid "Selected button:"
@@ -62876,20 +62872,19 @@ msgstr "כפתור נבחר:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Add a workflow button"
-msgstr ""
+msgstr "הוספת כפתור רצף עבודה"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "העברת כפתור רצף העבודה הנבחר לימין"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "העברת כפתור רצף העבודה הנבחר לשמאל"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
-#, fuzzy
 msgid "Delete selected workflow button"
-msgstr "יצירת שכבה חדשה"
+msgstr "מחיקת כפתור רצף העבודה הנבחר"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 msgid "Select icon mode:"
@@ -62980,9 +62975,8 @@ msgid "Bottom bar"
 msgstr "סרגל תחתון"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
-#, fuzzy
 msgid "Inline"
-msgstr "מקושר"
+msgstr "מוטבע בשורה"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
@@ -62994,14 +62988,13 @@ msgid "Script files "
 msgstr "קובצי סקריפטים"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:26
-#, fuzzy
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "הגדרות"
+msgstr "כפתורי רצף עבודה"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "פתיחת חלונית הגדרות כפתורי רצף עבודה"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"

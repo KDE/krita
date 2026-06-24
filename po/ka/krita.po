@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-16 02:38+0000\n"
-"PO-Revision-Date: 2026-05-02 01:13+0200\n"
+"PO-Revision-Date: 2026-06-23 05:12+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -28610,6 +28610,8 @@ msgid ""
 "Within and outside gamut; same as Absolute Colorimetric. White point changed "
 "to result in neutral grays."
 msgstr ""
+"გამის შიგნით და გარეთ. იგივეა, რაც აბსოლუტური კოლორიმეტრიული. თეთრი წერტილი "
+"შეიცვალა, რომ შედეგად ნეიტრალური ნაცრისფერი იყოს."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110

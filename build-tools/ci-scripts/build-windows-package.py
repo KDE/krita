@@ -39,6 +39,7 @@ elif not os.path.exists(os.environ['KRITACI_WINDOWS_SIGN_CONFIG']):
 
 buildPath = os.path.abspath('_build')
 depsPath = os.path.abspath('_install')
+ciUtilitiesPath = os.path.abspath(os.path.join('krita-deps-management', 'ci-utilities'))
 srcPath = os.path.abspath(os.getcwd())
 
 if arguments.skip_debug_package:
@@ -58,11 +59,11 @@ unstablePackageSuffix = '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA']) \
     if not arguments.release_package_naming else ''
 
 packageName = 'krita-x64-{}{}'.format(kritaVersionString, unstablePackageSuffix)
-hookFile = os.path.join(srcPath, 'build-tools', 'ci-scripts', 'sign-windows-package-at-notary-service.py')
+hookFile = os.path.join(ciUtilitiesPath, 'sign-windows-package-at-notary-service.py')
 
 commandToRun = ' '.join([sys.executable,
                          '-u',
-                         'packaging\windows\package-complete.py',
+                         os.path.join(ciUtilitiesPath, 'build-windows-zip-package.py'),
                          '--no-interactive',
                          '--package-name', packageName,
                          '--src-dir',  srcPath,
@@ -123,7 +124,7 @@ if arguments.build_installers:
             try:
                 print("## Verify that the installer is signed")
                 commandToRun = ' '.join([sys.executable, '-u',
-                                    os.path.join('packaging', 'windows', 'find-libs-with-debug.py'),
+                                    os.path.join(ciUtilitiesPath, 'verify-release-binaries.py'),
                                     '-s', '-f', installerFileName
                                     ])
                 subprocess.check_call(commandToRun)

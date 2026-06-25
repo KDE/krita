@@ -19,7 +19,7 @@
     KRITACI_SKIP_DEBUG_PACKAGE: True
     KRITACI_BUILD_INSTALLERS: False
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
-    KDECI_SIGN_BINARIES: False # we sign only nightlies and release packages
+    KDECI_SIGN_BINARIES: True # we sign only nightlies and release packages
     KRITACI_WINDOWS_SIGN_CONFIG: upstream-ci-utilities/signing/signwindowsbinaries.ini
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_WINDOWS

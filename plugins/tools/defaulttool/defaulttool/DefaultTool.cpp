@@ -2441,8 +2441,9 @@ void DefaultToolTextPropertiesInterface::notifyMarkupChanged()
 
 void DefaultToolTextPropertiesInterface::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
-    Q_UNUSED(type)
-    Q_UNUSED(shape)
+    if (type == KoShape::Deleted)
+        d->shapes.removeAll(shape);
+
     d->compressor.start();
 }
 

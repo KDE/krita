@@ -255,14 +255,9 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         m_mainWindow = mainWin;
 
         // set the shortcut links from actions (only if a shortcut exists)
-        if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
-            newFileLinkShortcut->setText(
-                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
-        }
-        if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
-            openFileShortcut->setText(
-                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
-        }
+        KisActionManager *actionManager = mainWin->viewManager()->actionManager();
+        updateShortcutLink(newFileLink, newFileLinkShortcut, actionManager->actionByName(QStringLiteral("file_new")));
+        updateShortcutLink(openFileLink, openFileShortcut, actionManager->actionByName(QStringLiteral("file_open")));
         connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
         // we need the view manager to actually call actions, so don't create the connections
         // until after the view manager is set
@@ -613,6 +608,23 @@ void KisWelcomePageWidget::showDevVersionHighlight()
     } else {
         devBuildIcon->setVisible(false);
         devBuildLabel->setVisible(false);
+    }
+}
+
+void KisWelcomePageWidget::updateShortcutLink(QToolButton *button, QLabel *label, QAction *action)
+{
+    if (action) {
+        QString shortcutText = action->shortcut().toString(QKeySequence::NativeText);
+        if (shortcutText.isEmpty()) {
+            label->setText(QString());
+        } else {
+            label->setText(QStringLiteral("(%1)").arg(shortcutText));
+        }
+        button->show();
+        label->show();
+    } else {
+        button->hide();
+        label->hide();
     }
 }
 

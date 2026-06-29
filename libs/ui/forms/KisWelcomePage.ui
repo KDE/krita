@@ -1476,7 +1476,7 @@ recently opened documents</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <widget class="KisClickableLabel" name="labelNoFeed">
+             <widget class="QLabel" name="labelNoFeed">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -1745,11 +1745,6 @@ p, li { white-space: pre-wrap; }
    <extends>QWidget</extends>
    <header>widgets/KisNewsWidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisClickableLabel</class>
-   <extends>QLabel</extends>
-   <header>KisClickableLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

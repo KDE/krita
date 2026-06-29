@@ -69430,6 +69430,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "Få støttemerke for Krita her!"

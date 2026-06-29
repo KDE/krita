@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-06-28 02:51+0000\n"
-"PO-Revision-Date: 2026-04-26 15:15+0200\n"
+"PO-Revision-Date: 2026-06-28 11:25+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 26.04.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16333,47 +16333,41 @@ msgstr "Espais de treball"
 
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgctxt "action"
 msgid "Resources"
 msgstr "Recursos"
 
 #. i18n: context: text @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources..."
-msgstr "Gestiona els recursos..."
+msgstr "Obtén més recursos..."
 
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources"
-msgstr "Recursos d'emmagatzematge"
+msgstr "Obtén més recursos"
 
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
-#, fuzzy, kde-format
-#| msgid "LUT Management"
+#, kde-format
 msgctxt "action"
 msgid "Management"
-msgstr "Gestió de la LUT"
+msgstr "Gestió"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
-msgstr "Gestiona els enregistraments..."
+msgstr "Gestió dels beneficis dels seguidors..."
 
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
@@ -16383,26 +16377,24 @@ msgstr "Gestiona els enregistraments..."
 #, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr ""
+msgstr "Gestió dels beneficis dels seguidors"
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions..."
-msgstr "Gestiona els enregistraments..."
+msgstr "Gestiona les subscripcions..."
 
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:36 krita/kritamenu_android.action:37
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions"
-msgstr "Descripció"
+msgstr "Gestiona les subscripcions"
 
 #: krita/main.cc:723
 #, kde-format
@@ -28321,38 +28313,34 @@ msgid "Preset Icon Library"
 msgstr "Biblioteca d'icones dels predefinits"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
-#, fuzzy, kde-format
-#| msgid "Unsupported unit"
+#, kde-format
 msgid "Supporter Benefits"
-msgstr "Unitat no admesa"
+msgstr "Beneficis dels seguidors"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscriptions"
-msgstr "Descripció"
+msgstr "Gestiona les subscripcions"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:114
 #, kde-format
 msgid "You have %1 supporter benefit:"
 msgid_plural "You have %1 supporter benefits:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Teniu %1 benefici de seguidor:"
+msgstr[1] "Teniu %1 beneficis de seguidor:"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:122
 #, kde-format
 msgid "There is %1 supporter benefit available:"
 msgid_plural "There are %1 supporter benefits available:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hi ha disponible %1 benefici de seguidor:"
+msgstr[1] "Hi ha disponibles %1 beneficis de seguidor:"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Stacked"
+#, kde-format
 msgid "StackedWidget"
-msgstr "Apilada"
+msgstr "StackedWidget"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblNoBenefits)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:53
@@ -28361,12 +28349,14 @@ msgid ""
 "No supporter benefits available on this version of Krita.\n"
 "You can still support Krita by donating."
 msgstr ""
+"Ni hi ha disponible cap benefici de seguidor en aquesta versió del Krita.\n"
+"Tot i això, podeu ajudar el Krita fent una donació."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnNoBenefitsSupport)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Donació"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -28726,19 +28716,19 @@ msgstr ""
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr ""
+"El Krita s'ha fet possible gràcies al suport recurrent de persones com vós!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
 #, kde-format
 msgid "Manage Supporter Benefits"
-msgstr ""
+msgstr "Gestió dels beneficis dels seguidors"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:833
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Contribució al Krita"
+msgstr "Ajudeu el Krita!"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -37012,17 +37002,17 @@ msgstr "Cal reiniciar."
 #: libs/ui/KisWelcomePageWidget.cpp:832
 #, kde-format
 msgid "Become a Supporter!"
-msgstr ""
+msgstr "Convertiu-vos en seguidor!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:836
 #, kde-format
 msgid "Supporters get brush packs and more."
-msgstr ""
+msgstr "El seguidors obtenen paquets de pinzells i altres."
 
 #: libs/ui/KisWelcomePageWidget.cpp:837
 #, kde-format
 msgid "Contributions keep development going."
-msgstr ""
+msgstr "Les contribucions mantenen el desenvolupament en marxa."
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
@@ -40188,16 +40178,14 @@ msgid "Current dockers"
 msgstr "Acobladors actuals"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Edit Resource Bundle"
+#, kde-format
 msgid "Download Resource Bundles"
-msgstr "Edició del paquet de recursos"
+msgstr "Baixada de paquets de recursos"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscription"
-msgstr "Descripció"
+msgstr "Gestió de la subscripció"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -50883,21 +50871,19 @@ msgid "What resource do you want to import these %1 files as?"
 msgstr "Amb quin recurs voleu importar aquests fitxers %1?"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
-#, fuzzy, kde-format
-#| msgid "All Supported Files"
+#, kde-format
 msgid "Supporter Bundles"
-msgstr "Tots els fitxers admesos"
+msgstr "Paquets de seguidors"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
 msgid "<strong>Error:</strong> %1"
-msgstr ""
+msgstr "<strong>Error:</strong> %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgid "No supporter bundles available."
-msgstr "No hi ha cap imatge disponible."
+msgstr "No hi ha disponible cap paquet de seguidor."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:108
 #, kde-format
@@ -50907,182 +50893,165 @@ msgid ""
 "for purchases and may make these bundles in other ways behind the links "
 "below."
 msgstr ""
+"Aquests paquets s'han fet disponibles pels seus autors per a ajudar a "
+"proporcionar recompenses per a donar suport al desenvolupament del Krita. No "
+"reben compensació per les compres i poden fer disponibles aquests paquets "
+"d'altres maneres des dels enllaços següents."
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLoading)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "S'està carregant…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
-#, fuzzy, kde-format
-#| msgid "Symmetry"
+#, kde-format
 msgid "Retry"
-msgstr "Simetria"
+msgstr "Torna a intentar-ho"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
 msgid "Server responded with error %1."
-msgstr ""
+msgstr "El servidor ha respost amb l'error %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
-#, fuzzy, kde-format
-#| msgid "Invalid File"
+#, kde-format
 msgid "Invalid checksums file."
-msgstr "Fitxer no vàlid"
+msgstr "Fitxer no vàlid de suma de verificació."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
 msgid "Invalid checksums version."
-msgstr ""
+msgstr "Versió no vàlida de les sumes de verificació."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:117
 #, kde-format
 msgid "You have to update Krita to use this service."
-msgstr ""
+msgstr "Cal actualitzar el Krita per a fer servir aquest servei."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:119
 #, kde-format
 msgid "This service is not available in your region."
-msgstr ""
+msgstr "Aquest servei no està disponible a la vostra regió."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:121
 #, kde-format
 msgid "This service is currently unavailable."
-msgstr ""
+msgstr "Aquest servei no està disponible actualment."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
-#, fuzzy, kde-format
-#| msgid "The document has been modified."
+#, kde-format
 msgid "This service has been discontinued."
-msgstr "S'ha modificat el document."
+msgstr "Aquest servei s'ha abandonat."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
-#, fuzzy, kde-format
-#| msgid "Unknown error: %1"
+#, kde-format
 msgid "Unknown service error %1."
-msgstr "Error desconegut: %1"
+msgstr "Error desconegut del servidor %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
 msgid "Not enough data."
-msgstr ""
+msgstr "No hi ha prou dades."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
-#, fuzzy, kde-format
-#| msgid "Invalid value."
+#, kde-format
 msgid "Invalid version."
-msgstr "Valor no vàlid."
+msgstr "Versió no vàlida."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksum."
-msgstr "El nom no és vàlid."
+msgstr "Suma de verificació no vàlida."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "Warning message"
-#| msgid "Failed to rename the resource."
+#, kde-format
 msgid "Failed to create directory %1."
-msgstr "Ha fallat en reanomenar el recurs."
+msgstr "Ha fallat en crear el directori %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
-#, fuzzy, kde-format
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to open %1 for writing."
-msgstr "No es pot obrir %1."
+msgstr "Ha fallat en obrir %1 per a escriptura."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
-#, fuzzy, kde-format
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to write %1."
-msgstr "No es pot obrir %1."
+msgstr "Ha fallat en escriure %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:317
 #, kde-format
 msgid "Failed to retrieve bundle checksums: %1"
-msgstr ""
+msgstr "Ha fallat en recuperar les sumes de verificació del paquet: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
-#, fuzzy, kde-format
-#| msgctxt "a tooltip shown when a file layer cannot load its linked file"
-#| msgid "Failed to load linked file: %1"
+#, kde-format
 msgid "Failed to retrieve bundles: %1"
-msgstr "Ha fallat en carregar el fitxer enllaçat: %1"
+msgstr "Ha fallat en recuperar els paquets: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Brush presets"
+#, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "Pinzells predefinits"
-msgstr[1] "Pinzells predefinits"
+msgstr[0] "%1 predefinit de pinzells"
+msgstr[1] "%1 predefinits de pinzells"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
-#, fuzzy, kde-format
-#| msgid "Brush tips"
+#, kde-format
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
-msgstr[0] "Puntes de pinzell"
-msgstr[1] "Puntes de pinzell"
+msgstr[0] "%1 puntes de pinzell"
+msgstr[1] "%1 puntes de pinzells"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
+#, kde-format
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
-msgstr[0] "18 textura-escorça"
-msgstr[1] "18 textura-escorça"
+msgstr[0] "%1 patrons de textura"
+msgstr[1] "%1 patrons de textures"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
 #, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 disposició d'espai de treball"
+msgstr[1] "%1 disposicions d'espai de treball"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
 msgid "%1 (subscribed)"
-msgstr ""
+msgstr "%1 (subscrit)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "%1 (Copy)"
+#, kde-format
 msgid "%1 (owned)"
-msgstr "%1 (còpia)"
+msgstr "%1 (en propietat)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
-msgstr "Contrast:"
+msgstr "Conté:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
-msgstr "No hi ha cap imatge disponible."
+msgstr "No disponible."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
-#, fuzzy, kde-format
-#| msgid "Available"
+#, kde-format
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
 msgid "Available with:"
-msgstr "Disponible"
+msgstr "Disponible amb:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
 msgid "Downloading bundle…"
-msgstr ""
+msgstr "Baixada de paquet…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:139
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
@@ -51091,52 +51060,46 @@ msgid "%1"
 msgstr "%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:194
-#, fuzzy, kde-format
-#| msgid "Invalid File"
+#, kde-format
 msgid "Invalid bundle size"
-msgstr "Fitxer no vàlid"
+msgstr "Mida no vàlida de paquet"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
 msgid "Invalid bundle checksum"
-msgstr ""
+msgstr "Suma de verificació de paquet no vàlida"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
 #, kde-format
 msgid "Activating bundle…"
-msgstr ""
+msgstr "S'està activant el paquet…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed to import the resource"
+#, kde-format
 msgid "Failed to import bundle"
-msgstr "Ha fallat en importar el recurs"
+msgstr "Ha fallat en importar el paquet"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgid "Bundle download failed: %1"
-msgstr "No s'ha pogut carregar el perfil: %1."
+msgstr "Ha fallat la baixada del paquet: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Conversion failed"
+#, kde-format
 msgid "Download failed"
-msgstr "Ha fallat la conversió"
+msgstr "Ha fallat la baixada"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Down"
+#, kde-format
 msgid "Download"
-msgstr "Avall"
+msgstr "Baixa"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
 #, kde-format
 msgid "✔ Owned"
-msgstr ""
+msgstr "✔ En propietat"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
@@ -51276,10 +51239,9 @@ msgid "Manage Resources..."
 msgstr "Gestiona els recursos..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:50
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Get More Resources..."
-msgstr "Gestiona els recursos..."
+msgstr "Obtén més recursos..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -51312,11 +51274,9 @@ msgstr "Edita una biblioteca de recursos"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSupport)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
+#, kde-format
 msgid "Get More Bundles"
-msgstr "Crea un paquet"
+msgstr "Obtén més paquets"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:433

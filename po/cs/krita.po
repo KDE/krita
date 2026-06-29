@@ -27881,7 +27881,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Přispět"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -49577,14 +49577,13 @@ msgstr ""
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "Probíhá načítání…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
-#, fuzzy, kde-format
-#| msgid "Symmetry"
+#, kde-format
 msgid "Retry"
-msgstr "Symetrie"
+msgstr "Zkusit znovu"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
@@ -49640,11 +49639,9 @@ msgid "Invalid version."
 msgstr "Neplatná hodnota."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksum."
-msgstr "Neplatný název."
+msgstr "Neplatný kontrolní součet."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
 #, fuzzy, kde-format
@@ -49785,17 +49782,15 @@ msgid "Bundle download failed: %1"
 msgstr "Nelze načíst profil: %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Reload File"
+#, kde-format
 msgid "Download failed"
-msgstr "Znovu načíst soubor"
+msgstr "Stažení bylo neúspěšné"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Down"
+#, kde-format
 msgid "Download"
-msgstr "Dolů"
+msgstr "Stáhnout"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196

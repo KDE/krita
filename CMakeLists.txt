@@ -841,6 +841,26 @@ return Qt::ANDROID_INPUT_PLATFORM_DATA_SOFT_INPUT_ADJUST_NOTHING;
 KRITA_QT_HAS_ANDROID_INPUT_PLATFORM_DATA_SOFT_INPUT_ADJUST_NOTHING
 )
 
+
+unset(KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT CACHE)
+
+set(required_includes_backup ${CMAKE_REQUIRED_INCLUDES})
+list(APPEND CMAKE_REQUIRED_INCLUDES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}")
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <qpa/qplatformscreen.h>
+int main(int argc, char *argv[]) {
+QPlatformScreen *screen = nullptr;
+screen->setDensityAdjustment(1.0);
+return screen->densityAdjustment();
+}
+"
+KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+)
+
+set(CMAKE_REQUIRED_INCLUDES ${required_includes_backup})
+unset(required_includes_backup)
+
 configure_file(config-qt-patches-present.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qt-patches-present.h)
 
 unset(CMAKE_REQUIRED_INCLUDES)

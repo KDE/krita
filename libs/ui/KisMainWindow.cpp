@@ -234,6 +234,9 @@ public:
 
     bool firstTime {true};
     bool windowSizeDirty {false};
+#ifdef Q_OS_ANDROID
+    bool flashWindowHackInProgress {false};
+#endif
 
     KisAction *showDocumentInfo {nullptr};
     KisAction *saveAction {nullptr};
@@ -1163,12 +1166,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
     // opening a document seems to work fine on these devices though, it delays
     // for a moment then displays fine, so just skip this there I guess.
     if (!KisAndroidUtils::looksLikeXiaomiDevice()) {
-        QTimer::singleShot(0, this, [this] {
-            hide();
-            QTimer::singleShot(0, this, [this] {
-                show();
-            });
-        });
+        slotFlashWindowHack();
     }
 #endif
 
@@ -1889,6 +1887,20 @@ void KisMainWindow::slotShowDonationManagementDialog()
         dlg->setAttribute(Qt::WA_DeleteOnClose);
         dlg->setObjectName(objectName);
         dlg->show();
+    }
+}
+
+void KisMainWindow::slotFlashWindowHack()
+{
+    if (!d->flashWindowHackInProgress) {
+        d->flashWindowHackInProgress = true;
+        QTimer::singleShot(0, this, [this] {
+            hide();
+            QTimer::singleShot(0, this, [this] {
+                show();
+                d->flashWindowHackInProgress = false;
+            });
+        });
     }
 }
 #endif

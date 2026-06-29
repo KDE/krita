@@ -185,6 +185,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
     supporterBadge->hide();
+    wdgAndroidSupportBanner->hide();
 #ifdef Q_OS_ANDROID
     initDonations();
 #endif

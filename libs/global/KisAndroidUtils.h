@@ -4,6 +4,7 @@
 #ifndef __KISANDROIDUTILS_H_
 #define __KISANDROIDUTILS_H_
 
+#include <QString>
 #include <kritaglobal_export.h>
 
 namespace KisAndroidUtils
@@ -21,6 +22,11 @@ KRITAGLOBAL_EXPORT bool looksLikeXiaomiDevice();
 // Check whether the device supports reporting low-memory situations as an exit
 // reason. Devices that don't will instead report a SIGKILL.
 KRITAGLOBAL_EXPORT bool isLowMemoryKillReportSupported();
+
+// Checks , logs and clears the pending exception in the Java Native Interface.
+// If an exception occurs while one is pending, the application dies. Some Qt
+// stuff, such as QDesktopServices, can throw JNI errors and don't clear them.
+KRITAGLOBAL_EXPORT void clearJniException(const QString &location);
 
 } // namespace KisAndroidUtils
 

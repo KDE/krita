@@ -3,6 +3,7 @@
  */
 #include "KisAndroidUtils.h"
 #include "KisAndroidLogHandler.h"
+#include <kis_debug.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QJniEnvironment>
@@ -56,6 +57,16 @@ bool isLowMemoryKillReportSupported()
                                                         "()Z");
     }
     return result;
+}
+
+void clearJniException(const QString &location)
+{
+    QJniEnvironment env;
+    if (env->ExceptionCheck()) {
+        warnKrita << "JNI exception occurred" << location;
+        env->ExceptionDescribe();
+        env->ExceptionClear();
+    }
 }
 
 } // namespace KisAndroidUtils

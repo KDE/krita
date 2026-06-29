@@ -384,9 +384,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
-#ifdef Q_OS_ANDROID
-    connect(this, &KisMainWindow::sigFullscreenOnShow, this, &KisMainWindow::viewFullscreen, Qt::QueuedConnection);
-#endif
 
     actionCollection()->addAssociatedWidget(this);
     KoPluginLoader::instance()->load("Krita/ViewPlugin", KoPluginLoader::PluginsConfig(), d->viewManager, false);
@@ -1641,7 +1638,6 @@ void KisMainWindow::showEvent(QShowEvent *event)
         setMainWindowLayoutForCurrentMainWidget(d->widgetStack->currentIndex(), false);
     }
 #ifdef Q_OS_ANDROID
-    Q_EMIT sigFullscreenOnShow(true); // Android defaults to fullscreen.
     // The user can conceivably purchase a product from the splash screen while
     // Krita is still loading. In that case, the "pending" flag will be set. The
     // dialog in question will clear the flag.
@@ -2377,6 +2373,14 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
+#ifdef Q_OS_ANDROID
+    // Full-screening on Android applies to the entire application, not this
+    // window in particular. Qt tries to paper over that matter, but it causes
+    // some pretty horrid flickering when the main window gets hidden. We just
+    // talk to the Android interface directly to get around that.
+    KisAndroidUtils::setFullScreen(fullScreen);
+    d->fullScreenMode->setChecked(fullScreen);
+#else
     KisConfig cfg(false);
     cfg.setFullscreenMode(fullScreen);
 
@@ -2386,6 +2390,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
     d->fullScreenMode->setChecked(isFullScreen());
+#endif
 }
 
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
@@ -3195,7 +3200,13 @@ void KisMainWindow::initializeGeometry()
         move(x,y);
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
-    d->fullScreenMode->setChecked(isFullScreen());
+#ifdef Q_OS_ANDROID
+    // We handle full-screening differently on Android, see viewFullScreen.
+    bool fullScreen = KisAndroidUtils::isInFullScreen();
+#else
+    bool fullScreen = isFullScreen();
+#endif
+    d->fullScreenMode->setChecked(fullScreen);
 }
 
 void KisMainWindow::showManual()

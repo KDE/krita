@@ -69,4 +69,34 @@ void clearJniException(const QString &location)
     }
 }
 
+bool isInFullScreen()
+{
+    QJniObject activity = QJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative",
+                                                             "activity",
+                                                             "()Landroid/app/Activity;");
+    KisAndroidUtils::clearJniException(QStringLiteral("getting activity in isInFullScreen"));
+    if (activity.isValid()) {
+        bool fullScreen = activity.callMethod<jboolean>("isInFullScreen", "()Z");
+        KisAndroidUtils::clearJniException(QStringLiteral("calling isInFullScreen"));
+        return fullScreen;
+    } else {
+        qWarning("isInFullScreen: activity not valid");
+        return false;
+    }
+}
+
+void setFullScreen(bool fullScreen)
+{
+    QJniObject activity = QJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative",
+                                                             "activity",
+                                                             "()Landroid/app/Activity;");
+    KisAndroidUtils::clearJniException(QStringLiteral("getting activity in setFullScreen"));
+    if (activity.isValid()) {
+        activity.callMethod<void>("setFullScreenOnUiThread", "(Z)V", jboolean(fullScreen));
+        KisAndroidUtils::clearJniException(QStringLiteral("calling setFullScreenOnUiThread"));
+    } else {
+        qWarning("setFullScreen: activity not valid");
+    }
+}
+
 } // namespace KisAndroidUtils

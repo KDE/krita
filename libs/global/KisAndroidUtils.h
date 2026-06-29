@@ -28,6 +28,12 @@ KRITAGLOBAL_EXPORT bool isLowMemoryKillReportSupported();
 // stuff, such as QDesktopServices, can throw JNI errors and don't clear them.
 KRITAGLOBAL_EXPORT void clearJniException(const QString &location);
 
+// Checks whether we are in immersive mode, which is basically full-screen.
+KRITAGLOBAL_EXPORT bool isInFullScreen();
+
+// Enters or exits immersive mode if we're not in that state already.
+KRITAGLOBAL_EXPORT void setFullScreen(bool fullScreen);
+
 } // namespace KisAndroidUtils
 
 #endif // __KISANDROIDUTILS_H_

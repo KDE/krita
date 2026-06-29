@@ -46,6 +46,7 @@ public class MainActivity extends QtActivity {
     private static String applicationLoadingText = "";
     private boolean haveLibsLoaded = false;
     private boolean serviceStarted = false;
+    private boolean inFullScreen = false;
     private DonationDialog mDonationDialog = null;
 
     @Override
@@ -84,11 +85,7 @@ public class MainActivity extends QtActivity {
             serviceStarted  = true;
             // Full-screening the application here instead of after the main window is shown avoids
             // some ugly flicker as the Qt UI resizes itself.
-            try {
-                setFullScreen(true);
-            } catch (Exception | UnsatisfiedLinkError e) {
-                Log.e(TAG, "Failed to enter fullscreen", e);
-            }
+            trySetFullScreen(true);
             // Keep the service started so in an unfortunate case where we're not allowed to start a
             // foreground service, we can try to continue without it.
             Intent docSaverServiceIntent = new Intent(this, DocumentSaverService.class);
@@ -202,6 +199,25 @@ public class MainActivity extends QtActivity {
 
     public void copyAssets() {
         new ConfigsManager(this).handleAssets();
+    }
+
+    public boolean isInFullScreen() {
+        return inFullScreen;
+    }
+
+    public void setFullScreenOnUiThread(boolean fullScreen) {
+        if (fullScreen != inFullScreen) {
+            runOnUiThread(() -> trySetFullScreen(fullScreen));
+        }
+    }
+
+    private void trySetFullScreen(boolean fullScreen) {
+        try {
+            setFullScreen(fullScreen);
+            inFullScreen = fullScreen;
+        } catch (Exception | UnsatisfiedLinkError e) {
+            Log.e(TAG, "Failed to set fullscreen " + fullScreen, e);
+        }
     }
 
     public static int getLongPressTimeout() {

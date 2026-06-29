@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#242424">
+
+    <TextView
+        android:id="@+id/percentText"
+        style="@android:style/Widget.Material.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:text="Interface scale: 100%"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textColor="#ffffff" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@android:style/Widget.Material.SeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_weight="2"
+        android:max="60"
+        android:progress="0"
+        android:thumbTint="#ffffff"
+        android:progressTint="#ffffff"
+        android:progressBackgroundTint="#53728e" />
+
+    <CheckBox
+        android:id="@+id/rememberCheckBox"
+        style="@android:style/Widget.Material.CompoundButton.CheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_this_dialog_when_krita_starts"
+        android:textColor="#ffffff"
+        android:buttonTint="#ffffff" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ok"
+        android:layout_margin="4dp"
+        android:background="@drawable/krita_gray_button"
+        android:textColor="#ffffff"  />
+
+</LinearLayout>

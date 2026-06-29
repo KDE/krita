@@ -68,6 +68,7 @@ Q_SIGNALS:
     void sigStateUpdateReceived(int state, long long ownedProductFlags);
     void sigStateChanged();
     void sigShowDonationManagementDialogRequested();
+    void sigSplashDialogDismissed();
 
 private:
     explicit KisAndroidDonations(QObject *parent = nullptr);

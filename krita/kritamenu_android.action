@@ -42,5 +42,20 @@
       <statusTip></statusTip>
     </Action>
   </Actions>
+  <Actions category="Interface">
+    <text>Interface</text>
+    <Action name="change_interface_scale">
+      <icon></icon>
+      <text>Change Interface Scale...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Change Interface Scale</toolTip>
+      <iconText>Change Interface Scale</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
 </ActionCollection>
 

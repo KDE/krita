@@ -137,6 +137,10 @@
 
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
+#if defined(Q_OS_ANDROID) && KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+#include <KisAndroidScaling.h>
+#endif
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -191,6 +195,9 @@ public:
     QScopedPointer<KisExtendedModifiersMapperPluginInterface> extendedModifiersPluginInterface;
 #ifdef Q_OS_ANDROID
     KisAndroidDonations *androidDonations {nullptr};
+#if KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    KisAndroidScaling *androidScaling {nullptr};
+#endif
 #endif
 };
 
@@ -528,6 +535,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     setSplashScreenLoadingText(i18n("Initializing Globals..."));
     processEvents();
     initializeGlobals(args);
+
+#if defined(Q_OS_ANDROID) && KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    d->androidScaling = new KisAndroidScaling(cfg, this);
+#endif
 
     const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
@@ -1343,5 +1354,16 @@ KisAndroidDonations *KisApplication::androidDonations()
         d->androidDonations->syncState();
     }
     return d->androidDonations;
+}
+
+KisAndroidScaling *KisApplication::androidScaling()
+{
+#if KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    // Should get initialized during startup and not accessed before.
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->androidScaling, nullptr);
+    return d->androidScaling;
+#else
+    return nullptr;
+#endif
 }
 #endif

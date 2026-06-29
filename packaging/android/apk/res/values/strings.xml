@@ -33,4 +33,8 @@
 	<string name="product_subscription_description"><![CDATA[<p>Support Krita\'s development with a monthly contribution. While subscribed, you get access to <strong>all</strong> supporter benefits as they are released. You currently receive %1$d resource bundles together containing over %2$d brushes, including the paid Digital Atelier bundle, with more planned in the future.</p>]]></string>
 	<string name="product_onetime_title">Krita 5.3 Supporter Pack</string>
 	<string name="product_onetime_description"><![CDATA[<p>In this pack you will receive %1$d resource bundles together containing over %2$d brushes, including the paid Digital Atelier bundle. This is a <strong>one-time purchase</strong>, you won\'t be entered into a subscription.</p>]]></string>
+	<string name="show_this_dialog_when_krita_starts">Show this dialog when Krita starts</string>
+	<string name="ok">OK</string>
+	<string name="interface_scale_default">Interface scale: %d%% (default)</string>
+	<string name="interface_scale">Interface scale: %d%%</string>
 </resources>

@@ -1704,6 +1704,48 @@ void KisConfig::setUseIgnoreHistoricTabletEventsWorkaround(bool value)
     m_cfg.writeEntry("useIgnoreHistoricTabletEventsWorkaround", value);
     KisConfigNotifier::instance()->notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(value);
 }
+
+qreal KisConfig::androidScalingLastInitialScale(bool defaultValue) const
+{
+    if (defaultValue) {
+        return 0.0;
+    } else {
+        return m_cfg.readEntry("androidScalingLastInitialScale", 0.0);
+    }
+}
+
+void KisConfig::setAndroidScalingLastInitialScale(qreal value)
+{
+    m_cfg.writeEntry("androidScalingLastInitialScale", value);
+}
+
+qreal KisConfig::androidScalingTargetScale(bool defaultValue) const
+{
+    if (defaultValue) {
+        return 0.0;
+    } else {
+        return m_cfg.readEntry("androidScalingTargetScale", 0.0);
+    }
+}
+
+void KisConfig::setAndroidScalingTargetScale(qreal value)
+{
+    m_cfg.writeEntry("androidScalingTargetScale", value);
+}
+
+bool KisConfig::androidScalingAskOnStartup(bool defaultValue) const
+{
+    if (defaultValue) {
+        return true;
+    } else {
+        return m_cfg.readEntry("androidScalingAskOnStartup", true);
+    }
+}
+
+void KisConfig::setAndroidScalingAskOnStartup(bool value)
+{
+    m_cfg.writeEntry("androidScalingAskOnStartup", value);
+}
 #endif
 
 qreal KisConfig::vastScrolling(bool defaultValue) const

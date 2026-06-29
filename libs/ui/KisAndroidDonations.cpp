@@ -259,3 +259,15 @@ extern "C" JNIEXPORT void JNICALL Java_org_krita_android_JNIWrappers_showDonatio
         }
     }
 }
+
+extern "C" JNIEXPORT void JNICALL Java_org_krita_android_JNIWrappers_onSplashDialogDismissed(JNIEnv * /*env*/,
+                                                                                             jobject /*obj*/)
+{
+    KisApplication *app = qobject_cast<KisApplication *>(KisApplication::instance());
+    if (app) {
+        KisAndroidDonations *androidDonations = app->androidDonations();
+        if (androidDonations) {
+            Q_EMIT androidDonations->sigSplashDialogDismissed();
+        }
+    }
+}

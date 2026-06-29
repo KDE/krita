@@ -158,8 +158,13 @@
 #include "KisWidgetConnectionUtils.h"
 #include "KisToolBarStateModel.h"
 #include <config-qmdiarea-always-show-subwindow-title.h>
+#include <config-qt-patches-present.h>
 
 #include <mutex>
+
+#if defined(Q_OS_ANDROID) && KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+#include <KisAndroidScaling.h>
+#endif
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -262,6 +267,9 @@ public:
 #ifdef Q_OS_ANDROID
     KisAction *showDonationManagementDialog {nullptr};
     KisAction *manageSubscriptions {nullptr};
+#if KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    KisAction *changeInterfaceScale {nullptr};
+#endif
 #else
     KisAction *toggleDetachCanvas {nullptr};
     KisAction *newWindow {nullptr};
@@ -648,6 +656,19 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QScreen *s = QGuiApplication::primaryScreen();
     s->setOrientationUpdateMask(Qt::LandscapeOrientation|Qt::InvertedLandscapeOrientation|Qt::PortraitOrientation|Qt::InvertedPortraitOrientation);
     connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
+
+#if KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    // When the screen's UI scale changes, we have to hide and show it to get
+    // its contents to update, otherwise it fails to re-render altogether.
+    KisAndroidScaling *androidScaling = KisAndroidScaling::instance();
+    if (androidScaling) {
+        connect(androidScaling,
+                &KisAndroidScaling::sigInterfaceScaleChanged,
+                this,
+                &KisMainWindow::slotFlashWindowHack,
+                Qt::QueuedConnection);
+    }
+#endif
 
     // When Krita starts, Java side sends an event to set applicationState() to active. But, before
     // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFormat.
@@ -1832,6 +1853,16 @@ void KisMainWindow::slotFileSave()
     if (saveDocument(d->activeView->document(), false, false,false)) {
         Q_EMIT documentSaved();
     }
+}
+
+void KisMainWindow::slotChangeInterfaceScale()
+{
+#if defined(Q_OS_ANDROID) && KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    KisAndroidScaling *androidScaling = KisAndroidScaling::instance();
+    if (androidScaling) {
+        androidScaling->showDialog();
+    }
+#endif
 }
 
 void KisMainWindow::slotFileSaveAs()
@@ -3132,6 +3163,13 @@ void KisMainWindow::createActions()
                 &KisMainWindow::slotShowDonationManagementDialog,
                 Qt::QueuedConnection);
     }
+#if KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+    KisAndroidScaling *androidScaling = KisAndroidScaling::instance();
+    if (androidScaling && androidScaling->isSupported()) {
+        d->changeInterfaceScale = actionManager->createAction("change_interface_scale");
+        connect(d->changeInterfaceScale, &QAction::triggered, this, &KisMainWindow::slotChangeInterfaceScale);
+    }
+#endif
 #else
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));

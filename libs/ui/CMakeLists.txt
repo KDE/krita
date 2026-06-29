@@ -508,6 +508,11 @@ elseif(ANDROID)
         dialogs/KisDonationManagementDialog.cpp
         widgets/KisDonationManagementWidget.cpp
     )
+    if(KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT)
+        list(APPEND kritaui_LIB_SRCS
+            KisAndroidScaling.cpp
+        )
+    endif()
 endif()
 
     set(kritaui_LIB_SRCS
@@ -737,6 +742,17 @@ if(WIN32)
         PROPERTIES
         INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
         )
+elseif(ANDROID)
+    # Private headers are required to access QPlatformScreen::densityAdjustment
+    # and QPlatformScreen::setDensityAdjustment. These are patched into our Qt
+    # to allow us to dynamically change the UI scale on Android.
+    if(KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT)
+        set_source_files_properties(
+            KisAndroidScaling.cpp
+            PROPERTIES
+            INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
+    endif()
 endif()
 
 if (HAVE_X11)

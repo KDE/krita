@@ -13,5 +13,10 @@ class JNIWrappers {
     public static native void donationStateUpdated(int state, long ownedProductFlags);
     public static native void openFileFromIntent(String uri);
     public static native void showDonationManagementDialog();
+    public static native void setPrimaryScreenScale(double scale);
+    public static native void savePrimaryScreenScale(boolean save);
+    public static native void onSplashDialogDismissed();
+    public static native void onScalingDialogShown();
+    public static native void onScalingDialogDismissed();
 }
 

@@ -311,6 +311,9 @@ public class MainActivity extends QtActivity {
                     updateDonationDialog();
                     AlertDialog alertDialog = mDonationDialog.getAlertDialog();
                     alertDialog.setOnDismissListener(dialogInterface -> {
+                        if (splash) {
+                            JNIWrappers.onSplashDialogDismissed();
+                        }
                         if (mDonationDialog != null) {
                             if (dialogInterface == mDonationDialog.getAlertDialog()) {
                                 Log.d(TAG, "Donation dialog dismissed, clearing");
@@ -464,5 +467,12 @@ public class MainActivity extends QtActivity {
         dlg.setProductDetails(
                 donationHelper.isReady() ? donationHelper.getProductDetails() : null,
                 donationHelper.isAnyProductsOwned());
+    }
+
+    public void showScalingDialog(double currentScale, double defaultScale, boolean showOnStartup, boolean canShowOnStartup) {
+        QtNative.activity().runOnUiThread(() -> {
+            ScalingDialog scalingDialog = new ScalingDialog(this, currentScale, defaultScale, showOnStartup, canShowOnStartup);
+            scalingDialog.show();
+        });
     }
 }

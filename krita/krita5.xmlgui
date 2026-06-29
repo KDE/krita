@@ -384,6 +384,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
       <Action name="options_configure"/>
+      <Action name="change_interface_scale"/>
       <Action name="manage_bundles"/>
       <Action name="manage_resources"/>
       <Action name="manage_supporter_bundles"/>

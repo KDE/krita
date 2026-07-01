@@ -28,6 +28,7 @@ class KisSliderSpinBox;
 
 class KisCanvas2;
 class KisAction;
+class KisActionManager;
 class KisPlaybackEngine;
 
 
@@ -115,6 +116,8 @@ public Q_SLOTS:
     void setImageAnimSettings();
 
 private:
+    void establishPlaybackEngineConnections(KisPlaybackEngine *playbackEngine, KisActionManager *actionManager = nullptr);
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

@@ -1418,7 +1418,7 @@ void TestSvgParser::testRenderFillLinearGradientTransparent()
 
     SvgRenderTester t(data);
     t.setCheckQImagePremultiplied(true);
-    QEXPECT_FAIL("", "TODO: Krita forces all gradients to work in premultiplied space, which is against SVG spec", Abort);
+    QSKIP("TODO: Krita forces all gradients to work in premultiplied space, which is against SVG spec");
     t.test_standard_30px_72ppi("fill_gradient_transparent", false);
 }
 
@@ -1486,7 +1486,7 @@ void TestSvgParser::testRenderFillRadialGradientTransparent()
     SvgRenderTester t(data);
     t.setFuzzyThreshold(1);
     t.setCheckQImagePremultiplied(true);
-    QEXPECT_FAIL("", "TODO: Krita forces all gradients to work in premultiplied space, which is against SVG spec", Abort);
+    QSKIP("TODO: Krita forces all gradients to work in premultiplied space, which is against SVG spec");
     t.test_standard_30px_72ppi("fill_gradient_radial_transparent", false);
 }
 

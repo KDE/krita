@@ -554,6 +554,69 @@ void TestPointMergeCommand::testMultipathJoinShapesSingleShapeStartToEnd()
              }, true);
 }
 
+#include "KoShapeDeleteCommand.h"
 
+void TestPointMergeCommand::undoRedo()
+{
+    KoPathShape path1, path2;
+    path1.moveTo(QPointF(40, 0));
+    path1.lineTo(QPointF(60, 0));
+
+    path2.lineTo(QPointF(60, 30));
+    path2.lineTo(QPointF(0, 30));
+    
+    KoPathPointIndex index1(0, 0);
+    KoPathPointIndex index2(0, 0);
+
+    MockShapeController mockController;
+    MockCanvas canvas(&mockController);
+    MockContainer container1(nullptr);
+
+    path1.setParent(&container1);
+    path2.setParent(&container1);
+
+    KoPathPointData pd1(&path1, index1);
+    KoPathPointData pd2(&path2, index2);
+
+    // Test merge
+    {
+        KoMultiPathPointMergeCommand cmd(pd1, pd2, &mockController, canvas.shapeManager()->selection());
+        cmd.redo();
+
+        KoShapeDeleteCommand  deleteCommand(&mockController, cmd.testingCombinedPath());
+        deleteCommand.redo();
+
+        deleteCommand.undo();
+        cmd.undo();
+
+        cmd.redo();
+        deleteCommand.redo();
+
+        deleteCommand.undo();
+        cmd.undo();
+    }
+
+
+    // Test join
+    {
+        KoMultiPathPointJoinCommand cmd(pd1, pd2, &mockController, canvas.shapeManager()->selection());
+        cmd.redo();
+
+        KoShapeDeleteCommand  deleteCommand(&mockController, cmd.testingCombinedPath());
+        deleteCommand.redo();
+
+        deleteCommand.undo();
+        cmd.undo();
+
+        cmd.redo();
+        deleteCommand.redo();
+
+        deleteCommand.undo();
+        cmd.undo();
+    }
+
+    path1.setParent(nullptr);
+    path2.setParent(nullptr);
+}
 
 KISTEST_MAIN(TestPointMergeCommand)

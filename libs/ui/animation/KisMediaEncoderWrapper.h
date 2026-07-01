@@ -22,6 +22,7 @@ class KRITAUI_EXPORT KisMediaEncoderFormat
 public:
     enum class Type {
         AndroidMediaEncoder,
+        LibavMediaEncoder,
     };
 
     virtual ~KisMediaEncoderFormat() = default;

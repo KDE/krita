@@ -570,6 +570,7 @@ if(ANDROID)
     list(APPEND kritaui_LIB_SRCS
         KisAndroidDonations.cpp
         animation/KisAndroidMediaEncoderRunnable.cpp
+        animation/KisLibavMediaEncoderRunnable.cpp
         animation/KisMediaEncoderFormatPreferencesDialog.cpp
         animation/KisMediaEncoderWrapper.cpp
     )

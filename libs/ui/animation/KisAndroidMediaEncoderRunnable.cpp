@@ -31,6 +31,8 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
+#include "KisLibavEncoderContext.h"
+
 struct KisAndroidMediaEncoderRunnable::EncoderImage {
     uint8_t *bufferY;
     uint8_t *bufferU;
@@ -210,20 +212,16 @@ private:
     int m_formatId;
 };
 
-class KisAndroidMediaEncoderRunnable::Context
+class KisAndroidMediaEncoderRunnable::Context : public KisLibavEncoderContext
 {
 public:
     explicit Context(QString *outErrorMessage = nullptr)
-        : m_outErrorMessage(outErrorMessage)
+        : KisLibavEncoderContext(outErrorMessage)
     {
     }
 
-    ~Context()
+    ~Context() override
     {
-        if (m_imageFormat != AV_PIX_FMT_NONE) {
-            av_freep(&m_imageBuffers[0]);
-        }
-        sws_freeContext(m_swsContext);
         clearEncoder();
     }
 
@@ -273,15 +271,11 @@ public:
             return true;
         } else if (result == STATUS_ERROR_START_ENCODER) {
             warnFile << "Start encoder error" << result;
-            if (m_outErrorMessage) {
-                *m_outErrorMessage = i18n("Unsupported video parameters, try lowering the video FPS or size");
-            }
+            setErrorMessage(i18n("Unsupported video parameters, try lowering the video FPS or size"));
             return true;
         } else if (result == STATUS_ERROR_DRAIN_MUXER_ADD_TRACK) {
             warnFile << "Muxer track error" << result;
-            if (m_outErrorMessage) {
-                *m_outErrorMessage = i18n("Unsupported format");
-            }
+            setErrorMessage(i18n("Unsupported format"));
             return true;
         } else if (isErrorResult(result)) {
             setInternalErrorMessage(QStringLiteral("%1 failed with code %2").arg(title).arg(result));
@@ -301,27 +295,6 @@ public:
         } else {
             return false;
         }
-    }
-
-    SwsContext *getSwsContextFor(int inputWidth,
-                                 int inputHeight,
-                                 AVPixelFormat inputFormat,
-                                 int outputWidth,
-                                 int outputHeight,
-                                 AVPixelFormat outputFormat,
-                                 int flags)
-    {
-        return sws_getCachedContext(m_swsContext,
-                                    inputWidth,
-                                    inputHeight,
-                                    inputFormat,
-                                    outputWidth,
-                                    outputHeight,
-                                    outputFormat,
-                                    flags,
-                                    nullptr,
-                                    nullptr,
-                                    nullptr);
     }
 
     int imageFormat() const
@@ -358,16 +331,6 @@ public:
         }
     }
 
-    void setInternalErrorMessage(const QString &detail)
-    {
-        warnFile << "Media encoder error:" << detail;
-        if (m_outErrorMessage) {
-            // Internal encoder errors are only really useful for developers,
-            // so there's no point in translating them.
-            *m_outErrorMessage = i18n("Internal error (%1)", detail);
-        }
-    }
-
 private:
     static bool isErrorResult(int result)
     {
@@ -376,8 +339,6 @@ private:
 
     QJniEnvironment m_env;
     QJniObject m_encoder;
-    QString *m_outErrorMessage;
-    SwsContext *m_swsContext = nullptr;
     uint8_t *m_imageBuffers[4] = {nullptr, nullptr, nullptr, nullptr};
     int m_imageLinesizes[4] = {0, 0, 0, 0};
     AVPixelFormat m_imageFormat = AV_PIX_FMT_NONE;
@@ -486,26 +447,7 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
         // Grab the next frame from disk.
         QImage inputImage;
         AVPixelFormat inputPixelFormat;
-        if (frame.readImage(inputImage)) {
-            switch (inputImage.format()) {
-            case QImage::Format_RGB32:
-                inputPixelFormat = AV_PIX_FMT_BGR0;
-                break;
-            case QImage::Format_ARGB32:
-                inputPixelFormat = AV_PIX_FMT_BGRA;
-                break;
-            default:
-                // The above are the only formats I can get the the recorder to
-                // produce, so I'm not gonna get experimental with this.
-                inputPixelFormat = AV_PIX_FMT_BGRA;
-                inputImage = inputImage.convertToFormat(QImage::Format_ARGB32);
-                if (inputImage.isNull()) {
-                    warnFile << "Frame conversion from" << inputImage.format() << "failed";
-                    continue;
-                }
-                break;
-            }
-        } else {
+        if (!frame.readImage(inputImage) || !ctx.convertFrame(inputImage, inputPixelFormat)) {
             continue; // Keep going, some frames may be corrupted.
         }
 

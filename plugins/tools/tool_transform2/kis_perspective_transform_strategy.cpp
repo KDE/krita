@@ -327,8 +327,6 @@ void KisPerspectiveTransformStrategy::externalConfigChanged()
 
 bool KisPerspectiveTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
-    Q_UNUSED(pt);
-
     if (m_d->function == NONE) return false;
 
     m_d->clickPos = pt;

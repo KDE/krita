@@ -96,8 +96,12 @@ bool KisMediaEncoderRunnable::nextFrame(Frame &outFrame)
         }
 
         if (instances != 0) {
-            m_outputFrameNo += instances;
-            Q_EMIT sigProgressUpdated(m_outputFrameNo);
+            // GIF must spin through the input frames twice, once to generate a
+            // palette and then again to actually render the animated image. It
+            // sets the multiplier to 0.5 so that the progress bar shows values
+            // that make sense for the user, rather than reaching 100% halfway.
+            m_outputFrameNo += double(instances) * m_outputFrameNoMultiplier;
+            Q_EMIT sigProgressUpdated(int(m_outputFrameNo));
 
             // If we're on the last frame, we can append the linger time.
             if (fileIndex == lastIndex && m_needsLingerAfter) {
@@ -120,6 +124,14 @@ bool KisMediaEncoderRunnable::nextFrame(Frame &outFrame)
     }
 
     return false;
+}
+
+void KisMediaEncoderRunnable::rewindFrames()
+{
+    m_inputTime = 0;
+    m_inputFileIndex = 0;
+    m_needsPreviewBefore = true;
+    m_needsLingerAfter = true;
 }
 
 KisMediaEncoderRunnable::EncodeResult KisMediaEncoderRunnable::prepareAndEncode(QString &outErrorMessage)

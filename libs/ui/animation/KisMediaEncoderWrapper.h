@@ -111,7 +111,13 @@ protected:
         return m_cancel;
     }
 
+    void setOutputFrameNoMultiplier(double outputFrameNoMultiplier)
+    {
+        m_outputFrameNoMultiplier = outputFrameNoMultiplier;
+    }
+
     bool nextFrame(Frame &outFrame);
+    void rewindFrames();
 
 private:
     EncodeResult prepareAndEncode(QString &outErrorMessage);
@@ -119,7 +125,8 @@ private:
     KisMediaEncoderWrapperSettings m_settings;
     double m_inputTime = 0.0;
     int m_inputFileIndex = 0;
-    int m_outputFrameNo = 0;
+    double m_outputFrameNo = 0.0;
+    double m_outputFrameNoMultiplier = 1.0;
     bool m_needsPreviewBefore = true;
     bool m_needsLingerAfter = true;
     bool m_cancel = false;

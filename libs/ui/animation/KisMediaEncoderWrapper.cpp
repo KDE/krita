@@ -19,6 +19,7 @@
 #ifdef Q_OS_ANDROID
 #include "KisAndroidMediaEncoderRunnable.h"
 #endif
+#include "KisLibavMediaEncoderRunnable.h"
 
 void KisMediaEncoderRunnable::slotHandleCancelRequested()
 {
@@ -223,6 +224,7 @@ const QVector<KisMediaEncoderFormat *> &KisMediaEncoderWrapper::getSupportedForm
 #ifdef Q_OS_ANDROID
         KisAndroidMediaEncoderRunnable::getSupportedFormats(*supportedFormats);
 #endif
+        KisLibavMediaEncoderRunnable::getSupportedFormats(*supportedFormats);
     }
     return *supportedFormats;
 }
@@ -249,6 +251,12 @@ KisMediaEncoderRunnable *KisMediaEncoderWrapper::makeSupportedRunnable(const Kis
         }
     }
 #endif
+    {
+        KisLibavMediaEncoderRunnable *libavRunnable = KisLibavMediaEncoderRunnable::create(settings);
+        if (libavRunnable) {
+            return libavRunnable;
+        }
+    }
 
     return nullptr;
 }

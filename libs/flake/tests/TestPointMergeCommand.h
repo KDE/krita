@@ -35,6 +35,9 @@ private Q_SLOTS:
     void testMultipathJoinShapesSingleShapeEndToStart();
     void testMultipathJoinShapesSingleShapeStartToEnd();
 
+    // Regression test. Making sure that undo/redo operations don't cause crashes.
+    void undoRedo();
+
 };
 
 #endif // TESTPOINTMERGECOMMAND_H

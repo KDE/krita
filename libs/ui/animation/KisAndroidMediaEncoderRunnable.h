@@ -48,8 +48,6 @@ private:
     // Returns number of frames drained or one of the DRAIN_* values above.
     int drain(Context &ctx, long long initialTimeout);
 
-    bool copyTemporaryToOutputFile(Context &ctx, const QString &tempPath, const QString &outputPath);
-
     static bool readEncoderImage(Context &ctx, EncoderImage &outImage);
     static bool readPlaneBuffer(Context &ctx, int index, uint8_t *&outBuffer);
     static bool readPlaneRowStride(Context &ctx, int index, int &outRowStride);

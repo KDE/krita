@@ -23,6 +23,7 @@ using QJniObject = QAndroidJniObject;
 
 #include <klocalizedstring.h>
 
+#include <KisAndroidUtils.h>
 #include <kis_debug.h>
 
 extern "C" {
@@ -610,7 +611,9 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
         }
 
         if (closeResult == STATUS_NEEDS_COPY) {
-            if (!copyTemporaryToOutputFile(ctx, tempFilePath, settings().outputFile)) {
+            QString copyErrorMessage;
+            if (!KisAndroidUtils::copyFile(tempFilePath, settings().outputFile, &copyErrorMessage)) {
+                ctx.setInternalErrorMessage(copyErrorMessage);
                 return EncodeResult::Failed;
             }
         }
@@ -677,61 +680,6 @@ int KisAndroidMediaEncoderRunnable::drain(Context &ctx, long long initialTimeout
         }
     }
     return count;
-}
-
-bool KisAndroidMediaEncoderRunnable::copyTemporaryToOutputFile(Context &ctx,
-                                                               const QString &tempPath,
-                                                               const QString &outputPath)
-{
-    QFile tempFile(tempPath);
-    if (!tempFile.open(QIODevice::ReadOnly)) {
-        ctx.setInternalErrorMessage(
-            QStringLiteral("failed to open temp file '%1': %2").arg(tempPath).arg(tempFile.errorString()));
-        return false;
-    }
-
-    QFile outputFile(outputPath);
-    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        ctx.setInternalErrorMessage(
-            QStringLiteral("failed to open output file '%1': %2").arg(outputPath).arg(outputFile.errorString()));
-        return false;
-    }
-
-    QByteArray buffer;
-    buffer.resize(BUFSIZ);
-    while (true) {
-        qint64 read = tempFile.read(buffer.data(), BUFSIZ);
-        if (read < 0) {
-            ctx.setInternalErrorMessage(
-                QStringLiteral("failed to read from temp file '%1': %2").arg(tempPath).arg(tempFile.errorString()));
-            return false;
-        } else if (read > 0) {
-            qint64 written = outputFile.write(buffer, read);
-            if (written < 0) {
-                ctx.setInternalErrorMessage(QStringLiteral("failed to write %1 byte(s) to output file '%2': %3")
-                                                .arg(read)
-                                                .arg(outputPath)
-                                                .arg(outputFile.errorString()));
-                return false;
-            } else if (written != read) {
-                ctx.setInternalErrorMessage(
-                    QStringLiteral("tried to write %1 byte(s) to output file '%2', but only wrote %3")
-                        .arg(read)
-                        .arg(outputPath)
-                        .arg(written));
-                return false;
-            }
-        } else {
-            if (outputFile.flush()) {
-                return true;
-            } else {
-                ctx.setInternalErrorMessage(QStringLiteral("failed to flush output file '%1': %2")
-                                                .arg(outputPath)
-                                                .arg(outputFile.errorString()));
-                return false;
-            }
-        }
-    }
 }
 
 bool KisAndroidMediaEncoderRunnable::readEncoderImage(Context &ctx, EncoderImage &outImage)

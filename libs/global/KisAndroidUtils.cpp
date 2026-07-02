@@ -5,6 +5,8 @@
 #include "KisAndroidLogHandler.h"
 #include <kis_debug.h>
 
+#include <QFile>
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QJniEnvironment>
 #include <QJniObject>
@@ -96,6 +98,75 @@ void setFullScreen(bool fullScreen)
         KisAndroidUtils::clearJniException(QStringLiteral("calling setFullScreenOnUiThread"));
     } else {
         qWarning("setFullScreen: activity not valid");
+    }
+}
+
+bool copyFile(const QString &inputPath, const QString &outputPath, QString *outErrorMessage)
+{
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open input file '%1': %2").arg(inputPath).arg(inputFile.errorString());
+        }
+        return false;
+    }
+
+    QFile outputFile(outputPath);
+    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open output file '%1': %2").arg(outputPath).arg(outputFile.errorString());
+        }
+        return false;
+    }
+
+    QByteArray buffer;
+    buffer.resize(BUFSIZ);
+    while (true) {
+        qint64 read = inputFile.read(buffer.data(), BUFSIZ);
+        if (read < 0) {
+            if (outErrorMessage) {
+                *outErrorMessage = QStringLiteral("failed to read from input file '%1': %2")
+                                       .arg(inputPath)
+                                       .arg(inputFile.errorString());
+            }
+            return false;
+        } else if (read > 0) {
+            qint64 written = outputFile.write(buffer, read);
+            if (written < 0) {
+                if (outErrorMessage) {
+                    *outErrorMessage = QStringLiteral("failed to write %1 byte(s) to output file '%2': %3")
+                                           .arg(read)
+                                           .arg(outputPath)
+                                           .arg(outputFile.errorString());
+                }
+                return false;
+            } else if (written != read) {
+                if (outErrorMessage) {
+                    *outErrorMessage =
+                        QStringLiteral("tried to write %1 byte(s) to output file '%2', but only wrote %3")
+                            .arg(read)
+                            .arg(outputPath)
+                            .arg(written);
+                }
+                return false;
+            }
+        } else {
+            if (outputFile.flush()) {
+                if (outErrorMessage) {
+                    outErrorMessage->clear();
+                }
+                return true;
+            } else {
+                if (outErrorMessage) {
+                    *outErrorMessage = QStringLiteral("failed to flush output file '%1': %2")
+                                           .arg(outputPath)
+                                           .arg(outputFile.errorString());
+                }
+                return false;
+            }
+        }
     }
 }
 

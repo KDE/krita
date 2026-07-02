@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-30 02:33+0000\n"
-"PO-Revision-Date: 2026-06-28 19:24+0300\n"
+"POT-Creation-Date: 2026-07-02 02:38+0000\n"
+"PO-Revision-Date: 2026-07-01 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16351,32 +16351,27 @@ msgstr "Abonelikleri yönet"
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr "Kullanıcı Arayüzü"
+msgstr "Arayüz"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr "Dikdörtgeni Değiştir"
+msgstr "Arayüz Ölçeğini Değiştir…"
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:51 krita/kritamenu_android.action:52
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr "Dikdörtgeni Değiştir"
+msgstr "Arayüz ölçeğini değiştir"
 
 #: krita/main.cc:723
 #, kde-format
@@ -43128,22 +43123,22 @@ msgstr "Boş Kendiliğinden Anahtar"
 msgid "AutoKey Duplicate"
 msgstr "Kendiliğinden Anahtar Yinelemesi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:565
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:635
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Oynatma zamanlamasını korumak için etkinleştirin."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:575
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:645
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Etkili FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:576
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:646
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Gerçek FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:577
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:647
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Bırakılan kareler:\t%​%1"

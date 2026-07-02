@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-30 02:33+0000\n"
-"PO-Revision-Date: 2026-06-30 17:08+0300\n"
+"POT-Creation-Date: 2026-07-02 02:38+0000\n"
+"PO-Revision-Date: 2026-07-01 17:14+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -15865,7 +15865,7 @@ msgstr "Повторно применить последний фильтр G'MI
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
-msgstr "Повторить последнее действие G'Mic-Qt"
+msgstr "Повторить последнее действие G'MIC-Qt"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -16810,7 +16810,7 @@ msgstr[0] ""
 "Удаление %1 формы\n"
 "удаление %1 формы"
 msgstr[1] ""
-"Удаление %1 формы\n"
+"Удаление %1 форм\n"
 "удаление %1 форм"
 msgstr[2] ""
 "Удаление %1 форм\n"
@@ -16860,8 +16860,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
 msgstr ""
-"Изменение свойств формы текста\n"
-"изменение свойств формы текста"
+"Изменение свойств текстовой фигуры\n"
+"изменение свойств текстовой фигуры"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:26
 #: libs/flake/commands/KoShapeMoveCommand.cpp:38
@@ -16875,7 +16875,7 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
 msgstr ""
-"Установить порядок рисования\n"
+"Установка порядка рисования\n"
 "установку порядка рисования"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
@@ -20837,7 +20837,7 @@ msgstr "Текст"
 #: libs/flake/text/KoSvgTextShape.cpp:2625
 #, kde-format
 msgid "SVG Text Shape"
-msgstr "Форма текста SVG"
+msgstr "Текстовая фигура SVG"
 
 # ?
 #: libs/flake/text/KoSvgTextShape.cpp:2623
@@ -21900,7 +21900,7 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 "Унификация цветового пространства слоёв\n"
-"унификация цветового пространства слоёв"
+"унификацию цветового пространства слоёв"
 
 #: libs/image/kis_image.cc:1496
 msgctxt "(qtundo-format)"
@@ -22126,8 +22126,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
-"Сведение выбранных узлов\n"
-"сведение выбранных узлов"
+"Объединение выбранных узлов\n"
+"объединение выбранных узлов"
 
 #: libs/image/kis_layer_utils.cpp:2066
 msgctxt "(qtundo-format)"
@@ -35194,7 +35194,7 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr ""
-"Запись альфа-канал в слой\n"
+"Запись альфа-канала в слой\n"
 "запись альфа-канала в слой"
 
 #: libs/ui/kis_node_manager.cpp:1578
@@ -38646,7 +38646,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr ""
 "Фильтр «%1»\n"
-"Фильтр «%1»"
+"фильтр «%1»"
 
 #: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
@@ -43819,22 +43819,22 @@ msgstr "Пустой AutoKey"
 msgid "AutoKey Duplicate"
 msgstr "Дубликат AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:565
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:635
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Включить для сохранения времени воспроизведения."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:575
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:645
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Эффективная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:576
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:646
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реальная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:577
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:647
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Кадров пропущено:\t%1%"
@@ -44037,7 +44037,7 @@ msgstr[2] ""
 "Копирование %1 ключевых кадров\n"
 "копирование %1 ключевых кадров"
 msgstr[3] ""
-"Копировать ключевой кадр\n"
+"Копирование ключевого кадра\n"
 "копирование ключевого кадра"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:396
@@ -47488,7 +47488,7 @@ msgid ""
 "The language of this text shape. Language affects a number of properties, "
 "like glyph shape, upper- and lowercase and line breaking"
 msgstr ""
-"Язык этого текстового элемента. Язык влияет на ряд свойств, таких как форма "
+"Язык этого текстовой фигуры. Язык влияет на ряд свойств, таких как форма "
 "символа, регистр букв и перенос строки."
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
@@ -51188,8 +51188,8 @@ msgstr "Комментарий"
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr ""
-"Фильтр Gmic\n"
-"фильтр Gmic"
+"Фильтр G'MIC\n"
+"фильтр G'MIC"
 
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
@@ -67886,8 +67886,8 @@ msgstr "Выделение контура"
 msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr ""
-"Выделение кривой Безье\n"
-"выделение кривой Безье"
+"Выделение по кривой Безье\n"
+"выделение по кривой Безье"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
 #, kde-format

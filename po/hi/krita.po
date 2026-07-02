@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-30 02:33+0000\n"
+"POT-Creation-Date: 2026-07-02 02:38+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -43170,26 +43170,26 @@ msgstr "अनुकृति"
 msgid "AutoKey Duplicate"
 msgstr "अनुकृति"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:565
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:635
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Drop Frames, enable to preserve playback timing."
 msgid "Enable to preserve playback timing."
 msgstr "फ़्रेम को छोड़ दें, प्लेबैक समय को संरक्षित करने में उपयोग करें ।"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:575
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:645
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:576
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:646
 #, fuzzy, kde-format
 #| msgctxt "video importer: video file statistics"
 #| msgid "FPS: %1"
 msgid "Real FPS:\t%1"
 msgstr "एफपीएस : %1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:577
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:647
 #, fuzzy, kde-format
 #| msgctxt "video importer: video file statistics"
 #| msgid "Frames: %1"

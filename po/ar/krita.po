@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-30 02:33+0000\n"
-"PO-Revision-Date: 2026-06-30 22:23+0400\n"
+"POT-Creation-Date: 2026-07-02 02:38+0000\n"
+"PO-Revision-Date: 2026-07-01 18:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28090,23 +28090,23 @@ msgstr "إدارة الاشتراكات"
 #, kde-format
 msgid "You have %1 supporter benefit:"
 msgid_plural "You have %1 supporter benefits:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "ليس لديك أي ميزة داعم:"
+msgstr[1] "لديك ميزة داعم واحدة:"
+msgstr[2] "لديك ميزتا داعم:"
+msgstr[3] "لديك %1 ميزات داعم:"
+msgstr[4] "لديك %1 ميزة داعم:"
+msgstr[5] "لديك %1 ميزة داعم:"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:122
 #, kde-format
 msgid "There is %1 supporter benefit available:"
 msgid_plural "There are %1 supporter benefits available:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا تتوفر أي ميزة داعم:"
+msgstr[1] "تتوفر ميزة داعم واحدة (%1):"
+msgstr[2] "تتوفر ميزتا داعم (%1):"
+msgstr[3] "تتوفر %1 ميزات داعم:"
+msgstr[4] "تتوفر %1 ميزة داعم:"
+msgstr[5] "تتوفر %1 ميزة داعم:"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
@@ -28121,6 +28121,8 @@ msgid ""
 "No supporter benefits available on this version of Krita.\n"
 "You can still support Krita by donating."
 msgstr ""
+"لا تتوفر ميزات داعم في هذه النسخة من كريتا.\n"
+"ما زال بإمكانك دعم كريتا عبر التبرع."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnNoBenefitsSupport)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
@@ -42913,22 +42915,22 @@ msgstr "إطار رئيس آلي فارغ"
 msgid "AutoKey Duplicate"
 msgstr "إطار رئيس آلي مكرر"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:565
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:635
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "مكّن للحفاظ على توقيت التشغيل."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:575
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:645
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "إطار/ثا الفعليّ:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:576
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:646
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "إطار/ثا الحقيقيّ:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:577
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:647
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "الإطارات المُسقطة:\t%1٪"
@@ -50480,53 +50482,48 @@ msgid "Failed to retrieve bundles: %1"
 msgstr "فشل استرداد الحُزَم: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Brush presets"
+#, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "الفُرش مسبقة الضّبط"
-msgstr[1] "الفُرش مسبقة الضّبط"
-msgstr[2] "الفُرش مسبقة الضّبط"
-msgstr[3] "الفُرش مسبقة الضّبط"
-msgstr[4] "الفُرش مسبقة الضّبط"
-msgstr[5] "الفُرش مسبقة الضّبط"
+msgstr[0] "لا توجد فُرش مسبقة الضّبط"
+msgstr[1] "فرشاة واحدة مسبقة الضّبط"
+msgstr[2] "فرشاتان مسبقتا الضّبط"
+msgstr[3] "%1 فُرش مسبقة الضّبط"
+msgstr[4] "%1 فرشاة مسبقة الضّبط"
+msgstr[5] "%1 فرشاة مسبقة الضّبط"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
-#, fuzzy, kde-format
-#| msgid "Brush tips"
+#, kde-format
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
-msgstr[0] "رؤوس الفرشاة"
-msgstr[1] "رؤوس الفرشاة"
-msgstr[2] "رؤوس الفرشاة"
-msgstr[3] "رؤوس الفرشاة"
-msgstr[4] "رؤوس الفرشاة"
-msgstr[5] "رؤوس الفرشاة"
+msgstr[0] "لا توجد رؤوس فرشاة"
+msgstr[1] "رأس فرشاة واحد"
+msgstr[2] "رأسا فرشاة"
+msgstr[3] "%1 رؤوس فرشاة"
+msgstr[4] "%1 رأس فرشاة"
+msgstr[5] "%1 رأس فرشاة"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
+#, kde-format
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
-msgstr[0] "18 نسيج-لحاء"
-msgstr[1] "18 نسيج-لحاء"
-msgstr[2] "18 نسيج-لحاء"
-msgstr[3] "18 نسيج-لحاء"
-msgstr[4] "18 نسيج-لحاء"
-msgstr[5] "18 نسيج-لحاء"
+msgstr[0] "لا توجد أنماط نسيج"
+msgstr[1] "نمط نسيج واحد"
+msgstr[2] "نمطا نسيج"
+msgstr[3] "%1 أنماط نسيج"
+msgstr[4] "%1 نمط نسيج"
+msgstr[5] "%1 نمط نسيج"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Workspaces"
+#, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] "مساحات العمل"
-msgstr[1] "مساحات العمل"
-msgstr[2] "مساحات العمل"
-msgstr[3] "مساحات العمل"
-msgstr[4] "مساحات العمل"
-msgstr[5] "مساحات العمل"
+msgstr[0] "لا توجدتخطيطات مساحة عمل"
+msgstr[1] "تخطيط مساحة عمل واحد (%1)"
+msgstr[2] "تخطيطا مساحة عمل (%1)"
+msgstr[3] "%1 تخطيطات مساحة عمل"
+msgstr[4] "%1 تخطيط مساحة عمل"
+msgstr[5] "%1 تخطيط مساحة عمل"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format

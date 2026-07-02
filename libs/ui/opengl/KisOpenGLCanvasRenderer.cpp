@@ -419,7 +419,7 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                 QVector4D(d->cursorColor.redF(), d->cursorColor.greenF(), d->cursorColor.blueF(), 1.0f));
 
     glEnable(GL_BLEND);
-    glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE);
+    glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ZERO, GL_ONE);
     glBlendEquationSeparate(GL_FUNC_SUBTRACT, GL_FUNC_ADD);
 
 
@@ -732,7 +732,7 @@ void KisOpenGLCanvasRenderer::drawGrid(const QRect &updateRect)
     d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
 
     d->solidColorShader->setUniformValue(
                 d->solidColorShader->location(Uniform::FragmentColor),
@@ -792,7 +792,7 @@ void KisOpenGLCanvasRenderer::drawImage(const QRect &updateRect)
     }
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
 
     KisCoordinatesConverter *converter = coordinatesConverter();
 

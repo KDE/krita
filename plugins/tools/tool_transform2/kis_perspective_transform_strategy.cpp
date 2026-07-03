@@ -522,6 +522,17 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
         Eigen::Matrix3f B = getTransitionMatrix(m_d->dstHandlePoints);
         Eigen::Matrix3f result = B * A.inverse();
 
+        // Points in dstHandlePoints are not arranged in an organized way, so if we used it directly as a polygon it
+        // will never be considered convex
+        QPolygonF poly;
+        poly << m_d->dstHandlePoints[HANDLE_TOP_LEFT] << m_d->dstHandlePoints[HANDLE_TOP_RIGHT]
+             << m_d->dstHandlePoints[HANDLE_BOTTOM_RIGHT] << m_d->dstHandlePoints[HANDLE_BOTTOM_LEFT];
+
+        //Don't apply the handle movement if it makes the transform area not convex
+        if (!KisAlgebra2D::isPolygonTrulyConvex(poly)) {
+            break;
+        }
+
         m_d->transformIntoArgs(result);
 
         break;

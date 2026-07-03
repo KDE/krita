@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-02 02:38+0000\n"
+"POT-Creation-Date: 2026-07-03 02:41+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -31099,7 +31099,7 @@ msgstr "전체 불투명도:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #: libs/ui/forms/wdgdisplaysettings.ui:524
-#: libs/ui/forms/wdggeneralsettings.ui:1260
+#: libs/ui/forms/wdggeneralsettings.ui:1247
 #, kde-format
 msgid "Miscellaneous"
 msgstr "기타"
@@ -31658,7 +31658,7 @@ msgstr "(Hi-DPI)실수배 크기 조정 배율 사용"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:598
-#: libs/ui/forms/wdggeneralsettings.ui:1704
+#: libs/ui/forms/wdggeneralsettings.ui:1691
 #, fuzzy, kde-format
 #| msgid "(Needs restart)"
 msgid "(needs restart)"
@@ -32000,77 +32000,77 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1204
+#: libs/ui/forms/wdggeneralsettings.ui:1191
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "리소스"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1210
+#: libs/ui/forms/wdggeneralsettings.ui:1197
 #, kde-format
 msgid "Resource Folder:"
 msgstr "리소스 폴더:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1314
+#: libs/ui/forms/wdggeneralsettings.ui:1301
 #, kde-format
 msgid "When Krita starts:"
 msgstr "Krita를 시작할 때:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1331
+#: libs/ui/forms/wdggeneralsettings.ui:1318
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "Krita를 종료할 때 세션 저장"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1338
+#: libs/ui/forms/wdggeneralsettings.ui:1325
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr "이미지를 레이어로 가져올 때 이미지의 색 공간 변환하기"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1351
-#: libs/ui/forms/wdggeneralsettings.ui:1361
+#: libs/ui/forms/wdggeneralsettings.ui:1338
+#: libs/ui/forms/wdggeneralsettings.ui:1348
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "새로 연 이미지에만 적용됩니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1354
+#: libs/ui/forms/wdggeneralsettings.ui:1341
 #, kde-format
 msgid "Undo stack size:"
 msgstr "실행 취소 스택 크기:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1382
+#: libs/ui/forms/wdggeneralsettings.ui:1369
 #, fuzzy, kde-format
 #| msgid "Disable Cumulative Undo"
 msgid "Use cumulative undo"
 msgstr "누적 실행 취소 사용 안함"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1402
+#: libs/ui/forms/wdggeneralsettings.ui:1389
 #, kde-format
 msgid "Advanced..."
 msgstr "고급..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1411
+#: libs/ui/forms/wdggeneralsettings.ui:1398
 #, kde-format
 msgid "Show root layer"
 msgstr "루트 레이어 표시"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1418
+#: libs/ui/forms/wdggeneralsettings.ui:1405
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "버그 보고에 사용할 로그 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1449
+#: libs/ui/forms/wdggeneralsettings.ui:1436
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -32080,14 +32080,14 @@ msgstr ""
 "를 보고하지 마십시오."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1452
+#: libs/ui/forms/wdggeneralsettings.ui:1439
 #, fuzzy, kde-format
 #| msgid "Enable Cumulative Undo"
 msgid "Enable native file dialogs"
 msgstr "누적 실행 취소 사용"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1475
+#: libs/ui/forms/wdggeneralsettings.ui:1462
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enable native file dialogs (warning: may not work correctly on some "
@@ -32098,39 +32098,39 @@ msgstr ""
 "음)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1485
+#: libs/ui/forms/wdggeneralsettings.ui:1472
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "최대 브러시 크기:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1513
+#: libs/ui/forms/wdggeneralsettings.ui:1500
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "픽셀 단위 최대 브러시 지름입니다."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1516
+#: libs/ui/forms/wdggeneralsettings.ui:1503
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "픽셀"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1551
+#: libs/ui/forms/wdggeneralsettings.ui:1538
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(다시 시작 필요)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1561
+#: libs/ui/forms/wdggeneralsettings.ui:1548
 #, fuzzy, kde-format
 #| msgid "Font DPI workaround"
 msgid "Font DPI Workaround"
 msgstr "글꼴 DPI 둘러가기"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1576
+#: libs/ui/forms/wdggeneralsettings.ui:1563
 #, fuzzy, kde-format
 #| msgid ""
 #| "In some Krita versions before 5.0 text size could be dependent on the "
@@ -32169,7 +32169,7 @@ msgstr ""
 "Krita 5.0에서 파일을 한 번 이상 저장했다면 더 이상 변환하지 않아도 됩니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1579
+#: libs/ui/forms/wdggeneralsettings.ui:1566
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -32177,7 +32177,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1588
+#: libs/ui/forms/wdggeneralsettings.ui:1575
 #, fuzzy, kde-format
 #| msgid ""
 #| "In some versions of Krita before 4.4.3 text size could be dependent on "
@@ -32199,50 +32199,50 @@ msgstr ""
 "제로 사용할 글꼴 표시 DPI를 지정할 수 있습니다."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1601
+#: libs/ui/forms/wdggeneralsettings.ui:1588
 #, fuzzy, kde-format
 #| msgid "Automatic hyphenation"
 msgid "Automatic layer naming"
 msgstr "자동 하이픈 삽입"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1607
+#: libs/ui/forms/wdggeneralsettings.ui:1594
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1614
+#: libs/ui/forms/wdggeneralsettings.ui:1601
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1621
+#: libs/ui/forms/wdggeneralsettings.ui:1608
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
-#: libs/ui/forms/wdggeneralsettings.ui:1631
+#: libs/ui/forms/wdggeneralsettings.ui:1618
 #, kde-format
 msgid "Long-press to open context menus"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1638
+#: libs/ui/forms/wdggeneralsettings.ui:1625
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "키네틱 스크롤링(다시 시작 필요)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1653
+#: libs/ui/forms/wdggeneralsettings.ui:1640
 #, kde-format
 msgid "Sensitivity:"
 msgstr "민감도:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1678
+#: libs/ui/forms/wdggeneralsettings.ui:1665
 #, fuzzy, kde-format
 #| msgid ""
 #| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
@@ -32250,7 +32250,7 @@ msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "키네틱 스크롤 사용 시 도커 스크롤 바 숨기기(다시 시작해야 함)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1730
+#: libs/ui/forms/wdggeneralsettings.ui:1717
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -32261,7 +32261,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1733
+#: libs/ui/forms/wdggeneralsettings.ui:1720
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr ""

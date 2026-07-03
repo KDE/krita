@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-02 02:38+0000\n"
-"PO-Revision-Date: 2026-07-01 17:14+0300\n"
+"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"PO-Revision-Date: 2026-07-02 16:20+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -15642,7 +15642,7 @@ msgstr "Уменьшение выделения"
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "&Выделение границ"
+msgstr "&Выделение границ…"
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
@@ -16692,8 +16692,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr ""
-"Вставка точки\n"
-"вставку точки"
+"Вставка точек\n"
+"вставку точек"
 
 #: libs/flake/commands/KoPathPointMoveCommand.cpp:31
 #: libs/flake/commands/KoPathPointMoveCommand.cpp:47
@@ -22146,8 +22146,8 @@ msgstr "Видимый"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
-"Объединение выбранных масок\n"
-"объединение выбранных масок"
+"Объединение масок выделения\n"
+"объединение масок выделения"
 
 #: libs/image/kis_layer_utils.cpp:2170
 msgctxt "(qtundo-format)"
@@ -22216,8 +22216,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Border Selection"
 msgstr ""
-"Обводка из выделения\n"
-"обводку из выделения"
+"Выделение границ\n"
+"выделение границ"
 
 #: libs/image/kis_selection_filters.cpp:499
 msgctxt "(qtundo-format)"
@@ -23000,8 +23000,8 @@ msgstr "Импорт кадров"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
 msgstr ""
-"Рукописные мазки кистью\n"
-"рукописные мазки кистью"
+"Сценарный мазок кистью\n"
+"сценарный мазок кистью"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -25538,8 +25538,8 @@ msgstr ""
 "\n"
 "Из-за этого система может быть перегружена.\n"
 "Если требуется отредактировать видео, содержащее более 100 кадров, "
-"рекомендуется использовать настоящий видеоредактор, например, Kdenlive "
-"(https://kdenlive.org)."
+"рекомендуется использовать настоящий видеоредактор (например, Kdenlive — "
+"https://kdenlive.org)."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:234
 #, kde-format
@@ -30165,7 +30165,7 @@ msgstr "Непрозрачность наложения:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #: libs/ui/forms/wdgdisplaysettings.ui:524
-#: libs/ui/forms/wdggeneralsettings.ui:1260
+#: libs/ui/forms/wdggeneralsettings.ui:1247
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Разное"
@@ -30725,7 +30725,7 @@ msgstr "Включить нецелый коэффициент масштаби�
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:598
-#: libs/ui/forms/wdggeneralsettings.ui:1704
+#: libs/ui/forms/wdggeneralsettings.ui:1691
 #, kde-format
 msgid "(needs restart)"
 msgstr "(требуется перезапуск)"
@@ -31068,32 +31068,32 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1204
+#: libs/ui/forms/wdggeneralsettings.ui:1191
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "Источники"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1210
+#: libs/ui/forms/wdggeneralsettings.ui:1197
 #, kde-format
 msgid "Resource Folder:"
 msgstr "Папка ресурсов:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1314
+#: libs/ui/forms/wdggeneralsettings.ui:1301
 #, kde-format
 msgid "When Krita starts:"
 msgstr "При запуске Krita:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1331
+#: libs/ui/forms/wdggeneralsettings.ui:1318
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "Сохранять сеанс при закрытии Krita"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1338
+#: libs/ui/forms/wdggeneralsettings.ui:1325
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr ""
@@ -31102,44 +31102,44 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1351
-#: libs/ui/forms/wdggeneralsettings.ui:1361
+#: libs/ui/forms/wdggeneralsettings.ui:1338
+#: libs/ui/forms/wdggeneralsettings.ui:1348
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "Применяется только к новым и недавно открытым изображениям."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1354
+#: libs/ui/forms/wdggeneralsettings.ui:1341
 #, kde-format
 msgid "Undo stack size:"
 msgstr "Размер буфера отменяемых действий:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1382
+#: libs/ui/forms/wdggeneralsettings.ui:1369
 #, kde-format
 msgid "Use cumulative undo"
 msgstr "Использовать накопительную отмену"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1402
+#: libs/ui/forms/wdggeneralsettings.ui:1389
 #, kde-format
 msgid "Advanced..."
 msgstr "Дополнительно..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1411
+#: libs/ui/forms/wdggeneralsettings.ui:1398
 #, kde-format
 msgid "Show root layer"
 msgstr "Показать главный слой"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1418
+#: libs/ui/forms/wdggeneralsettings.ui:1405
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "Включить журналирование для отчётов об ошибках"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1449
+#: libs/ui/forms/wdggeneralsettings.ui:1436
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -31149,50 +31149,50 @@ msgstr ""
 "диалоговыми окнами, не сообщайте об ошибке в программе."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1452
+#: libs/ui/forms/wdggeneralsettings.ui:1439
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr "Включить системные файловые диалоги"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1475
+#: libs/ui/forms/wdggeneralsettings.ui:1462
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(Внимание: может работать некорректно в некоторых системах)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1485
+#: libs/ui/forms/wdggeneralsettings.ui:1472
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "Максимальный размер кисти:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1513
+#: libs/ui/forms/wdggeneralsettings.ui:1500
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "Максимально допустимый диаметр кисти в пикселах."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1516
+#: libs/ui/forms/wdggeneralsettings.ui:1503
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr " пикс."
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1551
+#: libs/ui/forms/wdggeneralsettings.ui:1538
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(Требуется перезапуск)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1561
+#: libs/ui/forms/wdggeneralsettings.ui:1548
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "Обход проблемы с разрешением шрифта"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1576
+#: libs/ui/forms/wdggeneralsettings.ui:1563
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -31223,7 +31223,7 @@ msgstr ""
 "потребности в преобразованиях уже не будет."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1579
+#: libs/ui/forms/wdggeneralsettings.ui:1566
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -31231,7 +31231,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1588
+#: libs/ui/forms/wdggeneralsettings.ui:1575
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -31250,56 +31250,56 @@ msgstr ""
 "поле."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1601
+#: libs/ui/forms/wdggeneralsettings.ui:1588
 #, kde-format
 msgid "Automatic layer naming"
 msgstr "Автоматическое именование слоёв"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1607
+#: libs/ui/forms/wdggeneralsettings.ui:1594
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr "Добавить «Сведено» к сведённым групповым слоям"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1614
+#: libs/ui/forms/wdggeneralsettings.ui:1601
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Добавить «(вставлено)» к вставленным слоям"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1621
+#: libs/ui/forms/wdggeneralsettings.ui:1608
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "Добавить префикс «Копия» к дублированным слоям"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
-#: libs/ui/forms/wdggeneralsettings.ui:1631
+#: libs/ui/forms/wdggeneralsettings.ui:1618
 #, kde-format
 msgid "Long-press to open context menus"
 msgstr "Длительное нажатие для открытия контекстных меню"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1638
+#: libs/ui/forms/wdggeneralsettings.ui:1625
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "Кинетическая прокрутка (требуется перезапуск)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1653
+#: libs/ui/forms/wdggeneralsettings.ui:1640
 #, kde-format
 msgid "Sensitivity:"
 msgstr "Чувствительность:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1678
+#: libs/ui/forms/wdggeneralsettings.ui:1665
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
 "Скрыть полосы прокрутки на панели, если включена кинетическая прокрутка"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1730
+#: libs/ui/forms/wdggeneralsettings.ui:1717
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -31316,7 +31316,7 @@ msgstr ""
 "потенциальную проблему."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1733
+#: libs/ui/forms/wdggeneralsettings.ui:1720
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr "Игнорировать высокие функциональные клавиши (F13-F24)"
@@ -35067,15 +35067,15 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr ""
-"Увеличение узлов\n"
-"увеличение узлов"
+"Поднятие узлов\n"
+"поднятие узлов"
 
 #: libs/ui/kis_node_manager.cpp:1092
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr ""
-"Уменьшение узлов\n"
-"уменьшение узлов"
+"Опускание узлов\n"
+"опускание узлов"
 
 #: libs/ui/kis_node_manager.cpp:1112
 msgctxt "(qtundo-format)"
@@ -44046,17 +44046,17 @@ msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
 msgstr[0] ""
-"Перемещение %1 ключевого кадра\n"
-"перемещение %1 ключевого кадра"
+"Клонирование %1 ключевого кадра\n"
+"клонирование %1 ключевого кадра"
 msgstr[1] ""
-"Перемещение %1 ключевых кадров\n"
-"перемещение %1 ключевых кадров"
+"Клонирование %1 ключевых кадров\n"
+"клонирование %1 ключевых кадров"
 msgstr[2] ""
-"Перемещение %1 ключевых кадров\n"
-"перемещение %1 ключевых кадров"
+"Клонирование %1 ключевых кадров\n"
+"клонирование %1 ключевых кадров"
 msgstr[3] ""
-"Перемещение ключевого кадра\n"
-"перемещение ключевого кадра"
+"Клонирование ключевого кадра\n"
+"клонирование ключевого кадра"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:427
 msgctxt "(qtundo-format)"
@@ -50695,7 +50695,7 @@ msgstr "Значение"
 #: plugins/extensions/modify_selection/dlg_border_selection.cc:20
 #, kde-format
 msgid "Border Selection"
-msgstr "Обводка из выделения"
+msgstr "Выделение границ"
 
 #: plugins/extensions/modify_selection/dlg_feather_selection.cc:20
 #, kde-format
@@ -66625,8 +66625,8 @@ msgstr "Перемещение"
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr ""
-"Рисование мультикистью\n"
-"рисование мультикистью"
+"Мазок мультикистью\n"
+"мазок мультикистью"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:449
 #, kde-format
@@ -66681,8 +66681,8 @@ msgstr "Панорамирование"
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
 msgstr ""
-"Кривая Безье\n"
-"кривую Безье"
+"Рисование кривой Безье\n"
+"рисование кривой Безье"
 
 #: plugins/tools/basictools/kis_tool_path.h:84
 #, kde-format
@@ -67886,8 +67886,8 @@ msgstr "Выделение контура"
 msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
 msgstr ""
-"Выделение по кривой Безье\n"
-"выделение по кривой Безье"
+"Выделение кривой Безье\n"
+"выделение кривой Безье"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
 #, kde-format
@@ -68249,8 +68249,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr ""
-"Изменение SvgTextTool\n"
-"изменение SvgTextTool"
+"Изменение текста SVG\n"
+"изменение текста SVG"
 
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:20
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31

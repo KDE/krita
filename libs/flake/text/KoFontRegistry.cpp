@@ -938,6 +938,13 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
         }
     }
 
+    /// BUG:517717, some vertical fonts have nonsense values for the caret.
+    /// We can assume a multi-master font is relatively modern and doesn't have this issue.
+    if (!FT_HAS_MULTIPLE_MASTERS(face) && !isHorizontal) {
+        metrics.caretRise = 0;
+        metrics.caretRun = 1;
+    }
+
     // Baselines.
 
     const QVector<hb_ot_layout_baseline_tag_t> baselines ({

@@ -16255,7 +16255,7 @@ msgstr "资源"
 #, kde-format
 msgctxt "action"
 msgid "Get More Resources..."
-msgstr ""
+msgstr "获取更多资源..."
 
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
@@ -16265,21 +16265,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Get More Resources"
-msgstr ""
+msgstr "获取更多资源"
 
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
 #, kde-format
 msgctxt "action"
 msgid "Management"
-msgstr ""
+msgstr "管理"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
 #, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
-msgstr ""
+msgstr "管理捐款支持者权益..."
 
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
@@ -16289,14 +16289,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr ""
+msgstr "管理捐款支持者权益"
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
 #, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions..."
-msgstr ""
+msgstr "管理订阅..."
 
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
@@ -16306,21 +16306,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions"
-msgstr ""
+msgstr "管理订阅"
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
 #, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr ""
+msgstr "界面"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
 #, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr ""
+msgstr "更改界面缩放..."
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
@@ -16330,7 +16330,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr ""
+msgstr "更换界面缩放"
 
 #: krita/main.cc:723
 #, kde-format
@@ -27977,30 +27977,30 @@ msgstr "预设图标库"
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
 #, kde-format
 msgid "Supporter Benefits"
-msgstr ""
+msgstr "捐款支持者权益"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
 #, kde-format
 msgid "Manage Subscriptions"
-msgstr ""
+msgstr "管理订阅"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:114
 #, kde-format
 msgid "You have %1 supporter benefit:"
 msgid_plural "You have %1 supporter benefits:"
-msgstr[0] ""
+msgstr[0] "您拥有 %1 个捐款支持者权益："
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:122
 #, kde-format
 msgid "There is %1 supporter benefit available:"
 msgid_plural "There are %1 supporter benefits available:"
-msgstr[0] ""
+msgstr[0] "有 %1 个捐款支持者权益可用："
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
 #, kde-format
 msgid "StackedWidget"
-msgstr ""
+msgstr "叠加小部件"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblNoBenefits)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:53
@@ -28009,12 +28009,14 @@ msgid ""
 "No supporter benefits available on this version of Krita.\n"
 "You can still support Krita by donating."
 msgstr ""
+"此版本的 Krita 暂无可用的捐款支持者权益。  \n"
+"您仍可通过捐款来支持 Krita。"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnNoBenefitsSupport)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "捐款"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -28363,19 +28365,19 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:1659
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
-msgstr ""
+msgstr "Krita 能够持续发展，离不开像您这样的捐款支持者！"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
 #, kde-format
 msgid "Manage Supporter Benefits"
-msgstr ""
+msgstr "管理捐款支持者权益"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
 #, kde-format
 msgid "Support Krita!"
-msgstr ""
+msgstr "捐款支持 Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -36446,17 +36448,17 @@ msgstr "需要重启软件。"
 #: libs/ui/KisWelcomePageWidget.cpp:843
 #, kde-format
 msgid "Become a Supporter!"
-msgstr ""
+msgstr "成为捐款支持者"
 
 #: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Supporters get brush packs and more."
-msgstr ""
+msgstr "捐款支持者可获得笔刷包和更多资源。"
 
 #: libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Contributions keep development going."
-msgstr ""
+msgstr "捐款能帮助 Krita 项目存续并发展。"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
@@ -39498,12 +39500,12 @@ msgstr "当前面板"
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
 #, kde-format
 msgid "Download Resource Bundles"
-msgstr ""
+msgstr "下载资源包"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
 #, kde-format
 msgid "Manage Subscription"
-msgstr ""
+msgstr "管理订阅"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -50070,17 +50072,17 @@ msgstr "您想要将这些 %1 文件导入为何种资源？"
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
 #, kde-format
 msgid "Supporter Bundles"
-msgstr ""
+msgstr "捐款支持者资源包"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
 msgid "<strong>Error:</strong> %1"
-msgstr ""
+msgstr "<strong>错误：</strong> %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
 #, kde-format
 msgid "No supporter bundles available."
-msgstr ""
+msgstr "没有可用的捐款支持者资源包。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:108
 #, kde-format
@@ -50090,144 +50092,146 @@ msgid ""
 "for purchases and may make these bundles in other ways behind the links "
 "below."
 msgstr ""
+"这些资源包由作者无偿捐赠，旨在回馈捐款支持 Krita 开发的用户。作者不从中获利，"
+"且仅通过下方链接提供这些资源包。"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLoading)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "正在加载…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
 #, kde-format
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
 msgid "Server responded with error %1."
-msgstr ""
+msgstr "服务器返回错误 %1。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
 #, kde-format
 msgid "Invalid checksums file."
-msgstr ""
+msgstr "无效的校验和文件。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
 msgid "Invalid checksums version."
-msgstr ""
+msgstr "无效的校验和版本。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:117
 #, kde-format
 msgid "You have to update Krita to use this service."
-msgstr ""
+msgstr "您必须更新 Krita 才能使用此服务。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:119
 #, kde-format
 msgid "This service is not available in your region."
-msgstr ""
+msgstr "此服务在您的地区不可用。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:121
 #, kde-format
 msgid "This service is currently unavailable."
-msgstr ""
+msgstr "此服务当前不可用。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
 #, kde-format
 msgid "This service has been discontinued."
-msgstr ""
+msgstr "此服务已终止."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
 #, kde-format
 msgid "Unknown service error %1."
-msgstr ""
+msgstr "未知服务错误 %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
 msgid "Not enough data."
-msgstr ""
+msgstr "数据不足。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
 #, kde-format
 msgid "Invalid version."
-msgstr ""
+msgstr "无效版本。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
 #, kde-format
 msgid "Invalid checksum."
-msgstr ""
+msgstr "无效校验和。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
 #, kde-format
 msgid "Failed to create directory %1."
-msgstr ""
+msgstr "创建目录 %1 失败。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
 #, kde-format
 msgid "Failed to open %1 for writing."
-msgstr ""
+msgstr "无法打开 %1 进行写入。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
 #, kde-format
 msgid "Failed to write %1."
-msgstr ""
+msgstr "写入 %1 失败。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:317
 #, kde-format
 msgid "Failed to retrieve bundle checksums: %1"
-msgstr ""
+msgstr "无法获取资源包校验和：%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
 #, kde-format
 msgid "Failed to retrieve bundles: %1"
-msgstr ""
+msgstr "无法获取资源包：%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
 #, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] ""
+msgstr[0] "%1 个笔刷预设"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
 #, kde-format
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
-msgstr[0] ""
+msgstr[0] "%1 个笔尖图像"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
 #, kde-format
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
-msgstr[0] ""
+msgstr[0] "%1 个纹理图案"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
 #, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] ""
+msgstr[0] "%1 个工作区布局"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
 msgid "%1 (subscribed)"
-msgstr ""
+msgstr "%1 (已订阅)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
 #, kde-format
 msgid "%1 (owned)"
-msgstr ""
+msgstr "%1 (已拥有)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
 #, kde-format
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
-msgstr ""
+msgstr "包含："
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
 #, kde-format
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
-msgstr ""
+msgstr "不可用。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
 #, kde-format
@@ -50235,12 +50239,12 @@ msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
 msgid "Available with:"
-msgstr ""
+msgstr "可用条件："
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
 msgid "Downloading bundle…"
-msgstr ""
+msgstr "下载资源包…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:139
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
@@ -50251,44 +50255,44 @@ msgstr "%1"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:194
 #, kde-format
 msgid "Invalid bundle size"
-msgstr ""
+msgstr "无效的资源包大小"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
 msgid "Invalid bundle checksum"
-msgstr ""
+msgstr "无效的资源包校验和"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
 #, kde-format
 msgid "Activating bundle…"
-msgstr ""
+msgstr "正在激活资源包…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
 #, kde-format
 msgid "Failed to import bundle"
-msgstr ""
+msgstr "导入资源包失败。"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
 #, kde-format
 msgid "Bundle download failed: %1"
-msgstr ""
+msgstr "资源包下载失败：%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
 #, kde-format
 msgid "Download failed"
-msgstr ""
+msgstr "下载失败"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
 #, kde-format
 msgid "✔ Owned"
-msgstr ""
+msgstr "✔ 已拥有"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
@@ -50428,7 +50432,7 @@ msgstr "管理资源..."
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:50
 #, kde-format
 msgid "Get More Resources..."
-msgstr ""
+msgstr "获取更多资源..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -50463,7 +50467,7 @@ msgstr "编辑资源库"
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
 #, kde-format
 msgid "Get More Bundles"
-msgstr ""
+msgstr "获取更多资源包"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:433

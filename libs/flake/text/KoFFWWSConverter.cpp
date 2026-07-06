@@ -701,6 +701,19 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             KIS_ASSERT_RECOVER_NOOP(childBegin(child) == childEnd(child));
             d->fontFamilyCollection.erase(child);
         }
+
+        QVector<KisForest<FontFamilyNode>::child_iterator> moveToFront;
+        for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
+            // prioritize the font with the name closest to the typographic family, so other fonts get sorted into it.
+            if(font->fontFamily == typographic->fontFamily && font != tempList.childBegin()) {
+                moveToFront.append(font);
+            }
+        }
+        while (!moveToFront.isEmpty()) {
+            auto font = moveToFront.takeLast();
+            tempList.move(font, tempList.childBegin());
+        }
+
         if (KisForestDetail::size(tempList) > 0) {
             //Do most regular first...
             KoSvgText::FontFormatType testType = types.contains(KoSvgText::OpenTypeFontType)? KoSvgText::OpenTypeFontType: types.first();

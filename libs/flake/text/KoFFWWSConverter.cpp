@@ -668,6 +668,7 @@ void KoFFWWSConverter::addSupportedLanguagesByFile(const QString &filename, cons
 void KoFFWWSConverter::sortIntoWWSFamilies()
 {
     QStringList wwsNames;
+    QStringList wwsNamesDuplicates;
     // Some font families have predefined wws families, others don't. This function sorts out everything so that each font file has
     // a wws family in between the typographic and font-file nodes, this is important, because the wws family will be the one presented
     // as the font-family resource.
@@ -854,6 +855,60 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                         break;
                     }
                 }
+            }
+        }
+
+        // One final deduplication check.
+
+        for (auto child = childBegin(typographic); child != childEnd(typographic); child++) {
+            if (childBegin(child) != childEnd(child)) {
+                if (wwsNamesDuplicates.contains(child->fontFamily)) {
+                    // Here, we try to avoid duplicates in the same typographic family.
+                    QVector<KisForest<FontFamilyNode>::child_iterator> moveList;
+                    auto child2 = childBegin(typographic);
+                    for (; child2 != childEnd(typographic); child2++) {
+                        if (child2->fontFamily == child->fontFamily) {
+                            break;
+                        }
+                    }
+                    if (child2 != childEnd(typographic)) {
+                        for (auto ribbi = childBegin(child); ribbi != childEnd(child); ribbi++) {
+                            auto ribbi2 = childBegin(child2);
+                            for (; ribbi2 != childEnd(child2); ribbi2++) {
+                                if (ribbi->fontFamily == ribbi2->fontFamily && ribbi->fontStyle == ribbi2->fontStyle) {
+
+                                    break;
+                                }
+                            }
+                            if (ribbi2 != childEnd(child2)) {
+                                ribbi2->otherFiles.append(ribbi->otherFiles);
+                                ribbi2->otherFiles.append(ribbi->fileName);
+                                ribbi2->pixelSizes.insert(ribbi->pixelSizes);
+                                deleteList.append(ribbi);
+                            } else {
+                                moveList.append(ribbi);
+                            }
+                        }
+                        while (!moveList.isEmpty()) {
+                            auto move = moveList.takeFirst();
+                            d->fontFamilyCollection.move(move, childEnd(child2));
+                        }
+                    } else {
+                        // Give up when it doesn't share the same typographic family, and just delete the node.
+                        QVector<KisForest<FontFamilyNode>::child_iterator> deleteList2;
+                        for (auto ribbi = childBegin(child); ribbi != childEnd(child); ribbi++) {
+                            deleteList.append(ribbi);
+                        }
+                    }
+                    deleteList.append(child);
+                } else {
+                    wwsNamesDuplicates.append(child->fontFamily);
+                }
+            }
+            while (!deleteList.isEmpty()) {
+                auto del = deleteList.takeFirst();
+                KIS_ASSERT_RECOVER_NOOP(childBegin(del) == childEnd(del));
+                d->fontFamilyCollection.erase(del);
             }
         }
     }

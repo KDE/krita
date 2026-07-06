@@ -372,7 +372,6 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
     }
     FontFamilyNode typographicFamily;
     FontFamilyNode wwsFamily;
-    bool isWWSFamilyWithoutName = false; ///< This indicates that the family follows WWS without having a specified WWS name.
 
     if (!FT_IS_SFNT(face.data())) {
         fontFamily.type = FT_IS_SCALABLE(face.data())? KoSvgText::Type1FontType: KoSvgText::BDFFontType;
@@ -420,7 +419,8 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
                 sizeInfo.isSet = true;
                 fontFamily.sizeInfo = sizeInfo;
             }
-            isWWSFamilyWithoutName = (os2Table->fsSelection & OS2_WWS);
+            /// (os2Table->fsSelection & OS2_WWS) indicates WWS-family, but Krita has no use for it. It infact breaks
+            /// some font handling, because fonts can be mixed in whether they have this flag set. See BUG:518874.
         }
 
 
@@ -587,23 +587,6 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             }
         }
         if (it != d->fontFamilyCollection.childEnd()) {
-
-            if (isWWSFamilyWithoutName) {
-                /**
-                 * When isWWSFamilyWithoutName is active, we need to assume that...
-                 *
-                 * 1. The font is indicating it follows a WWS format only.
-                 * 2. The font has no wws family name.
-                 * 3. Probably this means that the font family is the
-                 *    typographic family, unless the typographic family is the
-                 *    exact same as the RIBBI family.
-                 */
-                if (!typographicFamily.fontFamily.isEmpty() && typographicFamily.fontFamily != fontFamily.fontFamily) {
-                    wwsFamily.fontFamily = typographicFamily.fontFamily;
-                } else {
-                    wwsFamily.fontFamily = fontFamily.fontFamily;
-                }
-            }
             if (!wwsFamily.fontFamily.isEmpty()) {
                 // sort into wws family
                 auto wws = childBegin(it);
@@ -641,13 +624,6 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             }
         } else {
             auto typographic = d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), typographicFamily);
-            if (isWWSFamilyWithoutName) {
-                if (!typographicFamily.fontFamily.isEmpty() && typographicFamily.fontFamily != fontFamily.fontFamily) {
-                    wwsFamily.fontFamily = typographicFamily.fontFamily;
-                } else {
-                    wwsFamily.fontFamily = fontFamily.fontFamily;
-                }
-            }
             if (!wwsFamily.fontFamily.isEmpty()) {
                 auto wwsNew = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
                 d->fontFamilyCollection.insert(childEnd(wwsNew), fontFamily);

@@ -968,14 +968,14 @@ void GeneralTab::selectionActionsBarPositionChanged(int buttonId)
         case KisConfig::SelectionActionsBarPosition::Bottom:
             // set to horizontal
             if (currentOrientation != KisConfig::SelectionActionsBarOrientation::Horizontal) {
-                sapHorizontalButton->click();
+                sapHorizontalButton->setChecked(true);
             }
         break;
         case KisConfig::SelectionActionsBarPosition::Left:
         case KisConfig::SelectionActionsBarPosition::Right:
             // set to vertical
             if (currentOrientation != KisConfig::SelectionActionsBarOrientation::Vertical) {
-                sapVerticalButton->click();
+                sapVerticalButton->setChecked(true);
             }
         break;
         case KisConfig::SelectionActionsBarPosition::TopLeft:

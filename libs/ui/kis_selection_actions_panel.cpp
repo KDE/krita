@@ -624,6 +624,7 @@ void KisSelectionActionsPanel::drawAnchorWhileMoving(QPainter &painter) const
     QPen pen = painter.pen();
     pen.setStyle(Qt::CustomDashLine);
     pen.setDashPattern({6, 6});
+    pen.setColor(Qt::darkGray);
     painter.setPen(pen);
     QPoint initial = freeFloatingInitialTopLeftPosition(true);
     QPoint offset = QPoint(d->m_actionBarWidth/2, d->m_actionBarHeight/2);

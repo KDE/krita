@@ -893,41 +893,51 @@ bool isPolygonPixelAlignedRect(const Polygon &poly, Difference tolerance) {
 
 }
 
-
 template <class T>
-bool isPolygonTrulyConvex(const QVector<T> &polygon) {
-    const int numPoints = polygon.size();
+bool isPolygonTrulyConvex(const QVector<T> &polygon, bool ensureNoLoops = true) {
+    int numPoints = polygon.size();
     if (numPoints < 3)
         return true;
 
-    qreal baseAngle = std::atan2(polygon[1].y() - polygon[0].y(), polygon[1].x() - polygon[0].x());
-    qreal secondAngle = std::atan2(polygon[2].y() - polygon[1].y(), polygon[2].x() - polygon[1].x());
+    if (fuzzyPointCompare(polygon[0], polygon[numPoints - 1])) {
+        // common in QPainterPaths to have the startPoint and endPoint the same
+        numPoints--;
+    }
 
+    int sign = 0;
+    qreal angleSum = 0;
 
-    qreal prevAngle = secondAngle;
-    secondAngle -= baseAngle;
+    for (int i = 0; i < numPoints; i++) {
+        int a = i;
+        int b = wrapValue(i + 1, numPoints);
+        int c = wrapValue(i + 2, numPoints);
 
-    qreal sign = signZZ(secondAngle);
-    for (int i = 2; i < numPoints; i++) {
-        int next = i == (numPoints - 1) ? 0 : i + 1;
-        if (next == 0 && fuzzyPointCompare(polygon[next], polygon[i])) {
-            break;
+        qreal angle = angleBetweenVectors(static_cast<QPointF>(polygon[b] - polygon[a]), static_cast<QPointF>(polygon[c] - polygon[b]));
+
+        if (angle < -M_PI) {
+            angle += 2*M_PI;
         }
-        qreal nextAngle = std::atan2(polygon[next].y() - polygon[i].y(), polygon[next].x() - polygon[i].x());
 
-        qreal newPrevAngle = nextAngle;
-        nextAngle -= baseAngle;
-        nextAngle -= prevAngle;
-        prevAngle = newPrevAngle;
-        if (nextAngle < -M_PI) {
-            nextAngle += 2*M_PI;
-        } else if (nextAngle > M_PI) {
-            nextAngle -= 2*M_PI;
+        if (angle > M_PI) {
+            angle -= 2*M_PI;
         }
-        if (int(signZZ(nextAngle)) != sign) {
-            return false;
+
+        angleSum += angle;
+
+        if (sign == 0) {
+            sign = signZZ(angle);
+        } else {
+            int currentSign = signZZ(angle);
+            if (currentSign != 0 && currentSign != sign) {
+                return false;
+            }
         }
     }
+
+    if (ensureNoLoops && !qFuzzyCompare(qAbs(angleSum), 2*M_PI)) {
+        return false;
+    }
+
     return true;
 }
 

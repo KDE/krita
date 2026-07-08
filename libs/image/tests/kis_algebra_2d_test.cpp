@@ -2008,7 +2008,22 @@ void KisAlgebra2DTest::testIsPolygonTrulyConvex_data()
     QTest::addColumn<bool>("isConvex");
 
     QTest::addRow("nearly rectangle") << QPolygonF(QVector<QPointF> {QPointF(0,64), QPointF(8.00001,64), QPointF(8.00001,72), QPointF(0,72)}) << true;
+    QTest::addRow("concave polygon") << QPolygonF(QVector<QPointF> {QPointF(0,0), QPointF(10,0), QPointF(10, 10), QPointF(-10, -5)}) << false;
+    QTest::addRow("concave polygon 2") << QPolygonF(QVector<QPointF> {QPointF(10,0), QPointF(10, 10), QPointF(-10, -5), QPointF(0,0)}) << false;
 
+    QTest::addRow("tangled polygon") << QPolygonF(QVector<QPointF> {QPointF(9,3), QPointF(8, 6), QPointF(4, 4), QPointF(7,3), QPointF(4,8), QPointF(1,5), QPointF(2,2), QPointF(4,1), QPointF(6,1)}) << false;
+    QTest::addRow("untangled polygon") << QPolygonF(QVector<QPointF> {QPointF(9,3), QPointF(8, 6), QPointF(4, 8), QPointF(1,5), QPointF(2,2), QPointF(4,1), QPointF(6,1)}) << true;
+    QTest::addRow("untangled polygon 2") << QPolygonF(QVector<QPointF> {QPointF(9,3), QPointF(8, 6), QPointF(4, 4), QPointF(6,1)}) << true;
+
+
+
+    QTest::addRow("tangled polygon ccw") << QPolygonF(QVector<QPointF> {QPointF(6,1), QPointF(4,1), QPointF(2,2), QPointF(1,5), QPointF(4,8), QPointF(7,3), QPointF(4, 4), QPointF(8, 6), QPointF(9,3)}) << false;
+    QTest::addRow("untangled polygon ccw") << QPolygonF(QVector<QPointF> {QPointF(6,1), QPointF(4,1), QPointF(2,2), QPointF(1,5), QPointF(4, 8), QPointF(8, 6), QPointF(9,3)}) << true;
+    QTest::addRow("untangled polygon 2 ccw") << QPolygonF(QVector<QPointF> {QPointF(6,1), QPointF(4, 4), QPointF(8, 6), QPointF(9,3)}) << true;
+
+
+    QTest::addRow("tangled polygon ccw, double start point") << QPolygonF(QVector<QPointF> {QPointF(6,1), QPointF(4,1), QPointF(2,2), QPointF(1,5), QPointF(4,8), QPointF(7,3), QPointF(4, 4), QPointF(8, 6), QPointF(9,3), QPointF(6,1)}) << false;
+    QTest::addRow("untangled polygon ccw, double start point") << QPolygonF(QVector<QPointF> {QPointF(6,1), QPointF(4,1), QPointF(2,2), QPointF(1,5), QPointF(4, 8), QPointF(8, 6), QPointF(9,3), QPointF(6,1)}) << true;
 }
 
 

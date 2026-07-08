@@ -60,12 +60,53 @@ void KisInputManagerTest::testStrokeShortcut()
 
 struct TestingAction : public KisAbstractInputAction
 {
+    enum State {
+        Deactivated = 0,
+        Activated,
+        Running
+    };
+
     TestingAction() : KisAbstractInputAction("TestingAction"), m_isHighResolution(false) { reset(); }
     ~TestingAction() {}
 
-    void begin(int shortcut, QEvent *event) override { m_beginIndex = shortcut; m_beginNonNull = event;}
-    void end(QEvent *event) override { m_ended = true; m_endNonNull = event; }
-    void inputEvent(QEvent* event) override { Q_UNUSED(event); m_gotInput = true; }
+    void activate(int shortcut) override
+    {
+        KIS_ASSERT(m_state == Deactivated);
+        m_state = Activated;
+
+        m_activatedShortcut = shortcut;
+    }
+
+    void deactivate(int shortcut) override
+    {
+        KIS_ASSERT(m_state == Activated);
+        KIS_ASSERT(m_activatedShortcut == shortcut);
+        m_state = Deactivated;
+
+        m_activatedShortcut = -1;
+    }
+
+    void begin(int shortcut, QEvent *event) override {
+        KIS_ASSERT(m_state == Activated || m_state == Deactivated);
+        // TODO: make sure that single action shortcuts first deactivate currently
+        // active long actions
+        // KIS_ASSERT(m_state == Deactivated || m_activatedShortcut == shortcut);
+        m_stateBeforeRunning = m_state;
+        m_state = Running;
+
+        m_beginIndex = shortcut; m_beginNonNull = event;
+    }
+    void end(QEvent *event) override {
+        KIS_ASSERT(m_state == Running);
+        m_state = m_stateBeforeRunning;
+
+        m_ended = true; m_endNonNull = event;
+    }
+    void inputEvent(QEvent* event) override {
+        KIS_ASSERT(m_state == Running);
+
+        Q_UNUSED(event); m_gotInput = true;
+    }
 
     void reset() {
         m_beginIndex = -1;
@@ -83,6 +124,7 @@ struct TestingAction : public KisAbstractInputAction
         m_isHighResolution = value;
     }
 
+    int m_activatedShortcut = -1;
     int m_beginIndex;
     bool m_ended;
     bool m_gotInput;
@@ -90,6 +132,9 @@ struct TestingAction : public KisAbstractInputAction
     bool m_endNonNull;
 
     bool m_isHighResolution;
+    State m_state {Deactivated};
+    State m_stateBeforeRunning {Deactivated};
+
 };
 
 KisSingleActionShortcut* createKeyShortcut(KisAbstractInputAction *action,
@@ -152,7 +197,6 @@ void KisInputManagerTest::testKeyEvents()
 
     QVERIFY(!m.keyPressed(Qt::Key_Control));
     QCOMPARE(a->m_beginIndex, -1);
-
 
     // Complete Ctrl+Shift+Enter shortcut
     QVERIFY(m.keyPressed(Qt::Key_Enter));

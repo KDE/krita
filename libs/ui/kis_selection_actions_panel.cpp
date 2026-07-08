@@ -123,6 +123,14 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
     d->m_viewManager = viewManager;
     d->m_selectionManager = viewManager->selectionManager();
 
+
+    KisConfig kcfg(true);
+    // instead of loading the user's configuration, set it to the "old version" of the behaviour:
+    kcfg.setSelectionActionBarOrientation(KisConfig::SelectionActionsBarOrientation::Horizontal);
+    kcfg.setSelectionActionBarPosition(KisConfig::SelectionActionsBarPosition::Bottom);
+    // whether it's fixed or free-floating can be determined by the pin icon, so let's load that one correctly and don't change it
+    // TODO: remove this whole part when restoring the behaviour
+
     // Setup buttons...
     QVector<ActionButtonData> data = Private::buttonData();
     for (int i = 0; i  < data.length(); i++) {

@@ -423,63 +423,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkEnableSelectionActionBar->setChecked(sapEnabled);
 
-    m_sapOrientationGroup.addButton(sapHorizontalButton, KisConfig::SelectionActionsBarOrientation::Horizontal);
-    m_sapOrientationGroup.addButton(sapVerticalButton, KisConfig::SelectionActionsBarOrientation::Vertical);
-
-    if (m_sapOrientationGroup.button(cfg.selectionActionBarOrientation())) {
-        m_sapOrientationGroup.button(cfg.selectionActionBarOrientation())->setChecked(true);
-    }
-
-    m_sapBehaviourGroup.addButton(sapFixedButton, KisConfig::SelectionActionsBarBehavior::Fixed);
-    m_sapBehaviourGroup.addButton(sapFreeFloatingButton, KisConfig::SelectionActionsBarBehavior::FreeFloating);
-    if (m_sapBehaviourGroup.button(cfg.selectionActionBarBehavior())) {
-        m_sapBehaviourGroup.button(cfg.selectionActionBarBehavior())->setChecked(true);
-    }
-
-    selectionActionsBarBehaviorLabel->setEnabled(sapEnabled);
-    setButtonGroupEnabled(m_sapBehaviourGroup, sapEnabled);
-
-    setButtonGroupEnabled(m_sapOrientationGroup, sapEnabled);
-    selectionActionsBarOrientationLabel->setEnabled(sapEnabled);
-
-#if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
-    connect(chkEnableSelectionActionBar, SIGNAL(checkStateChanged(Qt::CheckState)), this, SLOT(selectionActionsBarCheckboxChanged(Qt::CheckState)));
-#else
-    connect(chkEnableSelectionActionBar, SIGNAL(stateChanged(int)), this, SLOT(selectionActionsBarCheckboxChanged(int)));
-#endif
-
-    QSize sapPositionIconSize = sapRightMiddleButton->iconSize();
-    sapRightMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-right"), sapPositionIconSize));
-    sapTopRightButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-topright"), sapPositionIconSize));
-    sapTopMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-up"), sapPositionIconSize));
-    sapTopLeftButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-topleft"), sapPositionIconSize));
-    sapLeftMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-left"), sapPositionIconSize));
-    sapBottomLeftButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-downleft"), sapPositionIconSize));
-    sapBottomMiddleButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-down"), sapPositionIconSize));
-    sapBottomRightButton->setIcon(addDisabledStatesToIcon(KisIconUtils::loadIcon("arrow-downright"), sapPositionIconSize));
-
-
-    using Position = KisConfig::SelectionActionsBarPosition;
-    m_sapPositionGroup.addButton(sapBottomLeftButton, Position::BottomLeft);
-    m_sapPositionGroup.addButton(sapBottomMiddleButton, Position::Bottom);
-    m_sapPositionGroup.addButton(sapBottomRightButton, Position::BottomRight);
-    m_sapPositionGroup.addButton(sapLeftMiddleButton, Position::Left);
-    m_sapPositionGroup.addButton(sapRightMiddleButton, Position::Right);
-    m_sapPositionGroup.addButton(sapTopLeftButton, Position::TopLeft);
-    m_sapPositionGroup.addButton(sapTopMiddleButton, Position::Top);
-    m_sapPositionGroup.addButton(sapTopRightButton, Position::TopRight);
-
-
-    if (m_sapPositionGroup.button(cfg.selectionActionBarPosition())) {
-        m_sapPositionGroup.button(cfg.selectionActionBarPosition())->setChecked(true);
-    }
-
-
-    setButtonGroupEnabled(m_sapPositionGroup, sapEnabled);
-    selectionActionsBarPositionLabel->setEnabled(sapEnabled);
-
-    connect(&m_sapPositionGroup, SIGNAL(idClicked(int)), this, SLOT(selectionActionsBarPositionChanged(int)));
-
     //
     // File handling
     //
@@ -957,53 +900,6 @@ void GeneralTab::colorSamplePreviewThicknessChanged(qreal value)
 void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
 {
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
-}
-
-void GeneralTab::selectionActionsBarPositionChanged(int buttonId)
-{
-    KisConfig::SelectionActionsBarPosition position = (KisConfig::SelectionActionsBarPosition)buttonId;
-    KisConfig::SelectionActionsBarOrientation currentOrientation = (KisConfig::SelectionActionsBarOrientation)m_sapOrientationGroup.checkedId();
-
-    switch (position) {
-        case KisConfig::SelectionActionsBarPosition::Top:
-        case KisConfig::SelectionActionsBarPosition::Bottom:
-            // set to horizontal
-            if (currentOrientation != KisConfig::SelectionActionsBarOrientation::Horizontal) {
-                sapHorizontalButton->setChecked(true);
-            }
-        break;
-        case KisConfig::SelectionActionsBarPosition::Left:
-        case KisConfig::SelectionActionsBarPosition::Right:
-            // set to vertical
-            if (currentOrientation != KisConfig::SelectionActionsBarOrientation::Vertical) {
-                sapVerticalButton->setChecked(true);
-            }
-        break;
-        case KisConfig::SelectionActionsBarPosition::TopLeft:
-        case KisConfig::SelectionActionsBarPosition::TopRight:
-        case KisConfig::SelectionActionsBarPosition::BottomLeft:
-        case KisConfig::SelectionActionsBarPosition::BottomRight:
-            // nothing to do
-        break;
-    }
-}
-
-#if (QT_VERSION > QT_VERSION_CHECK(6, 7, 0))
-void GeneralTab::selectionActionsBarCheckboxChanged(Qt::CheckState value)
-#else
-void GeneralTab::selectionActionsBarCheckboxChanged(int value)
-#endif
-{
-    bool enabled = value == Qt::CheckState::Checked;
-
-    setButtonGroupEnabled(m_sapPositionGroup, enabled);
-    selectionActionsBarPositionLabel->setEnabled(enabled);
-
-    setButtonGroupEnabled(m_sapBehaviourGroup, enabled);
-    selectionActionsBarBehaviorLabel->setEnabled(enabled);
-
-    setButtonGroupEnabled(m_sapOrientationGroup, enabled);
-    selectionActionsBarOrientationLabel->setEnabled(enabled);
 }
 
 void GeneralTab::setButtonGroupEnabled(const QButtonGroup &buttonGroup, bool value)
@@ -3098,10 +2994,6 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
-
-        cfg.setSelectionActionBarBehavior((KisConfig::SelectionActionsBarBehavior)m_general->m_sapBehaviourGroup.checkedId());
-        cfg.setSelectionActionBarPosition((KisConfig::SelectionActionsBarPosition)m_general->m_sapPositionGroup.checkedId());
-        cfg.setSelectionActionBarOrientation((KisConfig::SelectionActionsBarOrientation)m_general->m_sapOrientationGroup.checkedId());
 
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());

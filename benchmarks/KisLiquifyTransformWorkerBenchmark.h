@@ -18,6 +18,8 @@ public:
         Scale,
         Rotate,
         Undo,
+        RelaxSimple,
+        RelaxAffine,
         RunOnQImage,
         RunOnDev,
         BenchmarkCopyConstructor,
@@ -42,6 +44,10 @@ private Q_SLOTS:
 
     void testPointsUndoBuildUp();
     void testPointsUndoWash();
+    void testPointsRelaxSimpleBuildUp();
+    void testPointsRelaxSimpleWash();
+    void testPointsRelaxAffineBuildUp();
+    void testPointsRelaxAffineWash();
 
     void testRunOnDev();
     void testRunOnQImage();

@@ -57,6 +57,20 @@ bool KisLiquifyProperties::operator==(const KisLiquifyProperties &other) const
         m_flow == other.m_flow;
 }
 
+bool KisLiquifyProperties::supportsReverseDirection(LiquifyMode mode)
+{
+    return mode != UNDO &&
+        mode != RELAX_SIMPLE &&
+        mode != RELAX_AFFINE;
+}
+
+bool KisLiquifyProperties::supportsWashMode(LiquifyMode mode)
+{
+    return mode != UNDO &&
+        mode != RELAX_SIMPLE &&
+        mode != RELAX_AFFINE;
+}
+
 QString liquifyModeString(KisLiquifyProperties::LiquifyMode mode)
 {
     QString result;
@@ -77,11 +91,37 @@ QString liquifyModeString(KisLiquifyProperties::LiquifyMode mode)
     case KisLiquifyProperties::UNDO:
         result = "Undo";
         break;
+    case KisLiquifyProperties::RELAX_SIMPLE:
+        result = "RelaxSimple";
+        break;
+    case KisLiquifyProperties::RELAX_AFFINE:
+        result = "RelaxAffine";
+        break;
     case KisLiquifyProperties::N_MODES:
         qFatal("Unsupported mode");
     }
 
     return QString("LiquifyTool/%1").arg(result);
+}
+
+qreal defaultAmountForMode(KisLiquifyProperties::LiquifyMode mode)
+{
+    switch (mode) {
+    case KisLiquifyProperties::RELAX_SIMPLE:
+        return 0.3;
+    case KisLiquifyProperties::RELAX_AFFINE:
+        return 1.0;
+    case KisLiquifyProperties::MOVE:
+    case KisLiquifyProperties::SCALE:
+    case KisLiquifyProperties::ROTATE:
+    case KisLiquifyProperties::OFFSET:
+    case KisLiquifyProperties::UNDO:
+        return 0.05;
+    case KisLiquifyProperties::N_MODES:
+        qFatal("Unsupported mode");
+    }
+
+    return 0.05;
 }
 
 void KisLiquifyProperties::saveMode() const
@@ -108,7 +148,7 @@ void KisLiquifyProperties::loadMode()
          KSharedConfig::openConfig()->group(liquifyModeString(m_mode));
 
     m_size = cfg.readEntry("size", m_size);
-    m_amount = cfg.readEntry("amount", m_amount);
+    m_amount = cfg.readEntry("amount", defaultAmountForMode(m_mode));
     m_spacing = cfg.readEntry("spacing", m_spacing);
     m_sizeHasPressure = cfg.readEntry("sizeHasPressure", m_sizeHasPressure);
     m_amountHasPressure = cfg.readEntry("amountHasPressure", m_amountHasPressure);

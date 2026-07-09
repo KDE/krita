@@ -24,6 +24,8 @@ public:
         ROTATE,
         OFFSET,
         UNDO,
+        RELAX_SIMPLE,
+        RELAX_AFFINE,
 
         N_MODES
     };
@@ -54,6 +56,9 @@ public:
     void setMode(LiquifyMode value) {
         m_mode = value;
     }
+
+    static bool supportsReverseDirection(LiquifyMode mode);
+    static bool supportsWashMode(LiquifyMode mode);
 
     qreal size() const {
         return m_size;

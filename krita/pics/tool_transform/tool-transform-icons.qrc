@@ -9,6 +9,8 @@
         <file>dark_transform_icons_liquify_main.svg</file>
         <file>dark_transform_icons_liquify_move.svg</file>
         <file>dark_transform_icons_liquify_offset.svg</file>
+        <file>dark_transform_icons_liquify_relax_affine.svg</file>
+        <file>dark_transform_icons_liquify_relax.svg</file>
         <file>dark_transform_icons_liquify_resize.svg</file>
         <file>dark_transform_icons_liquify_rotate.svg</file>
         <file>dark_transform_icons_liquify_rotateCCW.svg</file>
@@ -27,6 +29,8 @@
         <file>light_transform_icons_liquify_main.svg</file>
         <file>light_transform_icons_liquify_move.svg</file>
         <file>light_transform_icons_liquify_offset.svg</file>
+        <file>light_transform_icons_liquify_relax_affine.svg</file>
+        <file>light_transform_icons_liquify_relax.svg</file>
         <file>light_transform_icons_liquify_resize.svg</file>
         <file>light_transform_icons_liquify_rotate.svg</file>
         <file>light_transform_icons_liquify_rotateCCW.svg</file>

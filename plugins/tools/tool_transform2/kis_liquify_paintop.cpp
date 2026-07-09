@@ -49,6 +49,8 @@ QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
     switch (props.mode()) {
     case KisLiquifyProperties::MOVE:
     case KisLiquifyProperties::SCALE:
+    case KisLiquifyProperties::RELAX_SIMPLE:
+    case KisLiquifyProperties::RELAX_AFFINE:
         break;
     case KisLiquifyProperties::ROTATE: {
         QPainterPath p;
@@ -132,8 +134,7 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
     const qreal spacing = m_d->props.spacing() * size;
 
     const qreal reverseCoeff =
-        m_d->props.mode() !=
-        KisLiquifyProperties::UNDO &&
+        KisLiquifyProperties::supportsReverseDirection(m_d->props.mode()) &&
         m_d->props.reverseDirection() ? -1.0 : 1.0;
     const qreal amount = m_d->props.amountHasPressure() ?
         pi.pressure() * reverseCoeff * m_d->props.amount():
@@ -172,6 +173,18 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
         m_d->worker->undoPoints(pi.pos(),
                                 amount,
                                 size);
+
+        break;
+    case KisLiquifyProperties::RELAX_SIMPLE:
+        m_d->worker->relaxPoints(pi.pos(),
+                                 amount,
+                                 size);
+
+        break;
+    case KisLiquifyProperties::RELAX_AFFINE:
+        m_d->worker->affineRelaxPoints(pi.pos(),
+                                       amount,
+                                       size);
 
         break;
     case KisLiquifyProperties::N_MODES:

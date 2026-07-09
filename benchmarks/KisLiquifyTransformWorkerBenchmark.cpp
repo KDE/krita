@@ -158,6 +158,29 @@ void testPoints(KisLiquifyTransformWorkerBenchmark::Operation operation, bool us
                 worker.undoPoints(undoBases[i], flows[i%flows.length()], sigmas[i%sigmas.length()]);
             }
         }
+    } else if (operation == KisLiquifyTransformWorkerBenchmark::RelaxSimple ||
+               operation == KisLiquifyTransformWorkerBenchmark::RelaxAffine) {
+
+        for (int i = 0; i < bases.count(); i++) {
+            worker.translatePoints(bases[i], QPointF(50, 0), sigmas[i%sigmas.length()], useWashMode, flows[i%flows.length()]);
+        }
+
+        for (int i = 0; i < bases.count(); i++) {
+            worker.rotatePoints(bases[i], M_PI / 4, sigmas[i%sigmas.length()], useWashMode, flows[i%flows.length()]);
+        }
+
+        QList<QPointF> relaxBases = preparePointsData((A + D)/2, (C+B)/2, (B+D)/2, (A+C)/2, oneWayBasesCount);
+
+        QBENCHMARK {
+
+            for (int i = 0; i < relaxBases.count(); i++) {
+                if (operation == KisLiquifyTransformWorkerBenchmark::RelaxSimple) {
+                    worker.relaxPoints(relaxBases[i], flows[i%flows.length()], sigmas[i%sigmas.length()]);
+                } else {
+                    worker.affineRelaxPoints(relaxBases[i], flows[i%flows.length()], sigmas[i%sigmas.length()]);
+                }
+            }
+        }
     } else if (operation == KisLiquifyTransformWorkerBenchmark::RunOnQImage) {
         for (int i = 0; i < bases.count(); i++) {
             worker.translatePoints(bases[i], QPointF(50, 0), sigmas[i%sigmas.length()], useWashMode, flows[i%flows.length()]);
@@ -289,6 +312,26 @@ void KisLiquifyTransformWorkerBenchmark::testPointsUndoBuildUp()
 void KisLiquifyTransformWorkerBenchmark::testPointsUndoWash()
 {
     testPoints(Undo, true);
+}
+
+void KisLiquifyTransformWorkerBenchmark::testPointsRelaxSimpleBuildUp()
+{
+    testPoints(RelaxSimple, false);
+}
+
+void KisLiquifyTransformWorkerBenchmark::testPointsRelaxSimpleWash()
+{
+    testPoints(RelaxSimple, true);
+}
+
+void KisLiquifyTransformWorkerBenchmark::testPointsRelaxAffineBuildUp()
+{
+    testPoints(RelaxAffine, false);
+}
+
+void KisLiquifyTransformWorkerBenchmark::testPointsRelaxAffineWash()
+{
+    testPoints(RelaxAffine, true);
 }
 
 void KisLiquifyTransformWorkerBenchmark::testRunOnDev()

@@ -130,6 +130,54 @@ void KisLiquifyTransformWorkerTest::testPoints()
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "unity");
 }
 
+void KisLiquifyTransformWorkerTest::testRelaxPoints()
+{
+    const QRect bounds(0, 0, 64, 64);
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
+
+    const QPoint centerCell(4, 4);
+    const int centerIndex = worker.pointToIndex(centerCell);
+    const QPointF centerPoint = worker.originalPoints()[centerIndex];
+
+    worker.translatePoints(centerPoint, QPointF(30.0, 0.0), 8.0, false, 1.0);
+
+    const QPointF oldCenterDisplacement =
+        worker.transformedPoints()[centerIndex] - worker.originalPoints()[centerIndex];
+    worker.relaxPoints(worker.transformedPoints()[centerIndex], 1.0, 8.0);
+
+    const QPointF centerDisplacement =
+        worker.transformedPoints()[centerIndex] - worker.originalPoints()[centerIndex];
+
+    QVERIFY(centerDisplacement.x() < oldCenterDisplacement.x());
+    QVERIFY(centerDisplacement.x() > 0.0);
+    QVERIFY(qAbs(centerDisplacement.y()) < 1e-6);
+}
+
+void KisLiquifyTransformWorkerTest::testAffineRelaxPoints()
+{
+    const QRect bounds(0, 0, 64, 64);
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
+
+    const QPoint centerCell(4, 4);
+    const int centerIndex = worker.pointToIndex(centerCell);
+    const QPointF centerPoint = worker.originalPoints()[centerIndex];
+
+    worker.rotatePoints(centerPoint, M_PI / 2.0, 100.0, false, 1.0);
+    const QPointF affinePosition = worker.transformedPoints()[centerIndex];
+
+    worker.translatePoints(affinePosition, QPointF(25.0, 0.0), 8.0, false, 1.0);
+    const qreal corruptedDistance = kisDistance(worker.transformedPoints()[centerIndex], affinePosition);
+
+    worker.affineRelaxPoints(worker.transformedPoints()[centerIndex], 1.0, 8.0);
+    const qreal relaxedDistance = kisDistance(worker.transformedPoints()[centerIndex], affinePosition);
+
+    QVERIFY(relaxedDistance < corruptedDistance);
+}
+
 void KisLiquifyTransformWorkerTest::testPointsQImage()
 {
     TestUtil::TestProgressBar bar;

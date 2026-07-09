@@ -265,11 +265,15 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyOffset, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyUndo, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyRelaxSimple, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyRelaxAffine, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     liquifyModeMapper->setMapping(liquifyMove, (int)KisLiquifyProperties::MOVE);
     liquifyModeMapper->setMapping(liquifyScale, (int)KisLiquifyProperties::SCALE);
     liquifyModeMapper->setMapping(liquifyRotate, (int)KisLiquifyProperties::ROTATE);
     liquifyModeMapper->setMapping(liquifyOffset, (int)KisLiquifyProperties::OFFSET);
     liquifyModeMapper->setMapping(liquifyUndo, (int)KisLiquifyProperties::UNDO);
+    liquifyModeMapper->setMapping(liquifyRelaxSimple, (int)KisLiquifyProperties::RELAX_SIMPLE);
+    liquifyModeMapper->setMapping(liquifyRelaxAffine, (int)KisLiquifyProperties::RELAX_AFFINE);
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(slotLiquifyModeChanged(int)));
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(notifyEditingFinished()));
 
@@ -278,6 +282,14 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifyRotate->setToolTip(i18nc("@info:tooltip", "Rotate: twirl image under cursor"));
     liquifyOffset->setToolTip(i18nc("@info:tooltip", "Offset: shift the image to the right of the stroke direction"));
     liquifyUndo->setToolTip(i18nc("@info:tooltip", "Undo: erase actions of other tools"));
+    liquifyRelaxSimple->setToolTip(i18nc("@info:tooltip",
+                                          "Relax: smooth liquify distortions by averaging neighboring movements\n"
+                                          "Preserves: local average movement\n"
+                                          "Removes: local movement differences, bumps and jitter"));
+    liquifyRelaxAffine->setToolTip(i18nc("@info:tooltip",
+                                          "Shape-preserving Relax: smooth liquify distortions while preserving local rotation, scale and shear\n"
+                                          "Preserves: local translation, rotation, scale and shear\n"
+                                          "Removes: local non-affine distortions, pinches and swirls"));
 
     // Connect all edit boxes to the Editing Finished signal
     connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
@@ -350,6 +362,8 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     liquifyRotate->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotate"));
     liquifyOffset->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_offset"));
     liquifyUndo->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_erase"));
+    liquifyRelaxSimple->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_relax"));
+    liquifyRelaxAffine->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_relax_affine"));
 
 
 
@@ -394,10 +408,8 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     KisLiquifyProperties::LiquifyMode mode =
         static_cast<KisLiquifyProperties::LiquifyMode>(props->mode());
 
-    bool canInverseDirection =
-        mode != KisLiquifyProperties::UNDO;
-
-    bool canUseWashMode = mode != KisLiquifyProperties::UNDO;
+    bool canInverseDirection = KisLiquifyProperties::supportsReverseDirection(mode);
+    bool canUseWashMode = KisLiquifyProperties::supportsWashMode(mode);
 
     liquifyReverseDirectionChk->setEnabled(canInverseDirection);
     liquifyFlowSlider->setEnabled(canUseWashMode && useWashMode);
@@ -656,6 +668,12 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
             break;
         case KisLiquifyProperties::UNDO:
             liquifyUndo->setChecked(true);
+            break;
+        case KisLiquifyProperties::RELAX_SIMPLE:
+            liquifyRelaxSimple->setChecked(true);
+            break;
+        case KisLiquifyProperties::RELAX_AFFINE:
+            liquifyRelaxAffine->setChecked(true);
             break;
         case KisLiquifyProperties::N_MODES:
             qFatal("Unsupported mode");

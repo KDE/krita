@@ -1,0 +1,12 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+ <g fill="none" stroke="#373737" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M2 5c2.2-2 3.8 2 6 0s3.8 2 6 0"/>
+  <path d="M2 8c2.2-2 3.8 2 6 0s3.8 2 6 0"/>
+  <path d="M2 11c2.2-2 3.8 2 6 0s3.8 2 6 0"/>
+  <path d="M4 3h8v10H4z"/>
+ </g>
+</svg>

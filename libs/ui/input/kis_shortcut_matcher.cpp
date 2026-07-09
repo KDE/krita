@@ -405,7 +405,7 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     m_d->isTouchDragDetected = false;
     m_d->isTouchHeld = false;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
+    KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateForTapTouchEvent);
 #else
     m_d->bestCandidateForTapTouchEvent.reset(event->clone());
 #endif
@@ -427,10 +427,8 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = event->touchPoints();
-    using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = event->points();
-    using TouchPoint = QEventPoint;
 #endif
 
     // Check whether the touchpoints are relatively stationary or have
@@ -476,7 +474,12 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
         }
     } else {
         // triggered if a new finger was added, which might result in shortcut not matching the action
-        if (event->touchPointStates().testFlag(TouchPoint::Released) && !hasRunningShortcut()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        const auto FlagReleased = Qt::TouchPointReleased;
+#else
+        const auto FlagReleased = QEventPoint::Released;
+#endif
+        if (event->touchPointStates().testFlag(FlagReleased) && !hasRunningShortcut()) {
             const int previousNumPoints =
                 KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::allTouchStates());
 
@@ -1035,7 +1038,7 @@ void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
     if (touchPointCount > m_d->maxTouchPoints) {
         m_d->maxTouchPoints = touchPointCount;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
+        KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateForTapTouchEvent);
 #else
         m_d->bestCandidateForTapTouchEvent.reset(event->clone());
 #endif

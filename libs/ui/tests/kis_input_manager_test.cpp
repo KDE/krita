@@ -8,8 +8,11 @@
 
 #include <simpletest.h>
 
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
 // for QMutableEventPoint
 #include <QtGui/private/qeventpoint_p.h>
+#endif
+
 #include <QMouseEvent>
 
 #include "input/kis_single_action_shortcut.h"
@@ -479,6 +482,75 @@ void KisInputManagerTest::testMouseMoves()
 
 struct TouchSequenceGeneratorBase
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    using TouchPoint = QTouchEvent::TouchPoint;
+
+    struct TouchPointWrapper {
+        enum State : quint8 {
+            Unknown = 0,
+            Stationary = Qt::TouchPointStationary,
+            Pressed = Qt::TouchPointPressed,
+            Updated = Qt::TouchPointMoved,
+            Released = Qt::TouchPointReleased
+        };
+
+        QPointF globalPosition() const {
+            return point.screenPos();
+        }
+
+        QPointF globalLastPosition() const {
+            return point.lastScreenPos();
+        }
+
+        State state() const {
+            return static_cast<State>(point.state());
+        }
+
+        // TODO: can we use a const-ref here as per c++?
+        TouchPoint point;
+    };
+
+    TouchPointWrapper tpw(const TouchPoint &point) {
+        return {point};
+    }
+
+    struct QMutableEventPoint {
+        static void setGlobalLastPosition(TouchPoint &point, const QPointF &value) {
+            point.setLastScreenPos(value);
+
+            // mimic the behavior of Qt6
+            point.setLastPos(value + point.pos() - point.screenPos());
+        }
+
+        static void setGlobalPressPosition(TouchPoint &point, const QPointF &value) {
+            point.setStartScreenPos(value);
+
+            // mimic the behavior of Qt6
+            point.setStartPos(value + point.pos() - point.screenPos());
+        }
+
+        static void setGlobalPosition(TouchPoint &point, const QPointF &value) {
+            point.setScreenPos(value);
+        }
+
+        static void setPosition(TouchPoint &point, const QPointF &value) {
+            point.setPos(value);
+        }
+
+        static void setState(TouchPoint &point, TouchPointWrapper::State value) {
+            point.setState(static_cast<Qt::TouchPointState>(value));
+        }
+    };
+
+#else
+    using TouchPoint = QEventPoint;
+    using TouchPointWrapper = QEventPoint;
+
+    TouchPointWrapper tpw(const TouchPoint &point) {
+        return point;
+    }
+#endif
+
     TouchSequenceGeneratorBase(int fingerCount, int maxEventIndex, const QPointF pointOffset)
         : m_fingerCount(fingerCount)
         , m_maxEventIndex(maxEventIndex)
@@ -488,13 +560,13 @@ struct TouchSequenceGeneratorBase
 
     virtual ~TouchSequenceGeneratorBase() {}
 
-    void updatePoints(int eventIndex, QList<QEventPoint> &touchPoints)
+    void updatePoints(int eventIndex, QList<TouchPoint> &touchPoints)
     {
         /**
          * First, remove all the points marked as "Release" at the previous step
          */
         for (auto it = touchPoints.begin(); it != touchPoints.end();) {
-            if (it->state() == QEventPoint::Released) {
+            if (tpw(*it).state() == TouchPointWrapper::Released) {
                 it = touchPoints.erase(it);
             } else {
                 ++it;
@@ -507,22 +579,22 @@ struct TouchSequenceGeneratorBase
             /**
              * Now update all points positions
              */
-            QMutableEventPoint::setGlobalLastPosition(*it, it->globalPosition());
+            QMutableEventPoint::setGlobalLastPosition(*it, tpw(*it).globalPosition());
             QMutableEventPoint::setGlobalPosition(*it, globalPositionForPoint(it->id(), eventIndex));
-            QMutableEventPoint::setPosition(*it, it->globalPosition());
+            QMutableEventPoint::setPosition(*it, tpw(*it).globalPosition());
 
-            if (it->state() == QEventPoint::Pressed && it->globalLastPosition() != it->globalPosition()) {
+            if (tpw(*it).state() == TouchPointWrapper::Pressed && tpw(*it).globalLastPosition() != tpw(*it).globalPosition()) {
                 /**
                  * If a "Pressed" point has been offset, then we should change
                  * its state to "Updated"
                  */
-                QMutableEventPoint::setState(*it, QEventPoint::Updated);
+                QMutableEventPoint::setState(*it, TouchPointWrapper::Updated);
             } else if (eventIndex == m_maxEventIndex) {
                 /**
                  * At the very last iteration, mark all the points as
                  * "Released".
                  */
-                QMutableEventPoint::setState(*it, QEventPoint::Released);
+                QMutableEventPoint::setState(*it, TouchPointWrapper::Released);
             }
 
             // ENTER_FUNCTION() << ppVar(eventIndex) << ppVar(it->id()) << ppVar(it->state()) <<
@@ -536,11 +608,20 @@ protected:
         return QPointF(10 * id + eventIndex * m_pointOffset.x(), eventIndex * m_pointOffset.y());
     };
 
-    void appendNewPoint(QList<QEventPoint> &touchPoints, int eventIndex)
+    void appendNewPoint(QList<TouchPoint> &touchPoints, int eventIndex)
     {
         const int newIndex = touchPoints.size();
         const QPointF pos = globalPositionForPoint(10 * newIndex, eventIndex);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        TouchPoint point;
+        point.setId(10 * newIndex);
+        QMutableEventPoint::setState(point, TouchPointWrapper::Pressed);
+        QMutableEventPoint::setGlobalPosition(point, pos);
+        QMutableEventPoint::setPosition(point, pos);
+        touchPoints.append(point);
+#else
         touchPoints.emplace_back(10 * newIndex, QEventPoint::Pressed, pos, pos);
+#endif
         QMutableEventPoint::setGlobalPressPosition(touchPoints.back(), pos);
     };
 
@@ -553,7 +634,7 @@ protected:
      * 2) To remove a point just change its state to "Released" and
      *    it will be removed at the next iteration automatically.
      */
-    virtual void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) = 0;
+    virtual void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) = 0;
 
 protected:
     int m_fingerCount = 0;
@@ -566,7 +647,7 @@ struct TouchCleanDrag : TouchSequenceGeneratorBase
     using TouchSequenceGeneratorBase::TouchSequenceGeneratorBase;
 
 protected:
-    void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) override
+    void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) override
     {
         if (eventIndex == 0) {
             for (int i = 0; i < m_fingerCount; i++) {
@@ -581,7 +662,7 @@ struct TouchDragDirtyStart : TouchSequenceGeneratorBase
     using TouchSequenceGeneratorBase::TouchSequenceGeneratorBase;
 
 protected:
-    void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) override
+    void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) override
     {
         KIS_ASSERT(m_fingerCount > 1);
         KIS_ASSERT(m_maxEventIndex > 6);
@@ -613,7 +694,7 @@ struct TouchDragDirtyEnd : TouchSequenceGeneratorBase
     using TouchSequenceGeneratorBase::TouchSequenceGeneratorBase;
 
 protected:
-    void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) override
+    void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) override
     {
         if (eventIndex == 0) {
             for (int i = 0; i < m_fingerCount; ++i) {
@@ -623,7 +704,7 @@ protected:
 
         for (int i = 0; i < m_fingerCount; i++) {
             if (eventIndex == m_maxEventIndex - i * 2) {
-                QMutableEventPoint::setState(touchPoints.back(), QEventPoint::Released);
+                QMutableEventPoint::setState(touchPoints.back(), TouchPointWrapper::Released);
             }
         }
     }
@@ -634,7 +715,7 @@ struct TouchDragTwoThenThree : TouchSequenceGeneratorBase
     using TouchSequenceGeneratorBase::TouchSequenceGeneratorBase;
 
 protected:
-    void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) override
+    void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) override
     {
         KIS_ASSERT(m_fingerCount == 2);
         KIS_ASSERT(m_maxEventIndex > 10);
@@ -655,7 +736,7 @@ struct TouchDragThreeThenTwo : TouchSequenceGeneratorBase
     using TouchSequenceGeneratorBase::TouchSequenceGeneratorBase;
 
 protected:
-    void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) override
+    void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) override
     {
         KIS_ASSERT(m_fingerCount == 3);
         KIS_ASSERT(m_maxEventIndex > 10);
@@ -667,7 +748,7 @@ protected:
         }
 
         if (eventIndex == m_maxEventIndex / 2) {
-            QMutableEventPoint::setState(touchPoints.back(), QEventPoint::Released);
+            QMutableEventPoint::setState(touchPoints.back(), TouchPointWrapper::Released);
         }
     }
 };
@@ -677,7 +758,7 @@ struct TouchDragThreeThenTwoThenThree : TouchSequenceGeneratorBase
     using TouchSequenceGeneratorBase::TouchSequenceGeneratorBase;
 
 protected:
-    void updatePointsSet(int eventIndex, QList<QEventPoint> &touchPoints) override
+    void updatePointsSet(int eventIndex, QList<TouchPoint> &touchPoints) override
     {
         KIS_ASSERT(m_fingerCount == 3);
         KIS_ASSERT(m_maxEventIndex > 10);
@@ -689,7 +770,7 @@ protected:
         }
 
         if (eventIndex == m_maxEventIndex / 3) {
-            QMutableEventPoint::setState(touchPoints.back(), QEventPoint::Released);
+            QMutableEventPoint::setState(touchPoints.back(), TouchPointWrapper::Released);
         }
 
         if (eventIndex == 2 * m_maxEventIndex / 3) {
@@ -716,7 +797,11 @@ TouchSequenceGeneratorBase* createTouchSequenceGenerator(const QString sequenceN
         qFatal("Unknown touch sequence name");
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return nullptr;
+#else
     Q_UNREACHABLE_RETURN(nullptr);
+#endif
 }
 
 void KisInputManagerTest::testTouchMoves_data()
@@ -808,19 +893,45 @@ void KisInputManagerTest::testTouchMoves()
     std::unique_ptr<TouchSequenceGeneratorBase> strokeGenerator(
         createTouchSequenceGenerator(sequenceName, fingerCount, eventsCount - 1, pointOffset));
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QTouchDevice device;
+    auto calcTouchPointStates = [] (const QList<TouchSequenceGeneratorBase::TouchPoint> &touchPoints) -> Qt::TouchPointStates {
+        Qt::TouchPointStates result;
+
+        for (auto it = touchPoints.begin(); it != touchPoints.end(); ++it) {
+            result |= it->state();
+        }
+
+        return result;
+    };
+#else
     QPointingDevice device;
-    QList<QEventPoint> touchPoints;
+#endif
+
+    QList<TouchSequenceGeneratorBase::TouchPoint> touchPoints;
 
     for (int eventIndex = 0; eventIndex < eventsCount; eventIndex++) {
         strokeGenerator->updatePoints(eventIndex, touchPoints);
         if (eventIndex == 0) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+#else
             QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, touchPoints);
+#endif
             m.touchBeginEvent(&e);
         } else if (eventIndex > 0 && eventIndex < eventsCount - 1) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+#else
             QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, touchPoints);
+#endif
             m.touchUpdateEvent(&e);
         } else if (eventIndex == eventsCount - 1) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+#else
             QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, touchPoints);
+#endif
             m.touchEndEvent(&e);
         } else {
             qFatal("invalid step value");

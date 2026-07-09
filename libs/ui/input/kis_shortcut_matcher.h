@@ -288,6 +288,7 @@ public:
     void setInputActionGroupsMaskCallback(std::function<KisInputActionGroupsMask()> func);
 
 private:
+
     friend class KisInputManagerTest;
 
     void reset();
@@ -305,10 +306,10 @@ private:
     void forceDeactivateAllActions();
 
     void setMaxTouchPointEvent(QTouchEvent *event);
-    void fireReadyTouchShortcut(QTouchEvent *event);
-    KisTouchShortcut *matchTouchShortcut(QTouchEvent *event);
-    bool matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut);
-    bool tryRunTouchShortcut(QTouchEvent *event);
+    bool tryFireTapTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+    KisTouchShortcut *matchTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+    bool matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut, Qt::TouchPointStates allowedStates);
+    bool tryRunTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates);
     bool tryEndTouchShortcut(QTouchEvent *event);
 
     bool tryRunNativeGestureShortcut(QNativeGestureEvent *event);

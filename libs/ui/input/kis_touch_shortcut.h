@@ -18,7 +18,7 @@ class QTouchEvent;
  * it _does not_ handle tool invocation i.e painting (which is being
  * handled in KisShortcutMatcher).
  */
-class KisTouchShortcut : public KisAbstractShortcut
+class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
 {
         using GestureAction = KisShortcutConfiguration::GestureAction;
 
@@ -33,10 +33,20 @@ class KisTouchShortcut : public KisAbstractShortcut
         void setMaximumTouchPoints( int max );
         void setDisableOnTouchPainting(bool disableOnTouchPainting);
 
-        bool matchTapType(QTouchEvent *event);
-        bool matchDragType(QTouchEvent *event);
-        bool matchHoldType(QTouchEvent *event);
-        bool matchTouchPoint(QTouchEvent *event);
+        bool matchTapType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchDragType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchHoldType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+
+        static inline Qt::TouchPointStates allTouchStates() {
+            return Qt::TouchPointStationary | Qt::TouchPointPressed | Qt::TouchPointMoved | Qt::TouchPointReleased;
+        }
+
+        static inline Qt::TouchPointStates pressedOnlyTouchStates() {
+            return Qt::TouchPointStationary | Qt::TouchPointPressed | Qt::TouchPointMoved;
+        }
+
+        static int countTouchPoints(QTouchEvent *event, Qt::TouchPointStates allowedStates);
 
     private:
         class Private;

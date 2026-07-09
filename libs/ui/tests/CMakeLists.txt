@@ -82,6 +82,12 @@ kis_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.
     LINK_LIBRARIES kritaui kritatestsdk
     )
 
+set_source_files_properties(
+    kis_input_manager_test.cpp
+    PROPERTIES
+    INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+    )
+
 kis_add_test(
     kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
     TEST_NAME KisInputManagerTest

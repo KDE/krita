@@ -19,6 +19,9 @@ private Q_SLOTS:
     void testReleaseUnnecessaryModifiers();
     void testMouseMoves();
 
+    void testTouchMoves_data();
+    void testTouchMoves();
+
     void testIncrementalAverage();
 };
 

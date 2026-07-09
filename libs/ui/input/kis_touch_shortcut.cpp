@@ -69,31 +69,52 @@ void KisTouchShortcut::setDisableOnTouchPainting(bool disableOnTouchPainting)
     d->disableOnTouchPainting = disableOnTouchPainting;
 }
 
-bool KisTouchShortcut::matchTapType(QTouchEvent *event)
+bool KisTouchShortcut::matchTapType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    return matchTouchPoint(event)
+    return matchTouchPoint(event, allowedStates)
 #ifndef Q_OS_MACOS
         && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap)
 #endif
         ;
 }
 
-bool KisTouchShortcut::matchDragType(QTouchEvent *event)
+bool KisTouchShortcut::matchDragType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    return matchTouchPoint(event)
+    return matchTouchPoint(event, allowedStates)
 #ifndef Q_OS_MACOS
         && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
 #endif
         ;
 }
 
-bool KisTouchShortcut::matchHoldType(QTouchEvent *event)
+bool KisTouchShortcut::matchHoldType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    return isHoldType() && matchTouchPoint(event);
+    return isHoldType() && matchTouchPoint(event, allowedStates);
 }
 
-bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)
+int KisTouchShortcut::countTouchPoints(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = event->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = event->points();
+    using TouchPoint = QEventPoint;
+#endif
+
+    const int count =
+        std::count_if(points.begin(), points.end(), [=] (const TouchPoint &point) {
+            auto state = static_cast<Qt::TouchPointState>(point.state());
+            return allowedStates.testFlag(state);
+        });
+
+    return count;
+}
+
+bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+{
+    const int numStillActivePoints = countTouchPoints(event, allowedStates);
+
     return (!d->disableOnTouchPainting || KisConfig(true).disableTouchOnCanvas())
-        && event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
+        && numStillActivePoints >= d->minTouchPoints && numStillActivePoints <= d->maxTouchPoints;
 }

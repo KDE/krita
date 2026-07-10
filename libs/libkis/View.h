@@ -342,6 +342,28 @@ print(selected_nodes)
      */
     QTransform flakeToImageTransform() const;
 
+Q_SIGNALS:
+    /**
+     * Emitted when the active tool for this view changes.
+     *
+     * @param toolId the identifier of the new active tool.
+     */
+    void currentToolChanged(const QString &toolId);
+
+    /**
+     * Emitted when the current brush preset for this view changes.
+     */
+    void currentBrushPresetChanged();
+
+    /**
+     * Emitted when this view's foreground color changes.
+     */
+    void foregroundColorChanged();
+
+    /**
+     * Emitted when this view's background color changes.
+     */
+    void backgroundColorChanged();
 private:
 
     friend class Window;

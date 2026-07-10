@@ -138,8 +138,6 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
 
 void KisSelectionActionsPanel::setVisible(bool p_visible)
 {
-    d->configure_action->setVisible(p_visible && d->m_enabled);
-
     QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
     if (!canvasWidget) {
         return;
@@ -151,6 +149,8 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
     if (!VISIBILITY_CHANGED) {
         return;
     }
+
+    d->configure_action->setVisible(p_visible && d->m_viewManager->selection());
 
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
         d->m_handleWidget->installEventFilter(this);
@@ -177,9 +177,11 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
 
 void KisSelectionActionsPanel::setEnabled(bool enabled)
 {
-    d->configure_action->setVisible(enabled);
 
     bool configurationChanged = enabled != d->m_enabled;
+
+    d->configure_action->setVisible(enabled && d->m_viewManager->selection());
+
     d->m_enabled = enabled;
     if (configurationChanged) {
         // Reset visibility when configuration changes

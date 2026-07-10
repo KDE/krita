@@ -260,12 +260,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse direction of the current deformation tool"));
 
     KisSignalMapper *liquifyModeMapper = new KisSignalMapper(this);
-    connect(liquifyMove, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyScale, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyOffset, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyUndo, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyRestoreShape, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyMove, SIGNAL(clicked(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyScale, SIGNAL(clicked(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyRotate, SIGNAL(clicked(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyOffset, SIGNAL(clicked(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyUndo, SIGNAL(clicked(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyRestoreShape, SIGNAL(clicked(bool)), liquifyModeMapper, SLOT(map()));
     liquifyModeMapper->setMapping(liquifyMove, (int)KisLiquifyProperties::MOVE);
     liquifyModeMapper->setMapping(liquifyScale, (int)KisLiquifyProperties::SCALE);
     liquifyModeMapper->setMapping(liquifyRotate, (int)KisLiquifyProperties::ROTATE);

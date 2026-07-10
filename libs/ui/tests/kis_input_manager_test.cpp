@@ -196,12 +196,6 @@ KisTouchShortcut* createTouchShortcut(KisAbstractInputAction *action,
 #ifndef Q_OS_MACOS
     case KisShortcutConfiguration::OneFingerTap:
     case KisShortcutConfiguration::OneFingerDrag:
-        // Touch painting takes precedence over one-finger touch shortcuts, so
-        // disable this type of shortcut when touch painting is active. Except
-        // touch hold shortcuts, since touching and holding in one spot does
-        // nothing otherwise and is therefore unambiguous.
-        //s->setDisableOnTouchPainting(true);
-        Q_FALLTHROUGH();
     case KisShortcutConfiguration::OneFingerHold:
         s->setMinimumTouchPoints(1);
         s->setMaximumTouchPoints(1);

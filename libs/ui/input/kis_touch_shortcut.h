@@ -32,7 +32,6 @@ class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
 
         void setMinimumTouchPoints( int min );
         void setMaximumTouchPoints( int max );
-        void setDisableOnTouchPainting(bool disableOnTouchPainting);
 
         void setIsTouchPainting(bool value);
 

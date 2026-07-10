@@ -21,7 +21,6 @@ public:
         : minTouchPoints(0)
         , maxTouchPoints(0)
         , type(type)
-        , disableOnTouchPainting(false)
         , isTouchPainting(false)
         , minDragThreshold(16)
     { }
@@ -29,7 +28,6 @@ public:
     int minTouchPoints;
     int maxTouchPoints;
     GestureAction type;
-    bool disableOnTouchPainting;
     bool isTouchPainting;
     qreal minDragThreshold;
 };
@@ -80,11 +78,6 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
-void KisTouchShortcut::setDisableOnTouchPainting(bool disableOnTouchPainting)
-{
-    d->disableOnTouchPainting = disableOnTouchPainting;
-}
-
 void KisTouchShortcut::setIsTouchPainting(bool value)
 {
     d->isTouchPainting = value;
@@ -95,10 +88,6 @@ bool KisTouchShortcut::isAvailable(KisInputActionGroupsMask mask) const
     if (d->isTouchPainting && KisConfig(true).disableTouchOnCanvas()) {
         return false;
     }
-
-    // if (d->disableOnTouchPainting && !KisConfig(true).disableTouchOnCanvas()) {
-    //     return false;
-    // }
 
     return KisAbstractShortcut::isAvailable(mask);
 }
@@ -171,6 +160,5 @@ bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates 
 {
     const int numStillActivePoints = countTouchPoints(event, allowedStates);
 
-    return /*(!d->disableOnTouchPainting || KisConfig(true).disableTouchOnCanvas())
-        &&*/ numStillActivePoints >= d->minTouchPoints && numStillActivePoints <= d->maxTouchPoints;
+    return numStillActivePoints >= d->minTouchPoints && numStillActivePoints <= d->maxTouchPoints;
 }

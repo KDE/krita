@@ -664,6 +664,7 @@ public:
 
         m_frame->pts = 0;
         Frame inputFrame;
+        int swsFlags = getSwsFlags(settings.scaleFilter);
         while (m_runnable->nextFrame(inputFrame)) {
             if (isCancelled()) {
                 return EncodeResult::Cancelled;
@@ -701,7 +702,7 @@ public:
                                                       outputWidth,
                                                       outputHeight,
                                                       AVPixelFormat(m_frame->format),
-                                                      SWS_FAST_BILINEAR);
+                                                      swsFlags);
             if (!swsContext) {
                 setInternalErrorMessage(QStringLiteral("sws_getCachedContext failed"));
                 return EncodeResult::Failed;

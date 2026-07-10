@@ -24,9 +24,8 @@ public:
     /**
      * @brief KisAnimationVideoSaver
      * This is the object that takes an animation document and config and tells ffmpeg
-     * to render it via KisFFMpegWrapper.
+     * to render it via KisFFMpegWrapper or uses KisMediaEncoderWrapper on Android.
      * @param doc the document to use for rendering.
-     * @param ffmpegPath the path to the ffmpeg executable.
      * @param batchMode whether Krita is in batchmode and we can thus not show gui widgets.
      */
     KisAnimationVideoSaver(KisDocument* doc, bool batchMode);
@@ -38,16 +37,17 @@ public:
      */
     KisImageSP image();
 
-    /**
-     * @brief encode the main encoding function.
-     * This in turn calls runFFMpeg, which is a private function inside this class.
-     * @param filename the filename to which to render the animation.
-     * @param configuration the configuration
-     * @return whether it is successful or had another failure.
-     */
-    KisImportExportErrorCode encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options);
+    KisImportExportErrorCode encode(const QString &framesDirectory,
+                                    const QString &savedFilesMask,
+                                    const QStringList &savedFiles,
+                                    const KisAnimationRenderingOptions &options);
 
-    static KisImportExportErrorCode convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode);
+    static KisImportExportErrorCode convert(KisDocument *document,
+                                            const QString &framesDirectory,
+                                            const QString &savedFilesMask,
+                                            const QStringList &savedFiles,
+                                            const KisAnimationRenderingOptions &options,
+                                            bool batchMode);
 
 private:
     KisImageSP m_image;

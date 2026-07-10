@@ -54,6 +54,25 @@ public:
         return true;
     }
 
+    int getSwsFlags(const QString &scaleFilter) const
+    {
+        // These are the values provided by KisDlgAnimationRenderer.
+        if (scaleFilter.isEmpty() || scaleFilter == QStringLiteral("bilinear")) {
+            return SWS_FAST_BILINEAR;
+        } else if (scaleFilter == QStringLiteral("bicubic")) {
+            return SWS_BICUBIC;
+        } else if (scaleFilter == QStringLiteral("lanczos")) {
+            return SWS_LANCZOS;
+        } else if (scaleFilter == QStringLiteral("neighbor")) {
+            return 0;
+        } else if (scaleFilter == QStringLiteral("spline")) {
+            return SWS_SPLINE;
+        } else {
+            warnFile.nospace() << "Unhandled scale filter '" << scaleFilter << "'";
+            return SWS_FAST_BILINEAR;
+        }
+    }
+
     SwsContext *getSwsContextFor(int inputWidth,
                                  int inputHeight,
                                  AVPixelFormat inputFormat,

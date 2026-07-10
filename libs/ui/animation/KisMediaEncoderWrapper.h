@@ -14,6 +14,8 @@
 
 #include <kritaui_export.h>
 
+#include "KisImportExportErrorCode.h"
+
 class QImage;
 class QWidget;
 
@@ -45,6 +47,7 @@ struct KRITAUI_EXPORT KisMediaEncoderWrapperSettings {
     QStringList inputFiles;
     KisMediaEncoderFormat *format;
     QVariantMap formatPreferences;
+    QString scaleFilter;
     QSize outputSize;
     int inputFps;
     int outputFps;
@@ -141,6 +144,7 @@ public:
     explicit KisMediaEncoderWrapper(QObject *parent = nullptr);
     ~KisMediaEncoderWrapper() override;
 
+    KisImportExportErrorCode start(const KisMediaEncoderWrapperSettings &settings, bool batchMode);
     void startNonBlocking(const KisMediaEncoderWrapperSettings &settings);
     void reset();
 

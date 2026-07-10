@@ -18,6 +18,7 @@
 #include <kis_paintop_box.h>
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
+#include <KoToolProxy.h>
 #include <kis_canvas2.h>
 #include <KisResourceTypes.h>
 #include <KisDocument.h>
@@ -40,6 +41,12 @@ View::View(KisView* view, QObject *parent)
     , d(new Private)
 {
     d->view = view;
+    if (d->view) {
+        if (KoToolProxy *toolProxy = d->view->canvasBase()->toolProxy()) {
+            connect(toolProxy, SIGNAL(toolChanged(QString)), this, SIGNAL(currentToolChanged(QString)));
+        }
+        connect(d->view->resourceProvider(), SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), this, SIGNAL(currentBrushPresetChanged()));
+    }
 }
 
 View::~View()

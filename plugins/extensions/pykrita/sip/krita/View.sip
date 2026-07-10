@@ -84,5 +84,10 @@ public Q_SLOTS:
     QTransform flakeToDocumentTransform() const;
     QTransform flakeToCanvasTransform() const;
     QTransform flakeToImageTransform() const;
+Q_SIGNALS:
+    void currentToolChanged(const QString &toolId);
+    void currentBrushPresetChanged();
+    void foregroundColorChanged();
+    void backgroundColorChanged();
 private:
 };

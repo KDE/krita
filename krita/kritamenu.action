@@ -1610,7 +1610,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags></activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions></activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>

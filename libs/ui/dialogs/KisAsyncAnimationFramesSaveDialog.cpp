@@ -74,16 +74,40 @@ KisAsyncAnimationFramesSaveDialog::~KisAsyncAnimationFramesSaveDialog()
 
 KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::regenerateRange(KisViewManager *viewManager)
 {
-    QFileInfo fileInfo(savedFilesMaskWildcard());
-    QDir dir(fileInfo.absolutePath());
+    QString dirPath;
+    QString fileWildcard;
+#ifdef Q_OS_ANDROID
+    // QFileInfo can't manage to manipulate content URIs on Android, most
+    // functions either just hand you the entire input or an empty string, so
+    // we have to do the name mangling by hand.
+    {
+        QString wildcardPath = savedFilesMaskWildcard();
+        int lastSlashIndex = wildcardPath.lastIndexOf(QChar('/'));
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastSlashIndex != -1, RenderFailed);
+        dirPath = wildcardPath.mid(0, lastSlashIndex);
+        fileWildcard = wildcardPath.mid(lastSlashIndex + 1);
+    }
+#else
+    {
+        QFileInfo fileInfo(savedFilesMaskWildcard());
+        dirPath = fileInfo.absolutePath();
+        fileWildcard = fileInfo.fileName();
+    }
+#endif
+    QDir dir(dirPath);
 
+    // On Android, directory existence checks are unreliable and creating
+    // directories is not allowed. We'll just have to take what we're given and
+    // hope that works out for us.
+#ifndef Q_OS_ANDROID
     if (!dir.exists()) {
-        dir.mkpath(fileInfo.absolutePath());
+        dir.mkpath(dirPath);
     }
     KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+#endif
 
     // Check for overwrite. (Batch mode always overwrites.)
-    QStringList preexistingFileNames = dir.entryList({ fileInfo.fileName() });
+    QStringList preexistingFileNames = dir.entryList({ fileWildcard });
     if (!preexistingFileNames.isEmpty() && !batchMode()) {
         QStringList truncatedList = preexistingFileNames;
 
@@ -105,7 +129,7 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
                                           "deleted, continue?\n\n"
                                           "Directory: %1\n"
                                           "Files: %2",
-                                          fileInfo.absolutePath(), exampleFiles),
+                                          dirPath, exampleFiles),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
 

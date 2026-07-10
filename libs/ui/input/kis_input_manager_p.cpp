@@ -563,6 +563,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index, gesture);
     if (isTouchPainting) {
         shortcut->setIsTouchPainting(true);
+        shortcut->setMinDragThreshold(1.5); // min threshold for touch painting is 1.5 px
     }
     dbgKrita << "TouchAction:" << action->name() << (isTouchPainting ? "touch-painting" : "");
     switch(gesture) {

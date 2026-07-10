@@ -74,7 +74,8 @@ class KisNativeGestureShortcut;
 class KRITAUI_EXPORT KisShortcutMatcher
 {
 public:
-    static constexpr int TOUCH_SLOP_SQUARED = 16 * 16;
+    static constexpr int TOUCH_SLOP_SQUARED = 16 * 16; // TODO: remove!
+    static constexpr qreal TOUCH_SLOP = 16;
 
     KisShortcutMatcher();
     ~KisShortcutMatcher();
@@ -294,6 +295,12 @@ private:
     void reset();
     void reset(QString msg);
 
+    enum class TouchShortcutMode {
+        Drag = 0,
+        Tap,
+        Hold
+    };
+
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
     template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState, bool keyboard = true);
 
@@ -307,9 +314,9 @@ private:
 
     void setMaxTouchPointEvent(QTouchEvent *event);
     bool tryFireTapTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates);
-    KisTouchShortcut *matchTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates);
-    bool matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut, Qt::TouchPointStates allowedStates);
-    bool tryRunTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+    KisTouchShortcut *matchTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates, TouchShortcutMode mode);
+    bool matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut, Qt::TouchPointStates allowedStates, TouchShortcutMode mode);
+    bool tryRunTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates, TouchShortcutMode mode);
     bool tryEndTouchShortcut(QTouchEvent *event);
 
     bool tryRunNativeGestureShortcut(QNativeGestureEvent *event);

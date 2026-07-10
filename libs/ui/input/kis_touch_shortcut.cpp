@@ -7,6 +7,8 @@
  */
 
 #include "kis_touch_shortcut.h"
+
+#include <kis_algebra_2d.h>
 #include "kis_abstract_input_action.h"
 #include "kis_config.h"
 
@@ -21,6 +23,7 @@ public:
         , type(type)
         , disableOnTouchPainting(false)
         , isTouchPainting(false)
+        , minDragThreshold(16)
     { }
 
     int minTouchPoints;
@@ -28,6 +31,7 @@ public:
     GestureAction type;
     bool disableOnTouchPainting;
     bool isTouchPainting;
+    qreal minDragThreshold;
 };
 
 KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type)
@@ -40,6 +44,16 @@ KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, Ge
 KisTouchShortcut::~KisTouchShortcut()
 {
     delete d;
+}
+
+qreal KisTouchShortcut::minDragThreshold() const
+{
+    return d->minDragThreshold;
+}
+
+void KisTouchShortcut::setMinDragThreshold(qreal value)
+{
+    d->minDragThreshold = value;
 }
 
 int KisTouchShortcut::priority() const
@@ -100,7 +114,8 @@ bool KisTouchShortcut::matchTapType(QTouchEvent *event, Qt::TouchPointStates all
 
 bool KisTouchShortcut::matchDragType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    return matchTouchPoint(event, allowedStates)
+    return touchDragDistance(event, allowedStates) > d->minDragThreshold &&
+        matchTouchPoint(event, allowedStates)
 #ifndef Q_OS_MACOS
         && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
 #endif
@@ -114,7 +129,7 @@ bool KisTouchShortcut::matchHoldType(QTouchEvent *event, Qt::TouchPointStates al
 
 int KisTouchShortcut::countTouchPoints(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = event->touchPoints();
     using TouchPoint = QTouchEvent::TouchPoint;
 #else
@@ -129,6 +144,27 @@ int KisTouchShortcut::countTouchPoints(QTouchEvent *event, Qt::TouchPointStates 
         });
 
     return count;
+}
+
+qreal KisTouchShortcut::touchDragDistance(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = event->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = event->points();
+    using TouchPoint = QEventPoint;
+#endif
+
+    return std::sqrt(std::accumulate(points.begin(), points.end(), qreal(0),
+        [&] (qreal maxOffsetSq, const TouchPoint &point) {
+            auto state = static_cast<Qt::TouchPointState>(point.state());
+            if (!allowedStates.testFlag(state)) {
+                return maxOffsetSq;
+            }
+
+            return std::max(maxOffsetSq, KisAlgebra2D::normSquared(point.pos() - point.startPos()));
+        }));
 }
 
 bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates allowedStates)

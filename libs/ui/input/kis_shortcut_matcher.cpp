@@ -10,7 +10,6 @@
 #include <QMouseEvent>
 #include <QTabletEvent>
 
-#include <kis_algebra_2d.h>
 #include "kis_assert.h"
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
@@ -425,23 +424,28 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 
     bool retval = false;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    auto points = event->touchPoints();
-#else
-    auto points = event->points();
-#endif
-
     // Check whether the touchpoints are relatively stationary or have
     // been moved for dragging. If the drag is detected, until the next
     // TouchBegin event, we'll be assuming the gesture to be of
     // dragging type.
     if (!m_d->isTouchDragDetected) {
-        for (auto it = points.begin(); it != points.end(); ++it) {
-            const QPointF delta = it->pos() - it->startPos();
-            if (KisAlgebra2D::normSquared(delta) > TOUCH_SLOP_SQUARED) {
-                m_d->isTouchDragDetected = true;
-                break;
-            }
+        if (KisTouchShortcut::touchDragDistance(event, KisTouchShortcut::allTouchStates()) > TOUCH_SLOP) {
+            m_d->isTouchDragDetected = true;
+        }
+    }
+
+    // Different drag shortcuts can have different drag thresholds. E.g.
+    // touch-painting shortcut will have much lower threshold value. The
+    // shortcuts will calculate the distance themselves in
+    // KisTouchShortcut::matchDragType, so we should just ask them to do that.
+    const int numStillDraggedPoints =
+        KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::pressedOnlyTouchStates());
+    if (!hasRunningShortcut() && numStillDraggedPoints >= m_d->maxTouchPoints) {
+        m_d->maxTouchPoints = numStillDraggedPoints;
+        DEBUG_TOUCH_ACTION("starting", event);
+        if (tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates(), TouchShortcutMode::Drag)) {
+            m_d->isTouchDragDetected = true;
+            return true;
         }
     }
 
@@ -453,26 +457,22 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
         m_d->matchingIteration++;
         setMaxTouchPointEvent(event);
         DEBUG_TOUCH_ACTION("return best", event)
-        return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateForTapTouchEvent.data(), KisTouchShortcut::allTouchStates());
+        return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateForTapTouchEvent.data(),
+                                  KisTouchShortcut::allTouchStates(),
+                                  TouchShortcutMode::Tap);
     }
 
     if (m_d->isTouchDragDetected) {
-        const int numStillDraggedPoints =
-            KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::pressedOnlyTouchStates());
-
-        if (m_d->touchShortcut && !m_d->touchShortcut->matchDragType(event, KisTouchShortcut::pressedOnlyTouchStates())) {
+        if (m_d->touchShortcut
+            && !m_d->touchShortcut->matchDragType(event, KisTouchShortcut::pressedOnlyTouchStates())) {
             DEBUG_TOUCH_ACTION("ending", event)
             // we should end the event as an event with more touchpoints was received
             retval = tryEndTouchShortcut(event);
-        } else if (!hasRunningShortcut() && numStillDraggedPoints >= m_d->maxTouchPoints) {
-            m_d->maxTouchPoints = numStillDraggedPoints;
-            DEBUG_TOUCH_ACTION("starting", event);
-            retval = tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates());
         } else if (m_d->touchShortcut) {
             m_d->touchShortcut->action()->inputEvent(event);
             retval = true;
         }
-    } else {
+    } else { // !m_d->isTouchDragDetected
         // triggered if a new finger was added, which might result in shortcut not matching the action
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         const auto FlagReleased = Qt::TouchPointReleased;
@@ -480,8 +480,7 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
         const auto FlagReleased = QEventPoint::Released;
 #endif
         if (event->touchPointStates().testFlag(FlagReleased) && !hasRunningShortcut()) {
-            const int previousNumPoints =
-                KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::allTouchStates());
+            const int previousNumPoints = KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::allTouchStates());
 
             // we should end the event as an event with more touchpoints was received
             if (previousNumPoints >= m_d->maxTouchPoints) {
@@ -494,6 +493,7 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
             }
         }
     }
+    // TODO: update maxTouchPoints
 
     return retval;
 }
@@ -580,7 +580,7 @@ bool KisShortcutMatcher::touchHoldBeginEvent(QTouchEvent *event)
     }
 
     m_d->isTouchHeld = true; // Must be set first, used in tryRunTouchShortcut.
-    if (tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates())) {
+    if (tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates(), TouchShortcutMode::Hold)) {
         DEBUG_ACTION("touch shortcut found");
         return true;
     } else {
@@ -1048,7 +1048,7 @@ void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
 
 bool KisShortcutMatcher::tryFireTapTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    KisTouchShortcut *goodCandidate = matchTouchShortcut(event, allowedStates);
+    KisTouchShortcut *goodCandidate = matchTouchShortcut(event, allowedStates, TouchShortcutMode::Tap);
     if (goodCandidate) {
         DEBUG_TOUCH_ACTION("starting", event)
         goodCandidate->action()->activate(goodCandidate->shortcutIndex());
@@ -1061,12 +1061,12 @@ bool KisShortcutMatcher::tryFireTapTouchShortcut(QTouchEvent *event, Qt::TouchPo
     return goodCandidate;
 }
 
-KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates, TouchShortcutMode mode)
 {
     KisTouchShortcut *goodCandidate = nullptr;
     Q_FOREACH (KisTouchShortcut *shortcut, m_d->touchShortcuts) {
         if (shortcut->isAvailable(m_d->actionGroupMask())
-            && matchTouchShortcutBasedOnState(event, shortcut, allowedStates)
+            && matchTouchShortcutBasedOnState(event, shortcut, allowedStates, mode)
             && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
 
             goodCandidate = shortcut;
@@ -1075,20 +1075,30 @@ KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event, Qt:
     return goodCandidate;
 }
 
-bool KisShortcutMatcher::matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut, Qt::TouchPointStates allowedStates)
+bool KisShortcutMatcher::matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut, Qt::TouchPointStates allowedStates, TouchShortcutMode mode)
 {
-    if (m_d->isTouchHeld) {
+    switch (mode) {
+    case TouchShortcutMode::Hold:
         return shortcut->matchHoldType(event, allowedStates);
-    } else if (m_d->isTouchDragDetected) {
+        break;
+    case TouchShortcutMode::Drag:
         return shortcut->matchDragType(event, allowedStates);
-    } else {
+        break;
+    case TouchShortcutMode::Tap:
         return shortcut->matchTapType(event, allowedStates);
+        break;
     }
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return false;
+#else
+    Q_UNREACHABLE_RETURN(false);
+#endif
 }
 
-bool KisShortcutMatcher::tryRunTouchShortcut(QTouchEvent* event, Qt::TouchPointStates allowedStates)
+bool KisShortcutMatcher::tryRunTouchShortcut(QTouchEvent* event, Qt::TouchPointStates allowedStates, TouchShortcutMode mode)
 {
-    KisTouchShortcut *goodCandidate = matchTouchShortcut(event, allowedStates);
+    KisTouchShortcut *goodCandidate = matchTouchShortcut(event, allowedStates, mode);
 
     if (m_d->actionsSuppressed())
         return false;

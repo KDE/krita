@@ -34,6 +34,45 @@
 struct View::Private {
     Private() {}
     QPointer<KisView> view;
+    QPointer<KoToolProxy> toolProxy;
+    QPointer<KisCanvasResourceProvider> resourceProvider;
+
+    void reconnect(View *self)
+    {
+        // View::setDocument() can replace the wrapped KisView.
+        if (toolProxy) {
+            QObject::disconnect(toolProxy, SIGNAL(toolChanged(QString)), self, SIGNAL(currentToolChanged(QString)));
+            toolProxy.clear();
+        }
+
+        if (resourceProvider) {
+            QObject::disconnect(resourceProvider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), self, SIGNAL(currentBrushPresetChanged()));
+            QObject::disconnect(resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), self, SIGNAL(foregroundColorChanged()));
+            QObject::disconnect(resourceProvider, SIGNAL(sigBGColorChanged(KoColor)), self, SIGNAL(backgroundColorChanged()));
+            resourceProvider.clear();
+        }
+
+        if (!view) {
+            return;
+        }
+
+        resourceProvider = view->resourceProvider();
+        if (resourceProvider) {
+            QObject::connect(resourceProvider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), self, SIGNAL(currentBrushPresetChanged()));
+            QObject::connect(resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), self, SIGNAL(foregroundColorChanged()));
+            QObject::connect(resourceProvider, SIGNAL(sigBGColorChanged(KoColor)), self, SIGNAL(backgroundColorChanged()));
+        }
+
+        KoCanvasBase *canvasBase = view->canvasBase();
+        if (!canvasBase) {
+            return;
+        }
+
+        toolProxy = canvasBase->toolProxy();
+        if (toolProxy) {
+            QObject::connect(toolProxy, SIGNAL(toolChanged(QString)), self, SIGNAL(currentToolChanged(QString)));
+        }
+    }
 };
 
 View::View(KisView* view, QObject *parent)
@@ -41,12 +80,7 @@ View::View(KisView* view, QObject *parent)
     , d(new Private)
 {
     d->view = view;
-    if (d->view) {
-        if (KoToolProxy *toolProxy = d->view->canvasBase()->toolProxy()) {
-            connect(toolProxy, SIGNAL(toolChanged(QString)), this, SIGNAL(currentToolChanged(QString)));
-        }
-        connect(d->view->resourceProvider(), SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), this, SIGNAL(currentBrushPresetChanged()));
-    }
+    d->reconnect(this);
 }
 
 View::~View()
@@ -84,6 +118,7 @@ void View::setDocument(Document *document)
 {
     if (!d->view || !document || !document->document()) return;
     d->view = d->view->replaceBy(document->document());
+    d->reconnect(this);
 }
 
 bool View::visible() const
@@ -159,7 +194,9 @@ void View::setBackGroundColor(ManagedColor *color)
 Resource *View::currentBrushPreset() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentPreset(), ResourceType::PaintOpPresets);
+    KoResourceSP preset = d->view->resourceProvider()->currentPreset();
+    if (!preset) return 0;
+    return new Resource(preset, ResourceType::PaintOpPresets);
 }
 
 void View::setCurrentBrushPreset(Resource *resource)

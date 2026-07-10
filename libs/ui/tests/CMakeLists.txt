@@ -21,7 +21,7 @@ kis_add_tests(
     KisSafeDocumentLoaderTest.cpp
     KisSurfaceColorSpaceWrapperTest.cpp
 
-    LINK_LIBRARIES kritaui kritatestsdk
+    LINK_LIBRARIES kritaui kritalibkis kritatestsdk
     )
 
 kis_add_tests(
@@ -102,6 +102,12 @@ kis_add_test( kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
 kis_add_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../../sdk/tests/testutil.cpp
     TEST_NAME kis_dummies_facade_test
     LINK_LIBRARIES kritaui kritatestsdk
+    )
+
+kis_add_test(
+    kis_view_signals_test.cpp ../../../krita/krita.qrc
+    TEST_NAME kis_view_signals_test
+    LINK_LIBRARIES kritaui kritalibkis kritatestsdk
     )
 
 

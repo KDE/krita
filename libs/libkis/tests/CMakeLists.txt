@@ -10,4 +10,3 @@ kis_add_tests(
     TestNotifier.cpp
     LINK_LIBRARIES kritalibkis kritatestsdk
     )
-

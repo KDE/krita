@@ -338,6 +338,10 @@ void KisView::setViewManager(KisViewManager *view)
 {
     d->viewManager = view;
 
+    if (!d->viewManager) {
+        return;
+    }
+
     KoToolManager::instance()->addController(&d->canvasController);
     KisShapeController* shapeController = dynamic_cast<KisShapeController*>(d->document->shapeController());
     shapeController->setInitialShapeForCanvas(&d->canvas);

@@ -30,12 +30,13 @@
 
 #include "kis_abstract_input_action.h"
 #include "kis_tool_invocation_action.h"
-#include "kis_pan_action.h"
-#include "kis_alternate_invocation_action.h"
-#include "kis_rotate_canvas_action.h"
-#include "kis_zoom_action.h"
-#include "KisPopupWidgetAction.h"
-#include "kis_change_primary_setting_action.h"
+// #include "kis_pan_action.h"
+// #include "kis_alternate_invocation_action.h"
+// #include "kis_rotate_canvas_action.h"
+// #include "kis_zoom_action.h"
+// #include "KisPopupWidgetAction.h"
+// #include "kis_change_primary_setting_action.h"
+#include "KisPopupWidgetInterface.h"
 
 #include "kis_shortcut_matcher.h"
 #include "kis_stroke_shortcut.h"
@@ -811,21 +812,22 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
 
         retval = d->matcher.touchEndEvent(touchEvent);
-        if (d->touchStrokeStarted) {
-            retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
-            d->startingPos = {0, 0};
-            d->previousPos = {0, 0};
-            d->touchStrokeStarted = false; // stroke ended
-        } else if (!d->touchStrokeBlocked
-                   && !KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
-                   && touchEvent->touchPoints().count() == 1) {
-            // If no stroke has been started while touch painting is enabled,
-            // the user tapped with one finger, but didn't make any motion that
-            // caused us to start a stroke. We produce a press and release in
-            // response so that the tool responds to their input.
-            d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
-            d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
-        }
+
+        // if (d->touchStrokeStarted) {
+        //     retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
+        //     d->startingPos = {0, 0};
+        //     d->previousPos = {0, 0};
+        //     d->touchStrokeStarted = false; // stroke ended
+        // } else if (!d->touchStrokeBlocked
+        //            && !KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
+        //            && touchEvent->touchPoints().count() == 1) {
+        //     // If no stroke has been started while touch painting is enabled,
+        //     // the user tapped with one finger, but didn't make any motion that
+        //     // caused us to start a stroke. We produce a press and release in
+        //     // response so that the tool responds to their input.
+        //     d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
+        //     d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
+        // }
 
         endTouch();
         d->allowMouseEvents();
@@ -960,25 +962,29 @@ bool KisInputManager::handleTouchBegin(QTouchEvent *touchEvent)
 bool KisInputManager::handleTouchUpdate(QTouchEvent *touchEvent)
 {
     QPointF currentPos = touchEvent->touchPoints().at(0).pos();
-    if (d->touchStrokeStarted
-        || (!d->touchStrokeBlocked
-            && !KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
-            && touchEvent->touchPoints().count() == 1 && touchEvent->touchPointStates() != Qt::TouchPointStationary
-            && (qAbs(currentPos.x() - d->previousPos.x()) > 1 // stop wobbliness which Qt sends us
-                || qAbs(currentPos.y() - d->previousPos.y()) > 1))) {
-        d->previousPos = currentPos;
-        if (!d->touchStrokeStarted) {
-            // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
-            bool retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
-            d->touchStrokeStarted = retval;
-            return retval;
-        } else {
-            // if it is a full-fledged stroke, then ignore (currentPos.x - previousPos.x)
-            bool retval = compressMoveEventCommon(touchEvent);
-            d->blockMouseEvents();
-            return retval;
-        }
-    } else {
+
+    // TODO: lower threshold for touch painting!
+
+    // if (d->touchStrokeStarted
+    //     || (!d->touchStrokeBlocked
+    //         && !KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
+    //         && touchEvent->touchPoints().count() == 1 && touchEvent->touchPointStates() != Qt::TouchPointStationary
+    //         && (qAbs(currentPos.x() - d->previousPos.x()) > 1 // stop wobbliness which Qt sends us
+    //             || qAbs(currentPos.y() - d->previousPos.y()) > 1))) {
+    //     d->previousPos = currentPos;
+    //     if (!d->touchStrokeStarted) {
+    //         // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
+    //         bool retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
+    //         d->touchStrokeStarted = retval;
+    //         return retval;
+    //     } else {
+    //         // if it is a full-fledged stroke, then ignore (currentPos.x - previousPos.x)
+    //         bool retval = compressMoveEventCommon(touchEvent);
+    //         d->blockMouseEvents();
+    //         return retval;
+    //     }
+    // } else
+    {
         KisAbstractInputAction::setInputManager(this);
         bool retval = d->matcher.touchUpdateEvent(touchEvent);
         d->touchHasBlockedPressEvents = retval;
@@ -1088,6 +1094,19 @@ void KisInputManager::profileChanged()
                 break;
             default:
                 break;
+            }
+        }
+
+        {
+            KisAbstractInputAction *action = profile->actionForId("Tool Invocation");
+            if (action) {
+#ifndef Q_OS_MACOS
+                // Touch painting shortcuts
+                d->addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, KisShortcutConfiguration::OneFingerDrag, true);
+                d->addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, KisShortcutConfiguration::OneFingerTap, true);
+#else
+                // TODO: implement code for MacOS!
+#endif
             }
         }
     }

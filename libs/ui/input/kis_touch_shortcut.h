@@ -28,10 +28,13 @@ class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
 
         int priority() const override;
         bool isHoldType() const;
+        bool isAvailable(KisInputActionGroupsMask mask) const override;
 
         void setMinimumTouchPoints( int min );
         void setMaximumTouchPoints( int max );
         void setDisableOnTouchPainting(bool disableOnTouchPainting);
+
+        void setIsTouchPainting(bool value);
 
         bool matchTapType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
         bool matchDragType(QTouchEvent *event, Qt::TouchPointStates allowedStates);

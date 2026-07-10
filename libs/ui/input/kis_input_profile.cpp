@@ -53,6 +53,16 @@ QList< KisShortcutConfiguration * > KisInputProfile::allShortcuts() const
     return d->shortcuts.values();
 }
 
+KisAbstractInputAction* KisInputProfile::actionForId(const QString &id) const
+{
+    for (auto it = d->shortcuts.begin(); it != d->shortcuts.end(); ++it) {
+        if (it.key()->id() == id) {
+            return it.key();
+        }
+    }
+    return nullptr;
+}
+
 QList< KisShortcutConfiguration * > KisInputProfile::shortcutsForAction(KisAbstractInputAction *action) const
 {
     if (d->shortcuts.contains(action)) {

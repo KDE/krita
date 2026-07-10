@@ -74,11 +74,11 @@ struct TestingAction : public KisAbstractInputAction
         Running
     };
 
-    TestingAction()
-        : KisAbstractInputAction("TestingAction")
+    TestingAction(const QString &id = "test")
+        : KisAbstractInputAction(id)
         , m_isHighResolution(false)
     {
-        setName("testing touch action");
+        setName(id);
         reset();
     }
     ~TestingAction() {}
@@ -192,7 +192,7 @@ KisTouchShortcut* createTouchShortcut(KisAbstractInputAction *action,
         // disable this type of shortcut when touch painting is active. Except
         // touch hold shortcuts, since touching and holding in one spot does
         // nothing otherwise and is therefore unambiguous.
-        s->setDisableOnTouchPainting(true);
+        //s->setDisableOnTouchPainting(true);
         Q_FALLTHROUGH();
     case KisShortcutConfiguration::OneFingerHold:
         s->setMinimumTouchPoints(1);
@@ -810,85 +810,111 @@ void KisInputManagerTest::testTouchMoves_data()
     QTest::addColumn<int>("fingerCount");
     QTest::addColumn<int>("eventsCount");
     QTest::addColumn<QPointF>("pointOffset");
-    QTest::addColumn<QList<int>>("triggeredShortcuts");
+    QTest::addColumn<bool>("enableTouchPainting");
+    QTest::addColumn<QList<int>>("triggeredTouchShortcuts");
+    QTest::addColumn<QList<int>>("triggeredPaintShortcuts");
 
     const QPointF dragOffset(10,10);
     const QPointF dirtyDragOffset(1,1);
     const QPointF tapOffset(0.5,0.5);
 
-    QTest::addRow("clean-1p-drag") << "touchCleanDrag" << 1 << 100 << dragOffset << QList<int>{15};
-    QTest::addRow("clean-2p-drag") << "touchCleanDrag" << 2 << 100 << dragOffset << QList<int>{16};
-    QTest::addRow("clean-3p-drag") << "touchCleanDrag" << 3 << 100 << dragOffset << QList<int>{17};
+    const bool touchPaintingOn = true;
+    const bool touchPaintingOff = false;
 
-    QTest::addRow("clean-1p-tap") << "touchCleanDrag" << 1 << 10 << tapOffset << QList<int>{20};
-    QTest::addRow("clean-2p-tap") << "touchCleanDrag" << 2 << 10 << tapOffset << QList<int>{21};
-    QTest::addRow("clean-3p-tap") << "touchCleanDrag" << 3 << 10 << tapOffset << QList<int>{22};
+    QTest::addRow("clean-1p-drag") << "touchCleanDrag" << 1 << 100 << dragOffset << touchPaintingOff << QList<int>{15} << QList<int>{};
+    QTest::addRow("clean-2p-drag") << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOff << QList<int>{16} << QList<int>{};
+    QTest::addRow("clean-3p-drag") << "touchCleanDrag" << 3 << 100 << dragOffset << touchPaintingOff << QList<int>{17} << QList<int>{};
+
+    QTest::addRow("clean-1p-drag-paint") << "touchCleanDrag" << 1 << 100 << dragOffset << touchPaintingOn << QList<int>{} << QList<int>{30};
+    QTest::addRow("clean-2p-drag-paint") << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOn << QList<int>{16} << QList<int>{};
+    QTest::addRow("clean-3p-drag-paint") << "touchCleanDrag" << 3 << 100 << dragOffset << touchPaintingOn << QList<int>{17} << QList<int>{};
+
+    QTest::addRow("clean-1p-tap") << "touchCleanDrag" << 1 << 10 << tapOffset << touchPaintingOff << QList<int>{20} << QList<int>{};
+    QTest::addRow("clean-2p-tap") << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOff << QList<int>{21} << QList<int>{};
+    QTest::addRow("clean-3p-tap") << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOff << QList<int>{22} << QList<int>{};
+
+    QTest::addRow("clean-1p-tap-paint") << "touchCleanDrag" << 1 << 10 << tapOffset << touchPaintingOn << QList<int>{} << QList<int>{31};
+    QTest::addRow("clean-2p-tap-paint") << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOn << QList<int>{21} << QList<int>{};
+    QTest::addRow("clean-3p-tap-paint") << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOn << QList<int>{22} << QList<int>{};
 
     // 16px is the threshold for distinguishing taps and drags (touch-begin + 16 steps + touch-end)
-    QTest::addRow("clean-1p-tap-upper-bound") << "touchCleanDrag" << 1 << 18 << QPointF(1, 0) << QList<int>{20};
-    QTest::addRow("clean-1p-drag-lower-bound") << "touchCleanDrag" << 1 << 19 << QPointF(1, 0) << QList<int>{15};
+    QTest::addRow("clean-1p-tap-upper-bound") << "touchCleanDrag" << 1 << 18 << QPointF(1, 0) << touchPaintingOff << QList<int>{20} << QList<int>{};
+    QTest::addRow("clean-1p-drag-lower-bound") << "touchCleanDrag" << 1 << 19 << QPointF(1, 0) << touchPaintingOff << QList<int>{15} << QList<int>{};
 
-    QTest::addRow("dirty-start-2p-drag") << "touchDragDirtyStart" << 2 << 100 << dirtyDragOffset << QList<int>{16};
-    QTest::addRow("dirty-start-3p-drag") << "touchDragDirtyStart" << 3 << 100 << dirtyDragOffset << QList<int>{17};
+    QTest::addRow("dirty-start-2p-drag") << "touchDragDirtyStart" << 2 << 100 << dirtyDragOffset << touchPaintingOff << QList<int>{16} << QList<int>{};
+    QTest::addRow("dirty-start-3p-drag") << "touchDragDirtyStart" << 3 << 100 << dirtyDragOffset << touchPaintingOff << QList<int>{17} << QList<int>{};
 
-    QTest::addRow("dirty-end-2p-drag") << "touchDragDirtyEnd" << 2 << 100 << dirtyDragOffset << QList<int>{16};
-    QTest::addRow("dirty-end-3p-drag") << "touchDragDirtyEnd" << 3 << 100 << dirtyDragOffset << QList<int>{17};
+    QTest::addRow("dirty-end-2p-drag") << "touchDragDirtyEnd" << 2 << 100 << dirtyDragOffset << touchPaintingOff << QList<int>{16} << QList<int>{};
+    QTest::addRow("dirty-end-3p-drag") << "touchDragDirtyEnd" << 3 << 100 << dirtyDragOffset << touchPaintingOff << QList<int>{17} << QList<int>{};
 
-    QTest::addRow("dirty-end-2p-tap") << "touchDragDirtyEnd" << 2 << 10 << tapOffset << QList<int>{21};
-    QTest::addRow("dirty-end-3p-tap") << "touchDragDirtyEnd" << 3 << 10 << tapOffset << QList<int>{22};
+    QTest::addRow("dirty-end-2p-tap") << "touchDragDirtyEnd" << 2 << 10 << tapOffset << touchPaintingOff << QList<int>{21} << QList<int>{};
+    QTest::addRow("dirty-end-3p-tap") << "touchDragDirtyEnd" << 3 << 10 << tapOffset << touchPaintingOff << QList<int>{22} << QList<int>{};
 
     // the current implementation is expected to switch to a "more-fingers-rich" shortcut immetiately
-    QTest::addRow("clean-2p-then-3p-drag") << "touchDragTwoThenThree" << 2 << 100 << dragOffset << QList<int>{16, 17};
+    QTest::addRow("clean-2p-then-3p-drag") << "touchDragTwoThenThree" << 2 << 100 << dragOffset << touchPaintingOff << QList<int>{16, 17} << QList<int>{};
 
     // the current implementation is expected to stay on the "finger-richest" shortcut and,
     // not to switch to a "finger-poorer" shortcut
-    QTest::addRow("clean-3p-then-2p-drag") << "touchDragThreeThenTwo" << 3 << 100 << dragOffset << QList<int>{17};
+    QTest::addRow("clean-3p-then-2p-drag") << "touchDragThreeThenTwo" << 3 << 100 << dragOffset << touchPaintingOff << QList<int>{17} << QList<int>{};
 
     // the 3-point gesture should be run twice during the same run
-    QTest::addRow("clean-3p-then-2p-then-3p-drag") << "touchDragThreeThenTwoThenThree" << 3 << 100 << dragOffset << QList<int>{17, 17};
+    QTest::addRow("clean-3p-then-2p-then-3p-drag") << "touchDragThreeThenTwoThenThree" << 3 << 100 << dragOffset << touchPaintingOff << QList<int>{17, 17} << QList<int>{};
 }
 
 void KisInputManagerTest::testTouchMoves()
 {
+    std::unique_ptr<TestingAction> paintAction(new TestingAction("paint-action"));
+    std::unique_ptr<TestingAction> a(new TestingAction("touch-action"));
+
     KisShortcutMatcher m;
     m.enterEvent();
 
-    TestingAction *a = new TestingAction();
-
     m.addShortcut(
-        createKeyShortcut(a, 10,
+        createKeyShortcut(a.get(), 10,
                           QSet<Qt::Key>() << Qt::Key_Shift,
                           Qt::Key_Enter));
 
     m.addShortcut(
-        createStrokeShortcut(a, 13,
+        createStrokeShortcut(a.get(), 13,
                              QSet<Qt::Key>(),
                              Qt::LeftButton));
 
-    // TODO: add a separate test for that!
-    // let single finger gestures to work
-    KisConfig(false).setTouchPainting(KisConfig::TOUCH_PAINTING_DISABLED);
+    m.addShortcut(
+        createTouchShortcut(a.get(), 15, KisShortcutConfiguration::OneFingerDrag));
+    m.addShortcut(
+        createTouchShortcut(a.get(), 16, KisShortcutConfiguration::TwoFingerDrag));
+    m.addShortcut(
+        createTouchShortcut(a.get(), 17, KisShortcutConfiguration::ThreeFingerDrag));
 
     m.addShortcut(
-        createTouchShortcut(a, 15, KisShortcutConfiguration::OneFingerDrag));
+        createTouchShortcut(a.get(), 20, KisShortcutConfiguration::OneFingerTap));
     m.addShortcut(
-        createTouchShortcut(a, 16, KisShortcutConfiguration::TwoFingerDrag));
+        createTouchShortcut(a.get(), 21, KisShortcutConfiguration::TwoFingerTap));
     m.addShortcut(
-        createTouchShortcut(a, 17, KisShortcutConfiguration::ThreeFingerDrag));
+        createTouchShortcut(a.get(), 22, KisShortcutConfiguration::ThreeFingerTap));
 
-    m.addShortcut(
-        createTouchShortcut(a, 20, KisShortcutConfiguration::OneFingerTap));
-    m.addShortcut(
-        createTouchShortcut(a, 21, KisShortcutConfiguration::TwoFingerTap));
-    m.addShortcut(
-        createTouchShortcut(a, 22, KisShortcutConfiguration::ThreeFingerTap));
 
+    {
+        // Touch painting shortcuts
+        auto *shortcutDrag = createTouchShortcut(paintAction.get(), 30, KisShortcutConfiguration::OneFingerDrag);
+        shortcutDrag->setIsTouchPainting(true);
+        m.addShortcut(shortcutDrag);
+
+        auto *shortcutTap = createTouchShortcut(paintAction.get(), 31, KisShortcutConfiguration::OneFingerTap);
+        shortcutTap->setIsTouchPainting(true);
+        m.addShortcut(shortcutTap);
+    }
 
     QFETCH(QString, sequenceName);
     QFETCH(int, fingerCount);
     QFETCH(int, eventsCount);
     QFETCH(QPointF, pointOffset);
-    QFETCH(QList<int>, triggeredShortcuts);
+    QFETCH(bool, enableTouchPainting);
+    QFETCH(QList<int>, triggeredTouchShortcuts);
+    QFETCH(QList<int>, triggeredPaintShortcuts);
+
+    KisConfig(false).setTouchPainting(enableTouchPainting ? KisConfig::TOUCH_PAINTING_ENABLED
+                                                          : KisConfig::TOUCH_PAINTING_DISABLED);
 
     std::unique_ptr<TouchSequenceGeneratorBase> strokeGenerator(
         createTouchSequenceGenerator(sequenceName, fingerCount, eventsCount - 1, pointOffset));
@@ -938,10 +964,14 @@ void KisInputManagerTest::testTouchMoves()
         }
     }
 
-    QCOMPARE(a->m_begunIndexes, triggeredShortcuts);
-    QCOMPARE(a->m_endedIndexes, triggeredShortcuts);
-    QCOMPARE(a->m_ended, true);
+    QCOMPARE(a->m_begunIndexes, triggeredTouchShortcuts);
+    QCOMPARE(a->m_endedIndexes, triggeredTouchShortcuts);
+    QCOMPARE(a->m_ended, !a->m_begunIndexes.isEmpty());
     //QCOMPARE(a->m_gotInput, true); // TODO!
+
+    QCOMPARE(paintAction->m_begunIndexes, triggeredPaintShortcuts);
+    QCOMPARE(paintAction->m_endedIndexes, triggeredPaintShortcuts);
+    QCOMPARE(paintAction->m_ended, !paintAction->m_begunIndexes.isEmpty());
 }
 
 #include "../input/wintab/kis_incremental_average.h"

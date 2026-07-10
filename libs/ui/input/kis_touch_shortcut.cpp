@@ -20,12 +20,14 @@ public:
         , maxTouchPoints(0)
         , type(type)
         , disableOnTouchPainting(false)
+        , isTouchPainting(false)
     { }
 
     int minTouchPoints;
     int maxTouchPoints;
     GestureAction type;
     bool disableOnTouchPainting;
+    bool isTouchPainting;
 };
 
 KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type)
@@ -42,7 +44,7 @@ KisTouchShortcut::~KisTouchShortcut()
 
 int KisTouchShortcut::priority() const
 {
-    return action()->priority();
+    return d->isTouchPainting ? std::numeric_limits<int>::max() : action()->priority();
 }
 
 bool KisTouchShortcut::isHoldType() const
@@ -67,6 +69,24 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
 void KisTouchShortcut::setDisableOnTouchPainting(bool disableOnTouchPainting)
 {
     d->disableOnTouchPainting = disableOnTouchPainting;
+}
+
+void KisTouchShortcut::setIsTouchPainting(bool value)
+{
+    d->isTouchPainting = value;
+}
+
+bool KisTouchShortcut::isAvailable(KisInputActionGroupsMask mask) const
+{
+    if (d->isTouchPainting && KisConfig(true).disableTouchOnCanvas()) {
+        return false;
+    }
+
+    // if (d->disableOnTouchPainting && !KisConfig(true).disableTouchOnCanvas()) {
+    //     return false;
+    // }
+
+    return KisAbstractShortcut::isAvailable(mask);
 }
 
 bool KisTouchShortcut::matchTapType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
@@ -115,6 +135,6 @@ bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates 
 {
     const int numStillActivePoints = countTouchPoints(event, allowedStates);
 
-    return (!d->disableOnTouchPainting || KisConfig(true).disableTouchOnCanvas())
-        && numStillActivePoints >= d->minTouchPoints && numStillActivePoints <= d->maxTouchPoints;
+    return /*(!d->disableOnTouchPainting || KisConfig(true).disableTouchOnCanvas())
+        &&*/ numStillActivePoints >= d->minTouchPoints && numStillActivePoints <= d->maxTouchPoints;
 }

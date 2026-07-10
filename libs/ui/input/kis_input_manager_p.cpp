@@ -558,10 +558,13 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut.release());
 }
 
-void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
+void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture, bool isTouchPainting)
 {
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index, gesture);
-    dbgKrita << "TouchAction:" << action->name();
+    if (isTouchPainting) {
+        shortcut->setIsTouchPainting(true);
+    }
+    dbgKrita << "TouchAction:" << action->name() << (isTouchPainting ? "touch-painting" : "");
     switch(gesture) {
 #ifndef Q_OS_MACOS
     case KisShortcutConfiguration::OneFingerTap:
@@ -570,7 +573,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         // disable this type of shortcut when touch painting is active. Except
         // touch hold shortcuts, since touching and holding in one spot does
         // nothing otherwise and is therefore unambiguous.
-        shortcut->setDisableOnTouchPainting(true);
+        //shortcut->setDisableOnTouchPainting(true);
         Q_FALLTHROUGH();
     case KisShortcutConfiguration::OneFingerHold:
         shortcut->setMinimumTouchPoints(1);

@@ -41,6 +41,12 @@ public:
      * \return A list of all shortcuts available.
      */
     QList<KisShortcutConfiguration *> allShortcuts() const;
+
+    /**
+     * Return the action object for a specific \p id
+     */
+    KisAbstractInputAction* actionForId(const QString &id) const;
+
     /**
      * \return A list of shortcuts associated with the given action.
      *

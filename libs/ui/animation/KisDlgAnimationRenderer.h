@@ -69,7 +69,7 @@ private Q_SLOTS:
     void setFFmpegPath(const QString& path);
 #endif
 
-    void frameRateChanged(int framerate);
+    void slotCheckWarnings();
 
 protected Q_SLOTS:
 #ifndef Q_OS_ANDROID
@@ -90,7 +90,6 @@ private:
 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
 
-    void checkWarnings();
 #ifndef Q_OS_ANDROID
     FFmpegValidationResult validateFFmpeg(const QString &ffmpegPath);
 

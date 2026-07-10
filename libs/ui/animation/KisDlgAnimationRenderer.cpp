@@ -145,7 +145,9 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
         connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
         connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
 
-        connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(frameRateChanged(int)));
+        connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(slotCheckWarnings()));
+        connect(m_page->intWidth, SIGNAL(valueChanged(int)), SLOT(slotCheckWarnings()));
+        connect(m_page->intHeight, SIGNAL(valueChanged(int)), SLOT(slotCheckWarnings()));
 
 #ifndef Q_OS_ANDROID
         connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(setFFmpegPath(QString)));
@@ -169,6 +171,7 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     }
 
     setMainWidget(m_page);
+    slotCheckWarnings();
 }
 
 KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
@@ -573,31 +576,47 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
         // Store configuration..
         cfg.setFFMpegLocation(ffmpegJsonObj["path"].toString());
 
-        checkWarnings();
+        slotCheckWarnings();
     }
 }
 #endif
 
-void KisDlgAnimationRenderer::checkWarnings()
+void KisDlgAnimationRenderer::slotCheckWarnings()
 {
+    setUpdatesEnabled(false);
     QStringList warnings;
+    bool exportMayFail = false;
 
-    QString videoType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
-    bool gif = looksLikeGif(videoType);
+    if (m_page->shouldExportOnlyVideo->isChecked()) {
+        QString videoType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
+        bool gif = looksLikeGif(videoType);
 
 #ifndef Q_OS_ANDROID
-    const QRegularExpression minVerFFMpegRX(R"(^n{0,1}(?:[0-3]|4\.[01])[\.\-])");
-    const QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
+        const QRegularExpression minVerFFMpegRX(R"(^n{0,1}(?:[0-3]|4\.[01])[\.\-])");
+        const QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
 
-    if (gif && minVerFFMpegMatch.hasMatch()) {
-        warnings << i18nc("ffmpeg warning checks", "FFmpeg must be at least version 4.2+ for GIF transparency to work");
-    }
+        if (gif && minVerFFMpegMatch.hasMatch()) {
+            warnings << i18nc("ffmpeg warning checks",
+                              "FFmpeg must be at least version 4.2+ for GIF transparency to work");
+        }
 #endif
 
-    if (gif && m_page->intFramesPerSecond->value() > 50) {
-        warnings << i18nc("ffmpeg warning checks",
-                          "Animated GIF images cannot have a framerate higher than 50. The framerate will be reduced "
-                          "to 50 frames per second");
+        int fps = m_page->intFramesPerSecond->value();
+        if (gif && fps > 50) {
+            warnings << i18nc("ffmpeg warning checks",
+                              "Animated GIF images cannot have a framerate higher than 50. The framerate will be "
+                              "reduced to 50 frames per second");
+        }
+
+        if (fps > 30) {
+            exportMayFail = true;
+            warnings << i18nc("ffmpeg warning checks", "FPS beyond 30 are not widely supported.");
+        }
+
+        if (m_page->intWidth->value() > 1920 || m_page->intHeight->value() > 1920) {
+            exportMayFail = true;
+            warnings << i18nc("ffmpeg warnings checks", "Dimensions larger than 1920 pixels are not widely supported.");
+        }
     }
 
     m_page->lblWarnings->setVisible(!warnings.isEmpty());
@@ -611,6 +630,13 @@ void KisDlgAnimationRenderer::checkWarnings()
             text.append("</li>");
         }
         text.append("</ul></p>");
+        if (exportMayFail) {
+            text.append(QStringLiteral("<p>"));
+            text.append(
+                i18nc("ffmpeg warning checks", "The export may fail and some devices may not be able to play it.")
+                    .toHtmlEscaped());
+            text.append(QStringLiteral("</p>"));
+        }
         m_page->lblWarnings->setText(text);
 
         m_page->lblWarnings->setPixmap(
@@ -618,6 +644,7 @@ void KisDlgAnimationRenderer::checkWarnings()
     }
 
     m_page->adjustSize();
+    setUpdatesEnabled(true);
 }
 
 #ifndef Q_OS_ANDROID
@@ -639,7 +666,7 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
 
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
-    checkWarnings();
+    slotCheckWarnings();
 
     QString videoFileName = defaultVideoFileName(m_doc, mimeType);
 
@@ -931,12 +958,8 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
          KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
          m_page->shouldExportOnlyImageSequence->setChecked(true);
     }
-}
 
-void KisDlgAnimationRenderer::frameRateChanged(int framerate)
-{
-    Q_UNUSED(framerate);
-    checkWarnings();
+    slotCheckWarnings();
 }
 
 void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)

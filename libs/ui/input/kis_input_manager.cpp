@@ -30,12 +30,6 @@
 
 #include "kis_abstract_input_action.h"
 #include "kis_tool_invocation_action.h"
-// #include "kis_pan_action.h"
-// #include "kis_alternate_invocation_action.h"
-// #include "kis_rotate_canvas_action.h"
-// #include "kis_zoom_action.h"
-// #include "KisPopupWidgetAction.h"
-// #include "kis_change_primary_setting_action.h"
 #include "KisPopupWidgetInterface.h"
 
 #include "kis_shortcut_matcher.h"
@@ -722,7 +716,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->lastPointCount = touchEvent->touchPoints().size();
             d->startingPos = touchEvent->touchPoints().at(0).pos();
             d->previousPos = d->startingPos;
-            d->touchStrokeBlocked = d->lastPointCount > 1;
             // we don't want to lose this event
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             KoPointerEvent::copyQtPointerEvent(touchEvent, d->originatingTouchBeginEvent);
@@ -744,9 +737,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 retval = handleTouchBegin(touchEvent);
             }
 
-            KIS_SAFE_ASSERT_RECOVER(!d->touchStrokeStarted) {
-                d->touchStrokeStarted = false;
-            }
             d->resetCompressor();
             event->accept();
         }
@@ -764,9 +754,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         int eventPointCount = touchEvent->touchPoints().size();
         d->lastPointCount = eventPointCount;
-        if (!d->touchStrokeStarted && !d->touchStrokeBlocked) {
-            d->touchStrokeBlocked = d->lastPointCount > 1;
-        }
 
 #ifdef Q_OS_MAC
         int count = 0;
@@ -791,9 +778,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 #ifdef Q_OS_MACOS
         }
 #endif
-        // if the event isn't handled, Qt starts to send MouseEvents
-        if (!KisConfig(true).disableTouchOnCanvas())
-            retval = true;
 
         event->accept();
         break;
@@ -813,29 +797,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         retval = d->matcher.touchEndEvent(touchEvent);
 
-        // if (d->touchStrokeStarted) {
-        //     retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
-        //     d->startingPos = {0, 0};
-        //     d->previousPos = {0, 0};
-        //     d->touchStrokeStarted = false; // stroke ended
-        // } else if (!d->touchStrokeBlocked
-        //            && !KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
-        //            && touchEvent->touchPoints().count() == 1) {
-        //     // If no stroke has been started while touch painting is enabled,
-        //     // the user tapped with one finger, but didn't make any motion that
-        //     // caused us to start a stroke. We produce a press and release in
-        //     // response so that the tool responds to their input.
-        //     d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
-        //     d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
-        // }
-
         endTouch();
         d->allowMouseEvents();
-        d->touchStrokeBlocked = false;
-
-        // if the event isn't handled, Qt starts to send MouseEvents
-        if (!KisConfig(true).disableTouchOnCanvas())
-            retval = true;
 
         event->accept();
         break;
@@ -878,8 +841,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->lastPointCount = 0;
         d->startingPos = {0, 0};
         d->previousPos = {0, 0};
-        d->touchStrokeStarted = false;
-        d->touchStrokeBlocked = false;
         retval = true;
         event->accept();
         break;
@@ -927,6 +888,9 @@ bool KisInputManager::startTouch(bool &retval)
 {
     Q_UNUSED(retval);
 
+    // TODO: can we remove that? It should be covered by the
+    // touch events stream
+
     // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
     if (KisConfig(true).disableTouchOnCanvas()) {
         d->eatOneMousePress();
@@ -961,35 +925,10 @@ bool KisInputManager::handleTouchBegin(QTouchEvent *touchEvent)
 
 bool KisInputManager::handleTouchUpdate(QTouchEvent *touchEvent)
 {
-    QPointF currentPos = touchEvent->touchPoints().at(0).pos();
-
-    // TODO: lower threshold for touch painting!
-
-    // if (d->touchStrokeStarted
-    //     || (!d->touchStrokeBlocked
-    //         && !KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
-    //         && touchEvent->touchPoints().count() == 1 && touchEvent->touchPointStates() != Qt::TouchPointStationary
-    //         && (qAbs(currentPos.x() - d->previousPos.x()) > 1 // stop wobbliness which Qt sends us
-    //             || qAbs(currentPos.y() - d->previousPos.y()) > 1))) {
-    //     d->previousPos = currentPos;
-    //     if (!d->touchStrokeStarted) {
-    //         // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
-    //         bool retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
-    //         d->touchStrokeStarted = retval;
-    //         return retval;
-    //     } else {
-    //         // if it is a full-fledged stroke, then ignore (currentPos.x - previousPos.x)
-    //         bool retval = compressMoveEventCommon(touchEvent);
-    //         d->blockMouseEvents();
-    //         return retval;
-    //     }
-    // } else
-    {
-        KisAbstractInputAction::setInputManager(this);
-        bool retval = d->matcher.touchUpdateEvent(touchEvent);
-        d->touchHasBlockedPressEvents = retval;
-        return retval;
-    }
+    KisAbstractInputAction::setInputManager(this);
+    bool retval = d->matcher.touchUpdateEvent(touchEvent);
+    d->touchHasBlockedPressEvents = retval;
+    return retval;
 }
 
 void KisInputManager::slotCompressedMoveEvent()

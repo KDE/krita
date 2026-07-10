@@ -2,12 +2,15 @@
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 #include <QAtomicInt>
+#include <QCoreApplication>
 #include <QImage>
 #include <QImageReader>
+#include <QProgressDialog>
 #include <QRunnable>
 #include <QThreadPool>
 
 #include <functional>
+#include <memory>
 
 #include <klocalizedstring.h>
 
@@ -158,6 +161,84 @@ KisMediaEncoderWrapper::KisMediaEncoderWrapper(QObject *parent)
 KisMediaEncoderWrapper::~KisMediaEncoderWrapper()
 {
     reset();
+}
+
+KisImportExportErrorCode KisMediaEncoderWrapper::start(const KisMediaEncoderWrapperSettings &settings, bool batchMode)
+{
+    reset();
+
+    KisMediaEncoderRunnable *runnable = makeSupportedRunnable(settings);
+    ImportExportCodes::ErrorCodeID resultCode = ImportExportCodes::InternalError;
+    if (runnable) {
+        connect(
+            runnable,
+            &KisMediaEncoderRunnable::sigCompleted,
+            this,
+            [&resultCode] {
+                resultCode = ImportExportCodes::OK;
+            },
+            Qt::DirectConnection);
+        connect(
+            runnable,
+            &KisMediaEncoderRunnable::sigCancelled,
+            this,
+            [&resultCode] {
+                resultCode = ImportExportCodes::Cancelled;
+            },
+            Qt::DirectConnection);
+        connect(
+            runnable,
+            &KisMediaEncoderRunnable::sigFailed,
+            this,
+            [&resultCode](const QString &errorMessage) {
+                warnFile << "Media encoder export error:" << errorMessage;
+                resultCode = ImportExportCodes::OK;
+            },
+            Qt::DirectConnection);
+        connect(this,
+                &KisMediaEncoderWrapper::sigCancelRequested,
+                runnable,
+                &KisMediaEncoderRunnable::slotHandleCancelRequested,
+                Qt::DirectConnection);
+
+        QProgressDialog *progressDlg;
+        if (batchMode) {
+            progressDlg = nullptr;
+        } else {
+            progressDlg = new QProgressDialog;
+            progressDlg->setLabelText(i18n("Rendering animation..."));
+            connect(
+                runnable,
+                &KisMediaEncoderRunnable::sigProgressUpdated,
+                this,
+                [progressDlg, frameCount = settings.inputFiles.size()](int frameNo) {
+                    int progress;
+                    if (frameNo < 0) {
+                        progress = 0;
+                    } else if (frameNo >= frameCount) {
+                        progress = 100;
+                    } else {
+                        progress = qRound(qreal(frameNo) / qreal(frameCount) * 100.0);
+                    }
+                    progressDlg->setValue(progress);
+                    QCoreApplication::processEvents();
+                },
+                Qt::DirectConnection);
+            connect(progressDlg,
+                    &QProgressDialog::canceled,
+                    this,
+                    &KisMediaEncoderWrapper::sigCancelRequested,
+                    Qt::DirectConnection);
+            progressDlg->show();
+            QCoreApplication::processEvents();
+        }
+
+        m_runnable = runnable;
+        runnable->run();
+        delete runnable;
+        delete progressDlg;
+    }
+    return KisImportExportErrorCode(resultCode);
 }
 
 void KisMediaEncoderWrapper::startNonBlocking(const KisMediaEncoderWrapperSettings &settings)

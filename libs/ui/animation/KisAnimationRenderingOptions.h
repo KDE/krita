@@ -18,11 +18,16 @@ public:
     KisAnimationRenderingOptions();
 
     QString lastDocumentPath;
-    QString videoMimeType;
-    QString frameMimeType;
+#ifdef Q_OS_ANDROID
+    QString videoFormatKey;
+    QString videoFormatPreferencesJson;
+#else
+    QString videoMimeType = QStringLiteral("video/mp4");
+#endif
+    QString frameMimeType = QStringLiteral("image/png");
 
-    QString basename;
-    QString directory;
+    QString basename = QStringLiteral("frame");
+    QString directory = QStringLiteral("");
     int firstFrame = 0;
     int lastFrame = 0;
     int sequenceStart = 0;
@@ -32,22 +37,28 @@ public:
     bool includeAudio = false;
     bool wantsOnlyUniqueFrameSequence = false;
 
+#ifndef Q_OS_ANDROID
     QString ffmpegPath;
+#endif
     int frameRate = 25;
     int width = 0;
     int height = 0;
     QString scaleFilter;
     QString videoFileName;
 
+#ifndef Q_OS_ANDROID
     QString customFFMpegOptions;
+#endif
     KisPropertiesConfigurationSP frameExportConfig;
 
+#ifndef Q_OS_ANDROID
     QString resolveAbsoluteDocumentFilePath(const QString &documentPath) const;
     QString resolveAbsoluteVideoFilePath(const QString &documentPath) const;
     QString resolveAbsoluteFramesDirectory(const QString &documentPath) const;
 
     QString resolveAbsoluteVideoFilePath() const;
     QString resolveAbsoluteFramesDirectory() const;
+#endif
 
 
     enum RenderMode {

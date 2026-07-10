@@ -300,6 +300,7 @@ public:
             settings->inputFilePaths,
             KisMediaEncoderWrapper::getFormatByKey(settings->selectedFormat),
             settings->formatPreferences.value(settings->selectedFormat).toMap(),
+            QString(),
             settings->resize ? settings->size : settings->imageSize,
             settings->inputFps,
             settings->fps,

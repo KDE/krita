@@ -13,6 +13,9 @@
 
 #include <kis_types.h>
 
+#ifdef Q_OS_ANDROID
+#include <QVariantMap>
+#endif
 
 #include "kritaui_export.h"
 
@@ -48,7 +51,9 @@ public:
     KisAnimationRenderingOptions getEncoderOptions() const;
 
 private Q_SLOTS:
+#ifndef Q_OS_ANDROID
     void selectRenderType(int i);
+#endif
     void selectRenderOptions();
     /**
      * @brief sequenceMimeTypeSelected
@@ -60,32 +65,33 @@ private Q_SLOTS:
     void slotLockAspectRatioDimensionsHeight(int height);
 
     void slotExportTypeChanged();
+#ifndef Q_OS_ANDROID
     void setFFmpegPath(const QString& path);
+#endif
 
     void frameRateChanged(int framerate);
 
 protected Q_SLOTS:
-
+#ifndef Q_OS_ANDROID
     void slotButtonClicked(int button) override;
+#endif
     void slotDialogAccepted();
 
 
 private: 
-#ifdef Q_OS_ANDROID
-    static constexpr bool PLATFORM_SUPPORTS_FFMPEG = false;
-#else
-    static constexpr bool PLATFORM_SUPPORTS_FFMPEG = true;
-#endif
-
+#ifndef Q_OS_ANDROID
     enum FFmpegValidationResult {
         VALID = 1,
         INVALID = 0,
         NOT_A_BINARY = -1,
         COMPRESSED_FORMAT = -2
     };
+#endif
 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
-    void ffmpegWarningCheck();
+
+    void checkWarnings();
+#ifndef Q_OS_ANDROID
     FFmpegValidationResult validateFFmpeg(const QString &ffmpegPath);
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
@@ -95,19 +101,34 @@ private:
                                               const QStringList &availableEncoders,
                                               QString *customFFMpegOptionsString,
                                               bool *forceHDRVideo);
+#endif
 
     static void filterSequenceMimeTypes(QStringList &mimeTypes);
+
+#ifndef Q_OS_ANDROID
     static QStringList makeVideoMimeTypesList();
     QStringList filterMimeTypeListByAvailableEncoders(const QStringList &mimeTypes);
+#endif
     static bool imageMimeSupportsHDR(QString &hdr);
+
+#ifdef Q_OS_ANDROID
+    static QVariantMap loadVideoFormatPreferences();
+    static void saveVideoFormatPreferences(const QVariantMap &value);
+#endif
 
     static KisPropertiesConfigurationSP loadLastConfiguration(QString configurationID);
     static void saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config);
+
+    static bool looksLikeGif(const QString &videoType);
 
 private:
     KisImageSP m_image;
     KisDocument *m_doc;
 
+#ifdef Q_OS_ANDROID
+    QString m_videoFileName;
+    QVariantMap m_videoFormatPreferences;
+#else
     QString m_customFFMpegOptionsString;
     QString ffmpegVersion = "None";
 
@@ -115,6 +136,7 @@ private:
     QMap<QString, QStringList> ffmpegEncoderTypes; // Maps supported output format to available list of encoder(s)
 
     bool m_wantsRenderWithHDR = false;
+#endif
 
     WdgAnimationRenderer *m_page {0};
 };

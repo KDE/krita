@@ -440,6 +440,7 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
 
     // Encode the frames.
     Frame frame;
+    int swsFlags = ctx.getSwsFlags(settings().scaleFilter);
     while (nextFrame(frame)) {
         if (isCancelled()) {
             return EncodeResult::Cancelled;
@@ -516,7 +517,7 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
                                                           outputWidth,
                                                           outputHeight,
                                                           outputPixelFormat,
-                                                          SWS_FAST_BILINEAR);
+                                                          swsFlags);
             if (!swsContext) {
                 ctx.setInternalErrorMessage(QStringLiteral("sws_getCachedContext"));
                 return EncodeResult::Failed;

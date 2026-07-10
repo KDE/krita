@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -44643,7 +44643,7 @@ msgstr "Prethodni"
 msgid "Next frames"
 msgstr "Najbolje za tačkaste boje"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -44652,7 +44652,7 @@ msgstr[0] "Ukloni pretpodešavanje"
 msgstr[1] "Ukloni pretpodešavanje"
 msgstr[2] "Ukloni pretpodešavanje"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

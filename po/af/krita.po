@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -42393,7 +42393,7 @@ msgstr "Wit"
 msgid "Next frames"
 msgstr "Verwyder Laag"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -42401,7 +42401,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Verwyder Laag"
 msgstr[1] "Verwyder Laag"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

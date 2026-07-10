@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -43800,7 +43800,7 @@ msgstr "Previous frames colour:"
 msgid "Next frames"
 msgstr "Next frames colour"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -43808,7 +43808,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Remove frame and shift"
 msgstr[1] "Remove %1 frames and shift"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Mirror Frames"

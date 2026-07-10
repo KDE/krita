@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2026-06-30 09:51+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -43600,7 +43600,7 @@ msgstr "Fotogrames anteriors"
 msgid "Next frames"
 msgstr "Fotogrames següents"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -43608,7 +43608,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Elimina el fotograma i desplaça"
 msgstr[1] "Elimina els %1 fotogrames i desplaça"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Fotogrames en espill"

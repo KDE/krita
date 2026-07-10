@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2026-06-30 07:58-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -43479,7 +43479,7 @@ msgstr "Quadro anterior"
 msgid "Next frames"
 msgstr "Próxima quadro"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -43487,7 +43487,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Remover quadro e deslocamento"
 msgstr[1] "Remover %1 quadros e deslocamentos"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Espelhar Quadros"

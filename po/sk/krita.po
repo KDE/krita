@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -43363,7 +43363,7 @@ msgstr "Predchádzajúce snímky"
 msgid "Next frames"
 msgstr "Nasledujúce snímky"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -43372,7 +43372,7 @@ msgstr[0] "Odstrániť snímka and shift"
 msgstr[1] "Odstrániť %1 snímky and shift"
 msgstr[2] "Odstrániť %1 snímky and shift"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Zrkadliť snímky"

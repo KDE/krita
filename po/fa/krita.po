@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -43093,7 +43093,7 @@ msgstr "پالایه‌ها"
 msgid "Next frames"
 msgstr "حذف لایه"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -43101,7 +43101,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "حذف لایه"
 msgstr[1] ""
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

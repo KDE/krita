@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -42431,7 +42431,7 @@ msgstr "Фільтр:"
 msgid "Next frames"
 msgstr "Выдаленне пласта"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -42440,7 +42440,7 @@ msgstr[0] "Выдаленне пласта"
 msgstr[1] "Выдаленне пласта"
 msgstr[2] "Выдаленне пласта"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

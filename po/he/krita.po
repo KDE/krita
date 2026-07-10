@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2026-06-18 08:58+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -42548,7 +42548,7 @@ msgstr "התמוניות הקודמות"
 msgid "Next frames"
 msgstr "התמוניות הבאות"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -42558,7 +42558,7 @@ msgstr[1] "הסר שכבה"
 msgstr[2] ""
 msgstr[3] ""
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "שיקוף תמוניות"

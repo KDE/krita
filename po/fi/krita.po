@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2026-01-19 18:02+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -45687,7 +45687,7 @@ msgstr "Edelliset kehykset"
 msgid "Next frames"
 msgstr "Seuraavat kehykset"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, fuzzy, kde-format
 #| msgid "Remove Frames"
 msgctxt "(qtundo-format)"
@@ -45696,7 +45696,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Poista ruutuja"
 msgstr[1] "Poista ruutuja"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

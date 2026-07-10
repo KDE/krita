@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-03 02:41+0000\n"
+"POT-Creation-Date: 2026-07-10 02:36+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -43711,7 +43711,7 @@ msgstr "Frámaí roimhe seo"
 msgid "Next frames"
 msgstr "Na frámaí seo chugainn"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:423
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -43722,7 +43722,7 @@ msgstr[2] "Bain %1 fráma agus bog"
 msgstr[3] "Bain %1 fráma agus bog"
 msgstr[4] "Bain %1 fráma agus bog"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Frámaí Scátháin"

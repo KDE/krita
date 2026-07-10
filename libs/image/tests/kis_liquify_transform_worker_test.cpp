@@ -11,6 +11,9 @@
 #include <KoColor.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <QDomDocument>
+#include <QScopedPointer>
+#include <cmath>
 
 #include <testutil.h>
 #include <kis_liquify_transform_worker.h>
@@ -76,6 +79,83 @@ KisLiquifyTransformWorker* getWorkerFromXml(QString filename)
 
 }
 
+namespace {
+
+KisLiquifyTransformWorker* cloneWorkerWithRebuiltSpatialIndex(const KisLiquifyTransformWorker &worker)
+{
+    QDomDocument doc;
+    QDomElement root = doc.createElement("data");
+    doc.appendChild(root);
+    worker.toXML(&root);
+    return KisLiquifyTransformWorker::fromXML(root);
+}
+
+QPointF mapPoint(const QPointF &pt,
+                 const QPointF &center,
+                 const QTransform &linearTransform,
+                 const QPointF &translation)
+{
+    return center + translation + linearTransform.map(pt - center);
+}
+
+void setTransformedPoints(KisLiquifyTransformWorker *worker,
+                          const QPointF &center,
+                          const QTransform &linearTransform,
+                          const QPointF &translation)
+{
+    for (int i = 0; i < worker->transformedPoints().size(); i++) {
+        worker->transformedPoints()[i] =
+            mapPoint(worker->originalPoints()[i], center, linearTransform, translation);
+    }
+}
+
+qreal maxDistance(const QVector<QPointF> &lhs, const QVector<QPointF> &rhs)
+{
+    KIS_ASSERT(lhs.size() == rhs.size());
+
+    qreal maxDistance = 0.0;
+    for (int i = 0; i < lhs.size(); i++) {
+        maxDistance = qMax(maxDistance, kisDistance(lhs[i], rhs[i]));
+    }
+
+    return maxDistance;
+}
+
+qreal averageDistance(const QVector<QPointF> &lhs, const QVector<QPointF> &rhs)
+{
+    KIS_ASSERT(lhs.size() == rhs.size());
+
+    qreal distance = 0.0;
+    for (int i = 0; i < lhs.size(); i++) {
+        distance += kisDistance(lhs[i], rhs[i]);
+    }
+
+    return distance / lhs.size();
+}
+
+QPointF weightedTransformedCentroid(KisLiquifyTransformWorker *worker,
+                                    const QPointF &base,
+                                    qreal sigma)
+{
+    const qreal maxDist = 3.0 * sigma;
+    QPointF centroid;
+    qreal weightSum = 0.0;
+
+    Q_FOREACH (const QPointF &pt, worker->transformedPoints()) {
+        const QPointF diff = pt - base;
+        const qreal dist = KisAlgebra2D::norm(diff);
+        if (dist > maxDist) continue;
+
+        const qreal weight = exp(-0.5 * pow2(dist / sigma));
+        centroid += pt * weight;
+        weightSum += weight;
+    }
+
+    return centroid / weightSum;
+}
+
+}
+
 
 void KisLiquifyTransformWorkerTest::testPoints()
 {
@@ -130,52 +210,163 @@ void KisLiquifyTransformWorkerTest::testPoints()
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "unity");
 }
 
-void KisLiquifyTransformWorkerTest::testRelaxPoints()
+void KisLiquifyTransformWorkerTest::testRestoreShapePreservesSimilarity()
 {
     const QRect bounds(0, 0, 64, 64);
     const int pixelPrecision = 8;
 
     KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
 
-    const QPoint centerCell(4, 4);
-    const int centerIndex = worker.pointToIndex(centerCell);
-    const QPointF centerPoint = worker.originalPoints()[centerIndex];
+    const QPointF centerPoint(32.0, 32.0);
+    const QPointF translation(17.0, -6.0);
 
-    worker.translatePoints(centerPoint, QPointF(30.0, 0.0), 8.0, false, 1.0);
+    QTransform transform;
+    transform.rotateRadians(M_PI / 5.0);
+    transform.scale(1.4, 1.4);
 
-    const QPointF oldCenterDisplacement =
-        worker.transformedPoints()[centerIndex] - worker.originalPoints()[centerIndex];
-    worker.relaxPoints(worker.transformedPoints()[centerIndex], 1.0, 8.0);
+    setTransformedPoints(&worker, centerPoint, transform, translation);
 
-    const QPointF centerDisplacement =
-        worker.transformedPoints()[centerIndex] - worker.originalPoints()[centerIndex];
+    QScopedPointer<KisLiquifyTransformWorker> indexedWorker(
+        cloneWorkerWithRebuiltSpatialIndex(worker));
 
-    QVERIFY(centerDisplacement.x() < oldCenterDisplacement.x());
-    QVERIFY(centerDisplacement.x() > 0.0);
-    QVERIFY(qAbs(centerDisplacement.y()) < 1e-6);
+    const QVector<QPointF> before = indexedWorker->transformedPoints();
+    indexedWorker->restoreShapePoints(centerPoint + translation, 1.0, 100.0, true, true, false);
+
+    QVERIFY(maxDistance(before, indexedWorker->transformedPoints()) < 1e-4);
 }
 
-void KisLiquifyTransformWorkerTest::testAffineRelaxPoints()
+void KisLiquifyTransformWorkerTest::testRestoreShapeRestoresRotationAndScale()
 {
     const QRect bounds(0, 0, 64, 64);
     const int pixelPrecision = 8;
 
     KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
 
-    const QPoint centerCell(4, 4);
-    const int centerIndex = worker.pointToIndex(centerCell);
-    const QPointF centerPoint = worker.originalPoints()[centerIndex];
+    const QPointF centerPoint(32.0, 32.0);
+    const QPointF translation(17.0, -6.0);
 
-    worker.rotatePoints(centerPoint, M_PI / 2.0, 100.0, false, 1.0);
-    const QPointF affinePosition = worker.transformedPoints()[centerIndex];
+    QTransform transform;
+    transform.rotateRadians(M_PI / 4.0);
+    transform.scale(1.8, 1.8);
 
-    worker.translatePoints(affinePosition, QPointF(25.0, 0.0), 8.0, false, 1.0);
-    const qreal corruptedDistance = kisDistance(worker.transformedPoints()[centerIndex], affinePosition);
+    setTransformedPoints(&worker, centerPoint, transform, translation);
 
-    worker.affineRelaxPoints(worker.transformedPoints()[centerIndex], 1.0, 8.0);
-    const qreal relaxedDistance = kisDistance(worker.transformedPoints()[centerIndex], affinePosition);
+    QScopedPointer<KisLiquifyTransformWorker> indexedWorker(
+        cloneWorkerWithRebuiltSpatialIndex(worker));
 
-    QVERIFY(relaxedDistance < corruptedDistance);
+    const QPoint sampleCell(5, 4);
+    const int sampleIndex = indexedWorker->pointToIndex(sampleCell);
+    const QPointF expectedRestoredPosition =
+        centerPoint + translation + (indexedWorker->originalPoints()[sampleIndex] - centerPoint);
+
+    const qreal beforeDistance =
+        kisDistance(indexedWorker->transformedPoints()[sampleIndex], expectedRestoredPosition);
+
+    indexedWorker->restoreShapePoints(centerPoint + translation, 1.0, 100.0, false, false, false);
+
+    const qreal afterDistance =
+        kisDistance(indexedWorker->transformedPoints()[sampleIndex], expectedRestoredPosition);
+
+    QVERIFY(afterDistance < beforeDistance);
+}
+
+void KisLiquifyTransformWorkerTest::testRestoreShapeRestoresScalePreservingRotation()
+{
+    const QRect bounds(0, 0, 64, 64);
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
+
+    const QPointF centerPoint(32.0, 32.0);
+    const QPointF translation(17.0, -6.0);
+
+    QTransform fullTransform;
+    fullTransform.rotateRadians(M_PI / 4.0);
+    fullTransform.scale(1.8, 1.8);
+
+    QTransform rotationOnlyTransform;
+    rotationOnlyTransform.rotateRadians(M_PI / 4.0);
+
+    setTransformedPoints(&worker, centerPoint, fullTransform, translation);
+
+    QScopedPointer<KisLiquifyTransformWorker> indexedWorker(
+        cloneWorkerWithRebuiltSpatialIndex(worker));
+
+    const QPoint sampleCell(5, 4);
+    const int sampleIndex = indexedWorker->pointToIndex(sampleCell);
+    const QPointF expectedRestoredPosition =
+        mapPoint(indexedWorker->originalPoints()[sampleIndex],
+                 centerPoint,
+                 rotationOnlyTransform,
+                 translation);
+
+    const qreal beforeDistance =
+        kisDistance(indexedWorker->transformedPoints()[sampleIndex], expectedRestoredPosition);
+
+    indexedWorker->restoreShapePoints(centerPoint + translation, 1.0, 100.0, true, false, false);
+
+    const qreal afterDistance =
+        kisDistance(indexedWorker->transformedPoints()[sampleIndex], expectedRestoredPosition);
+
+    QVERIFY(afterDistance < beforeDistance);
+}
+
+void KisLiquifyTransformWorkerTest::testRestoreShapePreservesCentroid()
+{
+    const QRect bounds(0, 0, 64, 64);
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
+
+    const QPointF centerPoint(32.0, 32.0);
+    const QPointF translation(9.0, 12.0);
+    const QPointF base = centerPoint + translation;
+    const qreal sigma = 60.0;
+
+    QTransform transform(1.8, 0.2,
+                         0.6, 0.7,
+                         0.0, 0.0);
+    setTransformedPoints(&worker, centerPoint, transform, translation);
+
+    QScopedPointer<KisLiquifyTransformWorker> indexedWorker(
+        cloneWorkerWithRebuiltSpatialIndex(worker));
+
+    const QPointF beforeCentroid =
+        weightedTransformedCentroid(indexedWorker.data(), base, sigma);
+    indexedWorker->restoreShapePoints(base, 1.0, sigma, false, false, false);
+    const QPointF afterCentroid =
+        weightedTransformedCentroid(indexedWorker.data(), base, sigma);
+
+    QVERIFY(kisDistance(beforeCentroid, afterCentroid) < 1e-4);
+}
+
+void KisLiquifyTransformWorkerTest::testRestoreShapeCanPreserveStretch()
+{
+    const QRect bounds(0, 0, 64, 64);
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(bounds, 0, pixelPrecision);
+
+    const QPointF centerPoint(32.0, 32.0);
+    const QPointF translation(9.0, 12.0);
+    const QPointF base = centerPoint + translation;
+
+    QTransform transform;
+    transform.scale(2.0, 0.5);
+    setTransformedPoints(&worker, centerPoint, transform, translation);
+
+    QScopedPointer<KisLiquifyTransformWorker> restoreStretchWorker(
+        cloneWorkerWithRebuiltSpatialIndex(worker));
+    QScopedPointer<KisLiquifyTransformWorker> restoreShapeWorker(
+        cloneWorkerWithRebuiltSpatialIndex(worker));
+
+    const QVector<QPointF> before = restoreStretchWorker->transformedPoints();
+
+    restoreStretchWorker->restoreShapePoints(base, 1.0, 100.0, false, true, true);
+    restoreShapeWorker->restoreShapePoints(base, 1.0, 100.0, false, true, false);
+
+    QVERIFY(averageDistance(before, restoreStretchWorker->transformedPoints()) <
+            averageDistance(before, restoreShapeWorker->transformedPoints()));
 }
 
 void KisLiquifyTransformWorkerTest::testPointsQImage()

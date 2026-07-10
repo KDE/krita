@@ -49,8 +49,7 @@ QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
     switch (props.mode()) {
     case KisLiquifyProperties::MOVE:
     case KisLiquifyProperties::SCALE:
-    case KisLiquifyProperties::RELAX_SIMPLE:
-    case KisLiquifyProperties::RELAX_AFFINE:
+    case KisLiquifyProperties::RESTORE_SHAPE:
         break;
     case KisLiquifyProperties::ROTATE: {
         QPainterPath p;
@@ -175,16 +174,13 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
                                 size);
 
         break;
-    case KisLiquifyProperties::RELAX_SIMPLE:
-        m_d->worker->relaxPoints(pi.pos(),
-                                 amount,
-                                 size);
-
-        break;
-    case KisLiquifyProperties::RELAX_AFFINE:
-        m_d->worker->affineRelaxPoints(pi.pos(),
-                                       amount,
-                                       size);
+    case KisLiquifyProperties::RESTORE_SHAPE:
+        m_d->worker->restoreShapePoints(pi.pos(),
+                                        amount,
+                                        size,
+                                        m_d->props.preserveShapeRotation(),
+                                        m_d->props.preserveShapeScale(),
+                                        m_d->props.preserveShapeStretch());
 
         break;
     case KisLiquifyProperties::N_MODES:

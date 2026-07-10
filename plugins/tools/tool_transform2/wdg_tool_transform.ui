@@ -1941,7 +1941,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="liquifyRelaxSimple">
+             <widget class="QToolButton" name="liquifyRestoreShape">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1949,29 +1949,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Relax</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="liquifyRelaxAffine">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Affine Relax</string>
+               <string>Restore Shape</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2114,6 +2092,201 @@
               <string>Reverse:</string>
              </property>
             </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblLiquifyShapeRotation">
+             <property name="text">
+              <string>Rotation:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayoutLiquifyRotation">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QToolButton" name="liquifyRestoreShapeRotationOriginal">
+               <property name="minimumSize">
+                <size>
+                 <width>135</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>To original</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="autoRaise">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="liquifyRestoreShapeRotationPreserve">
+               <property name="minimumSize">
+                <size>
+                 <width>135</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Preserve</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="autoRaise">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacerLiquifyRotation">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="lblLiquifyShapeScale">
+             <property name="text">
+              <string>Scale:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayoutLiquifyScale">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QToolButton" name="liquifyRestoreShapeScaleOriginal">
+               <property name="minimumSize">
+                <size>
+                 <width>135</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>To original</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="autoRaise">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="liquifyRestoreShapeScalePreserve">
+               <property name="minimumSize">
+                <size>
+                 <width>135</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Preserve</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="autoRaise">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacerLiquifyScale">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="lblLiquifyShapeStretch">
+             <property name="text">
+              <string>Stretch:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayoutLiquifyStretch">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QToolButton" name="liquifyRestoreShapeStretchOriginal">
+               <property name="minimumSize">
+                <size>
+                 <width>135</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>To original</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="autoRaise">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="liquifyRestoreShapeStretchPreserve">
+               <property name="minimumSize">
+                <size>
+                 <width>135</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Preserve</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="autoRaise">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacerLiquifyStretch">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblAmount">

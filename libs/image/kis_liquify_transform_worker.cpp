@@ -7,6 +7,8 @@
 #include "kis_liquify_transform_worker.h"
 
 #include <KoColorSpace.h>
+#include <Eigen/Dense>
+#include <cmath>
 #include "kis_grid_interpolation_tools.h"
 #include "kis_dom_utils.h"
 #include "krita_utils.h"
@@ -236,40 +238,39 @@ struct PointUpdate
     QPointF newPosition;
 };
 
-bool solveLinear3x3(const qreal matrix[3][3], const qreal rhs[3], qreal result[3])
+struct RestoreShapeSample
 {
-    const qreal determinant =
-        matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
-        matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
-        matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
+    int index = -1;
+    qreal weight = 0.0;
+    qreal lambda = 0.0;
+};
 
-    if (qAbs(determinant) < 1e-12) return false;
+Eigen::Vector2d toEigenPoint(const QPointF &pt)
+{
+    return Eigen::Vector2d(pt.x(), pt.y());
+}
 
-    const qreal invDeterminant = 1.0 / determinant;
+QPointF fromEigenPoint(const Eigen::Vector2d &pt)
+{
+    return QPointF(pt.x(), pt.y());
+}
 
-    qreal inverse[3][3];
-    inverse[0][0] =  (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) * invDeterminant;
-    inverse[0][1] = -(matrix[0][1] * matrix[2][2] - matrix[0][2] * matrix[2][1]) * invDeterminant;
-    inverse[0][2] =  (matrix[0][1] * matrix[1][2] - matrix[0][2] * matrix[1][1]) * invDeterminant;
-    inverse[1][0] = -(matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) * invDeterminant;
-    inverse[1][1] =  (matrix[0][0] * matrix[2][2] - matrix[0][2] * matrix[2][0]) * invDeterminant;
-    inverse[1][2] = -(matrix[0][0] * matrix[1][2] - matrix[0][2] * matrix[1][0]) * invDeterminant;
-    inverse[2][0] =  (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]) * invDeterminant;
-    inverse[2][1] = -(matrix[0][0] * matrix[2][1] - matrix[0][1] * matrix[2][0]) * invDeterminant;
-    inverse[2][2] =  (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]) * invDeterminant;
-
-    for (int i = 0; i < 3; i++) {
-        result[i] = inverse[i][0] * rhs[0] + inverse[i][1] * rhs[1] + inverse[i][2] * rhs[2];
-    }
-
-    return true;
+bool isFinite(const Eigen::Matrix2d &m)
+{
+    return std::isfinite(m(0, 0)) &&
+        std::isfinite(m(0, 1)) &&
+        std::isfinite(m(1, 0)) &&
+        std::isfinite(m(1, 1));
 }
 
 }
 
-void KisLiquifyTransformWorker::relaxPoints(const QPointF &base,
-                                            qreal amount,
-                                            qreal sigma)
+void KisLiquifyTransformWorker::restoreShapePoints(const QPointF &base,
+                                                   qreal amount,
+                                                   qreal sigma,
+                                                   bool preserveRotation,
+                                                   bool preserveScale,
+                                                   bool preserveStretch)
 {
     const qreal maxDistCoeff = 3.0;
     const qreal maxDist = maxDistCoeff * sigma;
@@ -284,179 +285,128 @@ void KisLiquifyTransformWorker::relaxPoints(const QPointF &base,
     QVector<int> indexes;
     m_d->transformedPointsContainer.findAllInRange(indexes, base, maxDist);
 
-    QVector<PointUpdate> updates;
-    updates.reserve(indexes.count());
+    QVector<RestoreShapeSample> samples;
+    samples.reserve(indexes.count());
 
-    /*
-     * Blur the displacement field, not the transformed point positions.
-     * Repeatedly blurring positions would pull all coordinates in the dab
-     * toward their centroid, effectively compressing the grid like a black
-     * hole. Blurring displacements keeps the original grid structure and
-     * only reduces local disagreement in how neighboring points moved.
-     *
-     * Store all updates first so every point is relaxed against the same
-     * pre-dab state; otherwise the result would depend on iteration order.
-     */
+    qreal weightSum = 0.0;
+    Eigen::Vector2d originalCentroid(0.0, 0.0);
+    Eigen::Vector2d transformedCentroid(0.0, 0.0);
+
     for (int i = 0; i < indexes.count(); i++) {
         const int index = indexes[i];
 
-        QPointF diff = m_d->transformedPoints[index] - base;
-        qreal dist = KisAlgebra2D::norm(diff);
+        const QPointF diff = m_d->transformedPoints[index] - base;
+        const qreal dist = KisAlgebra2D::norm(diff);
         if (dist > maxDist) continue;
 
-        qreal lambda = exp(-0.5 * pow2(dist / sigma));
-        lambda *= amount;
+        const qreal weight = exp(-0.5 * pow2(dist / sigma));
+        const qreal lambda = qBound<qreal>(0.0, weight * amount, 1.0);
+        if (lambda <= 0.0) continue;
 
-        const int col = index % m_d->gridSize.width();
-        const int row = index / m_d->gridSize.width();
+        samples << RestoreShapeSample{index, weight, lambda};
 
-        QPointF displacementSum;
-        int displacementCount = 0;
-
-        for (int neighborRow = qMax(0, row - 1);
-             neighborRow <= qMin(m_d->gridSize.height() - 1, row + 1);
-             neighborRow++) {
-            for (int neighborCol = qMax(0, col - 1);
-                 neighborCol <= qMin(m_d->gridSize.width() - 1, col + 1);
-                 neighborCol++) {
-
-                if (neighborCol == col && neighborRow == row) continue;
-
-                const int neighborIndex =
-                    GridIterationTools::pointToIndex(QPoint(neighborCol, neighborRow),
-                                                     m_d->gridSize);
-
-                displacementSum += m_d->transformedPoints[neighborIndex] -
-                    m_d->originalPoints[neighborIndex];
-                displacementCount++;
-            }
-        }
-
-        if (!displacementCount) continue;
-
-        const QPointF oldDisplacement =
-            m_d->transformedPoints[index] - m_d->originalPoints[index];
-        const QPointF relaxedDisplacement = displacementSum / displacementCount;
-
-        const QPointF newPosition =
-            m_d->originalPoints[index] +
-            oldDisplacement * (1.0 - lambda) +
-            relaxedDisplacement * lambda;
-
-        updates << PointUpdate{index, m_d->transformedPoints[index], newPosition};
+        originalCentroid += weight * toEigenPoint(m_d->originalPoints[index]);
+        transformedCentroid += weight * toEigenPoint(m_d->transformedPoints[index]);
+        weightSum += weight;
     }
 
-    for (int i = 0; i < updates.count(); i++) {
-        const PointUpdate &update = updates[i];
-        m_d->transformedPoints[update.index] = update.newPosition;
-        m_d->transformedPointsContainer.movePoint(update.index, update.oldPosition, update.newPosition);
+    if (samples.count() < 3 || weightSum <= 1e-12) return;
+
+    originalCentroid /= weightSum;
+    transformedCentroid /= weightSum;
+
+    Eigen::Matrix2d originalMoment = Eigen::Matrix2d::Zero();
+    Eigen::Matrix2d transformedOriginalMoment = Eigen::Matrix2d::Zero();
+
+    for (int i = 0; i < samples.count(); i++) {
+        const RestoreShapeSample &sample = samples[i];
+
+        const Eigen::Vector2d originalOffset =
+            toEigenPoint(m_d->originalPoints[sample.index]) - originalCentroid;
+        const Eigen::Vector2d transformedOffset =
+            toEigenPoint(m_d->transformedPoints[sample.index]) - transformedCentroid;
+
+        originalMoment += sample.weight * originalOffset * originalOffset.transpose();
+        transformedOriginalMoment += sample.weight * transformedOffset * originalOffset.transpose();
     }
-}
 
-void KisLiquifyTransformWorker::affineRelaxPoints(const QPointF &base,
-                                                  qreal amount,
-                                                  qreal sigma)
-{
-    const qreal maxDistCoeff = 3.0;
-    const qreal maxDist = maxDistCoeff * sigma;
-    const int neighborhoodRadius = 2;
+    if (qAbs(originalMoment.determinant()) < 1e-12) return;
 
-    KIS_ASSERT_RECOVER_RETURN(m_d->originalPoints.size() ==
-                              m_d->transformedPoints.size());
+    const Eigen::Matrix2d affine =
+        transformedOriginalMoment * originalMoment.inverse();
 
-    QRectF clipRect(base.x() - maxDist, base.y() - maxDist,
-                    2 * maxDist, 2 * maxDist);
-    m_d->accumulatedBrushStrokes |= kisGrowRect(clipRect, m_d->pixelPrecision);
+    if (!isFinite(affine)) return;
 
-    QVector<int> indexes;
-    m_d->transformedPointsContainer.findAllInRange(indexes, base, maxDist);
+    Eigen::JacobiSVD<Eigen::Matrix2d> svd(affine, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    Eigen::Matrix2d rotation = svd.matrixU() * svd.matrixV().transpose();
+
+    if (rotation.determinant() < 0.0) {
+        Eigen::Matrix2d u = svd.matrixU();
+        u.col(1) *= -1.0;
+        rotation = u * svd.matrixV().transpose();
+    }
+
+    if (!isFinite(rotation)) return;
+
+    const Eigen::Vector2d singularValues = svd.singularValues();
+    const qreal uniformScale =
+        preserveScale ? qMax<qreal>(1e-6, 0.5 * (singularValues.x() + singularValues.y())) : 1.0;
+
+    Eigen::Matrix2d targetLinear = Eigen::Matrix2d::Identity();
+    if (preserveRotation) {
+        targetLinear = rotation;
+    }
+    targetLinear *= uniformScale;
+
+    if (preserveStretch) {
+        const Eigen::Matrix2d stretchInRotationSpace = rotation.transpose() * affine;
+        qreal stretchX = qMax<qreal>(1e-6, qAbs(stretchInRotationSpace(0, 0)));
+        qreal stretchY = qMax<qreal>(1e-6, qAbs(stretchInRotationSpace(1, 1)));
+        const qreal stretchNormalization =
+            preserveScale ? uniformScale : qMax<qreal>(1e-6, std::sqrt(stretchX * stretchY));
+
+        Eigen::Matrix2d stretch = Eigen::Matrix2d::Identity();
+        stretch(0, 0) = stretchX / stretchNormalization;
+        stretch(1, 1) = stretchY / stretchNormalization;
+        targetLinear *= stretch;
+    }
 
     QVector<PointUpdate> updates;
-    updates.reserve(indexes.count());
+    updates.reserve(samples.count());
 
-    /*
-     * Fit a local affine transform from neighboring original points to their
-     * transformed positions. This preserves broad local translation, rotation,
-     * scale and shear. A pure displacement blur would slowly damp rotations
-     * because a rotated area has different displacement vectors at different
-     * points, even when the rotation itself is perfectly smooth.
-     *
-     * Like simple relax, collect updates first so each fit samples the same
-     * pre-dab deformation grid.
-     */
-    for (int i = 0; i < indexes.count(); i++) {
-        const int index = indexes[i];
+    Eigen::Vector2d updatedCentroid(0.0, 0.0);
+    qreal updatedWeightSum = 0.0;
 
-        QPointF diff = m_d->transformedPoints[index] - base;
-        qreal dist = KisAlgebra2D::norm(diff);
-        if (dist > maxDist) continue;
+    for (int i = 0; i < samples.count(); i++) {
+        const RestoreShapeSample &sample = samples[i];
+        const Eigen::Vector2d oldPosition = toEigenPoint(m_d->transformedPoints[sample.index]);
+        const Eigen::Vector2d originalOffset =
+            toEigenPoint(m_d->originalPoints[sample.index]) - originalCentroid;
+        const Eigen::Vector2d targetPosition =
+            transformedCentroid + targetLinear * originalOffset;
+        const Eigen::Vector2d newPosition =
+            oldPosition * (1.0 - sample.lambda) + targetPosition * sample.lambda;
 
-        qreal lambda = exp(-0.5 * pow2(dist / sigma));
-        lambda *= amount;
+        updates << PointUpdate{sample.index,
+                               m_d->transformedPoints[sample.index],
+                               fromEigenPoint(newPosition)};
 
-        const int col = index % m_d->gridSize.width();
-        const int row = index / m_d->gridSize.width();
-        const QPointF originalCenter = m_d->originalPoints[index];
-
-        qreal matrix[3][3] = {};
-        qreal rhsX[3] = {};
-        qreal rhsY[3] = {};
-        int sampleCount = 0;
-
-        for (int neighborRow = qMax(0, row - neighborhoodRadius);
-             neighborRow <= qMin(m_d->gridSize.height() - 1, row + neighborhoodRadius);
-             neighborRow++) {
-            for (int neighborCol = qMax(0, col - neighborhoodRadius);
-                 neighborCol <= qMin(m_d->gridSize.width() - 1, col + neighborhoodRadius);
-                 neighborCol++) {
-
-                if (neighborCol == col && neighborRow == row) continue;
-
-                const int neighborIndex =
-                    GridIterationTools::pointToIndex(QPoint(neighborCol, neighborRow),
-                                                     m_d->gridSize);
-                const QPointF originalOffset =
-                    m_d->originalPoints[neighborIndex] - originalCenter;
-                const qreal fitPoint[3] = {originalOffset.x(), originalOffset.y(), 1.0};
-
-                const qreal gridDistance = KisAlgebra2D::norm(originalOffset);
-                const qreal fitSigma = qMax<qreal>(m_d->pixelPrecision, 1.0);
-                const qreal weight = exp(-0.5 * pow2(gridDistance / (neighborhoodRadius * fitSigma)));
-
-                for (int r = 0; r < 3; r++) {
-                    for (int c = 0; c < 3; c++) {
-                        matrix[r][c] += weight * fitPoint[r] * fitPoint[c];
-                    }
-                    rhsX[r] += weight * fitPoint[r] * m_d->transformedPoints[neighborIndex].x();
-                    rhsY[r] += weight * fitPoint[r] * m_d->transformedPoints[neighborIndex].y();
-                }
-
-                sampleCount++;
-            }
-        }
-
-        qreal coeffX[3];
-        qreal coeffY[3];
-        if (sampleCount < 3 ||
-            !solveLinear3x3(matrix, rhsX, coeffX) ||
-            !solveLinear3x3(matrix, rhsY, coeffY)) {
-
-            continue;
-        }
-
-        const QPointF predictedPosition(coeffX[2], coeffY[2]);
-
-        const QPointF newPosition =
-            m_d->transformedPoints[index] * (1.0 - lambda) +
-            predictedPosition * lambda;
-
-        updates << PointUpdate{index, m_d->transformedPoints[index], newPosition};
+        updatedCentroid += sample.weight * newPosition;
+        updatedWeightSum += sample.weight;
     }
 
+    if (updatedWeightSum <= 1e-12) return;
+    updatedCentroid /= updatedWeightSum;
+
+    const QPointF centroidCorrection = fromEigenPoint(transformedCentroid - updatedCentroid);
+
     for (int i = 0; i < updates.count(); i++) {
-        const PointUpdate &update = updates[i];
+        PointUpdate &update = updates[i];
+        update.newPosition += centroidCorrection;
         m_d->transformedPoints[update.index] = update.newPosition;
-        m_d->transformedPointsContainer.movePoint(update.index, update.oldPosition, update.newPosition);
+        m_d->transformedPointsContainer.movePoint(update.index,
+                                                 update.oldPosition,
+                                                 update.newPosition);
     }
 }
 

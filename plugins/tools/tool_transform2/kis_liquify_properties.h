@@ -24,8 +24,7 @@ public:
         ROTATE,
         OFFSET,
         UNDO,
-        RELAX_SIMPLE,
-        RELAX_AFFINE,
+        RESTORE_SHAPE,
 
         N_MODES
     };
@@ -39,7 +38,10 @@ public:
           m_amountHasPressure(false),
           m_reverseDirection(false),
           m_useWashMode(false),
-          m_flow(0.2)
+          m_flow(0.2),
+          m_preserveShapeRotation(true),
+          m_preserveShapeScale(true),
+          m_preserveShapeStretch(false)
     {
     }
 
@@ -124,6 +126,27 @@ public:
         m_flow = value;
     }
 
+    bool preserveShapeRotation() const {
+        return m_preserveShapeRotation;
+    }
+    void setPreserveShapeRotation(bool value) {
+        m_preserveShapeRotation = value;
+    }
+
+    bool preserveShapeScale() const {
+        return m_preserveShapeScale;
+    }
+    void setPreserveShapeScale(bool value) {
+        m_preserveShapeScale = value;
+    }
+
+    bool preserveShapeStretch() const {
+        return m_preserveShapeStretch;
+    }
+    void setPreserveShapeStretch(bool value) {
+        m_preserveShapeStretch = value;
+    }
+
     void saveMode() const;
     void loadMode();
 
@@ -143,6 +166,9 @@ private:
 
     bool m_useWashMode;
     qreal m_flow;
+    bool m_preserveShapeRotation;
+    bool m_preserveShapeScale;
+    bool m_preserveShapeStretch;
 };
 
 QDebug KRITATOOLTRANSFORM_EXPORT operator<<(QDebug dbg, const KisLiquifyProperties &properties);

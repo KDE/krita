@@ -100,6 +100,9 @@ public Q_SLOTS:
     void liquifySizePressureChanged(bool value);
     void liquifyAmountPressureChanged(bool value);
     void liquifyReverseDirectionChanged(bool value);
+    void liquifyPreserveShapeRotationChanged(int value);
+    void liquifyPreserveShapeScaleChanged(int value);
+    void liquifyPreserveShapeStretchChanged(int value);
 
     void slotLiquifyModeChanged(int value);
 
@@ -139,6 +142,9 @@ private:
     TransformTransactionProperties *m_transaction;
     QPointF m_handleDir[9];
     QButtonGroup *m_rotationCenterButtons;
+    QButtonGroup *m_restoreShapeRotationButtons;
+    QButtonGroup *m_restoreShapeScaleButtons;
+    QButtonGroup *m_restoreShapeStretchButtons;
     int m_notificationsBlocked;
     int m_uiSlotsBlocked;
     double m_scaleRatio;

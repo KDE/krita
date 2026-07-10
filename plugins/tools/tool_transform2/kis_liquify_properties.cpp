@@ -26,6 +26,9 @@ KisLiquifyProperties::KisLiquifyProperties(const KisLiquifyProperties &rhs)
     m_reverseDirection = rhs.m_reverseDirection;
     m_useWashMode = rhs.m_useWashMode;
     m_flow = rhs.m_flow;
+    m_preserveShapeRotation = rhs.m_preserveShapeRotation;
+    m_preserveShapeScale = rhs.m_preserveShapeScale;
+    m_preserveShapeStretch = rhs.m_preserveShapeStretch;
 }
 
 KisLiquifyProperties &KisLiquifyProperties::operator=(const KisLiquifyProperties &rhs)
@@ -39,6 +42,9 @@ KisLiquifyProperties &KisLiquifyProperties::operator=(const KisLiquifyProperties
     m_reverseDirection = rhs.m_reverseDirection;
     m_useWashMode = rhs.m_useWashMode;
     m_flow = rhs.m_flow;
+    m_preserveShapeRotation = rhs.m_preserveShapeRotation;
+    m_preserveShapeScale = rhs.m_preserveShapeScale;
+    m_preserveShapeStretch = rhs.m_preserveShapeStretch;
 
     return *this;
 }
@@ -54,21 +60,22 @@ bool KisLiquifyProperties::operator==(const KisLiquifyProperties &other) const
         m_amountHasPressure == other.m_amountHasPressure &&
         m_reverseDirection == other.m_reverseDirection &&
         m_useWashMode == other.m_useWashMode &&
-        m_flow == other.m_flow;
+        m_flow == other.m_flow &&
+        m_preserveShapeRotation == other.m_preserveShapeRotation &&
+        m_preserveShapeScale == other.m_preserveShapeScale &&
+        m_preserveShapeStretch == other.m_preserveShapeStretch;
 }
 
 bool KisLiquifyProperties::supportsReverseDirection(LiquifyMode mode)
 {
     return mode != UNDO &&
-        mode != RELAX_SIMPLE &&
-        mode != RELAX_AFFINE;
+        mode != RESTORE_SHAPE;
 }
 
 bool KisLiquifyProperties::supportsWashMode(LiquifyMode mode)
 {
     return mode != UNDO &&
-        mode != RELAX_SIMPLE &&
-        mode != RELAX_AFFINE;
+        mode != RESTORE_SHAPE;
 }
 
 QString liquifyModeString(KisLiquifyProperties::LiquifyMode mode)
@@ -91,11 +98,8 @@ QString liquifyModeString(KisLiquifyProperties::LiquifyMode mode)
     case KisLiquifyProperties::UNDO:
         result = "Undo";
         break;
-    case KisLiquifyProperties::RELAX_SIMPLE:
-        result = "RelaxSimple";
-        break;
-    case KisLiquifyProperties::RELAX_AFFINE:
-        result = "RelaxAffine";
+    case KisLiquifyProperties::RESTORE_SHAPE:
+        result = "RestoreShape";
         break;
     case KisLiquifyProperties::N_MODES:
         qFatal("Unsupported mode");
@@ -107,10 +111,8 @@ QString liquifyModeString(KisLiquifyProperties::LiquifyMode mode)
 qreal defaultAmountForMode(KisLiquifyProperties::LiquifyMode mode)
 {
     switch (mode) {
-    case KisLiquifyProperties::RELAX_SIMPLE:
-        return 0.3;
-    case KisLiquifyProperties::RELAX_AFFINE:
-        return 1.0;
+    case KisLiquifyProperties::RESTORE_SHAPE:
+        return 0.03;
     case KisLiquifyProperties::MOVE:
     case KisLiquifyProperties::SCALE:
     case KisLiquifyProperties::ROTATE:
@@ -137,6 +139,9 @@ void KisLiquifyProperties::saveMode() const
     cfg.writeEntry("reverseDirection", m_reverseDirection);
     cfg.writeEntry("useWashMode", m_useWashMode);
     cfg.writeEntry("flow", m_flow);
+    cfg.writeEntry("preserveShapeRotation", m_preserveShapeRotation);
+    cfg.writeEntry("preserveShapeScale", m_preserveShapeScale);
+    cfg.writeEntry("preserveShapeStretch", m_preserveShapeStretch);
 
     KConfigGroup globalCfg =  KSharedConfig::openConfig()->group("LiquifyTool");
     globalCfg.writeEntry("mode", (int)m_mode);
@@ -155,12 +160,22 @@ void KisLiquifyProperties::loadMode()
     m_reverseDirection = cfg.readEntry("reverseDirection", m_reverseDirection);
     m_useWashMode = cfg.readEntry("useWashMode", m_useWashMode);
     m_flow = cfg.readEntry("flow", m_flow);
+    m_preserveShapeRotation = cfg.readEntry("preserveShapeRotation", m_preserveShapeRotation);
+    m_preserveShapeScale = cfg.readEntry("preserveShapeScale", m_preserveShapeScale);
+    m_preserveShapeStretch = cfg.readEntry("preserveShapeStretch", m_preserveShapeStretch);
 }
 
 void KisLiquifyProperties::loadAndResetMode()
 {
     KConfigGroup globalCfg =  KSharedConfig::openConfig()->group("LiquifyTool");
-    m_mode = (LiquifyMode) globalCfg.readEntry("mode", (int)m_mode);
+    const int loadedMode = globalCfg.readEntry("mode", (int)m_mode);
+    if (loadedMode >= 0 && loadedMode < N_MODES) {
+        m_mode = (LiquifyMode) loadedMode;
+    } else if (loadedMode == N_MODES) {
+        m_mode = RESTORE_SHAPE;
+    } else {
+        m_mode = MOVE;
+    }
 
     loadMode();
 }
@@ -180,6 +195,9 @@ void KisLiquifyProperties::toXML(QDomElement *e) const
     KisDomUtils::saveValue(&liqEl, "reverseDirection", m_reverseDirection);
     KisDomUtils::saveValue(&liqEl, "useWashMode", m_useWashMode);
     KisDomUtils::saveValue(&liqEl, "flow", m_flow);
+    KisDomUtils::saveValue(&liqEl, "preserveShapeRotation", m_preserveShapeRotation);
+    KisDomUtils::saveValue(&liqEl, "preserveShapeScale", m_preserveShapeScale);
+    KisDomUtils::saveValue(&liqEl, "preserveShapeStretch", m_preserveShapeStretch);
 }
 
 KisLiquifyProperties KisLiquifyProperties::fromXML(const QDomElement &e)
@@ -205,8 +223,16 @@ KisLiquifyProperties KisLiquifyProperties::fromXML(const QDomElement &e)
 
     if (result && newMode >= 0 && newMode < N_MODES) {
         props.m_mode = (LiquifyMode) newMode;
+    } else if (result && newMode == N_MODES) {
+        props.m_mode = RESTORE_SHAPE;
     } else {
         result = false;
+    }
+
+    if (result) {
+        KisDomUtils::loadValue(liqEl, "preserveShapeRotation", &props.m_preserveShapeRotation);
+        KisDomUtils::loadValue(liqEl, "preserveShapeScale", &props.m_preserveShapeScale);
+        KisDomUtils::loadValue(liqEl, "preserveShapeStretch", &props.m_preserveShapeStretch);
     }
 
     return props;
@@ -225,6 +251,9 @@ QDebug operator<<(QDebug dbg, const KisLiquifyProperties &props)
     dbg.space() << "\n    " << ppVar(props.reverseDirection());
     dbg.space() << "\n    " << ppVar(props.useWashMode());
     dbg.space() << "\n    " << ppVar(props.flow());
+    dbg.space() << "\n    " << ppVar(props.preserveShapeRotation());
+    dbg.space() << "\n    " << ppVar(props.preserveShapeScale());
+    dbg.space() << "\n    " << ppVar(props.preserveShapeStretch());
     dbg.space() << "\n    );\n";
     return dbg.nospace();
 }

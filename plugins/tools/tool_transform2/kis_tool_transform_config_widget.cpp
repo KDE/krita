@@ -265,15 +265,13 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyOffset, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyUndo, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyRelaxSimple, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    connect(liquifyRelaxAffine, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyRestoreShape, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     liquifyModeMapper->setMapping(liquifyMove, (int)KisLiquifyProperties::MOVE);
     liquifyModeMapper->setMapping(liquifyScale, (int)KisLiquifyProperties::SCALE);
     liquifyModeMapper->setMapping(liquifyRotate, (int)KisLiquifyProperties::ROTATE);
     liquifyModeMapper->setMapping(liquifyOffset, (int)KisLiquifyProperties::OFFSET);
     liquifyModeMapper->setMapping(liquifyUndo, (int)KisLiquifyProperties::UNDO);
-    liquifyModeMapper->setMapping(liquifyRelaxSimple, (int)KisLiquifyProperties::RELAX_SIMPLE);
-    liquifyModeMapper->setMapping(liquifyRelaxAffine, (int)KisLiquifyProperties::RELAX_AFFINE);
+    liquifyModeMapper->setMapping(liquifyRestoreShape, (int)KisLiquifyProperties::RESTORE_SHAPE);
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(slotLiquifyModeChanged(int)));
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(notifyEditingFinished()));
 
@@ -282,14 +280,69 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifyRotate->setToolTip(i18nc("@info:tooltip", "Rotate: twirl image under cursor"));
     liquifyOffset->setToolTip(i18nc("@info:tooltip", "Offset: shift the image to the right of the stroke direction"));
     liquifyUndo->setToolTip(i18nc("@info:tooltip", "Undo: erase actions of other tools"));
-    liquifyRelaxSimple->setToolTip(i18nc("@info:tooltip",
-                                          "Relax: smooth liquify distortions by averaging neighboring movements\n"
-                                          "Preserves: local average movement\n"
-                                          "Removes: local movement differences, bumps and jitter"));
-    liquifyRelaxAffine->setToolTip(i18nc("@info:tooltip",
-                                          "Shape-preserving Relax: smooth liquify distortions while preserving local rotation, scale and shear\n"
-                                          "Preserves: local translation, rotation, scale and shear\n"
-                                          "Removes: local non-affine distortions, pinches and swirls"));
+    liquifyRestoreShape->setToolTip(i18nc("@info:tooltip",
+                                           "Restore Shape: reduce local liquify stretching and bunching while keeping the affected area centered"));
+
+    m_restoreShapeRotationButtons = new QButtonGroup(this);
+    m_restoreShapeRotationButtons->addButton(liquifyRestoreShapeRotationOriginal, 0);
+    m_restoreShapeRotationButtons->addButton(liquifyRestoreShapeRotationPreserve, 1);
+    connect(m_restoreShapeRotationButtons, SIGNAL(idClicked(int)), this, SLOT(liquifyPreserveShapeRotationChanged(int)));
+    connect(m_restoreShapeRotationButtons, SIGNAL(idClicked(int)), this, SLOT(notifyEditingFinished()));
+
+    m_restoreShapeScaleButtons = new QButtonGroup(this);
+    m_restoreShapeScaleButtons->addButton(liquifyRestoreShapeScaleOriginal, 0);
+    m_restoreShapeScaleButtons->addButton(liquifyRestoreShapeScalePreserve, 1);
+    connect(m_restoreShapeScaleButtons, SIGNAL(idClicked(int)), this, SLOT(liquifyPreserveShapeScaleChanged(int)));
+    connect(m_restoreShapeScaleButtons, SIGNAL(idClicked(int)), this, SLOT(notifyEditingFinished()));
+
+    m_restoreShapeStretchButtons = new QButtonGroup(this);
+    m_restoreShapeStretchButtons->addButton(liquifyRestoreShapeStretchOriginal, 0);
+    m_restoreShapeStretchButtons->addButton(liquifyRestoreShapeStretchPreserve, 1);
+    connect(m_restoreShapeStretchButtons, SIGNAL(idClicked(int)), this, SLOT(liquifyPreserveShapeStretchChanged(int)));
+    connect(m_restoreShapeStretchButtons, SIGNAL(idClicked(int)), this, SLOT(notifyEditingFinished()));
+
+    liquifyRestoreShapeRotationOriginal->setToolTip(i18nc("@info:tooltip", "Rotate the affected area back toward its original orientation"));
+    liquifyRestoreShapeRotationPreserve->setToolTip(i18nc("@info:tooltip", "Keep the current rotation of the affected area"));
+    liquifyRestoreShapeScaleOriginal->setToolTip(i18nc("@info:tooltip", "Scale the affected area back toward its original size"));
+    liquifyRestoreShapeScalePreserve->setToolTip(i18nc("@info:tooltip", "Keep the current overall scale of the affected area"));
+    liquifyRestoreShapeStretchOriginal->setToolTip(i18nc("@info:tooltip", "Remove simple stretch or squash from the affected area"));
+    liquifyRestoreShapeStretchPreserve->setToolTip(i18nc("@info:tooltip", "Keep simple stretch or squash while removing shear-like distortion"));
+
+    const auto setRestoreShapeButtonStyle = [] (QToolButton *button, bool isLeftButton) {
+        button->setStyleSheet(QString::fromLatin1(
+            "QToolButton {"
+            " border: 1px solid palette(mid);"
+            " background-color: palette(button);"
+            " color: palette(button-text);"
+            " padding: 4px 10px;"
+            " %1"
+            "}"
+            "QToolButton:hover {"
+            " background-color: palette(light);"
+            "}"
+            "QToolButton:pressed {"
+            " background-color: palette(midlight);"
+            "}"
+            "QToolButton:checked {"
+            " background-color: palette(highlight);"
+            " color: palette(highlighted-text);"
+            " border-color: palette(highlight);"
+            "}"
+            "QToolButton:checked:hover {"
+            " background-color: palette(highlight);"
+            " color: palette(highlighted-text);"
+            "}")
+            .arg(isLeftButton ?
+                 QLatin1String("border-top-right-radius: 0px; border-bottom-right-radius: 0px;") :
+                 QLatin1String("border-top-left-radius: 0px; border-bottom-left-radius: 0px;")));
+    };
+
+    setRestoreShapeButtonStyle(liquifyRestoreShapeRotationOriginal, true);
+    setRestoreShapeButtonStyle(liquifyRestoreShapeRotationPreserve, false);
+    setRestoreShapeButtonStyle(liquifyRestoreShapeScaleOriginal, true);
+    setRestoreShapeButtonStyle(liquifyRestoreShapeScalePreserve, false);
+    setRestoreShapeButtonStyle(liquifyRestoreShapeStretchOriginal, true);
+    setRestoreShapeButtonStyle(liquifyRestoreShapeStretchPreserve, false);
 
     // Connect all edit boxes to the Editing Finished signal
     connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
@@ -362,8 +415,7 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     liquifyRotate->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotate"));
     liquifyOffset->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_offset"));
     liquifyUndo->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_erase"));
-    liquifyRelaxSimple->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_relax"));
-    liquifyRelaxAffine->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_relax_affine"));
+    liquifyRestoreShape->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_relax"));
 
 
 
@@ -403,6 +455,12 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     liquifySizePressureBox->setChecked(props->sizeHasPressure());
     liquifyAmountPressureBox->setChecked(props->amountHasPressure());
     liquifyReverseDirectionChk->setChecked(props->reverseDirection());
+    liquifyRestoreShapeRotationOriginal->setChecked(!props->preserveShapeRotation());
+    liquifyRestoreShapeRotationPreserve->setChecked(props->preserveShapeRotation());
+    liquifyRestoreShapeScaleOriginal->setChecked(!props->preserveShapeScale());
+    liquifyRestoreShapeScalePreserve->setChecked(props->preserveShapeScale());
+    liquifyRestoreShapeStretchOriginal->setChecked(!props->preserveShapeStretch());
+    liquifyRestoreShapeStretchPreserve->setChecked(props->preserveShapeStretch());
 
 
     KisLiquifyProperties::LiquifyMode mode =
@@ -410,10 +468,20 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
 
     bool canInverseDirection = KisLiquifyProperties::supportsReverseDirection(mode);
     bool canUseWashMode = KisLiquifyProperties::supportsWashMode(mode);
+    bool isRestoreShapeMode = mode == KisLiquifyProperties::RESTORE_SHAPE;
 
     liquifyReverseDirectionChk->setEnabled(canInverseDirection);
     liquifyFlowSlider->setEnabled(canUseWashMode && useWashMode);
     buildupModeComboBox->setEnabled(canUseWashMode);
+    lblLiquifyShapeRotation->setVisible(isRestoreShapeMode);
+    liquifyRestoreShapeRotationOriginal->setVisible(isRestoreShapeMode);
+    liquifyRestoreShapeRotationPreserve->setVisible(isRestoreShapeMode);
+    lblLiquifyShapeScale->setVisible(isRestoreShapeMode);
+    liquifyRestoreShapeScaleOriginal->setVisible(isRestoreShapeMode);
+    liquifyRestoreShapeScalePreserve->setVisible(isRestoreShapeMode);
+    lblLiquifyShapeStretch->setVisible(isRestoreShapeMode);
+    liquifyRestoreShapeStretchOriginal->setVisible(isRestoreShapeMode);
+    liquifyRestoreShapeStretchPreserve->setVisible(isRestoreShapeMode);
 
     const qreal maxAmount = canUseWashMode ? 5.0 : 1.0;
     liquifyAmountSlider->setRange(0.0, maxAmount, 2);
@@ -543,6 +611,42 @@ void KisToolTransformConfigWidget::liquifyReverseDirectionChanged(bool value)
     notifyConfigChanged(false);
 }
 
+void KisToolTransformConfigWidget::liquifyPreserveShapeRotationChanged(int value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setPreserveShapeRotation(value == 1);
+    notifyConfigChanged(false);
+}
+
+void KisToolTransformConfigWidget::liquifyPreserveShapeScaleChanged(int value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setPreserveShapeScale(value == 1);
+    notifyConfigChanged(false);
+}
+
+void KisToolTransformConfigWidget::liquifyPreserveShapeStretchChanged(int value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setPreserveShapeStretch(value == 1);
+    notifyConfigChanged(false);
+}
+
 void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 {
     blockUiSlots();
@@ -669,11 +773,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         case KisLiquifyProperties::UNDO:
             liquifyUndo->setChecked(true);
             break;
-        case KisLiquifyProperties::RELAX_SIMPLE:
-            liquifyRelaxSimple->setChecked(true);
-            break;
-        case KisLiquifyProperties::RELAX_AFFINE:
-            liquifyRelaxAffine->setChecked(true);
+        case KisLiquifyProperties::RESTORE_SHAPE:
+            liquifyRestoreShape->setChecked(true);
             break;
         case KisLiquifyProperties::N_MODES:
             qFatal("Unsupported mode");

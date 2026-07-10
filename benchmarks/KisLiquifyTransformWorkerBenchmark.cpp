@@ -158,8 +158,8 @@ void testPoints(KisLiquifyTransformWorkerBenchmark::Operation operation, bool us
                 worker.undoPoints(undoBases[i], flows[i%flows.length()], sigmas[i%sigmas.length()]);
             }
         }
-    } else if (operation == KisLiquifyTransformWorkerBenchmark::RelaxSimple ||
-               operation == KisLiquifyTransformWorkerBenchmark::RelaxAffine) {
+    } else if (operation == KisLiquifyTransformWorkerBenchmark::RestoreShape ||
+               operation == KisLiquifyTransformWorkerBenchmark::RestoreShapeWithStretch) {
 
         for (int i = 0; i < bases.count(); i++) {
             worker.translatePoints(bases[i], QPointF(50, 0), sigmas[i%sigmas.length()], useWashMode, flows[i%flows.length()]);
@@ -169,16 +169,20 @@ void testPoints(KisLiquifyTransformWorkerBenchmark::Operation operation, bool us
             worker.rotatePoints(bases[i], M_PI / 4, sigmas[i%sigmas.length()], useWashMode, flows[i%flows.length()]);
         }
 
-        QList<QPointF> relaxBases = preparePointsData((A + D)/2, (C+B)/2, (B+D)/2, (A+C)/2, oneWayBasesCount);
+        QList<QPointF> restoreShapeBases = preparePointsData((A + D)/2, (C+B)/2, (B+D)/2, (A+C)/2, oneWayBasesCount);
 
         QBENCHMARK {
 
-            for (int i = 0; i < relaxBases.count(); i++) {
-                if (operation == KisLiquifyTransformWorkerBenchmark::RelaxSimple) {
-                    worker.relaxPoints(relaxBases[i], flows[i%flows.length()], sigmas[i%sigmas.length()]);
-                } else {
-                    worker.affineRelaxPoints(relaxBases[i], flows[i%flows.length()], sigmas[i%sigmas.length()]);
-                }
+            for (int i = 0; i < restoreShapeBases.count(); i++) {
+                const bool preserveStretch =
+                    operation == KisLiquifyTransformWorkerBenchmark::RestoreShapeWithStretch;
+
+                worker.restoreShapePoints(restoreShapeBases[i],
+                                          flows[i%flows.length()],
+                                          sigmas[i%sigmas.length()],
+                                          true,
+                                          true,
+                                          preserveStretch);
             }
         }
     } else if (operation == KisLiquifyTransformWorkerBenchmark::RunOnQImage) {
@@ -314,24 +318,24 @@ void KisLiquifyTransformWorkerBenchmark::testPointsUndoWash()
     testPoints(Undo, true);
 }
 
-void KisLiquifyTransformWorkerBenchmark::testPointsRelaxSimpleBuildUp()
+void KisLiquifyTransformWorkerBenchmark::testPointsRestoreShapeBuildUp()
 {
-    testPoints(RelaxSimple, false);
+    testPoints(RestoreShape, false);
 }
 
-void KisLiquifyTransformWorkerBenchmark::testPointsRelaxSimpleWash()
+void KisLiquifyTransformWorkerBenchmark::testPointsRestoreShapeWash()
 {
-    testPoints(RelaxSimple, true);
+    testPoints(RestoreShape, true);
 }
 
-void KisLiquifyTransformWorkerBenchmark::testPointsRelaxAffineBuildUp()
+void KisLiquifyTransformWorkerBenchmark::testPointsRestoreShapeWithStretchBuildUp()
 {
-    testPoints(RelaxAffine, false);
+    testPoints(RestoreShapeWithStretch, false);
 }
 
-void KisLiquifyTransformWorkerBenchmark::testPointsRelaxAffineWash()
+void KisLiquifyTransformWorkerBenchmark::testPointsRestoreShapeWithStretchWash()
 {
-    testPoints(RelaxAffine, true);
+    testPoints(RestoreShapeWithStretch, true);
 }
 
 void KisLiquifyTransformWorkerBenchmark::testRunOnDev()

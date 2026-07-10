@@ -60,13 +60,12 @@ public:
                     qreal amount,
                     qreal sigma);
 
-    void relaxPoints(const QPointF &base,
-                     qreal amount,
-                     qreal sigma);
-
-    void affineRelaxPoints(const QPointF &base,
-                           qreal amount,
-                           qreal sigma);
+    void restoreShapePoints(const QPointF &base,
+                            qreal amount,
+                            qreal sigma,
+                            bool preserveRotation,
+                            bool preserveScale,
+                            bool preserveStretch);
 
     const QVector<QPointF>& originalPoints() const;
     QVector<QPointF>& transformedPoints();

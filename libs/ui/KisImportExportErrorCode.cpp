@@ -117,6 +117,13 @@ KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWri
     , cannotWrite(error)
 { }
 
+KisImportExportErrorCode::KisImportExportErrorCode(const QString &message)
+    : errorFieldUsed(CodeId)
+    , codeId(ImportExportCodes::Failure)
+    , cannotRead()
+    , cannotWrite()
+    , failureMessage(message)
+{ }
 
 bool KisImportExportErrorCode::isOk() const
 {
@@ -175,7 +182,7 @@ QString KisImportExportErrorCode::errorMessage() const
 
             // Other
             case ImportExportCodes::Failure:
-                return i18n("Unknown error.");
+                return failureMessage.isEmpty() ? i18n("Unknown error.") : failureMessage;
             case ImportExportCodes::InternalError:
                 return internal;
             case ImportExportCodes::Busy:

@@ -115,6 +115,7 @@ public:
     KisImportExportErrorCode(ImportExportCodes::ErrorCodeID code);
     KisImportExportErrorCode(KisImportExportErrorCannotRead code);
     KisImportExportErrorCode(KisImportExportErrorCannotWrite code);
+    explicit KisImportExportErrorCode(const QString &message);
 
     QString errorMessage() const;
     bool isOk() const;
@@ -140,6 +141,7 @@ private:
     ImportExportCodes::ErrorCodeID codeId {ImportExportCodes::OK};
     KisImportExportErrorCannotRead cannotRead;
     KisImportExportErrorCannotWrite cannotWrite;
+    QString failureMessage;
 };
 
 inline QDebug &operator<<(QDebug &d, const KisImportExportErrorCode &errorCode)

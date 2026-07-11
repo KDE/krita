@@ -168,31 +168,30 @@ KisImportExportErrorCode KisMediaEncoderWrapper::start(const KisMediaEncoderWrap
     reset();
 
     KisMediaEncoderRunnable *runnable = makeSupportedRunnable(settings);
-    ImportExportCodes::ErrorCodeID resultCode = ImportExportCodes::InternalError;
+    KisImportExportErrorCode errorCode(ImportExportCodes::InternalError);
     if (runnable) {
         connect(
             runnable,
             &KisMediaEncoderRunnable::sigCompleted,
             this,
-            [&resultCode] {
-                resultCode = ImportExportCodes::OK;
+            [&errorCode] {
+                errorCode = KisImportExportErrorCode(ImportExportCodes::OK);
             },
             Qt::DirectConnection);
         connect(
             runnable,
             &KisMediaEncoderRunnable::sigCancelled,
             this,
-            [&resultCode] {
-                resultCode = ImportExportCodes::Cancelled;
+            [&errorCode] {
+                errorCode = KisImportExportErrorCode(ImportExportCodes::Cancelled);
             },
             Qt::DirectConnection);
         connect(
             runnable,
             &KisMediaEncoderRunnable::sigFailed,
             this,
-            [&resultCode](const QString &errorMessage) {
-                warnFile << "Media encoder export error:" << errorMessage;
-                resultCode = ImportExportCodes::OK;
+            [&errorCode](const QString &errorMessage) {
+                errorCode = KisImportExportErrorCode(errorMessage);
             },
             Qt::DirectConnection);
         connect(this,
@@ -238,7 +237,7 @@ KisImportExportErrorCode KisMediaEncoderWrapper::start(const KisMediaEncoderWrap
         delete runnable;
         delete progressDlg;
     }
-    return KisImportExportErrorCode(resultCode);
+    return errorCode;
 }
 
 void KisMediaEncoderWrapper::startNonBlocking(const KisMediaEncoderWrapperSettings &settings)

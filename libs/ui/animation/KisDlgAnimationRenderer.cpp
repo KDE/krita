@@ -144,6 +144,7 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
         connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
         connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
+        connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), SLOT(slotRenderTypeChanged()));
 
         connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(slotCheckWarnings()));
         connect(m_page->intWidth, SIGNAL(valueChanged(int)), SLOT(slotCheckWarnings()));
@@ -337,6 +338,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     bool hasAudioLoaded = doc.getAudioTracks().count() > 0;
     m_page->chkIncludeAudio->setChecked(hasAudioLoaded);
+    slotRenderTypeChanged();
 }
 
 #ifndef Q_OS_ANDROID
@@ -490,6 +492,16 @@ bool KisDlgAnimationRenderer::looksLikeGif(const QString &videoType)
     return videoType.contains(QStringLiteral(":gif"));
 #else
     return videoType == QStringLiteral("image/gif");
+#endif
+}
+
+bool KisDlgAnimationRenderer::supportsAudio(const QString &videoType)
+{
+#ifdef Q_OS_ANDROID
+    KisMediaEncoderFormat *format = KisMediaEncoderWrapper::getFormatByKey(videoType);
+    return format && format->supportsAudio();
+#else
+    return !videoType.startsWith(QStringLiteral("image/"));
 #endif
 }
 
@@ -960,6 +972,13 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
     }
 
     slotCheckWarnings();
+}
+
+void KisDlgAnimationRenderer::slotRenderTypeChanged()
+{
+    m_page->chkIncludeAudio->setVisible(m_page->cmbRenderType->count() != 0
+                                        && supportsAudio(m_page->cmbRenderType->currentData().toString()));
+    m_page->adjustSize();
 }
 
 void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)

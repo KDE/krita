@@ -33,6 +33,7 @@ public:
     virtual QString key() const = 0;
     virtual QString title() const = 0;
     virtual QString extension() const = 0;
+    virtual bool supportsAudio() const = 0;
 
     virtual QWidget *createPreferencesWidget(const QVariantMap &preferences) const = 0;
     virtual void resetPreferencesWidget(QWidget *widget) const = 0;

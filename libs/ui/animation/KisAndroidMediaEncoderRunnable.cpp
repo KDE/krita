@@ -96,6 +96,11 @@ public:
         return extensionForFormatId(m_formatId);
     }
 
+    bool supportsAudio() const override
+    {
+        return true;
+    }
+
     QWidget *createPreferencesWidget(const QVariantMap &preferences) const override
     {
         KisAndroidMediaEncoderPreferencesWidget *pw = new KisAndroidMediaEncoderPreferencesWidget;

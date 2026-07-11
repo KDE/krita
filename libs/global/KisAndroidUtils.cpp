@@ -6,6 +6,7 @@
 #include <kis_debug.h>
 
 #include <QFile>
+#include <QTemporaryFile>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QJniEnvironment>
@@ -101,26 +102,14 @@ void setFullScreen(bool fullScreen)
     }
 }
 
-bool copyFile(const QString &inputPath, const QString &outputPath, QString *outErrorMessage)
+namespace
 {
-    QFile inputFile(inputPath);
-    if (!inputFile.open(QIODevice::ReadOnly)) {
-        if (outErrorMessage) {
-            *outErrorMessage =
-                QStringLiteral("failed to open input file '%1': %2").arg(inputPath).arg(inputFile.errorString());
-        }
-        return false;
-    }
-
-    QFile outputFile(outputPath);
-    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        if (outErrorMessage) {
-            *outErrorMessage =
-                QStringLiteral("failed to open output file '%1': %2").arg(outputPath).arg(outputFile.errorString());
-        }
-        return false;
-    }
-
+bool copyFileContents(const QString &inputPath,
+                      const QString &outputPath,
+                      QFile &inputFile,
+                      QFile &outputFile,
+                      QString *outErrorMessage)
+{
     QByteArray buffer;
     buffer.resize(BUFSIZ);
     while (true) {
@@ -168,6 +157,54 @@ bool copyFile(const QString &inputPath, const QString &outputPath, QString *outE
             }
         }
     }
+}
+} // namespace
+
+bool copyFile(const QString &inputPath, const QString &outputPath, QString *outErrorMessage)
+{
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open input file '%1': %2").arg(inputPath).arg(inputFile.errorString());
+        }
+        return false;
+    }
+
+    QFile outputFile(outputPath);
+    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open output file '%1': %2").arg(outputPath).arg(outputFile.errorString());
+        }
+        return false;
+    }
+
+    return copyFileContents(inputPath, outputPath, inputFile, outputFile, outErrorMessage);
+}
+
+bool copyFileToTemporary(const QString &inputPath, QTemporaryFile &outputFile, QString *outErrorMessage)
+{
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open input file '%1': %2").arg(inputPath).arg(inputFile.errorString());
+        }
+        return false;
+    }
+
+    if (!outputFile.open()) {
+        if (outErrorMessage) {
+            *outErrorMessage = QStringLiteral("failed to open temporary output file: %1").arg(outputFile.errorString());
+        }
+        return false;
+    }
+
+    if (outErrorMessage) {
+        outErrorMessage->clear();
+    }
+    return copyFileContents(inputPath, outputFile.fileName(), inputFile, outputFile, outErrorMessage);
 }
 
 } // namespace KisAndroidUtils

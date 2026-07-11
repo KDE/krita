@@ -845,7 +845,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 
     options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
     options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
-    options.includeAudio = m_page->chkIncludeAudio->isChecked();
+    options.includeAudio = supportsAudio(videoType) && m_page->chkIncludeAudio->isChecked();
     options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
     options.frameRate = m_page->intFramesPerSecond->value();

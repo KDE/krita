@@ -42,7 +42,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
-# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2023, 2024, 2025 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# SPDX-FileCopyrightText: 2004-2010, 2023-2026 Stefan Asserhäll <stefan.asserhall@gmail.com>
 # Stefan Asserhall <stefan.asserhall@gmail.com>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Arve Eriksson <031299870@telia.com>, 2011.
 # Arve Eriksson <031299870@telia.com>, 2010.
@@ -52,15 +52,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-10 02:36+0000\n"
-"PO-Revision-Date: 2025-10-26 23:39+0100\n"
+"POT-Creation-Date: 2026-07-11 02:37+0000\n"
+"PO-Revision-Date: 2026-07-10 15:46+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 26.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7707,109 +7707,87 @@ msgstr "Dela objekt med flera delkonturer i flera objekt"
 
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "Konvertera texttyp"
+msgstr "Konvertera text till förformaterad"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
 msgstr "Förformaterad"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Texten radbryts inte och behåller mellanslag och "
-"nyrader. En radbrytning infogas så att raderna förblir separerade efter "
-"radbrytning eller positionering.</p></body></html>"
+"Texten radbryts inte och behåller mellanslag och nyrader. En radbrytning "
+"infogas så att raderna förblir separerade efter radbrytning eller "
+"positionering."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "Konvertera texttyp"
+msgstr "Konvertera text till radbruten på plats"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
 msgstr "Radbruten på plats"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Text radbryts inom en fast längd, mellanslag och "
-"nyrader bevaras. Nyrader tas inte bort.</p></body></html>"
+"Text radbryts inom en fast längd, mellanslag och nyrader bevaras. Nyrader "
+"tas inte bort."
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "Konvertera texttyp"
+msgstr "Konvertera text till förpositionerad"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr "Förplacerad"
+msgstr "Förpositionerad"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Text använder teckentransformeringar i SVG 1.1 för att "
-"placera varje rad. Mellanslag och nyrader är dras ihop. Det är till för "
-"bakåtkompatibilitet med SVG 1.1.</p></body></html>"
+"Text använder teckentransformeringar i SVG 1.1 för att placera varje rad. "
+"Mellanslag och nyrader är dras ihop. Det är till för bakåtkompatibilitet med "
+"SVG 1.1."
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Textform"
+msgstr "Flyt text in i form"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
@@ -7819,66 +7797,55 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"Låt den första markerade texten flyta in i formen. Om det redan finns former "
+"som den flyter in i, läggs formen till i kedjan."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "Subtrahera former"
+msgstr "Subtrahera form från textkedja"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
-"Tvinga färgväljaren att endast välja färger i paletten som för närvarande är "
-"vald."
+"Gör former till en del av de subtraherade formområdena i den första "
+"markerade texten."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
-#, fuzzy, kde-format
-#| msgid "Text On Path"
+#, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr "Text på kontur"
+msgstr "Placera text på kontur"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
 msgstr ""
-"Tvinga färgväljaren att endast välja färger i paletten som för närvarande är "
-"vald."
+"Låt den första markerade texten flyta över till den första markerade "
+"konturen."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove Shape Collection"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Ta bort formsamling"
+msgstr "Ta bort former från textkedja"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
-#| msgid "Remove Shape Collection"
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "Ta bort formsamling"
+msgstr "Ta bort former från textkedjan och lägg till dem på lagret."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7886,19 +7853,17 @@ msgstr "Ta bort formsamling"
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Ändra lagrets alfa"
+msgstr "Ändra flödesformtyp"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Ändra den aktuella flödesformen mellan inne och subtraktionsläge"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7909,7 +7874,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Ställ in flödesform till sist"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7917,56 +7882,56 @@ msgstr ""
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
+"Gör den här flödesformen den sista i textkedjan som använd av textlayout."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "Tidigare i kedjan."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "Flytta den här formen tidigare i textkedjan."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Flytta formen tidigare i kedjan."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "Senare i kedjan."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "Flytta den här formen senare i textkedjan."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Flytta formen senare i kedjan."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Första radens indentering"
+msgstr "Först i kedjan"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7975,13 +7940,14 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
+"Gör den här flödesformen den första i textkedjan som använd av textlayout."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
 #, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr ""
+msgstr "Ställ in form som först i kedjan"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -15082,15 +15048,14 @@ msgstr "Beskär till bildstorlek"
 #, kde-format
 msgctxt "action"
 msgid "Purge Unused Image Data"
-msgstr ""
+msgstr "Rensa oanvänd bilddata"
 
 #. i18n: context: toolTip @ Action (purge_unused_image_data), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1199
-#, fuzzy, kde-format
-#| msgid "Smooths the edges of the selection"
+#, kde-format
 msgctxt "action"
 msgid "Removes all fully transparent pixels from the image storage"
-msgstr "Jämnar ut markeringens kanter"
+msgstr "Tar bort alla helt genomskinliga bildpunkter från bildlagringen"
 
 #. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209
@@ -15658,19 +15623,17 @@ msgstr "Jämna ut"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "Aktivera markeringsåtgärdsrad"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Configure sections"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Anpassa avsnitt"
+msgstr "Anpassa markeringsåtgärdsrad"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -16367,113 +16330,98 @@ msgstr "Arbetsytor"
 
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgctxt "action"
 msgid "Resources"
 msgstr "Resurser"
 
 #. i18n: context: text @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources..."
-msgstr "Hantera resurser..."
+msgstr "Hämta fler resurser..."
 
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources"
-msgstr "Lagringsresurser"
+msgstr "Hämta fler resurser"
 
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
-#, fuzzy, kde-format
-#| msgid "LUT Management"
+#, kde-format
 msgctxt "action"
 msgid "Management"
-msgstr "Hantering av uppslagningstabell"
+msgstr "Hantering"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
-msgstr "Hantera inspelningar..."
+msgstr "Hantera supporterförmåner..."
 
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:24 krita/kritamenu_android.action:25
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr "Hantera resurspackar"
+msgstr "Hantera supporterförmåner"
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions..."
-msgstr "Hantera inspelningar..."
+msgstr "Hantera prenumerationer..."
 
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:36 krita/kritamenu_android.action:37
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions"
-msgstr "Beskrivning"
+msgstr "Hantera prenumerationer"
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr "Användargränssnitt"
+msgstr "Gränssnitt"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr "Ändra rektangel"
+msgstr "Ändra gränssnittsskala..."
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:51 krita/kritamenu_android.action:52
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr "Ändra rektangel"
+msgstr "Ändra gränssnittsskala"
 
 #: krita/main.cc:723
-#, fuzzy, kde-format
-#| msgid "© 1999-%1, The Krita Team"
+#, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
-msgstr "© 1999-%1, Krita-gruppen"
+msgstr "© 1999-2026 Krita-utvecklarna"
 
 #: krita/main.cc:820 libs/ui/KisApplication.cpp:517
 #: libs/ui/KisApplication.cpp:842
@@ -16870,12 +16818,9 @@ msgid "Convert Text Type"
 msgstr "Konvertera texttyp"
 
 #: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Ändra textegenskaper"
+msgstr "Ändra egenskaper för text på kontur"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -16947,7 +16892,7 @@ msgstr "Anpassa till höjd"
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr ""
+msgstr "Stilexempel"
 
 #: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
@@ -19045,7 +18990,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Sammanhangsberoende släng"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -19252,7 +19197,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Kerning"
-msgstr ""
+msgstr "Kerning"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
 #, kde-format
@@ -19447,7 +19392,7 @@ msgid ""
 "Replaces oldstyle figures with lining figures, which harmonize well with "
 "uppercase letters."
 msgstr ""
-"Ersätter hängande siffror med linjerade siffror, som harmoniserar bra med "
+"Ersätter gammaldags siffror med linjerade siffror, som harmoniserar bra med "
 "versaler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
@@ -19498,7 +19443,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Siffror med gammaldags stil"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19507,7 +19452,7 @@ msgid ""
 "Replaces lining figures with oldstyle figures, which harmonize well with "
 "lowercase letters."
 msgstr ""
-"Ersätter linjerade siffror med hängande siffror, som harmoniserar bra med "
+"Ersätter linjerade siffror med gammaldags siffror, som harmoniserar bra med "
 "gemener."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
@@ -19590,7 +19535,7 @@ msgstr "Ersätter glyfer med sådana mer lämpade för upphöjd text."
 #, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Tabellformade figurer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
@@ -19702,7 +19647,7 @@ msgstr "Ersätter gemener med små versala former."
 #, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr ""
+msgstr "Textning"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -21567,7 +21512,7 @@ msgstr "Beskär bild"
 #: libs/image/kis_image.cc:887
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
-msgstr ""
+msgstr "Rensa oanvänd data"
 
 #: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
@@ -22437,6 +22382,8 @@ msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
+"Bilden innehåller ett vektorlager med former av typen <b>%1</b>, vilket inte "
+"stöds, de kommer inte att sparas."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
 #, kde-format
@@ -22445,6 +22392,8 @@ msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
+"Bilden innehåller ett vektorlager med former av typen <b>%1</b>, vilket inte "
+"stöds, de kommer att sparas som konturer"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -23971,7 +23920,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1163
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24040,7 +23989,7 @@ msgstr "Lokala resurser"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:679 libs/ui/KisView.cpp:1166
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:730 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24902,7 +24851,7 @@ msgid "Select All"
 msgstr "Markera alla"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:774
+#: libs/ui/KisView.cpp:778
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Fyll ut lager"
@@ -24964,7 +24913,7 @@ msgid "Paste shapes"
 msgstr "Klistra in former"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:589
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
 #, kde-format
 msgid "(pasted)"
 msgstr "(inklistrad)"
@@ -26582,6 +26531,9 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"Varning: HDR-läge aktiverades på ytor som arbetar i 8-bitars läge.\n"
+"Aktivera 10-bitars läge i Kritas inställningsdialogruta och starta om Krita "
+"för att undvika färgbandning."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27424,39 +27376,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Ingen"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1070
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Cirkel"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1071
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "Rektangel"
+msgstr "Rektangel vänster"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1072
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "Rektangel"
+msgstr "Rektangel höger"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1073
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "Rektangelverktyg"
+msgstr "Rektangel ovanför"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1105
 #, kde-format
@@ -27535,11 +27482,9 @@ msgid "Rec 709 Linear"
 msgstr "Rek 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1339
-#, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rek. 2100 PQ"
+msgstr "Rek. 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1340
 #, kde-format
@@ -27556,10 +27501,9 @@ msgstr ""
 "Använd \"föredragen\" rymd om du inte vet vad du gör.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1350
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "CMYK-blandningsläge (kräver omstart)"
+msgstr "Bitdjup för dukens arbetsyta (kräver omstart):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27576,13 +27520,13 @@ msgstr "Automatiskt"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1362
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8 bitar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1362
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10 bitar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1358
 #, kde-format
@@ -27591,12 +27535,13 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>Bitdjupet för färgen som skickas till fönstersammansättningen. Du bör "
+"byta till 10-bitars läge om HDR-funktionerna på skärmen ska användas.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1363
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Färgrymd för dukens yta:"
+msgstr "Nuvarande bitdjup för dukens arbetsyta:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1370
 #, kde-format
@@ -27725,31 +27670,28 @@ msgid "Auto (%1)"
 msgstr "Automatisk (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
-msgstr "Aktuell"
+msgstr "GLX (nuvarande)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2170
-#, fuzzy, kde-format
-#| msgid "GNX"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
-msgstr "GNX"
+msgstr "GLX"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#, fuzzy, kde-format
-#| msgid "Current"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
-msgstr "Aktuell"
+msgstr "EGL (nuvarande)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2172
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
-msgstr ""
+msgstr "EGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -27758,6 +27700,8 @@ msgid ""
 "<p>If you are using Krita on X11 or XWayland and experience slowness, try "
 "switching between EGL and GLX</p>"
 msgstr ""
+"<p>Om du använder Krita på X11 eller XWayland och upplever långsamhet, "
+"försök att byta mellan EGL och GLX.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
@@ -28279,36 +28223,34 @@ msgid "Preset Icon Library"
 msgstr "Ikonbibliotek för förinställningar"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
-#, fuzzy, kde-format
-#| msgid "Unsupported unit"
+#, kde-format
 msgid "Supporter Benefits"
-msgstr "Enhet som inte stöds"
+msgstr "Supporterförmåner"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscriptions"
-msgstr "Beskrivning"
+msgstr "Hantera prenumerationer"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:114
 #, kde-format
 msgid "You have %1 supporter benefit:"
 msgid_plural "You have %1 supporter benefits:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har %1 supporterförmån:"
+msgstr[1] "Du har %1 supporterförmåner:"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:122
 #, kde-format
 msgid "There is %1 supporter benefit available:"
 msgid_plural "There are %1 supporter benefits available:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Det finns %1 supporterförmån tillgänglig:"
+msgstr[1] "Det finns %1 supporterförmåner tillgängliga:"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
 #, kde-format
 msgid "StackedWidget"
-msgstr ""
+msgstr "StackedWidget"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblNoBenefits)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:53
@@ -28317,12 +28259,14 @@ msgid ""
 "No supporter benefits available on this version of Krita.\n"
 "You can still support Krita by donating."
 msgstr ""
+"Inga supporterförmåner är tillgängliga på den här versionen av Krita.\n"
+"Du kan fortfarande stödja Krita genom att ge ett bidrag."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnNoBenefitsSupport)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Ge ett bidrag"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -28680,14 +28624,13 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:1659
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
-msgstr ""
+msgstr "Krita är möjlig tack vare kontinuerligt stöd från personer som du!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgid "Manage Supporter Benefits"
-msgstr "Hantera resurspackar"
+msgstr "Hantera supporterförmåner"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
@@ -29494,12 +29437,13 @@ msgstr "Föredragen återgivning (kräver omstart):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
 #: libs/ui/forms/wdgdisplaysettings.ui:111
-#, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
+#, kde-format
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
-msgstr "Föredragen återgivning (kräver omstart):"
+msgstr ""
+"Föredraget OpenGL-gränssnitt\n"
+"(kräver omstart):"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:127
@@ -30383,6 +30327,8 @@ msgid ""
 "Dynamically adjust outline to match the effective size of the brush. (For "
 "example, as brush size changes due to pen pressure.)"
 msgstr ""
+"Justera konturen dynamiskt så att den matchar penselns effektiva storlek. "
+"(Till exempel när penselstorleken ändras på grund av penntryck.)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -30430,10 +30376,9 @@ msgstr "Raderingskonturfärg:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:886
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Färghämtare:"
+msgstr "Färghämtarens form:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -30461,17 +30406,15 @@ msgstr "Tjocklek:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:961
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Cirkelkontur"
+msgstr "Aktivera kontur"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "Expanderande mellanrum"
+msgstr "Extra jämförelserymd"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
@@ -32502,12 +32445,16 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Aktiverar kromatisk anpassning för absolut "
+"återgivning. Det visar i praktiken hur färgerna skulle se ut om bilden "
+"trycktes på papper och visades med skärmen som enda ljuskälla. Det är "
+"normalt beteende för ett ICC v4-arbetsflöde.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Absolut återgivning kromatisk adaption"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -32950,6 +32897,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Behandla tangenterna Page Up och Page Down som musens höger- och mittenknapp "
+"(provisorisk lösning för Xiaomi-pennor)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -32958,6 +32907,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Bortse från ritplattans positionshistorik (provisorisk lösning för ojämna "
+"linjer med Xiaomi-pennor)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214
@@ -33868,10 +33819,9 @@ msgid "Five Finger Drag"
 msgstr "Dra med fem fingrar"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:505
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "Tryck med ett finger"
+msgstr "Håll med ett finger"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:508
 #, kde-format
@@ -34088,9 +34038,7 @@ msgid "Toggle Eraser"
 msgstr "Ändra radergummi"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Ändra förinställning av radergummi"
 
@@ -34196,7 +34144,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ändra arkivlager"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:680
+#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34982,10 +34930,9 @@ msgid "Crop to Selection"
 msgstr "Beskär till markering"
 
 #: libs/ui/kis_selection_actions_panel.cpp:112
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgid "Disable selection actions bar"
-msgstr "Aktivera markeringsåtgärdsrad"
+msgstr "Inaktivera markeringsåtgärdsrad"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format
@@ -35117,8 +35064,7 @@ msgstr ""
 "\" text-decoration: underline; color:%1;\">Skriptskola</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:273
-#, fuzzy, kde-format
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
@@ -35193,6 +35139,13 @@ msgid ""
 "\t\tImage->Purge Unused Image Data action.\n"
 "Slow layers: "
 msgstr ""
+"\n"
+"\n"
+"Varning:\tVisa lager tog för lång tid för att beräkna\n"
+"\t\tsina miniatyrbilder. De ändrades till miniatyrbilder\n"
+"\t\tmed låg kvalitet. Försök att rensa oanvänd bilddata\n"
+"\t\tmed åtgärden Bild -> Rensa oanvänd bilddata.\n"
+"Långsamma lager: "
 
 #: libs/ui/kis_statusbar.cc:415
 #: plugins/python/channels2layers/channels2layers.py:105
@@ -35974,10 +35927,9 @@ msgstr ""
 "ett annat namn, på en annan plats."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "Filen kunde inte öppnas."
+msgstr "%1 kunde inte öppnas."
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -36691,27 +36643,27 @@ msgstr "Ingen bild tillgänglig."
 msgid "Use This Template"
 msgstr "Använd den här mallen"
 
-#: libs/ui/KisView.cpp:749
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Det går inte att dra och släppa färger på den valda lagertypen."
 
-#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:419
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:419
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Lagret är låst och osynligt."
 
-#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:421
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:421
 #, kde-format
 msgid "Layer is locked."
 msgstr "Lagret är låst."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:423
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Lagret är osynligt."
 
-#: libs/ui/KisView.cpp:1167
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -36719,47 +36671,47 @@ msgid ""
 msgstr ""
 "<p>Dokumentet <b>\"%1\"</b> har blivit ändrat.</p><p>Vill du spara det?</p>"
 
-#: libs/ui/KisView.cpp:1241
+#: libs/ui/KisView.cpp:1245
 #, kde-format
 msgid "Write Protected"
 msgstr "Skrivskyddad"
 
-#: libs/ui/KisView.cpp:1245
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Recovered"
 msgstr "Återställd"
 
-#: libs/ui/KisView.cpp:1347
+#: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Bildskärmskorrektur fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1352
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Bildskärmskorrektur på."
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Bildskärmskorrektur av."
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1370
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Färgomfångsvarningar fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1372
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Färgomfångsvarningar på."
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Men bildskärmskorrektur är fortfarande av."
 
-#: libs/ui/KisView.cpp:1377
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Färgomfångsvarningar av."
@@ -36898,17 +36850,17 @@ msgstr "Omstart krävs."
 #: libs/ui/KisWelcomePageWidget.cpp:843
 #, kde-format
 msgid "Become a Supporter!"
-msgstr ""
+msgstr "Bli en supporter!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Supporters get brush packs and more."
-msgstr ""
+msgstr "Supportrar får penselpaket med mera."
 
 #: libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Contributions keep development going."
-msgstr ""
+msgstr "Bidrag håller utvecklingen igång."
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
@@ -39365,16 +39317,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1.\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
 "Kunde inte spara %1.\n"
-"Orsak: %2"
+"Orsak: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
@@ -40056,16 +40005,14 @@ msgid "Current dockers"
 msgstr "Nuvarande paneler"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgid "Download Resource Bundles"
-msgstr "Hantera resurspackar"
+msgstr "Ladda ner resurspackar"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscription"
-msgstr "Beskrivning"
+msgstr "Hantera beskrivning"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -40594,10 +40541,9 @@ msgid "Luma:"
 msgstr "Luminans:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Ta bort sida"
+msgstr "Ta bort tagg"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -45929,7 +45875,7 @@ msgstr "Proportionell (ch)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "Ideografisk (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
@@ -45981,12 +45927,10 @@ msgstr "%1, %2, variant: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #: plugins/dockers/textproperties/LocaleHandler.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "language, variant"
-#| msgid "%1, variant: %3"
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %2"
-msgstr "%1, variant: %3"
+msgstr "%1, variant: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -46019,6 +45963,8 @@ msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
+"Justeringsbaslinje gör det möjligt att bestämma hur textintervallet justera "
+"med överliggande text."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:18
 #, kde-format
@@ -46026,7 +45972,7 @@ msgctxt ""
 "comma separated search terms for the alignment-baseline property, matching "
 "is case-insensitive"
 msgid "alignment-baseline, mojisoroe"
-msgstr ""
+msgstr "Justeringsbaslinje, mojisoroe"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:82
 #, kde-format
@@ -46038,7 +45984,7 @@ msgstr "Baslinje"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline defined by Dominant Baseline."
-msgstr ""
+msgstr "Justera till baslinjen definierad av dominant baslinje."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:84
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:82
@@ -46052,7 +45998,7 @@ msgstr "Alfabetisk"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline for scripts that align at the bottom."
-msgstr ""
+msgstr "Justera till baslinjen för skript som justeras i underkant."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
@@ -46066,7 +46012,7 @@ msgstr "Ideografisk"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box bottom."
-msgstr ""
+msgstr "Justera till den Ideografiska em-rutans underkant."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
@@ -46080,7 +46026,7 @@ msgstr "Central"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box center."
-msgstr ""
+msgstr "Justera till den Ideografiska em-rutans centrum."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
@@ -46094,7 +46040,7 @@ msgstr "Hängande"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
-msgstr ""
+msgstr "Justera efter huvuddraget som används i nordbrāhmiskrift."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -46112,6 +46058,8 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
+"Justera till mitten mellan den alfabetiska baslinjen och x-höjden vid "
+"horisontell layout, vertikalt är det den centrala baslinjen."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
@@ -46126,42 +46074,42 @@ msgstr "Matematisk"
 msgctxt "@info:tooltip"
 msgid "Align to the mathematical baseline, so that operator symbols align."
 msgstr ""
+"Justera mot den matematiska baslinjen så att operatorsymboler är på samma "
+"nivå."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Text Top"
-msgstr ""
+msgstr "Text längst upp"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:97
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:95
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
-msgstr ""
+msgstr "Justera till överhäng"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Text Bottom"
-msgstr ""
+msgstr "Text längst ner"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:99
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
-msgstr ""
+msgstr "Justera till underhäng"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Baseline"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
-msgstr "Baslinje"
+msgstr "Baslinjebyte"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
 #, kde-format
@@ -46170,6 +46118,8 @@ msgid ""
 "Baseline shift allows moving the text away from the baseline, either by "
 "predefined super and subscript values, or by a fixed amount."
 msgstr ""
+"Baslinjebyte gör det möjligt att flytta texten bort från baslinjen, antingen "
+"med fördefinierade upphöjt eller nedsänkt värde, eller med ett fast värde."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:20
 #, kde-format
@@ -46177,7 +46127,7 @@ msgctxt ""
 "comma separated search terms for the baseline-shift property, matching is "
 "case-insensitive"
 msgid "baseline-shift, superscript, subscript"
-msgstr ""
+msgstr "baslinjebyte, upphöjt, nedsänkt"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
@@ -46263,6 +46213,10 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
+"Normalt lagras stilar i punkter, vilket innebär att storlekarna i "
+"bildpunkter varierar beroende på dokumentets utskriftsupplösning. Aktivera "
+"alternativet för att säkerställa att stilen bibehåller samma "
+"bildpunktsstorlek i olika dokument."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, kde-format
@@ -46289,15 +46243,13 @@ msgid "... After"
 msgstr "... Efter"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Bredd:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Höjd:"
@@ -46312,7 +46264,7 @@ msgstr "Riktning"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
-msgstr ""
+msgstr "Höger till vänster."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -46321,6 +46273,7 @@ msgctxt ""
 "insensitive"
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
+"höger till vänster, htv, riktning, dubbelriktat, isolera, inbädda, överskrida"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:107
 #, kde-format
@@ -46338,7 +46291,7 @@ msgstr "Höger till vänster"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-Bidi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:136
 #: plugins/dockers/textproperties/qml/FontStyle.qml:386
@@ -46379,7 +46332,7 @@ msgstr "Isolera"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "Isolera-överskrid"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:141
 #, kde-format
@@ -46391,7 +46344,7 @@ msgstr "Vanlig text"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Dominant Baseline"
-msgstr ""
+msgstr "Dominant baslinje"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, kde-format
@@ -46400,6 +46353,8 @@ msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
+"Dominant baslinje anger hur textföljder av olika storlekar justeras. Det är "
+"också standardinställningen för Justeringsbaslinje."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -46407,7 +46362,7 @@ msgctxt ""
 "comma separated search terms for the dominant-baseline property, matching is "
 "case-insensitive"
 msgid "dominant-baseline, mojisoroe"
-msgstr ""
+msgstr "dominant-baslinje, mojisoroe"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:80
 #: plugins/dockers/textproperties/qml/LineBreak.qml:77
@@ -46426,6 +46381,8 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"Justerar till den alfabetiska baslinjen vid horisontell utläggning, justerar "
+"till den centrala baslinjen vid vertikal utläggning."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
@@ -46441,6 +46398,10 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
+"Teckensnittsfamiljen låter dig välja en lista med teckensnitt som ska "
+"användas för den aktuella texten. Den första teckensnittsfamiljen är det "
+"primära teckensnittet som används, medan varje teckensnittsfamilj efter den "
+"används som reserv."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -46448,7 +46409,7 @@ msgctxt ""
 "comma separated search terms for the font-family property, matching is case-"
 "insensitive"
 msgid "font-family, typeface, font, fallback"
-msgstr ""
+msgstr "teckensnittsfamilj, typsnitt, teckensnitt, reserv"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
@@ -46469,7 +46430,7 @@ msgstr "Lägg till reservfamilj"
 #, kde-format
 msgctxt "@label"
 msgid "Font Kerning"
-msgstr ""
+msgstr "Teckensnittskerning"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, kde-format
@@ -46478,6 +46439,8 @@ msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
+"Sätt på eller stäng av teckensnittskerning. Teckensnittskerning möjliggör "
+"mellanrumsjusteringar per glyf enligt teckensnittet."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46485,7 +46448,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr ""
+msgstr "teckensnittskerning, följning"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -46497,7 +46460,7 @@ msgstr "Teckenstorlek"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr ""
+msgstr "Teckenstorlek gör det möjligt att ställa in storleken på tecken."
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -46505,7 +46468,7 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "storlek, liten, stor, medel"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, kde-format
@@ -46519,6 +46482,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
+"Teckenstorleksjustering gör det möjligt att ställa in ett förhållande som x-"
+"höjden måste matchas av."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -46526,7 +46491,7 @@ msgctxt ""
 "comma separated search terms for the fontsize adjust property, matching is "
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
-msgstr ""
+msgstr "storlek, liten, stor, medel, teckenstorleksjustering"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -46539,6 +46504,8 @@ msgstr "Beräkna"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
+"Beräkna förhållandet mellan x-höjd och teckenstorlek för den första "
+"teckensnittsfamiljen."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
@@ -46553,6 +46520,8 @@ msgid ""
 "Font style allows setting the sub style of the given font family, such as "
 "italics and bold"
 msgstr ""
+"Teckenstil gör det möjligt att ställa in delstilen i den givna "
+"teckensnittsfamiljen, såsom kursiv och fetstil"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:20
 #, kde-format
@@ -46563,6 +46532,8 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"vikt, bredd, stil, kursiv, oblik, typsnittsstil, typsnittsutsträckning, "
+"typsnittsvikt, fetstil, optisk storlek, variation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -46606,7 +46577,7 @@ msgstr "Vikt: "
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr ""
+msgstr "Syntetisera fetstil"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, kde-format
@@ -46618,7 +46589,7 @@ msgstr "Bredd:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr ""
+msgstr "Lutning:"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:387
 #, kde-format
@@ -46642,7 +46613,7 @@ msgstr "°"
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr ""
+msgstr "Syntetisera lutning"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:455
 #, kde-format
@@ -46653,7 +46624,7 @@ msgstr "Optisk storlek"
 #: plugins/dockers/textproperties/qml/FontStyle.qml:479
 #, kde-format
 msgid "No extra variable axes in this font"
-msgstr ""
+msgstr "Inga extra variabelaxlar i teckensnittet"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
 #, kde-format
@@ -46669,6 +46640,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
+"Hängande skiljetecken möjliggör hängande inledande och avslutande "
+"skiljetecken såsom kommatecken. Den här implementeringen inför bara "
+"östasiatisk stil av hängande skiljetecken."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -46676,13 +46650,13 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "hängande-skiljetecken, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr ""
+msgstr "Hängande först"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -46694,25 +46668,25 @@ msgstr "Radslut:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr ""
+msgstr "Inga hängande"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "Tillåt hängande kommatecken"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "Tvinga hängande kommatecken"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr ""
+msgstr "Hängande sist"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -46727,6 +46701,8 @@ msgid ""
 "The language of this text shape. Language affects a number of properties, "
 "like glyph shape, upper- and lowercase and line breaking"
 msgstr ""
+"Språket i textformen. Språk påverkar ett antal egenskaper, som formen på "
+"glyfer, stora och små bokstäver och radbrytning"
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
 #, kde-format
@@ -46734,13 +46710,13 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "språk, landsinställning, bcp47"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Store this language between sessions."
-msgstr ""
+msgstr "Lagra det här språket mellan sessioner."
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
 #, kde-format
@@ -46759,7 +46735,7 @@ msgstr "Bokstavsmellanrum"
 msgctxt "@info:tooltip"
 msgid ""
 "Letter spacing controls the spacing between visible clusters of characters."
-msgstr ""
+msgstr "Bokstavsavstånd styr avståndet mellan synliga teckenkluster."
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:20
 #, kde-format
@@ -46767,7 +46743,7 @@ msgctxt ""
 "comma separated search terms for the letter-spacing property, matching is "
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
-msgstr ""
+msgstr "bokstavsmellanrum, följning, kerning"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -46782,6 +46758,8 @@ msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
+"Radbrytning gör det möjligt att välja hur strikt radbrytningsalgoritmen är. "
+"Används mest för CJK-skript, kräver att språket är inställt."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -46789,25 +46767,27 @@ msgctxt ""
 "comma separated search terms for the line-break property, matching is case-"
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
-msgstr ""
+msgstr "radbryt, radbrytning, strikt, kinsoku"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
-msgstr ""
+msgstr "Inga särskilda justeringar görs i radbrytningsalgoritmen"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr ""
+msgstr "Fri"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
+"Medan det vanligtvis definierar en friare algoritm, är det för närvarande "
+"samma som automatisk."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -46816,6 +46796,8 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"Samma som automatisk. Mjuka radbrytningar tillåts innan små kana om "
+"textspråket är japanska."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, kde-format
@@ -46827,7 +46809,7 @@ msgstr "Strikt"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr ""
+msgstr "Mjuka radbrytningar tillåts inte innan små kana."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
@@ -46840,7 +46822,7 @@ msgstr "Var som helst"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr ""
+msgstr "Mjuka radbrytningar sker längs vilken grafem som helst."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
@@ -46852,7 +46834,7 @@ msgstr "Radhöjd"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
-msgstr ""
+msgstr "Radhöjd styr radhöjden som används för textintervallet."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:21
 #, kde-format
@@ -46860,7 +46842,7 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "radhöjd, radmellanrum"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:134
 #, kde-format
@@ -46875,9 +46857,7 @@ msgid "OpenType Features"
 msgstr "OpenType-funktioner"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "Anpassa Open Type-funktioner."
@@ -46888,12 +46868,12 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "teckensnittsinställningar, OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "Inga OpenType-funktioner är för närvarande inställda."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -46912,13 +46892,13 @@ msgstr "Sök..."
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr ""
+msgstr "Glyfer: Versaler"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr ""
+msgstr "Aktivera OpenType-funktioner relaterade till versaler."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -46927,6 +46907,8 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"teckensnittsvariant-kapitäler, Kapitäler, Små kapitäler, Unicase, "
+"Titelgivning, Versaler"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
@@ -46962,19 +46944,19 @@ msgstr "Förenat skiftläge"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
-msgstr ""
+msgstr "Titelkapitäler"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr ""
+msgstr "Glyfer: Östasiatiska"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
-msgstr ""
+msgstr "Aktivera former av glyfer relaterade till östasiatisk textlayout."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -46985,6 +46967,8 @@ msgid ""
 "font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
 "full-width"
 msgstr ""
+"teckensnittsvariant-östasiatisk, jis78, jis83, jis90, jis04, ruby, "
+"proportionell, fullbredd"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
 #, kde-format
@@ -47057,13 +47041,15 @@ msgstr "Ruby"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr ""
+msgstr "Glyfer: ligaturer"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
 msgstr ""
+"Aktivera eller inaktivera ligaturer och sammanhangsberoende alternativ i "
+"texten."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -47074,6 +47060,8 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"teckensnittsvariant-ligaturer, vanliga-ligaturer, godtyckliga-ligaturer, "
+"historiska-ligaturer, sammanhangsberoende-alternativ"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -47085,7 +47073,7 @@ msgstr "Vanliga"
 #, kde-format
 msgctxt "@option:check"
 msgid "Discretionary"
-msgstr ""
+msgstr "Godtyckliga"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:117
 #, kde-format
@@ -47103,13 +47091,13 @@ msgstr "Sammanhangsberoende"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr ""
+msgstr "Glyfer: numeriska"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "Aktivera nummerrelaterade former av glyfer i texten."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -47120,6 +47108,8 @@ msgid ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"teckensnittsvariant-numerisk, gammaldags siffror, linjerade siffror, "
+"ordningstal, genomstruken nolla, bråk"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -47132,13 +47122,13 @@ msgstr "Stil:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lining"
-msgstr ""
+msgstr "Linjerad"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr ""
+msgstr "Gammaldags"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
 #, kde-format
@@ -47150,7 +47140,7 @@ msgstr "Mellanrum:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Tabular"
-msgstr ""
+msgstr "Tabell"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
 #, kde-format
@@ -47168,7 +47158,7 @@ msgstr "Diagonal"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Stacked"
-msgstr ""
+msgstr "Staplade"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:173
 #, kde-format
@@ -47186,13 +47176,13 @@ msgstr "Noll med snedstreck"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Position"
-msgstr ""
+msgstr "Glyfer: Position"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "Aktivera upphöjt och nedsänkt i texten."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -47200,13 +47190,13 @@ msgctxt ""
 "comma separated search terms for the font-variant-position property, "
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
-msgstr ""
+msgstr "teckensnittsvariant-position, upphöjt, nedsänkt"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "Överfyllnadsbrytning:"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
 #, kde-format
@@ -47214,13 +47204,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Revert property. Within the current selection, this property has different "
 "values."
-msgstr ""
+msgstr "Omvänd egenskap. Inom aktuell markering har egenskapen olika värden."
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:23
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert property."
-msgstr ""
+msgstr "Omvänd egenskap."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:14
 #, kde-format
@@ -47233,6 +47223,7 @@ msgstr "Tabulatorstorlek"
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
 msgstr ""
+"Tabulatorstorlek gör det möjligt att definiera storleken på tabulatortecken."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -47240,7 +47231,7 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr ""
+msgstr "tabulatorstorlek"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
@@ -47252,7 +47243,7 @@ msgstr "Testjustering"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
-msgstr ""
+msgstr "Testjustering ställer in justeringen för det givna blocket av tecken."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -47260,7 +47251,7 @@ msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
-msgstr ""
+msgstr "textjustering, justering, textförankring"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
@@ -47315,26 +47306,25 @@ msgstr "Inpassad"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Align Last:"
-msgstr ""
+msgstr "Justera sist:"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:357
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
-msgstr ""
+msgstr "Textförankring:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "Struktur"
+msgstr "Textområde"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Options for modifying the text area padding and margins."
-msgstr ""
+msgstr "Alternativ för att ändra utfyllnad och marginaler i textområdet."
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
 #, kde-format
@@ -47342,21 +47332,19 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "text-i-form, utfyllnad, marginal"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "Skapa form:"
+msgstr "Formutfyllnad:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "Skapa form:"
+msgstr "Formmarginal:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -47371,6 +47359,8 @@ msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"Textdekoration gör det möjligt att rita understruken, överstruken och "
+"genomstruken text."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -47378,7 +47368,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration property, matching is "
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
-msgstr ""
+msgstr "understreck, överstreck, genomstruken, streck-igenom"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -47402,7 +47392,7 @@ msgstr "Överstruken"
 #, kde-format
 msgctxt "@option:check"
 msgid "Line-through"
-msgstr ""
+msgstr "Genomstruken"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:222
 #, kde-format
@@ -47420,7 +47410,7 @@ msgstr "Heldragen"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dotted"
-msgstr ""
+msgstr "Prickad"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:257
 #, kde-format
@@ -47444,7 +47434,7 @@ msgstr "Vågig"
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Indent"
-msgstr ""
+msgstr "Textindentering"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
 #, kde-format
@@ -47453,6 +47443,8 @@ msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"Textindentering gör det möjligt att ställa in indentering vid radbörjan. "
+"Fungerar bara när texten radbryts."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -47460,19 +47452,19 @@ msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr ""
+msgstr "textindentering"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr ""
+msgstr "Hängande indentering"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
 msgctxt "@option:check"
 msgid "Indent after hardbreaks"
-msgstr ""
+msgstr "Indentering efter hård radbrytning"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:64
 #, kde-format
@@ -47552,7 +47544,7 @@ msgstr "Om relevant"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr ""
+msgstr "Om inställd"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -47565,7 +47557,7 @@ msgstr "visa alltid"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr ""
+msgstr "Följ standardvärde"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, kde-format
@@ -47584,7 +47576,7 @@ msgstr "Textåtergivning"
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
-msgstr ""
+msgstr "Textåtergivning bestämmer egenskapens antydning och återgivningsstil"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -47592,7 +47584,7 @@ msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr ""
+msgstr "textåtergivning, antydning, kantutjämning"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -47601,6 +47593,8 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
+"Samma som geometrisk precision, använder ingen antydning och undviker att "
+"läsa in interna bitavbildningar."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
 #, kde-format
@@ -47618,13 +47612,14 @@ msgstr "Återger utan kantutjämning."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Legibility"
-msgstr ""
+msgstr "Optimera läsbarhet"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
+"Använder 'lätt' antydning horisontellt och 'fullständig' antydning vertikalt."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
@@ -47638,6 +47633,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
 msgstr ""
+"Ingen antydning och undviker att läsa in bitavbildningar utom när "
+"teckensnittet inte har några konturer."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, kde-format
@@ -47653,6 +47650,9 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"Texttransformering gör det möjligt att omvandla det givna textområdet, till "
+"exempel genom att ändra dem till stora bokstäver, eller byta former med "
+"halvbredd till fullbredd."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -47663,18 +47663,20 @@ msgid ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana"
 msgstr ""
+"texttransformering, stora bokstäver, små bokstäver, fullbredd, kana "
+"fullstorlek"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
-msgstr ""
+msgstr "Skiftläge:"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
-msgstr ""
+msgstr "Inledande stor bokstav"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
 #, kde-format
@@ -47692,13 +47694,13 @@ msgstr "Små bokstäver"
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-width"
-msgstr ""
+msgstr "Full bredd"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:136
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "Kana med full storlek"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, kde-format
@@ -47710,7 +47712,7 @@ msgstr "Understrecksposition"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "Ange understreckens position för textdekoration."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -47718,7 +47720,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration-position property, "
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
-msgstr ""
+msgstr "textdekoration-position, understreck, vänster, höger, under"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
@@ -47751,6 +47753,8 @@ msgid ""
 "The CSS white space rule controls how multiples of spaces are handled, and "
 "whether the text can wrap."
 msgstr ""
+"CSS-regeln för blanktecken bestämmer hur flera blanktecken hanteras, och om "
+"texten kan radbrytas."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
 #, kde-format
@@ -47758,7 +47762,7 @@ msgctxt ""
 "comma separated search terms for the white-space property, matching is case-"
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
-msgstr ""
+msgstr "blanktecken, dra ihop, förformaterad"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -47770,25 +47774,25 @@ msgstr "Före"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr ""
+msgstr "Ingen radbrytning"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
-msgstr ""
+msgstr "Radbryt före"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
-msgstr ""
+msgstr "Radbryt mellanslag"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
-msgstr ""
+msgstr "Före rad"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
 #, kde-format
@@ -47804,6 +47808,9 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"Ordbrytning gör det möjligt att finjustera radbrytningen genom att välja om "
+"radbrytningen bara ska tillåtas vid ord eller även vid tecken. Användbart "
+"för koreanska eller etiopiska."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -47811,19 +47818,20 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "ordbrytning, radbrytning"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No additional adjustments are made to the regular line break algorithm."
 msgstr ""
+"Inga ytterligare justeringar görs av den vanliga radbrytningsalgoritmen."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "Behåll alla"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
@@ -47831,12 +47839,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
 msgstr ""
+"Mjuka radbrytningar tillåts bara inne i ord, typiskt avgränsade av "
+"mellanslag."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "Radbryt alla"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
@@ -47851,6 +47861,8 @@ msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
 msgstr ""
+"Ordmellanrum bestämmer storleken på radbrytningstecken, såsom "
+"mellanslagstecknet."
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -47858,7 +47870,7 @@ msgctxt ""
 "comma separated search terms for the word-spacing property, matching is case-"
 "insensitive"
 msgid "word-spacing, tracking, white space,"
-msgstr ""
+msgstr "ordmellanrum, följning, blanktecken."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -47873,6 +47885,9 @@ msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"Skrivmetod anger om texten flödar horisontellt eller vertikalt, och i det "
+"senare fallet om blocket flödar från höger till vänster eller från vänster "
+"till höger."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -47880,7 +47895,7 @@ msgctxt ""
 "comma separated search terms for the writing-mode property, matching is case-"
 "insensitive"
 msgid "writing-mode, horizontal, vertical, top-to-bottom"
-msgstr ""
+msgstr "skrivmetod, horisontell, vertikal, uppifrån och ner"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
 #, kde-format
@@ -50622,22 +50637,19 @@ msgid "What resource do you want to import these %1 files as?"
 msgstr "Vilka resurser vill du importera %1-filerna som?"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Import Bundles"
+#, kde-format
 msgid "Supporter Bundles"
-msgstr "Importera packar"
+msgstr "Packar som stöds"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
 msgid "<strong>Error:</strong> %1"
-msgstr ""
+msgstr "<strong>Fel:</strong> %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgid "No supporter bundles available."
-msgstr "Ingen bild tillgänglig."
+msgstr "Inga packar som stöds tillgänglig."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:108
 #, kde-format
@@ -50647,184 +50659,164 @@ msgid ""
 "for purchases and may make these bundles in other ways behind the links "
 "below."
 msgstr ""
+"Packarna har gjorts tillgängliga av sina upphovsmän för att ge belöningar "
+"för att stödja Kritas utveckling. De får ingen ersättning för inköp och kan "
+"skapa packarna på andra sätt via länkarna nedan."
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLoading)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "Läser in…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
-#, fuzzy, kde-format
-#| msgid "Symmetry"
+#, kde-format
 msgid "Retry"
-msgstr "Symmetri"
+msgstr "Försök igen"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
 msgid "Server responded with error %1."
-msgstr ""
+msgstr "Servern svarade med felet %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
-#, fuzzy, kde-format
-#| msgid "Invalid File"
+#, kde-format
 msgid "Invalid checksums file."
-msgstr "Ogiltig fil"
+msgstr "Ogiltig checksummefil."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
 msgid "Invalid checksums version."
-msgstr ""
+msgstr "Ogiltig version av checksumma."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:117
 #, kde-format
 msgid "You have to update Krita to use this service."
-msgstr ""
+msgstr "Du måste uppdatera Krita för att använda tjänsten."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:119
 #, kde-format
 msgid "This service is not available in your region."
-msgstr ""
+msgstr "Tjänsten är inte tillgänglig i din region."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:121
 #, kde-format
 msgid "This service is currently unavailable."
-msgstr ""
+msgstr "Tjänsten är för närvarande inte tillgänglig."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
-#, fuzzy, kde-format
-#| msgid "The document has been modified."
+#, kde-format
 msgid "This service has been discontinued."
-msgstr "Dokumentet har ändrats."
+msgstr "Tjänsten har upphört."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
-#, fuzzy, kde-format
-#| msgid "Unknown error: %1"
+#, kde-format
 msgid "Unknown service error %1."
-msgstr "Okänt fel: %1"
+msgstr "Okänt tjänstfel %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
 msgid "Not enough data."
-msgstr ""
+msgstr "Inte tillräckligt med data."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
-#, fuzzy, kde-format
-#| msgid "Invalid value."
+#, kde-format
 msgid "Invalid version."
-msgstr "Ogiltigt värde."
+msgstr "Ogiltig version."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksum."
-msgstr "Ogiltigt namn."
+msgstr "Ogiltig checksumma."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "Warning message"
-#| msgid "Failed to rename the resource."
+#, kde-format
 msgid "Failed to create directory %1."
-msgstr "Misslyckades byta namn på resursen."
+msgstr "Misslyckades skapa katalogen %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1 for writing!"
+#, kde-format
 msgid "Failed to open %1 for writing."
-msgstr "Kunde inte öppna %1 för skrivning."
+msgstr "Misslyckades öppna %1 för skrivning."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
-#, fuzzy, kde-format
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to write %1."
-msgstr "Misslyckades öppna %1."
+msgstr "Misslyckades skriva %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:317
 #, kde-format
 msgid "Failed to retrieve bundle checksums: %1"
-msgstr ""
+msgstr "Misslyckades hämta packarnas checksummor: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
-#, fuzzy, kde-format
-#| msgctxt "a tooltip shown when a file layer cannot load its linked file"
-#| msgid "Failed to load linked file: %1"
+#, kde-format
 msgid "Failed to retrieve bundles: %1"
-msgstr "Misslyckades läsa in länkad fil: %1"
+msgstr "Misslyckades hämta packar: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Brush presets"
+#, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "Penselförinställningar"
-msgstr[1] "Penselförinställningar"
+msgstr[0] "%1 penselförinställning"
+msgstr[1] "%1 penselförinställningar"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
-#, fuzzy, kde-format
-#| msgid "Brush tips"
+#, kde-format
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
-msgstr[0] "Penselspetsar"
-msgstr[1] "Penselspetsar"
+msgstr[0] "%1 penselspets"
+msgstr[1] "%1 penselspetsar"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
+#, kde-format
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
-msgstr[0] "18 struktur bark"
-msgstr[1] "18 struktur bark"
+msgstr[0] "%1 strukturmönster"
+msgstr[1] "%1 strukturmönster"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "resource type"
-#| msgid "workspaces"
+#, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] "arbetsytor"
-msgstr[1] "arbetsytor"
+msgstr[0] "%1 arbetsytelayout"
+msgstr[1] "%1 arbetsytelayouter"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
 msgid "%1 (subscribed)"
-msgstr ""
+msgstr "%1 (prenumererad)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "%1 (Copy)"
+#, kde-format
 msgid "%1 (owned)"
-msgstr "%1 (kopia)"
+msgstr "%1 (ägd)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
-msgstr "Kontrast:"
+msgstr "Innehåller:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
-msgstr "Ingen bild tillgänglig."
+msgstr "Inte tillgänglig."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
-#, fuzzy, kde-format
-#| msgid "Available"
+#, kde-format
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
 msgid "Available with:"
-msgstr "Tillgänglig"
+msgstr "Tillgänglig med:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
 msgid "Downloading bundle…"
-msgstr ""
+msgstr "Laddar ner packe…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:139
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
@@ -50833,54 +50825,46 @@ msgid "%1"
 msgstr "%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:194
-#, fuzzy, kde-format
-#| msgid "Invalid image size"
+#, kde-format
 msgid "Invalid bundle size"
-msgstr "Ogiltig bildstorlek"
+msgstr "Ogiltig packestorlek"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
 msgid "Invalid bundle checksum"
-msgstr ""
+msgstr "Ogiltig checksumma för packe"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Active Bundles"
+#, kde-format
 msgid "Activating bundle…"
-msgstr "Aktiva packar"
+msgstr "Aktiverar packe…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed to import the resource"
+#, kde-format
 msgid "Failed to import bundle"
-msgstr "Misslyckades importera resursen"
+msgstr "Misslyckades importera packe"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgid "Bundle download failed: %1"
-msgstr "Kunde inte läsa in profil: %1."
+msgstr "Nerladdning av packe misslyckades: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Download Color Profile"
+#, kde-format
 msgid "Download failed"
-msgstr "Ladda ner färgprofil"
+msgstr "Nerladdning misslyckades"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Downloads"
+#, kde-format
 msgid "Download"
-msgstr "Nerladdningar"
+msgstr "Ladda ner"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
 #, kde-format
 msgid "✔ Owned"
-msgstr ""
+msgstr "✔ Ägd"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
@@ -51020,10 +51004,9 @@ msgid "Manage Resources..."
 msgstr "Hantera resurser..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:50
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Get More Resources..."
-msgstr "Hantera resurser..."
+msgstr "Hämta fler resurser..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -51056,11 +51039,9 @@ msgstr "Redigera ett resursbibliotek"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSupport)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
+#, kde-format
 msgid "Get More Bundles"
-msgstr "Skapa packe"
+msgstr "Hämta fler packar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:433
@@ -51985,8 +51966,7 @@ msgid "Color Adjustment"
 msgstr "Färgjustering"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "Ljushet"
@@ -57243,10 +57223,7 @@ msgstr "Inflätning"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The compression will take a long time; saving the file will be slow."
-#| msgid "Small File Size"
+#, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small file size"
 msgstr "Liten filstorlek"
@@ -57359,6 +57336,9 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"Även om textformer kan sparas i psd, stöds endast grundläggande funktioner. "
+"Avancerade funktioner, som text på kontur och OpenType-funktioner, sparas "
+"inte."
 
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
@@ -57379,6 +57359,9 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
+"Hittade textobjekt. Vill du läsa in dem som redigerbara textformer? Om inte, "
+"läses de in som bildpunktsdata, vilket visuellt blir mer exakt jämfört med "
+"originalfilen."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
@@ -65917,7 +65900,7 @@ msgstr "Uppdatera färg"
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "Stil för panelrutan på duken för jämförelse av hämtade färger"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:42
@@ -66123,67 +66106,49 @@ msgid "Interval Y:"
 msgstr "Intervall Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Lägg till former i grupp"
+msgstr "Lägg till former i textflöde."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
-#, fuzzy
-#| msgid "Text On Path"
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr "Text på kontur"
+msgstr "Placera text på kontur"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:688
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "Subtrahera former"
+msgstr "Subtrahera former från textflöde."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:721
-#, fuzzy
-#| msgid "Remove Shape Collection"
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Ta bort formsamling"
+msgstr "Ta bort former från textflöde."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
-#, fuzzy
-#| msgid "Toggle Rotate Mode"
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr "Ändra roteringsmetod"
+msgstr "Ändra flödesformtyp"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:768
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Ställ in flödesform till först"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:770
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Minska flöde"
+msgstr "Minska flödesformindex"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:772
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Öka flöde"
+msgstr "Öka flödesformindex"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:774
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Ställ in flödesform till sist"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1045
 #, kde-format
@@ -66283,9 +66248,7 @@ msgid "Logical Operations"
 msgstr "Logiska operationer"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2314
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
 msgstr "Text"
 
@@ -67192,7 +67155,7 @@ msgstr "Glyfalternativ"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Character Map"
-msgstr ""
+msgstr "Teckenkarta"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:134
 #, kde-format
@@ -67202,13 +67165,14 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+"Söker efter tecken som matchar den första bokstaven i strängen. Hexadecimal "
+"sökning är möjlig när \"U+\" läggs till (till exempel söker U+0045 efter 'E')"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Ingen bild tillgänglig."
+msgstr "Inga glyfalternativ tillgängliga."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -67223,12 +67187,9 @@ msgid "All glyphs"
 msgstr "Alla glyfer"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Change text direction"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "Ändra textriktning"
+msgstr "Ändra position för text på kontur"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -67249,102 +67210,80 @@ msgstr "Ändra SVG-textverktyg"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "Justera teckentransformeringar i texten."
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
-#, fuzzy, kde-format
-#| msgid "Text Tool"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
-msgstr "Textverktyg"
+msgstr "Text längst upp"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:474
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:480
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Teckenstorlek"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
-msgstr "Längst ner"
+msgstr "Text längst ner"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Alphabetic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabetisk"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografisk"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Hanging"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Hängande"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Mitten"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematisk"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:493
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Central"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:495
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Radhöjd"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:498
-#, fuzzy, kde-format
-#| msgid "Current selection"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "Aktuell markering"
+msgstr "Aktuell baslinje"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:500
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Baseline"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "Baslinje"
+msgstr "Baslinjebyte"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
@@ -67403,11 +67342,9 @@ msgid "Remove Text"
 msgstr "Ta bort text"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
-#, fuzzy
-#| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "Återställ duktransformeringar"
+msgstr "Ta bort duktransformer"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -67687,19 +67624,17 @@ msgstr "Kerning"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste As Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "Klistra in som text"
+msgstr "Klistra in Rich text"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Försök klistra in text med stilar om möjligt."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67707,40 +67642,31 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Vanlig text"
+msgstr "Klistra in vanlig text"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Pastell struktur tunn"
+msgstr "Klistra in text utan stilar."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "Flytta markering"
+msgstr "Flytta textmarkering neråt"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
-#, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
-msgstr "Flytta markeringsstreck"
+msgstr "Flytta textmarkering neråt med en bildpunkten"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:230
@@ -67750,22 +67676,21 @@ msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
 msgstr ""
+"När typsättning är aktivt, flytta markeringens början neråt med en bildpunkt."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "Flytta markering"
+msgstr "Flytta textmarkering uppåt"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up By 1 Pixel"
-msgstr ""
+msgstr "Flytta textmarkering uppåt med en bildpunkt"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:241
@@ -67775,23 +67700,21 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
+"När typsättning är aktivt, flytta markeringens början uppåt med en bildpunkt."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "Flytta markering"
+msgstr "Flytta textmarkering åt vänster"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
-#, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr "Flytta markeringsstreck"
+msgstr "Flytta textmarkering åt vänster med en bildpunkt"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -67801,22 +67724,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
+"När typsättning är aktivt, flytta markeringens början åt vänster med en "
+"bildpunkt."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "Flytta markering"
+msgstr "Flytta textmarkering åt höger"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right By 1 Pixel"
-msgstr ""
+msgstr "Flytta textmarkering åt höger med en bildpunkt"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
@@ -67826,6 +67749,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
+"När typsättning är aktivt, flytta markeringens början åt höger med en "
+"bildpunkt."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67833,18 +67758,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
-#| msgid "Reset Canvas Transformations"
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "Återställ duktransformeringar"
+msgstr "Ta bort duktransformer"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "Ta bort teckentransformeringar från markeringen."
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67852,19 +67776,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Formatering"
+msgstr "Rensa formatering"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgid "Smooths the edges of the selection"
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Jämnar ut markeringens kanter"
+msgstr "Ta bort alla inställda textegenskaper från markeringen."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
@@ -67878,18 +67800,16 @@ msgid "SVG Text Tool"
 msgstr "SVG-textverktyg"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Skapa nya texter med..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Nuvarande egenskaper:"
+msgstr "Nuvarande textegenskaper"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
@@ -67897,21 +67817,19 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Använd nuvarande egenskaper i textegenskapspanelen för att skapa nya texter."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Duplicera stilförinställning"
+msgstr "Välj stilförinställning"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Textegenskaper"
+msgstr "Öppna textegenskaper"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:129
 #, kde-format
@@ -67919,82 +67837,71 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Öppna textegenskapspanelen för att redigera egenskaper som teckenstorlek och "
+"stil."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Alternativ"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:145
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Klistra in vid markören"
+msgstr "Använd visuell markör"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Använd den visuella ordningen för dubbelriktad text."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:161
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Enkel standardspets"
+msgstr "Klistra normalt in Rich text"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
-msgstr ""
+msgstr "Klistra alltid in Rich text när inklistringsåtgärden används."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:181
-#, fuzzy, kde-format
-#| msgid "Texturing Mode:"
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Strukturläge:"
+msgstr "Typsättningsläge"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:191
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Aktivera penninställningar"
+msgstr "Aktivera typsättningsläge."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Dialogruta"
+msgstr "Dialogrutor"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
-msgstr "Redigera SVG-källa"
+msgstr "Redigera SVG-källkod"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:215
-#, fuzzy, kde-format
-#| msgid "Duplicate the currently selected layer or mask"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr "Duplicera lagret eller masken som för närvarande är vald"
+msgstr "Redigera den markerade texten som SVG XML."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Glyfpalett"
@@ -68006,96 +67913,79 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Öppna glyfpaletten, som ger tillgång till alternativa OpenType- eller "
+"Unicode-varianter av tecken, samt en teckenuppsättning."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "&Convert Image Type..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "&Konvertera bildtyp..."
+msgstr "Konvertera typ..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:267
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Förformaterad"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:274
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Texten radbryts inte och behåller mellanslag och "
-"nyrader. En radbrytning infogas så att raderna förblir separerade efter "
-"radbrytning eller positionering.</p></body></html>"
+"Texten radbryts inte och behåller mellanslag och nyrader. En radbrytning "
+"infogas så att raderna förblir separerade efter radbrytning eller "
+"positionering."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:284
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Radbruten på plats"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Text radbryts inom en fast längd, mellanslag och "
-"nyrader bevaras. Nyrader tas inte bort.</p></body></html>"
+"Text radbryts inom en fast längd, mellanslag och nyrader bevaras. Nyrader "
+"tas inte bort."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:299
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr "Förplacerad"
+msgstr "Förpositionerad"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Text använder teckentransformeringar i SVG 1.1 för att "
-"placera varje rad. Mellanslag och nyrader är dras ihop. Det är till för "
-"bakåtkompatibilitet med SVG 1.1.</p></body></html>"
+"Text använder teckentransformeringar i SVG 1.1 för att placera varje rad. "
+"Mellanslag och nyrader är dras ihop. Det är till för bakåtkompatibilitet med "
+"SVG 1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Felsök"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:325
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Lås omgivande ruta"
+msgstr "Visa omgivande teckenrutor"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
-#, fuzzy, kde-format
-#| msgid "Show line boxes"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
 msgstr "Visa radrutor"
@@ -68575,24 +68465,21 @@ msgstr "Inneslutnings- och fyllverktyg"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"
-msgstr ""
+msgstr "Knivverktyg: skär mellan former"
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "This tool only works on vector layers. You probably want the move tool."
+#, kde-format
 msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
 msgstr ""
-"Verktyget fungerar bara med vektorlager. Du behöver troligtvis "
-"förflyttningsverktyget."
+"Verktyget fungerar bara med vektorlager. Du behöver troligtvis först skapa "
+"ett vektorlager och en startform."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Redigeringsverktyg för färgläggningsmask"
+msgstr "Redigeringsverktyg för seriepanel"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:299
 #, kde-format
@@ -68601,6 +68488,7 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"Skärläge: Skär genom former för att skapa spaltmellanrum med angiven bredd."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
 #, kde-format
@@ -68608,126 +68496,108 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "Sammanfogningsläge: Tar bort spaltmellanrum mellan former."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
-#, fuzzy, kde-format
-#| msgid "millimeter"
+#, kde-format
 msgid "Millimeters"
-msgstr "millimeter"
+msgstr "Millimeter"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
-#, fuzzy, kde-format
-#| msgid "Thickness"
+#, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
-msgstr "Tjocklek"
+msgstr "Tjock"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:310
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:315
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:320
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
-msgstr "Avtunning:"
+msgstr "Tunn"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:311
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:316
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Special"
-msgstr "Speciellt"
+msgstr "Speciell"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The display brightness in nits. By default this is "
-#| "set to 1000 for converting to display linear.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Skärmens ljusstyrka i nits. Normalt är den inställt "
-"till 1000 för att konvertera till bildskärmslinjär.</p></body></html>"
+"<html><head/><body><p>Det här verktyget fungerar bara på ett vektorlager.<br/"
+">Skapa den första panelen med valfritt formverktyg på ett vektorlager.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "Ursprunglig bredd:"
+msgstr "Breddenhet:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Tjocklek:"
+msgstr "Tjock gapbredd"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap:"
-msgstr "Tjocklek:"
+msgstr "Tjockt gap:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thin gap width"
-msgstr "Avtunning:"
+msgstr "Tunn gapbredd"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thin gap:"
-msgstr "Avtunning:"
+msgstr "Tunt gap:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgid "Special gap width"
-msgstr "Speciellt"
+msgstr "Speciell gapbredd"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgid "Special gap:"
-msgstr "Speciellt"
+msgstr "Speciellt gap:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
 #, kde-format
 msgid "Choose the width automatically, based on the angle"
-msgstr ""
+msgstr "Välj bredden automatiskt, baserat på vinkeln"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:176
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set while balance automatically"
-#| msgid "Automatic"
+#, kde-format
 msgid "Automatic"
 msgstr "Automatisk"
 
@@ -68735,51 +68605,44 @@ msgstr "Automatisk"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Horisontell våg"
+msgstr "Horisontell gaptyp:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Style:"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Vertikal stil:"
+msgstr "Vertikal gaptyp:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Diagonal"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Diagonal"
+msgstr "Diagonal gaptyp:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Diagonal"
+#, kde-format
 msgid "Diagonal:"
-msgstr "Diagonal"
+msgstr "Diagonal:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, angleLabel)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, gutterWidthAngleSpinBox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Local contrast threshold:"
+#, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Lokal kontrasttröskel:"
+msgstr "Diagonal typvinkeltröskel:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
-msgstr ""
+msgstr "Knivverktyg: ta bort ett spaltmellanrum"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
 msgctxt "(qtundo-format)"
@@ -69054,28 +68917,22 @@ msgid "Transform Tool Actions"
 msgstr "Transformeringsverktygsåtgärder"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:938
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform locked layers"
-msgstr "Kan inte transformera tomt lager "
+msgstr "Kan inte transformera låsta lager "
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:944
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform hidden layers"
-msgstr "Kan inte transformera tomt lager "
+msgstr "Kan inte transformera dolda lager "
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:950
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Cannot transform empty layer "
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "Kan inte transformera tomt lager "
+msgstr "Kan inte använda transformverktyg på den här uppsättningen lager"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:966
 #, kde-format
@@ -69275,52 +69132,45 @@ msgstr "Transformera ett lager eller en markering"
 
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Transformeringsverktygsåtgärder"
+msgstr "Transformeringsverktyg (fri transform)"
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
-#, fuzzy, kde-format
-#| msgid "Perspective Transform"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Perspektivtransform"
+msgstr "Transformeringsverktyg (perspektivtransform)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Transformeringsverktygsåtgärder"
+msgstr "Transformeringsverktyg (förvridningstransform)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Transformeringsverktygsåtgärder"
+msgstr "Transformeringsverktyg (burtransform)"
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Transform"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Transformera"
+msgstr "Transformeringsverktyg (flytandetransform)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr "Transformeringsverktygsåtgärder"
+msgstr "Transformeringsverktyg (masketransform)"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -69943,11 +69793,10 @@ msgstr "Referensbildverktyg"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Redigeringsverktyg för färgläggningsmask"
+msgstr "Redigeringsverktyg för seriepanel"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:94
 #, kde-format
@@ -69956,6 +69805,8 @@ msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
 msgstr ""
+"Teckenfamiljen \"%1\" saknas på den här datorn. Stilförinställningen kanske "
+"inte fungerar korrekt."
 
 #: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-10 02:36+0000\n"
+"POT-Creation-Date: 2026-07-11 02:37+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -24867,7 +24867,7 @@ msgstr "Бошқа"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1163
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -24938,7 +24938,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:679 libs/ui/KisView.cpp:1166
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:730 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -25865,7 +25865,7 @@ msgid "Select All"
 msgstr "&Алмаштириш:"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:774
+#: libs/ui/KisView.cpp:778
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -25939,7 +25939,7 @@ msgid "Paste shapes"
 msgstr "Намунани яратиш"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:589
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "(pasted)"
@@ -35204,7 +35204,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Рўйхатнинг турини ўзгартириш"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:680
+#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -37816,30 +37816,30 @@ msgstr "Ҳеч қандай расм йўқ."
 msgid "Use This Template"
 msgstr "Шу намунани ишлатиш"
 
-#: libs/ui/KisView.cpp:749
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:757 libs/ui/tool/kis_tool_utils.cpp:419
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:419
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "Layer is locked and invisible."
 msgstr "%1 файли мавжуд эмас."
 
-#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool_utils.cpp:421
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:421
 #, fuzzy, kde-format
 #| msgid "Page Size"
 msgid "Layer is locked."
 msgstr "Бетнинг ўлчами"
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:423
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "Layer is invisible."
 msgstr "%1 файли мавжуд эмас."
 
-#: libs/ui/KisView.cpp:1167
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -37848,48 +37848,48 @@ msgstr ""
 "<p><b>\"%1\"</b> ҳужжатига ўзгаришлар киритилди.</p><p>Уни сақлашни "
 "истайсизми?</p>"
 
-#: libs/ui/KisView.cpp:1241
+#: libs/ui/KisView.cpp:1245
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "Файлни яратиш"
 
-#: libs/ui/KisView.cpp:1245
+#: libs/ui/KisView.cpp:1249
 #, fuzzy, kde-format
 #| msgid "Palettes"
 msgid "Recovered"
 msgstr "Асбоб ойналари"
 
-#: libs/ui/KisView.cpp:1347
+#: libs/ui/KisView.cpp:1351
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Тўлдириш мосламалари"
 
-#: libs/ui/KisView.cpp:1352
+#: libs/ui/KisView.cpp:1356
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Тўлдириш мосламалари"
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1358
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Тўлдириш мосламалари"
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1370
 #, fuzzy, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "чизма"
 
-#: libs/ui/KisView.cpp:1372
+#: libs/ui/KisView.cpp:1376
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "чизма"
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1378
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Тўлдириш мосламалари"
 
-#: libs/ui/KisView.cpp:1377
+#: libs/ui/KisView.cpp:1381
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "чизма"

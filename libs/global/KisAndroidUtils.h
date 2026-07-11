@@ -7,6 +7,8 @@
 #include <QString>
 #include <kritaglobal_export.h>
 
+class QTemporaryFile;
+
 namespace KisAndroidUtils
 {
 
@@ -39,6 +41,9 @@ KRITAGLOBAL_EXPORT void setFullScreen(bool fullScreen);
 // present it to the user as an internal error. On success, it will be cleared.
 KRITAGLOBAL_EXPORT bool
 copyFile(const QString &inputPath, const QString &outputPath, QString *outErrorMessage = nullptr);
+
+KRITAGLOBAL_EXPORT bool
+copyFileToTemporary(const QString &inputPath, QTemporaryFile &outputFile, QString *outErrorMessage = nullptr);
 
 } // namespace KisAndroidUtils
 

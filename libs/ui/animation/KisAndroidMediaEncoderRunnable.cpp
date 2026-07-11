@@ -10,6 +10,7 @@
 #include <QImage>
 #include <QSpinBox>
 #include <QTemporaryFile>
+#include <memory>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QJniEnvironment>
@@ -25,6 +26,8 @@ using QJniObject = QAndroidJniObject;
 
 #include <KisAndroidUtils.h>
 #include <kis_debug.h>
+
+#include <mlt++/Mlt.h>
 
 extern "C" {
 #include <libavutil/imgutils.h>
@@ -53,22 +56,12 @@ public:
         bool hardware;
     };
 
-    Format(int formatId, const QVector<Encoder> &encoders)
+    Format(int formatId, const QVector<Encoder> &videoEncoders, const QVector<Encoder> &audioEncoders)
         : KisMediaEncoderFormat()
         , m_formatId(formatId)
     {
-        // Prefer software encoders, because hardware encoders are often busted.
-        m_encoders.reserve(encoders.size());
-        for (const Encoder &encoder : encoders) {
-            if (!encoder.hardware) {
-                m_encoders.append(encoder);
-            }
-        }
-        for (const Encoder &encoder : encoders) {
-            if (encoder.hardware) {
-                m_encoders.append(encoder);
-            }
-        }
+        fillEncoders(m_videoEncoders, videoEncoders);
+        fillEncoders(m_audioEncoders, audioEncoders);
     }
 
     int formatId() const
@@ -98,21 +91,19 @@ public:
 
     bool supportsAudio() const override
     {
-        return true;
+        return !m_audioEncoders.isEmpty();
     }
 
     QWidget *createPreferencesWidget(const QVariantMap &preferences) const override
     {
-        KisAndroidMediaEncoderPreferencesWidget *pw = new KisAndroidMediaEncoderPreferencesWidget;
+        KisAndroidMediaEncoderPreferencesWidget *pw = new KisAndroidMediaEncoderPreferencesWidget(this);
 
-        for (const Encoder &encoder : m_encoders) {
-            QString title;
-            if (encoder.hardware) {
-                title = i18n("%1 (hardware)", encoder.name);
-            } else {
-                title = i18n("%1 (software)", encoder.name);
-            }
-            pw->addEncoderOption(title, encoder.name);
+        for (const Encoder &videoEncoder : m_videoEncoders) {
+            pw->addVideoEncoderOption(makeEncoderTitle(videoEncoder), videoEncoder.name);
+        }
+
+        for (const Encoder &audioEncoder : m_audioEncoders) {
+            pw->addAudioEncoderOption(makeEncoderTitle(audioEncoder), audioEncoder.name);
         }
 
         applyPreferencesToWidget(pw, preferences);
@@ -131,36 +122,105 @@ public:
         QVariantMap preferences;
         KisAndroidMediaEncoderPreferencesWidget *pw = qobject_cast<KisAndroidMediaEncoderPreferencesWidget *>(widget);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(pw, preferences);
-        preferences.insert(QStringLiteral("encoder"), pw->encoder());
-        preferences.insert(QStringLiteral("bitrate"), pw->bitrate());
+        preferences.insert(QStringLiteral("encoder"), pw->videoEncoder());
+        preferences.insert(QStringLiteral("bitrate"), pw->videoBitrate());
+        if (supportsAudio()) {
+            preferences.insert(QStringLiteral("aencoder"), pw->audioEncoder());
+            preferences.insert(QStringLiteral("abitrate"), pw->audioBitrate());
+        }
         return preferences;
     }
 
-    QString getEncoderPreference(const QVariantMap &preferences) const
+    QString getVideoEncoderPreference(const QVariantMap &preferences) const
     {
-        QString encoder = preferences.value(QStringLiteral("encoder")).toString();
-        if (encoder.isEmpty() && !m_encoders.isEmpty()) {
-            return m_encoders.constFirst().name;
+        QString videoEncoder = preferences.value(QStringLiteral("encoder")).toString();
+        if (videoEncoder.isEmpty() && !m_videoEncoders.isEmpty()) {
+            return m_videoEncoders.constFirst().name;
         } else {
-            return encoder;
+            return videoEncoder;
         }
     }
 
-    int getBitratePreference(const QVariantMap &preferences) const
+    int getVideoBitratePreference(const QVariantMap &preferences) const
     {
-        int bitrate = preferences.value(QStringLiteral("bitrate")).toInt();
-        if (bitrate <= 0) {
-            return defaultBitrateForFormatId(m_formatId);
+        int videoBitrate = preferences.value(QStringLiteral("bitrate")).toInt();
+        if (videoBitrate <= 0) {
+            return defaultVideoBitrateForFormatId(m_formatId);
         } else {
-            return bitrate;
+            return videoBitrate;
         }
+    }
+
+    QString getAudioEncoderPreference(const QVariantMap &preferences) const
+    {
+        QString audioEncoder = preferences.value(QStringLiteral("aencoder")).toString();
+        if (audioEncoder.isEmpty() && !m_videoEncoders.isEmpty()) {
+            return m_audioEncoders.constFirst().name;
+        } else {
+            return audioEncoder;
+        }
+    }
+
+    int getAudioBitratePreference(const QVariantMap &preferences) const
+    {
+        int audioBitrate = preferences.value(QStringLiteral("abitrate")).toInt();
+        if (audioBitrate <= 0) {
+            return defaultAudioBitrateForFormatId(m_formatId);
+        } else {
+            return audioBitrate;
+        }
+    }
+
+    int audioSampleRate() const
+    {
+        // While creating an audio track on Android lets you pass it a sample
+        // rate, that doesn't actually give you an audio track with the given
+        // sample rate. For WEBM with Vorbis, you always get a 48kHz track. MP4
+        // with AAC seems more forgiving, but let's go with known good values.
+        switch (m_formatId) {
+        case FORMAT_MP4_H264:
+        case FORMAT_MP4_AV1:
+            return 44100;
+        case FORMAT_WEBM_VP8:
+            return 48000;
+        }
+        return 44100;
     }
 
 private:
+    static void fillEncoders(QVector<Encoder> &outEncoders, const QVector<Encoder> &encoders)
+    {
+        // Prefer software encoders, because hardware encoders are often busted.
+        outEncoders.reserve(encoders.size());
+        for (const Encoder &encoder : encoders) {
+            if (!encoder.hardware) {
+                outEncoders.append(encoder);
+            }
+        }
+        for (const Encoder &encoder : encoders) {
+            if (encoder.hardware) {
+                outEncoders.append(encoder);
+            }
+        }
+    }
+
+    static QString makeEncoderTitle(const Encoder &encoder)
+    {
+        if (encoder.hardware) {
+            return i18n("%1 (hardware)", encoder.name);
+        } else {
+            return i18n("%1 (software)", encoder.name);
+        }
+    }
+
     void applyPreferencesToWidget(KisAndroidMediaEncoderPreferencesWidget *pw, const QVariantMap &preferences) const
     {
-        pw->setEncoder(getEncoderPreference(preferences));
-        pw->setBitrate(getBitratePreference(preferences));
+        pw->setVideoEncoder(getVideoEncoderPreference(preferences));
+        pw->setVideoBitrate(getVideoBitratePreference(preferences));
+        if (supportsAudio()) {
+            pw->setAudioEncoder(getAudioEncoderPreference(preferences));
+            pw->setAudioBitrate(getAudioBitratePreference(preferences));
+        }
     }
 
     static QString keyForFormatId(int formatId)
@@ -201,7 +261,7 @@ private:
         return QString();
     }
 
-    static int defaultBitrateForFormatId(int formatId)
+    static int defaultVideoBitrateForFormatId(int formatId)
     {
         switch (formatId) {
         case FORMAT_MP4_H264:
@@ -214,7 +274,20 @@ private:
         return 6000000;
     }
 
-    QVector<Encoder> m_encoders;
+    static int defaultAudioBitrateForFormatId(int formatId)
+    {
+        switch (formatId) {
+        case FORMAT_MP4_H264:
+        case FORMAT_MP4_AV1:
+            return 128000;
+        case FORMAT_WEBM_VP8:
+            return 96000;
+        }
+        return 128000;
+    }
+
+    QVector<Encoder> m_videoEncoders;
+    QVector<Encoder> m_audioEncoders;
     int m_formatId;
 };
 
@@ -275,11 +348,18 @@ public:
     {
         if (checkException(title)) {
             return true;
-        } else if (result == STATUS_ERROR_START_ENCODER) {
-            warnFile << "Start encoder error" << result;
+        } else if (result == STATUS_ERROR_START_VIDEO_ENCODER) {
+            warnFile << "Start video encoder error" << result;
             setErrorMessage(i18n("Unsupported video parameters, try lowering the video FPS or size"));
             return true;
-        } else if (result == STATUS_ERROR_DRAIN_MUXER_ADD_TRACK) {
+        } else if (result == STATUS_ERROR_START_AUDIO_FORMAT || result == STATUS_ERROR_START_AUDIO_ENCODER) {
+            warnFile << "Start audio encoder error" << result;
+            setErrorMessage(
+                i18n("Unsupported audio parameters, try to re-encode your audio file with a more common sample format, "
+                     "sampling rate and channel count"));
+            return true;
+        } else if (result == STATUS_ERROR_DRAIN_VIDEO_MUXER_ADD_TRACK
+                   || result == STATUS_ERROR_DRAIN_AUDIO_MUXER_ADD_TRACK) {
             warnFile << "Muxer track error" << result;
             setErrorMessage(i18n("Unsupported format"));
             return true;
@@ -350,6 +430,194 @@ private:
     AVPixelFormat m_imageFormat = AV_PIX_FMT_NONE;
 };
 
+class KisAndroidMediaEncoderRunnable::Audio
+{
+public:
+    static constexpr int PULL_FRAME_OK = 0;
+    static constexpr int PULL_FRAME_END_OF_STREAM = 1;
+    static constexpr int PULL_FRAME_ERROR = 2;
+
+    Audio(mlt_audio_format format, int sampleRate, int channelCount)
+        : m_format(format)
+        , m_sampleRate(sampleRate)
+        , m_channelCount(channelCount)
+        , m_sampleSize(mlt_audio_format_size(format, 1, 1))
+    {
+    }
+
+    QString formatName() const
+    {
+        return QString::fromUtf8(mlt_audio_format_name(m_format));
+    }
+
+    int sampleRate() const
+    {
+        return m_sampleRate;
+    }
+
+    int channelCount() const
+    {
+        return m_channelCount;
+    }
+
+    bool isFinished() const
+    {
+        return m_finished;
+    }
+
+    bool open(Context &ctx, const KisMediaEncoderWrapperSettings &settings)
+    {
+        m_audioFileBytes = settings.audioFile.toUtf8();
+
+        m_profile = std::make_unique<Mlt::Profile>();
+        m_profile->set_frame_rate(settings.outputFps, 1);
+
+        m_producer = std::make_unique<Mlt::Producer>(*m_profile, "avformat", m_audioFileBytes.constData());
+        if (!m_producer->is_valid()) {
+            ctx.setInternalErrorMessage(QStringLiteral("failed to open MLT producer for '%1'").arg(settings.audioFile));
+            return false;
+        }
+
+        m_filter = std::make_unique<Mlt::Filter>(*m_profile, "swresample");
+        if (!m_filter->is_valid()) {
+            ctx.setInternalErrorMessage(QStringLiteral("failed to create MLT filter"));
+            return false;
+        }
+
+        int result = m_producer->attach(*m_filter);
+        if (result != 0) {
+            ctx.setInternalErrorMessage(QStringLiteral("error %1 attaching MLT filter").arg(result));
+            return false;
+        }
+
+        m_producer->seek(settings.audioSeekFrame);
+
+        return true;
+    }
+
+    int pullFrame(Context &ctx)
+    {
+        if (m_frame) {
+            return PULL_FRAME_OK;
+        }
+
+        m_frame.reset(m_producer->get_frame());
+        if (!m_frame || !m_frame->is_valid()) {
+            m_frame.reset();
+            return PULL_FRAME_END_OF_STREAM;
+        }
+
+        mlt_audio_format format = m_format;
+        int sampleRate = m_sampleRate;
+        int channelCount = m_channelCount;
+
+        float fps = float(m_profile->fps());
+        int64_t position = m_frame->get_position();
+        int sampleCount = mlt_audio_calculate_frame_samples(fps, sampleRate, position);
+        const void *sampleData = m_frame->get_audio(format, sampleRate, channelCount, sampleCount);
+        if (sampleCount <= 0 || !sampleData) {
+            m_frame.reset();
+            return PULL_FRAME_END_OF_STREAM;
+        }
+
+        if (format != m_format || sampleRate != m_sampleRate || channelCount != m_channelCount) {
+            ctx.setInternalErrorMessage(QStringLiteral("bad MLT frame format %1:%2:%3 != not %4:%5:%6")
+                                            .arg(int(format))
+                                            .arg(sampleRate)
+                                            .arg(channelCount)
+                                            .arg(int(m_format))
+                                            .arg(m_sampleRate)
+                                            .arg(m_channelCount));
+            m_frame.reset();
+            return PULL_FRAME_ERROR;
+        }
+
+        m_sampleCount = sampleCount;
+        m_sampleData = reinterpret_cast<const unsigned char *>(sampleData);
+        m_samplePos = 0;
+        return PULL_FRAME_OK;
+    }
+
+    bool pushSamples(Context &ctx)
+    {
+        void *buffer;
+        int availableSize;
+        if (!readAudioInputBuffer(ctx, buffer, availableSize)) {
+            return false;
+        }
+
+        int availableSamples = sizeToSamples(availableSize);
+        if (availableSamples <= 0) {
+            ctx.setInternalErrorMessage(QStringLiteral("no available samples from size %1").arg(availableSize));
+            return false;
+        }
+
+        int remainingSamples = m_sampleCount - m_samplePos;
+        int chunkSamples = qMin(availableSamples, remainingSamples);
+        int chunkSize = samplesToSize(chunkSamples);
+        memcpy(buffer, m_sampleData + samplesToSize(m_samplePos), chunkSize);
+
+        int commitResult =
+            int(ctx.encoder().callMethod<jint>("commitAudio", "(II)I", jint(chunkSamples), jint(chunkSize)));
+        if (ctx.checkResult(QStringLiteral("commitAudio"), commitResult)) {
+            return false;
+        }
+
+        m_samplePos += chunkSamples;
+        return true;
+    }
+
+    bool isSampleDataRemaining() const
+    {
+        return m_samplePos < m_sampleCount;
+    }
+
+    void finishFrame()
+    {
+        m_frame.reset();
+        m_sampleData = nullptr;
+        m_sampleCount = 0;
+        m_samplePos = 0;
+    }
+
+    bool finish(Context &ctx)
+    {
+        if (!m_finished) {
+            int finishAudioResult = int(ctx.encoder().callMethod<jint>("finishAudio", "()I"));
+            if (ctx.checkResult(QStringLiteral("finishAudio"), finishAudioResult)) {
+                return false;
+            }
+            m_finished = true;
+        }
+        return true;
+    }
+
+private:
+    int sizeToSamples(int size) const
+    {
+        return size / (m_channelCount * m_sampleSize);
+    }
+
+    int samplesToSize(int samples) const
+    {
+        return samples * m_channelCount * m_sampleSize;
+    }
+
+    QByteArray m_audioFileBytes;
+    std::unique_ptr<Mlt::Profile> m_profile;
+    std::unique_ptr<Mlt::Producer> m_producer;
+    std::unique_ptr<Mlt::Filter> m_filter;
+    std::unique_ptr<Mlt::Frame> m_frame;
+    const unsigned char *m_sampleData = nullptr;
+    const mlt_audio_format m_format;
+    const int m_sampleRate;
+    const int m_channelCount;
+    const int m_sampleSize;
+    int m_sampleCount = 0;
+    int m_samplePos = 0;
+    bool m_finished = false;
+};
+
 KisAndroidMediaEncoderRunnable *KisAndroidMediaEncoderRunnable::create(const KisMediaEncoderWrapperSettings &settings,
                                                                        QObject *parent)
 {
@@ -393,6 +661,33 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
     int outputWidth = settings().outputSize.width();
     int outputHeight = settings().outputSize.height();
 
+    // Set up audio if we were given some.
+    std::unique_ptr<Audio> audio;
+    if (!settings().audioFile.isEmpty()) {
+        // We always use these fixed parameters: 16 bit PCM, 2 channels and a
+        // sample rate according to the format. The Android media encoder makes
+        // it appear like you can create audio tracks with other parameters, but
+        // if it doesn't like the parameters it just gives you something else,
+        // which obviously just results in nonsense. We'll go with known good
+        // parameters instead, they'll also play back consistently everywhere.
+        audio = std::make_unique<Audio>(mlt_audio_s16, format->audioSampleRate(), 2);
+        if (!audio->open(ctx, settings())) {
+            return EncodeResult::Failed;
+        }
+
+        switch (audio->pullFrame(ctx)) {
+        case Audio::PULL_FRAME_OK:
+            break;
+        case Audio::PULL_FRAME_END_OF_STREAM:
+            // There's no frames, which can happen if our animation range start
+            // is beyond the end of the file. Just export without audio then.
+            audio.reset();
+            break;
+        default:
+            return EncodeResult::Failed;
+        }
+    }
+
     // Set up the encoder.
     {
         QJniObject outputPath = QJniObject::fromString(settings().outputFile);
@@ -405,19 +700,42 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
             return EncodeResult::Failed;
         }
 
-        QJniObject encoderName = QJniObject::fromString(format->getEncoderPreference(settings().formatPreferences));
-        ctx.checkException(QStringLiteral("encoderName"));
+        QJniObject videoEncoderName =
+            QJniObject::fromString(format->getVideoEncoderPreference(settings().formatPreferences));
+        ctx.checkException(QStringLiteral("videoEncoderName"));
 
-        ctx.setEncoder(QJniObject("org/krita/android/VideoEncoder",
-                                  "(IIIFLjava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V",
-                                  jint(format->formatId()),
-                                  jint(outputWidth),
-                                  jint(outputHeight),
-                                  jfloat(settings().outputFps),
-                                  outputPath.object<jstring>(),
-                                  tempPath.object<jstring>(),
-                                  encoderName.object<jstring>(),
-                                  jint(format->getBitratePreference(settings().formatPreferences))));
+        jint audioSampleRate;
+        jint audioChannelCount;
+        QJniObject audioEncoderName;
+        QJniObject audioFormatName;
+        if (audio) {
+            audioSampleRate = jint(audio->sampleRate());
+            audioChannelCount = jint(audio->channelCount());
+            audioEncoderName = QJniObject::fromString(format->getAudioEncoderPreference(settings().formatPreferences));
+            ctx.checkException(QStringLiteral("audioEncoderName"));
+            audioFormatName = QJniObject::fromString(audio->formatName());
+            ctx.checkException(QStringLiteral("audioFormatName"));
+        } else {
+            audioSampleRate = jint(0);
+            audioChannelCount = jint(0);
+        }
+
+        ctx.setEncoder(QJniObject(
+            "org/krita/android/VideoEncoder",
+            "(IIIFLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;III)V",
+            jint(format->formatId()),
+            jint(outputWidth),
+            jint(outputHeight),
+            jfloat(settings().outputFps),
+            outputPath.object<jstring>(),
+            tempPath.object<jstring>(),
+            videoEncoderName.object<jstring>(),
+            jint(format->getVideoBitratePreference(settings().formatPreferences)),
+            audio ? audioEncoderName.object<jstring>() : nullptr,
+            audio ? audioFormatName.object<jstring>() : nullptr,
+            jint(audioSampleRate),
+            jint(audioChannelCount),
+            jint(format->getAudioBitratePreference(settings().formatPreferences))));
         if (ctx.checkObject(QStringLiteral("encoder"), ctx.encoder())) {
             return EncodeResult::Failed;
         }
@@ -453,17 +771,38 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
 
         // Grab the next frame from disk.
         QImage inputImage;
+        if (!frame.readImage(inputImage)) {
+            // If we don't have audio, we can just skip the frame and hope it's
+            // okay. In timelapses it often is, you're not gonna notice a single
+            // frame missing in the video. However, if we have an animation with
+            // audio, skipping a frame would make a mess and be hard to resync,
+            // so in that case we just give up and bail out.
+            if (audio) {
+                ctx.setInternalErrorMessage(QStringLiteral("failed to read frame %1").arg(frame.path()));
+                return EncodeResult::Failed;
+            } else {
+                continue;
+            }
+        }
+
         AVPixelFormat inputPixelFormat;
-        if (!frame.readImage(inputImage) || !ctx.convertFrame(inputImage, inputPixelFormat)) {
-            continue; // Keep going, some frames may be corrupted.
+        if (!ctx.convertFrame(inputImage, inputPixelFormat)) {
+            // Dito to the above, try to skip frames we don't understand, don't
+            // bother when there's audio involved.
+            if (audio) {
+                ctx.setInternalErrorMessage(QStringLiteral("failed to convert frame %1").arg(frame.path()));
+                return EncodeResult::Failed;
+            } else {
+                continue;
+            }
         }
 
         int instances = frame.instances();
         for (int i = 0; i < instances; ++i) {
             // Grab a buffer from the encoder.
-            EncodeResult prepareResult = prepare(ctx);
-            if (prepareResult != EncodeResult::Completed) {
-                return prepareResult;
+            EncodeResult prepareVideoResult = prepareVideo(ctx);
+            if (prepareVideoResult != EncodeResult::Completed) {
+                return prepareVideoResult;
             }
 
             // Retrieve the buffer layout.
@@ -566,9 +905,39 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
                                outputHeight);
             }
 
-            int commitResult = int(ctx.encoder().callMethod<jint>("commit", "()I"));
-            if (ctx.checkResult(QStringLiteral("commit"), commitResult)) {
+            int commitResult = int(ctx.encoder().callMethod<jint>("commitVideo", "()I"));
+            if (ctx.checkResult(QStringLiteral("commitVideo"), commitResult)) {
                 return EncodeResult::Failed;
+            }
+
+            if (audio && !audio->isFinished()) {
+                int pullFrameResult = audio->pullFrame(ctx);
+                if (pullFrameResult == Audio::PULL_FRAME_OK) {
+                    do {
+                        EncodeResult prepareAudioResult = prepareAudio(ctx);
+                        if (prepareAudioResult != EncodeResult::Completed) {
+                            return prepareAudioResult;
+                        }
+
+                        if (!audio->pushSamples(ctx)) {
+                            return EncodeResult::Failed;
+                        }
+                    } while (audio->isSampleDataRemaining());
+                    audio->finishFrame();
+
+                } else if (pullFrameResult == Audio::PULL_FRAME_END_OF_STREAM) {
+                    EncodeResult prepareAudioResult = prepareAudio(ctx);
+                    if (prepareAudioResult != EncodeResult::Completed) {
+                        return prepareAudioResult;
+                    }
+
+                    if (!audio->finish(ctx)) {
+                        return EncodeResult::Failed;
+                    }
+
+                } else {
+                    return EncodeResult::Failed;
+                }
             }
         }
     }
@@ -577,33 +946,62 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
         return EncodeResult::Cancelled;
     }
 
-    // Finish the encoder stream.
+    // Finish the encoder streams.
     {
         // Need a buffer from the encoder to tell it that it's done.
-        EncodeResult prepareResult = prepare(ctx);
-        if (prepareResult != EncodeResult::Completed) {
-            return prepareResult;
+        EncodeResult prepareVideoResult = prepareVideo(ctx);
+        if (prepareVideoResult != EncodeResult::Completed) {
+            return prepareVideoResult;
         }
-        // Hand an empty buffer back with the end of stream flag set.
-        int finishResult = int(ctx.encoder().callMethod<jint>("finish", "()I"));
-        if (ctx.checkResult(QStringLiteral("finish"), finishResult)) {
+
+        // Hand empty buffer back with the end of stream flag set.
+        int finishVideoResult = int(ctx.encoder().callMethod<jint>("finishVideo", "()I"));
+        if (ctx.checkResult(QStringLiteral("finishVideo"), finishVideoResult)) {
             return EncodeResult::Failed;
+        }
+
+        // Same procedure with audio, but it might already have finished.
+        if (audio && !audio->isFinished()) {
+            EncodeResult prepareAudioResult = prepareAudio(ctx);
+            if (prepareAudioResult != EncodeResult::Completed) {
+                return prepareAudioResult;
+            }
+
+            if (!audio->finish(ctx)) {
+                return EncodeResult::Failed;
+            }
         }
     }
 
-    // Drain all remaining frames out of the encoder.
-    while (true) {
-        int drainResult = drain(ctx, 1000000LL);
-        if (drainResult == DRAIN_END_OF_STREAM) {
-            break;
-        } else if (drainResult == DRAIN_ERROR) {
-            return EncodeResult::Failed;
-        } else if (drainResult == DRAIN_CANCELLED) {
-            return EncodeResult::Cancelled;
-        } else {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(drainResult >= 0);
+    // Drain all remaining frames and samples out of the encoders.
+    bool videoStreamEnded = false;
+    bool audioStreamEnded = !audio;
+    do {
+        if (!videoStreamEnded) {
+            int drainVideoResult = drainVideo(ctx, 1000000LL);
+            if (drainVideoResult == DRAIN_END_OF_STREAM) {
+                videoStreamEnded = true;
+            } else if (drainVideoResult == DRAIN_ERROR) {
+                return EncodeResult::Failed;
+            } else if (drainVideoResult == DRAIN_CANCELLED) {
+                return EncodeResult::Cancelled;
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_NOOP(drainVideoResult >= 0);
+            }
         }
-    }
+        if (!audioStreamEnded) {
+            int drainAudioResult = drainAudio(ctx, 1000000LL);
+            if (drainAudioResult == DRAIN_END_OF_STREAM) {
+                audioStreamEnded = true;
+            } else if (drainAudioResult == DRAIN_ERROR) {
+                return EncodeResult::Failed;
+            } else if (drainAudioResult == DRAIN_CANCELLED) {
+                return EncodeResult::Cancelled;
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_NOOP(drainAudioResult >= 0);
+            }
+        }
+    } while (!videoStreamEnded || !audioStreamEnded);
 
     // Close the encoder, copy the temporary file to the output file if needed.
     {
@@ -628,21 +1026,35 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::encode(QSt
     return EncodeResult::Completed;
 }
 
-KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::prepare(Context &ctx)
+KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::prepareVideo(Context &ctx)
 {
+    return prepare(ctx, false);
+}
+
+KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::prepareAudio(Context &ctx)
+{
+    return prepare(ctx, true);
+}
+
+KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::prepare(Context &ctx, bool audio)
+{
+    const char *methodName = audio ? "prepareAudio" : "prepareVideo";
+    QString title = audio ? QStringLiteral("prepareAudio") : QStringLiteral("prepareVideo");
+
     while (true) {
         if (isCancelled()) {
             return EncodeResult::Cancelled;
         }
 
-        int prepareResult = int(ctx.encoder().callMethod<jint>("prepare", "(J)I", jlong(100000LL)));
-        if (ctx.checkResult(QStringLiteral("prepare"), prepareResult)) {
+        int prepareResult = int(ctx.encoder().callMethod<jint>(methodName, "(J)I", jlong(100000LL)));
+        if (ctx.checkResult(title, prepareResult)) {
             return EncodeResult::Failed;
 
         } else if (prepareResult == STATUS_TIMEOUT) {
-            int drainResult = drain(ctx, 0LL);
+            int drainResult = drain(ctx, 0LL, audio);
             if (drainResult == DRAIN_END_OF_STREAM) {
-                ctx.setInternalErrorMessage(QStringLiteral("unexpected end of stream"));
+                ctx.setInternalErrorMessage(QStringLiteral("unexpected end of %1 stream")
+                                                .arg(audio ? QStringLiteral("audio") : QStringLiteral("video")));
                 return EncodeResult::Failed;
             } else if (drainResult == DRAIN_ERROR) {
                 return EncodeResult::Failed;
@@ -660,8 +1072,21 @@ KisMediaEncoderRunnable::EncodeResult KisAndroidMediaEncoderRunnable::prepare(Co
     return EncodeResult::Completed;
 }
 
-int KisAndroidMediaEncoderRunnable::drain(Context &ctx, long long initialTimeout)
+int KisAndroidMediaEncoderRunnable::drainVideo(Context &ctx, long long initialTimeout)
 {
+    return drain(ctx, initialTimeout, false);
+}
+
+int KisAndroidMediaEncoderRunnable::drainAudio(Context &ctx, long long initialTimeout)
+{
+    return drain(ctx, initialTimeout, true);
+}
+
+int KisAndroidMediaEncoderRunnable::drain(Context &ctx, long long initialTimeout, bool audio)
+{
+    const char *methodName = audio ? "drainAudio" : "drainVideo";
+    QString title = audio ? QStringLiteral("drainAudio") : QStringLiteral("drainVideo");
+
     int count = 0;
     long long timeout = initialTimeout;
     while (true) {
@@ -669,9 +1094,9 @@ int KisAndroidMediaEncoderRunnable::drain(Context &ctx, long long initialTimeout
             return DRAIN_CANCELLED;
         }
 
-        int drainResult = int(ctx.encoder().callMethod<jint>("drain", "(J)I", jlong(timeout)));
+        int drainResult = int(ctx.encoder().callMethod<jint>(methodName, "(J)I", jlong(timeout)));
 
-        if (ctx.checkResult(QStringLiteral("drain"), drainResult)) {
+        if (ctx.checkResult(title, drainResult)) {
             return DRAIN_ERROR;
 
         } else if (drainResult == STATUS_TIMEOUT) {
@@ -742,95 +1167,178 @@ bool KisAndroidMediaEncoderRunnable::readPlanePixelStride(Context &ctx, int inde
     return true;
 }
 
+bool KisAndroidMediaEncoderRunnable::readAudioInputBuffer(Context &ctx, void *&outBuffer, int &outSize)
+{
+    QJniObject audioBuffer = ctx.encoder().callObjectMethod("getInputAudioBuffer", "()Ljava/nio/ByteBuffer;", jint());
+    if (ctx.checkObject(QStringLiteral("audioBuffer"), audioBuffer)) {
+        return false;
+    }
+
+    void *buffer = ctx.env()->GetDirectBufferAddress(audioBuffer.object<jobject>());
+    if (!buffer) {
+        ctx.setInternalErrorMessage(QStringLiteral("null audio buffer"));
+        return false;
+    }
+
+    jint size = audioBuffer.callMethod<jint>("remaining", "()I");
+    if (ctx.checkException(QStringLiteral("remaining"))) {
+        return false;
+    }
+
+    if (size <= 0) {
+        ctx.setInternalErrorMessage(QStringLiteral("audio buffer with size %1").arg(size));
+        return false;
+    }
+
+    outBuffer = buffer;
+    outSize = size;
+    return true;
+}
+
 void KisAndroidMediaEncoderRunnable::checkFormatSupport(Context &ctx,
                                                         int formatId,
                                                         QVector<KisMediaEncoderFormat *> &outSupportedFormats)
 {
-    QJniObject supports = QJniObject::callStaticObjectMethod("org/krita/android/VideoEncoder",
-                                                             "getSupportsForFormat",
-                                                             "(I)Ljava/util/List;",
-                                                             jint(formatId));
-    if (ctx.checkObject(QStringLiteral("supports"), supports)) {
-        return;
+    QVector<Format::Encoder> videoEncoders;
+    QVector<Format::Encoder> audioEncoders;
+
+    const QPair<QVector<Format::Encoder> *, const char *> ps[] = {
+        {&videoEncoders, "getSupportsForVideoFormat"},
+        {&audioEncoders, "getSupportsForAudioFormat"},
+    };
+
+    for (const QPair<QVector<Format::Encoder> *, const char *> &p : ps) {
+        QJniObject supports = QJniObject::callStaticObjectMethod("org/krita/android/VideoEncoder",
+                                                                 p.second,
+                                                                 "(I)Ljava/util/List;",
+                                                                 jint(formatId));
+        if (ctx.checkObject(QStringLiteral("supports"), supports)) {
+            return;
+        }
+
+        jint count = supports.callMethod<jint>("size", "()I");
+        if (ctx.checkException(QStringLiteral("size"))) {
+            return;
+        }
+
+        for (jint i = 0; i < count; ++i) {
+            QJniObject entry = supports.callObjectMethod("get", "(I)Ljava/lang/Object;", i);
+            if (ctx.checkObject(QStringLiteral("entry"), entry)) {
+                continue;
+            }
+
+            QJniObject name = entry.getObjectField("name", "Ljava/lang/String;");
+            if (ctx.checkObject(QStringLiteral("name"), name)) {
+                continue;
+            }
+
+            QString nameString = name.toString();
+            if (ctx.checkException(QStringLiteral("nameString")) || nameString.isEmpty()) {
+                continue;
+            }
+
+            bool hardware = entry.getField<jboolean>("hardware");
+            if (ctx.checkException(QStringLiteral("hardware"))) {
+                continue;
+            }
+
+            p.first->append({nameString, hardware});
+        }
     }
 
-    jint count = supports.callMethod<jint>("size", "()I");
-    if (ctx.checkException(QStringLiteral("size"))) {
-        return;
-    }
-
-    QVector<Format::Encoder> encoders;
-    for (jint i = 0; i < count; ++i) {
-        QJniObject entry = supports.callObjectMethod("get", "(I)Ljava/lang/Object;", i);
-        if (ctx.checkObject(QStringLiteral("entry"), entry)) {
-            continue;
-        }
-
-        QJniObject name = entry.getObjectField("name", "Ljava/lang/String;");
-        if (ctx.checkObject(QStringLiteral("name"), name)) {
-            continue;
-        }
-
-        QString nameString = name.toString();
-        if (ctx.checkException(QStringLiteral("nameString")) || nameString.isEmpty()) {
-            continue;
-        }
-
-        bool hardware = entry.getField<jboolean>("hardware");
-        if (ctx.checkException(QStringLiteral("hardware"))) {
-            continue;
-        }
-
-        encoders.append({nameString, hardware});
-    }
-
-    if (!encoders.isEmpty()) {
-        outSupportedFormats.append(new Format(formatId, encoders));
+    if (!videoEncoders.isEmpty()) {
+        outSupportedFormats.append(new Format(formatId, videoEncoders, audioEncoders));
     }
 }
 
-KisAndroidMediaEncoderPreferencesWidget::KisAndroidMediaEncoderPreferencesWidget(QWidget *parent)
+KisAndroidMediaEncoderPreferencesWidget::KisAndroidMediaEncoderPreferencesWidget(const KisMediaEncoderFormat *format,
+                                                                                 QWidget *parent)
     : QWidget(parent)
 {
     QFormLayout *form = new QFormLayout(this);
 
-    m_cmbEncoder = new QComboBox;
-    form->addRow(i18n("Encoder:"), m_cmbEncoder);
+    m_cmbVideoEncoder = new QComboBox;
+    form->addRow(i18n("Video encoder:"), m_cmbVideoEncoder);
 
-    m_intBitrate = new QSpinBox;
-    m_intBitrate->setRange(1, 999999999);
-    form->addRow(i18n("Bitrate:"), m_intBitrate);
+    m_intVideoBitrate = new QSpinBox;
+    m_intVideoBitrate->setRange(1, 999999999);
+    form->addRow(i18n("Video bitrate:"), m_intVideoBitrate);
+
+    if (format->supportsAudio()) {
+        m_cmbAudioEncoder = new QComboBox;
+        form->addRow(i18n("Audio encoder:"), m_cmbAudioEncoder);
+
+        m_intAudioBitrate = new QSpinBox;
+        m_intAudioBitrate->setRange(1, 999999999);
+        form->addRow(i18n("Audio bitrate:"), m_intAudioBitrate);
+    } else {
+        m_cmbAudioEncoder = nullptr;
+        m_intAudioBitrate = nullptr;
+    }
 }
 
-void KisAndroidMediaEncoderPreferencesWidget::addEncoderOption(const QString &title, const QString &key)
+void KisAndroidMediaEncoderPreferencesWidget::addVideoEncoderOption(const QString &title, const QString &key)
 {
-    m_cmbEncoder->addItem(title, QVariant(key));
+    m_cmbVideoEncoder->addItem(title, QVariant(key));
 }
 
-QString KisAndroidMediaEncoderPreferencesWidget::encoder() const
+void KisAndroidMediaEncoderPreferencesWidget::addAudioEncoderOption(const QString &title, const QString &key)
 {
-    return m_cmbEncoder->currentData().toString();
+    m_cmbAudioEncoder->addItem(title, QVariant(key));
 }
 
-void KisAndroidMediaEncoderPreferencesWidget::setEncoder(const QString &key)
+QString KisAndroidMediaEncoderPreferencesWidget::videoEncoder() const
+{
+    return m_cmbVideoEncoder->currentData().toString();
+}
+
+void KisAndroidMediaEncoderPreferencesWidget::setVideoEncoder(const QString &key)
 {
     int index = 0;
-    int count = m_cmbEncoder->count();
+    int count = m_cmbVideoEncoder->count();
     for (int i = 0; i < count; ++i) {
-        if (m_cmbEncoder->itemData(i).toString() == key) {
+        if (m_cmbVideoEncoder->itemData(i).toString() == key) {
             index = i;
             break;
         }
     }
-    m_cmbEncoder->setCurrentIndex(index);
+    m_cmbVideoEncoder->setCurrentIndex(index);
 }
 
-int KisAndroidMediaEncoderPreferencesWidget::bitrate() const
+int KisAndroidMediaEncoderPreferencesWidget::videoBitrate() const
 {
-    return m_intBitrate->value();
+    return m_intVideoBitrate->value();
 }
 
-void KisAndroidMediaEncoderPreferencesWidget::setBitrate(int bitrate)
+void KisAndroidMediaEncoderPreferencesWidget::setVideoBitrate(int videoBitrate)
 {
-    m_intBitrate->setValue(bitrate);
+    m_intVideoBitrate->setValue(videoBitrate);
+}
+
+QString KisAndroidMediaEncoderPreferencesWidget::audioEncoder() const
+{
+    return m_cmbAudioEncoder->currentData().toString();
+}
+
+void KisAndroidMediaEncoderPreferencesWidget::setAudioEncoder(const QString &key)
+{
+    int index = 0;
+    int count = m_cmbAudioEncoder->count();
+    for (int i = 0; i < count; ++i) {
+        if (m_cmbAudioEncoder->itemData(i).toString() == key) {
+            index = i;
+            break;
+        }
+    }
+    m_cmbAudioEncoder->setCurrentIndex(index);
+}
+
+int KisAndroidMediaEncoderPreferencesWidget::audioBitrate() const
+{
+    return m_intAudioBitrate->value();
+}
+
+void KisAndroidMediaEncoderPreferencesWidget::setAudioBitrate(int videoBitrate)
+{
+    m_intAudioBitrate->setValue(videoBitrate);
 }

@@ -46,6 +46,7 @@ protected:
 struct KRITAUI_EXPORT KisMediaEncoderWrapperSettings {
     QString outputFile;
     QStringList inputFiles;
+    QString audioFile;
     KisMediaEncoderFormat *format;
     QVariantMap formatPreferences;
     QString scaleFilter;
@@ -54,6 +55,7 @@ struct KRITAUI_EXPORT KisMediaEncoderWrapperSettings {
     int outputFps;
     int firstFrameSec;
     int lastFrameSec;
+    int audioSeekFrame;
 };
 
 // Intentionally not exported, this is only needed internally.
@@ -88,6 +90,11 @@ protected:
             : m_path(path)
             , m_instances(instances)
         {
+        }
+
+        const QString &path() const
+        {
+            return m_path;
         }
 
         int instances() const

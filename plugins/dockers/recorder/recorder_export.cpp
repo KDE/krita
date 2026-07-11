@@ -298,6 +298,7 @@ public:
         KisMediaEncoderWrapperSettings exporterSettings = {
             settings->videoFilePath,
             settings->inputFilePaths,
+            QString(),
             KisMediaEncoderWrapper::getFormatByKey(settings->selectedFormat),
             settings->formatPreferences.value(settings->selectedFormat).toMap(),
             QString(),
@@ -306,6 +307,7 @@ public:
             settings->fps,
             settings->firstFrameSec,
             settings->lastFrameSec,
+            0,
         };
 #else
         const RecorderProfile &profile = settings->profiles[settings->profileIndex];

@@ -31,7 +31,9 @@
 
 #ifdef Q_OS_ANDROID
 #include "animation/KisMediaEncoderWrapper.h"
+#include <KisAndroidUtils.h>
 #include <QJsonDocument>
+#include <QTemporaryFile>
 #else
 #include "animation/KisFFMpegWrapper.h"
 #endif
@@ -71,12 +73,14 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &framesDir
     KisMediaEncoderWrapperSettings settings = {
         options.videoFileName,
         QStringList(),
+        QString(),
         format,
         formatPreferences,
         options.scaleFilter,
         QSize(options.width, options.height),
         options.frameRate,
         options.frameRate,
+        0,
         0,
         0,
     };
@@ -89,6 +93,23 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &framesDir
     settings.inputFiles.reserve(savedFiles.size());
     for (const QString &savedFile : savedFiles) {
         settings.inputFiles.append(inputDir + savedFile);
+    }
+
+    // MLT can't read from Android content URIs, so we have to copy the file
+    // into temporary storage and get a real path for it.
+    QTemporaryFile audioFile;
+    if (format->supportsAudio() && options.includeAudio) {
+        QVector<QFileInfo> audioFiles = m_doc->getAudioTracks();
+        if (!audioFiles.isEmpty()) {
+            QString audioPath = audioFiles.first().filePath();
+            QString errorMessage;
+            if (KisAndroidUtils::copyFileToTemporary(audioPath, audioFile, &errorMessage)) {
+                settings.audioFile = audioFile.fileName();
+                settings.audioSeekFrame = options.firstFrame;
+            } else {
+                return KisImportExportErrorCode(i18n("Error preparing audio file: %1", errorMessage));
+            }
+        }
     }
 
     // This whole batchMode business is either a vestige or was never actually

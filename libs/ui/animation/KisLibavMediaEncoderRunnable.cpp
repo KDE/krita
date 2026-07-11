@@ -81,6 +81,11 @@ public:
         return extensionForFormatId(m_formatId);
     }
 
+    bool supportsAudio() const override
+    {
+        return false;
+    }
+
     QString formatName() const
     {
         switch (m_formatId) {

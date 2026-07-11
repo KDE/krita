@@ -65,6 +65,7 @@ private Q_SLOTS:
     void slotLockAspectRatioDimensionsHeight(int height);
 
     void slotExportTypeChanged();
+    void slotRenderTypeChanged();
 #ifndef Q_OS_ANDROID
     void setFFmpegPath(const QString& path);
 #endif
@@ -119,6 +120,7 @@ private:
     static void saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config);
 
     static bool looksLikeGif(const QString &videoType);
+    static bool supportsAudio(const QString &videoType);
 
 private:
     KisImageSP m_image;

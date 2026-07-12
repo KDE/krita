@@ -43,6 +43,7 @@
 #include "kis_image_config.h"
 
 #ifdef Q_OS_ANDROID
+#include <QButtonGroup>
 #include <QJsonDocument>
 #include "animation/KisMediaEncoderFormatPreferencesDialog.h"
 #include "animation/KisMediaEncoderWrapper.h"
@@ -76,13 +77,26 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     m_page->lblWarnings->setPixmap(KisIconUtils::loadIcon(QStringLiteral("dialog-warning")).pixmap(32, 32));
 
 #ifdef Q_OS_ANDROID
+    m_exportButtonGroup = new QButtonGroup(this);
+    m_exportButtonGroup->addButton(m_page->bnExportImages);
+    m_exportButtonGroup->addButton(m_page->bnExportVideo);
+    m_page->shouldExportOnlyImageSequence->setChecked(false);
+    m_page->shouldExportOnlyVideo->setChecked(false);
+    m_page->shouldExportOnlyImageSequence->setCheckable(false);
+    m_page->shouldExportOnlyVideo->setCheckable(false);
+    m_page->pgImages->layout()->addWidget(m_page->shouldExportOnlyImageSequence);
+    m_page->pgVideo->layout()->addWidget(m_page->shouldExportOnlyVideo);
     m_page->lblVideoFilenameTitle->hide();
     m_page->videoFilename->hide();
-    m_page->dirRequester->setReadOnlyText(true);
+    m_page->lblDirRequester->hide();
+    m_page->dirRequester->hide();
     m_page->lblFFMpegLocationTitle->hide();
     m_page->ffmpegLocation->hide();
     m_page->lblFFMpegVersionTitle->hide();
     m_page->lblFFMpegVersion->hide();
+#else
+    m_page->wdgExportButtons->hide();
+    m_page->stkExport->hide();
 #endif
 
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
@@ -145,8 +159,15 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
         connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeOptionsClicked()));
         connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
 
+#ifdef Q_OS_ANDROID
+        connect(m_exportButtonGroup,
+                QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked),
+                this,
+                &KisDlgAnimationRenderer::slotExportTypeChanged);
+#else
         connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
         connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
+#endif
         connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), SLOT(slotRenderTypeChanged()));
 
         connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(slotCheckWarnings()));
@@ -290,8 +311,16 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     }
 
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
+#ifdef Q_OS_ANDROID
+    if (lastUsedOptions.shouldEncodeVideo) {
+        m_page->bnExportVideo->setChecked(true);
+    } else {
+        m_page->bnExportImages->setChecked(true);
+    }
+#else
     m_page->shouldExportOnlyVideo->setChecked(lastUsedOptions.shouldEncodeVideo);
     m_page->shouldExportOnlyImageSequence->setChecked(!lastUsedOptions.shouldDeleteSequence);
+#endif
 
     slotExportTypeChanged();
 
@@ -342,6 +371,24 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     bool hasAudioLoaded = doc.getAudioTracks().count() > 0;
     m_page->chkIncludeAudio->setChecked(hasAudioLoaded);
     slotRenderTypeChanged();
+}
+
+bool KisDlgAnimationRenderer::wantImageSequenceExport() const
+{
+#ifdef Q_OS_ANDROID
+    return !wantVideoExport();
+#else
+    return m_page->shouldExportOnlyImageSequence->isChecked();
+#endif
+}
+
+bool KisDlgAnimationRenderer::wantVideoExport() const
+{
+#ifdef Q_OS_ANDROID
+    return m_page->bnExportVideo->isChecked();
+#else
+    return m_page->shouldExportOnlyVideo->isChecked();
+#endif
 }
 
 #ifndef Q_OS_ANDROID
@@ -609,7 +656,7 @@ void KisDlgAnimationRenderer::updateWarnings()
     QStringList warnings;
     bool exportMayFail = false;
 
-    if (m_page->shouldExportOnlyVideo->isChecked()) {
+    if (wantVideoExport()) {
         QString videoType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
         bool gif = looksLikeGif(videoType);
 
@@ -825,33 +872,44 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 
     options.lastDocumentPath = m_doc->localFilePath();
     QString videoType = m_page->cmbRenderType->currentData().toString();
+
 #ifdef Q_OS_ANDROID
-    options.videoFormatKey = videoType;
-    QVariantMap videoFormatPreferences = m_videoFormatPreferences.value(videoType).toMap();
-    if (!videoFormatPreferences.isEmpty()) {
-        options.videoFormatPreferencesJson =
-            QString::fromUtf8(QJsonDocument::fromVariant(videoFormatPreferences).toJson(QJsonDocument::Compact));
+    bool video = wantVideoExport();
+    options.shouldEncodeVideo = video;
+    options.includeAudio = video && supportsAudio(videoType) && m_page->chkIncludeAudio->isChecked();
+    options.wantsOnlyUniqueFrameSequence = !video && m_page->chkOnlyUniqueFrames->isChecked();
+
+    if (video) {
+        options.frameMimeType = QStringLiteral("image/png");
+        options.videoFileName = m_videoFileName;
+        options.videoFormatKey = videoType;
+        QVariantMap videoFormatPreferences = m_videoFormatPreferences.value(videoType).toMap();
+        if (!videoFormatPreferences.isEmpty()) {
+            options.videoFormatPreferencesJson =
+                QString::fromUtf8(QJsonDocument::fromVariant(videoFormatPreferences).toJson(QJsonDocument::Compact));
+        }
+    } else {
+        options.directory = m_imageDirectory;
+        options.frameMimeType = m_page->cmbMimetype->currentData().toString();
     }
-    options.videoFileName = m_videoFileName;
 #else
     options.videoMimeType = videoType;
     options.videoFileName = m_page->videoFilename->fileName();
     options.ffmpegPath = m_page->ffmpegLocation->fileName();
     options.customFFMpegOptions = m_customFFMpegOptionsString;
-#endif
+    options.directory = m_page->dirRequester->fileName();
+    options.shouldEncodeVideo = wantVideoExport();
+    options.shouldDeleteSequence = !wantImageSequenceExport();
+    options.includeAudio = supportsAudio(videoType) && m_page->chkIncludeAudio->isChecked();
+    options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
     options.frameMimeType = m_page->cmbMimetype->currentData().toString();
+#endif
     options.scaleFilter = m_page->cmbScaleFilter->currentData().toString();
 
     options.basename = m_page->txtBasename->text();
-    options.directory = m_page->dirRequester->fileName();
     options.firstFrame = m_page->intStart->value();
     options.lastFrame = m_page->intEnd->value();
     options.sequenceStart = m_page->sequenceStart->value();
-
-    options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
-    options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
-    options.includeAudio = supportsAudio(videoType) && m_page->chkIncludeAudio->isChecked();
-    options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
     options.frameRate = m_page->intFramesPerSecond->value();
     if (options.frameRate > 50 && looksLikeGif(videoType)) {
@@ -933,7 +991,10 @@ void KisDlgAnimationRenderer::slotButtonClicked(int button)
 void KisDlgAnimationRenderer::slotDialogAccepted()
 {
 #ifdef Q_OS_ANDROID
-    if (m_page->shouldExportOnlyVideo) {
+    m_imageDirectory.clear();
+    m_videoFileName.clear();
+
+    if (wantVideoExport()) {
         KisMediaEncoderFormat *format = KisMediaEncoderWrapper::getFormatByKey(m_page->cmbRenderType->currentData().toString());
         KIS_SAFE_ASSERT_RECOVER_RETURN(format);
         KoFileDialog dialog(this, KoFileDialog::SaveFile, QStringLiteral("ExportAnimation"));
@@ -943,8 +1004,13 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
         if (m_videoFileName.isEmpty()) {
             return;
         }
+
     } else {
-        m_videoFileName.clear();
+        KoFileDialog dialog(this, KoFileDialog::OpenDirectory, QStringLiteral("ExportAnimation"));
+        m_imageDirectory = dialog.filename();
+        if (m_imageDirectory.isEmpty()) {
+            return;
+        }
     }
 #endif
 
@@ -959,6 +1025,16 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
 
 void KisDlgAnimationRenderer::slotExportTypeChanged()
 {
+    setUpdatesEnabled(false);
+
+#ifdef Q_OS_ANDROID
+    if (wantVideoExport()) {
+        m_page->stkExport->setCurrentWidget(m_page->pgVideo);
+    } else {
+        m_page->lblWarnings->hide();
+        m_page->stkExport->setCurrentWidget(m_page->pgImages);
+    }
+#else
     // if a video format needs to be outputted
     if (m_page->shouldExportOnlyVideo->isChecked()) {
          // videos always uses PNG for creating video, so disable the ability to change the format
@@ -975,8 +1051,11 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
          KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
          m_page->shouldExportOnlyImageSequence->setChecked(true);
     }
+#endif
 
-    slotCheckWarnings();
+    updateWarnings();
+    m_page->adjustSize();
+    setUpdatesEnabled(true);
 }
 
 void KisDlgAnimationRenderer::slotRenderTypeChanged()

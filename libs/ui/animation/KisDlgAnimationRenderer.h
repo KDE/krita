@@ -22,6 +22,7 @@
 class KisDocument;
 class KisImportExportFilter;
 class KisConfigWidget;
+class QButtonGroup;
 class QHBoxLayout;
 class KisAnimationVideoSaver;
 class KisAnimationRenderingOptions;
@@ -91,6 +92,9 @@ private:
 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
 
+    bool wantImageSequenceExport() const;
+    bool wantVideoExport() const;
+
     void updateWarnings();
 
 #ifndef Q_OS_ANDROID
@@ -129,6 +133,8 @@ private:
     KisDocument *m_doc;
 
 #ifdef Q_OS_ANDROID
+    QButtonGroup *m_exportButtonGroup;
+    QString m_imageDirectory;
     QString m_videoFileName;
     QVariantMap m_videoFormatPreferences;
 #else

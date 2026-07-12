@@ -58,6 +58,13 @@ QString KisAnimationRenderingOptions::resolveAbsoluteFramesDirectory() const
 
 KisAnimationRenderingOptions::RenderMode KisAnimationRenderingOptions::renderMode() const
 {
+#ifdef Q_OS_ANDROID
+    if (shouldEncodeVideo) {
+        return RENDER_VIDEO_ONLY;
+    } else {
+        return RENDER_FRAMES_ONLY;
+    }
+#else
     if (shouldDeleteSequence) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(shouldEncodeVideo);
         return RENDER_VIDEO_ONLY;
@@ -67,6 +74,7 @@ KisAnimationRenderingOptions::RenderMode KisAnimationRenderingOptions::renderMod
     } else {
         return RENDER_FRAMES_AND_VIDEO;
     }
+#endif
 }
 
 KisPropertiesConfigurationSP KisAnimationRenderingOptions::toProperties() const
@@ -82,7 +90,9 @@ KisPropertiesConfigurationSP KisAnimationRenderingOptions::toProperties() const
     config->setProperty("frame_mimetype", frameMimeType);
 
     config->setProperty("encode_video", shouldEncodeVideo);
+#ifndef Q_OS_ANDROID
     config->setProperty("delete_sequence", shouldDeleteSequence);
+#endif
     config->setProperty("only_unique_frames", wantsOnlyUniqueFrameSequence);
 
     config->setProperty("framerate", frameRate);
@@ -116,7 +126,9 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
     frameMimeType = config->getPropertyLazy("frame_mimetype", frameMimeType);
 
     shouldEncodeVideo = config->getPropertyLazy("encode_video", false);
+#ifndef Q_OS_ANDROID
     shouldDeleteSequence = config->getPropertyLazy("delete_sequence", false);
+#endif
     wantsOnlyUniqueFrameSequence = config->getPropertyLazy("only_unique_frames", false);
 
     frameRate = config->getPropertyLazy("framerate", 25);

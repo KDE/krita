@@ -53,24 +53,28 @@ bool looksLikeMatroska(const QString &videoType)
 } // namespace
 
 bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, KisAnimationRenderingOptions encoderOptions) {
-#ifdef Q_OS_ANDROID
-    // The user may cancel the dialog prompting them for a video file, so bail
-    // out if we don't have one here. We can't create an implicit one next to
-    // the document on Android because of file system restrictions.
-    if (encoderOptions.shouldEncodeVideo && encoderOptions.videoFileName.isEmpty()) {
-        return false;
-    }
-#endif
-
     bool isTemporaryFramesDirectory = false;
     QString framesDirectory;
 #ifdef Q_OS_ANDROID
+    // The user may cancel the dialog prompting them for a video file or a frames
+    // directory and we can't implicitly create them next to the document like on
+    // desktop due to file system restrictions. So if we don't get those paths
+    // here, we just bail out. The user knows they pressed cancel on the file
+    // dialog, so no message dialog is necessary.
+    if (encoderOptions.shouldEncodeVideo) {
+        if (encoderOptions.videoFileName.isEmpty()) {
+            return false;
+        }
+    } else if (encoderOptions.directory.isEmpty()) {
+        return false;
+    }
+
     // Android uses weird content URIs instead of file paths and isn't allowed
     // to scribble around in the file system without asking the user for access.
     // We'll have to take the frames directory as it is given and if we don't
     // get one then we'll create a temporary directory to stick our frames into.
     std::unique_ptr<QTemporaryDir> tempDir;
-    if (encoderOptions.shouldDeleteSequence || encoderOptions.directory.isEmpty()) {
+    if (encoderOptions.shouldEncodeVideo) {
         tempDir = std::make_unique<QTemporaryDir>();
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tempDir->isValid(), false);
         framesDirectory = tempDir->path();
@@ -203,7 +207,12 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         if (!isTemporaryFramesDirectory) {
             QDir d(framesDirectory);
 
-            if (encoderOptions.shouldDeleteSequence || !delayReturnSuccess) {
+#ifdef Q_OS_ANDROID
+            bool shouldDeleteSequence = false;
+#else
+            bool shouldDeleteSequence = encoderOptions.shouldDeleteSequence;
+#endif
+            if (shouldDeleteSequence || !delayReturnSuccess) {
                 QStringList savedFiles = exporter.savedFiles();
 
                 Q_FOREACH(const QString &f, savedFiles) {

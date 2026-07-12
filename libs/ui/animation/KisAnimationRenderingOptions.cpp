@@ -125,7 +125,12 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
     sequenceStart = config->getPropertyLazy("sequence_start", 0);
     frameMimeType = config->getPropertyLazy("frame_mimetype", frameMimeType);
 
-    shouldEncodeVideo = config->getPropertyLazy("encode_video", false);
+#ifdef Q_OS_ANDROID
+    bool encodeVideoDefault = true;
+#else
+    bool encodeVideoDefault = false;
+#endif
+    shouldEncodeVideo = config->getPropertyLazy("encode_video", encodeVideoDefault);
 #ifndef Q_OS_ANDROID
     shouldDeleteSequence = config->getPropertyLazy("delete_sequence", false);
 #endif

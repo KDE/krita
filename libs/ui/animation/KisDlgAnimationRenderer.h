@@ -91,6 +91,8 @@ private:
 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
 
+    void updateWarnings();
+
 #ifndef Q_OS_ANDROID
     FFmpegValidationResult validateFFmpeg(const QString &ffmpegPath);
 

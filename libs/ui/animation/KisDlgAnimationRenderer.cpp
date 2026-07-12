@@ -72,6 +72,9 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
         m_page->bnRenderOptions->setIcon(editIcon);
     }
 
+    m_page->lblWarnings->hide();
+    m_page->lblWarnings->setPixmap(KisIconUtils::loadIcon(QStringLiteral("dialog-warning")).pixmap(32, 32));
+
 #ifdef Q_OS_ANDROID
     m_page->lblVideoFilenameTitle->hide();
     m_page->videoFilename->hide();
@@ -596,6 +599,13 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
 void KisDlgAnimationRenderer::slotCheckWarnings()
 {
     setUpdatesEnabled(false);
+    updateWarnings();
+    m_page->adjustSize();
+    setUpdatesEnabled(true);
+}
+
+void KisDlgAnimationRenderer::updateWarnings()
+{
     QStringList warnings;
     bool exportMayFail = false;
 
@@ -631,9 +641,9 @@ void KisDlgAnimationRenderer::slotCheckWarnings()
         }
     }
 
-    m_page->lblWarnings->setVisible(!warnings.isEmpty());
-
-    if (!warnings.isEmpty()) {
+    if (warnings.isEmpty()) {
+        m_page->lblWarnings->hide();
+    } else {
         QString text = QString("<p><b>%1</b>").arg(i18n("Warning(s):"));
         text.append("<ul>");
         Q_FOREACH (const QString &warning, warnings) {
@@ -650,13 +660,8 @@ void KisDlgAnimationRenderer::slotCheckWarnings()
             text.append(QStringLiteral("</p>"));
         }
         m_page->lblWarnings->setText(text);
-
-        m_page->lblWarnings->setPixmap(
-            m_page->lblWarnings->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+        m_page->lblWarnings->show();
     }
-
-    m_page->adjustSize();
-    setUpdatesEnabled(true);
 }
 
 #ifndef Q_OS_ANDROID

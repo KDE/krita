@@ -32,8 +32,15 @@ public:
     int lastFrame = 0;
     int sequenceStart = 0;
 
+    // On Android, we only allow either frame or video export, not both. Using
+    // a temporary directory instead of scribbling around in external storage is
+    // just orders of magnitude faster, doesn't spam the user's recent files
+    // with pointless image frames and also makes the export dialog not have to
+    // be so screen-escapingly tall. Hence we only have one boolean there.
     bool shouldEncodeVideo = false;
+#ifndef Q_OS_ANDROID
     bool shouldDeleteSequence = false;
+#endif
     bool includeAudio = false;
     bool wantsOnlyUniqueFrameSequence = false;
 
@@ -64,7 +71,9 @@ public:
     enum RenderMode {
         RENDER_FRAMES_ONLY,
         RENDER_VIDEO_ONLY,
+#ifndef Q_OS_ANDROID
         RENDER_FRAMES_AND_VIDEO
+#endif
     };
 
     RenderMode renderMode() const;

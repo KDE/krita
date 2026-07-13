@@ -41,6 +41,9 @@
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>3</number>
+     </property>
      <property name="movable">
       <bool>false</bool>
      </property>
@@ -1025,7 +1028,7 @@
               <item row="5" column="0" colspan="2">
                <widget class="QGroupBox" name="m_grpColorSamplerZoomPreview">
                 <property name="title">
-                 <string>Enable Zoom Preview (Pixel-Perfect Color Picker)</string>
+                 <string>Enable Zoom Preview (Pixel-Perfect Color Sampler)</string>
                 </property>
                 <property name="checkable">
                  <bool>true</bool>

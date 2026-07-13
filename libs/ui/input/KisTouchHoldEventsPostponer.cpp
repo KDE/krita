@@ -7,14 +7,13 @@
 #include "KisTouchHoldEventsPostponer.h"
 
 #include <QTimer>
+#include <QTouchEvent>
 
 #include <kis_assert.h>
 #include <input/kis_touch_shortcut.h>
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <KoPointerEvent.h>
-#else
-#include <QTouchEvent>
 #endif
 
 

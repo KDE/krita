@@ -79,7 +79,7 @@ struct KisAsyncColorSamplerHelper::Private
     QPainterPath cacheCircleInnerClip;
     QRect cacheCanvasPreviewRect;
     QImage cacheCanvasPreviewImage;
-    QImage cacheCrosshairImage;
+    QPainterPath cacheCrosshairPath;
     int cacheCirclePreviewDiameter;
 
     QColor currentColor;
@@ -246,38 +246,28 @@ struct KisAsyncColorSamplerHelper::Private
         return pixelRect;
     }
 
-    QImage crosshairForOffsettedCircle() {
-        if (!cacheCrosshairImage.isNull() && cacheCirclePreviewDiameter == circlePreviewDiameter) return cacheCrosshairImage;
+    QPainterPath crosshairForOffsettedCircle() {
+        if (!cacheCrosshairPath.isEmpty() && cacheCirclePreviewDiameter == circlePreviewDiameter) return cacheCrosshairPath;
 
         cacheCirclePreviewDiameter = circlePreviewDiameter;
 
-        int gap = 4;
+        int gap = 5; // Should be odd so it have a center point
         int crosshairRadius = circlePreviewDiameter / 2 * 0.3;
-        cacheCrosshairImage = QImage(crosshairRadius * 2 + 1, crosshairRadius * 2 + 1, QImage::Format_ARGB32);
-        cacheCrosshairImage.fill(Qt::transparent);
+        cacheCrosshairPath = QPainterPath(QPointF(-crosshairRadius, 0));
 
-        QPainter painter(&cacheCrosshairImage);\
-        painter.translate(crosshairRadius + 1, crosshairRadius + 1);
+        cacheCrosshairPath.lineTo(-gap, 0);
+        cacheCrosshairPath.moveTo(gap, 0);
+        cacheCrosshairPath.lineTo(crosshairRadius, 0);
 
-        painter.setBrush(Qt::NoBrush);
+        QTransform tf;
+        tf.translate(0, 0);
+        tf.rotate(90);
 
-        painter.setPen(Qt::black);
-        painter.drawLine(QLine(-crosshairRadius, 0, crosshairRadius, 0));
-        painter.drawLine(QLine(0, -crosshairRadius, 0, crosshairRadius));
+        cacheCrosshairPath.moveTo(0,0);
 
-        painter.setPen(Qt::white);
-        painter.drawLine(QLine(-crosshairRadius, 1, crosshairRadius, 1));
-        painter.drawLine(QLine(1, -crosshairRadius, 1, crosshairRadius));
+        cacheCrosshairPath.addPath(tf.map(cacheCrosshairPath));
 
-        painter.drawLine(QLine(-crosshairRadius, -1, crosshairRadius, -1));
-        painter.drawLine(QLine(-1, -crosshairRadius, -1, crosshairRadius));
-
-        painter.setCompositionMode(QPainter::CompositionMode_Clear);
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(Qt::transparent);
-        painter.drawRect(QRect(QPoint(-gap, -gap), QPoint(gap, gap)));
-
-        return cacheCrosshairImage;
+        return cacheCrosshairPath;
     }
 };
 
@@ -688,19 +678,18 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 
         // Draw crosshair if preview is offseted
         if (m_d->circlePreviewPosition != KisConfig::ColorSamplerPreviewCirclePosition::Center) {
-            QImage crosshairImage = m_d->crosshairForOffsettedCircle();
-
-            QRectF targetRect = crosshairImage.rect();
-            targetRect.moveCenter(cacheCenter);
+            QColor crosshairColor = Qt::black;
+            // Apparently this fomular is outdated and inaccurate. But the accurate version require calculating power, probably overkill anyway
+            qreal luminance = (0.299 * currentColor.redF() + 0.587 * currentColor.greenF() + 0.114 * currentColor.blueF());
+            if (luminance < 0.5) crosshairColor = Qt::white;
 
             cachePainter.save();
-            cachePainter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-            cachePainter.translate(cacheCenter);
-            cachePainter.rotate(-m_d->cacheRotation);
-            cachePainter.translate(-cacheCenter);
-
-            cachePainter.drawImage(targetRect, crosshairImage);
+            cachePainter.setPen(crosshairColor);
+            QTransform tf;
+            tf.translate(cacheCenter.x(), cacheCenter.y());
+            tf.rotate(-canvasRotationAngle);
+            cachePainter.drawPath(tf.map(m_d->crosshairForOffsettedCircle()));
 
             cachePainter.restore();
         }

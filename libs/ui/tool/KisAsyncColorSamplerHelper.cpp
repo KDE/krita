@@ -251,12 +251,12 @@ struct KisAsyncColorSamplerHelper::Private
 
         cacheCirclePreviewDiameter = circlePreviewDiameter;
 
-        int gap = 5; // Should be odd so it have a center point
-        int crosshairRadius = circlePreviewDiameter / 2 * 0.3;
+        int gapRadius = 3;
+        int crosshairRadius = circlePreviewDiameter / 2 * 0.2;
         cacheCrosshairPath = QPainterPath(QPointF(-crosshairRadius, 0));
 
-        cacheCrosshairPath.lineTo(-gap, 0);
-        cacheCrosshairPath.moveTo(gap, 0);
+        cacheCrosshairPath.lineTo(-gapRadius, 0);
+        cacheCrosshairPath.moveTo(gapRadius, 0);
         cacheCrosshairPath.lineTo(crosshairRadius, 0);
 
         QTransform tf;

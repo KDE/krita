@@ -763,8 +763,8 @@ void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     gc.restore();
 }
 
-// Won't show opacity because the color sampled doesn't respect opacity either
-// TODO: Test if reference image still show when not visible, opacity = 0. Maybe we need to cover that too
+// Preview won't respect opacity because the color sampled doesn't respect opacity either
+// But if opacity = 0, preview for that image won't show at all
 void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip) {
     KisDocument *document = m_d->canvas->viewManager()->document();
     if (!document || !document->referenceImagesLayer()) return;
@@ -781,6 +781,8 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         KisReferenceImage *refImage = dynamic_cast<KisReferenceImage*>(shape);
         if (!refImage) continue;
 
+        if (refImage->transparency() == 1.0) continue;
+
         gc.save();
 
         QImage image = refImage->getCachedImage();
@@ -788,7 +790,7 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         QPoint refPixelPoint = refImage->documentToPixelFloored(zoomDocRectF.center());
 
         // Avoid using KisReferenceImage::documentToPixel because it use absoluteTransformation.invert()
-        // Which will take rotation into account and cause some quirks
+        // Which will take rotation into account and cause some quirks when ref image is rotated
         qreal xScale = refImage->boundingRect().width() / image.width();
         qreal yScale = refImage->boundingRect().height() / image.height();
 

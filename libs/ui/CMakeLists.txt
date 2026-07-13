@@ -369,6 +369,7 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_and_rotate_action.cpp
     input/KisCanvasOnlyAction.cpp
     input/KisTouchGestureAction.cpp
+    input/KisTouchHoldEventsPostponer.cpp
     input/KisInputProfileMigrator.cpp
 
     operations/kis_operation.cpp

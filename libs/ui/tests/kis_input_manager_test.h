@@ -22,6 +22,9 @@ private Q_SLOTS:
     void testTouchMoves_data();
     void testTouchMoves();
 
+    void testTouchHoldPostponer_data();
+    void testTouchHoldPostponer();
+
     void testIncrementalAverage();
 };
 

@@ -204,7 +204,6 @@ KisInputManager::Private::Private(KisInputManager *qq)
                           KisSignalCompressor::ADDITIVE_INTERVAL)
     , priorityEventFilterSeqNo(0)
     , popupWidget(nullptr)
-    , touchHoldTimer(new QTimer(qq))
     , canvasSwitcher(this, qq)
 {
     KisConfig cfg(true);
@@ -242,11 +241,6 @@ KisInputManager::Private::Private(KisInputManager *qq)
     if (qEnvironmentVariableIsSet("KRITA_FIX_UNBALANCED_KEY_EVENTS")) {
         useUnbalancedKeyPressEventWorkaround = qEnvironmentVariableIntValue("KRITA_FIX_UNBALANCED_KEY_EVENTS");
     }
-
-    touchHoldTimer->setTimerType(Qt::CoarseTimer);
-    touchHoldTimer->setSingleShot(true);
-    touchHoldTimer->setInterval(TOUCH_HOLD_DELAY_MS);
-    connect(touchHoldTimer, &QTimer::timeout, qq, &KisInputManager::slotTouchHoldTriggered);
 }
 
 static const int InputWidgetsThreshold = 2000;
@@ -720,66 +714,6 @@ void KisInputManager::Private::startBlockingTouch()
 void KisInputManager::Private::stopBlockingTouch()
 {
     eventEater.stopBlockingTouch();
-}
-
-void KisInputManager::Private::restartTouchHoldTimer()
-{
-    touchHoldTimer->start();
-}
-
-void KisInputManager::Private::cancelTouchHoldTimer()
-{
-    touchHoldTimer->stop();
-}
-
-bool KisInputManager::Private::isPendingTouchHold() const
-{
-    return touchHoldTimer->isActive();
-}
-
-bool KisInputManager::Private::isWithinTouchHoldSlopRange(const QPointF &currentPos) const
-{
-    QPointF d = startingPos - currentPos;
-    qreal distanceSquared = (d.x() * d.x()) + (d.y() * d.y());
-    return distanceSquared <= KisShortcutMatcher::TOUCH_SLOP_SQUARED;
-}
-
-void KisInputManager::Private::bufferTouchEvent(QTouchEvent *touchEvent)
-{
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QScopedPointer<QEvent> dst;
-    KoPointerEvent::copyQtPointerEvent(touchEvent, dst);
-    bufferedTouchEvents.append(static_cast<QTouchEvent *>(dst.take()));
-#else
-    bufferedTouchEvents.append(touchEvent->clone());
-#endif
-}
-
-void KisInputManager::Private::flushBufferedTouchEvents()
-{
-    for (QTouchEvent *touchEvent : bufferedTouchEvents) {
-        switch (touchEvent->type()) {
-        case QEvent::TouchBegin:
-            q->handleTouchBegin(touchEvent);
-            break;
-        case QEvent::TouchUpdate:
-            q->handleTouchUpdate(touchEvent);
-            break;
-        default:
-            qWarning("Unhandled buffered touch event type %d", int(touchEvent->type()));
-            break;
-        }
-        delete touchEvent;
-    }
-    bufferedTouchEvents.clear();
-}
-
-void KisInputManager::Private::clearBufferedTouchEvents()
-{
-    for (QTouchEvent *event : bufferedTouchEvents) {
-        delete event;
-    }
-    bufferedTouchEvents.clear();
 }
 
 bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)

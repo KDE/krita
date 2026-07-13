@@ -129,17 +129,6 @@ void KisInputManager::slotConfigChanged()
 #endif
 }
 
-void KisInputManager::slotTouchHoldTriggered()
-{
-    d->cancelTouchHoldTimer();
-    d->clearBufferedTouchEvents();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(d->originatingTouchBeginEvent);
-    if (d->matcher.touchHoldBeginEvent(static_cast<QTouchEvent *>(d->originatingTouchBeginEvent.data()))) {
-        d->touchHasBlockedPressEvents = true;
-    }
-}
-
-
 void KisInputManager::toggleTabletLogger()
 {
     KisTabletDebugger::instance()->toggleDebugging();
@@ -716,26 +705,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->lastPointCount = touchEvent->touchPoints().size();
             d->startingPos = touchEvent->touchPoints().at(0).pos();
             d->previousPos = d->startingPos;
-            // we don't want to lose this event
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            KoPointerEvent::copyQtPointerEvent(touchEvent, d->originatingTouchBeginEvent);
-#else
-            d->originatingTouchBeginEvent.reset(touchEvent->clone());
-#endif
 
-            // In the face of a touch and hold shortcut being present, we need
-            // to disambiguate whether this is a touch being held or the user
-            // is doing something else. For that purpose, we start buffering
-            // received touch events until we can actually make a decision.
-            d->clearBufferedTouchEvents();
-            if (d->matcher.hasTouchHoldShortcut() && touchEvent->touchPoints().length() == 1) {
-                d->bufferTouchEvent(touchEvent);
-                d->restartTouchHoldTimer();
-                retval = true;
-            } else {
-                d->cancelTouchHoldTimer();
-                retval = handleTouchBegin(touchEvent);
-            }
+            retval = d->matcher.touchBeginEvent(touchEvent);
 
             d->resetCompressor();
             event->accept();
@@ -765,16 +736,13 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         if (count < 2 && eventPointCount > count) {
             d->touchHasBlockedPressEvents = false;
-            d->cancelTouchHoldTimer();
             retval = d->matcher.touchEndEvent(touchEvent);
         } else {
 #endif
-            // Touch hold shortcuts need to buffer events, see TouchBegin.
-            if (touchHoldBufferUpdate(touchEvent)) {
-                retval = true; // Event was buffered.
-            } else {
-                retval = handleTouchUpdate(touchEvent);
-            }
+            KisAbstractInputAction::setInputManager(this);
+            retval = d->matcher.touchUpdateEvent(touchEvent);
+            d->touchHasBlockedPressEvents = retval;
+
 #ifdef Q_OS_MACOS
         }
 #endif
@@ -785,9 +753,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchEnd:
     {
-        d->cancelTouchHoldTimer();
-        d->flushBufferedTouchEvents();
-
         if (d->popupWasActive) {
             event->setAccepted(true);
             return true;
@@ -816,13 +781,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 #else
         bool ignoreCancel = false;
 #endif
-
-        d->cancelTouchHoldTimer();
-        if (ignoreCancel) {
-            d->flushBufferedTouchEvents();
-        } else {
-            d->clearBufferedTouchEvents();
-        }
 
         if (d->popupWasActive) {
             event->setAccepted(true);
@@ -902,33 +860,6 @@ bool KisInputManager::startTouch(bool &retval)
 void KisInputManager::endTouch()
 {
     d->touchHasBlockedPressEvents = false;
-}
-
-bool KisInputManager::touchHoldBufferUpdate(QTouchEvent *touchEvent)
-{
-    if (d->isPendingTouchHold()) {
-        if (touchEvent->touchPoints().length() == 1 && d->isWithinTouchHoldSlopRange(touchEvent->touchPoints().at(0).pos())) {
-            d->bufferTouchEvent(touchEvent);
-            return true;
-        } else {
-            d->cancelTouchHoldTimer();
-            d->flushBufferedTouchEvents();
-        }
-    }
-    return false;
-}
-
-bool KisInputManager::handleTouchBegin(QTouchEvent *touchEvent)
-{
-    return d->matcher.touchBeginEvent(touchEvent);
-}
-
-bool KisInputManager::handleTouchUpdate(QTouchEvent *touchEvent)
-{
-    KisAbstractInputAction::setInputManager(this);
-    bool retval = d->matcher.touchUpdateEvent(touchEvent);
-    d->touchHasBlockedPressEvents = retval;
-    return retval;
 }
 
 void KisInputManager::slotCompressedMoveEvent()

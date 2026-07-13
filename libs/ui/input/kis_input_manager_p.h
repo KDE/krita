@@ -29,8 +29,6 @@ class KisToolInvocationAction;
 class KisInputManager::Private
 {
 public:
-    static constexpr int TOUCH_HOLD_DELAY_MS = 400;
-
     Private(KisInputManager *qq);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
@@ -73,14 +71,12 @@ public:
 
     QPointF startingPos;
     QPointF previousPos;
-    QScopedPointer<QEvent> originatingTouchBeginEvent;
 
     bool useUnbalancedKeyPressEventWorkaround = false;
     bool shouldSynchronizeOnNextKeyPress = false;
 
     KisPopupWidgetInterface *popupWidget;
 
-    QTimer *touchHoldTimer;
     QVector<QTouchEvent *> bufferedTouchEvents;
 
     void blockMouseEvents();
@@ -90,13 +86,6 @@ public:
     void resetCompressor();
     void startBlockingTouch();
     void stopBlockingTouch();
-    void restartTouchHoldTimer();
-    void cancelTouchHoldTimer();
-    bool isPendingTouchHold() const;
-    bool isWithinTouchHoldSlopRange(const QPointF &currentPos) const;
-    void bufferTouchEvent(QTouchEvent *event);
-    void flushBufferedTouchEvents();
-    void clearBufferedTouchEvents();
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event)

@@ -17,6 +17,7 @@
 #include "kis_native_gesture_shortcut.h"
 #include "kis_config.h"
 #include "kis_extended_modifiers_mapper.h"
+#include "KisTouchHoldEventsPostponer.h"
 #include <KoPointerEvent.h>
 
 //#define DEBUG_MATCHER
@@ -82,6 +83,7 @@ public:
     KisTouchShortcut *touchShortcut;
     KisNativeGestureShortcut *nativeGestureShortcut;
     QList<QTouchEvent::TouchPoint> lastTouchPoints;
+    std::optional<KisTouchHoldEventsPostponer> touchHoldEventPostponer;
 
     int maxTouchPoints{0};
     int matchingIteration{0};
@@ -409,10 +411,80 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     m_d->bestCandidateForTapTouchEvent.reset(event->clone());
 #endif
 
+    // TODO: also check if the first point actually qualifies
+    if (hasTouchHoldShortcut()) {
+        //static constexpr int TOUCH_HOLD_DELAY_MS = 400;
+        static constexpr int TOUCH_HOLD_DELAY_MS = 180;
+        m_d->touchHoldEventPostponer.emplace(TOUCH_SLOP, TOUCH_HOLD_DELAY_MS);
+        QObject::connect(&m_d->touchHoldEventPostponer.value(),
+                         &KisTouchHoldEventsPostponer::sigHoldCompleted,
+                         [this]() {
+                             slotTouchHoldCompleted();
+                         });
+        m_d->touchHoldEventPostponer->pushThrough(event);
+        if (m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::HoldCancelled) {
+            m_d->touchHoldEventPostponer.reset();
+        }
+    }
+
     return !notifier.isInRecursion();
 }
 
 bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
+{
+    if (m_d->touchHoldEventPostponer) {
+        m_d->touchHoldEventPostponer->pushThrough(event);
+        if (m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::HoldCancelled) {
+            // process all the postponed **update** events,
+            // the very first begin event is only used in
+            // the hold-completion operation
+            Q_FOREACH (QTouchEvent *event, m_d->touchHoldEventPostponer->postponedEvents()) {
+                if (event->type() == QEvent::TouchUpdate) {
+                    (void) touchUpdateEventImpl(event);
+                }
+            }
+            m_d->touchHoldEventPostponer.reset();
+        } else {
+            // noop, we are waiting for hold
+        }
+    } else {
+        // TODO: don't enter for hold-drag events
+        return touchUpdateEventImpl(event);
+    }
+
+    return true;
+}
+
+void KisShortcutMatcher::slotTouchHoldCompleted()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->touchHoldEventPostponer);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::HoldCompleted);
+
+    // Can happen when multiple shortcut sources interact
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->runningShortcut);
+
+    // take the very first begin event to start the action
+    QTouchEvent *event = m_d->touchHoldEventPostponer->postponedEvents().front();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(event->type() == QEvent::TouchBegin);
+
+    m_d->isTouchHeld = true; // Must be set first, used in tryRunTouchShortcut.
+    if (tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates(), TouchShortcutMode::Hold)) {
+        DEBUG_ACTION("touch-hold shortcut found");
+    } else {
+        KIS_SAFE_ASSERT_RECOVER(0 && "should not happen")
+        {
+            // Shouldn't really happen, since KisInputManager checks whether a touch
+            // hold shortcut exists beforehand. We'll just handle this though.
+            DEBUG_ACTION("touch-hold shortcut not found");
+            m_d->isTouchHeld = false;
+        }
+    }
+
+    // remove the postponer to continue processing events in-place
+    m_d->touchHoldEventPostponer.reset();
+}
+
+bool KisShortcutMatcher::touchUpdateEventImpl(QTouchEvent *event)
 {
     DEBUG_TOUCH_ACTION("entered", event)
 
@@ -464,6 +536,7 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 
     if (m_d->isTouchDragDetected) {
         if (m_d->touchShortcut
+            // TODO: use a different check without threshold! split into match() and matchBegin()
             && !m_d->touchShortcut->matchDragType(event, KisTouchShortcut::pressedOnlyTouchStates())) {
             DEBUG_TOUCH_ACTION("ending", event)
             // we should end the event as an event with more touchpoints was received
@@ -502,6 +575,21 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 {
     Private::RecursionNotifier notifier(this);
 
+    // flush all the touch-hold postiponed events if they were present
+    if (m_d->touchHoldEventPostponer) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::WaitingForHold);
+        m_d->touchHoldEventPostponer->cancelHoldWait();
+        // process all the postponed **update** events,
+        // the very first begin event is only used in
+        // the hold-completion operation
+        Q_FOREACH (QTouchEvent *event, m_d->touchHoldEventPostponer->postponedEvents()) {
+            if (event->type() == QEvent::TouchUpdate) {
+                (void) touchUpdateEventImpl(event);
+            }
+        }
+        m_d->touchHoldEventPostponer.reset();
+    }
+
     m_d->maxTouchPoints = 0;
     m_d->isTouchHeld = false;
 
@@ -530,6 +618,13 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
 {
     Private::RecursionNotifier notifier(this);
+
+    // discard all the postponed touch-hold events
+    if (m_d->touchHoldEventPostponer) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::WaitingForHold);
+        m_d->touchHoldEventPostponer->cancelHoldWait();
+        m_d->touchHoldEventPostponer.reset();
+    }
 
     m_d->maxTouchPoints = 0;
     m_d->isTouchHeld = false;
@@ -567,28 +662,6 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
     } else if (!hasRunningShortcut()) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
-    }
-}
-
-bool KisShortcutMatcher::touchHoldBeginEvent(QTouchEvent *event)
-{
-    DEBUG_TOUCH_ACTION("hold", event)
-
-    // Can happen when multiple shortcut sources interact.
-    if (m_d->runningShortcut) {
-        return false;
-    }
-
-    m_d->isTouchHeld = true; // Must be set first, used in tryRunTouchShortcut.
-    if (tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates(), TouchShortcutMode::Hold)) {
-        DEBUG_ACTION("touch shortcut found");
-        return true;
-    } else {
-        // Shouldn't really happen, since KisInputManager checks whether a touch
-        // hold shortcut exists beforehand. We'll just handle this though.
-        DEBUG_ACTION("touch shortcut not found");
-        m_d->isTouchHeld = false;
-        return touchBeginEvent(event);
     }
 }
 

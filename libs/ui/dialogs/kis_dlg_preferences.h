@@ -125,6 +125,9 @@ private Q_SLOTS:
     void colorSamplePreviewSizeChanged(int value);
     void colorSamplePreviewThicknessChanged(qreal value);
     void colorSamplePreviewOutlineEnabledChanged(int value);
+
+    static void setButtonGroupEnabled(const QButtonGroup& buttonGroup, bool value);
+
 public:
     QButtonGroup m_pasteFormatGroup;
     KisCumulativeUndoData m_cumulativeUndoData;

@@ -197,6 +197,31 @@ public:
     }
 };
 
+QIcon addDisabledStatesToIcon(const QIcon &_icon, const QSize &size) {
+
+    QIcon icon = _icon;
+    QImage imageOrig = _icon.pixmap(size).toImage();
+
+    auto makeFainter = [imageOrig] (int alphaVal) {
+        QImage image = imageOrig;
+        QImage alpha = QImage(image.size(), QImage::Format_Alpha8);
+        alpha.fill(alphaVal);
+        image.setAlphaChannel(alpha);
+        QPixmap pixmap = QPixmap();
+        pixmap.convertFromImage(image);
+        return pixmap;
+    };
+
+    QPixmap thirdOpaque = makeFainter(int(256*0.3));
+    QPixmap halfOpaque = makeFainter(int(256*0.65));
+
+    icon.addPixmap(thirdOpaque, QIcon::Mode::Disabled, QIcon::State::Off);
+    icon.addPixmap(thirdOpaque, QIcon::Mode::Disabled, QIcon::State::On);
+    icon.addPixmap(halfOpaque, QIcon::Mode::Normal, QIcon::State::Off);
+
+    return icon;
+}
+
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
 {
@@ -394,7 +419,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     intZoomMarginSize->setValue(cfg.zoomMarginSize());
 
-    chkEnableSelectionActionBar->setChecked(cfg.selectionActionBar());
+    bool sapEnabled = cfg.selectionActionBar();
+
+    chkEnableSelectionActionBar->setChecked(sapEnabled);
 
     //
     // File handling
@@ -873,6 +900,15 @@ void GeneralTab::colorSamplePreviewThicknessChanged(qreal value)
 void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
 {
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
+}
+
+void GeneralTab::setButtonGroupEnabled(const QButtonGroup &buttonGroup, bool value)
+{
+    Q_FOREACH(QAbstractButton* button, buttonGroup.buttons()) {
+        if (button) {
+            button->setEnabled(value);
+        }
+    }
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -2958,6 +2994,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
+
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());

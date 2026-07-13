@@ -768,7 +768,38 @@ public:
 
     bool selectionActionBar(bool defaultValue = false) const;
     void setSelectionActionBar(bool value);
-    
+
+    enum SelectionActionsBarBehavior {
+        FreeFloating = 0,
+        Fixed
+    };
+
+    enum SelectionActionsBarPosition {
+        Bottom = 0,
+        BottomLeft,
+        BottomRight,
+        Left,
+        Right,
+        Top,
+        TopLeft,
+        TopRight
+    };
+
+    enum SelectionActionsBarOrientation {
+        Horizontal = 0,
+        Vertical
+    };
+
+    SelectionActionsBarBehavior
+    selectionActionBarBehavior(bool defaultValue = false) const;
+    void setSelectionActionBarBehavior(SelectionActionsBarBehavior value);
+
+    SelectionActionsBarPosition selectionActionBarPosition(bool defaultValue = false) const;
+    void setSelectionActionBarPosition(SelectionActionsBarPosition value);
+
+    SelectionActionsBarOrientation selectionActionBarOrientation(bool defaultValue = false) const;
+    void setSelectionActionBarOrientation(SelectionActionsBarOrientation value);
+
     enum RootSurfaceFormat {
         BT709_G22 = 0,
         BT709_G10,

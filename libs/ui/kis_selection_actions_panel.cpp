@@ -6,6 +6,7 @@
 
 #include "kis_selection_actions_panel.h"
 
+#include "KoCanvasController.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -33,6 +34,9 @@
 #include <kis_algebra_2d.h>
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
+#include <kconfiggroup.h>
+#include <KisPart.h>
+#include <KisMainWindow.h>
 
 #include <QApplication>
 #include <QPainter>
@@ -41,6 +45,11 @@
 
 static constexpr int BUTTON_SIZE = 30;
 static constexpr int BUFFER_SPACE = 5;
+
+static constexpr int BIG_BUFFER_SPACE_X = 30;
+static constexpr int BIG_BUFFER_SPACE_Y = 30;
+
+
 
 class KisSelectionManager;
 
@@ -67,9 +76,10 @@ struct KisSelectionActionsPanel::Private {
     struct DragHandle {
         QPoint position = QPoint(0, 0);
         QPoint dragOrigin = QPoint(0, 0);
+        QPoint dragOffset = QPoint(0, 0);
     };
 
-    QScopedPointer<DragHandle> m_dragHandle;
+    DragHandle m_dragHandle;
 
     KisSelectionActionsPanelHandle * m_handleWidget;
     QList<KisSelectionActionsPanelButton *> m_buttons;
@@ -82,15 +92,30 @@ struct KisSelectionActionsPanel::Private {
             {"krita_tool_color_fill", i18n("Fill Selection with Color"), &KisSelectionManager::fillForegroundColor},
             {"draw-eraser", i18n("Clear Selection"), &KisSelectionManager::clear},
             {"duplicatelayer", i18n("Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
-            {"tool_crop", i18n("Crop to Selection"), &KisSelectionManager::imageResizeToSelection}};
+            {"tool_crop", i18n("Crop to Selection"), &KisSelectionManager::imageResizeToSelection},
+            {"krita_tool_reference_images", i18n("Toggle pin selection actions bar"), &KisSelectionManager::toggleSAPpin}};
         return data;
     }
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle
 
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
+    int m_actionBarHeight = BUTTON_SIZE;
+    int m_innerActionBarWidth = (m_buttonCount - 1) * BUTTON_SIZE;
+    int m_innerActionBarHeight = BUTTON_SIZE;
+
     KisAction* disable_action  = nullptr;
     KisAction* configure_action  = nullptr;
+
+    Orientation orientation = Orientation::Horizontal;
+    Position position = Position::Bottom;
+    Behavior behavior = Behavior::FreeFloating;
+
+    const QString dragOffsetConfigName = "selectionActionBarDragOffset";
+
+    int sapPinButtonIndex = {-1};
 };
+
+
 
 KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
     : d(new Private)
@@ -98,12 +123,27 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
     d->m_viewManager = viewManager;
     d->m_selectionManager = viewManager->selectionManager();
 
+
+    KisConfig kcfg(true);
+    // instead of loading the user's configuration, set it to the "old version" of the behaviour:
+    kcfg.setSelectionActionBarOrientation(KisConfig::SelectionActionsBarOrientation::Horizontal);
+    kcfg.setSelectionActionBarPosition(KisConfig::SelectionActionsBarPosition::Bottom);
+    // whether it's fixed or free-floating can be determined by the pin icon, so let's load that one correctly and don't change it
+    // TODO: remove this whole part when restoring the behaviour
+
     // Setup buttons...
-    for (const ActionButtonData &buttonData : Private::buttonData()) {
+    QVector<ActionButtonData> data = Private::buttonData();
+    for (int i = 0; i  < data.length(); i++) {
+        const ActionButtonData &buttonData = data[i];
         KisSelectionActionsPanelButton *button = new KisSelectionActionsPanelButton(buttonData.iconName, buttonData.tooltip, BUTTON_SIZE, viewManager->canvas());
         connect(button, &QAbstractButton::clicked, d->m_selectionManager, buttonData.slot);
         connect(button, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
         d->m_buttons.append(button);
+
+        if (buttonData.slot == &KisSelectionManager::toggleSAPpin) {
+            d->sapPinButtonIndex = i;
+            button->setCheckable(true);
+        }
     }
 
     d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, viewManager->canvas());
@@ -114,6 +154,17 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
 
     d->configure_action = viewManager->actionManager()->actionByName("configure_sap");
     connect(d->configure_action, SIGNAL(triggered()), SLOT(configureSelectionActionsPanel()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
+    connect(d->m_viewManager->canvasBase()->canvasController()->proxyObject, SIGNAL(canvasStateChanged()), SLOT(canvasStateChanged()));
+
+    connect(KisPart::instance()->currentMainwindow(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("");
+    d->m_dragHandle.dragOffset = cfg.readEntry(d->dragOffsetConfigName, QPoint(0, 0));
+
+    configChanged(true);
+
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -128,12 +179,123 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
         return;
     }
 
+    if (d->m_viewManager->canvas()) {
+        d->m_dragHandle.position = currentTopLeftPosition();
+        movePanelWidgets();
+    }
+
+    if (d->m_pressed && d->behavior == Behavior::FreeFloating) {
+        drawAnchorWhileMoving(painter);
+    }
+
+    //drawDebugRectanglesForFreeFloatingBehaviour(painter);
+
     drawActionBarBackground(painter);
     Q_FOREACH(KisSelectionActionsPanelButton* button, d->m_buttons){
         button->draw(painter);
     }
 
-    d->m_handleWidget->draw(painter);
+    if (d->m_handleWidget->isEnabled()) {
+        d->m_handleWidget->draw(painter);
+    }
+
+}
+
+void KisSelectionActionsPanel::setOrientation(Orientation mode)
+{
+    d->orientation = mode;
+    d->m_handleWidget->setOrientation(mode);
+    recalculateDimensions();
+
+    //Recalcute the position of the bar to be inside the canvas
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
+    if (canvasWidget) {
+        d->m_dragHandle.position = clipPositionToCanvasBoundaries(d->m_dragHandle.position, canvasWidget);
+        movePanelWidgets();
+    }
+}
+
+void KisSelectionActionsPanel::setHandleEnabled(bool enabled)
+{
+    if (enabled && !d->m_handleWidget->isEnabled()) {
+        d->m_handleWidget->setEnabled(enabled);
+        d->m_buttonCount++;
+    }
+
+    if (!enabled && d->m_handleWidget->isEnabled()) {
+        d->m_handleWidget->setEnabled(enabled);
+        d->m_buttonCount--;
+    }
+    recalculateDimensions();
+}
+
+QPoint KisSelectionActionsPanel::getFixedPosition() const
+{
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
+    if (!canvasWidget) {
+        return QPoint();
+    }
+
+    QRect canvasBounds = canvasWidget->rect();
+    QPoint result = QPoint();
+
+    switch (d->position) {
+    case KisConfig::Bottom:
+        result.setY(canvasBounds.bottom());
+        result.setX((canvasBounds.width() - d->m_actionBarWidth) / 2);
+        break;
+    case KisConfig::BottomLeft:
+        result.setY(canvasBounds.bottom());
+        result.setX(canvasBounds.left());
+        break;
+    case KisConfig::BottomRight:
+        result.setY(canvasBounds.bottom());
+        result.setX(canvasBounds.right());
+        break;
+    case KisConfig::Left:
+        result.setY((canvasBounds.height() - d->m_actionBarHeight) / 2);
+        result.setX(canvasBounds.left());
+        break;
+    case KisConfig::Right:
+        result.setY((canvasBounds.height() - d->m_actionBarHeight) / 2);
+        result.setX(canvasBounds.right());
+        break;
+    case KisConfig::Top:
+        result.setY(canvasBounds.top());
+        result.setX((canvasBounds.width() - d->m_actionBarWidth) / 2);
+        break;
+    case KisConfig::TopLeft:
+        result.setY(canvasBounds.top());
+        result.setX(canvasBounds.left());
+        break;
+    case KisConfig::TopRight:
+        result.setY(canvasBounds.top());
+        result.setX(canvasBounds.right());
+        break;
+    }
+
+    return clipPositionToCanvasBoundaries(result, canvasWidget);
+}
+
+void KisSelectionActionsPanel::recalculateDimensions()
+{
+    if (!d->m_handleWidget) return;
+
+    if (d->orientation == Orientation::Horizontal) {
+        d->m_innerActionBarHeight = d->m_actionBarHeight = BUTTON_SIZE;
+        d->m_innerActionBarWidth = d->m_actionBarWidth = BUTTON_SIZE * d->m_buttonCount;
+        if (d->m_handleWidget->isEnabled()) {
+            d->m_innerActionBarWidth = BUTTON_SIZE * (d->m_buttonCount - 1);
+        }
+    } else if (d->orientation == Orientation::Vertical) {
+        d->m_innerActionBarHeight = d->m_actionBarHeight = BUTTON_SIZE * d->m_buttonCount;
+        d->m_innerActionBarWidth = d->m_actionBarWidth = BUTTON_SIZE;
+        if (d->m_handleWidget->isEnabled()) {
+            d->m_innerActionBarHeight = BUTTON_SIZE * (d->m_buttonCount - 1);
+        }
+    }
+
+    movePanelWidgets();
 }
 
 void KisSelectionActionsPanel::setVisible(bool p_visible)
@@ -154,12 +316,8 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
 
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
         d->m_handleWidget->installEventFilter(this);
-
-        if (!d->m_dragHandle) {
-            d->m_dragHandle.reset(new Private::DragHandle());
-            d->m_dragHandle->position = initialDragHandlePosition();
-            movePanelWidgets();
-        }
+        d->m_dragHandle.position = currentTopLeftPosition();
+        movePanelWidgets();
     } else { // Now hidden!
         d->m_handleWidget->removeEventFilter(this);
 
@@ -169,7 +327,6 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
         d->m_handleWidget->hide();
 
         d->m_pressed = false;
-        d->m_dragHandle.reset();
     }
 
     d->m_visible = p_visible;
@@ -238,10 +395,7 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
     case QEvent::TouchEnd:
     case QEvent::TouchCancel:
         if (d->m_pressed) {
-            d->m_handleWidget->set_held(false);
-            d->m_pressed = false;
-            event->accept();
-            return true;
+            return handleRelease(event);
         }
         break;
 
@@ -264,12 +418,12 @@ void KisSelectionActionsPanel::canvasWidgetChanged(KisCanvasWidgetBase* canvas)
     d->m_handleWidget->show();
 }
 
-QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const
+QPoint KisSelectionActionsPanel::clipPositionToCanvasBoundaries(QPoint position, QWidget *canvasWidget) const
 {
     QRect canvasBounds = canvasWidget->rect();
 
     const int ACTION_BAR_WIDTH = d->m_actionBarWidth;
-    const int ACTION_BAR_HEIGHT = BUTTON_SIZE;
+    const int ACTION_BAR_HEIGHT = d->m_actionBarHeight;
 
     int pos_x_min = canvasBounds.left() + BUFFER_SPACE;
     int pos_x_max = canvasBounds.right() - ACTION_BAR_WIDTH - BUFFER_SPACE;
@@ -294,24 +448,204 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     return position;
 }
 
-QPoint KisSelectionActionsPanel::initialDragHandlePosition() const
+QPoint KisSelectionActionsPanel::horizontalFreeFloatingTopLeftPosition(bool calculateOnlyAnchor) const
 {
+    Position position = d->position;
+    QRect selection = getWidgetSelectionRect().toRect();
+    QPoint anchor = selection.center();
+    QPoint offsetted = selection.center();
+    qreal barHorizontalOffset = d->m_actionBarWidth;
+    qreal barVerticalOffset = d->m_actionBarHeight;
+
+    switch (position) {
+        case Position::Top:
+        case Position::Bottom:
+            anchor = QPoint(selection.center().x(), 0);
+            offsetted = anchor - QPoint(barHorizontalOffset/2, 0);
+        break;
+        case Position::TopLeft:
+        case Position::BottomLeft:
+            anchor = QPoint(selection.left(), 0);
+            offsetted = anchor;
+        break;
+        case Position::TopRight:
+        case Position::BottomRight:
+            anchor = QPoint(selection.right(), 0);
+            offsetted = anchor - QPoint(barHorizontalOffset, 0);
+        break;
+
+
+        case Position::Left:
+            anchor = QPoint(selection.left(), 0);
+            offsetted = anchor - QPoint(barHorizontalOffset + BIG_BUFFER_SPACE_X, 0);
+        break;
+
+        case Position::Right:
+            anchor = QPoint(selection.right(), 0);
+            offsetted = anchor + QPoint(BIG_BUFFER_SPACE_X, 0);
+        break;
+    }
+
+    switch (position) {
+        case Position::Top:
+        case Position::TopLeft:
+        case Position::TopRight:
+            anchor += QPoint(0, selection.top());
+            offsetted += QPoint(0, selection.top() - BIG_BUFFER_SPACE_Y - barVerticalOffset);
+        break;
+        case Position::Bottom:
+        case Position::BottomLeft:
+        case Position::BottomRight:
+            anchor += QPoint(0, selection.bottom());
+            offsetted += QPoint(0, selection.bottom() + BIG_BUFFER_SPACE_Y);
+        break;
+
+        case Position::Left:
+        case Position::Right:
+            anchor += QPoint(0, selection.center().y());
+            offsetted += QPoint(0, selection.center().y() - barVerticalOffset/2);
+        break;
+
+    }
+
+    if (calculateOnlyAnchor) {
+        return anchor;
+    }
+    return offsetted;
+
+}
+
+QPoint KisSelectionActionsPanel::verticalFreeFloatingTopLeftPosition(bool calculateOnlyAnchor) const
+{
+    Position position = d->position;
+    QRect selection = getWidgetSelectionRect().toRect();
+    QPoint anchor = selection.center();
+    QPoint offsetted = selection.center();
+    qreal barVerticalOffset = d->m_actionBarHeight;
+    qreal barHorizontalOffset = d->m_actionBarWidth;
+
+    switch (position) {
+        case Position::Left:
+        case Position::Right:
+            anchor = QPoint(0, selection.center().y());
+            offsetted = -QPoint(0, barVerticalOffset/2);
+        break;
+        case Position::TopLeft:
+        case Position::TopRight:
+            anchor = QPoint(0, selection.top());
+            offsetted = QPoint();
+        break;
+        case Position::BottomLeft:
+        case Position::BottomRight:
+            anchor = QPoint(0, selection.bottom());
+            offsetted = -QPoint(0, barVerticalOffset);
+        break;
+
+        case Position::Top:
+            anchor = QPoint(0, selection.top());
+            offsetted = -QPoint(0, barVerticalOffset + BIG_BUFFER_SPACE_Y);
+        break;
+
+        case Position::Bottom:
+            anchor = QPoint(0, selection.bottom());
+            offsetted = QPoint(0, BIG_BUFFER_SPACE_Y);
+        break;
+    }
+
+    switch (position) {
+        case Position::Left:
+        case Position::TopLeft:
+        case Position::BottomLeft:
+            anchor += QPoint(selection.left(), 0);
+            offsetted += QPoint(- BIG_BUFFER_SPACE_X - barHorizontalOffset, 0);
+        break;
+        case Position::Right:
+        case Position::TopRight:
+        case Position::BottomRight:
+            anchor += QPoint(selection.right(), 0);
+            offsetted += QPoint(BIG_BUFFER_SPACE_X, 0);
+        break;
+
+        case Position::Top:
+        case Position::Bottom:
+            anchor += QPoint(selection.center().x(), 0);
+            offsetted += QPoint(- barHorizontalOffset/2, 0);
+        break;
+    }
+
+    if (calculateOnlyAnchor) {
+        return anchor;
+    }
+    return anchor + offsetted;
+}
+
+QRectF KisSelectionActionsPanel::getWidgetSelectionRect() const
+{
+    if (!d->m_viewManager) {
+        return QRectF();
+    }
+
     KisSelectionSP selection = d->m_viewManager->selection();
     KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(d->m_viewManager->canvas());
-    KIS_ASSERT(selection);
-    KIS_ASSERT(canvas);
 
-    QRectF selectionBounds = selection->selectedRect();
-    int selectionBottom = selectionBounds.bottom();
-    QPointF selectionCenter = selectionBounds.center();
-    QPointF bottomCenter(selectionCenter.x(), selectionBottom);
+    if (!canvas || !selection) {
+        return QRectF();
+    }
 
-    QPointF widgetBottomCenter = canvas->coordinatesConverter()->imageToWidget(bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
+    QPainterPath selectionOutline = selection->outlineCache();
+    const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
 
-    widgetBottomCenter.setX(widgetBottomCenter.x() - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
-    widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
+    if (!converter) {
+        return QRectF();
+    }
 
-    return updateCanvasBoundaries(widgetBottomCenter.toPoint(), d->m_viewManager->canvas());
+    QRectF selectionBoundsWidget = converter->imageToWidget(selectionOutline).boundingRect();
+
+    return selectionBoundsWidget;
+}
+
+QPoint KisSelectionActionsPanel::freeFloatingInitialTopLeftPosition(bool calculateOnlyAnchor) const
+{
+    if (d->orientation == Orientation::Horizontal) {
+        return horizontalFreeFloatingTopLeftPosition(calculateOnlyAnchor);
+    } else {
+        return verticalFreeFloatingTopLeftPosition(calculateOnlyAnchor);
+    }
+}
+
+QPoint KisSelectionActionsPanel::currentTopLeftPosition() const
+{
+    if (d->behavior == Behavior::Fixed) {
+        return getFixedPosition();
+    }
+
+    QPoint widgetTopLeftPosition = freeFloatingInitialTopLeftPosition();
+    widgetTopLeftPosition += d->m_dragHandle.dragOffset;
+
+    return clipPositionToCanvasBoundaries(widgetTopLeftPosition, d->m_viewManager->canvas());
+}
+
+void KisSelectionActionsPanel::drawAnchorWhileMoving(QPainter &painter) const
+{
+    painter.save();
+
+    QPen pen = painter.pen();
+    pen.setStyle(Qt::CustomDashLine);
+    pen.setDashPattern({6, 6});
+    pen.setColor(Qt::darkGray);
+    painter.setPen(pen);
+    QPoint initial = freeFloatingInitialTopLeftPosition(true);
+    QPoint offset = QPoint(d->m_actionBarWidth/2, d->m_actionBarHeight/2);
+    painter.drawLine(QLine(initial, d->m_dragHandle.position + offset));
+
+    int xSize = 8;
+    pen.setStyle(Qt::SolidLine);
+    painter.setPen(pen);
+
+    painter.drawLine(initial + QPoint(xSize, xSize), initial - QPoint(xSize, xSize));
+    painter.drawLine(initial + QPoint(xSize, -xSize), initial + QPoint(-xSize, xSize));
+
+    painter.restore();
 }
 
 void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
@@ -333,10 +667,10 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
     const int outline_width = 4;
 
     //an outer 1px wide outline for contrast against the background
-    QRectF contrastOutline(d->m_dragHandle->position - QPoint(outline_width + 1,outline_width + 1), QSize(d->m_actionBarWidth, BUTTON_SIZE) +QSize(outline_width + 1,outline_width + 1) * 2);
-    QRectF midOutline(d->m_dragHandle->position - QPoint(outline_width,outline_width), QSize(d->m_actionBarWidth, BUTTON_SIZE) +QSize(outline_width,outline_width) * 2);
+    QRectF contrastOutline(d->m_dragHandle.position - QPoint(outline_width + 1,outline_width + 1), QSize(d->m_actionBarWidth, d->m_actionBarHeight) +QSize(outline_width + 1,outline_width + 1) * 2);
+    QRectF midOutline(d->m_dragHandle.position - QPoint(outline_width,outline_width), QSize(d->m_actionBarWidth, d->m_actionBarHeight) +QSize(outline_width,outline_width) * 2);
     //Add a bit of padding here for the icons
-    QRectF centerBackground(d->m_dragHandle->position - QPoint(outline_width,outline_width) / 2, QSize(d->m_actionBarWidth - BUTTON_SIZE, BUTTON_SIZE) +QSize(outline_width,outline_width));
+    QRectF centerBackground(d->m_dragHandle.position - QPoint(outline_width,outline_width) / 2, QSize(d->m_innerActionBarWidth, d->m_innerActionBarHeight) +QSize(outline_width,outline_width));
     QPainterPath bgPath;
     QPainterPath outlinePath;
     QPainterPath contrastOutlinePath;
@@ -359,7 +693,7 @@ bool KisSelectionActionsPanel::handlePress(QEvent *event, const QPoint &pos, Qt:
 
     if (button == Qt::LeftButton) {
         d->m_pressed = true;
-        d->m_dragHandle->dragOrigin = pos - d->m_dragHandle->position;
+        d->m_dragHandle.dragOrigin = pos - d->m_dragHandle.dragOffset;
         d->m_handleWidget->set_held(true);
 
         event->accept();
@@ -372,24 +706,53 @@ bool KisSelectionActionsPanel::handlePress(QEvent *event, const QPoint &pos, Qt:
 bool KisSelectionActionsPanel::handleMove(QEvent *event, const QPoint &pos)
 {
     QWidget *canvasWidget = d->m_viewManager->canvas();
-    QPoint newPos = pos - d->m_dragHandle->dragOrigin;
-    d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
+    QPoint newPos = pos - d->m_dragHandle.dragOrigin;
+    d->m_dragHandle.dragOffset = newPos;
+
     movePanelWidgets();
     canvasWidget->update();
     event->accept();
     return true;
 }
 
+bool KisSelectionActionsPanel::handleRelease(QEvent *event)
+{
+    d->m_handleWidget->set_held(false);
+    d->m_pressed = false;
+    event->accept();
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("");
+    cfg.writeEntry(d->dragOffsetConfigName, d->m_dragHandle.dragOffset);
+
+    return true;
+}
+
 void KisSelectionActionsPanel::movePanelWidgets()
 {
-    d->m_handleWidget->move(d->m_dragHandle->position.x() + d->m_buttons.size() * BUTTON_SIZE, d->m_dragHandle->position.y());
+    //This function gets called on panel creation, when dragHandle is not initialized, so we need to handle that
+    if (!d->m_handleWidget)
+        return;
+
+    if (d->orientation == Orientation::Vertical) {
+        d->m_handleWidget->move(d->m_dragHandle.position.x(),
+                                d->m_dragHandle.position.y() + d->m_buttons.size() * BUTTON_SIZE);
+    } else if (d->orientation == Orientation::Horizontal) {
+        d->m_handleWidget->move(d->m_dragHandle.position.x() + d->m_buttons.size() * BUTTON_SIZE,
+                                d->m_dragHandle.position.y());
+    }
     d->m_handleWidget->show();
 
     int i = 0;
-    Q_FOREACH(KisSelectionActionsPanelButton *button, d->m_buttons) {
+    Q_FOREACH (KisSelectionActionsPanelButton *button, d->m_buttons) {
         int buttonPosition = i * BUTTON_SIZE;
-        button->move(d->m_dragHandle->position.x() + buttonPosition, d->m_dragHandle->position.y());
+
+        if (d->orientation == Orientation::Vertical) {
+            button->move(d->m_dragHandle.position.x(), d->m_dragHandle.position.y() + buttonPosition);
+        } else if (d->orientation == Orientation::Horizontal) {
+            button->move(d->m_dragHandle.position.x() + buttonPosition, d->m_dragHandle.position.y());
+        }
         button->show();
+
         i++;
     }
 }
@@ -433,7 +796,7 @@ bool KisSelectionActionsPanel::touchEventPos(const QTouchEvent *touchEvent, QPoi
 }
 
 QPoint KisSelectionActionsPanel::transformHandleCoords(QPoint pos) {
-    return d->m_dragHandle->position + pos;
+    return d->m_dragHandle.position + pos;
 }
 
 void KisSelectionActionsPanel::showContextMenu(const QPoint &pos)
@@ -459,3 +822,86 @@ void KisSelectionActionsPanel::configureSelectionActionsPanel()
 
     a->trigger();
 }
+
+void KisSelectionActionsPanel::configChanged(bool skipResettingOffset)
+{
+    KisConfig cfg(true);
+    KConfigGroup silentCfg = KSharedConfig::openConfig()->group("");
+
+
+    setHandleEnabled(cfg.selectionActionBarBehavior() != Behavior::Fixed);
+
+    bool resetOffset = false;
+    if (d->orientation != cfg.selectionActionBarOrientation()) {
+        resetOffset = true;
+        setOrientation(cfg.selectionActionBarOrientation());
+    }
+    d->behavior = cfg.selectionActionBarBehavior();
+    if (d->position != cfg.selectionActionBarPosition()) {
+        resetOffset = true;
+        d->position = cfg.selectionActionBarPosition();
+    }
+
+    if (resetOffset && !skipResettingOffset) {
+        d->m_dragHandle.dragOffset = QPoint();
+        silentCfg.writeEntry(d->dragOffsetConfigName, QPoint());
+    }
+
+    if (d->behavior == Behavior::Fixed) {
+        d->m_dragHandle.position = currentTopLeftPosition();
+        movePanelWidgets();
+    }
+
+    if (d->sapPinButtonIndex >= 0 && d->m_buttons[d->sapPinButtonIndex] && d->m_buttons[d->sapPinButtonIndex]->isCheckable()) {
+        d->m_buttons[d->sapPinButtonIndex]->setChecked(cfg.selectionActionBarBehavior() == Behavior::Fixed);
+    }
+}
+
+void KisSelectionActionsPanel::canvasStateChanged()
+{
+    if (d->behavior == Behavior::Fixed) {
+        d->m_dragHandle.position = currentTopLeftPosition();
+    } else {
+        d->m_dragHandle.position = currentTopLeftPosition();
+        d->m_dragHandle.position = clipPositionToCanvasBoundaries(d->m_dragHandle.position, d->m_viewManager->canvas());
+    }
+
+    movePanelWidgets();
+}
+
+void KisSelectionActionsPanel::themeChanged()
+{
+    Q_FOREACH(KisSelectionActionsPanelButton* button, d->m_buttons) {
+        KisIconUtils::updateIcon(button);
+    }
+    d->m_handleWidget->themeChanged();
+}
+
+
+
+void KisSelectionActionsPanel::drawDebugRectangle(QPainter &painter, Position position)
+{
+    d->position = position;
+    QBrush brush(Qt::cyan);
+    QPoint p = freeFloatingInitialTopLeftPosition();
+    brush.setColor(QColor(100 + 20*(int)position, 100, 100, 150));
+    painter.setBrush(brush);
+    painter.drawRect(QRect(p, QSize(d->m_actionBarWidth, d->m_actionBarHeight)));
+    painter.drawEllipse(freeFloatingInitialTopLeftPosition(true), 10, 10);
+}
+
+
+void KisSelectionActionsPanel::drawDebugRectanglesForFreeFloatingBehaviour(QPainter &painter)
+{
+    painter.save();
+    Position remember = d->position;
+
+    for (int position = 0; position < 8; position++) {
+        drawDebugRectangle(painter, (Position)position);
+    }
+
+    painter.restore();
+    d->position = remember;
+
+}
+

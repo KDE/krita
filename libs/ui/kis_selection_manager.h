@@ -108,6 +108,8 @@ public Q_SLOTS:
 
     void selectOpaqueOnNode(KisNodeSP node, SelectionAction action);
 
+    void toggleSAPpin();
+
 Q_SIGNALS:
     void currentSelectionChanged();
     void signalUpdateGUI();

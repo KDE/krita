@@ -792,3 +792,26 @@ void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction act
     tmpSel->invalidateOutlineCache();
     helper.selectPixelSelection(tmpSel, action);
 }
+
+void KisSelectionManager::toggleSAPpin()
+{
+    KisConfig cfg(false);
+
+    auto current = cfg.selectionActionBarBehavior();
+
+    KisConfig::SelectionActionsBarBehavior new_behavior;
+
+    switch (current) {
+    case KisConfig::FreeFloating:
+        new_behavior = KisConfig::Fixed;
+
+        break;
+    case KisConfig::Fixed:
+        new_behavior = KisConfig::FreeFloating;
+        break;
+    }
+
+    cfg.setSelectionActionBarBehavior(new_behavior);
+
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}

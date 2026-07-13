@@ -2827,6 +2827,36 @@ void KisConfig::setSelectionActionBar(bool value)
     m_cfg.writeEntry("selectionActionBar", value);
 }
 
+KisConfig::SelectionActionsBarBehavior KisConfig::selectionActionBarBehavior(bool defaultValue) const
+{
+    return defaultValue ? KisConfig::SelectionActionsBarBehavior::FreeFloating : ((KisConfig::SelectionActionsBarBehavior)m_cfg.readEntry("selectionActionBarBehavior", (int)KisConfig::SelectionActionsBarBehavior::FreeFloating));
+}
+
+void KisConfig::setSelectionActionBarBehavior(KisConfig::SelectionActionsBarBehavior value)
+{
+    m_cfg.writeEntry("selectionActionBarBehavior", (int)value);
+}
+
+KisConfig::SelectionActionsBarPosition KisConfig::selectionActionBarPosition(bool defaultValue) const
+{
+    return defaultValue ? KisConfig::SelectionActionsBarPosition::Bottom : ((KisConfig::SelectionActionsBarPosition)m_cfg.readEntry("selectionActionBarPosition", (int)KisConfig::SelectionActionsBarPosition::Bottom));
+}
+
+void KisConfig::setSelectionActionBarPosition(KisConfig::SelectionActionsBarPosition value)
+{
+    m_cfg.writeEntry("selectionActionBarPosition", (int)value);
+}
+
+KisConfig::SelectionActionsBarOrientation KisConfig::selectionActionBarOrientation(bool defaultValue) const
+{
+    return defaultValue ? KisConfig::SelectionActionsBarOrientation::Horizontal :  ((KisConfig::SelectionActionsBarOrientation)m_cfg.readEntry("selectionActionBarOrientation", (int)KisConfig::SelectionActionsBarOrientation::Horizontal));
+}
+
+void KisConfig::setSelectionActionBarOrientation(KisConfig::SelectionActionsBarOrientation value)
+{
+    m_cfg.writeEntry("selectionActionBarOrientation", (int)value);
+}
+
 KisConfig::RootSurfaceFormat KisConfig::rootSurfaceFormat(bool defaultValue) const
 {
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

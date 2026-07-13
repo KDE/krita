@@ -16320,7 +16320,7 @@ msgstr "界面"
 #, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr "更改界面缩放..."
+msgstr "更改界面缩放比例..."
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
@@ -16330,7 +16330,7 @@ msgstr "更改界面缩放..."
 #, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr "更换界面缩放"
+msgstr "更改界面缩放比例"
 
 #: krita/main.cc:723
 #, kde-format

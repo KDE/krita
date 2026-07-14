@@ -19,10 +19,11 @@ struct KisSelectionActionsPanelHandle::Private
     Orientation orientation;
 };
 
-KisSelectionActionsPanelHandle::KisSelectionActionsPanelHandle(int size, QWidget * parent) :
-    QWidget(parent),
-    d(new Private(size))
+KisSelectionActionsPanelHandle::KisSelectionActionsPanelHandle(int size, Orientation orientation, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private(size))
 {
+    d->orientation = orientation;
     d->default_cursor = Qt::OpenHandCursor;
     d->held_cursor = Qt::ClosedHandCursor;
     d->handle_icon = KisIconUtils::loadIcon("drag-handle");

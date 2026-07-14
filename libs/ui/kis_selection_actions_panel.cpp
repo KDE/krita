@@ -146,7 +146,7 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager)
         }
     }
 
-    d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, viewManager->canvas());
+    d->m_handleWidget = new KisSelectionActionsPanelHandle(BUTTON_SIZE, d->orientation, viewManager->canvas());
     connect(d->m_handleWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     d->disable_action = new KisAction(i18n("Disable selection actions bar"));

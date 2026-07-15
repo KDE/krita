@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-14 02:37+0000\n"
-"PO-Revision-Date: 2026-07-01 19:55+0300\n"
+"POT-Creation-Date: 2026-07-15 02:37+0000\n"
+"PO-Revision-Date: 2026-07-14 20:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34906,11 +34906,9 @@ msgid "Crop to Selection"
 msgstr "Seçime Kırp"
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "Seçim Eylemleri Çubuğunu Yapılandır"
+msgstr "Seçim eylemleri çubuğunu sabitlemeyi aç/kapat"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format
@@ -68532,7 +68530,7 @@ msgstr "Belirli bir renk veya saydamlıkla çevrelenmiş herhangi biri"
 msgid "Enclose and Fill Tool"
 msgstr "Çevreleme ve Dolgu Aracı"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:255
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-14 02:37+0000\n"
+"POT-Creation-Date: 2026-07-15 02:37+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -69695,7 +69695,7 @@ msgstr "पृष्ठभूमीतील रंगातील बदल"
 msgid "Enclose and Fill Tool"
 msgstr "पुढचा स्तर सक्रिय करा"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:255
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

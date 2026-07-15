@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-14 02:37+0000\n"
+"POT-Creation-Date: 2026-07-15 02:37+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -71007,7 +71007,7 @@ msgstr "promjene prednje boje"
 msgid "Enclose and Fill Tool"
 msgstr "Aktiviraj alatku za linije"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:255
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

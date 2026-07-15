@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-14 02:37+0000\n"
+"POT-Creation-Date: 2026-07-15 02:37+0000\n"
 "PO-Revision-Date: 2026-03-31 22:28+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -68561,7 +68561,7 @@ msgstr "Bármi, amit egy adott szín vagy átlátszóság vesz körül"
 msgid "Enclose and Fill Tool"
 msgstr "Körülrajzoló és kitöltő eszköz"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:255
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

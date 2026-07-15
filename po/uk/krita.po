@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-14 02:37+0000\n"
-"PO-Revision-Date: 2026-07-03 08:36+0300\n"
+"POT-Creation-Date: 2026-07-15 02:37+0000\n"
+"PO-Revision-Date: 2026-07-14 10:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -35369,11 +35369,9 @@ msgid "Crop to Selection"
 msgstr "Обрізати до позначеного"
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "Налаштувати панель дій із позначеним"
+msgstr "Увімкнути або вимкнути пришпилення панелі дій із позначеним"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format
@@ -69443,7 +69441,7 @@ msgstr "Усе, що охоплено вказаним кольором або �
 msgid "Enclose and Fill Tool"
 msgstr "Інструмент «Охопити і заповнити»"
 
-#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:205
+#: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:255
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"

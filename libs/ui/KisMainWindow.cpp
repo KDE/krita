@@ -441,34 +441,19 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->styleActions = new QActionGroup(this);
     QAction * action;
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QStringList allowableStyles = QStringList() << "macintosh" << "breeze" << "fusion";
-#else
-    QStringList allowableStyles = QStringList() << "macos" << "breeze" << "fusion";
-#endif
+#ifndef Q_OS_ANDROID
 
     Q_FOREACH (QString styleName, QStyleFactory::keys()) {
-#ifdef Q_OS_ANDROID
-        // disable the style for android platform
-        if (styleName.toLower().contains("android")) {
-            continue;
-        }
-#endif
-        if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-            if (!allowableStyles.contains(styleName.toLower())) {
-                continue;
-            }
-        }
+
         action = new QAction(styleName, d->styleActions);
         action->setCheckable(true);
         d->actionMap.insert(styleName, action);
         d->styleMenu->addAction(d->actionMap.value(styleName));
     }
 
-
     // select the config value, or the current style if that does not exist
     QString styleFromConfig = cfg.widgetStyle().toLower();
-    QString styleToSelect = styleFromConfig == "" ? style()->objectName().toLower() : styleFromConfig;
+    QString styleToSelect = styleFromConfig.isEmpty() ? style()->objectName().toLower() : styleFromConfig;
 
     Q_FOREACH (auto key, d->actionMap.keys()) {
         if(key.toLower() == styleToSelect) { // does the key match selection
@@ -478,7 +463,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     connect(d->styleActions, SIGNAL(triggered(QAction*)),
             this, SLOT(slotUpdateWidgetStyle()));
-
+#endif
 
     // Load all the actions from the tool plugins
     // ToolBoxDocker needs them when at setViewManager()

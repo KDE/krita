@@ -242,46 +242,22 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 #endif
 
-    if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-
+           // if style is set from config, try to load that
+    KisConfig cfg(true);
+    QString widgetStyleFromConfig = cfg.widgetStyle();
+    if (!widgetStyleFromConfig.isEmpty()) {
+        qApp->setStyle(widgetStyleFromConfig);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        QStringList styles = QStringList() << "haiku" << "macintosh" << "breeze" << "fusion";
-#else
-        QStringList styles = QStringList() << "haiku" << "macos" << "breeze" << "fusion";
-#endif
-        if (!styles.contains(style()->objectName().toLower())) {
-            Q_FOREACH (const QString & style, styles) {
-                if (!setStyle(style)) {
-                    qDebug() << "No" << style << "available.";
-                }
-                else {
-                    qDebug() << "Set style" << style;
-                    break;
-                }
-            }
-        }
-
-        // if style is set from config, try to load that
-        KisConfig cfg(true);
-        QString widgetStyleFromConfig = cfg.widgetStyle();
-        if(widgetStyleFromConfig != "") {
-            qApp->setStyle(widgetStyleFromConfig);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        } else if (style()->objectName().toLower() == "macintosh") {
-            // if no configured style on macOS, default to Fusion
-            qApp->setStyle("fusion");
-        }
-#else
-        } else if (style()->objectName().toLower() == "macos") {
-            // if no configured style on macOS, default to Fusion
-            qApp->setStyle("fusion");
-        }
-#endif
-
+    } else if (style()->objectName().toLower() == "macintosh") {
+         // if no configured style on macOS, default to Fusion
+        qApp->setStyle("fusion");
     }
-    else {
-        qDebug() << "Style override disabled, using" << style()->objectName();
+#else
+    } else if (style()->objectName().toLower() == "macos") {
+        // if no configured style on macOS, default to Fusion
+        qApp->setStyle("fusion");
     }
+#endif
 
     /**
      * Load platform plugin for modifiers fetching

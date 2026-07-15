@@ -741,10 +741,14 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip) {
     KisImageWSP image = m_d->canvas->image();
 
-    QRect canvasPixelRect = image->documentToPixel(zoomDocRectF).toRect();
+    QRectF canvasPixelRectF = image->documentToPixel(zoomDocRectF);
+
+    // Floor manually to avoid width != height when using toRect()
+    QRect canvasPixelRect = QRect(canvasPixelRectF.topLeft().toPoint(), QSize(qFloor(canvasPixelRectF.width()), qFloor(canvasPixelRectF.height())));
+
     canvasPixelRect = m_d->standardizeZoomPreviewPixelRect(canvasPixelRect);
 
-    // Make sure the center is the pixel currently sampled (in case of rounding errors)
+    // Make sure the center is the pixel currently sampled because standardizing may change the shape
     canvasPixelRect.moveCenter(image->documentToImagePixelFloored(zoomDocRectF.center()));
 
     QImage cachedImage = cacheCanvasImage(canvasPixelRect);

@@ -8,6 +8,8 @@
 #include <filter/kis_filter_registry.h>
 #include <KoColorModelStandardIds.h>
 
+#include <KoCompositeColorTransformation.h>
+
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
 
@@ -35,7 +37,17 @@ KoColorTransformation *KisToneGamutMapFilter::createTransformation(const KoColor
 {
     QHash<QString, QVariant> params;
     params["targetColorProfileName"] = "sRGB-elle-V2-srgbtrc.icc";
-    return cs->createColorTransformation("gamutmap_clip_adjustment", params);
+
+    const KoColorSpace *workingCs = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id());
+
+    KoColorTransformation *toneMap = cs->createColorTransformation("tonemap_adjustment", params);
+    KoColorTransformation *gamutMap = cs->createColorTransformation("gamutmap_clip_adjustment", params);
+
+    QVector<KoColorTransformation*> allTransforms;
+    allTransforms << toneMap;
+    allTransforms << gamutMap;
+
+    return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
 }
 
 #include "KisToneGamutMapFilter.moc"

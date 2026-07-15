@@ -8,6 +8,7 @@
 #include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 
+#include <QtMath>
 #include <QImage>
 #include <QMessageBox>
 #include <QPainter>

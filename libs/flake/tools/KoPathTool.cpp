@@ -806,7 +806,7 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event)
     event->accept();
 }
 
-void KoPathTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
+void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     Q_D(KoToolBase);
     // check if we are doing something else at the moment
@@ -826,6 +826,9 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
             m_pointSelection.add(p, false);
         }
         updateActions();
+
+        // Call a mouse move event to update the cursor and allow the user to drag the new point immediately
+        mouseMoveEvent(event);
     } else if (!m_activeHandle && !m_activeSegment) {
         explicitUserStrokeEndRequest();
     }

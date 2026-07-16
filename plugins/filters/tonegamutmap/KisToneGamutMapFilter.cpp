@@ -23,6 +23,7 @@
 #include "ui_kistonegamutmapwidget.h"
 
 const QString TONE_MAP_ENABLED = "toneMap/Enabled";
+const QString TONE_MAP_MAX_WHITE = "toneMap/MaxWhite";
 const QString GAMUT_MAP_ENABLED = "gamutMap/Enabled";
 const QString GAMUT_MAP_TARGET_PROFILE = "gamutMap/TargetProfile";
 
@@ -60,6 +61,7 @@ KoColorTransformation *KisToneGamutMapFilter::createTransformation(const KoColor
 
     if (config->getProperty(TONE_MAP_ENABLED).toBool()) {
         QHash<QString, QVariant> params;
+        params["maxWhite"] = config->getProperty(TONE_MAP_MAX_WHITE);
         KoColorTransformation *toneMap = cs->createColorTransformation("tonemap_adjustment", params);
         allTransforms << toneMap;
     }
@@ -78,6 +80,7 @@ KisFilterConfigurationSP KisToneGamutMapFilter::defaultConfiguration(KisResource
 {
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty(TONE_MAP_ENABLED, true);
+    config->setProperty(TONE_MAP_MAX_WHITE, 1.0);
     config->setProperty(GAMUT_MAP_ENABLED, true);
     config->setProperty(GAMUT_MAP_TARGET_PROFILE, "sRGB-elle-V2-srgbtrc.icc");
     return config;
@@ -100,8 +103,11 @@ KisToneGamutMapWidget::KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP d
     ui->targetGamut->showDepth(false);
     ui->targetGamut->showColorBrowserButton(false);
 
-    connect(ui->chkGamutMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+
     connect(ui->chkToneMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnMaxWhite, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(ui->chkGamutMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->targetGamut, SIGNAL(colorSpaceChanged(const KoColorSpace*)), SIGNAL(sigConfigurationItemChanged()));
 }
 
@@ -115,6 +121,9 @@ void KisToneGamutMapWidget::setConfiguration(const KisPropertiesConfigurationSP 
     QVariant value;
     if (config->getProperty(TONE_MAP_ENABLED, value)) {
         ui->chkToneMap->setChecked(value.toBool());
+    }
+    if (config->getProperty(TONE_MAP_MAX_WHITE, value)) {
+        ui->spnMaxWhite->setValue(value.toDouble());
     }
     if (config->getProperty(GAMUT_MAP_ENABLED, value)) {
         ui->chkGamutMap->setChecked(value.toBool());
@@ -135,6 +144,8 @@ KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("tone_gamut_map", 1, KisGlobalResourcesInterface::instance());
     config->setProperty(TONE_MAP_ENABLED, ui->chkToneMap->isChecked());
+    config->setProperty(TONE_MAP_MAX_WHITE, ui->spnMaxWhite->value());
+
     config->setProperty(GAMUT_MAP_ENABLED, ui->chkGamutMap->isChecked());
     if (ui->targetGamut->currentColorSpace()) {
         config->setProperty(GAMUT_MAP_TARGET_PROFILE, ui->targetGamut->currentColorSpace()->profile()->name());

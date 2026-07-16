@@ -6,7 +6,8 @@
 #ifndef KISTONEGAMUTMAPFILTER_H
 #define KISTONEGAMUTMAPFILTER_H
 
-#include "filter/kis_color_transformation_filter.h"
+#include <filter/kis_color_transformation_filter.h>
+#include <kis_config_widget.h>
 
 class KisToneGamutMapFilterPlugin : public QObject
 {
@@ -26,6 +27,28 @@ public:
     static inline KoID id() {
         return KoID("tone_gamut_map", i18n("Tone/Gamut Map"));
     }
+
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+};
+
+namespace Ui
+{
+class KisToneGamutMapWidget;
+}
+
+class KisToneGamutMapWidget : public KisConfigWidget
+{
+    Q_OBJECT
+
+public:
+    explicit KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP dev);
+    ~KisToneGamutMapWidget();
+
+    void setConfiguration(const KisPropertiesConfigurationSP config);
+    KisPropertiesConfigurationSP configuration() const;
+private:
+    Ui::KisToneGamutMapWidget *ui;
 
 };
 

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 02:37+0000\n"
-"PO-Revision-Date: 2026-07-01 18:01+0400\n"
+"PO-Revision-Date: 2026-07-15 19:42+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -34758,11 +34758,9 @@ msgid "Crop to Selection"
 msgstr "اقتصّ إلى التّحديد"
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "اضبط شريط إجراءات التحديد"
+msgstr "أظهر/أخفِ شريط إجراءات تحديد الدبوس"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format

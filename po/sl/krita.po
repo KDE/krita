@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 02:37+0000\n"
-"PO-Revision-Date: 2026-07-03 08:40+0200\n"
+"PO-Revision-Date: 2026-07-15 15:07+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -34902,11 +34902,9 @@ msgid "Crop to Selection"
 msgstr "Obreži v izbor"
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "Prilagodi vrstico Dejanja izbora"
+msgstr "Preklopi pripetost vrstice Dejanja izbora"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format
@@ -69921,6 +69919,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Selection Actions Bar"
-#~ msgstr "Vrstica Dejanja izbora"

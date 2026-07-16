@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 02:37+0000\n"
-"PO-Revision-Date: 2026-07-02 16:20+0300\n"
+"PO-Revision-Date: 2026-07-15 15:35+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -15683,7 +15683,7 @@ msgstr "Включить панель действий выделения"
 #, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Настроить секции"
+msgstr "Настроить панель действий выделения"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -35487,16 +35487,14 @@ msgid "Crop to Selection"
 msgstr "Кадрировать до выделения"
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "Настроить секции"
+msgstr "Включить или отключить закрепление панели действий выделения"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format
 msgid "Disable selection actions bar"
-msgstr "Включить панель действий выделения"
+msgstr "Отключить панель действий выделения"
 
 #: libs/ui/kis_selection_manager.cc:638
 #, kde-format

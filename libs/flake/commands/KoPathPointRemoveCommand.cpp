@@ -93,6 +93,12 @@ KUndo2Command *KoPathPointRemoveCommand::createCommand(
     if (pointsToDelete.size() > 0) {
         new KoPathPointRemoveCommand(pointsToDelete, cmd);
     }
+
+    //Reverse sort the subpath list to account for shifting indices of the subpaths
+    std::sort(subpathToDelete.begin(), subpathToDelete.end(), [](KoPathPointData a, KoPathPointData b) {
+        return a.pointIndex > b.pointIndex;
+    });
+
     Q_FOREACH (const KoPathPointData & pd, subpathToDelete) {
         new KoSubpathRemoveCommand(pd.pathShape, pd.pointIndex.first, cmd);
     }

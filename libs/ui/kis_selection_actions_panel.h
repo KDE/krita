@@ -50,6 +50,8 @@ public:
 
     void canvasWidgetChanged(KisCanvasWidgetBase* canvas);
 
+    void updatePositioning();
+
 private Q_SLOTS:
     void showContextMenu(const QPoint& pos);
     void disableSelectionActionsPanel();

@@ -30,6 +30,7 @@
 #include "KisReferenceImagesDecoration.h"
 #include "kis_display_color_converter.h"
 #include "strokes/kis_color_sampler_stroke_strategy.h"
+#include "kis_painting_tweaks.h"
 
 
 namespace {
@@ -679,8 +680,8 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         // Draw crosshair if preview is offseted
         if (m_d->circlePreviewPosition != KisConfig::ColorSamplerPreviewCirclePosition::Center) {
             QColor crosshairColor = Qt::black;
-            // Apparently this fomular is outdated and inaccurate. But the accurate version require calculating power, probably overkill anyway
-            qreal luminance = (0.299 * currentColor.redF() + 0.587 * currentColor.greenF() + 0.114 * currentColor.blueF());
+            // TODO: Check back with Wolthera about the sRGB param
+            qreal luminance = KisPaintingTweaks::luminosityCoarse(currentColor, true);
             if (luminance < 0.5) crosshairColor = Qt::white;
 
             cachePainter.save();

@@ -317,6 +317,10 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
 
     d->configure_action->setVisible(p_visible && d->m_viewManager->selection());
 
+    // movePanelWidgets() uses d->m_visible to decide whether to make the widgets
+    // visible or not
+    d->m_visible = p_visible;
+
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
         d->m_handleWidget->installEventFilter(this);
         d->m_dragHandle.position = currentTopLeftPosition();
@@ -331,8 +335,6 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
 
         d->m_pressed = false;
     }
-
-    d->m_visible = p_visible;
 }
 
 void KisSelectionActionsPanel::setEnabled(bool enabled)
@@ -414,11 +416,15 @@ void KisSelectionActionsPanel::canvasWidgetChanged(KisCanvasWidgetBase* canvas)
 
     Q_FOREACH(QWidget* btn, d->m_buttons)  {
         btn->setParent(canvas->widget());
-        btn->show();
+        if (d->m_visible) {
+            btn->show();
+        }
     }
 
     d->m_handleWidget->setParent(canvas->widget());
-    d->m_handleWidget->show();
+    if (d->m_visible) {
+        d->m_handleWidget->show();
+    }
 }
 
 QPoint KisSelectionActionsPanel::clipPositionToCanvasBoundaries(QPoint position, QWidget *canvasWidget) const
@@ -741,6 +747,10 @@ void KisSelectionActionsPanel::movePanelWidgets()
 {
     //This function gets called on panel creation, when dragHandle is not initialized, so we need to handle that
     if (!d->m_handleWidget)
+        return;
+
+    // don't show the widgets if the panel is hidden
+    if (!d->m_visible)
         return;
 
     if (d->orientation == Orientation::Vertical) {

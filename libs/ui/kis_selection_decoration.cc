@@ -154,6 +154,7 @@ void KisSelectionDecoration::selectionChanged()
     if (!selection && !selectionIsActive()) {
         m_selectionActionsPanel->setVisible(false);
     }
+    m_selectionActionsPanel->updatePositioning();
 }
 
 void KisSelectionDecoration::slotStartUpdateSelection()

@@ -179,11 +179,6 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
         return;
     }
 
-    if (d->m_viewManager->canvas()) {
-        d->m_dragHandle.position = currentTopLeftPosition();
-        movePanelWidgets();
-    }
-
     if (d->m_pressed && d->behavior == Behavior::FreeFloating) {
         drawAnchorWhileMoving(painter);
     }
@@ -208,11 +203,7 @@ void KisSelectionActionsPanel::setOrientation(Orientation mode)
     recalculateDimensions();
 
     //Recalcute the position of the bar to be inside the canvas
-    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
-    if (canvasWidget) {
-        d->m_dragHandle.position = clipPositionToCanvasBoundaries(d->m_dragHandle.position, canvasWidget);
-        movePanelWidgets();
-    }
+    updatePositioning();
 }
 
 void KisSelectionActionsPanel::setHandleEnabled(bool enabled)
@@ -320,8 +311,7 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
 
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
         d->m_handleWidget->installEventFilter(this);
-        d->m_dragHandle.position = currentTopLeftPosition();
-        movePanelWidgets();
+        updatePositioning();
     } else { // Now hidden!
         d->m_handleWidget->removeEventFilter(this);
 
@@ -421,6 +411,14 @@ void KisSelectionActionsPanel::canvasWidgetChanged(KisCanvasWidgetBase* canvas)
     d->m_handleWidget->setParent(canvas->widget());
     if (d->m_visible) {
         d->m_handleWidget->show();
+    }
+}
+
+void KisSelectionActionsPanel::updatePositioning()
+{
+    if (d->m_visible) {
+        d->m_dragHandle.position = currentTopLeftPosition();
+        movePanelWidgets();
     }
 }
 
@@ -715,7 +713,8 @@ bool KisSelectionActionsPanel::handleMove(QEvent *event, const QPoint &pos)
     QPoint newPos = pos - d->m_dragHandle.dragOrigin;
     d->m_dragHandle.dragOffset = newPos;
 
-    movePanelWidgets();
+    updatePositioning();
+
     canvasWidget->update();
     event->accept();
     return true;
@@ -857,26 +856,16 @@ void KisSelectionActionsPanel::configChanged(bool skipResettingOffset)
         silentCfg.writeEntry(d->dragOffsetConfigName, QPoint());
     }
 
-    if (d->behavior == Behavior::Fixed) {
-        d->m_dragHandle.position = currentTopLeftPosition();
-        movePanelWidgets();
-    }
-
     if (d->sapPinButtonIndex >= 0 && d->m_buttons[d->sapPinButtonIndex] && d->m_buttons[d->sapPinButtonIndex]->isCheckable()) {
         d->m_buttons[d->sapPinButtonIndex]->setChecked(cfg.selectionActionBarBehavior() == Behavior::Fixed);
     }
+
+    updatePositioning();
 }
 
 void KisSelectionActionsPanel::canvasStateChanged()
 {
-    if (d->behavior == Behavior::Fixed) {
-        d->m_dragHandle.position = currentTopLeftPosition();
-    } else {
-        d->m_dragHandle.position = currentTopLeftPosition();
-        d->m_dragHandle.position = clipPositionToCanvasBoundaries(d->m_dragHandle.position, d->m_viewManager->canvas());
-    }
-
-    movePanelWidgets();
+    updatePositioning();
 }
 
 void KisSelectionActionsPanel::themeChanged()

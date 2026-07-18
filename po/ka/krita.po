@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 02:37+0000\n"
-"PO-Revision-Date: 2026-07-06 12:16+0200\n"
+"PO-Revision-Date: 2026-07-17 08:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -34623,11 +34623,9 @@ msgid "Crop to Selection"
 msgstr "მონიშნულამდე ამოჭრა"
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "მონიშვნის ქმედებების პანელის მორგება"
+msgstr "გადასართავი მონიშნულის ქმედებების პანელზე"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format

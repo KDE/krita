@@ -34551,7 +34551,7 @@ msgstr "裁剪到选区"
 #: libs/ui/kis_selection_actions_panel.cpp:96
 #, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr ""
+msgstr "固定/取消固定选区操作浮动工具条"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format

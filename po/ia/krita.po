@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-15 02:37+0000\n"
-"PO-Revision-Date: 2026-05-14 11:21+0200\n"
+"PO-Revision-Date: 2026-07-17 17:16+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -16687,8 +16687,7 @@ msgstr "Spatio de labor"
 
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgctxt "action"
 msgid "Resources"
 msgstr "Ressources"
@@ -16720,7 +16719,7 @@ msgstr "Gere Ressources"
 #| msgid "Color Management"
 msgctxt "action"
 msgid "Management"
-msgstr "Gerente de color"
+msgstr "&Gestion"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
@@ -16762,11 +16761,10 @@ msgstr "Description"
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr "Interfacie de usator"
+msgstr "Interfacie"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
@@ -28706,7 +28704,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Dona"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -51181,14 +51179,14 @@ msgstr ""
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "Cargante..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
 #, fuzzy, kde-format
 #| msgid "Symmetry"
 msgid "Retry"
-msgstr "Symmetria"
+msgstr "Prova de nove"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
@@ -51245,23 +51243,21 @@ msgid "Invalid version."
 msgstr "Valor invalide."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksum."
-msgstr "Nomine invalide."
+msgstr "Checksum invalide."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
 #, fuzzy, kde-format
 #| msgid "Create session"
 msgid "Failed to create directory %1."
-msgstr "Crea session"
+msgstr "Il falleva a crear directorio %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid "Failed to open %1 for writing."
-msgstr "Il non pote crear le plugin de filtro"
+msgstr "Il falleva a aperir %1 pro scriber"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
 #, fuzzy, kde-format
@@ -51311,9 +51307,9 @@ msgstr[0] "Spatio de labor"
 msgstr[1] "Spatio de labor"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 (subscribed)"
-msgstr ""
+msgstr "Subscribite"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
 #, fuzzy, kde-format
@@ -51322,18 +51318,16 @@ msgid "%1 (owned)"
 msgstr "%1 (Copia)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
-msgstr "Contrasto:"
+msgstr "Il contine:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
-msgstr "Nulle imagine disponibile"
+msgstr "Non disponibile"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
 #, fuzzy, kde-format
@@ -51389,14 +51383,13 @@ msgstr "Il non pote cargar  insimul %1."
 #, fuzzy, kde-format
 #| msgid "Conversion failed"
 msgid "Download failed"
-msgstr "Conversion fallite"
+msgstr "Discargamento fallite"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Down"
+#, kde-format
 msgid "Download"
-msgstr "A basso"
+msgstr "Discarga"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196

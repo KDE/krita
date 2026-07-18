@@ -2910,7 +2910,7 @@
       <statusTip/>
     </Action>
     <Action name="create_quick_group">
-      <icon/>
+      <icon>quick_group</icon>
       <text>Quick Group</text>
       <whatsThis/>
       <toolTip>Create a group layer containing selected layers</toolTip>
@@ -2922,7 +2922,7 @@
       <statusTip/>
     </Action>
     <Action name="quick_ungroup">
-      <icon/>
+      <icon>quick_ungroup</icon>
       <text>Quick Ungroup</text>
       <whatsThis/>
       <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
@@ -2934,7 +2934,7 @@
       <statusTip/>
     </Action>
     <Action name="create_quick_clipping_group">
-      <icon/>
+      <icon>quick_clipping</icon>
       <text>Quick Clipping Group</text>
       <whatsThis/>
       <toolTip>Group selected layers and add a layer with clipped alpha channel</toolTip>

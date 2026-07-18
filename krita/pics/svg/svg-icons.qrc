@@ -4,6 +4,12 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>light_quick_group.svg</file>
+        <file>dark_quick_group.svg</file>
+        <file>light_quick_ungroup.svg</file>
+        <file>dark_quick_ungroup.svg</file>
+        <file>light_quick_clipping.svg</file>
+        <file>dark_quick_clipping.svg</file>
         <file>dark_preferences-desktop-locale.svg</file>
         <file>light_preferences-desktop-locale.svg</file>
         <file>dark_get_started.svg</file>

@@ -331,7 +331,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_grpColorSamplerZoomPreview->setChecked(cfg.colorSamplerZoomPreviewEnabled());
 
-    m_ssbColorSamplerZoomPreviewScale->setRange(1, 20);
+    m_ssbColorSamplerZoomPreviewScale->setRange(1, 50);
     m_ssbColorSamplerZoomPreviewScale->setSingleStep(1);
     m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale());
 

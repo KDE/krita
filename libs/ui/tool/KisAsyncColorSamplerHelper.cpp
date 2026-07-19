@@ -83,6 +83,7 @@ struct KisAsyncColorSamplerHelper::Private
     QPainterPath cacheCrosshairPath;
     int cacheCirclePreviewDiameter;
     bool canvasPreviewFetchingStarted {false};
+    QRect oldCanvasPixelRect;
 
     QColor currentColor;
     QColor baseColor;
@@ -412,6 +413,8 @@ void KisAsyncColorSamplerHelper::deactivate()
     // Reset the cached zoom preview image and rect
     m_d->cacheCanvasPreviewImage = QImage();
     m_d->cacheCanvasPreviewRect = QRect();
+    m_d->canvasPreviewFetchingStarted = false;
+    m_d->oldCanvasPixelRect = QRect();
 
     m_d->isActive = false;
 
@@ -696,7 +699,7 @@ void KisAsyncColorSamplerHelper::paintCircleCrosshair(QPainter &gc, const QRectF
 {
     QColor crosshairColor = Qt::black;
     // TODO: Check back with Wolthera about the sRGB param
-    qreal luminance = KisPaintingTweaks::luminosityCoarse(currentColor, true);
+    qreal luminance = KisPaintingTweaks::luminosityCoarse(currentColor);
     if (luminance < 0.5) crosshairColor = Qt::white;
 
     gc.save();
@@ -727,7 +730,7 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
 
     if (m_d->cacheCanvasPreviewRect.isEmpty() || !m_d->cacheCanvasPreviewRect.contains(canvasPixelRect)) {
         // Cache an area larger than the needed preview area to avoid rapid small dynamic allocations
-        // And also avoid frequent preview delay from fetching canvas image asynchronously repeatedly
+        // And also avoid frequent preview delay from repeatedly fetching canvas image asynchronously
         qreal cacheScale = 4;
 
         QRect cacheCanvasRect = canvasPixelRect;
@@ -744,13 +747,15 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
         if (!m_d->canvasPreviewFetchingStarted) {
             m_d->canvasPreviewFetchingStarted = true;
             m_d->strokesFacade()->addJob(m_d->strokeId,
-                new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage, cacheCanvasRect, canvasImage->profile()));
+                new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage, cacheCanvasRect, canvasImage->colorSpace()->profile()));
         }
 
-        // Instead of returning an empty QImage and cause painful flickering
-        // Just return old cache, it's not really noticeable normally. In extreme cases, we have a cool lazy loading effect :D
+        // Return the last valid canvas preview while we wait to fetch new canvas cache async
+        if (!m_d->oldCanvasPixelRect.isNull()) canvasPixelRect = m_d->oldCanvasPixelRect;
+        return m_d->cacheCanvasPreviewImage;
     }
     canvasPixelRect.translate(-m_d->cacheCanvasPreviewRect.topLeft());
+    m_d->oldCanvasPixelRect = canvasPixelRect;
 
     return m_d->cacheCanvasPreviewImage;
 }

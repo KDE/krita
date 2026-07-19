@@ -84,6 +84,7 @@ struct KisAsyncColorSamplerHelper::Private
     int cacheCirclePreviewDiameter;
     bool canvasPreviewFetchingStarted {false};
     QRect oldCanvasPixelRect;
+    bool zoomPreviewHasPainted {false};
 
     QColor currentColor;
     QColor baseColor;
@@ -415,6 +416,7 @@ void KisAsyncColorSamplerHelper::deactivate()
     m_d->cacheCanvasPreviewRect = QRect();
     m_d->canvasPreviewFetchingStarted = false;
     m_d->oldCanvasPixelRect = QRect();
+    m_d->zoomPreviewHasPainted = false;
 
     m_d->isActive = false;
 
@@ -674,11 +676,12 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         zoomDocRectF.setSize(zoomDocRectF.size() / m_d->circleZoomPreviewScale);
         zoomDocRectF.moveCenter(m_d->sampleDocPoint);
 
-        bool isPainted = paintCircleCanvasPreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
+        bool canvasPainted = paintCircleCanvasPreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
-        // This is only false for the very first frame, when canvas preview is not yet available, leave the center hollow for better visual
-        // the gray flickering otherwise would be an eyesore
-        if (isPainted) {
+        // canvasPainted is false when canvas preview is not yet available, leave the center hollow for better visual
+        // When draging from the outside (or from ref image only) to canvas, canvasPainted can also be false, causing flickering on the already painted zoom preview
+        // So if preview was ever successfully render, don't hide these and cause flickering
+        if (canvasPainted || m_d->zoomPreviewHasPainted) {
             paintCircleReferenceImagePreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
             // Draw crosshair if preview is offseted
@@ -689,6 +692,8 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
             // Fill empty spaces to hide the underlying canvas
             cachePainter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
             cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
+
+            m_d->zoomPreviewHasPainted = true;
         }
     }
 

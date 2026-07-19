@@ -820,6 +820,9 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
         qreal xScale = refImage->size().width() / image.width();
         qreal yScale = refImage->size().height() / image.height();
 
+        // This only happens when refImage size is 0, so painting it probably won't make senses
+        if (xScale == 0 || yScale == 0) continue;
+
         QRect refPixelRect = QRect(refPixelPoint, QSize(zoomDocRectF.width() / xScale, zoomDocRectF.height() / yScale));
 
         refPixelRect = m_d->standardizeZoomPreviewPixelRect(refPixelRect);

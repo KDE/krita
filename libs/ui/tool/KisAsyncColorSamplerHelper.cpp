@@ -796,10 +796,11 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
 
         // Avoid using KisReferenceImage::documentToPixel because it use absoluteTransformation.invert()
         // Which will take rotation into account and cause some quirks when ref image is rotated
-        qreal xScale = refImage->boundingRect().width() / image.width();
-        qreal yScale = refImage->boundingRect().height() / image.height();
+        qreal xScale = refImage->size().width() / image.width();
+        qreal yScale = refImage->size().height() / image.height();
 
         QRect refPixelRect = QRect(refPixelPoint, QSize(zoomDocRectF.width() / xScale, zoomDocRectF.height() / yScale));
+
         refPixelRect = m_d->standardizeZoomPreviewPixelRect(refPixelRect);
 
         refPixelRect.moveCenter(refPixelPoint);

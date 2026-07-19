@@ -44,6 +44,22 @@ public:
             return new FinalizeData();
         }
     };
+
+    class GenerateCanvasZoomPreviewData : public KisStrokeJobData {
+    public:
+        GenerateCanvasZoomPreviewData(KisImageWSP _image, const QRect &_canvasPixelRect, const KoColorProfile *_colorProfile)
+            : canvasImage(_image), canvasPixelRect(_canvasPixelRect), colorProfile(_colorProfile)
+        {}
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            Q_UNUSED(levelOfDetail);
+            return new GenerateCanvasZoomPreviewData(canvasImage, canvasPixelRect, colorProfile);
+        }
+
+        KisImageWSP canvasImage;
+        QRect canvasPixelRect;
+        const KoColorProfile *colorProfile;
+    };
 public:
     KisColorSamplerStrokeStrategy(int radius, int blend, int lod = 0);
     ~KisColorSamplerStrokeStrategy() override;
@@ -54,6 +70,7 @@ public:
 Q_SIGNALS:
     void sigColorUpdated(const KoColor &color);
     void sigFinalColorSelected(const KoColor &color);
+    void sigCanvasZoomPreviewUpdated(const QImage &canvasImage, const QRect &canvasRect);
 
 private:
     struct Private;

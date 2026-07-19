@@ -75,13 +75,15 @@ private Q_SLOTS:
     void slotAddSamplingJob(const QPointF &docPoint);
     void slotColorSamplingFinished(const KoColor &rawColor);
     void slotUpdateBgColor();
+    void slotCanvasZoomPreviewUpdated(const QImage &canvasImage, QRect canvasRect);
 
 private:
     void activatePreview();
     void paintRectangle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
     void paintCircle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
 
-    void paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
+    void paintCircleCrosshair(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor);
+    bool paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
     // Return true if at least one reference image preview was drawn
     void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
 

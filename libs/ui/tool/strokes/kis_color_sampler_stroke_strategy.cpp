@@ -8,6 +8,7 @@
 
 #include "kis_tool_utils.h"
 #include "kis_paint_device.h"
+#include "kis_image.h"
 
 struct KisColorSamplerStrokeStrategy::Private
 {
@@ -42,6 +43,7 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     Data *d = dynamic_cast<Data*>(data);
     FinalizeData *finalize = dynamic_cast<FinalizeData*>(data);
+    GenerateCanvasZoomPreviewData *previewData = dynamic_cast<GenerateCanvasZoomPreviewData*>(data);
 
     if (d) {
         KoColor color;
@@ -54,6 +56,10 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         if (m_d->lastSelectedColor) {
             Q_EMIT sigFinalColorSelected(*m_d->lastSelectedColor);
         }
+    } else if (previewData) {
+        QImage image = previewData->canvasImage->convertToQImage(previewData->canvasPixelRect, previewData->colorProfile);
+
+        Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
     }
 }
 

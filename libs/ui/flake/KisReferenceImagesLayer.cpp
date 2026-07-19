@@ -251,7 +251,7 @@ QRectF KisReferenceImagesLayer::boundingImageRect() const
     return converter()->documentToView(boundingRect());
 }
 
-KoColor KisReferenceImagesLayer::getPixel(QPointF docPosition) const
+KoColor KisReferenceImagesLayer::getPixelForDocPoint(QPointF docPosition) const
 {
     KoColor transparent;
     transparent.setOpacity(0.0);

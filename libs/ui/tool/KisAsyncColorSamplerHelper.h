@@ -83,8 +83,9 @@ private:
     void paintCircle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
 
     void paintCircleCrosshair(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor);
+    // Return true if cache miss, will repaint later when canvas image is fetched
+    // Return false if cache hit, and painted
     bool paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
-    // Return true if at least one reference image preview was drawn
     void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
 
     // Returns a QImage that should either contain the canvasPixelRectF, or the whole canvas if canvasPixelRectF > canvas size.

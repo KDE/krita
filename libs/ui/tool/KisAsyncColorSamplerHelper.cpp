@@ -727,28 +727,28 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
 
     if (m_d->cacheCanvasPreviewRect.isEmpty() || !m_d->cacheCanvasPreviewRect.contains(canvasPixelRect)) {
         // Cache an area larger than the needed preview area to avoid rapid small dynamic allocations
-        // Attempt to reduce cache size when sample size is big to reduce delay
-        qreal cacheScale = 1000;
-        // if (canvasPixelRect.width() < 250) cacheScale = 4;
-        // else if (canvasPixelRect.width() < 500) cacheScale = 2;
+        // And also avoid frequent preview delay from fetching canvas image asynchronously repeatedly
+        qreal cacheScale = 4;
 
         QRect cacheCanvasRect = canvasPixelRect;
         cacheCanvasRect.setSize(canvasPixelRect.size() * cacheScale);
         cacheCanvasRect.moveCenter(canvasPixelRect.center());
 
-        // if cache larger than canvas, then just copy whole canvas
+        // if cache requirement is larger than canvas, then just copy whole canvas
         if (cacheCanvasRect.width() >= canvasImage->width() || cacheCanvasRect.height() >= canvasImage->height()) {
             cacheCanvasRect = canvasImage->bounds();
         }
 
-        // If already fetching, then do nothing
-        if (m_d->canvasPreviewFetchingStarted) return QImage();
+        // If not already have a job fetching canvas image, then do it
+        // TODO: There's probably a better way to do this
+        if (!m_d->canvasPreviewFetchingStarted) {
+            m_d->canvasPreviewFetchingStarted = true;
+            m_d->strokesFacade()->addJob(m_d->strokeId,
+                new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage, cacheCanvasRect, canvasImage->profile()));
+        }
 
-        m_d->canvasPreviewFetchingStarted = true;
-        m_d->strokesFacade()->addJob(m_d->strokeId,
-            new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage, cacheCanvasRect, canvasImage->profile()));
-
-        return QImage();
+        // Instead of returning an empty QImage and cause painful flickering
+        // Just return old cache, it's not really noticeable normally. In extreme cases, we have a cool lazy loading effect :D
     }
     canvasPixelRect.translate(-m_d->cacheCanvasPreviewRect.topLeft());
 

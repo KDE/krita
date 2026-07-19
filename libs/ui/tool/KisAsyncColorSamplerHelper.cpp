@@ -674,9 +674,11 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         zoomDocRectF.setSize(zoomDocRectF.size() / m_d->circleZoomPreviewScale);
         zoomDocRectF.moveCenter(m_d->sampleDocPoint);
 
-        bool paintLater = paintCircleCanvasPreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
+        bool isPainted = paintCircleCanvasPreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
-        if (!paintLater) {
+        // This is only false for the very first frame, when canvas preview is not yet available, leave the center hollow for better visual
+        // the gray flickering otherwise would be an eyesore
+        if (isPainted) {
             paintCircleReferenceImagePreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
             // Draw crosshair if preview is offseted
@@ -754,6 +756,7 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
         if (!m_d->oldCanvasPixelRect.isNull()) canvasPixelRect = m_d->oldCanvasPixelRect;
         return m_d->cacheCanvasPreviewImage;
     }
+
     canvasPixelRect.translate(-m_d->cacheCanvasPreviewRect.topLeft());
     m_d->oldCanvasPixelRect = canvasPixelRect;
 
@@ -774,10 +777,9 @@ bool KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     canvasPixelRect.moveCenter(image->documentToImagePixelFloored(zoomDocRectF.center()));
 
     QImage cachedImage = cacheCanvasImage(canvasPixelRect);
-    // A null QImage and a null canvasPixelRect => No need to paint canvas
-    // A null QImage and a not null canvasPixelRect => Cache miss, skip painting and paint later when canvas image is ready
-    bool paintLater = cachedImage.isNull() && !canvasPixelRect.isNull();
-    if (cachedImage.isNull()) return paintLater;
+    // If cachedImage and canvasPixelRect is null, painting is not needed
+    // If cachedImage is null and canvasPixelRect is not null, painting was deferred
+    if (cachedImage.isNull()) return canvasPixelRect.isNull();
 
     gc.save();
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -791,7 +793,7 @@ bool KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
 
     gc.restore();
 
-    return false;
+    return true;
 }
 
 // Preview won't respect opacity because the color sampled doesn't respect opacity either

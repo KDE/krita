@@ -49,18 +49,17 @@ public:
 
     class GenerateCanvasZoomPreviewData : public KisStrokeJobData {
     public:
-        GenerateCanvasZoomPreviewData(KisCanvas2* _canvas, const QRect &_canvasPixelRect, const KoColorProfile *_colorProfile)
-            : canvas(_canvas), canvasPixelRect(_canvasPixelRect), colorProfile(_colorProfile)
+        GenerateCanvasZoomPreviewData(KisCanvas2* _canvas, const QRect &_canvasPixelRect)
+            : canvas(_canvas), canvasPixelRect(_canvasPixelRect)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             Q_UNUSED(levelOfDetail);
-            return new GenerateCanvasZoomPreviewData(canvas, canvasPixelRect, colorProfile);
+            return new GenerateCanvasZoomPreviewData(canvas, canvasPixelRect);
         }
 
         KisCanvas2 *canvas;
         QRect canvasPixelRect;
-        const KoColorProfile *colorProfile;
     };
 public:
     KisColorSamplerStrokeStrategy(int radius, int blend, int lod = 0);

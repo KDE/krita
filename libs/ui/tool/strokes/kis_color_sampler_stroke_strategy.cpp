@@ -59,13 +59,13 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
     } else if (previewData) {
         KisPaintDeviceSP dev = previewData->canvas->image()->projection();
-        KisPaintDeviceSP tmp = new KisPaintDevice(dev->colorSpace());
+        KisPaintDeviceSP tmpDev = new KisPaintDevice(dev->colorSpace());
 
-        tmp->makeCloneFromRough(dev, previewData->canvasPixelRect);
+        tmpDev->makeCloneFrom(dev, previewData->canvasPixelRect);
 
-        QImage image = previewData->canvas->displayColorConverter()->convertImageToDisplayColorSpace(tmp, previewData->canvasPixelRect, true);
+        QImage image = previewData->canvas->displayColorConverter()->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
 
-        Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
+        Q_EMIT sigCanvasZoomPreviewUpdated(image, QRect(QPoint(0,0), previewData->canvasPixelRect.size()));
     }
 }
 

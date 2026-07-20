@@ -87,9 +87,7 @@ private:
     bool paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
     void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
 
-    // Returns a QImage that should either contain the canvasPixelRect + caching, or the whole canvas if canvasPixelRect + caching > canvas size.
-    // Also modify the input rect to point to the same position relative to the returned image
-    QImage cacheCanvasImage(QRect &canvasPixelRect);
+    QImage fetchCanvasPreview(QRect &canvasPixelRect);
 
     struct Private;
     QScopedPointer<Private> m_d;

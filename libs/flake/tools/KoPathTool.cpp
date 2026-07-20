@@ -570,6 +570,8 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
         if (event->button() & Qt::LeftButton) {
 
+            bool shift_pressed = (event->modifiers() & Qt::ShiftModifier);
+
             // check if we hit a path segment
             if (m_activeSegment && m_activeSegment->isValid()) {
 
@@ -577,8 +579,15 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 KoPathPointIndex index = shape->pathPointIndex(m_activeSegment->segmentStart);
                 KoPathSegment segment = shape->segmentByIndex(index);
 
-                m_pointSelection.add(segment.first(), !(event->modifiers() & Qt::ShiftModifier));
-                m_pointSelection.add(segment.second(), false);
+                // The segment is selected so now need to deselect it
+                if (m_pointSelection.contains(segment.first()) && m_pointSelection.contains(segment.second())
+                    && shift_pressed) {
+                    m_pointSelection.remove(segment.first());
+                    m_pointSelection.remove(segment.second());
+                } else {
+                    m_pointSelection.add(segment.first(), !shift_pressed);
+                    m_pointSelection.add(segment.second(), false);
+                }
 
                 KoPathPointData data(shape, index);
                 m_currentStrategy.reset(new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment));
@@ -590,7 +599,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
                 if (shape && !selection->isSelected(shape)) {
 
-                    if (!(event->modifiers() & Qt::ShiftModifier)) {
+                    if (!shift_pressed) {
                         selection->deselectAll();
                     }
 

@@ -676,10 +676,11 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         zoomDocRectF.setSize(zoomDocRectF.size() / m_d->circleZoomPreviewScale);
         zoomDocRectF.moveCenter(m_d->sampleDocPoint);
 
+        // Returns true if painted or not needed, returns false if painting was deferred
         bool canvasPainted = paintCircleCanvasPreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
 
-        // canvasPainted is false when canvas preview is not yet available, leave the center hollow for better visual
-        // When draging from the outside (or from ref image only) to canvas, canvasPainted can also be false, causing flickering on the already painted zoom preview
+        // If canvasPainted is false (deferred), leave the center hollow to avoid gray flickering from fill
+        // When draging from the outside to canvas, canvasPainted can go from true (not needed) to false (deferred), causing flickering on the already painted zoom preview
         // So if preview was ever successfully render, don't hide these and cause flickering
         if (canvasPainted || m_d->zoomPreviewHasPainted) {
             paintCircleReferenceImagePreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
@@ -709,10 +710,15 @@ void KisAsyncColorSamplerHelper::paintCircleCrosshair(QPainter &gc, const QRectF
     qreal luminance = KisPaintingTweaks::luminosityCoarse(currentColor);
     if (luminance < 0.5) crosshairColor = Qt::white;
 
+    qreal dpr = gc.device()->devicePixelRatioF();
+    qreal penWidth = 1.0 * dpr;
+    QPen pen = QPen(crosshairColor, penWidth);
+
     gc.save();
 
+    gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    gc.setPen(crosshairColor);
+    gc.setPen(pen);
 
     QTransform tf;
     tf.translate(viewRectF.center().x(), viewRectF.center().y());
@@ -738,7 +744,7 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
     if (m_d->cacheCanvasPreviewRect.isEmpty() || !m_d->cacheCanvasPreviewRect.contains(canvasPixelRect)) {
         // Cache an area larger than the needed preview area to avoid rapid small dynamic allocations
         // And also avoid frequent preview delay from repeatedly fetching canvas image asynchronously
-        qreal cacheScale = 4;
+        qreal cacheScale = 1;
 
         QRect cacheCanvasRect = canvasPixelRect;
         cacheCanvasRect.setSize(canvasPixelRect.size() * cacheScale);
@@ -754,7 +760,7 @@ QImage KisAsyncColorSamplerHelper::cacheCanvasImage(QRect &canvasPixelRect) {
         if (!m_d->canvasPreviewFetchingStarted) {
             m_d->canvasPreviewFetchingStarted = true;
             m_d->strokesFacade()->addJob(m_d->strokeId,
-                new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage, cacheCanvasRect, canvasImage->colorSpace()->profile()));
+                new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(m_d->canvas, cacheCanvasRect, canvasImage->colorSpace()->profile()));
         }
 
         // Return the last valid canvas preview while we wait to fetch new canvas cache async

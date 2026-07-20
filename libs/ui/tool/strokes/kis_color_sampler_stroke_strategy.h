@@ -12,6 +12,8 @@
 #include "kis_lod_transform.h"
 #include "KoColor.h"
 
+class KisCanvas2;
+
 class KisColorSamplerStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
     Q_OBJECT
@@ -47,16 +49,16 @@ public:
 
     class GenerateCanvasZoomPreviewData : public KisStrokeJobData {
     public:
-        GenerateCanvasZoomPreviewData(KisImageWSP _image, const QRect &_canvasPixelRect, const KoColorProfile *_colorProfile)
-            : canvasImage(_image), canvasPixelRect(_canvasPixelRect), colorProfile(_colorProfile)
+        GenerateCanvasZoomPreviewData(KisCanvas2* _canvas, const QRect &_canvasPixelRect, const KoColorProfile *_colorProfile)
+            : canvas(_canvas), canvasPixelRect(_canvasPixelRect), colorProfile(_colorProfile)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             Q_UNUSED(levelOfDetail);
-            return new GenerateCanvasZoomPreviewData(canvasImage, canvasPixelRect, colorProfile);
+            return new GenerateCanvasZoomPreviewData(canvas, canvasPixelRect, colorProfile);
         }
 
-        KisImageWSP canvasImage;
+        KisCanvas2 *canvas;
         QRect canvasPixelRect;
         const KoColorProfile *colorProfile;
     };

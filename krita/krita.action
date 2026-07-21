@@ -1011,7 +1011,7 @@
       <statusTip/>
     </Action>
     <Action name="convert_selection_to_shape">
-      <icon/>
+      <icon>convert_to_shape</icon>
       <text>Convert &amp;to Shape</text>
       <whatsThis/>
       <toolTip>Convert to Shape</toolTip>
@@ -3042,7 +3042,7 @@
       <statusTip/>
     </Action>
     <Action name="convert_group_to_animated">
-      <icon/>
+      <icon>group_to_animated</icon>
       <text>Convert Group to &amp;Animated Layer</text>
       <whatsThis/>
       <toolTip>Converts the child layers of a group into a single layer with multiple frames of animation</toolTip>

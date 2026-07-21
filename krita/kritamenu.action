@@ -1413,7 +1413,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_vector_selection">
-      <icon></icon>
+      <icon>convert_vector_selection</icon>
       <text>&amp;Convert to Vector Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Convert to Vector Selection</toolTip>
@@ -1425,7 +1425,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_raster_selection">
-      <icon></icon>
+      <icon>convert_raster_selection</icon>
       <text>&amp;Convert to Raster Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Convert to Raster Selection</toolTip>
@@ -1449,7 +1449,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_shapes_to_vector_selection">
-      <icon></icon>
+      <icon>shapes_to_vector_selection</icon>
       <text>Convert Shapes to &amp;Vector Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Convert Shapes to Vector Selection</toolTip>

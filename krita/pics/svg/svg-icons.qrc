@@ -10,6 +10,16 @@
         <file>dark_quick_ungroup.svg</file>
         <file>light_quick_clipping.svg</file>
         <file>dark_quick_clipping.svg</file>
+        <file>light_group_to_animated.svg</file>
+        <file>dark_group_to_animated.svg</file>
+        <file>light_shapes_to_vector_selection.svg</file>
+        <file>dark_shapes_to_vector_selection.svg</file>
+        <file>light_convert_to_shape.svg</file>
+        <file>dark_convert_to_shape.svg</file>
+        <file>light_convert_raster_selection.svg</file>
+        <file>dark_convert_raster_selection.svg</file>
+        <file>light_convert_vector_selection.svg</file>
+        <file>dark_convert_vector_selection.svg</file>
         <file>dark_preferences-desktop-locale.svg</file>
         <file>light_preferences-desktop-locale.svg</file>
         <file>dark_get_started.svg</file>

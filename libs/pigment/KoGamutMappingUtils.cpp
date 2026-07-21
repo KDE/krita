@@ -223,9 +223,9 @@ KoGamutMappingUtils::PiecewiseFilmicCurve KoGamutMappingUtils::PiecewiseFilmicCu
 {
     const float uiGamma = 2.2f;
 
-    const float normalizedToeLength = powf(qBound(0.0, toeLength, 1.0), uiGamma);
-    const float normalizedToeStrength = qBound(0.0, toeStrength, 1.0);
-    const float normalizedShoulderAngle = qBound(0.0, shoulderAngle, 1.0);
+    const float normalizedToeLength = powf(qBound(0.0f, toeLength, 1.0f), uiGamma);
+    const float normalizedToeStrength = qBound(0.0f, toeStrength, 1.0f);
+    const float normalizedShoulderAngle = qBound(0.0f, shoulderAngle, 1.0f);
 
     const float x0 = normalizedToeLength * .5f;
     const float y0 = (1.0f - normalizedToeStrength) * x0;

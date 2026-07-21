@@ -65,8 +65,6 @@ struct xyzToOkLabModel {
         const QVector4D OkLab = lmsToOkLab * lmsPrime;
         QVector<qreal> lch(3);
         LabToLCH(OkLab.x(), OkLab.y()+0.5, OkLab.z()+0.5, &lch[0], &lch[1], &lch[2]);
-        lch[0] = qMin(lch[0], 1.0);
-        lch[1] = qMin(lch[1], 1.0);
         return lch;
     }
 
@@ -82,9 +80,9 @@ struct xyzToOkLabModel {
                                         powf(lmsPrime.y(), 3.0),
                                         powf(lmsPrime.z(), 3.0), 0.0);
         const QVector4D xyz = xyz50To65_inv * (XYZtoOkLABLMS_inv * lms);
-        channels[0] = qMax(0.0, xyz.x());
-        channels[1] = qMax(0.0, xyz.y());
-        channels[2] = qMax(0.0, xyz.z());
+        channels[0] = xyz.x();
+        channels[1] = xyz.y();
+        channels[2] = xyz.z();
 
         //qDebug() << "lch" << lch << "col" << color << "lmsprime" << lmsPrime << "lms" << lms << "xyz" << channels;
         return channels;

@@ -38,6 +38,15 @@ enum MappingModel {
     OkLAB
 };
 
+/**
+ * @brief reinhardToneMapping
+ * Implements 'extended' reinhard tonemapping.
+ * @param linearY -- luminance, linear.
+ * @param maxWhite -- maximum white to scale down, also linear
+ * @return tone mapped value
+ */
+float reinhardToneMapping(const float linearY, const float maxY);
+
 };
 
 #endif // KOGAMUTMAPPINGUTILS_H

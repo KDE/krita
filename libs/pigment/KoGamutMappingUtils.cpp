@@ -109,3 +109,9 @@ float KoGamutMappingUtils::deltaE2000(const QVector<float> &a, const QVector<flo
     dE += rT * (deltaC / sC) + (deltaH2 / sH);
     return qSqrt(dE)*0.01;
 }
+
+float KoGamutMappingUtils::reinhardToneMapping(const float linearY, const float maxY)
+{
+    const float num = linearY * (1.0f + (linearY/(maxY*maxY)));
+    return num / (linearY + 1.0f);
+}

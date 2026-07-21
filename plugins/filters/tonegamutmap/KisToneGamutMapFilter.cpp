@@ -16,16 +16,19 @@
 #include <kis_color_space_selector.h>
 
 #include <KoCompositeColorTransformation.h>
+#include <KoFallBackColorTransformation.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
+#include <KoGamutMappingUtils.h>
 
 #include "ui_kistonegamutmapwidget.h"
 
-const QString TONE_MAP_ENABLED = "toneMap/Enabled";
-const QString TONE_MAP_MAX_WHITE = "toneMap/MaxWhite";
-const QString GAMUT_MAP_ENABLED = "gamutMap/Enabled";
-const QString GAMUT_MAP_TARGET_PROFILE = "gamutMap/TargetProfile";
+const QString MAPPING_MODEL = "mapping_model"; ///< Enum, model in which the gamut or tone mapping is done.
+const QString TONE_MAP_ENABLED = "toneMap/Enabled"; ///< bool, whether to do tone mapping.
+const QString TONE_MAP_MAX_WHITE = "toneMap/MaxWhite"; ///< double, the maximum white that needs to be tonemapped.
+const QString GAMUT_MAP_ENABLED = "gamutMap/Enabled"; ///< bool, whether to do gamt mapping.
+const QString GAMUT_MAP_TARGET_PROFILE = "gamutMap/TargetProfile"; ///< QString, name of the color profile that is the target gamut.
 
 K_PLUGIN_FACTORY_WITH_JSON(KisToneGamutMapFilterFactory, "kritatonegamutmapfilter.json", registerPlugin<KisToneGamutMapFilterPlugin>();)
 
@@ -57,23 +60,28 @@ KisToneGamutMapFilter::KisToneGamutMapFilter()
 
 KoColorTransformation *KisToneGamutMapFilter::createTransformation(const KoColorSpace *cs, const KisFilterConfigurationSP config) const
 {
+    const KoColorSpace *mappingCs = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), "");
+    if (config->getProperty(MAPPING_MODEL).toInt() != KoGamutMappingUtils::LAB) {
+        mappingCs = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Float32BitsColorDepthID.id(), "");
+    }
     QVector<KoColorTransformation*> allTransforms;
 
     if (config->getProperty(TONE_MAP_ENABLED).toBool()) {
         QHash<QString, QVariant> params;
         params["maxWhite"] = config->getProperty(TONE_MAP_MAX_WHITE);
-        KoColorTransformation *toneMap = cs->createColorTransformation("tonemap_adjustment", params);
+        KoColorTransformation *toneMap = mappingCs->createColorTransformation("tonemap_adjustment", params);
         allTransforms << toneMap;
     }
 
     if (config->getProperty(GAMUT_MAP_ENABLED).toBool()) {
         QHash<QString, QVariant> params;
         params["targetColorProfileName"] = config->getProperty(GAMUT_MAP_TARGET_PROFILE);
-        KoColorTransformation *gamutMap = cs->createColorTransformation("gamutmap_clip_adjustment", params);
+        params["mappingModel"] = config->getProperty(MAPPING_MODEL);
+        KoColorTransformation *gamutMap = mappingCs->createColorTransformation("gamutmap_clip_adjustment", params);
         allTransforms << gamutMap;
     }
 
-    return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
+    return new KoFallBackColorTransformation(cs, mappingCs, KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms));
 }
 
 KisFilterConfigurationSP KisToneGamutMapFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
@@ -103,6 +111,11 @@ KisToneGamutMapWidget::KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP d
     ui->targetGamut->showDepth(false);
     ui->targetGamut->showColorBrowserButton(false);
 
+    ui->cmbMappingModel->addItem(i18n("LAB"), KoGamutMappingUtils::LAB);
+    ui->cmbMappingModel->addItem(i18n("XYZ (ICtCp)"), KoGamutMappingUtils::ICtCp);
+    ui->cmbMappingModel->addItem(i18n("XYZ (OkLAB)"), KoGamutMappingUtils::OkLAB);
+
+    connect(ui->cmbMappingModel, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(ui->chkToneMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->spnMaxWhite, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
@@ -119,6 +132,11 @@ KisToneGamutMapWidget::~KisToneGamutMapWidget()
 void KisToneGamutMapWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
+
+    if (config->getProperty(MAPPING_MODEL, value)) {
+        ui->cmbMappingModel->setCurrentIndex(ui->cmbMappingModel->findData(value));
+    }
+
     if (config->getProperty(TONE_MAP_ENABLED, value)) {
         ui->chkToneMap->setChecked(value.toBool());
     }
@@ -143,6 +161,8 @@ void KisToneGamutMapWidget::setConfiguration(const KisPropertiesConfigurationSP 
 KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("tone_gamut_map", 1, KisGlobalResourcesInterface::instance());
+    config->setProperty(MAPPING_MODEL, ui->cmbMappingModel->currentData());
+
     config->setProperty(TONE_MAP_ENABLED, ui->chkToneMap->isChecked());
     config->setProperty(TONE_MAP_MAX_WHITE, ui->spnMaxWhite->value());
 

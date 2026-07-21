@@ -48,6 +48,7 @@ set(kritapigment_SRCS
     KoCopyColorConversionTransformation.cpp
     KoFallBackColorTransformation.cpp
     KoHistogramProducer.cpp
+    KoGamutMappingUtils.cpp
     KoMultipleColorConversionTransformation.cpp
     colorspaces/KoAlphaColorSpace.cpp
     colorspaces/KoLabColorSpace.cpp

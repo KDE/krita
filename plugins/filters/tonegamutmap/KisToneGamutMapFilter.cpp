@@ -22,13 +22,22 @@
 #include <klocalizedstring.h>
 #include <KoGamutMappingUtils.h>
 
+
 #include "ui_kistonegamutmapwidget.h"
 
 const QString MAPPING_MODEL = "mapping_model"; ///< Enum, model in which the gamut or tone mapping is done.
 const QString TONE_MAP_ENABLED = "toneMap/Enabled"; ///< bool, whether to do tone mapping.
-const QString TONE_MAP_MAX_WHITE = "toneMap/MaxWhite"; ///< double, the maximum white that needs to be tonemapped.
+const QString TONE_MAP_MAX_WHITE = "toneMap/reinhard/MaxWhite"; ///< double, the maximum white that needs to be tonemapped.
 const QString GAMUT_MAP_ENABLED = "gamutMap/Enabled"; ///< bool, whether to do gamt mapping.
 const QString GAMUT_MAP_TARGET_PROFILE = "gamutMap/TargetProfile"; ///< QString, name of the color profile that is the target gamut.
+
+const QString TONE_MAP_TYPE = "toneMap/CurveType";
+
+const QString TONE_PIECE_WISE_TOE_STRENGTH = "toneMap/pieceWiseFilmic/toeStrength";
+const QString TONE_PIECE_WISE_TOE_LENGTH = "toneMap/pieceWiseFilmic/toeLength";
+const QString TONE_PIECE_WISE_SHOULDER_STRENGTH = "toneMap/pieceWiseFilmic/shoulderStrength";
+const QString TONE_PIECE_WISE_SHOULDER_LENGTH = "toneMap/pieceWiseFilmic/shoulderLength";
+const QString TONE_PIECE_WISE_SHOULDER_ANGLE = "toneMap/pieceWiseFilmic/shoulderAngle";
 
 K_PLUGIN_FACTORY_WITH_JSON(KisToneGamutMapFilterFactory, "kritatonegamutmapfilter.json", registerPlugin<KisToneGamutMapFilterPlugin>();)
 
@@ -68,7 +77,15 @@ KoColorTransformation *KisToneGamutMapFilter::createTransformation(const KoColor
 
     if (config->getProperty(TONE_MAP_ENABLED).toBool()) {
         QHash<QString, QVariant> params;
+        params["CurveType"] = config->getProperty(TONE_MAP_TYPE);
+
         params["maxWhite"] = config->getProperty(TONE_MAP_MAX_WHITE);
+
+        params["toeStrength"] = config->getProperty(TONE_PIECE_WISE_TOE_STRENGTH);
+        params["toeLength"] = config->getProperty(TONE_PIECE_WISE_TOE_LENGTH);
+        params["shoulderStrength"] = config->getProperty(TONE_PIECE_WISE_SHOULDER_STRENGTH);
+        params["shoulderLength"] = config->getProperty(TONE_PIECE_WISE_SHOULDER_LENGTH);
+        params["shoulderAngle"] = config->getProperty(TONE_PIECE_WISE_SHOULDER_ANGLE);
         KoColorTransformation *toneMap = mappingCs->createColorTransformation("tonemap_adjustment", params);
         allTransforms << toneMap;
     }
@@ -81,6 +98,8 @@ KoColorTransformation *KisToneGamutMapFilter::createTransformation(const KoColor
         allTransforms << gamutMap;
     }
 
+    if (allTransforms.isEmpty()) return nullptr;
+
     return new KoFallBackColorTransformation(cs, mappingCs, KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms));
 }
 
@@ -89,6 +108,13 @@ KisFilterConfigurationSP KisToneGamutMapFilter::defaultConfiguration(KisResource
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty(TONE_MAP_ENABLED, true);
     config->setProperty(TONE_MAP_MAX_WHITE, 1.0);
+
+    config->setProperty(TONE_PIECE_WISE_TOE_STRENGTH, 0.5);
+    config->setProperty(TONE_PIECE_WISE_TOE_LENGTH, 0.5);
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_STRENGTH, 2.0);
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, 0.5);
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, 1.0);
+
     config->setProperty(GAMUT_MAP_ENABLED, true);
     config->setProperty(GAMUT_MAP_TARGET_PROFILE, "sRGB-elle-V2-srgbtrc.icc");
     return config;
@@ -115,10 +141,22 @@ KisToneGamutMapWidget::KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP d
     ui->cmbMappingModel->addItem(i18n("XYZ (ICtCp)"), KoGamutMappingUtils::ICtCp);
     ui->cmbMappingModel->addItem(i18n("XYZ (OkLAB)"), KoGamutMappingUtils::OkLAB);
 
+    ui->cmbToneCurveType->addItem(i18n("Reinhard"), KoGamutMappingUtils::Reinhard);
+    ui->cmbToneCurveType->addItem(i18n("Piecewise Filmic"), KoGamutMappingUtils::PiecewiseFilmic);
+
     connect(ui->cmbMappingModel, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->cmbToneCurveType, SIGNAL(activated(int)), ui->stkToneMap, SLOT(setCurrentIndex(int)));
+    connect(ui->cmbToneCurveType, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(ui->chkToneMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+
     connect(ui->spnMaxWhite, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(ui->spnToeStrength, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnToeLength, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnShoulderStrength, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnShoulderLength, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->spnShoulderAngle, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(ui->chkGamutMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->targetGamut, SIGNAL(colorSpaceChanged(const KoColorSpace*)), SIGNAL(sigConfigurationItemChanged()));
@@ -136,6 +174,10 @@ void KisToneGamutMapWidget::setConfiguration(const KisPropertiesConfigurationSP 
     if (config->getProperty(MAPPING_MODEL, value)) {
         ui->cmbMappingModel->setCurrentIndex(ui->cmbMappingModel->findData(value));
     }
+    if (config->getProperty(TONE_MAP_TYPE, value)) {
+        ui->cmbToneCurveType->setCurrentIndex(ui->cmbToneCurveType->findData(value));
+        ui->stkToneMap->setCurrentIndex(ui->cmbToneCurveType->currentIndex());
+    }
 
     if (config->getProperty(TONE_MAP_ENABLED, value)) {
         ui->chkToneMap->setChecked(value.toBool());
@@ -143,6 +185,23 @@ void KisToneGamutMapWidget::setConfiguration(const KisPropertiesConfigurationSP 
     if (config->getProperty(TONE_MAP_MAX_WHITE, value)) {
         ui->spnMaxWhite->setValue(value.toDouble());
     }
+    if (config->getProperty(TONE_PIECE_WISE_TOE_STRENGTH, value)) {
+        ui->spnToeStrength->setValue(value.toDouble());
+    }
+    if (config->getProperty(TONE_PIECE_WISE_TOE_LENGTH, value)) {
+        ui->spnToeLength->setValue(value.toDouble());
+    }
+    if (config->getProperty(TONE_PIECE_WISE_SHOULDER_STRENGTH, value)) {
+        ui->spnShoulderStrength->setValue(value.toDouble());
+    }
+    if (config->getProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, value)) {
+        ui->spnShoulderLength->setValue(value.toDouble());
+    }
+    if (config->getProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, value)) {
+        ui->spnShoulderAngle->setValue(value.toDouble());
+    }
+
+
     if (config->getProperty(GAMUT_MAP_ENABLED, value)) {
         ui->chkGamutMap->setChecked(value.toBool());
     }
@@ -165,6 +224,30 @@ KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
 
     config->setProperty(TONE_MAP_ENABLED, ui->chkToneMap->isChecked());
     config->setProperty(TONE_MAP_MAX_WHITE, ui->spnMaxWhite->value());
+
+    config->setProperty(TONE_MAP_TYPE, ui->cmbToneCurveType->currentData());
+
+    config->setProperty(TONE_PIECE_WISE_TOE_STRENGTH, ui->spnToeStrength->value());
+    config->setProperty(TONE_PIECE_WISE_TOE_LENGTH, ui->spnToeLength->value());
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_STRENGTH, ui->spnShoulderStrength->value());
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, ui->spnShoulderLength->value());
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, ui->spnShoulderAngle->value());
+
+    {
+        KoGamutMappingUtils::PiecewiseFilmicCurve curve
+            = KoGamutMappingUtils::PiecewiseFilmicCurve::fromUserParams(ui->spnToeStrength->value(), ui->spnToeLength->value(), ui->spnShoulderStrength->value(), ui->spnShoulderLength->value(), ui->spnShoulderAngle->value());
+        QPolygonF poly;
+        const float white = 1.0/curve.inverseMaxWhite;
+        for (int x = 0; x < 20; x++) {
+            const float val = (float(x)/20.0)*white;
+            const float y = curve.evalCurve(val);
+            poly.append(QPointF(val/white, y));
+        }
+        ui->toneCurvePreview->setGreyscaleCurve(poly);
+        ui->toneCurvePreview->setProfileDataAvailable(true);
+        ui->toneCurvePreview->setToolTip(i18n("Current Maximum White: %1", QString::number(white)));
+        ui->toneCurvePreview->update();
+    }
 
     config->setProperty(GAMUT_MAP_ENABLED, ui->chkGamutMap->isChecked());
     if (ui->targetGamut->currentColorSpace()) {

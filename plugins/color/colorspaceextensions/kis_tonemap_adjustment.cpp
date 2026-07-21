@@ -114,6 +114,101 @@ private:
 
 };
 
+template <class LuminanceModel>
+class KisPiecewiseFilmicToneMapAdjustment: public KoColorTransformation
+{
+public:
+    KisPiecewiseFilmicToneMapAdjustment(const KoColorSpace *sourceSpace): m_sourceSpace(sourceSpace) {}
+
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
+    {
+        if (!m_sourceSpace) {
+            qWarning() << "no source space!";
+            return;
+        }
+
+        KoGamutMappingUtils::PiecewiseFilmicCurve curve =
+            KoGamutMappingUtils::PiecewiseFilmicCurve::fromUserParams(m_toeStrength, m_toeLength, m_shoulderStrength, m_shoulderLength, m_shoulderAngle);
+
+        while (nPixels > 0) {
+            QVector<float> originalChannels(m_sourceSpace->channelCount());
+            quint8* tmpOriginal = new quint8(m_sourceSpace->pixelSize());
+            m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
+
+            float Y = LuminanceModel::luminance(originalChannels);
+            Y = curve.evalCurve(Y);
+            originalChannels = LuminanceModel::setLuminance(originalChannels, Y);
+
+            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal, originalChannels);
+            memcpy(dstU8, tmpOriginal, m_sourceSpace->pixelSize());
+
+            --nPixels;
+            srcU8 += m_sourceSpace->pixelSize();
+            dstU8 += m_sourceSpace->pixelSize();
+        }
+    }
+
+    QList<QString> parameters() const override
+    {
+        QList<QString> list;
+        list << "toeStrength";
+        list << "toeLength";
+        list << "shoulderStrength";
+        list << "shoulderLength";
+        list << "shoulderAngle";
+        return list;
+    }
+
+    int parameterId(const QString& name) const override
+    {
+        if (name == "toeStrength") {
+            return 0;
+        } else if (name == "toeLength") {
+            return 1;
+        } else if (name == "shoulderStrength") {
+            return 2;
+        } else if (name == "shoulderLength") {
+            return 3;
+        } else if (name == "shoulderAngle") {
+            return 4;
+        }
+        return -1;
+    }
+
+    void setParameter(int id, const QVariant& parameter) override
+    {
+        switch(id)
+        {
+        case 0:
+            m_toeStrength = parameter.toFloat();
+            break;
+        case 1:
+            m_toeLength = parameter.toFloat();
+            break;
+        case 2:
+            m_shoulderStrength = parameter.toFloat();
+            break;
+        case 3:
+            m_shoulderLength = parameter.toFloat();
+            break;
+        case 4:
+            m_shoulderAngle = parameter.toFloat();
+            break;
+        default:
+            ;
+        }
+    }
+
+private:
+    const KoColorSpace *m_sourceSpace;
+    float m_toeStrength{0.5};
+    float m_toeLength{0.5};
+    float m_shoulderStrength{2.0};
+    float m_shoulderLength{0.5};
+    float m_shoulderAngle{1.0};
+
+};
+
 KisToneMapAdjustmentFactory::KisToneMapAdjustmentFactory()
     : KoColorTransformationFactory("tonemap_adjustment")
 {
@@ -134,9 +229,17 @@ KoColorTransformation *KisToneMapAdjustmentFactory::createTransformation(const K
     KoColorTransformation * adj;
 
     if (colorSpace->colorModelId() == XYZAColorModelID) {
-        adj = new KisReinhardToneMapAdjustment<XYZLuminanceModel>(colorSpace);
+        if (parameters["CurveType"].toInt() == KoGamutMappingUtils::Reinhard) {
+            adj = new KisReinhardToneMapAdjustment<XYZLuminanceModel>(colorSpace);
+        } else {
+            adj = new KisPiecewiseFilmicToneMapAdjustment<XYZLuminanceModel>(colorSpace);
+        }
     } else if (colorSpace->colorModelId() == LABAColorModelID) {
-        adj = new KisReinhardToneMapAdjustment<LABLuminanceModel>(colorSpace);
+        if (parameters["CurveType"].toInt() == KoGamutMappingUtils::Reinhard) {
+            adj = new KisReinhardToneMapAdjustment<LABLuminanceModel>(colorSpace);
+        } else {
+            adj = new KisPiecewiseFilmicToneMapAdjustment<LABLuminanceModel>(colorSpace);
+        }
     } else {
         dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisGamutMapClipAdjustmentFactory::createTransformation";
         return nullptr;

@@ -135,10 +135,11 @@ void KisToneCurveWidget::drawGrid()
         QTextStream(&s) << y;
         biasedLine(xstart, d->pxrows - grids(1), xstart,   d->pxrows - grids(4));
         biasedText(xstart - grids(11), d->pxrows + grids(15), s);
- 
-        QTextStream(&s) << 10 - y;
+
+        QString s2;
+        QTextStream(&s2) << (10 - y);
         biasedLine(0, ystart, grids(3), ystart);
-        biasedText(grids(-25), ystart + grids(5), s);
+        biasedText(grids(-25), ystart + grids(5), s2);
     }
     
     d->painter.setPen(qRgb(128, 128, 128));

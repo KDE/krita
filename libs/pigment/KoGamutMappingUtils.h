@@ -6,7 +6,9 @@
 #ifndef KOGAMUTMAPPINGUTILS_H
 #define KOGAMUTMAPPINGUTILS_H
 
+#include <QPointF>
 #include <QVector>
+
 #include "kritapigment_export.h"
 
 namespace KRITAPIGMENT_EXPORT KoGamutMappingUtils {
@@ -38,6 +40,11 @@ enum MappingModel {
     OkLAB
 };
 
+enum CurveType {
+    Reinhard,
+    PiecewiseFilmic
+};
+
 /**
  * @brief reinhardToneMapping
  * Implements 'extended' reinhard tonemapping.
@@ -46,6 +53,41 @@ enum MappingModel {
  * @return tone mapped value
  */
 float reinhardToneMapping(const float linearY, const float maxY);
+
+/**
+ * @brief The piecewiseFilmicCurve class
+ * Implement's Hable's piecewise filmic curve.
+ * https://filmicworlds.com/blog/filmic-tonemapping-with-piecewise-power-curves/
+ * License: CC-0
+ */
+struct PiecewiseFilmicCurve {
+
+    QPointF p0;
+    QPointF p1;
+
+    float inverseMaxWhite {1.0};
+
+    struct Segment {
+        float lnA{0.0f};
+        float b{0.0f};
+
+        float offsetX{0.0f};
+        float offsetY{0.0f};
+        float scaleX{1.0f};
+        float scaleY{1.0f};
+
+        float evalSegment(const float x);
+    };
+
+    QVector<Segment> segments;
+
+    PiecewiseFilmicCurve(float maxWhite, QPointF point0, QPointF point1, QPointF overshootPoint);
+    static PiecewiseFilmicCurve fromUserParams(float toeStrength = 0.5, float toeLength = 0.5, float shoulderStrength = 2.0, float shoulderLength = 0.5, float shoulderAngle = 1.0);
+
+    float evalCurve(const float x);
+};
+
+
 
 };
 

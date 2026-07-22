@@ -1,0 +1,51 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<g clip-path="url(#clip0_131_53)">
+<path d="M1 14V15H2V16H0V14H1Z" fill="#D2D2D2"/>
+<path d="M7 15V16H4V15H7Z" fill="#D2D2D2"/>
+<path d="M16 14V16H14V15H15V14H16Z" fill="#D2D2D2"/>
+<path d="M1 4V7H0V4H1Z" fill="#D2D2D2"/>
+<path d="M2 0V1H1V2H0V0H2Z" fill="#D2D2D2"/>
+<path d="M16 12H15V9H16V12Z" fill="#D2D2D2"/>
+<path d="M7 0V1H4V0H7Z" fill="#D2D2D2"/>
+<path d="M1 9V12H0V9H1Z" fill="#D2D2D2"/>
+<path d="M12 15V16H9V15H12Z" fill="#D2D2D2"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M10.0273 1.02305C11.3951 -0.342375 13.6108 -0.340561 14.9766 1.02696C16.3422 2.39473 16.3402 4.61037 14.9727 5.97618L11 9.99961H6.70703L4.85352 11.8531L4.14648 11.1461L6 9.29258V4.97618L10.0273 1.02305ZM9.70703 6.99961L7.70703 8.99961H10.5811L12.5566 6.99961H9.70703ZM14.2686 1.73301C13.293 0.756613 11.7103 0.755023 10.7334 1.73008L10.7275 1.73692L7 5.39512V8.29258L12.1465 3.1461C12.3417 2.95109 12.6583 2.95109 12.8535 3.1461C13.0487 3.3413 13.0486 3.65785 12.8535 3.85313L10.707 5.99961H13.5449L14.2617 5.27403L14.2666 5.26817C15.2431 4.29253 15.244 2.70986 14.2686 1.73301Z" fill="#D2D2D2"/>
+</g>
+<defs>
+<clipPath id="clip0_131_53">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

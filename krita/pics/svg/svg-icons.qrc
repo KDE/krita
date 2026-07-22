@@ -4,6 +4,18 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>light_feather_select.svg</file> 
+        <file>light_grow_selection.svg</file> 
+        <file>light_shrink_selection.svg</file> 
+        <file>light_border_selection.svg</file> 
+        <file>light_show_selection.svg</file> 
+        <file>light_edit_selection.svg</file> 
+        <file>dark_feather_select.svg</file> 
+        <file>dark_grow_selection.svg</file> 
+        <file>dark_shrink_selection.svg</file> 
+        <file>dark_border_selection.svg</file> 
+        <file>dark_show_selection.svg</file> 
+        <file>dark_edit_selection.svg</file>
         <file>light_quick_group.svg</file>
         <file>dark_quick_group.svg</file>
         <file>light_quick_ungroup.svg</file>

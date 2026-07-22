@@ -2970,7 +2970,7 @@
       <statusTip/>
     </Action>
     <Action name="select_locked_layers">
-      <icon/>
+      <icon></icon>
       <text>Locked Layers</text>
       <whatsThis/>
       <toolTip>Select all locked layers</toolTip>
@@ -2994,7 +2994,7 @@
       <statusTip/>
     </Action>
     <Action name="select_unlocked_layers">
-      <icon/>
+      <icon></icon>
       <text>Unlocked Layers</text>
       <whatsThis/>
       <toolTip>Select all unlocked layers</toolTip>

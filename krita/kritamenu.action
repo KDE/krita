@@ -1437,7 +1437,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_selection">
-      <icon></icon>
+      <icon>edit_selection</icon>
       <text>Edit Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Edit Selection</toolTip>
@@ -1461,7 +1461,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="featherselection">
-      <icon></icon>
+      <icon>feather_select</icon>
       <text>&amp;Feather Selection...</text>
       <whatsThis></whatsThis>
       <toolTip>Feather Selection</toolTip>
@@ -1473,7 +1473,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="toggle_display_selection">
-      <icon></icon>
+      <icon>show_selection</icon>
       <text>Dis&amp;play Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Display Selection</toolTip>
@@ -1557,7 +1557,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="growselection">
-      <icon></icon>
+      <icon>grow_selection</icon>
       <text>&amp;Grow Selection...</text>
       <whatsThis></whatsThis>
       <toolTip>Grow Selection</toolTip>
@@ -1569,7 +1569,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="shrinkselection">
-      <icon></icon>
+      <icon>shrink_selection</icon>
       <text>S&amp;hrink Selection...</text>
       <whatsThis></whatsThis>
       <toolTip>Shrink Selection</toolTip>
@@ -1581,7 +1581,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="borderselection">
-      <icon></icon>
+      <icon>border_selection</icon>
       <text>&amp;Border Selection...</text>
       <whatsThis></whatsThis>
       <toolTip>Border Selection</toolTip>

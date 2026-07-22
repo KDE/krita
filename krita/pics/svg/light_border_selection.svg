@@ -1,0 +1,72 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<g clip-path="url(#clip0_212_46)">
+<path d="M16 14V16H14V15H15V14H16Z" fill="#D2D2D2"/>
+<path d="M2 0V1H1V2H0V0H2Z" fill="#D2D2D2"/>
+<path d="M16 12H15V9H16V12Z" fill="#D2D2D2"/>
+<path d="M7 0V1H4V0H7Z" fill="#D2D2D2"/>
+<path d="M2 16H0V14H1V15H2V16Z" fill="#D2D2D2"/>
+<path d="M16 2H15V1H14V0H16V2Z" fill="#D2D2D2"/>
+<path d="M4 16V15H7V16H4Z" fill="#D2D2D2"/>
+<path d="M16 7H15V4H16V7Z" fill="#D2D2D2"/>
+<path d="M0 2V0H2V1H1V2H0Z" fill="#D2D2D2"/>
+<path d="M14 16V15H15V14H16V16H14Z" fill="#D2D2D2"/>
+<path d="M0 4H1V7H0V4Z" fill="#D2D2D2"/>
+<path d="M9 16V15H12V16H9Z" fill="#D2D2D2"/>
+<path d="M2 16H0V14H1V15H2V16Z" fill="#D2D2D2"/>
+<path d="M16 2H15V1H14V0H16V2Z" fill="#D2D2D2"/>
+<path d="M16 7H15V4H16V7Z" fill="#D2D2D2"/>
+<path d="M0 2V0H2V1H1V2H0Z" fill="#D2D2D2"/>
+<path d="M14 16V15H15V14H16V16H14Z" fill="#D2D2D2"/>
+<path d="M0 4H1V7H0V4Z" fill="#D2D2D2"/>
+<path d="M9 16V15H12V16H9Z" fill="#D2D2D2"/>
+<path d="M14 0H16V2H15V1H14V0Z" fill="#D2D2D2"/>
+<path d="M0 14H1V15H2V16H0V14Z" fill="#D2D2D2"/>
+<path d="M12 0V1H9V0H12Z" fill="#D2D2D2"/>
+<path d="M0 9H1V12H0V9Z" fill="#D2D2D2"/>
+<path d="M4 11V12H5V13H3V11H4Z" fill="#D2D2D2"/>
+<path d="M13 11V13H11V12H12V11H13Z" fill="#D2D2D2"/>
+<path d="M5 3V4H4V5H3V3H5Z" fill="#D2D2D2"/>
+<path d="M3 7V9H4V7H3Z" fill="#D2D2D2"/>
+<path d="M12 7V9H13V7H12Z" fill="#D2D2D2"/>
+<path d="M9 12H7V13H9V12Z" fill="#D2D2D2"/>
+<path d="M9 3L7 3V4H9V3Z" fill="#D2D2D2"/>
+<path d="M11 3V4H12V5H13V3H11Z" fill="#D2D2D2"/>
+</g>
+<defs>
+<clipPath id="clip0_212_46">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

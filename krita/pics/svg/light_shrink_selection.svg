@@ -1,0 +1,53 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<g clip-path="url(#clip0_672_208)">
+<path d="M1 14V15H2V16H0V14H1Z" fill="#D2D2D2"/>
+<path d="M11 14V16H9V15H10V14H11Z" fill="#D2D2D2"/>
+<path d="M2 5V6H1V7H0V5H2Z" fill="#D2D2D2"/>
+<path d="M0 9V12H1V9H0Z" fill="#D2D2D2"/>
+<path d="M10 9V12H11V9H10Z" fill="#D2D2D2"/>
+<path d="M7 15H4V16H7V15Z" fill="#D2D2D2"/>
+<path d="M7 5H4V6H7V5Z" fill="#D2D2D2"/>
+<path d="M16 14V16H14V15H15V14H16Z" fill="#D2D2D2"/>
+<path d="M2 0V1H1V2H0V0H2Z" fill="#D2D2D2"/>
+<path d="M16 12H15V9H16V12Z" fill="#D2D2D2"/>
+<path d="M7 0V1H4V0H7Z" fill="#D2D2D2"/>
+<path d="M8.99997 7L15 7L13 5L16 2L14 -8.37826e-07L11 3L8.99997 1L8.99997 7Z" fill="#D2D2D2"/>
+</g>
+<defs>
+<clipPath id="clip0_672_208">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>

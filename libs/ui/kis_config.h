@@ -374,6 +374,14 @@ public:
     SessionOnStartup sessionOnStartup(bool defaultValue = false) const;
     void setSessionOnStartup(SessionOnStartup value);
 
+    enum IconsInMenu {
+        IIM_Default,
+        IIM_Yes,
+        IIM_No
+    };
+    IconsInMenu iconsInMenu(bool defaultValue = false) const;
+    void setIconsInMenu(IconsInMenu value);
+
     bool saveSessionOnQuit(bool defaultValue) const;
     void setSaveSessionOnQuit(bool value);
 

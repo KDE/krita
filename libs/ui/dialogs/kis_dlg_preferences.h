@@ -75,6 +75,7 @@ public:
     bool colorSamplerPreviewCircleExtraCirclesEnabled() const;
 
     KisConfig::SessionOnStartup sessionOnStartup() const;
+    KisConfig::IconsInMenu iconsInMenu() const;
     bool saveSessionOnQuit() const;
 
     bool showRootLayer();

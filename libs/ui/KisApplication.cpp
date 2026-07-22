@@ -486,6 +486,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     KisConfig cfg(false);
 
+    auto iconsInMenuMode = cfg.iconsInMenu();
+    if (iconsInMenuMode == KisConfig::IIM_Yes) {
+        QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
+    } else if (iconsInMenuMode == KisConfig::IIM_No) {
+        QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, true);
+    }
+
 #if defined(Q_OS_WIN)
 #ifdef ENV32BIT
 

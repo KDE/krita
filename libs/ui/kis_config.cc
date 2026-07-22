@@ -1479,6 +1479,16 @@ void KisConfig::setSessionOnStartup(SessionOnStartup value)
     m_cfg.writeEntry("sessionOnStartup", (int)value);
 }
 
+KisConfig::IconsInMenu KisConfig::iconsInMenu(bool defaultValue) const
+{
+    int value = defaultValue ? IIM_Default : m_cfg.readEntry("iconsInMenu", (int)IIM_Default);
+    return (KisConfig::IconsInMenu)value;
+}
+void KisConfig::setIconsInMenu(IconsInMenu value)
+{
+    m_cfg.writeEntry("iconsInMenu", (int)value);
+}
+
 bool KisConfig::saveSessionOnQuit(bool defaultValue) const
 {
     return defaultValue ? false : m_cfg.readEntry("saveSessionOnQuit", false);

@@ -558,6 +558,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     chkIgnoreHighFunctionKeys->setVisible(false);
 #endif
 
+    cmbIconsInMenu->addItem(i18n("Default"));
+    cmbIconsInMenu->addItem(i18n("Yes"));
+    cmbIconsInMenu->addItem(i18n("No"));
+    cmbIconsInMenu->setCurrentIndex(cfg.iconsInMenu());
+
     //
     // Resources
     //
@@ -970,6 +975,11 @@ bool GeneralTab::colorSamplerPreviewCircleExtraCirclesEnabled() const
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
 {
     return (KisConfig::SessionOnStartup)cmbStartupSession->currentIndex();
+}
+
+KisConfig::IconsInMenu GeneralTab::iconsInMenu() const
+{
+    return (KisConfig::IconsInMenu)cmbIconsInMenu->currentIndex();
 }
 
 bool GeneralTab::saveSessionOnQuit() const
@@ -3060,6 +3070,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setForceAlwaysFullSizedEraserOutline(!m_general->m_changeEraserBrushOutline->isChecked());
         cfg.setSessionOnStartup(m_general->sessionOnStartup());
         cfg.setSaveSessionOnQuit(m_general->saveSessionOnQuit());
+        cfg.setIconsInMenu(m_general->iconsInMenu());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
         group.writeEntry("DontUseNativeFileDialog", !m_general->m_chkNativeFileDialog->isChecked());

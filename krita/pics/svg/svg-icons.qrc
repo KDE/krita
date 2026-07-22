@@ -78,6 +78,12 @@
         <file>dark_convert_raster_selection.svg</file>
         <file>light_convert_vector_selection.svg</file>
         <file>dark_convert_vector_selection.svg</file>
+        <file>light_text-inline-wrapped.svg</file>
+        <file>light_text-pre-positioned.svg</file>
+        <file>light_text-preformatted.svg</file>
+        <file>dark_text-inline-wrapped.svg</file>
+        <file>dark_text-pre-positioned.svg</file>
+        <file>dark_text-preformatted.svg</file>
         <file>dark_reset_colour.svg</file>
         <file>light_reset_colour.svg</file>
         <file>dark_dual_colour.svg</file>

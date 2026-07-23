@@ -60,10 +60,10 @@ public:
      */
     void setChannelValues(const QVector4D &values);
 protected:
-    void leaveEvent(QEvent *event) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager* viewManager) override;
+    bool eventFilter(QObject* obj, QEvent *ev) override;
 
     void disconnectFromCanvas();
     void updateLayout();

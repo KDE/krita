@@ -61,6 +61,7 @@ private Q_SLOTS:
     void setModified(bool modified);
     void dialogButtonClicked(QAbstractButton *button);
 
+    void tabChanged(int index);
 Q_SIGNALS:
     void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
     void textEditorClosed();

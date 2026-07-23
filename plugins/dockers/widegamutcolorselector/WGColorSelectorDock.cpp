@@ -49,6 +49,8 @@ WGColorSelectorDock::WGColorSelectorDock()
     setWindowTitle(i18n("Wide Gamut Color Selector"));
 
     QWidget *mainWidget = new QWidget();
+    mainWidget->installEventFilter(this);
+
     m_mainWidgetLayout = new QVBoxLayout(mainWidget);
     m_verticalElementsLayout = new QHBoxLayout();
     m_selectorAreaLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -156,12 +158,6 @@ void WGColorSelectorDock::setChannelValues(const QVector4D &values)
 
     m_canvas->resourceManager()->setForegroundColor(m_colorModelFG->currentColor());
     m_pendingFgUpdate = false;
-}
-
-void WGColorSelectorDock::leaveEvent(QEvent *event)
-{
-    Q_UNUSED(event)
-    m_colorTooltip->hide();
 }
 
 KisUniqueColorSet *WGColorSelectorDock::colorHistoryModel() const
@@ -512,6 +508,18 @@ void WGColorSelectorDock::slotOpenSettings()
 void WGColorSelectorDock::slotShowGamutMaskToolbar(bool show)
 {
     m_gamutToolbar->setVisible(show);
+}
+
+bool WGColorSelectorDock::eventFilter(QObject *obj, QEvent *e)
+{
+    Q_UNUSED(obj);
+
+    // Get the leave event of the inner widget, for when the docker is borrowed and doesn't properly handle leave events
+    if (e->type() == QEvent::Leave) {
+        m_colorTooltip->hide();
+    }
+
+    return false;
 }
 
 namespace WGConfig {

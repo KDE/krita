@@ -43,11 +43,8 @@
      <property name="checkable">
       <bool>true</bool>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QComboBox" name="cmbToneCurveType"/>
-      </item>
-      <item>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="1" column="0">
        <widget class="QStackedWidget" name="stkToneMap">
         <property name="currentIndex">
          <number>0</number>
@@ -86,6 +83,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QDoubleSpinBox" name="spnToeStrength">
+              <property name="toolTip">
+               <string>The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a sharp angle.</string>
+              </property>
               <property name="decimals">
                <number>4</number>
               </property>
@@ -93,7 +93,7 @@
                <double>1.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
@@ -106,6 +106,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="spnToeLength">
+              <property name="toolTip">
+               <string>How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is half the curve.</string>
+              </property>
               <property name="decimals">
                <number>4</number>
               </property>
@@ -113,7 +116,7 @@
                <double>1.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
@@ -126,11 +129,14 @@
             </item>
             <item row="2" column="1">
              <widget class="QDoubleSpinBox" name="spnShoulderStrength">
+              <property name="toolTip">
+               <string>Curvature of the shoulder. 1.0 is linear.</string>
+              </property>
               <property name="decimals">
                <number>4</number>
               </property>
               <property name="maximum">
-               <double>99.000000000000000</double>
+               <double>1.000000000000000</double>
               </property>
               <property name="singleStep">
                <double>0.010000000000000</double>
@@ -146,11 +152,17 @@
             </item>
             <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="spnShoulderLength">
+              <property name="toolTip">
+               <string>Determines the maximum white in stops.</string>
+              </property>
+              <property name="suffix">
+               <string> stops</string>
+              </property>
               <property name="maximum">
-               <double>1.000000000000000</double>
+               <double>999.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.010000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -163,6 +175,9 @@
             </item>
             <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="spnShoulderAngle">
+              <property name="toolTip">
+               <string>Angle of the shoulder, determines the smoothness of the shift to full white.</string>
+              </property>
               <property name="decimals">
                <number>4</number>
               </property>
@@ -176,12 +191,15 @@
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="KisToneCurveWidget" name="toneCurvePreview" native="true"/>
-          </item>
          </layout>
         </widget>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KisToneCurveWidget" name="toneCurvePreview" native="true"/>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QComboBox" name="cmbToneCurveType"/>
       </item>
      </layout>
     </widget>

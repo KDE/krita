@@ -111,8 +111,8 @@ KisFilterConfigurationSP KisToneGamutMapFilter::defaultConfiguration(KisResource
 
     config->setProperty(TONE_PIECE_WISE_TOE_STRENGTH, 0.5);
     config->setProperty(TONE_PIECE_WISE_TOE_LENGTH, 0.5);
-    config->setProperty(TONE_PIECE_WISE_SHOULDER_STRENGTH, 2.0);
-    config->setProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, 0.5);
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_STRENGTH, 0.5);
+    config->setProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, 2.0);
     config->setProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, 1.0);
 
     config->setProperty(GAMUT_MAP_ENABLED, true);
@@ -233,7 +233,7 @@ KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
     config->setProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, ui->spnShoulderLength->value());
     config->setProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, ui->spnShoulderAngle->value());
 
-    {
+    if (ui->cmbToneCurveType->currentData() == KoGamutMappingUtils::PiecewiseFilmic) {
         KoGamutMappingUtils::PiecewiseFilmicCurve curve
             = KoGamutMappingUtils::PiecewiseFilmicCurve::fromUserParams(ui->spnToeStrength->value(), ui->spnToeLength->value(), ui->spnShoulderStrength->value(), ui->spnShoulderLength->value(), ui->spnShoulderAngle->value());
         QPolygonF poly;
@@ -241,6 +241,18 @@ KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
         for (int x = 0; x < 20; x++) {
             const float val = (float(x)/20.0)*white;
             const float y = curve.evalCurve(val);
+            poly.append(QPointF(val/white, y));
+        }
+        ui->toneCurvePreview->setGreyscaleCurve(poly);
+        ui->toneCurvePreview->setProfileDataAvailable(true);
+        ui->toneCurvePreview->setToolTip(i18n("Current Maximum White: %1", QString::number(white)));
+        ui->toneCurvePreview->update();
+    } else {
+        QPolygonF poly;
+        const float white = ui->spnMaxWhite->value();
+        for (int x = 0; x < 20; x++) {
+            const float val = (float(x)/20.0)*white;
+            const float y = KoGamutMappingUtils::reinhardToneMapping(val, white);
             poly.append(QPointF(val/white, y));
         }
         ui->toneCurvePreview->setGreyscaleCurve(poly);

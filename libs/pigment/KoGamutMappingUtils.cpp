@@ -175,7 +175,7 @@ KoGamutMappingUtils::PiecewiseFilmicCurve::PiecewiseFilmicCurve(float maxWhite, 
     const float shoulderM = EvalDerivativeLinearGamma(m, b, g, p1.x());
 
     Segment toe;
-    SolveAB(toe.lnA, toe.b, toe.offsetX, toe.offsetY, toeM);
+    SolveAB(toe.lnA, toe.b, p0.x(), p0.y(), toeM);
     segments[0] = toe;
 
     Segment shoulder;
@@ -233,11 +233,11 @@ KoGamutMappingUtils::PiecewiseFilmicCurve KoGamutMappingUtils::PiecewiseFilmicCu
     const float remainingY = 1.0f - y0;
     const float initialW = x0 + remainingY;
 
-    const float y1_offset = (1.0f - shoulderLength) * remainingY;
+    const float y1_offset = (1.0f - shoulderStrength) * remainingY;
     const float x1 = x0 + y1_offset;
     const float y1 = y0 + y1_offset;
 
-    const float extraW = exp2f(shoulderStrength)-1.0f;
+    const float extraW = exp2f(shoulderLength)-1.0f;
     const float W = initialW + extraW;
 
     QPointF point0(powf(x0, uiGamma), powf(y0, uiGamma));

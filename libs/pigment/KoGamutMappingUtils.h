@@ -11,14 +11,13 @@
 
 #include "kritapigment_export.h"
 
-namespace KRITAPIGMENT_EXPORT KoGamutMappingUtils {
-
+namespace KoGamutMappingUtils {
 /**
  * @brief deltaE76
  * calculates the difference between two colors, represented as normalized channels.
  * @return The difference. Given that the input is scaled to [0 1], the output will also be [0 1]
  */
-float deltaE76(const QVector<float> &a, const QVector<float> &b);
+float KRITAPIGMENT_EXPORT deltaE76(const QVector<float> &a, const QVector<float> &b);
 
 /**
  * @brief deltaE2000
@@ -26,7 +25,7 @@ float deltaE76(const QVector<float> &a, const QVector<float> &b);
  * issues in the LAB color mode.
  * @return The difference. Given that the input is scaled to [0 1], the output will also be [0 1]
  */
-float deltaE2000(const QVector<float> &a, const QVector<float> &b);
+float KRITAPIGMENT_EXPORT deltaE2000(const QVector<float> &a, const QVector<float> &b);
 
 /**
  * @brief The MappingModel enum
@@ -52,7 +51,7 @@ enum CurveType {
  * @param maxWhite -- maximum white to scale down, also linear
  * @return tone mapped value
  */
-float reinhardToneMapping(const float linearY, const float maxY);
+float KRITAPIGMENT_EXPORT reinhardToneMapping(const float linearY, const float maxY);
 
 /**
  * @brief The piecewiseFilmicCurve class
@@ -60,7 +59,7 @@ float reinhardToneMapping(const float linearY, const float maxY);
  * https://filmicworlds.com/blog/filmic-tonemapping-with-piecewise-power-curves/
  * License: CC-0
  */
-struct PiecewiseFilmicCurve {
+struct KRITAPIGMENT_EXPORT PiecewiseFilmicCurve {
 
     QPointF p0;
     QPointF p1;

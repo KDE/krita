@@ -45,10 +45,11 @@ WGColorSelectorDock::WGColorSelectorDock()
     , m_actionManager(new WGActionManager(this))
     , m_colorTooltip(new WGColorPreviewToolTip(this))
     , m_colorModelBG(new KisVisualColorModel)
+    , m_mainWidget(new QWidget())
 {
     setWindowTitle(i18n("Wide Gamut Color Selector"));
 
-    QWidget *mainWidget = new QWidget();
+    QWidget *mainWidget = m_mainWidget;
     mainWidget->installEventFilter(this);
 
     m_mainWidgetLayout = new QVBoxLayout(mainWidget);
@@ -444,7 +445,7 @@ void WGColorSelectorDock::slotColorInteraction(bool active)
         if (sender() == m_shadeSelector) {
             m_colorTooltip->show(m_shadeSelector);
         } else {
-            m_colorTooltip->show(this);
+            m_colorTooltip->show(m_mainWidget);
         }
     }
 }

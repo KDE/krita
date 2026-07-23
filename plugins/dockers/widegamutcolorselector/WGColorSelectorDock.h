@@ -110,6 +110,8 @@ private:
     ColorSpaceSource m_CSSource {LayerColorSpace};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
+
+    QWidget* m_mainWidget;
 };
 
 namespace WGConfig {

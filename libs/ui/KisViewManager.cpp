@@ -776,6 +776,7 @@ void KisViewManager::createActions()
 
     tAction = actionManager()->createAction("view_show_canvas_only");
     tAction->setChecked(false);
+    tAction->setAutoRepeat(false);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(switchCanvasOnly(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas

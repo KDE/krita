@@ -472,6 +472,11 @@ void KisPaintingAssistantsDecoration::uncache()
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->uncache();
     }
+
+    // Redraw canvas decorations in case the change was made off canvas
+    if (d->m_canvas) {
+        d->m_canvas->updateCanvasDecorations();
+    }
 }
 void KisPaintingAssistantsDecoration::toggleAssistantVisible()
 {

@@ -65,7 +65,7 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         QImage image = previewData->canvas->displayColorConverter()->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
 
-        Q_EMIT sigCanvasZoomPreviewUpdated(image, QRect(QPoint(0,0), previewData->canvasPixelRect.size()));
+        Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
     }
 }
 

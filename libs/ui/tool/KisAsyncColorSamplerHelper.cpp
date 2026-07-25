@@ -731,14 +731,14 @@ QImage KisAsyncColorSamplerHelper::fetchCanvasPreview(QRect &canvasPixelRect) {
     }
 
     // If not already have a job fetching canvas image, then do it
-    if (!m_d->canvasPreviewFetchingStarted) {
+    if (!m_d->canvasPreviewFetchingStarted && m_d->cacheCanvasPreviewRect != canvasPixelRect) {
         m_d->canvasPreviewFetchingStarted = true;
         m_d->strokesFacade()->addJob(m_d->strokeId,
             new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(m_d->canvas, canvasPixelRect));
     }
 
     // Render the last frame if available
-    if (!m_d->cacheCanvasPreviewRect.isNull()) canvasPixelRect = m_d->cacheCanvasPreviewRect;
+    if (!m_d->cacheCanvasPreviewRect.isNull()) canvasPixelRect = QRect(QPoint(0,0), m_d->cacheCanvasPreviewRect.size());
 
     return m_d->cacheCanvasPreviewImage;
 }

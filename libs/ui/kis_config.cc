@@ -609,7 +609,7 @@ void KisConfig::setColorSamplerZoomPreviewEnabled(bool enabled) {
 }
 
 qreal KisConfig::colorSamplerZoomPreviewScale(bool defaultValue) const {
-    qreal def = 5;
+    qreal def = 10;
     if (!defaultValue) {
         return m_cfg.readEntry("colorSamplerZoomPreviewScale", def);
     }

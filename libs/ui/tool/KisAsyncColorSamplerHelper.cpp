@@ -73,7 +73,7 @@ struct KisAsyncColorSamplerHelper::Private
     QRectF previewDocRect;
 
     bool circleZoomPreviewEnabled {false};
-    qreal circleZoomPreviewScale {5};
+    qreal circleZoomPreviewScale {10};
     KisConfig::ColorSamplerPreviewCirclePosition circlePreviewPosition = KisConfig::ColorSamplerPreviewCirclePosition::Center;
     QPointF sampleDocPoint;
 
@@ -704,7 +704,6 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 void KisAsyncColorSamplerHelper::paintCircleCrosshair(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor)
 {
     QColor crosshairColor = Qt::black;
-    // TODO: Check back with Wolthera about the sRGB param
     qreal luminance = KisPaintingTweaks::luminosityCoarse(currentColor);
     if (luminance < 0.5) crosshairColor = Qt::white;
 

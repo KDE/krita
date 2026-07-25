@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-15 02:37+0000\n"
+"POT-Creation-Date: 2026-07-25 02:38+0000\n"
 "PO-Revision-Date: 2026-07-14 10:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -37193,36 +37193,36 @@ msgstr "Але пробу кольорів усе ще вимкнено."
 msgid "Gamut Warnings turned off."
 msgstr "Попередження щодо гами вимкнено."
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:811
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Активний профіль автора"
 
-#: libs/ui/KisViewManager.cpp:940
+#: libs/ui/KisViewManager.cpp:941
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (копія)"
 
-#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1067 libs/ui/KisViewManager.cpp:1135
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Альтернативних назв більше немає. Спробуйте зберегти вручну з більшим "
 "номером."
 
-#: libs/ui/KisViewManager.cpp:1066
+#: libs/ui/KisViewManager.cpp:1067
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Не вдалося зберегти нарощувальну версію"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1135
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Не вдалося зберегти нарощувальну резервну копію"
 
-#: libs/ui/KisViewManager.cpp:1418
+#: libs/ui/KisViewManager.cpp:1419
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -37231,13 +37231,13 @@ msgstr ""
 "Програму переведено у режим показу лише полотна.\n"
 "Натисніть %1, щоб повернути програму у звичайний режим."
 
-#: libs/ui/KisViewManager.cpp:1488
+#: libs/ui/KisViewManager.cpp:1489
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Відкриття теки ресурсів"
 
-#: libs/ui/KisViewManager.cpp:1492
+#: libs/ui/KisViewManager.cpp:1493
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -37261,19 +37261,19 @@ msgstr ""
 "<p><b>Приватне місце програми</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1507
+#: libs/ui/KisViewManager.cpp:1508
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Відкрити в AppData &користувача"
 
-#: libs/ui/KisViewManager.cpp:1508
+#: libs/ui/KisViewManager.cpp:1509
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Відкрити у &приватному місці програми"
 
-#: libs/ui/KisViewManager.cpp:1656 libs/ui/KisViewManager.cpp:1674
+#: libs/ui/KisViewManager.cpp:1657 libs/ui/KisViewManager.cpp:1675
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

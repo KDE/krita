@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-15 02:37+0000\n"
+"POT-Creation-Date: 2026-07-25 02:38+0000\n"
 "PO-Revision-Date: 2026-07-17 08:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -36381,35 +36381,35 @@ msgstr "მაგრამ ფერების პროგრამული 
 msgid "Gamut Warnings turned off."
 msgstr "ფერთა გამის გაფრთხილებები გამორთულია."
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:811
 #, kde-format
 msgid "Active Author Profile"
 msgstr "აქტიური ავტორის პროფილი"
 
-#: libs/ui/KisViewManager.cpp:940
+#: libs/ui/KisViewManager.cpp:941
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (ასლი)"
 
-#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1067 libs/ui/KisViewManager.cpp:1135
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "ალტერნატიული სახელები ამოიწურა. სცადეთ, ხელით შეინახოთ უფრო დიდი ნომრით"
 
-#: libs/ui/KisViewManager.cpp:1066
+#: libs/ui/KisViewManager.cpp:1067
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "ინკრემენტული ვერსიის შენახვის შეცდომა"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1135
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "ინკრემენტული მარქაფის შენახვის შეცდომა"
 
-#: libs/ui/KisViewManager.cpp:1418
+#: libs/ui/KisViewManager.cpp:1419
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36418,13 +36418,13 @@ msgstr ""
 "გადასვლა მხოლოდ ტილოს რეჟიმში.\n"
 "დასაბრუნებლად დააჭირეთ ღილაკს %1."
 
-#: libs/ui/KisViewManager.cpp:1488
+#: libs/ui/KisViewManager.cpp:1489
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "რესურსების საქაღალდის გახსნა"
 
-#: libs/ui/KisViewManager.cpp:1492
+#: libs/ui/KisViewManager.cpp:1493
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36439,19 +36439,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1507
+#: libs/ui/KisViewManager.cpp:1508
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "გახსნა მომხმარებლის AppData-&ში"
 
-#: libs/ui/KisViewManager.cpp:1508
+#: libs/ui/KisViewManager.cpp:1509
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "გახსნა ა&პის საკუთარ მდებარეობაში"
 
-#: libs/ui/KisViewManager.cpp:1656 libs/ui/KisViewManager.cpp:1674
+#: libs/ui/KisViewManager.cpp:1657 libs/ui/KisViewManager.cpp:1675
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

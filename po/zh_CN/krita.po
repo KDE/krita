@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-15 02:37+0000\n"
+"POT-Creation-Date: 2026-07-25 02:38+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -36315,34 +36315,34 @@ msgstr "但色彩校样尚未启用。"
 msgid "Gamut Warnings turned off."
 msgstr "色域超出警告色已关闭。"
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:811
 #, kde-format
 msgid "Active Author Profile"
 msgstr "作者档案切换"
 
-#: libs/ui/KisViewManager.cpp:940
+#: libs/ui/KisViewManager.cpp:941
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (副本)"
 
-#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1067 libs/ui/KisViewManager.cpp:1135
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "备用名称数字已用尽，请手动输入更大的数字保存文件"
 
-#: libs/ui/KisViewManager.cpp:1066
+#: libs/ui/KisViewManager.cpp:1067
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "无法保存增量版本"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1135
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "无法保存增量备份"
 
-#: libs/ui/KisViewManager.cpp:1418
+#: libs/ui/KisViewManager.cpp:1419
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36351,13 +36351,13 @@ msgstr ""
 "切换为隐藏面板模式\n"
 "按 %1 返回"
 
-#: libs/ui/KisViewManager.cpp:1488
+#: libs/ui/KisViewManager.cpp:1489
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "打开资源文件夹"
 
-#: libs/ui/KisViewManager.cpp:1492
+#: libs/ui/KisViewManager.cpp:1493
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36380,19 +36380,19 @@ msgstr ""
 "<p><b>私人应用目录</b>：<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1507
+#: libs/ui/KisViewManager.cpp:1508
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "打开用户 AppData 目录(&U)"
 
-#: libs/ui/KisViewManager.cpp:1508
+#: libs/ui/KisViewManager.cpp:1509
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "打开私人应用目录(&P)"
 
-#: libs/ui/KisViewManager.cpp:1656 libs/ui/KisViewManager.cpp:1674
+#: libs/ui/KisViewManager.cpp:1657 libs/ui/KisViewManager.cpp:1675
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

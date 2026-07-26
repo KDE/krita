@@ -2562,7 +2562,7 @@ void KisMainWindow::slotUpdateWidgetStyle()
                 d->themeManager->setCurrentTheme("System");
             }
 #else
-            if (currentStyle || currentStyle == "windowsvista") {
+            if (currentStyle == "macos" || currentStyle == "windowsvista") {
                 d->themeManager->setCurrentTheme("System");
             }
 #endif

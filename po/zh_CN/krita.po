@@ -69204,11 +69204,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "Convert to &Animated Layer"
-#~ msgstr "转换为动画图层(&A)"
-
-#~ msgctxt "action"
-#~ msgid "Convert layer into animation frames"
-#~ msgstr "将图层转换为动画帧"

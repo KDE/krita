@@ -2118,11 +2118,18 @@ void KisImage::setColorVolumeInformation(const std::optional<KisColorVolumeInfor
 
 std::optional<double> KisImage::diffuseWhiteLightLevel() const
 {
+    if (m_d->colorSpace->profile()->hdrReferenceWhite()) {
+        return m_d->colorSpace->profile()->hdrReferenceWhite();
+    }
     return m_d->diffuseWhiteLightLevel;
 }
 
 void KisImage::setDiffuseWhiteLightLevel(const std::optional<double> cdm2)
 {
+    if (m_d->colorSpace->profile()->hdrReferenceWhite()) {
+        qWarning() << "Cannot set diffuse white on image: profile provides the diffuse white for this image.";
+        return;
+    }
     if (!m_d->diffuseWhiteLightLevel ||
         !qFuzzyCompare(*m_d->diffuseWhiteLightLevel, *cdm2)) {
         m_d->diffuseWhiteLightLevel = cdm2;

@@ -16,7 +16,7 @@ KisChangeImageHdrDiffuseWhiteCommand::KisChangeImageHdrDiffuseWhiteCommand(KisIm
 {
     KisImageSP img = m_image.toStrongRef();
     if (img) {
-        m_diffuseWhite = img->diffuseWhiteLightLevel();
+        m_oldDiffuseWhite = img->diffuseWhiteLightLevel();
     }
 }
 

@@ -130,8 +130,11 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
     connect(d->image, &KisImage::sigColorVolumeInformationChanged, this, &KisDlgImageProperties::updateHDRColorVolume);
 
+    m_page->cmbDiffuseWhite->addItem(i18n("80 cd/m²"), 80.0);
+    m_page->cmbDiffuseWhite->addItem(i18n("203 cd/m²"), 203.0);
+
     connect(m_page->gbxDiffuseWhite, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRDiffuseLevelOnImage);
-    connect(m_page->spnDiffuseWhite, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRDiffuseLevelOnImage);
+    connect(m_page->cmbDiffuseWhite, SIGNAL(activated(int)), this, SLOT(setHDRDiffuseLevelOnImage()));
 
     connect(m_page->gbxContentLightLevel, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
     connect(m_page->spnMaxCll, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
@@ -254,10 +257,15 @@ void KisDlgImageProperties::updateHDRLightLevels()
 {
     if (d->image->diffuseWhiteLightLevel()) {
         m_page->gbxDiffuseWhite->setChecked(true);
-        m_page->spnDiffuseWhite->setValue(*d->image->diffuseWhiteLightLevel());
+        m_page->cmbDiffuseWhite->setCurrentIndex(m_page->cmbDiffuseWhite->findData(*d->image->diffuseWhiteLightLevel()));
+        if (d->image->colorSpace()->profile()->hdrReferenceWhite()) {
+            m_page->gbxDiffuseWhite->setEnabled(false);
+            m_page->cmbDiffuseWhite->setEnabled(false);
+        }
+
     } else {
         m_page->gbxDiffuseWhite->setChecked(false);
-        m_page->spnDiffuseWhite->setValue(80);
+        m_page->cmbDiffuseWhite->setCurrentIndex(0);
     }
     if (d->image->relativeContentLightLevelInformation()) {
         m_page->gbxContentLightLevel->setChecked(true);
@@ -318,7 +326,7 @@ void KisDlgImageProperties::setHDRDiffuseLevelOnImage()
 {
     KUndo2Command *cmd;
     if (m_page->gbxDiffuseWhite->isChecked()) {
-        cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::make_optional(m_page->spnDiffuseWhite->value()));
+        cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::make_optional(m_page->cmbDiffuseWhite->currentData().toDouble()));
     } else {
         cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::nullopt);
     }

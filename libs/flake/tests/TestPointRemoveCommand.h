@@ -16,6 +16,7 @@ private Q_SLOTS:
     void redoUndoSubpathRemove();
     void redoUndoShapeRemove();
     void redoUndo();
+    void subpathRemoval();
 };
 
 #endif // TESTPOINTREMOVECOMMAND_H

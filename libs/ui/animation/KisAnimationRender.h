@@ -20,7 +20,7 @@ namespace KisAnimationRender {
     **/
     KRITAUI_EXPORT bool render(KisDocument *doc, KisViewManager* viewManager, KisAnimationRenderingOptions encoderOptions);
 
-    bool mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode);
+    bool mustHaveEvenDimensions(const QString &videoType, KisAnimationRenderingOptions::RenderMode renderMode);
     bool hasEvenDimensions(int width, int height);
 
 }

@@ -42,28 +42,36 @@ private Q_SLOTS:
     void onSpinScaleHeightValueChanged(int value);
     void onButtonLockRatioToggled(bool checked);
     void onButtonLockFpsToggled(bool checked);
+#ifndef Q_OS_ANDROID
     void onButtonBrowseFfmpegClicked();
+#endif
     void onComboProfileIndexChanged(int index);
     void onButtonEditProfileClicked();
+#ifndef Q_OS_ANDROID
     void onEditVideoPathChanged(const QString &videoFilePath);
     void onButtonBrowseExportClicked();
+#endif
     void onButtonExportClicked();
     // second page
     void onButtonCancelClicked();
-    // ffmpeg
-    void onFFMpegStarted();
-    void onFFMpegFinished();
-    void onFFMpegFinishedWithError(QString error);
-    void onFFMpegProgressUpdated(int frameNo);
+    // exporter
+    void onExporterStarted();
+    void onExporterFinished();
+    void onExporterFinishedWithError(QString error);
+    void onExporterProgressUpdated(int frameNo);
     // third page
     void onButtonWatchItClicked();
+#ifndef Q_OS_ANDROID
     void onButtonShowInFolderClicked();
+#endif
     void onButtonRemoveSnapshotsClicked();
     void onButtonRestartClicked();
     void onCleanUpFinished();
 
+#ifndef Q_OS_ANDROID
 private:
      bool eventFilter(QObject *obj, QEvent *event) override;
+#endif
 
 private:
     Q_DISABLE_COPY(RecorderExport)

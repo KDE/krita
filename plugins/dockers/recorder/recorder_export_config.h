@@ -53,6 +53,13 @@ public:
     bool lockFps() const;
     void setLockFps(bool value);
 
+#ifdef Q_OS_ANDROID
+    QString selectedFormat() const;
+    void setSelectedFormat(const QString &value);
+
+    QVariantMap formatPreferences() const;
+    void setFormatPreferences(const QVariantMap &value);
+#else
     int profileIndex() const;
     void setProfileIndex(int value);
 
@@ -69,13 +76,16 @@ public:
 
     QString videoDirectory() const;
     void setVideoDirectory(const QString &value);
+#endif
 
 private:
     Q_DISABLE_COPY(RecorderExportConfig)
     mutable KisConfig *config;
 };
 
+#ifndef Q_OS_ANDROID
 bool operator==(const RecorderProfile &left, const RecorderProfile &right);
 bool operator!=(const RecorderProfile &left, const RecorderProfile &right);
+#endif
 
 #endif // RECORDER_EXPORT_CONFIG_H

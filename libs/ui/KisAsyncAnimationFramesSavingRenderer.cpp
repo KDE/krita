@@ -14,6 +14,12 @@
 #include "kis_time_span.h"
 #include "kis_paint_layer.h"
 
+#include <kis_debug.h>
+
+#ifdef Q_OS_ANDROID
+#include <KisAndroidUtils.h>
+#endif
+
 
 struct KisAsyncAnimationFramesSavingRenderer::Private
 {
@@ -113,7 +119,22 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
                 QString identicalFrameNumber = QString("%1").arg(identicalFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
                 QString identicalFrameName = m_d->filenamePrefix + identicalFrameNumber + m_d->filenameSuffix;
 
-                if (!QFile::copy(filename, identicalFrameName)) {
+                bool copyOk;
+                QString copyErrorMessage;
+#ifdef Q_OS_ANDROID
+                copyOk = KisAndroidUtils::copyFile(filename, identicalFrameName, &copyErrorMessage);
+#else
+                QFile sourceFile(filename);
+                if (sourceFile.copy(identicalFrameName)) {
+                    copyOk = true;
+                } else {
+                    copyOk = false;
+                    copyErrorMessage = sourceFile.errorString();
+                }
+#endif
+                if (!copyOk) {
+                    warnFile.nospace() << "Failed to copy frame '" << filename << "' to '" << identicalFrameName
+                                       << "': " << copyErrorMessage;
                     status = ImportExportCodes::ErrorWhileWriting;
                     break;
                 }

@@ -26,9 +26,17 @@
 #include <KoResourcePaths.h>
 #include "kis_config.h"
 #include "KisAnimationRenderingOptions.h"
-#include "animation/KisFFMpegWrapper.h"
 
 #include "KisPart.h"
+
+#ifdef Q_OS_ANDROID
+#include "animation/KisMediaEncoderWrapper.h"
+#include <KisAndroidUtils.h>
+#include <QJsonDocument>
+#include <QTemporaryFile>
+#else
+#include "animation/KisFFMpegWrapper.h"
+#endif
 
 KisAnimationVideoSaver::KisAnimationVideoSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
@@ -46,8 +54,79 @@ KisImageSP KisAnimationVideoSaver::image()
     return m_image;
 }
 
-KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
+KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &framesDirectory,
+                                                        const QString &savedFilesMask,
+                                                        const QStringList &savedFiles,
+                                                        const KisAnimationRenderingOptions &options)
 {
+#ifdef Q_OS_ANDROID
+    Q_UNUSED(savedFilesMask);
+
+    KisMediaEncoderFormat *format = KisMediaEncoderWrapper::getFormatByKey(options.videoFormatKey);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(format, ImportExportCodes::InternalError);
+
+    QVariantMap formatPreferences;
+    if (!options.videoFormatPreferencesJson.isEmpty()) {
+        formatPreferences = QJsonDocument::fromJson(options.videoFormatPreferencesJson.toUtf8()).toVariant().toMap();
+    }
+
+    KisMediaEncoderWrapperSettings settings = {
+        options.videoFileName,
+        QStringList(),
+        QString(),
+        format,
+        formatPreferences,
+        options.scaleFilter,
+        QSize(options.width, options.height),
+        options.frameRate,
+        options.frameRate,
+        0,
+        0,
+        0,
+    };
+
+    QString inputDir = framesDirectory;
+    if (!inputDir.endsWith(QStringLiteral("/"))) {
+        inputDir.append(QStringLiteral("/"));
+    }
+
+    settings.inputFiles.reserve(savedFiles.size());
+    for (const QString &savedFile : savedFiles) {
+        settings.inputFiles.append(inputDir + savedFile);
+    }
+
+    // MLT can't read from Android content URIs, so we have to copy the file
+    // into temporary storage and get a real path for it.
+    QTemporaryFile audioFile;
+    if (format->supportsAudio() && options.includeAudio) {
+        QVector<QFileInfo> audioFiles = m_doc->getAudioTracks();
+        if (!audioFiles.isEmpty()) {
+            QString audioPath = audioFiles.first().filePath();
+            QString errorMessage;
+            if (KisAndroidUtils::copyFileToTemporary(audioPath, audioFile, &errorMessage)) {
+                settings.audioFile = audioFile.fileName();
+                settings.audioSeekFrame = options.firstFrame;
+            } else {
+                return KisImportExportErrorCode(i18n("Error preparing audio file: %1", errorMessage));
+            }
+        }
+    }
+
+    // This whole batchMode business is either a vestige or was never actually
+    // implemented to completion. It's *supposed* to not show dialogs if Krita
+    // is run in batch mode via the command line, but it's not actually wired up
+    // properly. KisAnimationRender always sets it to false with a TODO to fetch
+    // it correctly and the ffmpeg code here never sets it either, meaning it'll
+    // always be false. For consistency, I've made KisMediaEncoderWrapper behave
+    // the same, even if it's kind of pointless. But if you're working on this
+    // in the future, you should be able to do the same thing for this code path
+    // as you're doing for the ffmpeg one.
+    bool batchMode = false;
+    return KisMediaEncoderWrapper().start(settings, batchMode);
+#else
+    Q_UNUSED(framesDirectory);
+    Q_UNUSED(savedFiles);
+
     if (!QFileInfo(options.ffmpegPath).exists()) {
         m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", options.ffmpegPath));
         return ImportExportCodes::Failure;
@@ -202,11 +281,17 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
      
 
     return resultOuter;
+#endif
 }
 
-KisImportExportErrorCode KisAnimationVideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
+KisImportExportErrorCode KisAnimationVideoSaver::convert(KisDocument *document,
+                                                         const QString &framesDirectory,
+                                                         const QString &savedFilesMask,
+                                                         const QStringList &savedFiles,
+                                                         const KisAnimationRenderingOptions &options,
+                                                         bool batchMode)
 {
     KisAnimationVideoSaver videoSaver(document, batchMode);
-    KisImportExportErrorCode res = videoSaver.encode(savedFilesMask, options);
+    KisImportExportErrorCode res = videoSaver.encode(framesDirectory, savedFilesMask, savedFiles, options);
     return res;
 }

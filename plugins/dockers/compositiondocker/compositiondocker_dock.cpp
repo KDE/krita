@@ -45,6 +45,10 @@
 #include <kis_time_span.h>
 #include <KisMimeDatabase.h>
 
+#ifdef Q_OS_ANDROID
+#include <animation/KisAndroidMediaEncoderRunnable.h>
+#endif
+
 
 #include "compositionmodel.h"
 
@@ -338,6 +342,21 @@ void CompositionDockerDock::exportAnimationClicked()
     KisAnimationRenderingOptions exportOptions;
     exportOptions.fromProperties(settings);
 
+#ifdef Q_OS_ANDROID
+    KisMediaEncoderFormat *format = KisMediaEncoderWrapper::getFormatByKey(exportOptions.videoFormatKey);
+    // If there's no format configured, try to grab the first available one.
+    if (!format) {
+        const QVector<KisMediaEncoderFormat *> &supportedFormats = KisMediaEncoderWrapper::getSupportedFormats();
+        if (!supportedFormats.isEmpty()) {
+            format = supportedFormats.first();
+        }
+    }
+    // If there's still none, bail out.
+    if (!format) {
+        return;
+    }
+#endif
+
     if (m_canvas &&
         m_canvas->viewManager() &&
         m_canvas->viewManager()->image() &&
@@ -367,7 +386,11 @@ void CompositionDockerDock::exportAnimationClicked()
         KisLayerCompositionSP currentComposition = toQShared(new KisLayerComposition(image, "temp"));
         currentComposition->store();
 
+#ifdef Q_OS_ANDROID
+        const QString videoExtension = format->extension();
+#else
         const QString videoExtension = KisMimeDatabase::suffixesForMimeType(exportOptions.videoMimeType).first();
+#endif
 
         Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {
             if(!composition->isExportEnabled())

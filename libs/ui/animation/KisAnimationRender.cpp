@@ -24,13 +24,78 @@
 
 #include "KisVideoSaver.h"
 
+#ifdef Q_OS_ANDROID
+#include <QTemporaryDir>
+#include <memory>
+#endif
+
+namespace
+{
+
+bool looksLikeMp4(const QString &videoType)
+{
+#ifdef Q_OS_ANDROID
+    return videoType.contains(QStringLiteral("mp4"));
+#else
+    return videoType == QStringLiteral("video/mp4");
+#endif
+}
+
+bool looksLikeMatroska(const QString &videoType)
+{
+#ifdef Q_OS_ANDROID
+    return videoType.contains(QStringLiteral("matroska"));
+#else
+    return videoType == QStringLiteral("video/x-matroska");
+#endif
+}
+
+} // namespace
+
 bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, KisAnimationRenderingOptions encoderOptions) {
+    bool isTemporaryFramesDirectory = false;
+    QString framesDirectory;
+#ifdef Q_OS_ANDROID
+    // The user may cancel the dialog prompting them for a video file or a frames
+    // directory and we can't implicitly create them next to the document like on
+    // desktop due to file system restrictions. So if we don't get those paths
+    // here, we just bail out. The user knows they pressed cancel on the file
+    // dialog, so no message dialog is necessary.
+    if (encoderOptions.shouldEncodeVideo) {
+        if (encoderOptions.videoFileName.isEmpty()) {
+            return false;
+        }
+    } else if (encoderOptions.directory.isEmpty()) {
+        return false;
+    }
+
+    // Android uses weird content URIs instead of file paths and isn't allowed
+    // to scribble around in the file system without asking the user for access.
+    // We'll have to take the frames directory as it is given and if we don't
+    // get one then we'll create a temporary directory to stick our frames into.
+    std::unique_ptr<QTemporaryDir> tempDir;
+    if (encoderOptions.shouldEncodeVideo) {
+        tempDir = std::make_unique<QTemporaryDir>();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tempDir->isValid(), false);
+        framesDirectory = tempDir->path();
+        isTemporaryFramesDirectory = true;
+    } else {
+        framesDirectory = encoderOptions.directory;
+    }
+#else
+    framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
+#endif
+
     const QString frameMimeType = encoderOptions.frameMimeType;
-    const QString framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
     const QString extension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
     const QString baseFileName = QString("%1/%2.%3").arg(framesDirectory, encoderOptions.basename, extension);
 
-    if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
+#ifdef Q_OS_ANDROID
+    QString videoType = encoderOptions.videoFormatKey;
+#else
+    QString videoType = encoderOptions.videoMimeType;
+#endif
+    if (mustHaveEvenDimensions(videoType, encoderOptions.renderMode())) {
         if (hasEvenDimensions(encoderOptions.width, encoderOptions.height) != true) {
             encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
             encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
@@ -39,9 +104,9 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
     const QSize scaledSize = doc->image()->bounds().size().scaled(encoderOptions.width, encoderOptions.height, Qt::IgnoreAspectRatio);
 
-    if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
+    if (mustHaveEvenDimensions(videoType, encoderOptions.renderMode())) {
         if (hasEvenDimensions(scaledSize.width(), scaledSize.height()) != true) {
-            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Matroska (.mkv) ";
+            QString type = looksLikeMp4(videoType) ? "Mpeg4 (.mp4) " : "Matroska (.mkv) ";
 
             qWarning() << type <<"requires width and height to be even, resize and try again!";
             doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
@@ -73,6 +138,12 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         const QString savedFilesMask = exporter.savedFilesMask();
 
         if (encoderOptions.shouldEncodeVideo) {
+            bool videoFileWriteAllowed = true;
+            // Android's weird file system doesn't work this way, the target
+            // file path is going to be a sandbox URL. Making it absolute,
+            // creating a directory above it or checking for its existence
+            // neither make sense nor are they necessary.
+#ifndef Q_OS_ANDROID
             const QString videoOutputFilePath = encoderOptions.resolveAbsoluteVideoFilePath();
             KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(videoOutputFilePath).isAbsolute());
 
@@ -85,7 +156,6 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
             KIS_SAFE_ASSERT_RECOVER_NOOP(outputDir.exists());
 
             // If file exists at output path, prompt user for overwrite..
-            bool videoFileWriteAllowed = true;
             if (videoOutputFile.exists()) {
                 QMessageBox videoOverwritePrompt;
 
@@ -96,11 +166,16 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
                 videoFileWriteAllowed = videoOverwritePrompt.exec() == QMessageBox::Ok ? true : false;
             }
+#endif
 
             // Write the video..
             if (videoFileWriteAllowed) {
                 KisImportExportErrorCode exportResult = ImportExportCodes::OK;
 
+                // Let's not mess with the file on Android like this, it's slow
+                // and could cause weird behavior depending on the provider.
+                // We'll notice that the file can't be opened later anyway.
+#ifndef Q_OS_ANDROID
                 QFile videoFile(videoOutputFilePath);
                 if (!videoFile.open(QIODevice::WriteOnly)) {
                     qWarning() << "Could not open" << videoFile.fileName() << "for writing! Do you have permission to write to this file?";
@@ -108,10 +183,16 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
                 } else {
                     videoFile.close();
                 }
+#endif
 
                 if (exportResult.isOk()) {
                     QScopedPointer<KisAnimationVideoSaver> encoder(new KisAnimationVideoSaver(doc, batchMode));
-                    exportResult = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
+                    exportResult = encoder->convert(doc,
+                                                    framesDirectory,
+                                                    savedFilesMask,
+                                                    exporter.savedFiles(),
+                                                    encoderOptions,
+                                                    batchMode);
                 }
 
                 if (!exportResult.isOk()) {
@@ -123,31 +204,41 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         }
 
         //File cleanup
-        QDir d(framesDirectory);
+        if (!isTemporaryFramesDirectory) {
+            QDir d(framesDirectory);
 
-        if (encoderOptions.shouldDeleteSequence || delayReturnSuccess == false) {
-            QStringList savedFiles = exporter.savedFiles();
+#ifdef Q_OS_ANDROID
+            bool shouldDeleteSequence = false;
+#else
+            bool shouldDeleteSequence = encoderOptions.shouldDeleteSequence;
+#endif
+            if (shouldDeleteSequence || !delayReturnSuccess) {
+                QStringList savedFiles = exporter.savedFiles();
 
-            Q_FOREACH(const QString &f, savedFiles) {
-                if (d.exists(f)) {
-                    d.remove(f);
+                Q_FOREACH(const QString &f, savedFiles) {
+                    if (d.exists(f)) {
+                        d.remove(f);
+                    }
+                }
+            } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
+                const QStringList fileNames = exporter.savedFiles();
+                const QStringList uniqueFrameNames = exporter.savedUniqueFiles();
+
+                Q_FOREACH(const QString &f, fileNames) {
+                    if (!uniqueFrameNames.contains(f)) {
+                        d.remove(f);
+                    }
                 }
             }
-        } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
-            const QStringList fileNames = exporter.savedFiles();
-            const QStringList uniqueFrameNames = exporter.savedUniqueFiles();
 
-            Q_FOREACH(const QString &f, fileNames) {
-                if (!uniqueFrameNames.contains(f)) {
-                    d.remove(f);
-                }
+            // We don't generate palette files on Android, that's done in memory.
+#ifndef Q_OS_ANDROID
+            QStringList paletteFiles = d.entryList(QStringList() << "KritaTempPalettegen_*.png", QDir::Files);
+
+            Q_FOREACH(const QString &f, paletteFiles) {
+                d.remove(f);
             }
-        }
-
-        QStringList paletteFiles = d.entryList(QStringList() << "KritaTempPalettegen_*.png", QDir::Files);
-
-        Q_FOREACH(const QString &f, paletteFiles) {
-            d.remove(f);
+#endif
         }
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderTimedOut) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), "Animation frame rendering has timed out. Output files are incomplete.\nTry to increase \"Frame Rendering Timeout\" or reduce \"Frame Rendering Clones Limit\" in Krita settings");
@@ -158,9 +249,11 @@ bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
     return delayReturnSuccess;
 }
 
-bool KisAnimationRender::mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode)
+bool KisAnimationRender::mustHaveEvenDimensions(const QString &videoType,
+                                                KisAnimationRenderingOptions::RenderMode renderMode)
 {
-    return (mimeType == "video/mp4" || mimeType == "video/x-matroska") && renderMode != KisAnimationRenderingOptions::RENDER_FRAMES_ONLY;
+    return renderMode != KisAnimationRenderingOptions::RENDER_FRAMES_ONLY
+        && (looksLikeMp4(videoType) || looksLikeMatroska(videoType));
 }
 
 bool KisAnimationRender::hasEvenDimensions(int width, int height)

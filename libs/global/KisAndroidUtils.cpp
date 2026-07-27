@@ -5,6 +5,9 @@
 #include "KisAndroidLogHandler.h"
 #include <kis_debug.h>
 
+#include <QFile>
+#include <QTemporaryFile>
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QJniEnvironment>
 #include <QJniObject>
@@ -97,6 +100,111 @@ void setFullScreen(bool fullScreen)
     } else {
         qWarning("setFullScreen: activity not valid");
     }
+}
+
+namespace
+{
+bool copyFileContents(const QString &inputPath,
+                      const QString &outputPath,
+                      QFile &inputFile,
+                      QFile &outputFile,
+                      QString *outErrorMessage)
+{
+    QByteArray buffer;
+    buffer.resize(BUFSIZ);
+    while (true) {
+        qint64 read = inputFile.read(buffer.data(), BUFSIZ);
+        if (read < 0) {
+            if (outErrorMessage) {
+                *outErrorMessage = QStringLiteral("failed to read from input file '%1': %2")
+                                       .arg(inputPath)
+                                       .arg(inputFile.errorString());
+            }
+            return false;
+        } else if (read > 0) {
+            qint64 written = outputFile.write(buffer, read);
+            if (written < 0) {
+                if (outErrorMessage) {
+                    *outErrorMessage = QStringLiteral("failed to write %1 byte(s) to output file '%2': %3")
+                                           .arg(read)
+                                           .arg(outputPath)
+                                           .arg(outputFile.errorString());
+                }
+                return false;
+            } else if (written != read) {
+                if (outErrorMessage) {
+                    *outErrorMessage =
+                        QStringLiteral("tried to write %1 byte(s) to output file '%2', but only wrote %3")
+                            .arg(read)
+                            .arg(outputPath)
+                            .arg(written);
+                }
+                return false;
+            }
+        } else {
+            if (outputFile.flush()) {
+                if (outErrorMessage) {
+                    outErrorMessage->clear();
+                }
+                return true;
+            } else {
+                if (outErrorMessage) {
+                    *outErrorMessage = QStringLiteral("failed to flush output file '%1': %2")
+                                           .arg(outputPath)
+                                           .arg(outputFile.errorString());
+                }
+                return false;
+            }
+        }
+    }
+}
+} // namespace
+
+bool copyFile(const QString &inputPath, const QString &outputPath, QString *outErrorMessage)
+{
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open input file '%1': %2").arg(inputPath).arg(inputFile.errorString());
+        }
+        return false;
+    }
+
+    QFile outputFile(outputPath);
+    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open output file '%1': %2").arg(outputPath).arg(outputFile.errorString());
+        }
+        return false;
+    }
+
+    return copyFileContents(inputPath, outputPath, inputFile, outputFile, outErrorMessage);
+}
+
+bool copyFileToTemporary(const QString &inputPath, QTemporaryFile &outputFile, QString *outErrorMessage)
+{
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly)) {
+        if (outErrorMessage) {
+            *outErrorMessage =
+                QStringLiteral("failed to open input file '%1': %2").arg(inputPath).arg(inputFile.errorString());
+        }
+        return false;
+    }
+
+    if (!outputFile.open()) {
+        if (outErrorMessage) {
+            *outErrorMessage = QStringLiteral("failed to open temporary output file: %1").arg(outputFile.errorString());
+        }
+        return false;
+    }
+
+    if (outErrorMessage) {
+        outErrorMessage->clear();
+    }
+    return copyFileContents(inputPath, outputFile.fileName(), inputFile, outputFile, outErrorMessage);
 }
 
 } // namespace KisAndroidUtils

@@ -8,23 +8,23 @@
 # --- krita_shape_artistictext
 # --- krita_shape_paths
 # --- krita_shape_vector
-# SPDX-FileCopyrightText: 2002, 2003 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2002-2003 Thomas Diehl <thd@kde.org>
 # SPDX-FileCopyrightText: 2005 Patrick Trettenbrein <patrick.trettenbrein@kdemail.net>
 # SPDX-FileCopyrightText: 2005 Stephan Johach <hunsum@gmx.de>
-# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
-# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2005-2009, 2011-2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2005-2010 Jannick Kuhr <opensource@kuhr.org>
 # SPDX-FileCopyrightText: 2006 Oliver Dörr <digikam-de@doerr-privat.de>
-# SPDX-FileCopyrightText: 2006, 2007 Thomas Reitelbach <tr@erdfunkstelle.de>
-# SPDX-FileCopyrightText: 2006, 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2022 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2006, 2010-2013, 2015-2016, 2018, 2022 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2006-2007 Thomas Reitelbach <tr@erdfunkstelle.de>
 # SPDX-FileCopyrightText: 2008 Justus Seifert <justus.seifert@googlemail.com>
 # SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
 # SPDX-FileCopyrightText: 2010 Panagiotis Papadopoulos <pano_90@gmx.net>
 # SPDX-FileCopyrightText: 2011 Peter Rüthemann <peter.ruethemann@gmail.com>
 # SPDX-FileCopyrightText: 2012 Eduard Gotwig <gotwig@ubuntu.com>
 # SPDX-FileCopyrightText: 2016 Maik Wagner <linuxandlanguages@t-online.de>
-# SPDX-FileCopyrightText: 2021, 2024, 2025 tobi <onewayme001@posteo.de>
-# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
+# SPDX-FileCopyrightText: 2021, 2024-2025 tobi <onewayme001@posteo.de>
 # SPDX-FileCopyrightText: 2026 Alexander Becker <alex-at-kde-l10n-de@freenet.de>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"

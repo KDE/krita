@@ -6,9 +6,8 @@
 
 #include "kis_color_sampler_stroke_strategy.h"
 
-#include "kis_canvas2.h"
-#include "kis_display_color_converter.h"
 #include "kis_tool_utils.h"
+#include "kis_display_color_converter.h"
 #include "kis_paint_device.h"
 
 struct KisColorSamplerStrokeStrategy::Private
@@ -58,12 +57,11 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             Q_EMIT sigFinalColorSelected(*m_d->lastSelectedColor);
         }
     } else if (previewData) {
-        KisPaintDeviceSP dev = previewData->canvas->image()->projection();
-        KisPaintDeviceSP tmpDev = new KisPaintDevice(dev->colorSpace());
+        KisPaintDeviceSP tmpDev = new KisPaintDevice(previewData->canvasDev->colorSpace());
 
-        tmpDev->makeCloneFrom(dev, previewData->canvasPixelRect);
+        tmpDev->makeCloneFrom(previewData->canvasDev, previewData->canvasPixelRect);
 
-        QImage image = previewData->canvas->displayColorConverter()->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
+        QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
 
         Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
     }

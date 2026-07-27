@@ -12,7 +12,7 @@
 #include "kis_lod_transform.h"
 #include "KoColor.h"
 
-class KisCanvas2;
+class KisDisplayColorConverter;
 
 class KisColorSamplerStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
@@ -49,17 +49,24 @@ public:
 
     class GenerateCanvasZoomPreviewData : public KisStrokeJobData {
     public:
-        GenerateCanvasZoomPreviewData(KisCanvas2* _canvas, const QRect &_canvasPixelRect)
-            : canvas(_canvas), canvasPixelRect(_canvasPixelRect)
+        GenerateCanvasZoomPreviewData(KisPaintDeviceSP _canvasDev, const QRect &_canvasPixelRect, KisDisplayColorConverter *_colorConverter)
+            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             Q_UNUSED(levelOfDetail);
-            return new GenerateCanvasZoomPreviewData(canvas, canvasPixelRect);
+            return new GenerateCanvasZoomPreviewData(canvasDev, canvasPixelRect, colorConverter);
         }
 
-        KisCanvas2 *canvas;
+        QWeakPointer<boost::none_t> cookie() {
+            fetchingCookie.reset(new boost::none_t(boost::none));
+            return fetchingCookie;
+        }
+
+        KisPaintDeviceSP canvasDev;
         QRect canvasPixelRect;
+        KisDisplayColorConverter *colorConverter;
+        QSharedPointer<boost::none_t> fetchingCookie;
     };
 public:
     KisColorSamplerStrokeStrategy(int radius, int blend, int lod = 0);

@@ -87,7 +87,7 @@ private:
     bool paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
     void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip);
 
-    QImage fetchCanvasPreview(QRect &canvasPixelRect);
+    QImage fetchCanvasPreview(QRect &canvasPixelRect, KisImageSP canvasImage);
 
     struct Private;
     QScopedPointer<Private> m_d;

@@ -127,6 +127,7 @@ protected:
     void init();
     void resetCurves();
     void setActiveChannel(int ch);
+    void syncActiveChannelUi();
     virtual int findDefaultVirtualChannelSelection();
 
     virtual void updateChannelControls() = 0;

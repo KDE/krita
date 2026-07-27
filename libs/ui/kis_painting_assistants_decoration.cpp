@@ -488,6 +488,7 @@ void KisPaintingAssistantsDecoration::toggleOutlineVisible()
 {
     // "outline" means assistant preview (line that depends on the mouse cursor)
     setOutlineVisible(!outlineVisibility());
+    uncache();
 }
 
 QColor KisPaintingAssistantsDecoration::globalAssistantsColor()

@@ -134,6 +134,35 @@ void TestPointRemoveCommand::redoUndoSubpathRemove()
     delete cmd1;
 }
 
+void TestPointRemoveCommand::subpathRemoval()
+{
+    KoPathShape path;
+
+    path.moveTo(QPointF(-1,-1));
+
+    auto p0 = path.moveTo(QPointF(0,0));
+    auto p1 = path.lineTo(QPointF(1,0));
+
+    auto p2 = path.moveTo(QPointF(0,1));
+    auto p3 = path.lineTo(QPointF(1,1));
+
+    QList<KoPathPointData> pd;
+    pd
+      << KoPathPointData(&path, path.pathPointIndex(p0))
+      << KoPathPointData(&path, path.pathPointIndex(p1))
+      << KoPathPointData(&path, path.pathPointIndex(p2))
+      << KoPathPointData(&path, path.pathPointIndex(p3));
+
+    MockShapeController mockController;
+    KoShapeController shapeController(0, &mockController);
+
+    KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
+    cmd->redo();
+
+    //Have to have one subpath left, so that it doesn't delete the whole shape
+    QCOMPARE(path.subpathCount(), 1);
+}
+
 void TestPointRemoveCommand::redoUndoShapeRemove()
 {
     KoPathShape *path1 = new KoPathShape();

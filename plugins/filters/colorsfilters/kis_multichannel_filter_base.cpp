@@ -434,12 +434,11 @@ void KisMultiChannelConfigWidget::init() {
         m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
     }
 
-    m_page->curveWidget->setCurve(m_curves[0]);
     connect(m_page->curveWidget, SIGNAL(modified()), this, SLOT(slotCurveModified()));
 
     {
         KisSignalsBlocker b(m_page->curveWidget);
-        setActiveChannel(0);
+        syncActiveChannelUi();
     }
 }
 
@@ -662,6 +661,12 @@ void KisMultiChannelConfigWidget::setActiveChannel(int ch)
     KIS_SAFE_ASSERT_RECOVER_RETURN(ch < m_curves.size());
 
     m_activeVChannel = ch;
+
+    syncActiveChannelUi();
+}
+
+void KisMultiChannelConfigWidget::syncActiveChannelUi()
+{
     m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);
     m_page->curveWidget->setPixmap(getHistogram());
 

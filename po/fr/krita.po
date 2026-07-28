@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-25 02:38+0000\n"
+"POT-Creation-Date: 2026-07-28 02:42+0000\n"
 "PO-Revision-Date: 2026-07-16 14:25+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -16732,7 +16732,7 @@ msgid "Move points"
 msgstr "Déplacer les points"
 
 #: libs/flake/commands/KoPathPointRemoveCommand.cpp:91
-#: libs/flake/commands/KoPathPointRemoveCommand.cpp:120
+#: libs/flake/commands/KoPathPointRemoveCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Remove points"
 msgstr "Supprimer les points"
@@ -20862,37 +20862,37 @@ msgstr "Modifier un segment"
 msgid "Edit Shape"
 msgstr "Modifier la forme"
 
-#: libs/flake/tools/KoPathTool.cpp:633
+#: libs/flake/tools/KoPathTool.cpp:642
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Tirer pour déplacer la poignée"
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:696
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Tirer pour déplacer le point. Faites un clic avec la touche « Maj » enfoncée "
 "pour modifier le type de point."
 
-#: libs/flake/tools/KoPathTool.cpp:689
+#: libs/flake/tools/KoPathTool.cpp:698
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Tirer pour déplacer le point de contrôle."
 
-#: libs/flake/tools/KoPathTool.cpp:712
+#: libs/flake/tools/KoPathTool.cpp:721
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Tirer pour changer directement la courbe. Double-cliquer pour insérer un "
 "nouveau point d'emplacement."
 
-#: libs/flake/tools/KoPathTool.cpp:722
+#: libs/flake/tools/KoPathTool.cpp:731
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Appuyez sur la touche %1 pour arrêter le tracé au point sélectionné."
 
-#: libs/flake/tools/KoPathTool.cpp:724
+#: libs/flake/tools/KoPathTool.cpp:733
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -20941,8 +20941,6 @@ msgstr "Zoo&m en arrière"
 #. i18n: ectx: property (text), widget (KisColorButton, bnShadowColor)
 #. i18n: ectx: property (text), widget (QToolButton, ffmpegPickerButton)
 #. i18n: ectx: property (text), widget (QToolButton, ffprobePickerButton)
-#. i18n: ectx: property (text), widget (QToolButton, bnExportOptions)
-#. i18n: ectx: property (text), widget (QToolButton, bnRenderOptions)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnFileName)
 #. i18n: ectx: property (text), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), widget (QToolButton, bnPortrait)
@@ -21016,8 +21014,6 @@ msgstr "Zoo&m en arrière"
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:168
 #: libs/ui/animation/VideoImportDialog.ui:625
 #: libs/ui/animation/VideoImportDialog.ui:652
-#: libs/ui/animation/wdg_animationrenderer.ui:77
-#: libs/ui/animation/wdg_animationrenderer.ui:213
 #: libs/ui/forms/wdggeneralsettings.ui:435 libs/ui/forms/wdgnewimage.ui:273
 #: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
@@ -21216,8 +21212,8 @@ msgstr "Taille"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, spbOffsetX)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, spbOffsetY)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
-#: libs/ui/animation/wdg_animationrenderer.ui:150
-#: libs/ui/animation/wdg_animationrenderer.ui:164
+#: libs/ui/animation/wdg_animationrenderer.ui:232
+#: libs/ui/animation/wdg_animationrenderer.ui:246
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:834
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:838
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1053
@@ -21248,8 +21244,8 @@ msgstr "Taille"
 #: plugins/dockers/griddocker/grid_config_widget.ui:442
 #: plugins/dockers/griddocker/grid_config_widget.ui:654
 #: plugins/dockers/griddocker/grid_config_widget.ui:717
-#: plugins/dockers/recorder/recorder_export.ui:478
-#: plugins/dockers/recorder/recorder_export.ui:516
+#: plugins/dockers/recorder/recorder_export.ui:281
+#: plugins/dockers/recorder/recorder_export.ui:319
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:479
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:34
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:42
@@ -24101,7 +24097,7 @@ msgstr "Dehors"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:542 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:717 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24135,11 +24131,11 @@ msgstr "Ressources locales"
 
 #: libs/resources/KisResourceCacheDb.cpp:353
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
-#: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:118
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:761
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:767
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:770
+#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:199
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:64
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:172
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:289
@@ -24200,7 +24196,7 @@ msgstr "Ressources locales"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:326
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:358
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:489
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
@@ -24209,7 +24205,7 @@ msgstr "Ressources locales"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -25129,7 +25125,66 @@ msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
 msgstr "Activer l'outil de transformation"
 
-#: libs/ui/animation/KisAnimationRender.cpp:47
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
+#, kde-format
+msgid "Android: %1"
+msgstr ""
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
+#, fuzzy, kde-format
+#| msgid "%1 (owned)"
+msgid "%1 (hardware)"
+msgstr "%1 (Possédé)"
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
+#, fuzzy, kde-format
+#| msgid "%1 (owned)"
+msgid "%1 (software)"
+msgstr "%1 (Possédé)"
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
+#, kde-format
+msgid "Unsupported video parameters, try lowering the video FPS or size"
+msgstr ""
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
+#, kde-format
+msgid ""
+"Unsupported audio parameters, try to re-encode your audio file with a more "
+"common sample format, sampling rate and channel count"
+msgstr ""
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
+#, fuzzy, kde-format
+#| msgid "All supported formats"
+msgid "Unsupported format"
+msgstr "Tous les formats pris en charge"
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
+#, fuzzy, kde-format
+#| msgid "Video file:"
+msgid "Video encoder:"
+msgstr "Fichier vidéo :"
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
+#, fuzzy, kde-format
+#| msgid "Video file:"
+msgid "Video bitrate:"
+msgstr "Fichier vidéo :"
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
+#, fuzzy, kde-format
+#| msgid "Audio menu"
+msgid "Audio encoder:"
+msgstr "Menu audio"
+
+#: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
+#, fuzzy, kde-format
+#| msgid "Adaptation State:"
+msgid "Audio bitrate:"
+msgstr "Niveau d'adaptation :"
+
+#: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
 msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
@@ -25138,8 +25193,8 @@ msgstr ""
 "%1 nécessite que la largeur et la hauteur soient des nombres pairs. Veuillez "
 "redimensionner ou rogner l'image avec l'exportation."
 
-#: libs/ui/animation/KisAnimationRender.cpp:48
-#: libs/ui/animation/KisAnimationRender.cpp:118
+#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:199
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -25148,12 +25203,12 @@ msgstr ""
 "Impossible d'effectuer le rendu d'animation : \n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:92
+#: libs/ui/animation/KisAnimationRender.cpp:162
 #, kde-format
 msgid "Overwrite existing video?"
 msgstr "Écraser la vidéo existante ?"
 
-#: libs/ui/animation/KisAnimationRender.cpp:93
+#: libs/ui/animation/KisAnimationRender.cpp:163
 #, kde-format
 msgid ""
 "A file already exists at the path where you want to render your video "
@@ -25166,68 +25221,68 @@ msgstr ""
 "                                                              Voulez-vous "
 "vraiment l'écraser ?"
 
-#: libs/ui/animation/KisAnimationRender.cpp:153
-#: libs/ui/animation/KisAnimationRender.cpp:155
+#: libs/ui/animation/KisAnimationRender.cpp:244
+#: libs/ui/animation/KisAnimationRender.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Erreur lors de la phase de rendu"
 
-#: libs/ui/animation/KisAnimationRender.cpp:155
+#: libs/ui/animation/KisAnimationRender.cpp:246
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
 "Impossible de réaliser un rendu pour les trames d'animations ! Les fichiers "
 "de sortie sont incomplets."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
 #: libs/ui/KisMainWindow.cpp:2332
 #, kde-format
 msgid "Render Animation"
 msgstr "Rendu de l'animation"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:95
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:145
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr "bicubique"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:96
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
 #, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "bi-linéaire"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:97
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr "lanczos3"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:98
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr "voisin"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "spline (Courbe de Bézier)"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:105
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:156
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N / A"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:428
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:573
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Aucun programme binaire valable de « FFMpeg » n'a été fourni..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:509
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:669
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
@@ -25235,7 +25290,7 @@ msgstr ""
 "FFMpeg doit être au moins en version 4.2+ pour que la transparence du GIF "
 "fonctionne."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:516
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -25245,18 +25300,36 @@ msgstr ""
 "Il est impossible d'avoir des images « GIF » animées avec une cadence "
 "supérieure à 50. La fréquence sera réduite à 50 images par seconde."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:523
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:682
+#, kde-format
+msgctxt "ffmpeg warning checks"
+msgid "FPS beyond 30 are not widely supported."
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
+#, kde-format
+msgctxt "ffmpeg warnings checks"
+msgid "Dimensions larger than 1920 pixels are not widely supported."
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
 #, kde-format
 msgid "Warning(s):"
 msgstr "Avertissement(s) :"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:761
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:705
+#, kde-format
+msgctxt "ffmpeg warning checks"
+msgid "The export may fail and some devices may not be able to play it."
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Veuillez saisir un nom de fichier vers lequel effectuer le rendu"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:767
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -25265,7 +25338,7 @@ msgstr ""
 "Le programme « FFMpeg » que vous avez fourni semble être sous forme "
 "compressée. Veuillez tenter de l'extraire tout d'abord de l'archive."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:770
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -25529,18 +25602,60 @@ msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
 msgstr "Chargement des données de la vidéo... %1 trames analysées."
 
-#: libs/ui/animation/KisVideoSaver.cpp:52
+#: libs/ui/animation/KisLibavEncoderContext.h:102
+#, fuzzy, kde-format
+#| msgid "Internal error"
+msgid "Internal error (%1)"
+msgstr "Erreur interne"
+
+#: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
+#, kde-format
+msgid "LibAV: %1"
+msgstr ""
+
+#: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
+#, fuzzy, kde-format
+#| msgid "Hatching preferences"
+msgid "This format has no preferences."
+msgstr "Préférences de hachures"
+
+#: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
+#, fuzzy, kde-format
+#| msgctxt "Shows up instead of the name when there's no profile"
+#| msgid "No Profile Found"
+msgid "No frame files found"
+msgstr "Aucun profil trouvé"
+
+#: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "&Render Animation..."
+msgid "Rendering animation..."
+msgstr "Effectuer un &rendu d'animation..."
+
+#: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
+#, kde-format
+msgid "No encoder for the selected format found"
+msgstr ""
+
+#: libs/ui/animation/KisVideoSaver.cpp:110
+#, fuzzy, kde-format
+#| msgid "No office:drawing tag found in file: %1"
+msgid "Error preparing audio file: %1"
+msgstr "Aucune étiquette « office:drawing » trouvée dans le fichier : %1"
+
+#: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
 msgid "ffmpeg could not be found at %1"
 msgstr "Impossible de trouver «  ffmpeg » à %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:136
+#: libs/ui/animation/KisVideoSaver.cpp:215
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Création de la palette pour le format de fichier %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:198
+#: libs/ui/animation/KisVideoSaver.cpp:277
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -26237,7 +26352,7 @@ msgstr "Affichage"
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
 #: libs/ui/kis_paintop_box.cc:319
-#: plugins/dockers/recorder/recorder_export.ui:497
+#: plugins/dockers/recorder/recorder_export.ui:300
 #, kde-format
 msgid "x"
 msgstr "x"
@@ -26325,7 +26440,7 @@ msgstr "Importation d'une animation vidéo"
 #. i18n: ectx: attribute (title), widget (QWidget, General)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/animation/wdg_animationrenderer.ui:16
+#: libs/ui/animation/wdg_animationrenderer.ui:24
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2561
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2563
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
@@ -26429,7 +26544,7 @@ msgstr "Importer dans :"
 
 #. i18n: ectx: property (text), widget (QLabel, fpsLabel)
 #: libs/ui/animation/VideoImportDialog.ui:375
-#: libs/ui/animation/wdg_animationrenderer.ui:171
+#: libs/ui/animation/wdg_animationrenderer.ui:253
 #, kde-format
 msgid "FPS:"
 msgstr "FPS :"
@@ -26489,7 +26604,7 @@ msgstr "Document"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/VideoImportDialog.ui:524
 #: libs/ui/animation/VideoImportDialog.ui:559
-#: libs/ui/animation/wdg_animationrenderer.ui:143
+#: libs/ui/animation/wdg_animationrenderer.ui:225
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:71
 #: libs/ui/forms/wdg_resolution.ui:24 libs/ui/forms/wdgimageproperties.ui:48
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:133
@@ -26530,7 +26645,7 @@ msgstr "Largeur :"
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/animation/VideoImportDialog.ui:537
 #: libs/ui/animation/VideoImportDialog.ui:572
-#: libs/ui/animation/wdg_animationrenderer.ui:157
+#: libs/ui/animation/wdg_animationrenderer.ui:239
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:108
 #: libs/ui/forms/wdg_resolution.ui:31 libs/ui/forms/wdgimageproperties.ui:71
 #: libs/ui/imagesize/wdg_canvassize.ui:39
@@ -26563,7 +26678,7 @@ msgstr "Importer le dimensionnement vidéo"
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
-#: libs/ui/animation/wdg_animationrenderer.ui:188
+#: libs/ui/animation/wdg_animationrenderer.ui:270
 #: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
@@ -26590,37 +26705,50 @@ msgid "FFprobe path:"
 msgstr "Emplacement de « FFProbe » :"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
-#: libs/ui/animation/wdg_animationrenderer.ui:10
+#: libs/ui/animation/wdg_animationrenderer.ui:18
 #, kde-format
 msgid "Animation Renderer Image"
 msgstr "Image du rendu de l'animation"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/wdg_animationrenderer.ui:22
+#: libs/ui/animation/wdg_animationrenderer.ui:30
 #, kde-format
 msgid "First frame:"
 msgstr "Première image :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/wdg_animationrenderer.ui:32
+#: libs/ui/animation/wdg_animationrenderer.ui:40
 #, kde-format
 msgid "Last frame:"
 msgstr "Dernière image :"
 
+#. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
+#: libs/ui/animation/wdg_animationrenderer.ui:72
+#, kde-format
+msgid "Images"
+msgstr "Images"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
+#: libs/ui/animation/wdg_animationrenderer.ui:82
+#, fuzzy, kde-format
+#| msgid "&Video"
+msgid "Video"
+msgstr "&Vidéo"
+
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
-#: libs/ui/animation/wdg_animationrenderer.ui:49
+#: libs/ui/animation/wdg_animationrenderer.ui:134
 #, kde-format
 msgid "Export as image sequence"
 msgstr "Exporter comme séquence d'images"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/wdg_animationrenderer.ui:58
+#: libs/ui/animation/wdg_animationrenderer.ui:143
 #, kde-format
 msgid "File format:"
 msgstr " Format de fichier :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
-#: libs/ui/animation/wdg_animationrenderer.ui:67
+#: libs/ui/animation/wdg_animationrenderer.ui:152
 #, kde-format
 msgid ""
 "Select the file format for the image sequence. If you want to render to "
@@ -26631,83 +26759,83 @@ msgstr ""
 "sélectionner que le format « png »."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
-#: libs/ui/animation/wdg_animationrenderer.ui:74
+#: libs/ui/animation/wdg_animationrenderer.ui:159
 #, kde-format
 msgid "Select the frame export options"
 msgstr "Sélectionner les options d'exportation des images"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/wdg_animationrenderer.ui:86
+#. i18n: ectx: property (text), widget (QLabel, lblDirRequester)
+#: libs/ui/animation/wdg_animationrenderer.ui:168
 #, kde-format
 msgid "Image location:"
 msgstr "Emplacement de l'image : "
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/wdg_animationrenderer.ui:96
+#: libs/ui/animation/wdg_animationrenderer.ui:178
 #, kde-format
 msgid "Base name:"
 msgstr "Nom de la base :"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBasename)
-#: libs/ui/animation/wdg_animationrenderer.ui:103
+#: libs/ui/animation/wdg_animationrenderer.ui:185
 #, kde-format
 msgid "frame"
 msgstr "image"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/animation/wdg_animationrenderer.ui:110
+#: libs/ui/animation/wdg_animationrenderer.ui:192
 #, kde-format
 msgid "Start numbering at:"
 msgstr "Démarrer la numérotation à :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOnlyUniqueFrames)
-#: libs/ui/animation/wdg_animationrenderer.ui:124
+#: libs/ui/animation/wdg_animationrenderer.ui:206
 #, kde-format
 msgid "Only Unique Frames"
 msgstr "Seulement les images uniques"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
-#: libs/ui/animation/wdg_animationrenderer.ui:134
+#: libs/ui/animation/wdg_animationrenderer.ui:216
 #, kde-format
 msgid "Export as video"
 msgstr "Exporter comme vidéo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
-#: libs/ui/animation/wdg_animationrenderer.ui:198
-#: plugins/dockers/recorder/recorder_export.ui:554
+#: libs/ui/animation/wdg_animationrenderer.ui:280
+#: plugins/dockers/recorder/recorder_export.ui:92
 #, kde-format
 msgid "Render as:"
 msgstr "Faire un rendu en :"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
-#: libs/ui/animation/wdg_animationrenderer.ui:210
+#: libs/ui/animation/wdg_animationrenderer.ui:292
 #, kde-format
 msgid "Select the FFmpeg render options."
 msgstr "Sélectionner les options pour le moteur de rendu « FFMpeg »."
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
+#. i18n: ectx: property (text), widget (QLabel, lblVideoFilenameTitle)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
-#: libs/ui/animation/wdg_animationrenderer.ui:222
-#: plugins/dockers/recorder/recorder_export.ui:404
+#: libs/ui/animation/wdg_animationrenderer.ui:301
+#: plugins/dockers/recorder/recorder_export.ui:105
 #, kde-format
 msgid "Video location:"
 msgstr "Emplacement de la vidéo :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
-#: libs/ui/animation/wdg_animationrenderer.ui:232
+#: libs/ui/animation/wdg_animationrenderer.ui:311
 #, kde-format
 msgid "Include Audio"
 msgstr "Inclure de l'audio"
 
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/animation/wdg_animationrenderer.ui:239
+#. i18n: ectx: property (text), widget (QLabel, lblFFMpegLocationTitle)
+#: libs/ui/animation/wdg_animationrenderer.ui:318
 #, kde-format
 msgid "FFmpeg location:"
 msgstr "Emplacement de « FFMpeg » :"
 
-#. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/wdg_animationrenderer.ui:249
+#. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersionTitle)
+#: libs/ui/animation/wdg_animationrenderer.ui:328
 #, kde-format
 msgid "FFmpeg version:"
 msgstr "Version de FFMpeg :"
@@ -26722,7 +26850,7 @@ msgstr "Version de FFMpeg :"
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
-#: libs/ui/animation/wdg_animationrenderer.ui:256
+#: libs/ui/animation/wdg_animationrenderer.ui:335
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:204
 #: libs/ui/widgets/KoFillConfigWidget.ui:41
 #: libs/ui/widgets/KoFillConfigWidget.ui:275
@@ -28090,12 +28218,12 @@ msgstr "Re-génération du cache..."
 msgid "Saving frames..."
 msgstr "Enregistrement des trames..."
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:101
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:125
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Supprimer les anciennes images ?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:102
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:126
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -28110,12 +28238,12 @@ msgstr ""
 "Dossier : %1\n"
 "Fichiers : %2"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:146
 #, kde-format
 msgid "Failed to delete"
 msgstr "Suppression impossible"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:147
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"
@@ -28147,9 +28275,9 @@ msgstr ""
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:272
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
-#: plugins/dockers/recorder/recorder_export.ui:853
+#: plugins/dockers/recorder/recorder_export.ui:917
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
 #: plugins/generators/seexpr/wdgseexpr.ui:179
 #: plugins/python/krita_script_starter/bbdkss.ui:203
@@ -32775,7 +32903,7 @@ msgstr "Définir la couleur utilisée par les alarmes"
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
 #: libs/ui/forms/wdgrectangleconstraints.ui:56
-#: plugins/dockers/recorder/recorder_export.ui:472
+#: plugins/dockers/recorder/recorder_export.ui:275
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:278
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:326
 #, kde-format
@@ -32792,7 +32920,7 @@ msgstr "Largeur :"
 #. i18n: ectx: property (toolTip), widget (QLabel, heightLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleHeight)
 #: libs/ui/forms/wdgrectangleconstraints.ui:95
-#: plugins/dockers/recorder/recorder_export.ui:510
+#: plugins/dockers/recorder/recorder_export.ui:313
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:228
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:253
 #, kde-format
@@ -33306,7 +33434,7 @@ msgstr "Fixer les proportions"
 #: libs/ui/imagesize/wdg_canvassize.ui:135
 #: libs/ui/imagesize/wdg_imagesize.ui:342
 #: libs/ui/imagesize/wdg_layersize.ui:142
-#: plugins/dockers/recorder/recorder_export.ui:346
+#: plugins/dockers/recorder/recorder_export.ui:390
 #, kde-format
 msgid "Constrain proportions"
 msgstr "Fixer les proportions"
@@ -36094,7 +36222,7 @@ msgid "An unspecified error occurred."
 msgstr "Une erreur non spécifiée est survenue."
 
 #: libs/ui/KisImportExportErrorCode.cpp:24
-#: libs/ui/KisImportExportErrorCode.cpp:185
+#: libs/ui/KisImportExportErrorCode.cpp:192
 #, kde-format
 msgid "The action has been completed successfully."
 msgstr "L'action s'est terminée avec succès."
@@ -36176,85 +36304,85 @@ msgstr "Impossible d'ouvrir le fichier en lecture pour le motif : %1"
 msgid "Cannot open file for writing. Reason: %1"
 msgstr "Impossible d'ouvrir le fichier en écriture. Motif : %1"
 
-#: libs/ui/KisImportExportErrorCode.cpp:139
+#: libs/ui/KisImportExportErrorCode.cpp:146
 #, kde-format
 msgid "Unexpected error."
 msgstr "Erreur non prévue."
 
-#: libs/ui/KisImportExportErrorCode.cpp:148
+#: libs/ui/KisImportExportErrorCode.cpp:155
 #, kde-format
 msgid "The file doesn't exist."
 msgstr "Le fichier n'existe pas."
 
-#: libs/ui/KisImportExportErrorCode.cpp:150
+#: libs/ui/KisImportExportErrorCode.cpp:157
 #, kde-format
 msgid "Permission denied: Krita is not allowed to read the file."
 msgstr ""
 "Permission refusée : la lecture du fichier par Krita n'est pas autorisée."
 
-#: libs/ui/KisImportExportErrorCode.cpp:152
+#: libs/ui/KisImportExportErrorCode.cpp:159
 #, kde-format
 msgid "The file format cannot be parsed."
 msgstr "Impossible d'analyser le format du fichier."
 
-#: libs/ui/KisImportExportErrorCode.cpp:154
+#: libs/ui/KisImportExportErrorCode.cpp:161
 #, kde-format
 msgid "The file format contains unsupported features."
 msgstr ""
 "Le format du fichier contient des fonctionnalités non prises en charge."
 
-#: libs/ui/KisImportExportErrorCode.cpp:156
+#: libs/ui/KisImportExportErrorCode.cpp:163
 #, kde-format
 msgid "The file format contains unsupported color space."
 msgstr ""
 "Le format du fichier contient un espace colorimétrique non pris en charge."
 
-#: libs/ui/KisImportExportErrorCode.cpp:158
+#: libs/ui/KisImportExportErrorCode.cpp:165
 #, kde-format
 msgid "Error occurred while reading from the file."
 msgstr "Une erreur est survenue lors de la lecture du fichier."
 
-#: libs/ui/KisImportExportErrorCode.cpp:162
+#: libs/ui/KisImportExportErrorCode.cpp:169
 #, kde-format
 msgid "The file cannot be created."
 msgstr "Impossible de créer le fichier."
 
-#: libs/ui/KisImportExportErrorCode.cpp:164
+#: libs/ui/KisImportExportErrorCode.cpp:171
 #, kde-format
 msgid "Permission denied: Krita is not allowed to write to the file."
 msgstr ""
 "Permission refusée : l'écriture du fichier par Krita n'est pas autorisée."
 
-#: libs/ui/KisImportExportErrorCode.cpp:166
+#: libs/ui/KisImportExportErrorCode.cpp:173
 #, kde-format
 msgid "There is not enough disk space left to save the file."
 msgstr ""
 "Il n'y a pas assez d'espace disponible sur disque pour enregistrer le "
 "fichier."
 
-#: libs/ui/KisImportExportErrorCode.cpp:168
+#: libs/ui/KisImportExportErrorCode.cpp:175
 #, kde-format
 msgid "Error occurred while writing to the file."
 msgstr "Une erreur est survenue lors de l'écriture du fichier."
 
-#: libs/ui/KisImportExportErrorCode.cpp:170
+#: libs/ui/KisImportExportErrorCode.cpp:177
 #, kde-format
 msgid "Krita does not support this file format."
 msgstr "Krita ne prend pas en charge ce format de fichier."
 
-#: libs/ui/KisImportExportErrorCode.cpp:174
+#: libs/ui/KisImportExportErrorCode.cpp:181
 #, kde-format
 msgid "The action was cancelled by the user."
 msgstr "Cette action a été annulée par l'utilisateur."
 
-#: libs/ui/KisImportExportErrorCode.cpp:178
+#: libs/ui/KisImportExportErrorCode.cpp:185
 #: plugins/impex/libkra/kra_converter.cpp:402
 #: plugins/impex/libkra/kra_converter.cpp:431
 #, kde-format
 msgid "Unknown error."
 msgstr "Erreur inconnue."
 
-#: libs/ui/KisImportExportErrorCode.cpp:182
+#: libs/ui/KisImportExportErrorCode.cpp:189
 #, kde-format
 msgid "Image is busy."
 msgstr "L'image est occupée."
@@ -44084,73 +44212,73 @@ msgstr "Propriétés disponibles :"
 msgid "Current properties:"
 msgstr "Préréglage actuel"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:53
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:57
 #, kde-format
 msgid "Compositions"
 msgstr "Compositions"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:66
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:70
 #, kde-format
 msgid "Delete Composition"
 msgstr "Supprimer la composition"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:67
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:71
 #, kde-format
 msgid "New Composition"
 msgstr "Nouvelle composition"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:68
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:72
 #, kde-format
 msgid "Export Composition"
 msgstr "Exporter la composition"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:69
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:73
 #, kde-format
 msgid "Move Composition Up"
 msgstr "Déplacer la composition vers le haut"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:70
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:74
 #, kde-format
 msgid "Move Composition Down"
 msgstr "Déplacer la composition vers le bas"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:86
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:90
 #, kde-format
 msgid "Export Images"
 msgstr "Importer des images"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:89
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:93
 #, kde-format
 msgid "Export Animations"
 msgstr "Exporter les animations"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:104
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:108
 #, kde-format
 msgid "Insert Name"
 msgstr "Insérer un nom"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:247
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:350
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:251
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:369
 #, kde-format
 msgid "Select a Directory"
 msgstr "Sélectionner un dossier"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:267
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:271
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "Exporter des compositions..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:293
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:297
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Exportation d'une composition : %1"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:453
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:476
 #, kde-format
 msgid "Rename Composition"
 msgstr "Renommer la composition"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:477
 #, kde-format
 msgid "New Name:"
 msgstr "Nouveau nom :"
@@ -45107,7 +45235,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "Exporter la vidéo en accéléré"
 
-#: plugins/dockers/recorder/recorder_export.cpp:93
+#: plugins/dockers/recorder/recorder_export.cpp:109
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -45115,7 +45243,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[INTROUVABLE]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:94
+#: plugins/dockers/recorder/recorder_export.cpp:110
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -45124,86 +45252,89 @@ msgstr ""
 "Il est impossible de trouver l'exécutable de FFMpeg. Veuillez l'installer ou "
 "indiquer manuellement son emplacement."
 
-#: plugins/dockers/recorder/recorder_export.cpp:177
+#: plugins/dockers/recorder/recorder_export.cpp:231
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "Annuler l'encodage de la vidéo en accéléré ?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:248
-#, kde-format
+#: plugins/dockers/recorder/recorder_export.cpp:321
+#, fuzzy, kde-format
+#| msgctxt "Status for the export of the video record"
+#| msgid "Starting FFmpeg..."
 msgctxt "Status for the export of the video record"
-msgid "Starting FFmpeg..."
+msgid "Starting exporter..."
 msgstr "Démarrage de « FFMpeg »..."
 
+#: plugins/dockers/recorder/recorder_export.cpp:440
+#, kde-format
+msgid "Export Timelapse Video As"
+msgstr "Exporter la vidéo en accéléré comme"
+
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:373
+#: plugins/dockers/recorder/recorder_export.cpp:531
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:388
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Aucune image à exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:392
+#: plugins/dockers/recorder/recorder_export.cpp:552
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Informations d'enregistrement"
 
-#: plugins/dockers/recorder/recorder_export.cpp:395
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:397
+#: plugins/dockers/recorder/recorder_export.cpp:557
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "Image(s)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:443
+#: plugins/dockers/recorder/recorder_export.cpp:617
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Aucune image à exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:549
+#: plugins/dockers/recorder/recorder_export.cpp:729
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Sélectionner le fichier exécutable de « FFMpeg »"
 
-#: plugins/dockers/recorder/recorder_export.cpp:594
-#, kde-format
-msgid "Export Timelapse Video As"
-msgstr "Exporter la vidéo en accéléré comme"
-
-#: plugins/dockers/recorder/recorder_export.cpp:613
-#, kde-format
-msgid "The video file already exists. Do you wish to overwrite it?"
-msgstr "Le fichier vidéo existe déjà. Voulez-vous vraiment l'écraser ?"
-
-#: plugins/dockers/recorder/recorder_export.cpp:618
+#: plugins/dockers/recorder/recorder_export.cpp:809
 #, kde-format
 msgid "No frames to export."
 msgstr "Aucune image à exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:645
+#: plugins/dockers/recorder/recorder_export.cpp:823
+#, kde-format
+msgid "The video file already exists. Do you wish to overwrite it?"
+msgstr "Le fichier vidéo existe déjà. Voulez-vous vraiment l'écraser ?"
+
+#: plugins/dockers/recorder/recorder_export.cpp:851
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "La vidéo en accéléré est en cours d'encodage..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:660
-#, kde-format
-msgid "Export failed. FFmpeg message:"
+#: plugins/dockers/recorder/recorder_export.cpp:866
+#, fuzzy, kde-format
+#| msgid "Export failed. FFmpeg message:"
+msgid "Export failed. Error message:"
 msgstr "Échec de l'exportation. Message de « FFMpeg » :"
 
-#: plugins/dockers/recorder/recorder_export.cpp:681
+#: plugins/dockers/recorder/recorder_export.cpp:889
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45219,7 +45350,7 @@ msgstr ""
 "\n"
 "Voulez-vous vraiment continuer ?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:688
+#: plugins/dockers/recorder/recorder_export.cpp:896
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -45238,23 +45369,52 @@ msgstr "Exporter la vidéo en accéléré"
 msgid "Open record directory"
 msgstr "Ouvrir le dossier d'enregistrements"
 
-#. i18n: ectx: property (text), widget (QLabel, labelRealTimeCaptureNotion)
-#: plugins/dockers/recorder/recorder_export.ui:178
+#. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
+#: plugins/dockers/recorder/recorder_export.ui:118
 #, kde-format
-msgid "Used for Capture Interval calculation"
-msgstr "Utilisé pour calculer l'intervalle de prise de vue"
+msgid "Setup ffmpeg executable location"
+msgstr "Paramétrer l'emplacement pour l'exécutable de « FFMpeg »"
 
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spinRate)
-#. i18n: ectx: property (suffix), widget (QSpinBox, spinLastFrameSec)
-#: plugins/dockers/recorder/recorder_export.ui:214
-#: plugins/dockers/recorder/recorderdocker.ui:183
+#. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
+#: plugins/dockers/recorder/recorder_export.ui:139
 #, kde-format
-msgctxt "Contraction of \"second\" for interval"
 msgid " sec."
 msgstr " sec."
 
+#. i18n: ectx: property (text), widget (QCheckBox, checkResize)
+#: plugins/dockers/recorder/recorder_export.ui:191
+#, kde-format
+msgid "Resize:"
+msgstr "Re-dimensionner :"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
+#: plugins/dockers/recorder/recorder_export.ui:218
+#, kde-format
+msgid "Edit video profile"
+msgstr "Modifier le profil de la vidéo"
+
+#. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
+#: plugins/dockers/recorder/recorder_export.ui:225
+#, kde-format
+msgid "FFmpeg:"
+msgstr "FFMpeg :"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
+#: plugins/dockers/recorder/recorder_export.ui:238
+#, kde-format
+msgid "Select a file location for the exported timelapse video"
+msgstr ""
+"Sélectionnez un emplacement de fichier pour l'exportation de la vidéo en "
+"temps accéléré"
+
+#. i18n: ectx: property (text), widget (QLabel, labelFps)
+#: plugins/dockers/recorder/recorder_export.ui:357
+#, kde-format
+msgid "Video FPS:"
+msgstr "FPS de la vidéo :"
+
 #. i18n: ectx: property (toolTip), widget (QLabel, labelFpsInput)
-#: plugins/dockers/recorder/recorder_export.ui:243
+#: plugins/dockers/recorder/recorder_export.ui:371
 #, kde-format
 msgid ""
 "The speed of reading the input stream.\n"
@@ -45266,59 +45426,54 @@ msgstr ""
 "FPS souhaité doit être deux fois plus grand que celui de la vidéo originale."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
-#: plugins/dockers/recorder/recorder_export.ui:246
+#: plugins/dockers/recorder/recorder_export.ui:374
 #, kde-format
 msgctxt "Input FPS of recorded timelapses."
 msgid "Input FPS:"
 msgstr "FPS souhaité :"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, buttonLockFps)
-#: plugins/dockers/recorder/recorder_export.ui:259
-#, kde-format
-msgid "Use the same rate for Input FPS and Video FPS"
-msgstr "Utiliser le même taux pour le FPS souhaité et le FPS de la vidéo"
-
-#. i18n: ectx: property (text), widget (QLabel, labelFps)
-#: plugins/dockers/recorder/recorder_export.ui:289
-#, kde-format
-msgid "Video FPS:"
-msgstr "FPS de la vidéo :"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
-#: plugins/dockers/recorder/recorder_export.ui:320
-#, kde-format
-msgid "Edit video profile"
-msgstr "Modifier le profil de la vidéo"
-
-#. i18n: ectx: property (text), widget (QLineEdit, editFfmpegPath)
-#: plugins/dockers/recorder/recorder_export.ui:333
-#, kde-format
-msgid "ffmpeg"
-msgstr "ffmpeg"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, extendResultCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:378
+#: plugins/dockers/recorder/recorder_export.ui:480
 #, kde-format
 msgid "Extend the last frame in the exported video by the specified duration"
 msgstr ""
 "Prolonger la dernière trame de la vidéo exportée selon la durée spécifiée"
 
 #. i18n: ectx: property (text), widget (QCheckBox, extendResultCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:381
+#: plugins/dockers/recorder/recorder_export.ui:483
 #, kde-format
 msgid "Extend result for:"
 msgstr "Étendre le résultat pour :"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
-#: plugins/dockers/recorder/recorder_export.ui:390
+#. i18n: ectx: property (toolTip), widget (QPushButton, buttonLockFps)
+#: plugins/dockers/recorder/recorder_export.ui:492
 #, kde-format
-msgid "Select a file location for the exported timelapse video"
-msgstr ""
-"Sélectionnez un emplacement de fichier pour l'exportation de la vidéo en "
-"temps accéléré"
+msgid "Use the same rate for Input FPS and Video FPS"
+msgstr "Utiliser le même taux pour le FPS souhaité et le FPS de la vidéo"
+
+#. i18n: ectx: property (text), widget (QLabel, labelRealTimeCaptureNotion)
+#: plugins/dockers/recorder/recorder_export.ui:548
+#, kde-format
+msgid "Used for Capture Interval calculation"
+msgstr "Utilisé pour calculer l'intervalle de prise de vue"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spinRate)
+#. i18n: ectx: property (suffix), widget (QSpinBox, spinLastFrameSec)
+#: plugins/dockers/recorder/recorder_export.ui:584
+#: plugins/dockers/recorder/recorderdocker.ui:183
+#, kde-format
+msgctxt "Contraction of \"second\" for interval"
+msgid " sec."
+msgstr " sec."
+
+#. i18n: ectx: property (text), widget (QLineEdit, editFfmpegPath)
+#: plugins/dockers/recorder/recorder_export.ui:618
+#, kde-format
+msgid "ffmpeg"
+msgstr "ffmpeg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:433
+#: plugins/dockers/recorder/recorder_export.ui:644
 #, kde-format
 msgid ""
 "Prepend a preview to the exported video.\n"
@@ -45328,92 +45483,85 @@ msgstr ""
 "L'aperçu affichera la dernière trame de la vidéo pour la durée spécifiée."
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:439
+#: plugins/dockers/recorder/recorder_export.ui:650
 #, kde-format
 msgid "Enable preview for:"
 msgstr "Activer l'aperçu pour :"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
-#: plugins/dockers/recorder/recorder_export.ui:567
+#. i18n: ectx: property (text), widget (QLabel, lblWarnSizeText)
+#: plugins/dockers/recorder/recorder_export.ui:677
 #, kde-format
-msgid "Setup ffmpeg executable location"
-msgstr "Paramétrer l'emplacement pour l'exécutable de « FFMpeg »"
+msgid ""
+"<strong>Warning:</strong> video with dimensions larger than 1920 pixels is "
+"not widely supported. The export may fail and some devices will not be able "
+"to play it."
+msgstr ""
 
-#. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
-#: plugins/dockers/recorder/recorder_export.ui:589
+#. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
+#: plugins/dockers/recorder/recorder_export.ui:711
 #, kde-format
-msgid " sec."
-msgstr " sec."
-
-#. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
-#: plugins/dockers/recorder/recorder_export.ui:617
-#, kde-format
-msgid "FFmpeg:"
-msgstr "FFMpeg :"
-
-#. i18n: ectx: property (text), widget (QCheckBox, checkResize)
-#: plugins/dockers/recorder/recorder_export.ui:654
-#, kde-format
-msgid "Resize:"
-msgstr "Re-dimensionner :"
+msgid ""
+"<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
+"The export may fail and some devices will not be able to play it."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
-#: plugins/dockers/recorder/recorder_export.ui:693
+#: plugins/dockers/recorder/recorder_export.ui:757
 #, kde-format
 msgid "Video duration:"
 msgstr "Durée de la vidéo :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDone)
-#: plugins/dockers/recorder/recorder_export.ui:943
+#: plugins/dockers/recorder/recorder_export.ui:1007
 #, kde-format
 msgctxt "Caption: Video exporting finished"
 msgid "Done!"
 msgstr "Terminé !"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonWatchIt)
-#: plugins/dockers/recorder/recorder_export.ui:961
+#: plugins/dockers/recorder/recorder_export.ui:1025
 #, kde-format
 msgctxt "Watch the video which is just created"
 msgid "Watch it!"
 msgstr "Surveillez le !"
 
 #. i18n: ectx: property (text), widget (QLabel, labelWritten)
-#: plugins/dockers/recorder/recorder_export.ui:971
+#: plugins/dockers/recorder/recorder_export.ui:1035
 #, kde-format
 msgid "The timelapse video has been written to:"
 msgstr "La vidéo en accéléré a été enregistrée dans :"
 
 # Timeline laissé volontairement en anglais
 #. i18n: ectx: property (text), widget (QPushButton, buttonShowInFolder)
-#: plugins/dockers/recorder/recorder_export.ui:989
+#: plugins/dockers/recorder/recorder_export.ui:1053
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Show in folder"
 msgstr "Afficher dans un dossier"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRemoveSnapshots)
-#: plugins/dockers/recorder/recorder_export.ui:1026
+#: plugins/dockers/recorder/recorder_export.ui:1090
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Remove recordings"
 msgstr "Supprimer les enregistrements"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
-#: plugins/dockers/recorder/recorder_export.ui:1056
+#: plugins/dockers/recorder/recorder_export.ui:1120
 #, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
 msgstr "Temps de rendu :"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
-#: plugins/dockers/recorder/recorder_export.ui:1083
+#: plugins/dockers/recorder/recorder_export.ui:1147
 #, kde-format
 msgctxt "Button to restart the timelapse video configuring"
 msgid "Restart"
 msgstr "Redémarrer"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDoneClose)
-#: plugins/dockers/recorder/recorder_export.ui:1090
+#: plugins/dockers/recorder/recorder_export.ui:1154
 #, kde-format
 msgctxt "Close dialog button"
 msgid "Close"
@@ -45834,25 +45982,25 @@ msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Enregistreur"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "Votre système n'est pas assez performant pour cette fonctionnalité"
 
 # unreviewed-context
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:634
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:629
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Sélectionner un dossier pour les enregistrements"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:755
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:761
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:750
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:756
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Enregistreur"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:756
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:751
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45862,7 +46010,7 @@ msgstr ""
 "trame. Veuillez vérifier l'espace disque libre et lancer à nouveau "
 "l'enregistreur."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:757
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
@@ -45870,7 +46018,7 @@ msgstr ""
 "Krita n'a probablement pas pu arrêter l'enregistreur. Veuillez essayer de "
 "redémarrer Krita."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:767
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45883,7 +46031,7 @@ msgstr ""
 "fréquence d'images pour l'exportation ffmpeg ou le filtrage de la mise à "
 "l'échelle dans les paramètres d'accélération du canevas."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:769
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:764
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -48905,12 +49053,12 @@ msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
 msgstr "Modifier la teinte de la couleur sélectionnée dans le sens antihoraire"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:49
 #, kde-format
 msgid "Wide Gamut Color Selector"
 msgstr "Sélecteur de couleurs à Gamut étendu"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:313
 #, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
@@ -52505,7 +52653,7 @@ msgstr "Ajustement &TSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Ajustement TSV/TSL "
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:489
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -68058,38 +68206,38 @@ msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Décalage de référence"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:97
 #, kde-format
 msgid "Text Tool"
 msgstr "Outil de texte"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:167
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, kde-format
 msgid "Conversion failed"
 msgstr "Échec de la conversion"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:220
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
 #, kde-format
 msgid "Find Text"
 msgstr "Chercher du texte"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
 #, kde-format
 msgid "Find:"
 msgstr "Chercher :"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:262
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Chercher et Remplacer tout"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:268
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
 #, kde-format
 msgid "Replace:"
 msgstr "Remplacer :"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Vous avez modifié le texte. Annuler les changements ?"
@@ -70839,9 +70987,6 @@ msgstr ""
 #~ msgid "Proofing transform"
 #~ msgstr "Vérification de la transformation"
 
-#~ msgid "Adaptation State:"
-#~ msgstr "Niveau d'adaptation :"
-
 #~ msgid ""
 #~ "<html><head/><body><p>Set how much you wish to correct the adaptation "
 #~ "state. This will affect how <span style=\" font-style:italic;\">Absolute "
@@ -71866,9 +72011,6 @@ msgstr ""
 
 #~ msgid "Image Se&quence"
 #~ msgstr "Sé&quence d'images"
-
-#~ msgid "&Video"
-#~ msgstr "&Vidéo"
 
 #~ msgid "Video Options"
 #~ msgstr "Options de vidéo"
@@ -76838,9 +76980,6 @@ msgstr ""
 #~ msgid "Home"
 #~ msgstr "Accueil"
 
-#~ msgid "Images"
-#~ msgstr "Images"
-
 #~ msgid "Next"
 #~ msgstr "Suivant"
 
@@ -77955,9 +78094,6 @@ msgstr ""
 
 #~ msgid "No body tag found in file: %1"
 #~ msgstr "Impossible de trouver des étiquettes dans le fichier : %1"
-
-#~ msgid "No office:drawing tag found in file: %1"
-#~ msgstr "Aucune étiquette « office:drawing » trouvée dans le fichier : %1"
 
 #~ msgid "Collection Error"
 #~ msgstr "Erreur de collection"
@@ -98798,12 +98934,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Invalid file format"
 #~ msgstr "Format de fichier non valable"
-
-#, fuzzy
-#~| msgid "Internal error"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Internal error"
-#~ msgstr "Erreur interne"
 
 #~ msgid "Out of memory"
 #~ msgstr "Mémoire insuffisante"

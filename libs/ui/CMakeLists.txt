@@ -778,6 +778,13 @@ if (HAVE_X11)
 endif()
 
 if (QT_MAJOR_VERSION STREQUAL "6")
+    #Need provate headers to access platform stuff for proper screen color sampling
+    set_source_files_properties(
+      widgets/KisScreenColorSampler.cpp
+      PROPERTIES
+      INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+    )
+
     target_link_libraries(kritaui
         PRIVATE
             Qt6::OpenGLWidgets

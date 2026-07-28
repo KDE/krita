@@ -62,6 +62,12 @@ private:
     void updateColorLabelText(const QPoint &globalPos);
     void releaseColorSampling();
     void continueUpdateColorSampling(const QPoint &globalPos);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool tryToUsePlatformIntegration();
+private Q_SLOTS:
+    void colorPicked(const QColor &color);
+#endif
 };
 
 class KisScreenColorSamplingEventFilter : public QObject {

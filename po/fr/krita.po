@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 02:42+0000\n"
-"PO-Revision-Date: 2026-07-16 14:25+0200\n"
+"PO-Revision-Date: 2026-07-19 09:39+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -25128,24 +25128,24 @@ msgstr "Activer l'outil de transformation"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "Android : %1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (hardware)"
-msgstr "%1 (Possédé)"
+msgstr "%1 (Matériel)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (software)"
-msgstr "%1 (Possédé)"
+msgstr "%1 (Logiciel)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
 msgid "Unsupported video parameters, try lowering the video FPS or size"
 msgstr ""
+"Paramètres vidéo non pris en charge. Veuillez essayer de réduire le débit "
+"« FPS » ou la taille de la vidéo"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
 #, kde-format
@@ -25155,10 +25155,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "Tous les formats pris en charge"
+msgstr "Format non pris en charge"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
 #, fuzzy, kde-format
@@ -25603,10 +25602,9 @@ msgid "Loading video data... %1 frames examined."
 msgstr "Chargement des données de la vidéo... %1 trames analysées."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgid "Internal error"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "Erreur interne"
+msgstr "Erreur interne (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
@@ -25620,11 +25618,9 @@ msgid "This format has no preferences."
 msgstr "Préférences de hachures"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "Aucun profil trouvé"
+msgstr "Aucune trame n'a été trouvé."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
 #, fuzzy, kde-format
@@ -25636,7 +25632,7 @@ msgstr "Effectuer un &rendu d'animation..."
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
 msgid "No encoder for the selected format found"
-msgstr ""
+msgstr "Aucun encodeur n'a été trouvé pour le format sélectionné."
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
 #, fuzzy, kde-format
@@ -26724,7 +26720,8 @@ msgstr "Dernière image :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Images"
 msgid "Images"
 msgstr "Images"
 
@@ -45258,12 +45255,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "Annuler l'encodage de la vidéo en accéléré ?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "Démarrage de « FFMpeg »..."
+msgstr "Démarrage de l'exportateur..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:440
 #, kde-format
@@ -45329,10 +45324,9 @@ msgid "The timelapse video is being encoded..."
 msgstr "La vidéo en accéléré est en cours d'encodage..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:866
-#, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
+#, kde-format
 msgid "Export failed. Error message:"
-msgstr "Échec de l'exportation. Message de « FFMpeg » :"
+msgstr "Échec de l'exportation. Message d'erreur :"
 
 #: plugins/dockers/recorder/recorder_export.cpp:889
 #, kde-format
@@ -45496,6 +45490,9 @@ msgid ""
 "not widely supported. The export may fail and some devices will not be able "
 "to play it."
 msgstr ""
+"<strong>Avertissement : </strong> : les vidéos dont les dimensions sont "
+"supérieures à 1 920 pixels ne sont pas largement prises en charge. "
+"L'exportation peut échouer et certains périphériques ne pourront pas la lire."
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
 #: plugins/dockers/recorder/recorder_export.ui:711
@@ -45504,6 +45501,9 @@ msgid ""
 "<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
 "The export may fail and some devices will not be able to play it."
 msgstr ""
+"<strong>Avertissement :</strong> : les vidéos avec des débits « FPS » "
+"supérieurs à 30 ne sont pas largement prises en charge. L'exportation peut "
+"échouer et certains périphériques ne pourront pas la lire."
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:757

@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 02:42+0000\n"
-"PO-Revision-Date: 2026-07-14 07:15+0200\n"
+"PO-Revision-Date: 2026-07-28 07:58+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -24932,24 +24932,24 @@ msgstr "Aktivera transformeringsverktyg"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "Android: %1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (hardware)"
-msgstr "%1 (ägd)"
+msgstr "%1 (maskinvara)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (software)"
-msgstr "%1 (ägd)"
+msgstr "%1 (programvara)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
 msgid "Unsupported video parameters, try lowering the video FPS or size"
 msgstr ""
+"Videoparametrar som inte stöds, försök att sänka videons bilder/s eller "
+"storlek"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
 #, kde-format
@@ -24957,36 +24957,33 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Ljudparametrar som inte stöds, försök att omkoda ljudfilen med ett vanligare "
+"samplingsformat, samplingsfrekvens och kanalantal."
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "Alla format som stöds"
+msgstr "Format stöds inte"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "Videonfil:"
+msgstr "Videokodare:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Videonfil:"
+msgstr "Videobithastighet:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Ljudmeny"
+msgstr "Ljudkodare:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Anpassningstillstånd:"
+msgstr "Ljudbithastighet:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25104,13 +25101,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "Mer än 30 bilder/s har inte brett stöd."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "Dimensioner större än 1920 bildpunkter har inte brett stöd."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
@@ -25123,6 +25120,7 @@ msgstr "Varning(ar):"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"Exporten kan misslyckas och vissa enheter kanske inte kan spela upp den."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25397,47 +25395,39 @@ msgid "Loading video data... %1 frames examined."
 msgstr "Läser in videodata ... %1 bildrutor hanterade."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Internal error"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "Internt fel"
+msgstr "Internt fel (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Skrafferinginställningar"
+msgstr "Formatet har inga inställningar"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "Ingen profil hittades"
+msgstr "Inga bildrutefiler hittades"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "Åte&rge animering..."
+msgstr "Återger animering..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
 msgid "No encoder for the selected format found"
-msgstr ""
+msgstr "Ingen kodare för valt format hittades"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgid "No office:drawing tag found in file: %1"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Taggen office:drawing hittades inte i filen: %1"
+msgstr "Fel vid förberedelse av ljudfil: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26251,7 +26241,7 @@ msgstr "Allmänt"
 #: libs/ui/animation/VideoImportDialog.ui:40
 #, kde-format
 msgid "Video file:"
-msgstr "Videonfil:"
+msgstr "Videofil:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -26519,10 +26509,9 @@ msgstr "Bilder"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "&Video"
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -44769,12 +44758,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "Avbryt kodning av tidsförloppsvideo?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "Startar FFmpeg ..."
+msgstr "Startar exportverktyg..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:440
 #, kde-format
@@ -44840,10 +44827,9 @@ msgid "The timelapse video is being encoded..."
 msgstr "Tidsförloppsvideon kodas..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:866
-#, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
+#, kde-format
 msgid "Export failed. Error message:"
-msgstr "Export misslyckades: FFmpeg-meddelande:"
+msgstr "Export misslyckades. Felmeddelande:"
 
 #: plugins/dockers/recorder/recorder_export.cpp:889
 #, kde-format
@@ -45005,6 +44991,9 @@ msgid ""
 "not widely supported. The export may fail and some devices will not be able "
 "to play it."
 msgstr ""
+"<strong>Varning:</strong> video med dimensioner större än 1920 bildpunkter "
+"har inte brett stöd. Exporten kan misslyckas och vissa enheter kan inte "
+"spela upp den."
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
 #: plugins/dockers/recorder/recorder_export.ui:711
@@ -45013,6 +45002,8 @@ msgid ""
 "<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
 "The export may fail and some devices will not be able to play it."
 msgstr ""
+"Varning:</strong> video med mer än 30 bilder/s har inte brett stöd. Exporten "
+"kan misslyckas och vissa enheter kan inte spela upp den."
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:757

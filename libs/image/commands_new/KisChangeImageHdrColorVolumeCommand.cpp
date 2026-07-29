@@ -16,7 +16,7 @@ KisChangeImageHdrColorVolumeCommand::KisChangeImageHdrColorVolumeCommand(KisImag
 {
     KisImageSP img = m_image.toStrongRef();
     if (img) {
-        m_cvi = img->colorVolumeInformation();
+        m_oldCvi = img->colorVolumeInformation();
     }
 }
 

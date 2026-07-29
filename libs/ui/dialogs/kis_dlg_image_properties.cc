@@ -127,14 +127,14 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     updateHDRColorVolume();
     connect(m_page->btnCalculateClli, &QPushButton::clicked, this, &KisDlgImageProperties::slotCalculateLightLevels);
     connect(d->image, &KisImage::sigContentLightLevelInformationChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
-    connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
+    connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRDiffuseWhite);
     connect(d->image, &KisImage::sigColorVolumeInformationChanged, this, &KisDlgImageProperties::updateHDRColorVolume);
 
     m_page->cmbDiffuseWhite->addItem(i18n("80 cd/m²"), 80.0);
     m_page->cmbDiffuseWhite->addItem(i18n("203 cd/m²"), 203.0);
 
-    connect(m_page->gbxDiffuseWhite, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRDiffuseLevelOnImage);
-    connect(m_page->cmbDiffuseWhite, SIGNAL(activated(int)), this, SLOT(setHDRDiffuseLevelOnImage()));
+    connect(m_page->gbxDiffuseWhite, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRDiffuseWhiteOnImage);
+    connect(m_page->cmbDiffuseWhite, SIGNAL(activated(int)), this, SLOT(setHDRDiffuseWhiteOnImage()));
 
     connect(m_page->gbxContentLightLevel, &QGroupBox::clicked, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
     connect(m_page->spnMaxCll, &QDoubleSpinBox::valueChanged, this, &KisDlgImageProperties::setHDRLightLevelsOnImage);
@@ -253,7 +253,7 @@ void KisDlgImageProperties::updateDisplayConfigInfo()
     m_page->wdgProofingOptions->setDisplayConfigOptions(d->colorConverter->conversionOptions());
 }
 
-void KisDlgImageProperties::updateHDRLightLevels()
+void KisDlgImageProperties::updateHDRDiffuseWhite()
 {
     if (d->image->diffuseWhiteLightLevel()) {
         m_page->gbxDiffuseWhite->setChecked(true);
@@ -267,6 +267,10 @@ void KisDlgImageProperties::updateHDRLightLevels()
         m_page->gbxDiffuseWhite->setChecked(false);
         m_page->cmbDiffuseWhite->setCurrentIndex(0);
     }
+}
+
+void KisDlgImageProperties::updateHDRLightLevels()
+{
     if (d->image->relativeContentLightLevelInformation()) {
         m_page->gbxContentLightLevel->setChecked(true);
         double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
@@ -306,38 +310,37 @@ void KisDlgImageProperties::updateHDRColorVolume()
 
 void KisDlgImageProperties::setHDRLightLevelsOnImage()
 {
-    KUndo2Command *cmd;
+    std::optional<KisRelativeContentLightLevelInformation> optClli = std::nullopt;
+
     if (m_page->gbxContentLightLevel->isChecked()) {
-        double diffuseWhite = d->image->diffuseWhiteLightLevel()? *d->image->diffuseWhiteLightLevel(): 80.0;
+        double diffuseWhite = d->image->diffuseWhiteLightLevel().value_or(80.0);
         KisRelativeContentLightLevelInformation clli;
         clli.maxContentLightLevel = m_page->spnMaxCll->value() / diffuseWhite;
         clli.maxFrameAverageLightLevel = m_page->spnMaxFall->value() / diffuseWhite;
         clli.type = KisRelativeContentLightLevelInformation::CalculationType(m_page->cmbLumiCalcType->currentData().toInt());
-        cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, std::make_optional(clli));
-    } else {
-        cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, std::nullopt);
+        optClli = std::make_optional(clli);
     }
-    if (cmd) {
+    if (d->image->relativeContentLightLevelInformation() != optClli) {
+        KUndo2Command *cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, optClli);
         d->image->undoAdapter()->addCommand(cmd);
     }
 }
 
-void KisDlgImageProperties::setHDRDiffuseLevelOnImage()
+void KisDlgImageProperties::setHDRDiffuseWhiteOnImage()
 {
-    KUndo2Command *cmd;
+    std::optional<double> dw = std::nullopt;
     if (m_page->gbxDiffuseWhite->isChecked()) {
-        cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::make_optional(m_page->cmbDiffuseWhite->currentData().toDouble()));
-    } else {
-        cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, std::nullopt);
+        dw = std::make_optional(m_page->cmbDiffuseWhite->currentData().toDouble());
     }
-    if (cmd) {
+    if (d->image->diffuseWhiteLightLevel() != dw) {
+        KUndo2Command *cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, dw);
         d->image->undoAdapter()->addCommand(cmd);
     }
 }
 
 void KisDlgImageProperties::setHDRColorVolumeOnImage()
 {
-    KUndo2Command *cmd;
+    std::optional<KisColorVolumeInformation> optCvi = std::nullopt;
     if (m_page->gbxColorVolume->isChecked()) {
         KisColorVolumeInformation cvi;
 
@@ -350,11 +353,11 @@ void KisDlgImageProperties::setHDRColorVolumeOnImage()
         cvi.maxLuminance = m_page->spnMaxLuminance->value();
         cvi.minLuminance = m_page->spnMinLuminance->value();
 
-        cmd = new KisChangeImageHdrColorVolumeCommand(d->image, std::make_optional(cvi));
-    } else {
-        cmd = new KisChangeImageHdrColorVolumeCommand(d->image, std::nullopt);
+        optCvi = std::make_optional(cvi);
+
     }
-    if (cmd) {
+    if (d->image->colorVolumeInformation() != optCvi) {
+        KUndo2Command *cmd = new KisChangeImageHdrColorVolumeCommand(d->image, optCvi);
         d->image->undoAdapter()->addCommand(cmd);
     }
 }
@@ -414,9 +417,12 @@ void KisDlgImageProperties::slotCalculateLightLevels()
     applicator.end();
 
     d->image->waitForDone();
+    std::optional<KisRelativeContentLightLevelInformation> optClli = std::make_optional(visitor->contentLightLevelInformation());
 
-    KUndo2Command *cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, std::make_optional(visitor->contentLightLevelInformation()));
-    d->image->undoAdapter()->addCommand(cmd);
+    if (d->image->relativeContentLightLevelInformation() != optClli) {
+        KUndo2Command *cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, optClli);
+        d->image->undoAdapter()->addCommand(cmd);
+    }
 }
 
 void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)

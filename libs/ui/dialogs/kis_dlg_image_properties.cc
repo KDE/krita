@@ -165,6 +165,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     connect(m_page->spnMaxLuminance, &QDoubleSpinBox::valueChanged, &d->colorVolumeCompressor, &KisSignalCompressor::start);
     connect(&d->colorVolumeCompressor, &KisSignalCompressor::timeout, this, &KisDlgImageProperties::setHDRColorVolumeOnImage);
 
+    const bool hdr = (d->image->colorSpace()->hasHighDynamicRange()
+                      || d->image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ);
+    m_page->grpHdrMeta->setEnabled(hdr);
+
     //annotations
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();

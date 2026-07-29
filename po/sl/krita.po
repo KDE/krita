@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 00:43+0000\n"
-"PO-Revision-Date: 2026-07-18 08:32+0200\n"
+"PO-Revision-Date: 2026-07-28 14:53+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -24907,6 +24907,8 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Zvočni parametri niso podprti. Poskusite zvočno datoteko ponovno kodirati z "
+"bolj običajnim formatom vzorčenja, frekvenco vzorčenja in številom kanalov."
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -24914,28 +24916,24 @@ msgid "Unsupported format"
 msgstr "Nepodprta oblika zapisa"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "Video datoteka:"
+msgstr "Video kodirnik:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Video datoteka:"
+msgstr "Bitna hitrost videa:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Zvočni meni"
+msgstr "Zvočni kodirnik:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Bitna hitrost:"
+msgstr "Bitna hitrost zvoka:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25053,13 +25051,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "Video z več kot 30 sl/s ni širše podprt."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "Video z merami, večjimi od 1920 slikovnih točk, ni širše podprt."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2435
@@ -25072,6 +25070,7 @@ msgstr "Opozorila:"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"Izvoz lahko spodleti in nekatere naprave ga morda ne bodo mogle predvajati."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25355,13 +25354,12 @@ msgstr "Notranja napaka (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Nastavitve šrafiranja"
+msgstr "Ta oblika nima nastavitev."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25369,11 +25367,9 @@ msgid "No frame files found"
 msgstr "Ni datotek sličic"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "&Upodobi animacijo ..."
+msgstr "Upodabljanje animacije ..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25381,11 +25377,9 @@ msgid "No encoder for the selected format found"
 msgstr "Za izbrani zapis ni možno najti nobenega kodirnika"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Napaka med shranjevanjem %1: %2"
+msgstr "Napaka pri pripravi zvočne datoteke: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26462,17 +26456,15 @@ msgstr "Zadnja sličica:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "Slika"
+msgstr "Slike"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video"
-msgstr "Hitrost videa (sl/s):"
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -30379,10 +30371,9 @@ msgstr "Ne prikazuj vsebine pri premikanju podoken"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "Meni Folije"
+msgstr "Ikone v meniju:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -70291,14 +70282,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Encoder:"
-#~ msgstr "Kodirnik:"
-
-#~ msgctxt "action"
-#~ msgid "Convert to &Animated Layer"
-#~ msgstr "Pretvori v plast za &animacijo"
-
-#~ msgctxt "action"
-#~ msgid "Convert layer into animation frames"
-#~ msgstr "Pretvori plast v sličice animacije"

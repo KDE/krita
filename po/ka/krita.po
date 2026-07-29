@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 00:43+0000\n"
-"PO-Revision-Date: 2026-07-18 06:11+0200\n"
+"PO-Revision-Date: 2026-07-28 06:17+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -22277,6 +22277,8 @@ msgid ""
 "The image contains layers of unsupported type <b>%1</b>. Only the rendered "
 "result will be saved."
 msgstr ""
+"გამოსახულება შეიცავს მხარდაუჭერელი ტიპის <b>%1</b>-ს. შენახული იქნება, "
+"მხოლოდ, დარენდერებული შედეგი."
 
 #: libs/impex/PSDLayerStylesCheck.h:104
 #, kde-format
@@ -22284,6 +22286,7 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr ""
+"გამოსახულება შეიცავს <b>ფენის სილებს</b>. ფენის სტილების შენახვა შეუძლებელია."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
 #, kde-format
@@ -24874,6 +24877,9 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"მხარდაუჭერელი აუდიოს პარამეტრები. სცადეთ, თავიდან დააკოდიროთ თქვენი "
+"აუდიოფაილი უფრო გავრცელებულ ფორმატში, დისტკრეტული სიხშირით და არხების "
+"რაოდენობით"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -24881,28 +24887,24 @@ msgid "Unsupported format"
 msgstr "მხარდაუჭერელი ფორმატი"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "ვიდეოფაილი:"
+msgstr "ვიდეოენკოდერი:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "ვიდეოფაილი:"
+msgstr "ვიდეოს ბიტური სიჩქარე:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "აუდიოს მენიუ"
+msgstr "აუდიოენკოდერი:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "სიჩქარე:"
+msgstr "აუდიოს ბიტური სიჩქარე:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25020,13 +25022,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "30-ზე მეტი FPS მხარდაჭერილი არაა."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "1920 პიქსელზე მეტი ზომები, ყველგან, მხარდაჭერილი არაა."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2435
@@ -25039,6 +25041,8 @@ msgstr "გაფრთხილებები:"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"გატანა, შეიძლება, ჩავარდეს და ზოგიერთმა მოწყობილობამ, შეიძლება, ფაილი ვერ "
+"დაუკრას."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25322,13 +25326,12 @@ msgstr "შიდა შეცდომა (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "დაშტრიხვის მორგება"
+msgstr "ამ ფორმატს პარამეტრები არ აქვს."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25336,11 +25339,9 @@ msgid "No frame files found"
 msgstr "ჩარჩოს ფაილები აღმოჩენილი არაა"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "ანიმაციის &რენდერი..."
+msgstr "ანიმაციის რენდერი..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25348,11 +25349,9 @@ msgid "No encoder for the selected format found"
 msgstr "არჩეული ფორმატისთვის ენკოდერი აღმოჩენილი არაა"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "შეცდომა %1-ის შენახვისას: %2"
+msgstr "აუდიოფაილის მომზადების შეცდომა: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26417,17 +26416,15 @@ msgstr "ბოლო კადრი:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "გამოსახულება"
+msgstr "გამოსახულებები"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video"
-msgstr "ვიდეოს კადრი/წმ:"
+msgstr "ვიდეო"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -30214,10 +30211,9 @@ msgstr "ქვეფანჯრების გადატანისას �
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "ხახვის კანის მენიუ"
+msgstr "ხატულები მენიუში:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)

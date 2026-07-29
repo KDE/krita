@@ -24756,10 +24756,9 @@ msgid "Video encoder:"
 msgstr "Soubor videa:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Soubor videa:"
+msgstr "Datový tok videa:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
 #, fuzzy, kde-format
@@ -24768,10 +24767,9 @@ msgid "Audio encoder:"
 msgstr "Nabídka zvuku"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Datový tok:"
+msgstr "Datový tok zvuku:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -26245,17 +26243,15 @@ msgstr "Poslední rámec:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "Obrázek"
+msgstr "Obrázky"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video"
-msgstr "Soubor videa:"
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134

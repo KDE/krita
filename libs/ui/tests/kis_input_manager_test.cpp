@@ -1188,8 +1188,165 @@ void KisInputManagerTest::testTouchHoldPostponer()
             QCOMPARE(postponer.state(), KisTouchHoldEventsPostponer::WaitingForHold);
         }
     }
+}
 
+void KisInputManagerTest::testTouchOverriddenByTablet_data()
+{
+    QTest::addColumn<QString>("sequenceName");
+    QTest::addColumn<QPointF>("pointOffset");
+    QTest::addColumn<int>("holdTimeout");
+    QTest::addColumn<int>("tabletStartEventIndex");
+    QTest::addColumn<QList<int>>("triggeredShortcuts");
 
+    const QPointF dragOffset(10,0);
+    const QPointF holdOffset(1,0);
+    const int holdTimeout = 170 /* ms */; // the timeout should happen on the fourth event after the first (with a 30 ms margin)
+
+    QTest::addRow("clean-1p-drag-no-tablet") << "touchCleanDrag" << dragOffset << holdTimeout << 200 << QList<int>{15};
+    QTest::addRow("clean-1p-hold-no-tablet") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << holdTimeout << 200 << QList<int>{40};
+    QTest::addRow("clean-1p-drag-slow-start-no-tablet") << "touchCleanDrag" << holdOffset << holdTimeout << 200 << QList<int>{15};
+
+    /// tablet action has been started while touch drag was running,
+    /// the touch action is ended and a tablet action is started
+    QTest::addRow("clean-1p-drag") << "touchCleanDrag" << dragOffset << holdTimeout << 2 << QList<int>{15, 50};
+
+    /// tablet action has been started while touch-hold was being waited for,
+    /// the touch-hold action should never start until the next touch-begin
+    QTest::addRow("clean-1p-hold") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << holdTimeout << 2 << QList<int>{50};
+
+    /// tablet action has been started before the touch-drag hasn't reached the
+    /// drash threshold, the touch-drag action should never start until
+    /// the next touch-begin
+    QTest::addRow("clean-1p-drag-slow-start") << "touchCleanDrag" << holdOffset << holdTimeout << 2 << QList<int>{50};
+}
+
+void KisInputManagerTest::testTouchOverriddenByTablet()
+{
+    QFETCH(QString, sequenceName);
+    QFETCH(QPointF, pointOffset);
+    QFETCH(int, holdTimeout); // TODO: unused!
+    QFETCH(int, tabletStartEventIndex);
+    QFETCH(QList<int>, triggeredShortcuts);
+
+    const int eventsCount = 100;
+
+    std::unique_ptr<TestingAction> paintAction(new TestingAction("paint-action"));
+    std::unique_ptr<TestingAction> a(new TestingAction("touch-action"));
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    m.addShortcut(
+        createTouchShortcut(a.get(), 15, KisShortcutConfiguration::OneFingerDrag));
+
+    m.addShortcut(
+            createTouchShortcut(a.get(), 40, KisShortcutConfiguration::OneFingerHold));
+
+    m.addShortcut(
+            createStrokeShortcut(a.get(), 50, {}, Qt::LeftButton));
+
+    KisConfig(false).setTouchPainting(KisConfig::TOUCH_PAINTING_DISABLED);
+
+    std::unique_ptr<TouchSequenceGeneratorBase> strokeGenerator(
+        createTouchSequenceGenerator(sequenceName, 1, eventsCount - 1, pointOffset));
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QTouchDevice device;
+    auto calcTouchPointStates = [] (const QList<TouchSequenceGeneratorBase::TouchPoint> &touchPoints) -> Qt::TouchPointStates {
+        Qt::TouchPointStates result;
+
+        for (auto it = touchPoints.begin(); it != touchPoints.end(); ++it) {
+            result |= it->state();
+        }
+
+        return result;
+    };
+#else
+    QPointingDevice device;
+#endif
+
+    QList<TouchSequenceGeneratorBase::TouchPoint> touchPoints;
+
+    for (int eventIndex = 0; eventIndex < eventsCount; eventIndex++) {
+        strokeGenerator->updatePoints(eventIndex, touchPoints);
+        if (eventIndex == 0) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+#else
+            QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, touchPoints);
+#endif
+            m.touchBeginEvent(&e);
+        } else if (eventIndex > 0 && eventIndex < eventsCount - 1) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+#else
+            QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, touchPoints);
+#endif
+            m.touchUpdateEvent(&e);
+        } else if (eventIndex == eventsCount - 1) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+#else
+            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, touchPoints);
+#endif
+            m.touchEndEvent(&e);
+        } else {
+            qFatal("invalid step value");
+        }
+
+        if (eventIndex == tabletStartEventIndex) {
+            const QPointF pos(eventIndex, 0.0);
+            QTabletEvent event(QEvent::TabletPress,
+                               &device,
+                               pos,
+                               pos,
+                               1.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               Qt::NoModifier,
+                               Qt::LeftButton,
+                               Qt::LeftButton);
+            m.buttonPressed(Qt::LeftButton, &event);
+        } else if (eventIndex > tabletStartEventIndex && eventIndex < tabletStartEventIndex + 10) {
+            const QPointF pos(eventIndex, 0.0);
+            QTabletEvent event(QEvent::TabletMove,
+                               &device,
+                               pos,
+                               pos,
+                               1.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               Qt::NoModifier,
+                               Qt::NoButton,
+                               Qt::LeftButton);
+            m.pointerMoved(&event);
+        } else if (eventIndex == tabletStartEventIndex + 10) {
+            const QPointF pos(eventIndex, 0.0);
+            QTabletEvent event(QEvent::TabletRelease,
+                               &device,
+                               pos,
+                               pos,
+                               1.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               0.0,
+                               Qt::NoModifier,
+                               Qt::LeftButton,
+                               Qt::NoButton);
+            m.buttonReleased(Qt::LeftButton, &event);
+        }
+    }
+
+    QCOMPARE(a->m_begunIndexes, triggeredShortcuts);
+    QCOMPARE(a->m_endedIndexes, triggeredShortcuts);
 }
 
 #include "../input/wintab/kis_incremental_average.h"

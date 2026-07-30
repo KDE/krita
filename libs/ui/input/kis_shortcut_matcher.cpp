@@ -20,6 +20,12 @@
 #include "KisTouchHoldEventsPostponer.h"
 #include <KoPointerEvent.h>
 
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+// for QMutableEventPoint
+#include <QWindow>
+#include <QtGui/private/qeventpoint_p.h>
+#endif
+
 //#define DEBUG_MATCHER
 
 #ifdef DEBUG_MATCHER
@@ -43,6 +49,36 @@
 #define DEBUG_TOUCH_ACTION(text, event)
 #endif
 
+namespace
+{
+QTouchEvent generateFakeTouchEndEvent(const QTouchEvent *event)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = event->touchPoints();
+#else
+    auto points = event->points();
+#endif
+
+    for (auto it = points.begin(); it != points.end();) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        if (it->state() == Qt::TouchPointReleased) {
+            it = points.erase(it);
+        } else {
+            it->setState(Qt::TouchPointReleased);
+        }
+#else
+        if (it->state() == QEventPoint::Released) {
+            it = points.erase(it);
+        } else {
+           QMutableEventPoint::setState(*it, QEventPoint::Released);
+        }
+#endif
+    }
+
+    return QTouchEvent(QEvent::TouchEnd, event->pointingDevice(), event->modifiers(), points);
+}
+
+} // namespace
 
 class Q_DECL_HIDDEN KisShortcutMatcher::Private
 {
@@ -82,7 +118,6 @@ public:
 
     KisTouchShortcut *touchShortcut;
     KisNativeGestureShortcut *nativeGestureShortcut;
-    QList<QTouchEvent::TouchPoint> lastTouchPoints;
     std::optional<KisTouchHoldEventsPostponer> touchHoldEventPostponer;
 
     int maxTouchPoints{0};
@@ -90,6 +125,8 @@ public:
     bool isTouchDragDetected {false};
     bool isTouchHeld {false};
     QScopedPointer<QEvent> bestCandidateForTapTouchEvent;
+    QScopedPointer<QTouchEvent> lastProcessedTouchEvent;
+    bool touchActionTracked {false};
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
@@ -283,6 +320,10 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
     Private::RecursionNotifier notifier(this);
     DEBUG_BUTTON_ACTION("entered", button);
 
+    // the tablet actions have the priority over any existing
+    // touch action, so we should cancel them first
+    tryCancelAllCurrentTouchActionsImpl();
+
     bool retval = false;
 
     if (m_d->buttons.contains(button)) { DEBUG_ACTION("Peculiar, button was already pressed."); }
@@ -398,13 +439,18 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 
     Private::RecursionNotifier notifier(this);
 
-    m_d->lastTouchPoints = event->touchPoints();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    KoPointerEvent::copyQtPointerEvent(event, m_d->lastProcessedTouchEvent);
+#else
+    m_d->lastProcessedTouchEvent.reset(event->clone());
+#endif
 
     // reset state
     m_d->maxTouchPoints = event->touchPoints().size();
     m_d->matchingIteration = 1;
     m_d->isTouchDragDetected = false;
     m_d->isTouchHeld = false;
+    m_d->touchActionTracked = true;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateForTapTouchEvent);
 #else
@@ -432,6 +478,10 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 
 bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 {
+    // the touch action has been overridden by some tablet action,
+    // consume and ignore it.
+    if (!m_d->touchActionTracked) return true;
+
     if (m_d->touchHoldEventPostponer) {
         m_d->touchHoldEventPostponer->pushThrough(event);
         if (m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::HoldCancelled) {
@@ -488,6 +538,12 @@ bool KisShortcutMatcher::touchUpdateEventImpl(QTouchEvent *event)
 {
     DEBUG_TOUCH_ACTION("entered", event)
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    KoPointerEvent::copyQtPointerEvent(event, m_d->lastProcessedTouchEvent);
+#else
+    m_d->lastProcessedTouchEvent.reset(event->clone());
+#endif
+
     if (m_d->isTouchHeld) {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->touchShortcut, false);
         m_d->touchShortcut->action()->inputEvent(event);
@@ -514,8 +570,9 @@ bool KisShortcutMatcher::touchUpdateEventImpl(QTouchEvent *event)
         KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::pressedOnlyTouchStates());
     if (!hasRunningShortcut() && numStillDraggedPoints >= m_d->maxTouchPoints) {
         m_d->maxTouchPoints = numStillDraggedPoints;
-        DEBUG_TOUCH_ACTION("starting", event);
+        DEBUG_TOUCH_ACTION("trying to start a touch-drag shortcut", event);
         if (tryRunTouchShortcut(event, KisTouchShortcut::pressedOnlyTouchStates(), TouchShortcutMode::Drag)) {
+            DEBUG_TOUCH_ACTION("started a touch-drag shortcut", event);
             m_d->isTouchDragDetected = true;
             return true;
         }
@@ -528,7 +585,7 @@ bool KisShortcutMatcher::touchUpdateEventImpl(QTouchEvent *event)
     if (m_d->matchingIteration <= numIterations && !m_d->isTouchDragDetected) {
         m_d->matchingIteration++;
         setMaxTouchPointEvent(event);
-        DEBUG_TOUCH_ACTION("return best", event)
+        DEBUG_TOUCH_ACTION("return best tap shortcut", event)
         return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateForTapTouchEvent.data(),
                                   KisTouchShortcut::allTouchStates(),
                                   TouchShortcutMode::Tap);
@@ -575,6 +632,16 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 {
     Private::RecursionNotifier notifier(this);
 
+    // the touch action has been overridden by some tablet action,
+    // consume and ignore it.
+    if (!m_d->touchActionTracked) {
+        KIS_SAFE_ASSERT_RECOVER(!m_d->touchHoldEventPostponer.has_value()) {
+            m_d->touchHoldEventPostponer->cancelHoldWait();
+            m_d->touchHoldEventPostponer.reset();
+        }
+        return true;
+    }
+
     // flush all the touch-hold postiponed events if they were present
     if (m_d->touchHoldEventPostponer) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::WaitingForHold);
@@ -590,8 +657,7 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
         m_d->touchHoldEventPostponer.reset();
     }
 
-    m_d->maxTouchPoints = 0;
-    m_d->isTouchHeld = false;
+    m_d->touchActionTracked = false;
 
     bool retval = false;
 
@@ -615,10 +681,8 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
     return retval;
 }
 
-void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
+void KisShortcutMatcher::tryCancelAllCurrentTouchActionsImpl()
 {
-    Private::RecursionNotifier notifier(this);
-
     // discard all the postponed touch-hold events
     if (m_d->touchHoldEventPostponer) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->touchHoldEventPostponer->state() == KisTouchHoldEventsPostponer::WaitingForHold);
@@ -626,36 +690,44 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
         m_d->touchHoldEventPostponer.reset();
     }
 
-    m_d->maxTouchPoints = 0;
-    m_d->isTouchHeld = false;
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->runningShortcut || !m_d->touchShortcut);
-
-    // end the stroke types
+    // end the touch action if present
     if (m_d->touchShortcut) {
         KisTouchShortcut *touchShortcut = m_d->touchShortcut;
         m_d->touchShortcut = 0;
-        QScopedPointer<QEvent> dstEvent;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        KoPointerEvent::copyQtPointerEvent(event, dstEvent);
-#else
-        dstEvent.reset(event->clone());
-#endif
 
-        // HACK: Because TouchEvents in KoPointerEvent need to contain at least one touchpoint
-        QTouchEvent* touchEvent = dynamic_cast<QTouchEvent *>(dstEvent.data());
-        KIS_ASSERT(touchEvent);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        touchEvent->setTouchPoints(m_d->lastTouchPoints);
-#else
-        dstEvent.reset(new QTouchEvent(event->type(),
-                                       event->pointingDevice(),
-                                       event->modifiers(),
-                                       m_d->lastTouchPoints));
-#endif
-        touchShortcut->action()->end(dstEvent.data());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->lastProcessedTouchEvent);
+
+        // on some platforms touch-cancel event may have **no**
+        // touch points, which would greatly confuse our KoPointerEvent
+        // class, so we should just generate a normal touch-end from the
+        // last known event
+        QTouchEvent touchEvent = generateFakeTouchEndEvent(m_d->lastProcessedTouchEvent.data());
+        touchShortcut->action()->end(&touchEvent);
         touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
     }
+
+    m_d->touchActionTracked = false;
+}
+
+void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
+{
+    Q_UNUSED(event)
+
+    Private::RecursionNotifier notifier(this);
+
+    // the touch action has been overridden by some tablet action,
+    // consume and ignore it.
+    if (!m_d->touchActionTracked) {
+        KIS_SAFE_ASSERT_RECOVER(!m_d->touchHoldEventPostponer.has_value()) {
+            m_d->touchHoldEventPostponer->cancelHoldWait();
+            m_d->touchHoldEventPostponer.reset();
+        }
+        return;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->runningShortcut || !m_d->touchShortcut);
+
+    tryCancelAllCurrentTouchActionsImpl();
 
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();

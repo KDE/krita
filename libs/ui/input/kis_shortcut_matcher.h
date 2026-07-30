@@ -314,6 +314,7 @@ private:
     bool matchTouchShortcutBasedOnState(QTouchEvent *event, KisTouchShortcut *shortcut, Qt::TouchPointStates allowedStates, TouchShortcutMode mode);
     bool tryRunTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates, TouchShortcutMode mode);
     bool tryEndTouchShortcut(QTouchEvent *event);
+    void tryCancelAllCurrentTouchActionsImpl();
 
     bool tryRunNativeGestureShortcut(QNativeGestureEvent *event);
     bool tryEndNativeGestureShortcut(QNativeGestureEvent *event);

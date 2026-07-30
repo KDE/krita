@@ -778,6 +778,12 @@ if (QT_MAJOR_VERSION STREQUAL "6")
             Qt6::SvgWidgets
             KF6::ColorScheme
     )
+
+    set_source_files_properties(
+        input/kis_shortcut_matcher.cpp
+        PROPERTIES
+        INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
 endif()
 
 if (Mlt7_FOUND)

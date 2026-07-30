@@ -439,6 +439,12 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 
     Private::RecursionNotifier notifier(this);
 
+    if (hasRunningShortcut()) {
+        // touch has been triggered while some tablet action is in progress,
+        // just consume and ignore it
+        return !notifier.isInRecursion();
+    }
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KoPointerEvent::copyQtPointerEvent(event, m_d->lastProcessedTouchEvent);
 #else

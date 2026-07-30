@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 00:43+0000\n"
-"PO-Revision-Date: 2026-07-15 08:16+0200\n"
+"PO-Revision-Date: 2026-07-29 09:53+0200\n"
 "Last-Translator: Benedek Péter <benedekppeter@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
@@ -25001,6 +25001,9 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Nem támogatott audioparaméterek. Próbálja meg újrakódolni a hangfájlt egy "
+"elterjedtebb mintaformátum, mintavételezési frekvencia és csatornaszám "
+"használatával."
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -25008,28 +25011,24 @@ msgid "Unsupported format"
 msgstr "Nem támogatott formátum"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "Videófájl:"
+msgstr "Videókódoló:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Videófájl:"
+msgstr "Videó bitráta:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Audió menü"
+msgstr "Audiokódoló:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Bitsebesség:"
+msgstr "Audio bitráta:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25149,13 +25148,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "30 feletti FPS-t csak kevés rendszer támogat."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "1920 pixel feletti méretet kevés rendszer támogat."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2435
@@ -25168,6 +25167,8 @@ msgstr "Figyelmeztetés(ek):"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"Az exportálás meghiúsulhat, és előfordulhat, hogy néhány eszköz nem tudja "
+"majd lejátszani."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25453,13 +25454,12 @@ msgstr "Belső hiba (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Vonalkázási beállítások"
+msgstr "Ez a formátum nem rendelkezik beállításokkal."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25467,11 +25467,9 @@ msgid "No frame files found"
 msgstr "Nem találhatók képkockafájlok"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "Animáció &renderelése..."
+msgstr "Animáció renderelése…"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25479,11 +25477,9 @@ msgid "No encoder for the selected format found"
 msgstr "Nem található kódoló a kiválasztott formátumhoz"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Hiba a(z) %1 mentése során: %2"
+msgstr "Hiba a hangfájl előkészítésekor: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26561,17 +26557,15 @@ msgstr "Utolsó képkocka:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "Kép"
+msgstr "Képek"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video"
-msgstr "Videó FPS:"
+msgstr "Videó"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -30478,10 +30472,9 @@ msgstr "Tartalom elrejtése alablakok mozgatásakor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "Onion skin-ek menü"
+msgstr "Ikonok a menüben:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -34461,32 +34454,24 @@ msgid "&Choose foreground and background colors"
 msgstr "Előtér- és háttérszín &kiválasztása"
 
 #: libs/ui/kis_control_frame.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Foreground Color"
+#, kde-format
 msgid "&Choose foreground colour"
-msgstr "&Előtérszín választása"
+msgstr "&Előtérszín kiválasztása"
 
 #: libs/ui/kis_control_frame.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Background Color"
+#, kde-format
 msgid "&Choose background colour"
-msgstr "&Háttérszín választása"
+msgstr "&Háttérszín kiválasztása"
 
 #: libs/ui/kis_control_frame.cpp:160
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap Foreground and Background Colors"
+#, kde-format
 msgid "&Swap Foreground and Background Colors"
-msgstr "Előtér- és háttérszín felcserélése"
+msgstr "Előtér- és &háttérszín felcserélése"
 
 #: libs/ui/kis_control_frame.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap Foreground and Background Colors"
+#, kde-format
 msgid "&reset Foreground and Background Colors"
-msgstr "Előtér- és háttérszín felcserélése"
+msgstr "Előtér- és háttérszín a&laphelyzetbe állítása"
 
 #: libs/ui/kis_control_frame.cpp:195
 #, kde-format
@@ -66209,13 +66194,14 @@ msgid "Show Guideline"
 msgstr "Segédvonal megjelenítése"
 
 #: plugins/tools/basictools/kis_tool_line.cc:467
-#, fuzzy, kde-format
-#| msgid "Length: %1 px"
+#, kde-format
 msgctxt "%1=length in pixels %2=angle in degrees"
 msgid ""
 "Length: %1 px\n"
 "Angle: %2°"
-msgstr "Hossz: %1 px"
+msgstr ""
+"Hossz: %1 px\n"
+"Szög: %2°"
 
 #: plugins/tools/basictools/kis_tool_line.cc:487
 #, kde-format
@@ -70381,20 +70367,3 @@ msgstr ""
 "Váltás a teljes tartomány és a részleges tartomány között.\n"
 "Teljes tartomány: [%1, %2]\n"
 "Részleges tartomány: [%3, %4]"
-
-#~ msgid "Encoder:"
-#~ msgstr "Kódoló:"
-
-#~ msgctxt "action"
-#~ msgid "Convert to &Animated Layer"
-#~ msgstr "Átalakítás &animált réteggé"
-
-#~ msgctxt "action"
-#~ msgid "Convert layer into animation frames"
-#~ msgstr "Réteg átalakítása animációs képkockákká"
-
-#~ msgid "&Open Foreground color selector"
-#~ msgstr "Előtérszín-választó &megnyitása"
-
-#~ msgid "&Open Background color selector"
-#~ msgstr "Háttérszín-választó &megnyitása"

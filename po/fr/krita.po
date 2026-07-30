@@ -26717,8 +26717,7 @@ msgstr "Dernière image :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Images"
+#, kde-format
 msgid "Images"
 msgstr "Images"
 

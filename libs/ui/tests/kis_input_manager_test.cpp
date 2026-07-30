@@ -1144,7 +1144,7 @@ void KisInputManagerTest::testTouchHoldPostponer()
         if (postponer.state() == KisTouchHoldEventsPostponer::HoldCompleted || holdHasBeenCompleted) {
             QVERIFY(holdHasBeenCompleted);
             QCOMPARE(postponer.state(), KisTouchHoldEventsPostponer::HoldCompleted);
-            QCOMPARE(completeOnIndex, eventIndex);
+            QCOMPARE(eventIndex, completeOnIndex);
 
             // the last event has not yet been pushed, so no "+1"
             QCOMPARE(postponer.postponedEvents().size(), eventIndex);

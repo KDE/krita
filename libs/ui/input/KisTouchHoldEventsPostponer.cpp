@@ -16,6 +16,11 @@
 #include <KoPointerEvent.h>
 #endif
 
+#ifdef Q_OS_WIN
+// to detect if we are running in a unittest mode
+#include <QStandardPaths>
+#endif
+
 
 KisTouchHoldEventsPostponer::KisTouchHoldEventsPostponer(qreal maxHoldDistance, int holdTimeout)
     : m_maxHoldDistance(maxHoldDistance)
@@ -23,7 +28,14 @@ KisTouchHoldEventsPostponer::KisTouchHoldEventsPostponer(qreal maxHoldDistance, 
     connect(&m_timer, &QTimer::timeout, this, &KisTouchHoldEventsPostponer::slotHoldCompletionTimeout);
 
     m_timer.setSingleShot(true);
+#ifdef Q_OS_WIN
+    // on Windows, the coarse timers are too coarse for running is a unitest, so we should
+    // switch to a precise one inside unittests; for normal user-facing runs the precision
+    // is not necessary
+    m_timer.setTimerType(QStandardPaths::isTestModeEnabled() ? Qt::PreciseTimer : Qt::CoarseTimer);
+#else
     m_timer.setTimerType(Qt::CoarseTimer);
+#endif
     m_timer.setInterval(holdTimeout);
     m_timer.start();
 }

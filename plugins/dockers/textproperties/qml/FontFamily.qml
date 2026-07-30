@@ -81,10 +81,14 @@ CollapsibleGroupProperty {
             Layout.fillWidth: true;
             locales: root.locales;
             onActivated: {
-                if (fontFamilies.length >0) {
+                if (fontFamilies.length > 0) {
                     fontFamilies[0] = resourceName;
+
+                    //Force update font families, as changing an element in an array no longer calls onChanged
+                    fontFamilies = [fontFamilies];
+
                 } else {
-                    fontFamilies = [ resourceName ];
+                    fontFamilies = [resourceName];
                 }
             }
             function updateCurrentIndex() {

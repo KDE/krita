@@ -42,18 +42,18 @@ KisImageSP createImage() {
 
 void KisContentLightLevelProcessingVisitorTest::testRgbColorSpace_data()
 {
-    QTest::addColumn<KisRelativeContentLightLevelInformation::CalculationType>("type");
+    QTest::addColumn<int>("type");
     QTest::addColumn<double>("expectedMaxCLL");
     QTest::addColumn<double>("expectedMaxFALL");
 
-    QTest::addRow("XYZ Luminance") << KisRelativeContentLightLevelInformation::XYZLuminance << 0.716905 << 0.0659222;
-    QTest::addRow("Rec2020 Component") << KisRelativeContentLightLevelInformation::Rec2020Component << 0.919528 << 0.0940548;
-    QTest::addRow("RGB Component") << KisRelativeContentLightLevelInformation::RGBComponent << 1.00002 << 0.111112;
+    QTest::addRow("XYZ Luminance") << int(KisRelativeContentLightLevelInformation::XYZLuminance) << 0.716905 << 0.0659222;
+    QTest::addRow("Rec2020 Component") << int(KisRelativeContentLightLevelInformation::Rec2020Component) << 0.919528 << 0.0940548;
+    QTest::addRow("RGB Component") << int(KisRelativeContentLightLevelInformation::RGBComponent) << 1.00002 << 0.111112;
 }
 
 void KisContentLightLevelProcessingVisitorTest::testRgbColorSpace()
 {
-    QFETCH(KisRelativeContentLightLevelInformation::CalculationType, type);
+    QFETCH(int, type);
     QFETCH(double, expectedMaxCLL);
     QFETCH(double, expectedMaxFALL);
 
@@ -65,7 +65,7 @@ void KisContentLightLevelProcessingVisitorTest::testRgbColorSpace()
                                        signalFlags);
 
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
-        new KisContentLightLevelProcessingVistor(type, image->bounds());
+        new KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType(type), image->bounds());
     applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
     applicator.end();
 
@@ -81,19 +81,19 @@ void KisContentLightLevelProcessingVisitorTest::testRgbColorSpace()
 
 void KisContentLightLevelProcessingVisitorTest::testCmykColorSpace_data()
 {
-    QTest::addColumn<KisRelativeContentLightLevelInformation::CalculationType>("type");
+    QTest::addColumn<int>("type");
     QTest::addColumn<double>("expectedMaxCLL");
     QTest::addColumn<double>("expectedMaxFALL");
 
-    QTest::addRow("XYZ Luminance") << KisRelativeContentLightLevelInformation::XYZLuminance << 0.360151 << 0.0195933;
-    QTest::addRow("Rec2020 Component") << KisRelativeContentLightLevelInformation::Rec2020Component << 0.514917 << 0.0538389;
+    QTest::addRow("XYZ Luminance") << int(KisRelativeContentLightLevelInformation::XYZLuminance) << 0.360151 << 0.0195933;
+    QTest::addRow("Rec2020 Component") << int(KisRelativeContentLightLevelInformation::Rec2020Component) << 0.514917 << 0.0538389;
     // Because we're testing cmyk, and not rgb, this will fallback onto xyzLuminance.
-    QTest::addRow("RGB Component") << KisRelativeContentLightLevelInformation::RGBComponent << 0.360151 << 0.0195933;
+    QTest::addRow("RGB Component") << int(KisRelativeContentLightLevelInformation::RGBComponent) << 0.360151 << 0.0195933;
 }
 
 void KisContentLightLevelProcessingVisitorTest::testCmykColorSpace()
 {
-    QFETCH(KisRelativeContentLightLevelInformation::CalculationType, type);
+    QFETCH(int, type);
     QFETCH(double, expectedMaxCLL);
     QFETCH(double, expectedMaxFALL);
     KisImageSP image = createImage();
@@ -106,7 +106,7 @@ void KisContentLightLevelProcessingVisitorTest::testCmykColorSpace()
                                        signalFlags);
 
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
-        new KisContentLightLevelProcessingVistor(type, image->bounds());
+        new KisContentLightLevelProcessingVistor(KisRelativeContentLightLevelInformation::CalculationType(type), image->bounds());
     applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
     applicator.end();
 

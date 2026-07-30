@@ -329,7 +329,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 
 void PaletteDockerDock::slotEditPalette()
 {
-    KisDlgPaletteEditor dlg(m_paletteEditor.data());
+    KisDlgPaletteEditor dlg(m_paletteEditor.data(), m_view->mainWindowAsQWidget());
     if (!m_currentColorSet) { return; }
     dlg.initialize(m_model);
     m_paletteEditor->startEditing();

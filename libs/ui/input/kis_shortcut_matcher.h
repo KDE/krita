@@ -281,6 +281,16 @@ public:
 
     void setInputActionGroupsMaskCallback(std::function<KisInputActionGroupsMask()> func);
 
+    /**
+     * \return the currently set delay for the touch-hold actions (milliseconds)
+     */
+    int touchHoldDelay() const;
+
+    /**
+     * \return the currently set delay for the touch-hold actions (milliseconds)
+     */
+    void setTouchHoldDelay(int value);
+
 private:
 
     friend class KisInputManagerTest;

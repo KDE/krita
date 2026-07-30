@@ -946,6 +946,8 @@ void KisInputManagerTest::testTouchMoves()
     std::unique_ptr<TestingAction> a(new TestingAction("touch-action"));
 
     KisShortcutMatcher m;
+    // the timeout should happen on the fourth event after the first (with a 30 ms margin)
+    m.setTouchHoldDelay(170);
     m.enterEvent();
 
     m.addShortcut(
@@ -1088,7 +1090,8 @@ void KisInputManagerTest::testTouchHoldPostponer_data()
     const int noComplete = -1;
 
     const QPointF dragOffset(1,0);
-    const int holdTimeout = 170 /* ms */; // the timeout should happen on the fourth event after the first (with a 30 ms margin)
+    // the timeout should happen on the fourth event after the first (with a 30 ms margin)
+    const int holdTimeout = 170 /* ms */;
 
     QTest::addRow("clean-1p-drag") << "touchCleanDrag" << 1 << 100 << dragOffset << holdTimeout << 21 << noComplete;
     QTest::addRow("clean-2p-drag") << "touchCleanDrag" << 2 << 100 << dragOffset << holdTimeout << 0 << noComplete;
@@ -1194,42 +1197,40 @@ void KisInputManagerTest::testTouchOverriddenByTablet_data()
 {
     QTest::addColumn<QString>("sequenceName");
     QTest::addColumn<QPointF>("pointOffset");
-    QTest::addColumn<int>("holdTimeout");
     QTest::addColumn<int>("tabletStartEventIndex");
     QTest::addColumn<QList<int>>("triggeredShortcuts");
 
     const QPointF dragOffset(10,0);
     const QPointF holdOffset(1,0);
     const QPointF tapOffset(0,0);
-    const int holdTimeout = 170 /* ms */; // the timeout should happen on the fourth event after the first (with a 30 ms margin)
     const int tabletStartsBeforeTouch = -1;
 
-    QTest::addRow("clean-1p-drag-no-tablet") << "touchCleanDrag" << dragOffset << holdTimeout << 200 << QList<int>{15};
-    QTest::addRow("clean-1p-hold-no-tablet") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << holdTimeout << 200 << QList<int>{40};
-    QTest::addRow("clean-1p-tap-no-tablet") << "touchCleanDrag" << tapOffset << holdTimeout << 200 << QList<int>{20};
-    QTest::addRow("clean-1p-drag-slow-start-no-tablet") << "touchCleanDrag" << holdOffset << holdTimeout << 200 << QList<int>{15};
+    QTest::addRow("clean-1p-drag-no-tablet") << "touchCleanDrag" << dragOffset << 200 << QList<int>{15};
+    QTest::addRow("clean-1p-hold-no-tablet") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << 200 << QList<int>{40};
+    QTest::addRow("clean-1p-tap-no-tablet") << "touchCleanDrag" << tapOffset << 200 << QList<int>{20};
+    QTest::addRow("clean-1p-drag-slow-start-no-tablet") << "touchCleanDrag" << holdOffset << 200 << QList<int>{15};
 
     /// tablet action has been started while touch drag was running,
     /// the touch action is ended and a tablet action is started
-    QTest::addRow("clean-1p-drag") << "touchCleanDrag" << dragOffset << holdTimeout << 2 << QList<int>{15, 50};
+    QTest::addRow("clean-1p-drag") << "touchCleanDrag" << dragOffset << 2 << QList<int>{15, 50};
 
     /// tablet action has been started while touch-hold was being waited for,
     /// the touch-hold action should never start until the next touch-begin
-    QTest::addRow("clean-1p-hold") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << holdTimeout << 2 << QList<int>{50};
+    QTest::addRow("clean-1p-hold") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << 2 << QList<int>{50};
 
     /// tablet action has been started before the touch-drag hasn't reached the
     /// drash threshold, the touch-drag action should never start until
     /// the next touch-begin
-    QTest::addRow("clean-1p-drag-slow-start") << "touchCleanDrag" << holdOffset << holdTimeout << 2 << QList<int>{50};
+    QTest::addRow("clean-1p-drag-slow-start") << "touchCleanDrag" << holdOffset << 2 << QList<int>{50};
 
     /// touch-drag is requested during a tablet stroke, nothig should happen
-    QTest::addRow("clean-1p-drag-over-tablet") << "touchCleanDrag" << dragOffset << holdTimeout << tabletStartsBeforeTouch << QList<int>{50};
+    QTest::addRow("clean-1p-drag-over-tablet") << "touchCleanDrag" << dragOffset << tabletStartsBeforeTouch << QList<int>{50};
 
     /// touch-hold is requested during a tablet stroke, nothig should happen
-    QTest::addRow("clean-1p-hold-over-tablet") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << holdTimeout << tabletStartsBeforeTouch << QList<int>{50};
+    QTest::addRow("clean-1p-hold-over-tablet") << "touchHoldFirstFourUpdateEventsFor50ms" << holdOffset << tabletStartsBeforeTouch << QList<int>{50};
 
     /// touch-tap is requested during the tablet stroke, nothig should happen
-    QTest::addRow("clean-1p-tap-over-tablet") << "touchCleanDrag" << tapOffset << holdTimeout << tabletStartsBeforeTouch << QList<int>{50};
+    QTest::addRow("clean-1p-tap-over-tablet") << "touchCleanDrag" << tapOffset << tabletStartsBeforeTouch << QList<int>{50};
 }
 
 class TabletEventsGenerator
@@ -1313,7 +1314,6 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
 {
     QFETCH(QString, sequenceName);
     QFETCH(QPointF, pointOffset);
-    QFETCH(int, holdTimeout); // TODO: unused!
     QFETCH(int, tabletStartEventIndex);
     QFETCH(QList<int>, triggeredShortcuts);
 
@@ -1323,6 +1323,8 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
     std::unique_ptr<TestingAction> a(new TestingAction("touch-action"));
 
     KisShortcutMatcher m;
+    // the timeout should happen on the fourth event after the first (with a 30 ms margin)
+    m.setTouchHoldDelay(170);
     m.enterEvent();
 
     m.addShortcut(

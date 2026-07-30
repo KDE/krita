@@ -127,6 +127,7 @@ public:
     QScopedPointer<QEvent> bestCandidateForTapTouchEvent;
     QScopedPointer<QTouchEvent> lastProcessedTouchEvent;
     bool touchActionTracked {false};
+    int touchHoldDelayMs {400};
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
@@ -465,9 +466,7 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 
     // TODO: also check if the first point actually qualifies
     if (hasTouchHoldShortcut()) {
-        //static constexpr int TOUCH_HOLD_DELAY_MS = 400;
-        static constexpr int TOUCH_HOLD_DELAY_MS = 180;
-        m_d->touchHoldEventPostponer.emplace(TOUCH_SLOP, TOUCH_HOLD_DELAY_MS);
+        m_d->touchHoldEventPostponer.emplace(TOUCH_SLOP, m_d->touchHoldDelayMs);
         QObject::connect(&m_d->touchHoldEventPostponer.value(),
                          &KisTouchHoldEventsPostponer::sigHoldCompleted,
                          [this]() {
@@ -1361,4 +1360,14 @@ bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
     }
 
     return false;
+}
+
+int KisShortcutMatcher::touchHoldDelay() const
+{
+    return m_d->touchHoldDelayMs;
+}
+
+void KisShortcutMatcher::setTouchHoldDelay(int value)
+{
+    m_d->touchHoldDelayMs = value;
 }

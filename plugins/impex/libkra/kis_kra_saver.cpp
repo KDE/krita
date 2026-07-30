@@ -709,7 +709,7 @@ void KisKraSaver::saveHDRMetadata(QDomDocument &doc, QDomElement &element, KisIm
         return;
     }
     QDomElement hdr = doc.createElement(HDRMETADATA);
-    if (image->diffuseWhiteLightLevel() && !image->colorSpace()->profile()->hdrReferenceWhite()) {
+    if (image->diffuseWhiteLightLevel() && !(image->colorSpace()->profile()->hdrReferenceWhite() && image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ)) {
         KisDomUtils::saveValue(&hdr, DIFFUSEWHITE, *image->diffuseWhiteLightLevel());
     }
     if (image->relativeContentLightLevelInformation()) {

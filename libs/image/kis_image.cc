@@ -2118,7 +2118,7 @@ void KisImage::setColorVolumeInformation(const std::optional<KisColorVolumeInfor
 
 std::optional<double> KisImage::diffuseWhiteLightLevel() const
 {
-    if (m_d->colorSpace->profile()->hdrReferenceWhite()) {
+    if (m_d->colorSpace->profile()->hdrReferenceWhite() && m_d->colorSpace->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ) {
         return m_d->colorSpace->profile()->hdrReferenceWhite();
     }
     return m_d->diffuseWhiteLightLevel;
@@ -2126,7 +2126,7 @@ std::optional<double> KisImage::diffuseWhiteLightLevel() const
 
 void KisImage::setDiffuseWhiteLightLevel(const std::optional<double> cdm2)
 {
-    if (m_d->colorSpace->profile()->hdrReferenceWhite()) {
+    if (m_d->colorSpace->profile()->hdrReferenceWhite() && m_d->colorSpace->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ) {
         qWarning() << "Cannot set diffuse white on image: profile provides the diffuse white for this image.";
         return;
     }

@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 02:42+0000\n"
-"PO-Revision-Date: 2026-07-15 15:35+0300\n"
+"PO-Revision-Date: 2026-07-29 17:16+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -25319,24 +25319,24 @@ msgstr ""
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "Android: %1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (hardware)"
-msgstr "%1 (приобретено)"
+msgstr "%1 (аппаратное обеспечение)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (software)"
-msgstr "%1 (приобретено)"
+msgstr "%1 (программное обеспечение)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
 msgid "Unsupported video parameters, try lowering the video FPS or size"
 msgstr ""
+"Неподдерживаемые параметры видео. Попробуйте уменьшить количество кадров в "
+"секунду или размер"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
 #, kde-format
@@ -25344,36 +25344,34 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Неподдерживаемые параметры звука. Попробуйте закодировать звуковой файл "
+"заново с использованием более распространённых формата дискретизации, "
+"частоты дискретизации и количества каналов"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "Все поддерживаемые форматы"
+msgstr "Неподдерживаемый формат"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "Видеофайл:"
+msgstr "Кодировщик видео:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Видеофайл:"
+msgstr "Битовый поток видео:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Меню звука"
+msgstr "Кодировщик звука:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Состояние адаптации:"
+msgstr "Битовый поток звука:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25407,10 +25405,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
-"Файл уже существует по пути, по которому вы хотите выполнить обработку видео "
-"[%1]... \n"
-"                                                              Вы уверены, "
-"что хотите перезаписать существующий файл?"
+"Файл уже существует по пути, по которому планируется выполнить обработку "
+"видео [%1]... \n"
+"                                                              Действительно "
+"перезаписать существующий файл?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:244
 #: libs/ui/animation/KisAnimationRender.cpp:246
@@ -25492,13 +25490,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "Количество кадров в секунду, превышающее «30», редко поддерживается."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "Размер, превышающий «1920» (в пикселах), редко поддерживается."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
@@ -25511,6 +25509,8 @@ msgstr "Предупреждения:"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"Экспорт может оказаться неудачным, и некоторые устройства не смогут "
+"выполнить воспроизведение."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25783,45 +25783,39 @@ msgid "Loading video data... %1 frames examined."
 msgstr "Загрузка данных видео... Обработано кадров: %1."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "Внутренняя ошибка Krita"
+msgstr "Внутренняя ошибка (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Параметры штриховки"
+msgstr "Для этого формата не предусмотрены параметры настройки."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "Профили не найдены"
+msgstr "Файлы кадров не найдены"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "&Обработать анимацию..."
+msgstr "Обработка анимации…"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
 msgid "No encoder for the selected format found"
-msgstr ""
+msgstr "Не найден кодировщик для выбранного формата"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgid "No office:drawing tag found in file: %1"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Не найден тег office:drawing в файле: %1"
+msgstr "Ошибка подготовки звукового файла: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26906,10 +26900,9 @@ msgstr "Изображения"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "&Видео"
+msgstr "Видео"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -27047,10 +27040,10 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
-"ВНИМАНИЕ: На поверхности, работающей в 8-битном режиме, активирован режим "
+"ВНИМАНИЕ: на поверхности, работающей в 8-битном режиме, активирован режим "
 "HDR!\n"
 "Активируйте 10-битный режим в диалоге «Параметры» Krita и перезапустите "
-"Krita,чтобы избежать цветовых полос!"
+"Krita, чтобы предотвратить появление цветовых полос!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27264,11 +27257,11 @@ msgid ""
 "org</a></p>"
 msgstr ""
 "<p>Графическая среда KDE переведена на многие языки благодаря работе команд "
-"переводчиков в разных странах.</p><p>Для дополнительной информации о "
-"переводе KDE зайдите на <a href=\"http://l10n.kde.org\">http://l10n.kde.org</"
-"a>, а также на <a href=\"https://kde.ru/translation\">kde.ru/translation</"
-"a>. Там вы сможете узнать о работе команды, переводившей KDE на русский "
-"язык, и, возможно, сами захотите участвовать в этой работе.</p>"
+"переводчиков в разных странах.</p><p>Для получения дополнительной информации "
+"о переводе KDE зайдите на <a href=\"http://l10n.kde.org\">http://l10n.kde."
+"org</a>, а также на <a href=\"https://kde.ru/translation\">kde.ru/"
+"translation</a>. Там можно узнать о работе команды, переводившей KDE на "
+"русский язык, и об участии в ней.</p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:93
 #, kde-format
@@ -28896,7 +28889,7 @@ msgid ""
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
 "Для этого файла существует автосохранённая копия. Что следует сделать?\n"
-"Внимание: если отменить автоматическое сохранение, копия будет удалена."
+"Внимание: если отменить открытие файла автосохранения, она будет удалена."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
@@ -28915,7 +28908,7 @@ msgstr "Открыть файл автосохранения"
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:44
 #, kde-format
 msgid "Discard autosave, open the main file"
-msgstr "Отменить автоматическое сохранение, открыть основной файл"
+msgstr "Отменить открытие файла автосохранения, открыть основной файл"
 
 #. i18n: ectx: property (text), widget (QPushButton, btOk)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:53
@@ -31431,9 +31424,9 @@ msgid ""
 msgstr ""
 "Некоторые приложения могут эмулировать нажатие функциональных клавиш с "
 "высокими номерами (например, F22), чтобы вывести себя на первый план. Это "
-"может нарушить работу системы горячих клавиш и действий Krita. Если у вас "
-"есть клавиатура с функциональными клавишами F13 или выше, и вы хотите их "
-"использовать, попробуйте отключить этот параметр, но учтите эту "
+"может нарушить работу системы горячих клавиш и действий Krita. Если имеется "
+"клавиатура с функциональными клавишами F13 или выше, которые требуется "
+"использовать, попробуйте отключить этот параметр, но примите во внимание эту "
 "потенциальную проблему."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
@@ -42258,19 +42251,19 @@ msgid_plural ""
 "%3"
 msgstr[0] ""
 "Сокращение «%2» совпадает с указанными ниже.\n"
-"Хотите удалить клавиатурное сокращение для следующих действий?\n"
+"Удалить клавиатурное сокращение для следующих действий?\n"
 "%3"
 msgstr[1] ""
 "Сокращение «%2» совпадает с указанными ниже.\n"
-"Хотите удалить клавиатурное сокращение для следующих действий?\n"
+"Удалить клавиатурное сокращение для следующих действий?\n"
 "%3"
 msgstr[2] ""
 "Сокращение «%2» совпадает с указанными ниже.\n"
-"Хотите удалить клавиатурное сокращение для следующих действий?\n"
+"Удалить клавиатурное сокращение для следующих действий?\n"
 "%3"
 msgstr[3] ""
 "Сокращение «%2» совпадает с указанным ниже.\n"
-"Хотите удалить клавиатурное сокращение для следующего действия?\n"
+"Удалить клавиатурное сокращение для следующего действия?\n"
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
@@ -42314,9 +42307,9 @@ msgid ""
 "some applications use.\n"
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
-"Клавиатурная комбинация «%1» используется для стандартного действия «%2», "
-"используемого некоторыми приложениями.\n"
-"Вы также хотите использовать её как глобальное сокращение?"
+"Клавиатурная комбинация «%1» также назначена стандартному действию «%2», "
+"используемому некоторыми приложениями.\n"
+"Действительно использовать её как глобальное сокращение?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
@@ -42399,7 +42392,7 @@ msgid ""
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
-"Вы точно хотите удалить схему %1?\n"
+"Действительно удалить схему %1?\n"
 "                                             Это не удалит никаких системных "
 "схем клавиатурных сокращений."
 
@@ -45531,12 +45524,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "Прервать кодирование ускоренного видео?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "Запуск FFmpeg..."
+msgstr "Запуск средства экспорта…"
 
 #: plugins/dockers/recorder/recorder_export.cpp:440
 #, kde-format
@@ -45602,10 +45593,9 @@ msgid "The timelapse video is being encoded..."
 msgstr "Замедленное видео кодируется..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:866
-#, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
+#, kde-format
 msgid "Export failed. Error message:"
-msgstr "Неудачное сохранение. Сообщение FFmpeg:"
+msgstr "Не удалось выполнить экспорт. Сообщение об ошибке:"
 
 #: plugins/dockers/recorder/recorder_export.cpp:889
 #, kde-format
@@ -45768,6 +45758,9 @@ msgid ""
 "not widely supported. The export may fail and some devices will not be able "
 "to play it."
 msgstr ""
+"<strong>Внимание:</strong> видео с размером больше 1920 пикселов редко "
+"поддерживается. Экспорт может оказаться неудачным, и некоторые устройства не "
+"смогут выполнить воспроизведение."
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
 #: plugins/dockers/recorder/recorder_export.ui:711
@@ -45776,6 +45769,9 @@ msgid ""
 "<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
 "The export may fail and some devices will not be able to play it."
 msgstr ""
+"<strong>Внимание:</strong> видео, содержащее более 30 кадров в секунду, "
+"редко поддерживается. Экспорт может оказаться неудачным, и некоторые "
+"устройства не смогут выполнить воспроизведение."
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:757
@@ -57603,7 +57599,7 @@ msgstr ""
 "\n"
 "Путь: %1\n"
 "\n"
-"Хотите выбрать другое место на диске?"
+"Выбрать другое место на диске?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:148
 #: plugins/impex/libkra/kis_kra_loader.cpp:697
@@ -57771,7 +57767,7 @@ msgstr ""
 "Предполагаемый путь:\n"
 "%2\n"
 "\n"
-"Хотите определить его вручную?"
+"Указать путь вручную?"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:867
 #, kde-format
@@ -57828,10 +57824,10 @@ msgid ""
 msgstr ""
 "Файл, ассоциированный с файловым слоем «%1», не найден.\n"
 "\n"
-"Предполагаемый путь к файлу:\n"
-">%2\n"
+"Предполагаемый путь:\n"
+"%2\n"
 "\n"
-"Хотите указать правильный путь вручную?"
+"Указать путь вручную?"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
@@ -67792,7 +67788,7 @@ msgstr "Название профиля"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:210
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr "Укажите название, под которым хотите сохранить этот профиль:"
+msgstr "Укажите название, под которым следует сохранить этот профиль:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format
@@ -70203,8 +70199,8 @@ msgid ""
 "Invisible sublayers will also be transformed. Lock layers if you do not want "
 "them to be transformed "
 msgstr ""
-"Невидимые слои также будут преобразованы. Заблокируйте слои, если не хотите "
-"их трансформировать "
+"Невидимые слои также будут преобразованы. Заблокируйте слои, если их не "
+"следует преобразовывать"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.h:370
 #, kde-format

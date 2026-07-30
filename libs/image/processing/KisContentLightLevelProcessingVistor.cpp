@@ -32,7 +32,6 @@ KisContentLightLevelProcessingVistor::~KisContentLightLevelProcessingVistor()
 void KisContentLightLevelProcessingVistor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
 {
     Q_UNUSED(undoAdapter)
-    if (layer->parent()) return;
 
     KisPaintDeviceSP projection = layer->projection();
     KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());

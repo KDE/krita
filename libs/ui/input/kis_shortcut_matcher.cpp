@@ -65,12 +65,14 @@ QTouchEvent generateFakeTouchEndEvent(const QTouchEvent *event)
             it = points.erase(it);
         } else {
             it->setState(Qt::TouchPointReleased);
+            ++it;
         }
 #else
         if (it->state() == QEventPoint::Released) {
             it = points.erase(it);
         } else {
            QMutableEventPoint::setState(*it, QEventPoint::Released);
+           ++it;
         }
 #endif
     }

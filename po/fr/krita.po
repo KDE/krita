@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-28 02:42+0000\n"
-"PO-Revision-Date: 2026-07-19 09:39+0200\n"
+"PO-Revision-Date: 2026-07-29 09:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -25153,6 +25153,9 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Paramètres audio non pris en charge. Veuillez essayer un ré-encodage de "
+"votre fichier audio avec un format d'échantillon, une fréquence "
+"d'échantillonnage et un nombre de canaux plus courants."
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -25160,28 +25163,24 @@ msgid "Unsupported format"
 msgstr "Format non pris en charge"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "Fichier vidéo :"
+msgstr "Encodeur vidéo :"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Fichier vidéo :"
+msgstr "Débit vidéo :"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Menu audio"
+msgstr "Encodeur audio :"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Niveau d'adaptation :"
+msgstr "Débit audio :"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25304,12 +25303,15 @@ msgstr ""
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
 msgstr ""
+"Les taux de FPS au-delà de 30 ne sont pas en généralement pris en charge."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr ""
+"Les dimensions supérieures à 1 920 pixels ne sont pas généralement prises en "
+"charge."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
@@ -25322,6 +25324,8 @@ msgstr "Avertissement(s) :"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"L'exportation pourrait échouer et certains périphériques pourraient ne pas "
+"être capable de la lire."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25609,13 +25613,12 @@ msgstr "Erreur interne (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV : %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Préférences de hachures"
+msgstr "Ce format ne possède aucune préférences."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25623,11 +25626,9 @@ msgid "No frame files found"
 msgstr "Aucune trame n'a été trouvé."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "Effectuer un &rendu d'animation..."
+msgstr "Rendu d'animation en cours..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25635,10 +25636,9 @@ msgid "No encoder for the selected format found"
 msgstr "Aucun encodeur n'a été trouvé pour le format sélectionné."
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgid "No office:drawing tag found in file: %1"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Aucune étiquette « office:drawing » trouvée dans le fichier : %1"
+msgstr "Erreur durant la préparation du fichier audio : %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26726,10 +26726,9 @@ msgstr "Images"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "&Vidéo"
+msgstr "Vidéo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -27805,12 +27804,12 @@ msgid ""
 msgstr ""
 "<p>L'activation de la gestion des couleurs du canevas crée automatiquement "
 "une surface native séparée du canevas. Cela pourrait causer des problèmes de "
-"performance sur certains systems. </p<p>Si la gestion des couleurs est "
+"performance sur certains systèmes. </p<p>Si la gestion des couleurs est "
 "désactivée, Krita effectuera le rendu du canevas dans la surface de la "
-"fenêtre principale, considérée comme espace « sRGB ». Cela conduira à deux "
-"limitations :<ol><li>Le gamut de couleurs sera limité à « sRGB »,</li>"
-"\t<li>Le mode de vérification des couleurs sera limité à « Utiliser la "
-"configuration globale pour l'affichage », c'est-à-dire que l'épreuvage blanc "
+"fenêtre principale, considérée comme espace « sRGB ». Cela conduira à deux "
+"limitations :<ol><li>Le gamut de couleurs sera limité à « sRGB »,</li>"
+"\t<li>Le mode de vérification des couleurs sera limité à « Utiliser la "
+"configuration globale pour l'affichage », c'est-à-dire que l'épreuvage blanc "
 "sur papier deviendra impossible</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1369
@@ -67186,7 +67185,7 @@ msgstr "Trait, marqueurs, remplissage"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr "Markers, Fill, Stroke"
+msgstr "Marqueurs, Remplissage, Trait"
 
 # attributs SVG Markers, Stroke, Fill
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113

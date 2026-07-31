@@ -26161,16 +26161,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "Govva"
+msgstr "Govat"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
 #, kde-format
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134

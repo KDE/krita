@@ -7575,7 +7575,7 @@ msgstr "GPS: Dunst und Atmosphäre"
 #, kde-format
 msgctxt "./krita/data/gradients/GPS-Light-Saber-_Use-FG-color_.ggr"
 msgid "GPS Light Saber (Use FG color)"
-msgstr "GPS: Lichtsäbel (Benutzt Vordergrundfarbe)"
+msgstr "GPS: Lichtsäbel (Verwendet Vordergrundfarbe)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/GPS-Nature-browns-copy.ggr:2
@@ -23792,7 +23792,7 @@ msgid ""
 "photographic information."
 msgstr ""
 "Diese Zusammenführungsstrategie versucht eine optimale Lösung zu finden, "
-"indem z. B. die Autorenliste zusammengeführt oder identische "
+"indem z. B. die Autorenliste zusammengeführt oder identische "
 "Fotoinformationen beibehalten werden."
 
 #: libs/metadata/kis_meta_data_value.cc:404
@@ -27756,7 +27756,8 @@ msgstr "Zuletzt verwendet"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Images"
 msgid "Images"
 msgstr "Bilder"
 
@@ -29685,7 +29686,7 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
-"Für diese Datei existiert eine automatische Sicherung. Wie wollen Sie "
+"Für diese Datei existiert eine automatische Sicherung. Wie möchten Sie "
 "fortfahren?\n"
 "Achtung: wenn Sie die automatische Sicherung jetzt verwerfen, wird sie "
 "entfernt."
@@ -30327,7 +30328,7 @@ msgstr ""
 "Farbton und Sättigung bleiben erhalten, während die Helligkeit aufgegeben "
 "wird, um die ursprüngliche Sättigung beizubehalten. Der Weißpunkt wird "
 "geändert um neutrale Grautöne zu erreichen. Vorgesehen für geschäftliche "
-"Grafiken (z. B. farbige Diagramme Zeichnungen, Overheadfolien, ...)"
+"Grafiken (z. B. farbige Diagramme Zeichnungen, Overheadfolien, ...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -30444,7 +30445,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:114
 #, kde-format
 msgid "Use Blackpoint Compensation"
-msgstr "Schwarzpunkt-Kompensierung benutzen"
+msgstr "Schwarzpunkt-Kompensierung verwenden"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:124
@@ -30454,7 +30455,7 @@ msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
 msgstr ""
 "„Little CMS“-Optimierungen zulassen (deaktivieren Sie diese Einstellung, "
-"wenn Sie lineares helles  RGB oder XYZ benutzen)"
+"wenn Sie lineares helles  RGB oder XYZ verwenden)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkForcePaletteColor)
 #: libs/ui/forms/wdgcolorsettings.ui:134
@@ -30739,7 +30740,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid "Use Blackpoint &Compensation"
-msgstr "Schwarzpunkt-&Kompensierung benutzen"
+msgstr "Schwarzpunkt-&Kompensierung verwenden"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgconvertcolorspace.ui:140
@@ -30789,7 +30790,7 @@ msgstr "Akt&ualisieren"
 #: libs/ui/forms/wdgcustompattern.ui:141
 #, kde-format
 msgid "use as &Pattern"
-msgstr "Als &Muster benutzen"
+msgstr "Als &Muster verwenden"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: libs/ui/forms/wdgcustompattern.ui:148
@@ -33166,7 +33167,7 @@ msgstr "XXX MiB"
 #: libs/ui/forms/wdgperformancesettings.ui:102
 #, kde-format
 msgid "Krita will not use more memory than this limit."
-msgstr "Krita benutzt nicht mehr als diesen angegebenen Arbeitsspeicher."
+msgstr "Krita verwendet nicht mehr als diesen angegebenen Arbeitsspeicher."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgperformancesettings.ui:87
@@ -42442,10 +42443,10 @@ msgstr ""
 "daran zu arbeiten. Allerdings sollten Sie uns mitteilen, falls etwas nicht "
 "wie erwartet funktioniert oder es in Ihren Augen einfach besser gemacht "
 "werden könnte.<br /><br />KDE besitzt ein System zum Verfolgen von "
-"Problemen. Besuchen Sie <a HREF=\"%1\">%1</a>, oder benutzen Sie den Dialog "
+"Problemen. Besuchen Sie <a HREF=\"%1\">%1</a>, oder verwenden Sie den Dialog "
 "„Probleme oder Wünsche berichten ...“ im Menü „Hilfe“, um auf Probleme "
 "hinzuweisen.<br /><br />Auch wenn Sie einen Verbesserungsvorschlag haben, "
-"können Sie das System für die Fehlerverfolgung benutzen. Stellen Sie nur "
+"können Sie das System für die Fehlerverfolgung verwenden. Stellen Sie nur "
 "sicher, dass Sie unter „Severity“ („Schweregrad“) die Auswahl „Enhancement“ "
 "treffen.</html>"
 
@@ -42467,7 +42468,7 @@ msgstr ""
 "href=\"%1\">%1</a>, um Information über Projekte zu erhalten, an denen Sie "
 "sich beteiligen können.<br /><br />Wenn Sie weitere Informationen oder "
 "Dokumentation benötigen, besuchen Sie <a href=\"%2\">%2</a>. Dort finden "
-"Sie, was Sie brauchen.</html>"
+"Sie, was Sie benötigen.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:115
 #, kde-format
@@ -42529,7 +42530,7 @@ msgid ""
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 "Das Programm, zu dem Sie einen Fehlerbericht einschicken möchten. Falls "
-"inkorrekt, benutzen Sie bitte den Knopf „Probleme oder Wünsche "
+"inkorrekt, verwenden Sie bitte den Knopf „Probleme oder Wünsche "
 "berichten ...“ des betreffenden Programms."
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
@@ -42790,7 +42791,7 @@ msgid ""
 "Search interactively for shortcut names (e.g. Copy) or combination of keys "
 "(e.g. Ctrl+C) by typing them here."
 msgstr ""
-"Sie können interaktiv nach Tastenkürzel-Namen (z. B. für „Kopieren“) oder "
+"Sie können interaktiv nach Tastenkürzel-Namen (z. B. für „Kopieren“) oder "
 "Tastenkombinationen (wie Strg+C) suchen, indem Sie sie hier eintippen."
 
 #. i18n: ectx: property (whatsThis), widget (QTreeWidget, list)
@@ -42801,9 +42802,9 @@ msgid ""
 "(e.g. 'Copy') shown in the left column and keys or combination of keys (e.g. "
 "Ctrl+V) shown in the right column."
 msgstr ""
-"Hier sehen Sie eine Liste der Tastenzuordnungen, d. h. Verknüpfungen "
-"zwischen Aktionen (z. B. „Kopieren“), die in der linken Spalte stehen, und "
-"Tasten oder Tastenkombinationen (z. B. Strg+C), die in der rechten Spalte "
+"Hier sehen Sie eine Liste der Tastenzuordnungen, d. h. Verknüpfungen "
+"zwischen Aktionen (z. B. „Kopieren“), die in der linken Spalte stehen, und "
+"Tasten oder Tastenkombinationen (z. B. Strg+C), die in der rechten Spalte "
 "erscheinen."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
@@ -42944,7 +42945,7 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 "Die Tastenkombination „%1“ ist bereits der Standard-Aktion „%2“ zugeordnet, "
-"die von einigen Anwendungen benutzt wird.\n"
+"die von einigen Anwendungen verwendet wird.\n"
 "Möchten Sie sie wirklich als globales Tastenkürzel verwenden?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
@@ -63839,7 +63840,7 @@ msgstr "Versatz-Skala:"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:114
 #, kde-format
 msgid "Use distance density"
-msgstr "Abstanddichte benutzen"
+msgstr "Abstanddichte verwenden"
 
 #. i18n: ectx: property (text), widget (QCheckBox, simpleModeCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:124

@@ -49,13 +49,15 @@ public:
 
     class GenerateCanvasZoomPreviewData : public KisStrokeJobData {
     public:
-        GenerateCanvasZoomPreviewData(KisPaintDeviceSP _canvasDev, const QRect &_canvasPixelRect, KisDisplayColorConverter *_colorConverter)
-            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter)
+        GenerateCanvasZoomPreviewData(KisPaintDeviceSP _canvasDev, const QRect &_canvasPixelRect, KisDisplayColorConverter *_colorConverter,
+                                      int _levelOfDetail = -1, QSharedPointer<boost::none_t> _cookie = nullptr)
+            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter), levelOfDetail(_levelOfDetail), fetchingCookie(_cookie)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            Q_UNUSED(levelOfDetail);
-            return new GenerateCanvasZoomPreviewData(canvasDev, canvasPixelRect, colorConverter);
+            KisLodTransform transform(levelOfDetail);
+            QRect lodPixelRect = transform.map(canvasPixelRect);
+            return new GenerateCanvasZoomPreviewData(canvasDev, lodPixelRect, colorConverter, levelOfDetail, fetchingCookie);
         }
 
         QWeakPointer<boost::none_t> cookie() {
@@ -66,6 +68,7 @@ public:
         KisPaintDeviceSP canvasDev;
         QRect canvasPixelRect;
         KisDisplayColorConverter *colorConverter;
+        int levelOfDetail;
         QSharedPointer<boost::none_t> fetchingCookie;
     };
 public:

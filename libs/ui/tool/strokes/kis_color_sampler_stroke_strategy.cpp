@@ -58,12 +58,27 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
     } else if (previewData) {
         KisPaintDeviceSP tmpDev = new KisPaintDevice(previewData->canvasDev->colorSpace());
-
         tmpDev->makeCloneFrom(previewData->canvasDev, previewData->canvasPixelRect);
 
         QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
+        qDebug() << "Scaled image rect: " << image.rect();
 
-        Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
+        if (previewData->levelOfDetail > 0) {
+            qDebug() << previewData->levelOfDetail;
+            qDebug() << "Modified rect" << previewData->canvasPixelRect;
+            KisLodTransform transform(previewData->levelOfDetail);
+
+            qreal scale = transform.lodToInvScale(previewData->levelOfDetail);
+            qDebug() << "Lod to scale" << scale;
+
+            image = image.scaled(QSize(scale * image.width(), scale * image.height()));
+            qDebug() << "Restored image rect: " << image.rect();
+
+            previewData->canvasPixelRect = transform.mapInverted(previewData->canvasPixelRect);
+            qDebug() << "Restored rect: " << previewData->canvasPixelRect;
+        }
+
+        Q_EMIT sigCanvasZoomPreviewUpdated(QImage(), QRect());
     }
 }
 

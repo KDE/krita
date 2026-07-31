@@ -729,7 +729,6 @@ QImage KisAsyncColorSamplerHelper::fetchCanvasPreview(QRect &canvasPixelRect, Ki
     // If not already have a job fetching canvas image, then do it
     // TODO: If LOD is involved, the cookie seems leaked. Also, Q_EMIT never trigger the slot?
     if (!m_d->canvasPreviewFetchingCookie && m_d->cacheCanvasPreviewRect != canvasPixelRect) {
-        qDebug() << "Original rect:" << canvasPixelRect;
 
         KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData *data =
             new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage->projection(), canvasPixelRect, m_d->canvas->displayColorConverter());
@@ -738,8 +737,6 @@ QImage KisAsyncColorSamplerHelper::fetchCanvasPreview(QRect &canvasPixelRect, Ki
 
         m_d->strokesFacade()->addJob(m_d->strokeId, data);
     }
-
-    // qDebug() << "Has fetching finished: " << m_d->canvasPreviewFetchingCookie.isNull();
 
     // Render the last frame if available
     if (!m_d->cacheCanvasPreviewRect.isNull()) canvasPixelRect = QRect(QPoint(0,0), m_d->cacheCanvasPreviewRect.size());
@@ -839,8 +836,6 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
 void KisAsyncColorSamplerHelper::slotCanvasZoomPreviewUpdated(const QImage &canvasImage, QRect canvasRect) {
     m_d->cacheCanvasPreviewRect = canvasRect;
     m_d->cacheCanvasPreviewImage = canvasImage;
-
-    qDebug() << "Canvas fetching finished";
 
     Q_EMIT sigRequestUpdateOutline();
 }

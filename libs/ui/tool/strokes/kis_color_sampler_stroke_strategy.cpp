@@ -19,6 +19,8 @@ struct KisColorSamplerStrokeStrategy::Private
     int blend = 100;
 
     boost::optional<KoColor> lastSelectedColor;
+
+    QSharedPointer<boost::none_t> strokeCookie = nullptr;
 };
 
 KisColorSamplerStrokeStrategy::KisColorSamplerStrokeStrategy(int radius, int blend, int lod)
@@ -61,24 +63,17 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         tmpDev->makeCloneFrom(previewData->canvasDev, previewData->canvasPixelRect);
 
         QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
-        qDebug() << "Scaled image rect: " << image.rect();
 
         if (previewData->levelOfDetail > 0) {
-            qDebug() << previewData->levelOfDetail;
-            qDebug() << "Modified rect" << previewData->canvasPixelRect;
             KisLodTransform transform(previewData->levelOfDetail);
-
             qreal scale = transform.lodToInvScale(previewData->levelOfDetail);
-            qDebug() << "Lod to scale" << scale;
 
             image = image.scaled(QSize(scale * image.width(), scale * image.height()));
-            qDebug() << "Restored image rect: " << image.rect();
 
             previewData->canvasPixelRect = transform.mapInverted(previewData->canvasPixelRect);
-            qDebug() << "Restored rect: " << previewData->canvasPixelRect;
         }
 
-        Q_EMIT sigCanvasZoomPreviewUpdated(QImage(), QRect());
+        Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
     }
 }
 
@@ -89,6 +84,9 @@ KisStrokeStrategy* KisColorSamplerStrokeStrategy::createLodClone(int levelOfDeta
     KisColorSamplerStrokeStrategy *lodStrategy = new KisColorSamplerStrokeStrategy(m_d->radius, m_d->blend, levelOfDetail);
     connect(lodStrategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
             this, &KisColorSamplerStrokeStrategy::sigColorUpdated,
+            Qt::DirectConnection);
+    connect(lodStrategy, &KisColorSamplerStrokeStrategy::sigCanvasZoomPreviewUpdated,
+            this, &KisColorSamplerStrokeStrategy::sigCanvasZoomPreviewUpdated,
             Qt::DirectConnection);
     return lodStrategy;
 }

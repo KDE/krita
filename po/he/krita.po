@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 02:42+0000\n"
-"PO-Revision-Date: 2026-07-19 08:53+0300\n"
+"POT-Creation-Date: 2026-08-01 02:39+0000\n"
+"PO-Revision-Date: 2026-07-31 12:47+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20050,7 +20050,7 @@ msgstr "גל משולש"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Respaces full-width glyphs to fit in a proportional context."
-msgstr ""
+msgstr "ריווח מחדש של גליפים ברוחב מלא כדי שיתאימו להקשר יחסי."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
 #, kde-format
@@ -45630,17 +45630,17 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, kde-format
 msgid "Remove family"
 msgstr "הסרת משפחה"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, kde-format
 msgid "Family list is empty."
 msgstr "רשימת המשפחות ריקה."
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, kde-format
 msgid "Add Fallback Family"
 msgstr "הוספת משפחה לגיבוי"
@@ -53501,12 +53501,12 @@ msgstr "סינוסואידי"
 #: plugins/generators/seexpr/generator.cpp:72
 #, kde-format
 msgid "&SeExpr..."
-msgstr ""
+msgstr "&SeExpr…"
 
 #: plugins/generators/seexpr/generator.h:52
 #, kde-format
 msgid "SeExpr"
-msgstr ""
+msgstr "SeExpr"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:45
 #, kde-format
@@ -53851,14 +53851,14 @@ msgstr ""
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
-msgstr ""
+msgstr "Rec 2100 HLG"
 
 #: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
-msgstr ""
+msgstr "Rec 2100 PQ"
 
 #: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199

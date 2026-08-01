@@ -702,37 +702,32 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         }
     }
 
-    // Clear the center if no zoom
-    // Or fill with a solid color to hide the underneath view when zooming at edge of canvas
     cachePainter.setPen(Qt::NoPen);
-    // If the cache update don't run, no brush is set. So set it
     cachePainter.setBrush(m_d->backgroundColor);
 
+    // Clear the center
     cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
     cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
 
-    // Draw zoom preview
-    if (m_d->circleZoomPreviewEnabled) {
-        // If canvas preview image is null and it's being fetched (which means canvas preview is needed),
-        // don't paint preview until it's done to avoid flickering
-        bool shouldPaint = !(m_d->cacheCanvasPreviewImage.isNull() && m_d->canvasPreviewFetchingCookie);
+    // If canvas preview image is null and it's being fetched (which means canvas preview is needed),
+    // don't paint preview until it's done to avoid flickering
+    bool shouldPaintPreview = !(m_d->cacheCanvasPreviewImage.isNull() && m_d->canvasPreviewFetchingCookie);
 
-        // But if zoom preview has already been painted, keeps painting to avoid flickering
-        if (shouldPaint || m_d->zoomPreviewHasPainted) {
-            paintCircleCanvasPreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
-            paintCircleReferenceImagePreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
+    // But if zoom preview has already been painted, keeps painting to avoid flickering
+    if (m_d->circleZoomPreviewEnabled && (shouldPaintPreview || m_d->zoomPreviewHasPainted)) {
+        paintCircleCanvasPreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
+        paintCircleReferenceImagePreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
 
-            // Draw crosshair if preview is offseted
-            if (m_d->circlePreviewPosition != KisConfig::ColorSamplerPreviewCirclePosition::Center) {
-                paintCircleCrosshair(cachePainter, cacheRect, currentColor);
-            }
-
-            // Fill empty spaces to hide the underlying canvas
-            cachePainter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-            cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
-
-            m_d->zoomPreviewHasPainted = true;
+        // Draw crosshair if preview is offseted
+        if (m_d->circlePreviewPosition != KisConfig::ColorSamplerPreviewCirclePosition::Center) {
+            paintCircleCrosshair(cachePainter, cacheRect, currentColor);
         }
+
+        // Fill empty spaces to hide the underlying canvas
+        cachePainter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+        cachePainter.drawPath(tf.map(m_d->cacheCircleInnerClip));
+
+        m_d->zoomPreviewHasPainted = true;
     }
 
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);

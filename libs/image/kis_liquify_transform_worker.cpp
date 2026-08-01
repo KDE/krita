@@ -265,6 +265,10 @@ bool isFinite(const Eigen::Matrix2d &m)
 
 }
 
+// A restore-shape dab determines its samples and Gaussian falloff from the
+// points' positions at the beginning of the dab. The centroid correction keeps
+// this fixed weighted sample set centered; subsequent dabs query the moved
+// points and calculate their falloff again.
 void KisLiquifyTransformWorker::restoreShapePoints(const QPointF &base,
                                                    qreal amount,
                                                    qreal sigma,

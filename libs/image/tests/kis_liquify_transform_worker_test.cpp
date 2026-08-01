@@ -133,22 +133,41 @@ qreal averageDistance(const QVector<QPointF> &lhs, const QVector<QPointF> &rhs)
     return distance / lhs.size();
 }
 
-QPointF weightedTransformedCentroid(KisLiquifyTransformWorker *worker,
-                                    const QPointF &base,
-                                    qreal sigma)
+struct WeightedPointSample
+{
+    int index;
+    qreal weight;
+};
+
+QVector<WeightedPointSample> transformedPointSamples(KisLiquifyTransformWorker *worker,
+                                                      const QPointF &base,
+                                                      qreal sigma)
 {
     const qreal maxDist = 3.0 * sigma;
-    QPointF centroid;
-    qreal weightSum = 0.0;
+    QVector<WeightedPointSample> samples;
 
-    Q_FOREACH (const QPointF &pt, worker->transformedPoints()) {
+    for (int i = 0; i < worker->transformedPoints().size(); i++) {
+        const QPointF &pt = worker->transformedPoints()[i];
         const QPointF diff = pt - base;
         const qreal dist = KisAlgebra2D::norm(diff);
         if (dist > maxDist) continue;
 
         const qreal weight = exp(-0.5 * pow2(dist / sigma));
-        centroid += pt * weight;
-        weightSum += weight;
+        samples << WeightedPointSample{i, weight};
+    }
+
+    return samples;
+}
+
+QPointF weightedTransformedCentroid(KisLiquifyTransformWorker *worker,
+                                    const QVector<WeightedPointSample> &samples)
+{
+    QPointF centroid;
+    qreal weightSum = 0.0;
+
+    Q_FOREACH (const WeightedPointSample &sample, samples) {
+        centroid += worker->transformedPoints()[sample.index] * sample.weight;
+        weightSum += sample.weight;
     }
 
     return centroid / weightSum;
@@ -331,11 +350,13 @@ void KisLiquifyTransformWorkerTest::testRestoreShapePreservesCentroid()
     QScopedPointer<KisLiquifyTransformWorker> indexedWorker(
         cloneWorkerWithRebuiltSpatialIndex(worker));
 
+    const QVector<WeightedPointSample> samples =
+        transformedPointSamples(indexedWorker.data(), base, sigma);
     const QPointF beforeCentroid =
-        weightedTransformedCentroid(indexedWorker.data(), base, sigma);
+        weightedTransformedCentroid(indexedWorker.data(), samples);
     indexedWorker->restoreShapePoints(base, 1.0, sigma, false, false, false);
     const QPointF afterCentroid =
-        weightedTransformedCentroid(indexedWorker.data(), base, sigma);
+        weightedTransformedCentroid(indexedWorker.data(), samples);
 
     QVERIFY(kisDistance(beforeCentroid, afterCentroid) < 1e-4);
 }

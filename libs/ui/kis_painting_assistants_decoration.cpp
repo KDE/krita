@@ -636,7 +636,11 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
 
     QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), globalEditorWidgetData.boundingSize.width(), globalEditorWidgetData.boundingSize.height()), 6, 6);
+    QRectF bgRect(actionsBGRectangle.x(),
+                  actionsBGRectangle.y(),
+                  globalEditorWidgetData.boundingSize.width(),
+                  globalEditorWidgetData.boundingSize.height());
+    bgPath.addRoundedRect(bgRect, 6, 6);
 
 
     // if the assistant is selected, make outline stroke fatter and use theme's highlight color
@@ -652,6 +656,20 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     gc.setPen(stroke);
     gc.drawPath(bgPath);
     gc.fillPath(bgPath, backgroundColor);
+
+    // If the assistant uses a custom color, draw a colored strip at the bottom
+    // of the editor rectangle so that the association is clear.
+    if (assistant->useCustomColor()) {
+        KoColor c;
+        c.fromQColor(assistant->effectiveAssistantColor());
+        QColor assistantColor = renderInterface->convertColorToDisplayColorSpace(c);
+        assistantColor.setAlpha(255); // No point in having transparency here.
+
+        gc.save();
+        gc.setClipPath(bgPath, Qt::IntersectClip);
+        gc.fillRect(QRectF(QPointF(bgRect.left(), bgRect.bottom() - 4.0), bgRect.bottomRight()), assistantColor);
+        gc.restore();
+    }
 
     //draw drag handle
     KoColor c;

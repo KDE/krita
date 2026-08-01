@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -47861,18 +47861,18 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, fuzzy, kde-format
 #| msgid "Remove profile"
 msgid "Remove family"
 msgstr "Fjern profil"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, fuzzy, kde-format
 msgid "Family list is empty."
 msgstr "Laget er låst."
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, fuzzy, kde-format
 msgid "Add Fallback Family"
 msgstr "Alle sprog"

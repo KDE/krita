@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -46126,17 +46126,17 @@ msgstr ""
 "beixuan, beiyongziti, beixuanziti, 字体, 字体系列, 字体家族, 备用, 备选, 备用"
 "字体, 备选字体"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, kde-format
 msgid "Remove family"
 msgstr "移除字体"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, kde-format
 msgid "Family list is empty."
 msgstr "字体列表为空。"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, kde-format
 msgid "Add Fallback Family"
 msgstr "添加备选字体"

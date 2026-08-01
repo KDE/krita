@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -45800,17 +45800,17 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, fuzzy, kde-format
 msgid "Remove family"
 msgstr "&ลบเลเยอร์"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, fuzzy, kde-format
 msgid "Family list is empty."
 msgstr "รูปภาพ"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, fuzzy, kde-format
 msgid "Add Fallback Family"
 msgstr "พอดีกับหน้า"

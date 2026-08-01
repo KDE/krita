@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -45654,17 +45654,17 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, fuzzy, kde-format
 msgid "Remove family"
 msgstr "Выдаліць адрэзак"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, fuzzy, kde-format
 msgid "Family list is empty."
 msgstr "Памер пласта"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, fuzzy, kde-format
 msgid "Add Fallback Family"
 msgstr "Уставіць тэкст з буфера абмену"

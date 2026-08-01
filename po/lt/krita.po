@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -47080,18 +47080,18 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, fuzzy, kde-format
 #| msgid "Remove profile"
 msgid "Remove family"
 msgstr "Pašalinti profilį"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, fuzzy, kde-format
 msgid "Family list is empty."
 msgstr "Sluoksnis yra užrakintas."
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, fuzzy, kde-format
 msgid "Add Fallback Family"
 msgstr "Paskutinis puslapis:"

@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2026-02-08 00:25+0100\n"
 "Last-Translator: Alexander Becker <alex-at-kde-l10n-de@freenet.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -48243,20 +48243,20 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, fuzzy, kde-format
 #| msgid "Remove profile"
 msgid "Remove family"
 msgstr "Profil entfernen"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, fuzzy, kde-format
 #| msgctxt "floating message in layer manager"
 #| msgid "Layer is empty "
 msgid "Family list is empty."
 msgstr "Die Ebene ist leer "
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, fuzzy, kde-format
 #| msgid "Add Fallback Language"
 msgid "Add Fallback Family"

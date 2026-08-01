@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2026-07-28 06:17+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -46060,17 +46060,17 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr "font-family, typeface, font, fallback, ფონტის ოჯახი, ფონტი"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, kde-format
 msgid "Remove family"
 msgstr "ოჯახის წაშლა"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, kde-format
 msgid "Family list is empty."
 msgstr "ოჯახის სია ცარიელია."
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, kde-format
 msgid "Add Fallback Family"
 msgstr "სარეზერვო ენის დამატება"

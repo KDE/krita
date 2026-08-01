@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-28 00:43+0000\n"
+"POT-Creation-Date: 2026-08-01 00:44+0000\n"
 "PO-Revision-Date: 2026-07-28 15:36+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -46883,17 +46883,17 @@ msgctxt ""
 msgid "font-family, typeface, font, fallback"
 msgstr "familia de fuente, tipo de letra, fuente, tipografía"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:149
+#: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, kde-format
 msgid "Remove family"
 msgstr "Eliminar familia"
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:155
+#: plugins/dockers/textproperties/qml/FontFamily.qml:159
 #, kde-format
 msgid "Family list is empty."
 msgstr "La lista de familias está vacía."
 
-#: plugins/dockers/textproperties/qml/FontFamily.qml:171
+#: plugins/dockers/textproperties/qml/FontFamily.qml:175
 #, kde-format
 msgid "Add Fallback Family"
 msgstr "Añadir familia a la que recurrir"

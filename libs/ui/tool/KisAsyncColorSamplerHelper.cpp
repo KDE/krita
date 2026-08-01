@@ -76,6 +76,7 @@ struct KisAsyncColorSamplerHelper::Private
     qreal circleZoomPreviewScale {10};
     KisConfig::ColorSamplerPreviewCirclePosition circlePreviewPosition = KisConfig::ColorSamplerPreviewCirclePosition::Center;
     QPointF sampleDocPoint;
+    QRectF zoomDocRectF;
 
     QPainterPath cacheCircleInnerClip;
     QRect cacheCanvasPreviewRect;
@@ -414,6 +415,7 @@ void KisAsyncColorSamplerHelper::deactivate()
     m_d->cacheCanvasPreviewImage = QImage();
     m_d->cacheCanvasPreviewRect = QRect();
     m_d->zoomPreviewHasPainted = false;
+    m_d->zoomDocRectF = QRectF();
 
     m_d->isActive = false;
 
@@ -462,8 +464,51 @@ QRectF KisAsyncColorSamplerHelper::colorPreviewDocRect(const QPointF &docPoint)
 
     KisConfig cfg(true);
     m_d->style = cfg.colorSamplerPreviewStyle();
-    m_d->previewDocRect = m_d->colorPreviewDocRect(docPoint);
+    QRectF previewDocRect = m_d->colorPreviewDocRect(docPoint);
+
+    if (previewDocRect != m_d->previewDocRect && m_d->circleZoomPreviewEnabled) prepareZoomPreview(previewDocRect);
+
+    m_d->previewDocRect = previewDocRect;
+
     return m_d->previewDocRect;
+}
+
+void KisAsyncColorSamplerHelper::prepareZoomPreview(const QRectF &docRect) {
+    KisImageSP image = m_d->canvas->image();
+    if (!image) return;
+
+    // Prepare zoomed doc rect
+    QRectF zoomDocRectF = docRect;
+
+    zoomDocRectF.setSize(zoomDocRectF.size() / m_d->circleZoomPreviewScale);
+    zoomDocRectF.moveCenter(m_d->sampleDocPoint);
+
+    m_d->zoomDocRectF = zoomDocRectF;
+
+    // Prepare canvas preview because it takes time
+    QRectF canvasPixelRectF = image->documentToPixel(zoomDocRectF);
+    // Floor manually to avoid width != height when using toRect()
+    QRect canvasPixelRect = QRect(canvasPixelRectF.topLeft().toPoint(), QSize(qFloor(canvasPixelRectF.width()), qFloor(canvasPixelRectF.height())));
+
+    canvasPixelRect = m_d->standardizeZoomPreviewPixelRect(canvasPixelRect);
+    // Make sure the center is the pixel currently sampled because standardizing may change the shape
+    canvasPixelRect.moveCenter(image->documentToImagePixelFloored(zoomDocRectF.center()));
+
+    if (!image->bounds().intersects(canvasPixelRect)) {
+        m_d->cacheCanvasPreviewRect = QRect();
+        m_d->cacheCanvasPreviewImage = QImage();
+        return;
+    }
+
+    // If not already have a job fetching canvas image, then do it
+    if (!m_d->canvasPreviewFetchingCookie && m_d->cacheCanvasPreviewRect != canvasPixelRect) {
+        KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData *data =
+            new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(image->projection(), canvasPixelRect, m_d->canvas->displayColorConverter());
+
+        m_d->canvasPreviewFetchingCookie = data->cookie();
+
+        m_d->strokesFacade()->addJob(m_d->strokeId, data);
+    }
 }
 
 void KisAsyncColorSamplerHelper::paint(QPainter &gc, const KoViewConverter &converter)
@@ -668,19 +713,14 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 
     // Draw zoom preview
     if (m_d->circleZoomPreviewEnabled) {
-        QRectF zoomDocRectF = m_d->previewDocRect;
+        // If canvas preview image is null and it's being fetched (which means canvas preview is needed),
+        // don't paint preview until it's done to avoid flickering
+        bool shouldPaint = !(m_d->cacheCanvasPreviewImage.isNull() && m_d->canvasPreviewFetchingCookie);
 
-        zoomDocRectF.setSize(zoomDocRectF.size() / m_d->circleZoomPreviewScale);
-        zoomDocRectF.moveCenter(m_d->sampleDocPoint);
-
-        // Returns true if painted or not needed, returns false if painting was deferred
-        bool canvasPainted = paintCircleCanvasPreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
-
-        // If canvasPainted is false (deferred), leave the center hollow to avoid gray flickering from fill
-        // When draging from the outside to canvas, canvasPainted can go from true (not needed) to false (deferred), causing flickering on the already painted zoom preview
-        // So if preview was ever successfully render, don't hide these and cause flickering
-        if (canvasPainted || m_d->zoomPreviewHasPainted) {
-            paintCircleReferenceImagePreview(cachePainter, cacheRect, zoomDocRectF, tf.map(m_d->cacheCircleInnerClip));
+        // But if zoom preview has already been painted, keeps painting to avoid flickering
+        if (shouldPaint || m_d->zoomPreviewHasPainted) {
+            paintCircleCanvasPreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
+            paintCircleReferenceImagePreview(cachePainter, cacheRect, tf.map(m_d->cacheCircleInnerClip));
 
             // Draw crosshair if preview is offseted
             if (m_d->circlePreviewPosition != KisConfig::ColorSamplerPreviewCirclePosition::Center) {
@@ -720,49 +760,11 @@ void KisAsyncColorSamplerHelper::paintCircleCrosshair(QPainter &gc, const QRectF
     gc.restore();
 }
 
-QImage KisAsyncColorSamplerHelper::fetchCanvasPreview(QRect &canvasPixelRect, KisImageSP canvasImage) {
-    if (!canvasImage->bounds().intersects(canvasPixelRect)) {
-        canvasPixelRect = QRect(); // Make this a null rect to imply no need to draw canvas
-        return QImage();
-    }
+void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip) {
+    QRect canvasPixelRect = QRect(QPoint(0,0), m_d->cacheCanvasPreviewRect.size());
+    QImage cachedImage = m_d->cacheCanvasPreviewImage;
 
-    // If not already have a job fetching canvas image, then do it
-    // TODO: If LOD is involved, the cookie seems leaked. Also, Q_EMIT never trigger the slot?
-    if (!m_d->canvasPreviewFetchingCookie && m_d->cacheCanvasPreviewRect != canvasPixelRect) {
-
-        KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData *data =
-            new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(canvasImage->projection(), canvasPixelRect, m_d->canvas->displayColorConverter());
-
-        m_d->canvasPreviewFetchingCookie = data->cookie();
-
-        m_d->strokesFacade()->addJob(m_d->strokeId, data);
-    }
-
-    // Render the last frame if available
-    if (!m_d->cacheCanvasPreviewRect.isNull()) canvasPixelRect = QRect(QPoint(0,0), m_d->cacheCanvasPreviewRect.size());
-
-    return m_d->cacheCanvasPreviewImage;
-}
-
-bool KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip) {
-    KisImageSP image = m_d->canvas->image();
-
-    if (!image) return false;
-
-    QRectF canvasPixelRectF = image->documentToPixel(zoomDocRectF);
-
-    // Floor manually to avoid width != height when using toRect()
-    QRect canvasPixelRect = QRect(canvasPixelRectF.topLeft().toPoint(), QSize(qFloor(canvasPixelRectF.width()), qFloor(canvasPixelRectF.height())));
-
-    canvasPixelRect = m_d->standardizeZoomPreviewPixelRect(canvasPixelRect);
-
-    // Make sure the center is the pixel currently sampled because standardizing may change the shape
-    canvasPixelRect.moveCenter(image->documentToImagePixelFloored(zoomDocRectF.center()));
-
-    QImage cachedImage = fetchCanvasPreview(canvasPixelRect, image);
-    // If cachedImage and canvasPixelRect is null, painting is not needed
-    // If cachedImage is null and canvasPixelRect is not null, painting was deferred
-    if (cachedImage.isNull()) return canvasPixelRect.isNull();
+    if (cachedImage.isNull()) return;
 
     gc.save();
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -775,13 +777,11 @@ bool KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QR
     gc.drawImage(viewRectF, cachedImage, canvasPixelRect);
 
     gc.restore();
-
-    return true;
 }
 
 // Preview won't respect opacity because the color sampled doesn't respect opacity either
 // But if opacity = 0, preview for that image won't show at all
-void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QRectF &zoomDocRectF, const QPainterPath &clip) {
+void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip) {
     KisDocument *document = m_d->canvas->viewManager()->document();
     if (!document || !document->referenceImagesLayer()) return;
 
@@ -789,6 +789,8 @@ void KisAsyncColorSamplerHelper::paintCircleReferenceImagePreview(QPainter &gc, 
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     gc.setClipPath(clip);
+
+    QRectF zoomDocRectF = m_d->zoomDocRectF;
 
     QList<KoShape*> shapeList = document->referenceImagesLayer()->shapeManager()->shapesAt(zoomDocRectF);
     if (shapeList.size() > 1) std::sort(shapeList.begin(), shapeList.end(), KoShape::compareShapeZIndex);

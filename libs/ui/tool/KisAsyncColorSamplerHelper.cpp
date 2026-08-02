@@ -83,7 +83,7 @@ struct KisAsyncColorSamplerHelper::Private
     QImage cacheCanvasPreviewImage;
     QPainterPath cacheCrosshairPath;
     int cacheCirclePreviewDiameter;
-    QWeakPointer<boost::none_t> canvasPreviewFetchingCookie;
+    QWeakPointer<boost::none_t> canvasPreviewFetchCookie;
     bool zoomPreviewHasPainted {false};
 
     QColor currentColor;
@@ -494,18 +494,18 @@ void KisAsyncColorSamplerHelper::prepareZoomPreview(const QRectF &docRect) {
     // Make sure the center is the pixel currently sampled because standardizing may change the shape
     canvasPixelRect.moveCenter(image->documentToImagePixelFloored(zoomDocRectF.center()));
 
-    if (!image->bounds().intersects(canvasPixelRect)) {
+    if (!image->bounds().intersects(canvasPixelRect) && !image->wrapAroundModeActive()) {
         m_d->cacheCanvasPreviewRect = QRect();
         m_d->cacheCanvasPreviewImage = QImage();
         return;
     }
 
     // If not already have a job fetching canvas image, then do it
-    if (!m_d->canvasPreviewFetchingCookie && m_d->cacheCanvasPreviewRect != canvasPixelRect) {
+    if (!m_d->canvasPreviewFetchCookie && m_d->cacheCanvasPreviewRect != canvasPixelRect) {
         KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData *data =
             new KisColorSamplerStrokeStrategy::GenerateCanvasZoomPreviewData(image->projection(), canvasPixelRect, m_d->canvas->displayColorConverter());
 
-        m_d->canvasPreviewFetchingCookie = data->cookie();
+        m_d->canvasPreviewFetchCookie = data->cookie();
 
         m_d->strokesFacade()->addJob(m_d->strokeId, data);
     }
@@ -711,7 +711,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
 
     // If canvas preview image is null and it's being fetched (which means canvas preview is needed),
     // don't paint preview until it's done to avoid flickering
-    bool shouldPaintPreview = !(m_d->cacheCanvasPreviewImage.isNull() && m_d->canvasPreviewFetchingCookie);
+    bool shouldPaintPreview = !(m_d->cacheCanvasPreviewImage.isNull() && m_d->canvasPreviewFetchCookie);
 
     // But if zoom preview has already been painted, keeps painting to avoid flickering
     if (m_d->circleZoomPreviewEnabled && (shouldPaintPreview || m_d->zoomPreviewHasPainted)) {
@@ -756,7 +756,7 @@ void KisAsyncColorSamplerHelper::paintCircleCrosshair(QPainter &gc, const QRectF
 }
 
 void KisAsyncColorSamplerHelper::paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip) {
-    QRect canvasPixelRect = QRect(QPoint(0,0), m_d->cacheCanvasPreviewRect.size());
+    QRect canvasPixelRect = m_d->cacheCanvasPreviewRect;
     QImage cachedImage = m_d->cacheCanvasPreviewImage;
 
     if (cachedImage.isNull()) return;

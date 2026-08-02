@@ -51,29 +51,31 @@ public:
     public:
         GenerateCanvasZoomPreviewData(KisPaintDeviceSP _canvasDev, const QRect &_canvasPixelRect, KisDisplayColorConverter *_colorConverter,
                                       int _levelOfDetail = 0, QSharedPointer<boost::none_t> _cookie = nullptr)
-            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter), levelOfDetail(_levelOfDetail), fetchingCookie(_cookie)
+            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter), levelOfDetail(_levelOfDetail), strokeCookie(_cookie)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             KisLodTransform transform(levelOfDetail);
             QRect lodPixelRect = transform.map(canvasPixelRect);
-            GenerateCanvasZoomPreviewData *newData = new GenerateCanvasZoomPreviewData(canvasDev, lodPixelRect, colorConverter, levelOfDetail);
-            // When Lod is involved, swap the cookie to the new Lod clone to track execution, the original object seems to leaks
-            newData->fetchingCookie.swap(fetchingCookie);
+            GenerateCanvasZoomPreviewData *newData =
+                new GenerateCanvasZoomPreviewData(canvasDev, lodPixelRect, colorConverter, levelOfDetail);
+            // When Lod is involved, swap the cookie to the new Lod clone to track execution
+            // The original object seems to leaks
+            newData->strokeCookie.swap(strokeCookie);
 
             return newData;
         }
 
         QWeakPointer<boost::none_t> cookie() {
-            fetchingCookie.reset(new boost::none_t(boost::none));
-            return fetchingCookie;
+            strokeCookie.reset(new boost::none_t(boost::none));
+            return strokeCookie;
         }
 
         KisPaintDeviceSP canvasDev;
         QRect canvasPixelRect;
         KisDisplayColorConverter *colorConverter;
         int levelOfDetail;
-        QSharedPointer<boost::none_t> fetchingCookie;
+        QSharedPointer<boost::none_t> strokeCookie;
     };
 public:
     KisColorSamplerStrokeStrategy(int radius, int blend, int lod = 0);

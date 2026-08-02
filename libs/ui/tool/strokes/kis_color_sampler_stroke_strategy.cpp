@@ -19,8 +19,6 @@ struct KisColorSamplerStrokeStrategy::Private
     int blend = 100;
 
     boost::optional<KoColor> lastSelectedColor;
-
-    QSharedPointer<boost::none_t> strokeCookie = nullptr;
 };
 
 KisColorSamplerStrokeStrategy::KisColorSamplerStrokeStrategy(int radius, int blend, int lod)
@@ -59,10 +57,17 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             Q_EMIT sigFinalColorSelected(*m_d->lastSelectedColor);
         }
     } else if (previewData) {
-        KisPaintDeviceSP tmpDev = new KisPaintDevice(previewData->canvasDev->colorSpace());
-        tmpDev->makeCloneFrom(previewData->canvasDev, previewData->canvasPixelRect);
+        bool oldWrapAroundModeSupport = previewData->canvasDev->supportsWraproundMode();
+        previewData->canvasDev->setSupportsWraparoundMode(true);
 
-        QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, previewData->canvasPixelRect, true);
+        KisPaintDeviceSP tmpDev = previewData->canvasDev->createThumbnailDevice(
+            previewData->canvasPixelRect.width(), previewData->canvasPixelRect.height(), previewData->canvasPixelRect);
+
+        previewData->canvasDev->setSupportsWraparoundMode(oldWrapAroundModeSupport);
+
+        QRect effectiveRect = QRect(QPoint(0,0), previewData->canvasPixelRect.size());
+
+        QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, effectiveRect, true);
 
         if (previewData->levelOfDetail > 0) {
             KisLodTransform transform(previewData->levelOfDetail);
@@ -70,10 +75,10 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             image = image.scaled(QSize(scale * image.width(), scale * image.height()));
 
-            previewData->canvasPixelRect = transform.mapInverted(previewData->canvasPixelRect);
+            effectiveRect = transform.mapInverted(effectiveRect);
         }
 
-        Q_EMIT sigCanvasZoomPreviewUpdated(image, previewData->canvasPixelRect);
+        Q_EMIT sigCanvasZoomPreviewUpdated(image, effectiveRect);
     }
 }
 

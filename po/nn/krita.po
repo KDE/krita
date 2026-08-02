@@ -1,6 +1,7 @@
 # Translation of krita to Norwegian Nynorsk
 #
 # Gaute Hvoslef Kvalnes <gaute@verdsveven.com>, 1999, 2000, 2003.
+# Karl Ove Hufthammer <karl@huftis.org>, 2008, 2016, 2019, 2020, 2021, 2022, 2023, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"

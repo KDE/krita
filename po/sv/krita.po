@@ -32501,7 +32501,7 @@ msgstr "Sortera färghistorikring enligt:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:180
 #, kde-format
 msgid "Fix sRGB Triangle Selector Rotation"
-msgstr "Rätta sRGB triangulär väljarrotation"
+msgstr "Lås rotation av sRGB triangulär väljare"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:192

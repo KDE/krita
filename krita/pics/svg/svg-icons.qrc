@@ -4,6 +4,8 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_close-all-tabs.svg</file>
+        <file>light_close-all-tabs.svg</file>
         <file>light_feather_select.svg</file> 
         <file>light_grow_selection.svg</file> 
         <file>light_shrink_selection.svg</file> 

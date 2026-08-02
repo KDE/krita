@@ -221,7 +221,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="file_close_all">
-      <icon></icon>
+      <icon>close-all-tabs</icon>
       <text>&amp;Close All</text>
       <whatsThis></whatsThis>
       <toolTip>Close All</toolTip>
@@ -233,7 +233,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="file_close">
-      <icon></icon>
+      <icon>close-tab</icon>
       <text>C&amp;lose</text>
       <whatsThis></whatsThis>
       <toolTip>Close</toolTip>

@@ -58,6 +58,25 @@ inline QString stringRemoveFirst(QString str)
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #define Q_UNREACHABLE_RETURN(...) Q_UNREACHABLE(); return __VA_ARGS__
+
+namespace Qt {
+inline namespace Literals {
+inline namespace StringLiterals {
+
+constexpr inline QLatin1Char operator""_L1(char ch) noexcept
+{
+    return QLatin1Char(ch);
+}
+
+constexpr inline QLatin1String operator""_L1(const char *str, size_t size) noexcept
+{
+    return QLatin1String(str, size);
+}
+
+} // StringLiterals
+} // Literals
+} // Qt
+
 #endif
 
 

@@ -1186,15 +1186,21 @@ void KisShortcutMatcher::forceDeactivateAllActions()
 
 void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
 {
-    int touchPointCount = event->touchPoints().size();
-    if (touchPointCount > m_d->maxTouchPoints) {
-        m_d->maxTouchPoints = touchPointCount;
+    int previousNumTouchPoints = -1;
+
+    if (m_d->bestCandidateForTapTouchEvent) {
+        QTouchEvent *bestTouchEvent = static_cast<QTouchEvent*>(m_d->bestCandidateForTapTouchEvent.data());
+        previousNumTouchPoints = KisTouchShortcut::countTouchPoints(bestTouchEvent, KisTouchShortcut::pressedOnlyTouchStates());
+    }
+
+    const int newNumTouchPoints = KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::pressedOnlyTouchStates());;
+
+    if (newNumTouchPoints >= previousNumTouchPoints) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateForTapTouchEvent);
 #else
         m_d->bestCandidateForTapTouchEvent.reset(event->clone());
 #endif
-
     }
 }
 

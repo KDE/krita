@@ -1206,6 +1206,14 @@ void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
 
 bool KisShortcutMatcher::tryFireTapTouchShortcut(QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
+    /**
+     * Touch actions don't usually send focus events, since they have no
+     * hover functionality, so they should be triggered unrelated to the
+     * current focus state.
+     */
+    if (m_d->actionsSuppressedIgnoreFocus())
+        return false;
+
     KisTouchShortcut *goodCandidate = matchTouchShortcut(event, allowedStates, TouchShortcutMode::Tap);
     if (goodCandidate) {
         DEBUG_TOUCH_ACTION("starting", event)
@@ -1258,7 +1266,12 @@ bool KisShortcutMatcher::tryRunTouchShortcut(QTouchEvent* event, Qt::TouchPointS
 {
     KisTouchShortcut *goodCandidate = matchTouchShortcut(event, allowedStates, mode);
 
-    if (m_d->actionsSuppressed())
+    /**
+     * Touch actions don't usually send focus events, since they have no
+     * hover functionality, so they should be triggered unrelated to the
+     * current focus state.
+     */
+    if (m_d->actionsSuppressedIgnoreFocus())
         return false;
 
     if (goodCandidate) {

@@ -69,13 +69,10 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, effectiveRect, true);
 
-        // In case of instant preview, scale the sample back up to fit the original requested rect
-        if (previewData->levelOfDetail > 0) {
-            if (!previewData->originalRect.isValid()) return;
+        if (previewData->outputSize.isValid()) {
+            image = image.scaled(previewData->outputSize);
 
-            image = image.scaled(previewData->originalRect.size());
-
-            effectiveRect = QRect(QPoint(0,0), previewData->originalRect.size());
+            effectiveRect = QRect(QPoint(0,0), previewData->outputSize);
         }
 
         Q_EMIT sigCanvasZoomPreviewUpdated(image, effectiveRect);

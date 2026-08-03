@@ -92,6 +92,7 @@ Q_LOGGING_CATEGORY(_41016, "krita.metadata", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41017, "krita.android", QtDebugMsg)
 Q_LOGGING_CATEGORY(_41018, "krita.locale", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41019, "krita.input.eater", QtInfoMsg)
+Q_LOGGING_CATEGORY(_41020, "krita.input.matcher", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41021, "krita.performance", QtInfoMsg)
 
 QString __methodName(const char *_prettyFunction)

@@ -40,6 +40,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41016();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41019();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41020();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 
 #define dbgPerformanceIsEnabled() (_41021().isDebugEnabled())
@@ -66,6 +67,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define dbgAndroid qCDebug(_41017)
 #define dbgLocale qCDebug(_41018)
 #define dbgInputEater qCDebug(_41019)
+#define dbgInputMatcher qCDebug(_41020)
 #define dbgPerformance qCDebug(_41021)
 
 #define infoResources qCInfo(_30009)
@@ -88,6 +90,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define infoOpenGL qCInfo(_41015)
 #define infoMetaData qCInfo(_41016)
 #define infoInputEater qCInfo(_41019)
+#define infoInputMatcher qCInfo(_41020)
 
 #define warnResources qCWarning(_30009)
 #define warnDbMigration qCWarning(_30010)
@@ -109,6 +112,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define warnOpenGL qCWarning(_41015)
 #define warnMetaData qCWarning(_41016)
 #define warnInputEater qCWarning(_41019)
+#define warnInputMatcher qCWarning(_41020)
 
 #define errResources qCCritical(_30009)
 #define errDbMigration qCCritical(_30010)
@@ -130,6 +134,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define errOpenGL qCCritical(_41015)
 #define errMetaData qCCritical(_41016)
 #define errInputEater qCCritical(_41019)
+#define errInputMatcher qCCritical(_41020)
 
 // Qt does not yet define qCFatal (TODO: this is an oversight, submit a patch upstream)
 /*

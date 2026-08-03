@@ -2,8 +2,22 @@
 <ActionCollection version="2" name="Scripts">
   <Actions category="Scripts">
     <text>Ten Scripts</text>
+
+    <Action name="ten_scripts">
+      <icon>10_scripts</icon>
+      <text>Ten Scripts</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="execute_script_1">
-      <icon></icon>
+      <icon>script_1</icon>
       <text>Execute Script 1</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -15,7 +29,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_2">
-      <icon></icon>
+      <icon>script_2</icon>
       <text>Execute Script 2</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -27,7 +41,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_3">
-      <icon></icon>
+      <icon>script_3</icon>
       <text>Execute Script 3</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -39,7 +53,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_4">
-      <icon></icon>
+      <icon>script_4</icon>
       <text>Execute Script 4</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -51,7 +65,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_5">
-      <icon></icon>
+      <icon>script_5</icon>
       <text>Execute Script 5</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -63,7 +77,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_6">
-      <icon></icon>
+      <icon>script_6</icon>
       <text>Execute Script 6</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -75,7 +89,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_7">
-      <icon></icon>
+      <icon>script_7</icon>
       <text>Execute Script 7</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -87,7 +101,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_8">
-      <icon></icon>
+      <icon>script_8</icon>
       <text>Execute Script 8</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -99,7 +113,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_9">
-      <icon></icon>
+      <icon>script_9</icon>
       <text>Execute Script 9</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -111,7 +125,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="execute_script_0">
-      <icon></icon>
+      <icon>script_0</icon>
       <text>Execute Script 0</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>

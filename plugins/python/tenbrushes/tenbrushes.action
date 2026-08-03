@@ -4,7 +4,7 @@
     <text>Ten Brushes</text>
 
     <Action name="ten_brushes">
-      <icon></icon>
+      <icon>10_brushes</icon>
       <text>Ten Brushes</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -17,7 +17,7 @@
     </Action>
     
     <Action name="activate_preset_1">
-      <icon></icon>
+      <icon>brush_preset_1</icon>
       <text>Activate Brush Preset 1</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -30,7 +30,7 @@
     </Action>
 
     <Action name="activate_preset_2">
-      <icon></icon>
+      <icon>brush_preset_2</icon>
       <text>Activate Brush Preset 2</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -43,7 +43,7 @@
     </Action>
 
     <Action name="activate_preset_3">
-      <icon></icon>
+      <icon>brush_preset_3</icon>
       <text>Activate Brush Preset 3</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -56,7 +56,7 @@
     </Action>
 
     <Action name="activate_preset_4">
-      <icon></icon>
+      <icon>brush_preset_4</icon>
       <text>Activate Brush Preset 4</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -69,7 +69,7 @@
     </Action>
 
     <Action name="activate_preset_5">
-      <icon></icon>
+      <icon>brush_preset_5</icon>
       <text>Activate Brush Preset 5</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -82,7 +82,7 @@
     </Action>
 
     <Action name="activate_preset_6">
-      <icon></icon>
+      <icon>brush_preset_6</icon>
       <text>Activate Brush Preset 6</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -95,7 +95,7 @@
     </Action>
 
     <Action name="activate_preset_7">
-      <icon></icon>
+      <icon>brush_preset_7</icon>
       <text>Activate Brush Preset 7</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -108,7 +108,7 @@
     </Action>
 
     <Action name="activate_preset_8">
-      <icon></icon>
+      <icon>brush_preset_8</icon>
       <text>Activate Brush Preset 8</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -121,7 +121,7 @@
     </Action>
 
     <Action name="activate_preset_9">
-      <icon></icon>
+      <icon>brush_preset_9</icon>
       <text>Activate Brush Preset 9</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
@@ -134,7 +134,7 @@
     </Action>
 
     <Action name="activate_preset_0">
-      <icon></icon>
+      <icon>brush_preset_0</icon>
       <text>Activate Brush Preset 0</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>

@@ -4,6 +4,50 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>light_10_scripts.svg</file>
+        <file>light_10_brushes.svg</file>
+        <file>light_script_0.svg</file>
+        <file>light_script_1.svg</file> 
+        <file>light_script_2.svg</file> 
+        <file>light_script_3.svg</file> 
+        <file>light_script_4.svg</file>
+        <file>light_script_5.svg</file> 
+        <file>light_script_6.svg</file> 
+        <file>light_script_7.svg</file> 
+        <file>light_script_8.svg</file> 
+        <file>light_script_9.svg</file> 
+        <file>light_brush_preset_0.svg</file>
+        <file>light_brush_preset_1.svg</file>
+        <file>light_brush_preset_2.svg</file>
+        <file>light_brush_preset_3.svg</file>
+        <file>light_brush_preset_4.svg</file>
+        <file>light_brush_preset_5.svg</file>
+        <file>light_brush_preset_6.svg</file>
+        <file>light_brush_preset_7.svg</file>
+        <file>light_brush_preset_8.svg</file>
+        <file>light_brush_preset_9.svg</file>
+        <file>dark_10_scripts.svg</file>
+        <file>dark_10_brushes.svg</file>
+        <file>dark_script_0.svg</file> 
+        <file>dark_script_1.svg</file> 
+        <file>dark_script_2.svg</file> 
+        <file>dark_script_3.svg</file> 
+        <file>dark_script_4.svg</file> 
+        <file>dark_script_5.svg</file> 
+        <file>dark_script_6.svg</file> 
+        <file>dark_script_7.svg</file> 
+        <file>dark_script_8.svg</file> 
+        <file>dark_script_9.svg</file> 
+        <file>dark_brush_preset_0.svg</file> 
+        <file>dark_brush_preset_1.svg</file> 
+        <file>dark_brush_preset_2.svg</file> 
+        <file>dark_brush_preset_3.svg</file> 
+        <file>dark_brush_preset_4.svg</file> 
+        <file>dark_brush_preset_5.svg</file> 
+        <file>dark_brush_preset_6.svg</file> 
+        <file>dark_brush_preset_7.svg</file> 
+        <file>dark_brush_preset_8.svg</file> 
+        <file>dark_brush_preset_9.svg</file> 
         <file>dark_close-all-tabs.svg</file>
         <file>light_close-all-tabs.svg</file>
         <file>light_feather_select.svg</file> 

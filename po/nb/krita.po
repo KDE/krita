@@ -9,6 +9,7 @@
 # Tom Kjølhamar <tom.kjolhamar@hedmarken-ikt.no>, 2006.
 # Lars Risan <lars.risan@tik.uio.no>, 2006.
 # Bjørn Kvisli <bjorn.kvisli@gmail.com>, 2011.
+# Karl Ove Hufthammer <karl@huftis.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"

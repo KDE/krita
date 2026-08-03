@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-01 02:39+0000\n"
-"PO-Revision-Date: 2026-07-31 12:47+0300\n"
+"PO-Revision-Date: 2026-08-01 16:04+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -42062,9 +42062,9 @@ msgstr "אפשרויות טלאי"
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:682
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:905
-#, fuzzy, kde-format
+#, kde-format
 msgid "Max Patches: "
-msgstr "&בוחר צבעים"
+msgstr "כמות טלאים מרבית: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, formGroupBox)
@@ -46015,7 +46015,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Anywhere"
-msgstr ""
+msgstr "בכל מקום"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:86
 #: plugins/dockers/textproperties/qml/WordBreak.qml:82
@@ -46073,7 +46073,7 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "לא מוגדרות יכולות OpenType כרגע."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -46098,7 +46098,7 @@ msgstr "גליפים: אותיות גדולות"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr ""
+msgstr "הפעלת יכולות OpenType שקשורות באותיות גדולות."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -47272,9 +47272,9 @@ msgstr "טלאים"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:695
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:902
-#, fuzzy, kde-format
+#, kde-format
 msgid "Max Patches:"
-msgstr "&בוחר צבעים"
+msgstr "כמות טלאים מרבית:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414

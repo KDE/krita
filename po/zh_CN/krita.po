@@ -24726,24 +24726,22 @@ msgstr "激活变形工具"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "安卓：%1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (hardware)"
-msgstr "%1 (已拥有)"
+msgstr "%1 (硬件)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (software)"
-msgstr "%1 (已拥有)"
+msgstr "%1 (软件)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
 msgid "Unsupported video parameters, try lowering the video FPS or size"
-msgstr ""
+msgstr "不支持的视频参数，请尝试降低视频的帧率或分辨率"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
 #, kde-format
@@ -24753,34 +24751,29 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "所有支持的格式"
+msgstr "不支持的格式"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "视频文件："
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "视频文件："
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "音频控制菜单"
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "码率："
+msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25177,11 +25170,9 @@ msgid "Loading video data... %1 frames examined."
 msgstr "正在加载视频数据... 已分析 %1 帧。"
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Intersect (%1)"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "交集 (%1)"
+msgstr "内部错误 (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
@@ -25189,36 +25180,29 @@ msgid "LibAV: %1"
 msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "排线处理"
+msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "本分类没有特性文件"
+msgstr "没有找到帧文件"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "导出动画(&R)..."
+msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
 msgid "No encoder for the selected format found"
-msgstr ""
+msgstr "没有找到所选格式的编码器"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "保存 %1 时出错：%2"
+msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26286,17 +26270,15 @@ msgstr "结束帧编号："
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "图像"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video"
-msgstr "视频每秒帧数："
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -44208,12 +44190,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "中止编码缩时视频吗？"
 
 #: plugins/dockers/recorder/recorder_export.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "正在启动 FFmpeg..."
+msgstr "正在启动导出程序..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:440
 #, kde-format
@@ -44279,10 +44259,9 @@ msgid "The timelapse video is being encoded..."
 msgstr "正在编码缩时视频..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:866
-#, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
+#, kde-format
 msgid "Export failed. Error message:"
-msgstr "导出失败。FFmpeg 错误消息："
+msgstr "导出失败。错误消息："
 
 #: plugins/dockers/recorder/recorder_export.cpp:889
 #, kde-format
@@ -44441,6 +44420,8 @@ msgid ""
 "not widely supported. The export may fail and some devices will not be able "
 "to play it."
 msgstr ""
+"<strong>警告：</strong>宽高大于 1920 像素的视频不被广泛支持。导出可能会失败，"
+"部分设备也无法播放。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
 #: plugins/dockers/recorder/recorder_export.ui:711
@@ -44449,6 +44430,8 @@ msgid ""
 "<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
 "The export may fail and some devices will not be able to play it."
 msgstr ""
+"<strong>警告：</strong>帧率高于 30 的视频不被广泛支持。导出可能会失败，部分设"
+"备也无法播放。"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:757

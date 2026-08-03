@@ -899,6 +899,6 @@ void KisInputManager::profileChanged()
         }
     }
     else {
-        dbgInput << "No Input Profile Found: canvas interaction will be impossible";
+        warnUI << "No Input Profile Found: canvas interaction will be impossible";
     }
 }

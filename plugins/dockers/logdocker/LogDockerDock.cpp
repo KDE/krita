@@ -292,10 +292,6 @@ void LogDockerDock::settings()
     chkScript->setChecked(cfg.readEntry("script_41011", false));
     layout->addWidget(chkScript);
 
-    QCheckBox *chkInput = new QCheckBox(i18n("Input handling"), page);
-    chkInput->setChecked(cfg.readEntry("input_41012", false));
-    layout->addWidget(chkInput);
-
     QCheckBox *chkAction = new QCheckBox(i18n("Actions"), page);
     chkAction->setChecked(cfg.readEntry("action_41013", false));
     layout->addWidget(chkAction);
@@ -344,7 +340,6 @@ void LogDockerDock::settings()
         cfg.writeEntry("math_41009", chkMath->isChecked());
         cfg.writeEntry("render_41010", chkRender->isChecked());
         cfg.writeEntry("script_41011", chkScript->isChecked());
-        cfg.writeEntry("input_41012", chkInput->isChecked());
         cfg.writeEntry("action_41013", chkAction->isChecked());
         cfg.writeEntry("tablet_41014", chkTablet->isChecked());
         cfg.writeEntry("input_eater_41019", chkInputEater->isChecked());
@@ -399,7 +394,6 @@ void LogDockerDock::applyCategories()
     filters << cfgToString("krita.math", cfg.readEntry("math_41009", false));
     filters << cfgToString("krita.grender", cfg.readEntry("render_41010", false));
     filters << cfgToString("krita.scripting", cfg.readEntry("script_41011", false));
-    filters << cfgToString("krita.input", cfg.readEntry("input_41012", false));
     filters << cfgToString("krita.action", cfg.readEntry("action_41013", false));
     filters << cfgToString("krita.tablet", cfg.readEntry("tablet_41014", false));
     filters << cfgToString("krita.input.eater", cfg.readEntry("input_eater_41019", false));

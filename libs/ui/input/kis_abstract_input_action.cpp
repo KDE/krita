@@ -207,7 +207,7 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event)
     }
 
     default:
-        warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
+        warnUI << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
         return QPoint();
     }
 }
@@ -255,7 +255,7 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
 #endif
     }
     default:
-        warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
+        warnUI << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
         return QPointF();
     }
 }

@@ -51,17 +51,32 @@ public:
     public:
         GenerateCanvasZoomPreviewData(KisPaintDeviceSP _canvasDev, const QRect &_canvasPixelRect, KisDisplayColorConverter *_colorConverter,
                                       int _levelOfDetail = 0, QSharedPointer<boost::none_t> _cookie = nullptr)
-            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter), levelOfDetail(_levelOfDetail), strokeCookie(_cookie)
+            : canvasDev(_canvasDev), canvasPixelRect(_canvasPixelRect), colorConverter(_colorConverter),
+            levelOfDetail(_levelOfDetail), strokeCookie(_cookie), originalRect()
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             KisLodTransform transform(levelOfDetail);
+
             QRect lodPixelRect = transform.map(canvasPixelRect);
+
+            // The LOD pixel rect size should be odd so that the pixel sampled is in the center
+            // Otherwise, even after scaling back, it will be wrong
+            if (lodPixelRect.width() % 2 == 0) {
+                int oddSize = lodPixelRect.width() - 1;
+                if (oddSize < 3) oddSize = 3;
+                lodPixelRect.setSize(QSize(oddSize, oddSize));
+            }
+            lodPixelRect.moveCenter(transform.map(canvasPixelRect.center()));
+
             GenerateCanvasZoomPreviewData *newData =
                 new GenerateCanvasZoomPreviewData(canvasDev, lodPixelRect, colorConverter, levelOfDetail);
+
             // When Lod is involved, swap the cookie to the new Lod clone to track execution
             // The original object seems to leaks
-            newData->strokeCookie.swap(strokeCookie);
+            newData->swapCookie(strokeCookie);
+
+            newData->originalRect = canvasPixelRect;
 
             return newData;
         }
@@ -71,11 +86,16 @@ public:
             return strokeCookie;
         }
 
+        void swapCookie(QSharedPointer<boost::none_t> &newCookie) {
+            strokeCookie.swap(newCookie);
+        }
+
         KisPaintDeviceSP canvasDev;
         QRect canvasPixelRect;
         KisDisplayColorConverter *colorConverter;
         int levelOfDetail;
         QSharedPointer<boost::none_t> strokeCookie;
+        QRect originalRect;
     };
 public:
     KisColorSamplerStrokeStrategy(int radius, int blend, int lod = 0);

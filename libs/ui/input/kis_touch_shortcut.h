@@ -35,10 +35,10 @@ class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
 
         void setIsTouchPainting(bool value);
 
-        bool matchTapType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
-        bool matchDragType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
-        bool matchHoldType(QTouchEvent *event, Qt::TouchPointStates allowedStates);
-        bool matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchTapType(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchDragType(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchHoldType(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchTouchPoint(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
 
         qreal minDragThreshold() const;
         void setMinDragThreshold(qreal value);
@@ -51,9 +51,9 @@ class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
             return Qt::TouchPointStationary | Qt::TouchPointPressed | Qt::TouchPointMoved;
         }
 
-        static int countTouchPoints(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        static int countTouchPoints(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
 
-        static qreal touchDragDistance(QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        static qreal touchDragDistance(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
 
     private:
         class Private;

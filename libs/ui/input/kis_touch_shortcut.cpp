@@ -92,7 +92,7 @@ bool KisTouchShortcut::isAvailable(KisInputActionGroupsMask mask) const
     return KisAbstractShortcut::isAvailable(mask);
 }
 
-bool KisTouchShortcut::matchTapType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+bool KisTouchShortcut::matchTapType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
     return matchTouchPoint(event, allowedStates)
 #ifndef Q_OS_MACOS
@@ -101,7 +101,7 @@ bool KisTouchShortcut::matchTapType(QTouchEvent *event, Qt::TouchPointStates all
         ;
 }
 
-bool KisTouchShortcut::matchDragType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+bool KisTouchShortcut::matchDragType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
     return touchDragDistance(event, allowedStates) > d->minDragThreshold &&
         matchTouchPoint(event, allowedStates)
@@ -111,12 +111,13 @@ bool KisTouchShortcut::matchDragType(QTouchEvent *event, Qt::TouchPointStates al
         ;
 }
 
-bool KisTouchShortcut::matchHoldType(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+bool KisTouchShortcut::matchHoldType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
     return isHoldType() && matchTouchPoint(event, allowedStates);
 }
 
-int KisTouchShortcut::countTouchPoints(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+// TODO: const
+int KisTouchShortcut::countTouchPoints(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = event->touchPoints();
@@ -135,7 +136,7 @@ int KisTouchShortcut::countTouchPoints(QTouchEvent *event, Qt::TouchPointStates 
     return count;
 }
 
-qreal KisTouchShortcut::touchDragDistance(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+qreal KisTouchShortcut::touchDragDistance(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = event->touchPoints();
@@ -156,7 +157,7 @@ qreal KisTouchShortcut::touchDragDistance(QTouchEvent *event, Qt::TouchPointStat
         }));
 }
 
-bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event, Qt::TouchPointStates allowedStates)
+bool KisTouchShortcut::matchTouchPoint(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
     const int numStillActivePoints = countTouchPoints(event, allowedStates);
 

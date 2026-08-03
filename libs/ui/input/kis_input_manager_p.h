@@ -25,6 +25,18 @@
 
 class KisToolInvocationAction;
 
+enum EventBlockingReason {
+    NotBlocked = 0x0,
+    BlockedByTabletProximity = 0x01,
+    BlockedByTabletHover = 0x02,
+    BlockedByTabletPress = 0x04,
+    BlockedByTouchPress = 0x08,
+    BlockedByNextPressSuppression = 0x10,
+    BlockedByButtonsWorkaround = 0x20,
+    BlockedBySynthetic = 0x40
+};
+Q_DECLARE_FLAGS(EventBlockingReasons, EventBlockingReason)
+Q_DECLARE_OPERATORS_FOR_FLAGS(EventBlockingReasons)
 
 class KisInputManager::Private
 {
@@ -47,9 +59,6 @@ public:
     QPointer<KisToolProxy> toolProxy;
 
     bool forwardAllEventsToTool = false;
-    bool ignoringQtCursorEvents();
-
-    bool touchHasBlockedPressEvents = false;
 
     KisShortcutMatcher matcher;
 
@@ -77,24 +86,43 @@ public:
 
     KisPopupWidgetInterface *popupWidget;
 
-    QVector<QTouchEvent *> bufferedTouchEvents;
-
-    void blockMouseEvents();
-    void allowMouseEvents();
-    void eatOneMousePress();
     void setMaskSyntheticEvents(bool value);
     void resetCompressor();
-    void startBlockingTouch();
-    void stopBlockingTouch();
 
-    template <class Event, bool useBlocking>
-    void debugEvent(QEvent *event)
+    template <class Event>
+    static void debugEvent(QEvent *event, EventBlockingReasons reasons = NotBlocked)
     {
-      if (!KisTabletDebugger::instance()->debugEnabled()) return;
+        if (!KisTabletDebugger::instance()->debugEnabled()) return;
 
-      QString msg1 = useBlocking && ignoringQtCursorEvents() ? "[BLOCKED] " : "[       ]";
-      Event *specificEvent = static_cast<Event*>(event);
-      dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
+        QString reasonsString;
+
+        if (reasons.testFlag(BlockedByTabletProximity)) {
+            reasonsString += "Prx";
+        }
+
+        if (reasons.testFlag(BlockedByTabletHover)) {
+            reasonsString += "Hov";
+        }
+
+        if (reasons.testFlag(BlockedByTabletPress)) {
+            reasonsString += "Prs";
+        }
+
+        if (reasons.testFlag(BlockedByNextPressSuppression)) {
+            reasonsString += "Nxt";
+        }
+
+        if (reasons.testFlag(BlockedByTouchPress)) {
+            reasonsString += "Tch";
+        }
+
+        if (reasons.testFlag(BlockedBySynthetic)) {
+            reasonsString += "Syn";
+        }
+
+        QString msg1 = QString("[%1] ").arg(reasonsString, 15);
+        Event *specificEvent = static_cast<Event*>(event);
+        dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
     }
 
     class ProximityNotifier : public QObject
@@ -132,28 +160,23 @@ public:
 
         bool eventFilter(QObject* target, QEvent* event);
 
-        // This should be called after we're certain a tablet stroke has started.
-        void activate();
-        // This should be called after a tablet stroke has ended.
-        void deactivate();
+        void notifyTabletEnterProximity();
+        void notifyTabletLeaveProximity();
 
         // On Windows, we sometimes receive mouse events very late, so watch & wait.
         void eatOneMousePress();
 
-        // This should be called after the tablet is pressed,
-        void startBlockingTouch();
-        // This should be called after the tablet is released.
-        void stopBlockingTouch();
-
-        bool hungry{false};   // Continue eating mouse strokes
-        bool peckish{false};  // Eat a single mouse press event
-        bool eatSyntheticEvents{false}; // Mask all synthetic events
+        bool eatOneMousePressEvent{false};  // Eat a single mouse press event
         bool activateSecondaryButtonsWorkaround{false}; // Use mouse events for right- and middle-clicks
-        bool eatTouchEvents{false}; // Eat touch interactions
+
+        bool tabletIsInProximity {false};
+        bool tabletIsHovering {false};
+        bool tabletIsPressed {false};
+        bool touchIsActive {false};
+
+        void debugEaterStateTransition(const QLatin1String &stateName, bool newValue, QEvent::Type eventType, const QLatin1String &comment = QLatin1String());
     };
     EventEater eventEater;
-
-    bool containsPointer = false;
 
     int accumulatedScrollDelta = 0;
 

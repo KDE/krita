@@ -74,7 +74,12 @@ QTouchEvent generateFakeTouchEndEvent(const QTouchEvent *event)
 #endif
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QTouchEvent(QEvent::TouchEnd, event->device(), event->modifiers(), Qt::TouchPointReleased, points);
+#else
     return QTouchEvent(QEvent::TouchEnd, event->pointingDevice(), event->modifiers(), points);
+#endif
+
 }
 
 } // namespace
@@ -448,7 +453,9 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     }
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    KoPointerEvent::copyQtPointerEvent(event, m_d->lastProcessedTouchEvent);
+    QScopedPointer<QEvent> tmp;
+    KoPointerEvent::copyQtPointerEvent(event, tmp);
+    m_d->lastProcessedTouchEvent.reset(static_cast<QTouchEvent*>(tmp.take()));
 #else
     m_d->lastProcessedTouchEvent.reset(event->clone());
 #endif
@@ -555,7 +562,9 @@ bool KisShortcutMatcher::touchUpdateEventImpl(QTouchEvent *event)
     }
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    KoPointerEvent::copyQtPointerEvent(event, m_d->lastProcessedTouchEvent);
+    QScopedPointer<QEvent> tmp;
+    KoPointerEvent::copyQtPointerEvent(event, tmp);
+    m_d->lastProcessedTouchEvent.reset(static_cast<QTouchEvent*>(tmp.take()));
 #else
     m_d->lastProcessedTouchEvent.reset(event->clone());
 #endif

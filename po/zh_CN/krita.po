@@ -24751,28 +24751,24 @@ msgid "Unsupported format"
 msgstr "不支持的格式"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "视频文件："
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "视频文件："
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "音频控制菜单"
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "码率："
+msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25179,10 +25175,9 @@ msgid "LibAV: %1"
 msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "排线处理"
+msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25190,11 +25185,9 @@ msgid "No frame files found"
 msgstr "没有找到帧文件"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "导出动画(&R)..."
+msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25202,11 +25195,9 @@ msgid "No encoder for the selected format found"
 msgstr "没有找到所选格式的编码器"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "保存 %1 时出错：%2"
+msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26276,17 +26267,15 @@ msgstr "结束帧编号："
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
-msgstr "图像"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video"
-msgstr "视频每秒帧数："
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -30118,10 +30107,9 @@ msgstr "移动子窗口时不显示内容"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "绘图纸外观面板"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -69294,6 +69282,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgid "Encoder:"
-#~ msgstr "编码器："

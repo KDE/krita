@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-01 00:44+0000\n"
-"PO-Revision-Date: 2026-07-18 23:23+0200\n"
+"PO-Revision-Date: 2026-07-28 12:46+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -25031,6 +25031,8 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Parametri audio non supportati, prova a ricodificare il tuo file audio con "
+"con formato, velocità di campionamento e numero di canali più comuni"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -25038,28 +25040,24 @@ msgid "Unsupported format"
 msgstr "Formato non supportato"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "File video:"
+msgstr "Codificatore video:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "File video:"
+msgstr "Bitrate video:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Menu audio"
+msgstr "Codificatore audio:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Stato di adattamento:"
+msgstr "Bitrate audio:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25181,13 +25179,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "FPS sotto i 30 non sono molto supportati."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "Le dimensioni più grandi di 1920 pixel non sono molto supportate."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2435
@@ -25200,6 +25198,8 @@ msgstr "Avvisi:"
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
+"L'esportazione potrebbe non riuscire e alcuni dispositivi potrebbero non "
+"essere in grado di riprodurlo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25483,13 +25483,12 @@ msgstr "Errore interno (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Preferenze di marezzatura"
+msgstr "Questo formato non ha preferenze."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25497,11 +25496,9 @@ msgid "No frame files found"
 msgstr "Nessun file di fotogrammi trovato"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "&Resa animazione..."
+msgstr "Resa dell'animazione..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25509,10 +25506,9 @@ msgid "No encoder for the selected format found"
 msgstr "Nessun codificatore trovato per il formato selezionato"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgid "No office:drawing tag found in file: %1"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Nessun tag office:drawing trovato nel file: %1"
+msgstr "Errore durante la preparazione del file audio: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26597,10 +26593,9 @@ msgstr "Immagini"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "&Video"
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -30524,10 +30519,9 @@ msgstr "Non mostrare il contenuto quando sposti le sotto-finestre"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "Menu bucce di cipolla"
+msgstr "Icone nel menu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)

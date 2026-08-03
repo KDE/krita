@@ -45414,7 +45414,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorderdocker.ui:348
 #, kde-format
 msgid "Real Time Capture mode"
-msgstr "Realtidstagningsläge"
+msgstr "Realtidsinspelningsläge"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:356
@@ -45645,7 +45645,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 "Varning för låg prestanda. Inspelningen kan inte skriva alla bildrutor i tid "
-"vid realtidstagning.\n"
+"vid realtidsinspelning.\n"
 "Försök att reducera bildhastigheten för ffmpeg-export eller reducera "
 "skalningsfiltret i dukens accelerationsinställningar."
 

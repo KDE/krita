@@ -1381,21 +1381,21 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QTouchEvent e(QEvent::TouchBegin, &touchDevice, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
-            QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, touchPoints);
+            QTouchEvent e(QEvent::TouchBegin, &touchDevice, Qt::NoModifier, touchPoints);
 #endif
             m.touchBeginEvent(&e);
         } else if (eventIndex > 0 && eventIndex < eventsCount - 1) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QTouchEvent e(QEvent::TouchUpdate, &touchDevice, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
-            QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, touchPoints);
+            QTouchEvent e(QEvent::TouchUpdate, &touchDevice, Qt::NoModifier, touchPoints);
 #endif
             m.touchUpdateEvent(&e);
         } else if (eventIndex == eventsCount - 1) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QTouchEvent e(QEvent::TouchEnd, &touchDevice, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
-            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, touchPoints);
+            QTouchEvent e(QEvent::TouchEnd, &touchDevice, Qt::NoModifier, touchPoints);
 #endif
             m.touchEndEvent(&e);
         } else {

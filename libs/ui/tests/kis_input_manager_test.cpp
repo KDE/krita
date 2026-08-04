@@ -1237,13 +1237,13 @@ class TabletEventsGenerator
 {
 public:
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    using PointingDevice = QTouchDevice;
+    using PointingDeviceHandle = int;
 #else
-    using PointingDevice = QPointingDevice;
+    using PointingDeviceHandle = QPointingDevice*;
 #endif
 
 public:
-    TabletEventsGenerator(int startEventIndex, int endEventIndex, KisShortcutMatcher &matcher, PointingDevice &device)
+    TabletEventsGenerator(int startEventIndex, int endEventIndex, KisShortcutMatcher &matcher, PointingDeviceHandle device)
         : m_matcher(matcher)
         , m_device(device)
         , m_startEventIndex(startEventIndex)
@@ -1254,58 +1254,52 @@ public:
     void sendTabletEvent(int eventIndex) {
         if (eventIndex == m_startEventIndex) {
             const QPointF pos(eventIndex, 0.0);
-            QTabletEvent event(QEvent::TabletPress,
-                               &m_device,
-                               pos,
-                               pos,
-                               1.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               Qt::NoModifier,
-                               Qt::LeftButton,
-                               Qt::LeftButton);
-            m_matcher.buttonPressed(Qt::LeftButton, &event);
+            std::unique_ptr<QTabletEvent> event =
+                makeTabletEvent(QEvent::TabletPress, pos);
+            m_matcher.buttonPressed(Qt::LeftButton, event.get());
         } else if (eventIndex > m_startEventIndex && eventIndex < m_endEventIndex) {
             const QPointF pos(eventIndex, 0.0);
-            QTabletEvent event(QEvent::TabletMove,
-                               &m_device,
-                               pos,
-                               pos,
-                               1.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               Qt::NoModifier,
-                               Qt::NoButton,
-                               Qt::LeftButton);
-            m_matcher.pointerMoved(&event);
+            std::unique_ptr<QTabletEvent> event =
+                makeTabletEvent(QEvent::TabletMove, pos);
+            m_matcher.pointerMoved(event.get());
         } else if (eventIndex == m_endEventIndex) {
             const QPointF pos(eventIndex, 0.0);
-            QTabletEvent event(QEvent::TabletRelease,
-                               &m_device,
-                               pos,
-                               pos,
-                               1.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               0.0,
-                               Qt::NoModifier,
-                               Qt::LeftButton,
-                               Qt::NoButton);
-            m_matcher.buttonReleased(Qt::LeftButton, &event);
+            std::unique_ptr<QTabletEvent> event =
+                makeTabletEvent(QEvent::TabletRelease, pos);
+            m_matcher.buttonReleased(Qt::LeftButton, event.get());
         }
     }
+private:
+std::unique_ptr<QTabletEvent> makeTabletEvent(QEvent::Type type, const QPointF pos)
+{
+    std::unique_ptr<QTabletEvent> event(new QTabletEvent(type,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                                                         m_device,
+#endif
+                                                         pos,
+                                                         pos,
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                                                         m_device,
+                                                         QTabletEvent::Stylus,
+#endif
+                                                         1.0,
+                                                         0.0,
+                                                         0.0,
+                                                         0.0,
+                                                         0.0,
+                                                         0.0,
+                                                         Qt::NoModifier,
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                                                         4815162342,
+#endif
+                                                         type != QEvent::TabletMove ? Qt::LeftButton : Qt::NoButton,
+                                                         type != QEvent::TabletRelease ? Qt::LeftButton : Qt::NoButton));
+    return event;
+}
 
 private:
     KisShortcutMatcher &m_matcher;
-    PointingDevice &m_device;
+    PointingDeviceHandle m_device;
     int m_startEventIndex;
     int m_endEventIndex;
 };
@@ -1345,7 +1339,7 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
         createTouchSequenceGenerator(sequenceName, 1, eventsCount - 1, pointOffset));
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QTouchDevice device;
+    QTouchDevice touchDevice;
     auto calcTouchPointStates = [] (const QList<TouchSequenceGeneratorBase::TouchPoint> &touchPoints) -> Qt::TouchPointStates {
         Qt::TouchPointStates result;
 
@@ -1355,8 +1349,11 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
 
         return result;
     };
+    int tabletDeviceHandle = 1;
 #else
-    QPointingDevice device;
+    QPointingDevice touchDevice;
+    QPointingDevice tabletDeviceObject;
+    QPointingDevice *tabletDeviceHandle = &tabletDeviceObject;
 #endif
 
     enum TabletOverrideMode {
@@ -1369,9 +1366,9 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
     std::optional<TabletEventsGenerator> tabletStrokeGenerator;
 
     if (overrideMode == ModeTabletOverTouch) {
-        tabletStrokeGenerator.emplace(tabletStartEventIndex, tabletStartEventIndex + 10, m, device);
+        tabletStrokeGenerator.emplace(tabletStartEventIndex, tabletStartEventIndex + 10, m, tabletDeviceHandle);
     } else if (overrideMode == ModeTouchOverTablet) {
-        tabletStrokeGenerator.emplace(0, 2, m, device);
+        tabletStrokeGenerator.emplace(0, 2, m, tabletDeviceHandle);
         tabletStrokeGenerator->sendTabletEvent(0);
         tabletStrokeGenerator->sendTabletEvent(1);
     }
@@ -1382,21 +1379,21 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
         touchStrokeEventsGenerator->updatePoints(eventIndex, touchPoints);
         if (eventIndex == 0) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+            QTouchEvent e(QEvent::TouchBegin, &touchDevice, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
             QTouchEvent e(QEvent::TouchBegin, &device, Qt::NoModifier, touchPoints);
 #endif
             m.touchBeginEvent(&e);
         } else if (eventIndex > 0 && eventIndex < eventsCount - 1) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+            QTouchEvent e(QEvent::TouchUpdate, &touchDevice, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
             QTouchEvent e(QEvent::TouchUpdate, &device, Qt::NoModifier, touchPoints);
 #endif
             m.touchUpdateEvent(&e);
         } else if (eventIndex == eventsCount - 1) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+            QTouchEvent e(QEvent::TouchEnd, &touchDevice, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
             QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, touchPoints);
 #endif

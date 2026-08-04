@@ -30,6 +30,11 @@
 
 #include <memory>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+// for namespace Qt::StringLiterals
+#include <KisPortingUtils.h>
+#endif
+
 
 /**
  * This hungry class EventEater encapsulates event masking logic.

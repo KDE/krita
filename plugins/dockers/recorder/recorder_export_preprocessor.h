@@ -19,8 +19,11 @@ public:
 
     void updateSettings(QDir directory, RecorderFormat format);
 
+    /// Renames tail frames, checks if there are no holes in the frames, and shifts the files to fill them
     void doPreprocessing();
 
+    /// Restores tail frames, doesn't actually undo `doPreprocessing()`
+    void undoPreprocessing();
 private:
     struct Private;
     QScopedPointer<Private> d;

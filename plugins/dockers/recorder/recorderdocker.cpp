@@ -52,6 +52,7 @@ RecorderDockerPlugin::RecorderDockerPlugin(QObject* parent, const QVariantList&)
     : QObject(parent)
 {
     KoDockRegistry::instance()->add(new RecorderDockerDockFactory());
+    qRegisterMetaType<QVector<QRect>>();
 }
 
 RecorderDockerPlugin::~RecorderDockerPlugin()

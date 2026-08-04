@@ -51,6 +51,9 @@ public:
     bool recordAutomatically() const;
     void setRecordAutomatically(bool value);
 
+    bool focusedRecord() const;
+    void setFocusedRecord(bool value);
+
 #ifdef Q_OS_ANDROID
     // Returns the internal storage directory that older versions of Krita
     // defaulted to. Using this directory to store recordings is bogus, since

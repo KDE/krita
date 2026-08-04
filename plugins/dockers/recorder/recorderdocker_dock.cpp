@@ -86,6 +86,8 @@ public:
     bool realTimeCaptureMode = false;
     bool recordIsolateLayerMode = false;
     bool recordAutomatically = false;
+    bool focusedRecord = false;
+
     bool paused = true;
 #ifdef Q_OS_ANDROID
     bool internalMoveInProgress{false};
@@ -147,6 +149,7 @@ public:
         }
         recordIsolateLayerMode = config.recordIsolateLayerMode();
         recordAutomatically = config.recordAutomatically();
+        focusedRecord = config.focusedRecord();
 
         updateUiFormat();
     }
@@ -244,7 +247,8 @@ public:
             resolution,
             captureInterval,
             recordIsolateLayerMode,
-            realTimeCaptureMode});
+            realTimeCaptureMode,
+            focusedRecord});
     }
 
     QString getPrefix()
@@ -437,6 +441,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->checkBoxRealTimeCaptureMode->setChecked(d->realTimeCaptureMode);
     d->ui->checkBoxRecordIsolateMode->setChecked(d->recordIsolateLayerMode);
     d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
+    d->ui->checkBoxFocusedRecord->setChecked(d->focusedRecord);
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     d->recordToggleAction = actionRegistry->makeQAction(keyActionRecordToggle, this);
@@ -464,6 +469,8 @@ RecorderDockerDock::RecorderDockerDock()
     connect(d->ui->checkBoxAutoRecord, SIGNAL(toggled(bool)), this, SLOT(onAutoRecordToggled(bool)));
     connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
     connect(d->ui->buttonExport, SIGNAL(clicked()), this, SLOT(onExportButtonClicked()));
+
+    connect(d->ui->checkBoxFocusedRecord, SIGNAL(toggled(bool)), this, SLOT(onFocusedCaptureToggled(bool)));
 
     connect(&d->writer.recorderThreads, SIGNAL(notifyInUseChange(bool)), this, SLOT(onActiveRecording(bool)));
     connect(&d->writer.recorderThreads, SIGNAL(notifyInUseChange(bool)), this, SLOT(onUpdateRecIndicator()));
@@ -652,6 +659,13 @@ void RecorderDockerDock::slotSelectSnapshotDirectory()
         RecorderConfig(false).setSnapshotDirectory(directory);
         d->loadSettings();
     }
+}
+
+void RecorderDockerDock::onFocusedCaptureToggled(bool checked)
+{
+    d->focusedRecord = checked;
+    RecorderConfig(false).setFocusedRecord(checked);
+    d->loadSettings();
 }
 
 void RecorderDockerDock::onRecordIsolateLayerModeToggled(bool checked)

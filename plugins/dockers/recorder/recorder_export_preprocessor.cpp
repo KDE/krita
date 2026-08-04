@@ -13,6 +13,7 @@
 struct RecorderExportPreprocessor::Private {
     QDir directory;
     RecorderFormat format;
+    QStringList tails;
 
     Private(QDir directory, RecorderFormat format)
         : directory(directory)
@@ -22,6 +23,32 @@ struct RecorderExportPreprocessor::Private {
 
     ~Private()
     {
+    }
+
+    void processTail()
+    {
+        if (!directory.exists())
+            return;
+
+        Q_FOREACH (QString file, directory.entryList({"*-tail.*"})) {
+            QString oldFile = file;
+            directory.rename(oldFile, file.remove("-tail"));
+
+            tails.append(file);
+        }
+    }
+
+    void restoreTail()
+    {
+        if (!directory.exists())
+            return;
+
+        Q_FOREACH (QString tail, tails) {
+            QString oldName = tail;
+            directory.rename(oldName, tail.replace(".", "-tail."));
+        }
+
+        tails.clear();
     }
 };
 
@@ -46,6 +73,8 @@ void RecorderExportPreprocessor::doPreprocessing()
     if (!d->directory.exists()) {
         return;
     }
+
+    d->processTail();
 
     QStringList fileNames = d->directory.entryList({"*." % RecorderFormatInfo::fileExtension(d->format)});
 
@@ -86,6 +115,8 @@ void RecorderExportPreprocessor::doPreprocessing()
     }
 
     int offset = 0;
+    QStringList new_tails  = d->tails;
+
     for (auto it = indecies.begin(); it != indecies.end(); ++it) {
         int ind = *it;
 
@@ -101,7 +132,19 @@ void RecorderExportPreprocessor::doPreprocessing()
         QString newName = QString("%2.%3").arg(QString("%1").arg(ind - offset, 7, 10, QLatin1Char('0')),
                                                RecorderFormatInfo::fileExtension(d->format));
 
+        int tailIndex = d->tails.indexOf(oldName);
+        if (tailIndex != -1) {
+            new_tails[tailIndex] = newName;
+        }
+
         // Hopefully nothing should go wrong
         d->directory.rename(oldName, newName);
     }
+
+    d->tails = new_tails;
+}
+
+void RecorderExportPreprocessor::undoPreprocessing()
+{
+    d->restoreTail();
 }

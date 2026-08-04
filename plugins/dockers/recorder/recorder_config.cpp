@@ -23,6 +23,7 @@ const QString keyThreads = "recorder/threads";
 const QString keyRealTimeCaptureMode = "recorder/realtimecapturemode";
 const QString keyRecordIsolateLayerMode = "recorder/recordisolatelayermode";
 const QString keyRecordAutomatically = "recorder/recordautomatically";
+const QString keyFocusedRecording = "recorder/focusedrecording";
 const QString defaultSnapshotDirectory = QDir::homePath() % QDir::separator() % "KritaRecorder";
 }
 
@@ -146,6 +147,16 @@ bool RecorderConfig::recordAutomatically() const
 void RecorderConfig::setRecordAutomatically(bool value)
 {
     config->writeEntry(keyRecordAutomatically, value);
+}
+
+bool RecorderConfig::focusedRecord() const
+{
+    return config->readEntry(keyFocusedRecording, false);
+}
+
+void RecorderConfig::setFocusedRecord(bool value)
+{
+    return config->writeEntry(keyFocusedRecording, value);
 }
 
 #ifdef Q_OS_ANDROID

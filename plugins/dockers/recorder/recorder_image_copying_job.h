@@ -9,13 +9,14 @@
 
 #include "kis_paint_device.h"
 #include "kis_spontaneous_job.h"
+#include <qcontainerfwd.h>
 
 class RecorderImageCopyingJob : public QObject, public KisSpontaneousJob
 {
     Q_OBJECT
 
 public:
-    RecorderImageCopyingJob(KisPaintDeviceSP device, const QRect &rect, int writerId, int index);
+    RecorderImageCopyingJob(KisPaintDeviceSP device, const QRect &rect, int writerId, int index, QVector<QRect> regions);
 
     ~RecorderImageCopyingJob();
     void run() override;
@@ -28,7 +29,7 @@ public:
     }
 
 Q_SIGNALS:
-    void sigImageCopyingDoneWithData(int writerId, int index, KisPaintDeviceSP device);
+    void sigImageCopyingDoneWithData(int writerId, int index, QVector<QRect> regions, KisPaintDeviceSP device);
 
 private:
     KisPaintDeviceSP m_device;
@@ -36,5 +37,6 @@ private:
     int m_writerId;
     int m_partIndex;
     QRect m_area;
+    QVector<QRect> m_regions;
 };
 #endif

@@ -49,6 +49,7 @@ private Q_SLOTS:
     void slotSelectSnapshotDirectory();
     bool onRecordButtonToggled(bool checked);
     void onExportButtonClicked();
+    void onFocusedCaptureToggled(bool checked);
 
     void onWriterStarted();
     void onWriterStopped();

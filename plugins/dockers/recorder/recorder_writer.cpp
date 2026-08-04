@@ -28,6 +28,8 @@
 #include <QVector>
 #include <QSharedPointer>
 #include <atomic>
+#include <QtMath>
+#include <qobjectdefs.h>
 
 namespace
 {
@@ -144,9 +146,22 @@ public:
                                                      Integer8BitsColorDepthID.id(),
                                                      KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
-    void captureImage(KisPaintDeviceSP device)
+    void captureImage(QRect area, KisPaintDevice* greaterImage)
     {
         KisImageSP image = canvas->image();
+
+        KisPaintDeviceSP device;
+
+        if (!greaterImage) {
+            // Create detached paint device that can be converted to target colorspace
+            device = new KisPaintDevice(image->colorSpace());
+            // we don't want image->barrierLock() because it will wait until the full stroke is finished
+            image->immediateLockForReadOnly();
+            device->makeCloneFromRough(image->projection(), area);
+            image->unlock();
+        } else {
+            device = greaterImage;
+        }
 
         const bool needSrgbConversion = [&]() {
             if (image->colorSpace()->colorDepthId() != Integer8BitsColorDepthID
@@ -170,8 +185,8 @@ public:
 
         // truncate uneven image width/height making it even for subdivided size too
         const quint32 bitmask = ~(0xFFFFFFFFu >> (31 - settings->resolution));
-        const quint32 width = image->width() & bitmask;
-        const quint32 height = image->height() & bitmask;
+        const quint32 width = area.width() & bitmask;
+        const quint32 height = area.height() & bitmask;
         const int bufferSize = device->pixelSize() * width * height;
 
         bool resize = imageBuffer.size() != bufferSize;
@@ -187,7 +202,7 @@ public:
             frame = QImage(outData, outWidth, outHeight, QImage::Format_ARGB32);
         }
 
-        device->readBytes(reinterpret_cast<quint8 *>(imageBuffer.data()), 0, 0, width, height);
+        device->readBytes(reinterpret_cast<quint8 *>(imageBuffer.data()), area.x(), area.y(), width, height);
 
         imageBufferWidth = width;
         imageBufferHeight = height;
@@ -257,31 +272,31 @@ public:
         }
     }
 
-    int writeFrame(int index)
+    bool writeFrame()
     {
         if (!outputDir->exists() && !outputDir->mkpath(settings->outputDirectory))
             return false;
 
-        const QString fileName = QString("%1").arg(index, 7, 10, QLatin1Char('0'));
-        const QString &filePath = QString("%1%2.%3").arg(settings->outputDirectory, fileName,
+        const QString fileName = QString("%1").arg(partIndex, 7, 10, QLatin1Char('0'));
+        const QString &filePath = QString("%1%2.%3").arg(settings->outputDirectory,
+                                                         fileName,
                                                          RecorderFormatInfo::fileExtension(settings->format));
 
         int factor = -1; // default value
         switch (settings->format) {
-            case RecorderFormat::JPEG:
-                factor = settings->quality; // 0...100
-                break;
-            case RecorderFormat::PNG:
-                factor = qBound(0, 100 - (settings->compression * 10), 100); // 0..10 -> 100..0
-                break;
+        case RecorderFormat::JPEG:
+            factor = settings->quality; // 0...100
+            break;
+        case RecorderFormat::PNG:
+            factor = qBound(0, 100 - (settings->compression * 10), 100); // 0..10 -> 100..0
+            break;
         }
 
         bool result = frame.save(filePath, RecorderFormatInfo::fileFormat(settings->format).data(), factor);
-        if (!result)
+        if (!result) {
             QFile(filePath).remove(); // remove corrupted frame
         return result;
     }
-
 };
 
 RecorderWriter::RecorderWriter(
@@ -298,14 +313,9 @@ RecorderWriter::~RecorderWriter()
     delete d;
 }
 
-void RecorderWriter::onCaptureImage(int writerId, int index, KisPaintDeviceSP device)
+bool RecorderWriter::onCaptureImageImpl(int index, bool tail, QRect region, KisPaintDevice* device)
 {
-    if (static_cast<int>(id) != writerId)
-        return;
-
-    d->isActive = true;
-
-    d->captureImage(device);
+    d->captureImage(region, device);
 
     // downscale image buffer
     for (int res = 0; res < d->settings->resolution; ++res)
@@ -313,15 +323,53 @@ void RecorderWriter::onCaptureImage(int writerId, int index, KisPaintDeviceSP de
 
     d->removeFrameTransparency();
 
-    bool isFrameWritten = d->writeFrame(index);
+    d->partIndex = index;
 
-    d->isActive = false;
-    Q_EMIT capturingDone(id, isFrameWritten);
+    return d->writeFrame(tail);
 }
 
 bool RecorderWriter::isActive()
 {
     return d->isActive;
+}
+
+void RecorderWriter::onCaptureImage(int writerId, int index, QVector<QRect> regions, KisPaintDeviceSP device)
+{
+    if (static_cast<int>(id) != writerId)
+        return;
+
+    d->isActive = true;
+
+    // Sanity check
+    KIS_ASSERT(!regions.isEmpty());
+
+    KisPaintDeviceSP device;
+
+    if (regions.length() > 1) {
+        KisImageSP image = d->canvas->image();
+        device = new KisPaintDevice(image->colorSpace());
+
+        QRect united = regions.first();
+
+        Q_FOREACH (QRect r, regions) {
+            united = united.united(r);
+        }
+
+        image->immediateLockForReadOnly();
+        device->makeCloneFromRough(image->projection(), united);
+        image->unlock();
+    }
+
+    bool framesWrittens = true;
+
+    Q_FOREACH (QRect region, regions) {
+        framesWrittens &= onCaptureImageImpl(index, tail, region, regions.length() > 1 ? device.data() : nullptr);
+        index++;
+    }
+
+    d->isActive = false;
+
+    Q_EMIT capturingDone(id, framesWrittens);
 }
 
 struct WriterPoolEl
@@ -370,6 +418,8 @@ public:
     WriterPool writerPool;
     RecorderWriterSettings settings{};
     QDir outputDir;
+    bool captureTail = false;
+    QRect oldRegion = QRect(-1, -1, -1, -1);
 
     int findLastIndex(const QString &directory)
     {
@@ -421,7 +471,7 @@ public:
         for (auto &el : writerPool) {
             el.thread->quit();
             el.thread->wait(RecorderConst::waitThreadTimeoutMs);
-            disconnect(q, SIGNAL(startCapturing(int, int, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, KisPaintDeviceSP)));
+            disconnect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>)), el.writer.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>)));
             disconnect(el.writer.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             if (el.thread->isRunning())
             {
@@ -465,7 +515,7 @@ public:
             auto writerPtr = writerPool[newWorkerId].writer;
             auto threadPtr = writerPool[newWorkerId].thread;
             threadPtr->setObjectName(QString("Krita-Recorder-WriterPool#%1").arg(newWorkerId));
-            connect(q, SIGNAL(startCapturing(int, int, KisPaintDeviceSP)), writerPtr.get(), SLOT(onCaptureImage(int, int, KisPaintDeviceSP)));
+            connect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>)), writerPtr.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>)));
             connect(writerPtr.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             writerPtr->moveToThread(threadPtr.get());
             threadPtr->start(QThread::IdlePriority);
@@ -562,6 +612,9 @@ void RecorderWriterManager::setup(const RecorderWriterSettings &settings)
 
 void RecorderWriterManager::start(bool toggleEnabled)
 {
+    removeTails();
+    tryRestoreRegion();
+
     if (d->timer.isActive())
         return;
 
@@ -584,11 +637,27 @@ void RecorderWriterManager::start(bool toggleEnabled)
     }
 }
 
+void RecorderWriterManager::removeTails()
+{
+    // Remove all tail frames
+    if(d->outputDir.exists()) {
+        Q_FOREACH (QString f, d->outputDir.entryList({"*-tail.*"}, QDir::Files)) {
+            d->outputDir.remove(f);
+        }
+    }
+}
+
 bool RecorderWriterManager::stop(bool toggleEnabled)
 {
     //Check if the timer is active, so that we don't try to clear the writer pool multiple times
     if (!d->timer.isActive())
         return true;
+
+saveRegion();
+
+    //Capture some tail frame
+    d->captureTail = true;
+    onTimer();
 
     d->timer.stop();
     auto result = d->clearWriterPool();
@@ -606,8 +675,9 @@ void RecorderWriterManager::setEnabled(bool enabled = false)
 
 void RecorderWriterManager::onTimer()
 {
-    if (!d->enabled || !d->canvas)
+    if ((!d->enabled && !d->captureTail) || !d->canvas) {
         return;
+    }
 
     // take snapshots only if main window is active
     // else some dialogs like filters may disappear when canvas->image()->lock() is called
@@ -619,7 +689,7 @@ void RecorderWriterManager::onTimer()
         return;
     }
 
-    if (!d->imageModified)
+    if (!d->imageModified && !d->captureTail)
         return;
 
     d->imageModified = false;
@@ -639,17 +709,92 @@ void RecorderWriterManager::onTimer()
     d->writerPool[d->freeWriterId].thread->setPriority(QThread::HighPriority);
     recorderThreads.incUsedAndNotify();
 
-    RecorderImageCopyingJob *job = new RecorderImageCopyingJob(d->canvas->image()->projection(),
-                                                               d->canvas->image()->bounds(),
-                                                               d->freeWriterId,
-                                                               ++d->partIndex);
+    QRect fullSize = d->canvas->image()->bounds();
+
+    QRect region = d->settings.focusedRecord && !d->captureTail ? d->canvas->regionOfInterest() : fullSize;
+
+    // Handle initialisation
+    if (d->oldRegion.width() == -1 || d->oldRegion.height() == 1) {
+        d->oldRegion = region;
+    }
+
+    bool interpolate = region != d->oldRegion;
+
+    int totalFrames = 1;
+    // Change in the region, let's generate some frames
+    if (interpolate) {
+        float diffX = abs(region.x() - d->oldRegion.x()) / (float)fullSize.width();
+        float diffY = abs(region.y() - d->oldRegion.y()) / (float)fullSize.height();
+        float diffW = abs(region.width() - d->oldRegion.width()) / (float)fullSize.width();
+        float diffH = abs(region.height() - d->oldRegion.height()) / (float)fullSize.height();
+
+        // Find the highest diff
+        float maxDiff = std::max({diffX, diffY, diffW, diffH});
+
+        // Maximum amount of interpolation frames to generate
+        const int maxFrames = 10;
+
+        // TODO: Potentially change the number of frames function from linear to smth else
+        int framesToGenerate = std::ceil(maxFrames * maxDiff);
+
+        totalFrames += framesToGenerate;
+    }
+
+    auto lerp = [](QRect a, QRect b, qreal t) {
+
+        KIS_SAFE_ASSERT_RECOVER(t <= 1);
+        QRect out;
+
+        out.setX(a.x() + t * (b.x() - a.x()));
+        out.setY(a.y() + t * (b.y() - a.y()));
+        out.setWidth(a.width() + t * (b.width() - a.width()));
+        out.setHeight(a.height() + t * (b.height() - a.height()));
+
+        return out;
+    };
+
+    //TODO: try other easing functions
+    auto easeOutCubic = [](qreal t) {
+        return 1 - qPow(1 - t, 3);
+    };
+
+    QVector<QRect> rects;
+
+    for (int frame = 0; frame < totalFrames; frame++) {
+        //Linear animations look really bad, so do easing
+        QRect interpolatedRect = lerp(d->oldRegion, region, easeOutCubic((qreal)(frame + 1) / (qreal)totalFrames));
+        rects.push_back(interpolatedRect);
+    };
+
+    QRect copyArea = rects.first();
+
+    if (rects.length() > 1) {
+        QRect united = rects.first();
+
+        Q_FOREACH (QRect r, rects) {
+            united = united.united(r);
+        }
+
+        copyArea = united;
+    }
+
+    RecorderImageCopyingJob *job =
+        new RecorderImageCopyingJob(d->canvas->image()->projection(), copyArea, d->freeWriterId, ++d->partIndex, rects);
 
     connect(job,
-            SIGNAL(sigImageCopyingDoneWithData(int, int, KisPaintDeviceSP)),
+            SIGNAL(sigImageCopyingDoneWithData(int, int, QVector<QRect>, KisPaintDeviceSP)),
             this,
-            SIGNAL(startCapturing(int, int, KisPaintDeviceSP)));
+            SIGNAL(startCapturing(int, int, QVector<QRect>, KisPaintDeviceSP)));
 
     d->canvas->image()->addSpontaneousJob(job);
+
+    d->partIndex += totalFrames - 1;
+
+    if (!d->captureTail) {
+        d->oldRegion = region;
+    }
+
+    d->captureTail = false;
 }
 
 void RecorderWriterManager::onCapturingDone(int workerId, bool success)
@@ -686,4 +831,40 @@ void RecorderWriterManager::onToolChanged(const QString &toolId)
 void RecorderWriterManager::onToolPrimaryActionActivated(bool activated)
 {
     d->toolActivated = activated;
+}
+
+//Need to save the region, so that there are no jumps when stopping and resuming the recording
+void RecorderWriterManager::saveRegion()
+{
+    const QString filename = "region";
+    QDir dir(d->outputDir);
+
+    QFile file(dir.filePath(filename));
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        return;
+    }
+
+    QDataStream out(&file);
+    out << d->oldRegion;
+
+    file.close();
+}
+
+void RecorderWriterManager::tryRestoreRegion()
+{
+    const QString filename = "region";
+    QDir dir(d->outputDir);
+
+    QFile file(dir.filePath(filename));
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        d->oldRegion = QRect(-1, -1, -1, -1);
+        return;
+    }
+
+    QDataStream out(&file);
+    out >> d->oldRegion;
+
+    file.close();
 }

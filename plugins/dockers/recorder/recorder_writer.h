@@ -10,9 +10,10 @@
 #include "kis_types.h"
 #include "recorder_format.h"
 
+#include <QMutex>
 #include <QObject>
 #include <QPointer>
-#include <QMutex>
+#include <kis_paint_device.h>
 
 struct RecorderExportSettings;
 class RecorderConfig;
@@ -29,6 +30,7 @@ struct RecorderWriterSettings
     double captureInterval;
     bool recordIsolateLayerMode;
     bool realTimeCaptureMode;
+    bool focusedRecord;
 };
 
 // This class is used to provide mechanism ro sync the number of available
@@ -89,7 +91,10 @@ Q_SIGNALS:
     void capturingDone(int writerId, bool success);
 
 public Q_SLOTS:
-    void onCaptureImage(int writerId, int index, KisPaintDeviceSP device);
+    void onCaptureImage(int writerId, int index, bool tail, QVector<QRect> regions);
+
+private:
+    bool onCaptureImageImpl(int index, bool tail, QRect region, KisPaintDevice* device);
 
 private:
     class Private;
@@ -120,6 +125,10 @@ public:
 
     void setEnabled(bool enabled);
 
+    void removeTails();
+    void saveRegion();
+    void tryRestoreRegion();
+
 Q_SIGNALS:
     void started();
     void stopped();
@@ -127,7 +136,7 @@ Q_SIGNALS:
     void lowPerformanceWarning();
     void recorderStopWarning();
 
-    void startCapturing(int writerId, int index, KisPaintDeviceSP device);
+    void startCapturing(int writerId, int index, bool tail, QVector<QRect> regions);
 
 private Q_SLOTS:
     void onTimer();

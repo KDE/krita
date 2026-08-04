@@ -336,6 +336,8 @@ public:
 
     void cleanupExporter()
     {
+        preprocessor->undoPreprocessing();
+
         if (exporter) {
             exporter->reset();
             exporter.reset();

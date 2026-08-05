@@ -1050,10 +1050,10 @@ void KisConfig::setPasteFormat(qint32 format)
 
 qint32 KisConfig::monitorRenderIntent(bool defaultValue) const
 {
-    qint32 intent = m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
+    qint32 intent = m_cfg.readEntry("renderIntent", INTENT_RELATIVE_COLORIMETRIC);
     if (intent > 3) intent = 3;
     if (intent < 0) intent = 0;
-    return (defaultValue ? INTENT_PERCEPTUAL : intent);
+    return (defaultValue ? INTENT_RELATIVE_COLORIMETRIC : intent);
 }
 
 void KisConfig::setRenderIntent(qint32 renderIntent) const

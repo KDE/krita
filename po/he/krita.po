@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-01 02:39+0000\n"
-"PO-Revision-Date: 2026-08-01 16:04+0300\n"
+"PO-Revision-Date: 2026-08-04 09:43+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -38792,9 +38792,9 @@ msgid "Saturation:"
 msgstr "רוויה:"
 
 #: libs/ui/widgets/kis_paintop_preset_icon_library.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mid-gray level:"
-msgstr "חזרה:"
+msgstr ""
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
@@ -38830,14 +38830,14 @@ msgid "The settings for this preset have changed from their default."
 msgstr ""
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle showing presets"
-msgstr "אליפסה"
+msgstr ""
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle showing scratchpad"
-msgstr "אליפסה"
+msgstr ""
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
 #, kde-format
@@ -38937,9 +38937,9 @@ msgid "Smooths the edges of the selection"
 msgstr "החלקת קצוות הבחירה"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "הזז בחירה"
+msgstr "התפחה או צמצום הבחירה בכמות שהוגדרה"
 
 #: libs/ui/widgets/kis_selection_options.cc:248
 #: plugins/tools/basictools/kis_tool_fill.cc:663
@@ -38954,14 +38954,14 @@ msgid "Blur the selection by the set amount"
 msgstr "טשטוש הבחירה בכמות שהוגדרה"
 
 #: libs/ui/widgets/kis_selection_options.cc:253
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select regions found from the active layer"
-msgstr "בחירה"
+msgstr "בחירת אזורים שנמצאו מהשכבה הפעילה"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "בחירה"
+msgstr "בחירת אזורים שנמצאו ממיזוג כל השכבות"
 
 #: libs/ui/widgets/kis_selection_options.cc:257
 #, kde-format
@@ -39024,9 +39024,9 @@ msgid "Symmetric Difference (%1)"
 msgstr "הבדל סימטרי (%1)"
 
 #: libs/ui/widgets/kis_tone_curve_widget.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgid "No tone curve available..."
-msgstr "אין תמונה זמינה."
+msgstr ""
 
 #: libs/ui/widgets/kis_transport_controls.cpp:27
 #, kde-format
@@ -39189,10 +39189,10 @@ msgstr "צבעי הדגשות:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
-msgstr "מקושר"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
@@ -39203,10 +39203,10 @@ msgstr "שיטה:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -39340,15 +39340,14 @@ msgid "Current dockers"
 msgstr "מעגנים נוכחיים"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Download Resource Bundles"
-msgstr "ערוצים"
+msgstr "הורדת מאגדי משאבים"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscription"
-msgstr "תיאור"
+msgstr "ניהול מינוי"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -41492,15 +41491,15 @@ msgid "Ruler"
 msgstr "סרגל"
 
 #: plugins/assistants/Assistants/SplineAssistant.cc:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spline assistant"
-msgstr "אליפסה"
+msgstr ""
 
 #: plugins/assistants/Assistants/SplineAssistant.cc:350
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "A type of drawing assistants"
 msgid "Spline"
-msgstr "מקושר"
+msgstr ""
 
 #: plugins/assistants/Assistants/TwoPointAssistant.cc:27
 #, kde-format
@@ -41513,9 +41512,9 @@ msgid "2 Point Perspective"
 msgstr "נקודת מבט של 2 נקודות"
 
 #: plugins/assistants/Assistants/VanishingPointAssistant.cc:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vanishing Point assistant"
-msgstr "אליפסה"
+msgstr "מסייע נקודת מגוז"
 
 #: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
@@ -41735,9 +41734,9 @@ msgid "Advanced Color Selector"
 msgstr "בורר צבע מתקדם"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Hotkeys"
-msgstr "מחליף צבעים"
+msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
 #, kde-format
@@ -41775,9 +41774,9 @@ msgid "MyPaint"
 msgstr "MyPaint"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Minimal"
-msgstr "סובב &90"
+msgstr "מזערי"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:84
 #, kde-format
@@ -41964,9 +41963,9 @@ msgstr "דגם הצבעים:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
-#, fuzzy, kde-format
+#, kde-format
 msgid "Update Selector When:"
-msgstr "כלי מ&חיקה"
+msgstr "לעדכן את הבוחר כאשר:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
@@ -42307,14 +42306,14 @@ msgid "Hold constant value. No interpolation."
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:499
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear interpolation."
-msgstr "&בוחר צבעים"
+msgstr "ביון קווי."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:506
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bezier curve interpolation."
-msgstr "&בוחר צבעים"
+msgstr "ביון עקומת בזייה."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:513
 #, fuzzy, kde-format
@@ -43344,10 +43343,10 @@ msgid "Blending info text opacity"
 msgstr "אטימות"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:415
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "מקושר"
+msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
@@ -43745,21 +43744,21 @@ msgid "Pin navigation controls"
 msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new color swatch"
-msgstr "מאפייני שכבה..."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove swatch or group"
-msgstr "הזז בחירה"
+msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit swatch or group"
-msgstr "מאפייני שכבה..."
+msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, kde-format
@@ -43824,9 +43823,9 @@ msgid "Static Positions"
 msgstr "מקומות קבועים"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move to Top on Use"
-msgstr "הסר קישור"
+msgstr ""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:65
 #, kde-format
@@ -44072,10 +44071,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:374
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Input FPS of recorded timelapses."
 msgid "Input FPS:"
-msgstr "מאפייני שכבה..."
+msgstr "תמוניות לשנייה בקלט:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:480
@@ -44499,10 +44498,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:197
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
-msgstr "יצירת שכבה חדשה"
+msgstr "תמונות לשנייה בווידאו:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:206
 #, kde-format
@@ -45210,10 +45209,10 @@ msgid "alignment-baseline, mojisoroe"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:82
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Baseline"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "קו בסיס"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:83
 #, kde-format
@@ -45266,10 +45265,10 @@ msgstr "גל משולש"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "מלבן"
+msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -49891,42 +49890,40 @@ msgid "Failed to retrieve bundles: %1"
 msgstr "משיכת המאגדים נכשלה: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Brush presets"
+#, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "ערכות מכחולים"
-msgstr[1] "ערכות מכחולים"
-msgstr[2] "ערכות מכחולים"
-msgstr[3] "ערכות מכחולים"
+msgstr[0] "ערכת מכחולים"
+msgstr[1] "שתי ערכות מכחולים"
+msgstr[2] "%1 ערכות מכחולים"
+msgstr[3] "%1 ערכות מכחולים"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
-#, fuzzy, kde-format
-#| msgid "Brush tips"
+#, kde-format
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
-msgstr[0] "קצוות מכחולים"
-msgstr[1] "קצוות מכחולים"
-msgstr[2] "קצוות מכחולים"
-msgstr[3] "קצוות מכחולים"
+msgstr[0] "קצה מכחול"
+msgstr[1] "שני קצוות מכחולים"
+msgstr[2] "%1 קצוות מכחולים"
+msgstr[3] "%1 קצוות מכחולים"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
-msgstr[0] "&בוחר צבעים"
-msgstr[1] "&בוחר צבעים"
-msgstr[2] "&בוחר צבעים"
-msgstr[3] "&בוחר צבעים"
+msgstr[0] "תבנית מרקם"
+msgstr[1] "שתי תבניות מרקם"
+msgstr[2] "%1 תבניות מרקם"
+msgstr[3] "%1 תבניות מרקם"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] "&בוחר צבעים"
-msgstr[1] "&בוחר צבעים"
-msgstr[2] "&בוחר צבעים"
-msgstr[3] "&בוחר צבעים"
+msgstr[0] "פריסת מרחב עבודה"
+msgstr[1] "שתי פריסות מרחב עבודה"
+msgstr[2] "%1 פריסות מרחב עבודה"
+msgstr[3] "%1 פריסות מרחב עבודה"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
@@ -50182,11 +50179,9 @@ msgstr "עריכת ספריית משאבים"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSupport)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
+#, kde-format
 msgid "Get More Bundles"
-msgstr "יצירת מאגד"
+msgstr "הורדת מאגדים נוספים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:433
@@ -54552,10 +54547,10 @@ msgid "64x64 lower resolution pass"
 msgstr "כפתור איפוס"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr "כפתור איפוס"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
 #, kde-format
@@ -57527,9 +57522,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:422
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alpha Plane Compression"
-msgstr "מאפייני שכבה..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:432
@@ -57631,15 +57626,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:603
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum degradation"
-msgstr "ירוק בהיר"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:613
-#, fuzzy, kde-format
+#, kde-format
 msgid "No degradation"
-msgstr "גודל יח&סי:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
@@ -67250,10 +67245,10 @@ msgid "Liquify"
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
-msgstr "מברשות"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
@@ -67876,9 +67871,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mesh size"
-msgstr "מברשות"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2207

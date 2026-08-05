@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-01 02:39+0000\n"
-"PO-Revision-Date: 2026-02-08 00:25+0100\n"
+"PO-Revision-Date: 2026-08-01 13:51+0200\n"
 "Last-Translator: Alexander Becker <alex-at-kde-l10n-de@freenet.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -25335,7 +25335,7 @@ msgstr "Für Bilder"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "md5sum"
-msgstr ""
+msgstr "MD5-Prüfsumme"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
@@ -25859,16 +25859,14 @@ msgstr ""
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:51
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgid "Tag"
 msgstr "Stichwort"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:73
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Tag options"
-msgstr "Keine Optionen"
+msgstr "Stichwort-Einstellungen"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:144
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:315
@@ -29868,7 +29866,7 @@ msgstr "Krita-Webseite"
 #: libs/ui/forms/KisWelcomePage.ui:1041
 #, kde-format
 msgid "Recent Images"
-msgstr "Zuletzt göffnete Bilder"
+msgstr "Zuletzt geöffnete Bilder"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1065
@@ -41905,10 +41903,9 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgid "Remove tag"
-msgstr "Seite entfernen"
+msgstr "Stichwort entfernen"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -44358,11 +44355,10 @@ msgstr "Bildwiederholrate:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
-#, fuzzy, kde-format
-#| msgid "Speed"
+#, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
-msgstr "Geschwindigkeit"
+msgstr "Geschwindigkeit: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
@@ -52383,10 +52379,9 @@ msgstr "Ressourcen verwalten"
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:128
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "Wählen Sie eine Farbe"
+msgstr "Stichwörter auswählen"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:129
@@ -52413,10 +52408,9 @@ msgid "Edit Resources"
 msgstr "Ressourcen"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:139
-#, fuzzy, kde-format
-#| msgid "Edit Palette"
+#, kde-format
 msgid "Edit Tags"
-msgstr "Farbpalette bearbeiten"
+msgstr "Stichwörter bearbeiten"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:140
 #, fuzzy, kde-format
@@ -55169,11 +55163,10 @@ msgid "Diamond"
 msgstr "Diamant"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Octagon (8)"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Octagon"
-msgstr "Achteck (8)"
+msgstr "Achteck"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
 #, fuzzy, kde-format
@@ -72209,8 +72202,7 @@ msgid ""
 msgstr ""
 
 #: qmlmodules/components/qml/ResourceView.qml:149
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Stichwort"
@@ -72251,18 +72243,16 @@ msgid "Search in tag"
 msgstr "Auswahlaktionen"
 
 #: qmlmodules/components/qml/ResourceView.qml:349
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
-msgstr "Importieren"
+msgstr "%1 importieren"
 
 #: qmlmodules/components/qml/ResourceView.qml:373
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
-msgstr "Entfernen"
+msgstr "%1 entfernen"
 
 #: qmlmodules/components/qml/sliderspinbox/SliderSpinBoxContentItem.qml:154
 #, kde-format

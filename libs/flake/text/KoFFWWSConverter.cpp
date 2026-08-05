@@ -1017,6 +1017,7 @@ QList<KoFontFamilyWWSRepresentation> KoFFWWSConverter::collectFamilies() const
     QList<KoFontFamilyWWSRepresentation> collection;
     for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
         auto counter = childBegin(typographic);
+        if (counter == childEnd(typographic)) continue;
         counter++;
         bool singleFamily = childBegin(typographic) != childEnd(typographic) && std::next(childBegin(typographic)) == childEnd(typographic);
 

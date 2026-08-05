@@ -118,7 +118,6 @@
               <uap:FileType>.tif</uap:FileType>
               <uap:FileType>.tiff</uap:FileType>
               <uap:FileType>.webp</uap:FileType>
-              <uap:FileType>.xcf</uap:FileType>
             </uap:SupportedFileTypes>
           </uap3:FileTypeAssociation>
         </uap3:Extension>

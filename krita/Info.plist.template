@@ -176,18 +176,6 @@
         </dict>
         <dict>
           <key>CFBundleTypeName</key>
-          <string>Gimp Image</string>
-          <key>CFBundleTypeRole</key>
-          <string>Editor</string>
-          <key>LSHandlerRank</key>
-          <string>Default</string>
-          <key>LSItemContentTypes</key>
-          <array>
-            <string>org.gimp.xcf</string>
-          </array>
-        </dict>
-        <dict>
-          <key>CFBundleTypeName</key>
           <string>Targa image</string>
           <key>CFBundleTypeRole</key>
           <string>Editor</string>
@@ -440,30 +428,6 @@
       </array>
       <key>UTImportedTypeDeclarations</key>
         <array>
-          <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-              <string>public.data</string>
-              <string>public.image</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>GIMP Image</string>
-            <key>UTTypeIdentifier</key>
-            <string>org.gimp.xcf</string>
-            <key>UTTypeReferenceURL</key>
-            <string>http://www.gimp.org/</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-              <key>public.filename-extension</key>
-              <array>
-                <string>xcf</string>
-              </array>
-              <key>public.mime-type</key>
-              <array>
-                <string>image/x-xcf</string>
-              </array>
-            </dict>
-          </dict>
           <dict>
             <key>UTTypeConformsTo</key>
             <array>

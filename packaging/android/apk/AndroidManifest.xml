@@ -35,7 +35,6 @@
                 <data android:scheme="content" />
                 <data android:scheme="file" />
 
-                <data android:mimeType="application/x-xcf" />
                 <data android:mimeType="image/jpeg" />
                 <data android:mimeType="image/x-r32" />
                 <data android:mimeType="image/x-r16" />

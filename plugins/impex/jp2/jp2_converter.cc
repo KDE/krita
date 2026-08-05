@@ -27,7 +27,6 @@
 #include <kis_transaction.h>
 #include "kis_iterator_ng.h"
 #include <QThread>
-#include <plugins/impex/xcf/3rdparty/xcftools/xcftools.h>
 
 #include <iostream>
 #include <sstream>

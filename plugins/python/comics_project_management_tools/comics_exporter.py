@@ -418,11 +418,19 @@ class comicsExporter():
     """
 
     def handleShapeDescription(self, shape, list, textOnly=False):
+        if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
+            return
+        shapeDesc = {}
+        shapeDesc["name"] = shape.name()
+        rect = shape.boundingBox()
+        listOfPoints = [rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()]
+        shapeDesc["boundingBox"] = listOfPoints
+        if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
+            shapeDesc["text"] = shape.toSvg()
+        list.append(shapeDesc)
         return
         # Turn off shape retrieval for now until the new text tool is finished.
         r"""
-        if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
-            return
         shapeDesc = {}
         shapeDesc["name"] = shape.name()
         rect = shape.boundingBox()

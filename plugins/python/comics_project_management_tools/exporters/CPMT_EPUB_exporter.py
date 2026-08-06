@@ -144,7 +144,7 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         transform = data["transform"]
         for v in data["vector"]:
             pointsList = []
-            dominantColor = QColor(Qt.white)
+            dominantColor = QColor(Qt.GlobalColor.white)
             listOfColors = []
             for point in v["boundingBox"]:
                 offset = QPointF(transform["offsetX"], transform["offsetY"])

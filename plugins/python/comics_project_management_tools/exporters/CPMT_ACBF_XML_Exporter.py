@@ -282,7 +282,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     if "publishingDate" in configDictionary.keys():
         publishingDate = document.createElement("publish-date")
         publishingDate.setAttribute("value", configDictionary["publishingDate"])
-        publishingDate.appendChild(document.createTextNode(QDate.fromString(configDictionary["publishingDate"], Qt.DateFormat.ISODate).toString(Qt.DateFormat.SystemLocaleLongDate)))
+        publishingDate.appendChild(document.createTextNode(QDate.fromString(configDictionary["publishingDate"], Qt.DateFormat.ISODate).toString(Qt.DateFormat.TextDate)))
         publisherInfo.appendChild(publishingDate)
     if "publisherCity" in configDictionary.keys():
         publishCity = document.createElement("city")

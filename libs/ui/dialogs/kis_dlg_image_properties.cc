@@ -35,6 +35,8 @@
 #include <commands_new/KisChangeImageHdrDiffuseWhiteCommand.h>
 #include <KisContentLightLevelProcessingVistor.h>
 
+#include <kis_signal_compressor_with_param.h>
+
 #include "KisProofingConfigModel.h"
 
 struct KisDlgImageProperties::Private {
@@ -325,8 +327,8 @@ void KisDlgImageProperties::setHDRLightLevelsOnImage()
         optClli = std::make_optional(clli);
     }
     if (d->image->relativeContentLightLevelInformation() != optClli) {
-        KUndo2Command *cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, optClli);
-        d->image->undoAdapter()->addCommand(cmd);
+        KisProcessingApplicator::runSingleCommandStroke(d->image,
+            new KisChangeImageHdrContentLightLevelCommand(d->image, optClli));
     }
 }
 
@@ -410,22 +412,35 @@ void KisDlgImageProperties::changeColorVolumePreset()
 void KisDlgImageProperties::slotCalculateLightLevels()
 {
     KisRelativeContentLightLevelInformation::CalculationType type = KisRelativeContentLightLevelInformation::CalculationType(m_page->cmbLumiCalcType->currentData().toInt());
-
-    KisProcessingApplicator::ProcessingFlags signalFlags = KisProcessingApplicator::NO_UI_UPDATES | KisProcessingApplicator::RECURSIVE_FRAME_TIMES;
-    KisProcessingApplicator applicator(d->image, d->image->rootLayer(),
-                                       signalFlags);
-
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
-        new KisContentLightLevelProcessingVistor(type, d->image->bounds());
+            new KisContentLightLevelProcessingVistor(type, d->image->bounds());
 
-    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
+    KisProcessingApplicator::ProcessingFlags flags =
+        KisProcessingApplicator::RECURSIVE_FRAME_TIMES | KisProcessingApplicator::READ_ONLY_ACTION;
+    KisProcessingApplicator applicator(d->image, d->image->rootLayer(), flags);
 
-    auto cmd = new KisCommandUtils::LambdaCommand(
-        [visitor, image = d->image] () {
+    applicator.applyVisitorAllFrames(visitor);
+
+    // a poor-man implementation of a QFuture (which is Qt6-only),
+    // the proxy object will notify us manually when the visitor
+    // has completed its execution
+    QSharedPointer<FunctionToSignalProxy> completionSignalProxy(new FunctionToSignalProxy);
+    connect(completionSignalProxy.get(), &FunctionToSignalProxy::timeout, this,
+        [visitor, image = d->image]() {
             auto info = visitor->contentLightLevelInformation();
-            return new KisChangeImageHdrContentLightLevelCommand(image, info);
+            if (info != image->relativeContentLightLevelInformation()) {
+                KisProcessingApplicator::runSingleCommandStroke(image,
+                                                                new KisChangeImageHdrContentLightLevelCommand(image, info));
+            }
         });
-    applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+
+    // add the command **after** the signal has been set up; this
+    // is not a QFuture, so it cannot store the actual "finished"
+    // state
+    applicator.applyCommand(new KisCommandUtils::LambdaCommand([completionSignalProxy]() {
+        completionSignalProxy->start();
+        return nullptr;
+    }));
 
     applicator.end();
 }

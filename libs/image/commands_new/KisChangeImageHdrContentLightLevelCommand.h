@@ -7,12 +7,13 @@
 #define KISCHANGEIMAGEHDRMETADATACOMMAND_H
 
 #include <kundo2command.h>
+#include <commands_new/KisAsynchronouslyMergeableCommandInterface.h>
 #include <kis_types.h>
 #include <kis_hdr_metadata.h>
 #include "kritaimage_export.h"
 #include <optional>
 
-class KRITAIMAGE_EXPORT KisChangeImageHdrContentLightLevelCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisChangeImageHdrContentLightLevelCommand : public KUndo2Command, public KisAsynchronouslyMergeableCommandInterface
 {
 public:
     KisChangeImageHdrContentLightLevelCommand(KisImageWSP image,
@@ -23,6 +24,7 @@ public:
     void undo() override;
 
     int id() const override;
+    bool canMergeWith(const KUndo2Command *other) const override;
     bool mergeWith(const KUndo2Command *other) override;
 private:
     KisImageWSP m_image;

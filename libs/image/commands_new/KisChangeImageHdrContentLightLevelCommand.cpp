@@ -43,6 +43,13 @@ int KisChangeImageHdrContentLightLevelCommand::id() const
     return KisCommandUtils::ChangeImageHdrContentLightLevelId;
 }
 
+bool KisChangeImageHdrContentLightLevelCommand::canMergeWith(const KUndo2Command *otherCommand) const
+{
+    const KisChangeImageHdrContentLightLevelCommand *other = dynamic_cast<const KisChangeImageHdrContentLightLevelCommand *>(otherCommand);
+    if (!other || other->m_image != m_image) return false;
+    return true;
+}
+
 bool KisChangeImageHdrContentLightLevelCommand::mergeWith(const KUndo2Command *otherCommand)
 {
     const KisChangeImageHdrContentLightLevelCommand *other = dynamic_cast<const KisChangeImageHdrContentLightLevelCommand *>(otherCommand);

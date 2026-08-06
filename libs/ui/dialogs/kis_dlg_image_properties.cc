@@ -417,16 +417,17 @@ void KisDlgImageProperties::slotCalculateLightLevels()
 
     KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
         new KisContentLightLevelProcessingVistor(type, d->image->bounds());
+
     applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::SEQUENTIAL);
+
+    auto cmd = new KisCommandUtils::LambdaCommand(
+        [visitor, image = d->image] () {
+            auto info = visitor->contentLightLevelInformation();
+            return new KisChangeImageHdrContentLightLevelCommand(image, info);
+        });
+    applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+
     applicator.end();
-
-    d->image->waitForDone();
-    std::optional<KisRelativeContentLightLevelInformation> optClli = std::make_optional(visitor->contentLightLevelInformation());
-
-    if (d->image->relativeContentLightLevelInformation() != optClli) {
-        KUndo2Command *cmd = new KisChangeImageHdrContentLightLevelCommand(d->image, optClli);
-        d->image->undoAdapter()->addCommand(cmd);
-    }
 }
 
 void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)

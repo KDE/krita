@@ -599,12 +599,16 @@ class comicsExporter():
     """
 
     def removeLayers(self, labels, node):
+        deleteList = []
         if node.colorLabel() in labels:
             node.remove()
+            deleteList.append(node)
         else:
             if node.childNodes():
                 for child in node.childNodes():
                     self.removeLayers(labels, node=child)
+        for node in deleteList:
+            del node
 
     """
     package cbz puts all the meta-data and relevant files into an zip file ending with ".cbz"

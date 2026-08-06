@@ -167,7 +167,7 @@ class labelSelector(QComboBox):
         for i in listOfIndexes:
             index = self.itemModel.index(i, 0)
             item = self.itemModel.itemFromIndex(index)
-            item.setCheckState(True)
+            item.setCheckState(Qt.CheckState.Checked)
 
 """
 Little Enum to keep track of where in the item we add styles.

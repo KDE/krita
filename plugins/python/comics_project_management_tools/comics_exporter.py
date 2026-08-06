@@ -286,12 +286,12 @@ class comicsExporter():
                     # Crop. Cropping per guide only happens if said guides have been found.
                     if w["Crop"] is True:
                         listHGuides = []
-                        listHGuides = page.horizontalGuides()
+                        listHGuides = page.guidesConfig().horizontalGuides()
                         listHGuides.sort()
                         for i in range(len(listHGuides) - 1, 0, -1):
                             if listHGuides[i] < 0 or listHGuides[i] > page.height():
                                 listHGuides.pop(i)
-                        listVGuides = page.verticalGuides()
+                        listVGuides = page.guidesConfig().verticalGuides()
                         listVGuides.sort()
                         for i in range(len(listVGuides) - 1, 0, -1):
                             if listVGuides[i] < 0 or listVGuides[i] > page.width():

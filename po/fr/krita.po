@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-01 00:44+0000\n"
-"PO-Revision-Date: 2026-07-29 09:04+0200\n"
+"PO-Revision-Date: 2026-08-04 18:27+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -42749,12 +42749,12 @@ msgstr "Ellipse"
 #: plugins/assistants/Assistants/FisheyePointAssistant.cc:28
 #, kde-format
 msgid "Fish Eye Point assistant"
-msgstr "Assistant de point « FishEye »"
+msgstr "Assistant de point « Grand angle »"
 
 #: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
-msgstr "Point « FishEye »"
+msgstr "Point « Grand angle »"
 
 #: plugins/assistants/Assistants/InfiniteRulerAssistant.cc:27
 #, kde-format
@@ -47516,7 +47516,7 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr "language, locale, bcp47"
+msgstr "langue, local, bcp47"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
@@ -58562,7 +58562,7 @@ msgstr ""
 "filtre médian à 5 passes provenant du projet « PerfectRaw ».</"
 "li><li><emphasis strong='true'>VCD</emphasis> : l'interpolation « Variance "
 "of Color Differences ».</li><li><emphasis strong='true'>VCD & AHD</"
-"emphasis>: démosaïquage mélangé entre « VCD » et « AHD ».</li><li><emphasis "
+"emphasis> : démosaïquage mélangé entre « VCD » et « AHD ».</li><li><emphasis "
 "strong='true'>LMMSE</emphasis> : démosaïquage grâce à une interpolation avec "
 "estimation directionnelle linéaire avec erreur moyenne quadratique à partir "
 "de « PerfectRaw ».</li> <li><emphasis strong='true'>AMaZE</emphasis> : "

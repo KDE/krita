@@ -186,6 +186,7 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
 
         img = doc.createElement("img")
         img.setAttribute("src", os.path.relpath(pagesList[i], str(textPath)))
+        img.setAttribute("width", "100%")
         body.appendChild(img)
 
         html.appendChild(body)

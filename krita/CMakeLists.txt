@@ -107,9 +107,68 @@ else()
     set(krita_splash_qrc splash.qrc)
 endif()
 
+# ==============================================================================
+# KRITA5.XMLGUI UPDATE
+#
+# The krita5.xmlgui file needs to have its version number updated when it is
+# modified. Failing to do so will cause users who have customized their toolbars
+# to not see the changes, since that equips them with a local krita5.xmlgui file
+# in their application data directory.
+#
+# On the other hand, if you update the file version, some customizations may
+# get lost. If you have changes that are only relevant for certain operating
+# systems, you can choose to only bump that system's version here to limit the
+# potential blast radius.
+#
+
+# Update the version number here. If you have OS-specific changes, put them
+# inside of a condition to only bump the version number on that system. If you
+# make a change that applies to all systems, remove any conditions. The version
+# you specify should always be one higher than any version number you see here,
+# no matter what you're doing. Do not re-use versions.
+if(ANDROID)
+    # Android had interface scaling and supporter benefit menu options added.
+    set(KRITA5_XMLGUI_VERSION 544)
+else()
+    # Other systems aren't affected, they keep using the previous version.
+    set(KRITA5_XMLGUI_VERSION 543)
+endif()
+
+# After updating the version number properly, put the new hash that the CMake
+# error lists as the "actual hash" here.
+set(krita5_xmlgui_hash_expected "b74fdc4f3bafac700be2db906a424542")
+
+# You can stop reading now, the stuff that follows doesn't need to be modified.
+# ==============================================================================
+
+# Read the krita5.xmlgui file, strip all whitespace from it and then make an
+# hash from it. This will also strip whitespace inside of the XML and MD5 isn't
+# a great hash, but that's fine to catch any changes a developer actually makes,
+# we're not trying to build an enterprise file change detection system here.
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/krita5.xmlgui" krita5_xmlgui_content)
+string(REGEX REPLACE "[ \t\r\n]+" "" krita5_xmlgui_content "${krita5_xmlgui_content}")
+string(MD5 krita5_xmlgui_hash_actual "${krita5_xmlgui_content}")
+if(NOT krita5_xmlgui_hash_actual STREQUAL krita5_xmlgui_hash_expected)
+    message(FATAL_ERROR
+        "krita5.xmlgui has changed!\n"
+        "Actual hash:   <${krita5_xmlgui_hash_actual}>\n"
+        "Expected hash: <${krita5_xmlgui_hash_expected}>\n"
+        "You have to update the hash and increase the version number.\n"
+        "Look for 'KRITA5.XMLGUI UPDATE' in krita/CMakeLists.txt for instructions."
+    )
+endif()
+
+# Generate a krita5.xmlgui in the build directory with the specified version
+# number and then a krita.qrc that pulls in that file.
+set(KRITA5_XMLGUI_PATH "${CMAKE_CURRENT_BINARY_DIR}/krita5.xmlgui")
+set(KRITA_QRC_PATH "${CMAKE_CURRENT_BINARY_DIR}/krita.qrc")
+set(KRITARC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/data/kritarc")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/krita5.xmlgui" "${KRITA5_XMLGUI_PATH}" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/krita.qrc" "${KRITA_QRC_PATH}" @ONLY)
+
 # separate listing, both used by Krita and KritaSketch
 set(krita_QRCS
-    ${CMAKE_SOURCE_DIR}/krita/krita.qrc
+    ${KRITA_QRC_PATH}
     ${CMAKE_SOURCE_DIR}/krita/pics/Breeze-dark/breeze-dark-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/Breeze-light/breeze-light-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/layerbox/layerbox-icons.qrc

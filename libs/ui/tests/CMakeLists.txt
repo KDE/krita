@@ -105,7 +105,7 @@ kis_add_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../..
     )
 
 kis_add_test(
-    kis_view_signals_test.cpp ../../../krita/krita.qrc
+    kis_view_signals_test.cpp "${CMAKE_BINARY_DIR}/krita/krita.qrc"
     TEST_NAME kis_view_signals_test
     LINK_LIBRARIES kritaui kritalibkis kritatestsdk
     )

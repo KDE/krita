@@ -1501,7 +1501,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                     }
                 }
                 else { // Export
-                    ret = document->exportDocument(newFilePath, outputFormat, isAdvancedExporting, true);
+                    ret = document->exportDocument(newFilePath, outputFormat, isAdvancedExporting, false);
                     if (ret) {
                         d->lastExportLocation = newFilePath;
                         d->lastExportedFormat = outputFormat;

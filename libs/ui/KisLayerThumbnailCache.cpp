@@ -92,7 +92,7 @@ public:
     }
 
 Q_SIGNALS:
-    void sigThumbnailGenerated(KisNodeSP node, int maxSize, int seqNo, const QImage &thumb);
+    void sigThumbnailGenerated(KisNodeSP node, int seqNo, int maxSize, const QImage &thumb);
 private:
 
     KisNodeSP m_root;

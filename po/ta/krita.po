@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-01 02:39+0000\n"
+"POT-Creation-Date: 2026-08-07 02:42+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -27814,7 +27814,7 @@ msgstr "ஆசிரியர்"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2653
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "ஆசிரியர்"
@@ -51868,7 +51868,7 @@ msgstr "&வண்ணங்கள்"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy, kde-format
 msgid "Other"
 msgstr "முனை மழுங்கக்கூடிய..."
@@ -61620,13 +61620,13 @@ msgstr "அடுக்கை ஏற்றுமதிசெய்"
 msgid "Export not happening because there are no pages."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:631
+#: plugins/python/comics_project_management_tools/comics_exporter.py:643
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:641
+#: plugins/python/comics_project_management_tools/comics_exporter.py:653
 msgid "Packaging CBZ"
 msgstr ""
 
@@ -61761,13 +61761,13 @@ msgid "Writer"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Adapter"
 msgstr "&அத்தியாயம்"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Artist"
 msgstr "உரை கருவி"
@@ -61782,7 +61782,7 @@ msgid "Inker"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Colorist"
 msgstr "&வண்ணங்கள்"
@@ -61802,7 +61802,7 @@ msgid "Photographer"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Editor"
 msgstr "தொகு"
@@ -61813,13 +61813,13 @@ msgid "Assistant Editor"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Designer"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Translator"
 msgstr "முக்கோணம்"
@@ -61999,7 +61999,7 @@ msgid "Database:"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Publisher"
 msgstr ""
 
@@ -62488,275 +62488,275 @@ msgstr "பின்னணி"
 msgid "Creating template"
 msgstr "உருவகைகள்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Abridger"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Art copyist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Factor:"
 msgid "Actor"
 msgstr "காரணி:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Art director"
 msgstr "நீள்சதுரம்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Annotator"
 msgstr "சுழற்றுகிறது"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Bibliographic antecedent"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Architect"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Artistic director"
 msgstr "தேர்வை அளவுமாற்று"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Associated name"
 msgstr "%1 புதிதாக உருவாக்கு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Autographer"
 msgstr "தானாகவே வேறுபடுதல்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Attributed name"
 msgstr "உரையை அழி"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Author"
 msgid "Author of dialog"
 msgstr "ஆசிரியர்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Binding designer"
 msgstr "கடைசி அச்சிட்டல்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookjacket designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Book designer"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book producer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Blurb writer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Rendering"
 msgid "Binder"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookplate designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Bookseller"
 msgstr "<No title>"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Calligrapher"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Censor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Cover designer"
 msgstr "அடுத்த பக்கம்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Copyright holder"
 msgstr "நேர்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Creator"
 msgstr "உருவகைகள்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Contributor"
 msgstr "வேறுபாடு:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Curator"
 msgstr "உருவகைகள்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Commentator for written text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Draftsman"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Dubious author"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Etcher"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Expert"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Rendering"
 msgid "Funder"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Illustrator"
 msgstr "நிறமாற்றம்:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Illuminator"
 msgstr "நிறமாற்றம்:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Inscriber"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Licensee"
 msgstr "புள்ளிகள்/அங்குலம்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Licensor"
 msgstr "புள்ளிகள்/அங்குலம்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Lithographer"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Metadata contact"
 msgstr "உருவகைகள்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Owner"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Patron"
 msgstr "சைன்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Publishing director"
 msgstr "நீள்சதுரம்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Printer"
 msgstr "புள்ளிகள்"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Scenarist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Subscript"
 msgid "Scribe"
 msgstr "கீழொட்டு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Sponsor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Storyteller"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Transcriber"
 msgstr "FG to படிகம்போன்ற"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Type designer"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Typographer"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added commentary"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added lyrics"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of accompanying material"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Writer of introduction"
 msgstr "நிறத் தெளிப்பு:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Writer of preface"
 msgstr "திருத்தப் பாதுகாப்பு"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of supplementary textual content"
 msgstr ""
 

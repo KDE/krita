@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-01 02:39+0000\n"
+"POT-Creation-Date: 2026-08-07 02:42+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -28796,7 +28796,7 @@ msgstr "Авторы"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2653
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy, kde-format
 msgid "Author"
 msgstr "Авторы"
@@ -54025,7 +54025,7 @@ msgstr "Түстер"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Other"
 msgstr "Басқа"
@@ -64244,13 +64244,13 @@ msgstr "Экспорт"
 msgid "Export not happening because there are no pages."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:631
+#: plugins/python/comics_project_management_tools/comics_exporter.py:643
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:641
+#: plugins/python/comics_project_management_tools/comics_exporter.py:653
 msgid "Packaging CBZ"
 msgstr ""
 
@@ -64397,14 +64397,14 @@ msgid "Writer"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Chapter"
 msgid "Adapter"
 msgstr "Тарау"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Artistic"
 msgid "Artist"
@@ -64421,7 +64421,7 @@ msgid "Inker"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Colors"
 msgid "Colorist"
@@ -64445,7 +64445,7 @@ msgid "Photographer"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Editor:"
 msgid "Editor"
@@ -64457,14 +64457,14 @@ msgid "Assistant Editor"
 msgstr "Көмекші:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Ruler assistant"
 msgid "Designer"
 msgstr "Көмекші өлшегіш"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Translate"
 msgid "Translator"
@@ -64656,7 +64656,7 @@ msgid "Database:"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Publisher:"
 msgid "Publisher"
@@ -65189,307 +65189,307 @@ msgstr "Аясы"
 msgid "Creating template"
 msgstr "Құр&у"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Abridger"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Art copyist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Actor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Art director"
 msgstr "Каталогын таңдау"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Annotator"
 msgstr "Аңдатпасы:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Bibliography entries"
 msgid "Bibliographic antecedent"
 msgstr "Библиография аталымы"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Architect"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Artistic Color Selector"
 msgid "Artistic director"
 msgstr "Көркем түс таңдағышы"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Action Name"
 msgid "Associated name"
 msgstr "Амал атауы"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Auto bracket"
 msgid "Autographer"
 msgstr "Авто бракетинг"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Distribute shapes"
 msgid "Attributed name"
 msgstr "Қалыптарды үлестіру"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Author of dialog"
 msgstr "Авторы"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Binding Edge:"
 msgid "Binding designer"
 msgstr "Түбтеу шеті:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookjacket designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Ruler assistant"
 msgid "Book designer"
 msgstr "Көмекші өлшегіш"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book producer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Blurb writer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reorder shapes"
 msgid "Binder"
 msgstr "Қалыптарды реттеу"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookplate designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Booklet"
 msgid "Bookseller"
 msgstr "Кітапша"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Calligraphy"
 msgid "Calligrapher"
 msgstr "Каллиграфия"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Sensor:"
 msgid "Censor"
 msgstr "Сенсоры:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Average"
 msgid "Cover designer"
 msgstr "Орталап"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Top Right"
 msgid "Copyright holder"
 msgstr "Жоғары оң жақта"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "&Create"
 msgid "Creator"
 msgstr "Құр&у"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Contributor"
 msgstr "Контрастық"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "&Create"
 msgid "Curator"
 msgstr "Құр&у"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Commentator for written text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Draftsman"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Dubious author"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Etcher"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgctxt "Category of brush engines"
 #| msgid "Experimental"
 msgid "Expert"
 msgstr "Экспериментті"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reorder shapes"
 msgid "Funder"
 msgstr "Қалыптарды реттеу"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Orientation"
 msgid "Illustrator"
 msgstr "Қай жаққа"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Orientation"
 msgid "Illuminator"
 msgstr "Қай жаққа"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Inscriber"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Licensee"
 msgstr "Басатын биіктігі:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Licensor"
 msgstr "Басатын биіктігі:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Bibliography"
 msgid "Lithographer"
 msgstr "Библиография"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Metadata"
 msgid "Metadata contact"
 msgstr "Метадерек"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Owner"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Strong"
 msgid "Patron"
 msgstr "Күшті"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Publishing director"
 msgstr "Каталогын таңдау"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Printer"
 msgstr "Қабатты &салу"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Scenarist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Subscript"
 msgid "Scribe"
 msgstr "Жол астылық"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Sensor:"
 msgid "Sponsor"
 msgstr "Сенсоры:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Storyteller"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Transparent"
 msgid "Transcriber"
 msgstr "Мөлдір"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Ruler assistant"
 msgid "Type designer"
 msgstr "Көмекші өлшегіш"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Bibliography"
 msgid "Typographer"
 msgstr "Библиография"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added commentary"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added lyrics"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of accompanying material"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "Bilinear interpolation"
 msgid "Writer of introduction"
 msgstr "Қосызықты интерполяция"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 #| msgid "(write protected)"
 msgid "Writer of preface"
 msgstr "(жазудан қорғалған)"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of supplementary textual content"
 msgstr ""
 

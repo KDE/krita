@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-01 02:39+0000\n"
+"POT-Creation-Date: 2026-08-07 02:42+0000\n"
 "PO-Revision-Date: 2026-07-28 07:41-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -27971,7 +27971,7 @@ msgstr "Autor"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2653
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "Autor"
@@ -52963,7 +52963,7 @@ msgstr "Fatores de indexação"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Other"
 msgstr "Outro"
@@ -63276,7 +63276,7 @@ msgstr "Exportando para {key}"
 msgid "Export not happening because there are no pages."
 msgstr "Exportação não ocorreu porque não há páginas."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:631
+#: plugins/python/comics_project_management_tools/comics_exporter.py:643
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -63284,7 +63284,7 @@ msgstr ""
 "Salvando o Comicbook \n"
 "informações do arquivo de metadados"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:641
+#: plugins/python/comics_project_management_tools/comics_exporter.py:653
 msgid "Packaging CBZ"
 msgstr "Empacotamento CBZ"
 
@@ -63397,12 +63397,12 @@ msgid "Writer"
 msgstr "Escritor"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Adapter"
 msgstr "Adaptador"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Artist"
 msgstr "Artista"
 
@@ -63415,7 +63415,7 @@ msgid "Inker"
 msgstr "Pintor"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Colorist"
 msgstr "Colorista"
 
@@ -63432,7 +63432,7 @@ msgid "Photographer"
 msgstr "Fotógrafo"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Editor"
 msgstr "Editor"
 
@@ -63441,12 +63441,12 @@ msgid "Assistant Editor"
 msgstr "Editor Assistente"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Designer"
 msgstr "Designer"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Translator"
 msgstr "Tradutor"
 
@@ -63632,7 +63632,7 @@ msgid "Database:"
 msgstr "Banco de dados:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Publisher"
 msgstr "Editor(a):"
 
@@ -64084,235 +64084,235 @@ msgstr "Plano de fundo"
 msgid "Creating template"
 msgstr "Criando modelo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Abridger"
 msgstr "Abreviador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Art copyist"
 msgstr "Copiadora de arte"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Actor"
 msgstr "Ator"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Art director"
 msgstr "Diretor de arte"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Annotator"
 msgstr "Anotador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bibliographic antecedent"
 msgstr "Antecedente bibliográfico"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Architect"
 msgstr "Arquiteto"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Artistic director"
 msgstr "Diretor artístico"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Associated name"
 msgstr "Nome associado"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Autographer"
 msgstr "Autógrafo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Attributed name"
 msgstr "Nome atribuído"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Author of dialog"
 msgstr "Autor do diálogo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Binding designer"
 msgstr "Designer de encadernação"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookjacket designer"
 msgstr "Designer de capa de livro"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book designer"
 msgstr "Designer de livros"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book producer"
 msgstr "Produtor de livros"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Blurb writer"
 msgstr "Escritor da sinopse"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Binder"
 msgstr "Encadernador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookplate designer"
 msgstr "Designer de Folha de Rosto"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookseller"
 msgstr "Livreiro"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Calligrapher"
 msgstr "Calígrafo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Censor"
 msgstr "Censor"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Cover designer"
 msgstr "Designer de capa"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Copyright holder"
 msgstr "Detentor dos direitos autorais"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Creator"
 msgstr "Criador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Contributor"
 msgstr "Colaborador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Curator"
 msgstr "Curador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Commentator for written text"
 msgstr "Comentador para texto escrito"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Draftsman"
 msgstr "Relator de parecer"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Dubious author"
 msgstr "Autor duvidoso"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Etcher"
 msgstr "Gravador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Expert"
 msgstr "Expert"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Funder"
 msgstr "Produtor Executivo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Illustrator"
 msgstr "Ilustrador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Illuminator"
 msgstr "Iluminador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Inscriber"
 msgstr "Inscrito"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Licensee"
 msgstr "Licenciado"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Licensor"
 msgstr "Licenciante"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Lithographer"
 msgstr "Litógrafo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Metadata contact"
 msgstr "Metadados para contato"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Owner"
 msgstr "Proprietário"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Patron"
 msgstr "Patrono"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Publishing director"
 msgstr "Diretor de publicação"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Printer"
 msgstr "Impressora"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Scenarist"
 msgstr "Cenarista"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Scribe"
 msgstr "Escriba"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Sponsor"
 msgstr "Patrocinador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Storyteller"
 msgstr "Narrador"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Transcriber"
 msgstr "Transcritor"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Type designer"
 msgstr "Designer de Tipos"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Typographer"
 msgstr "Tipógrafo"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added commentary"
 msgstr "Escritor de comentário adicionado"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added lyrics"
 msgstr "Escritor de letras adicionadas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of accompanying material"
 msgstr "Escritor do material acompanhante"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added text"
 msgstr "Escritor de texto adicionado"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of introduction"
 msgstr "Autor da introdução"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of preface"
 msgstr "Escritor do prefácio"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of supplementary textual content"
 msgstr "Escritor de conteúdo textual suplementar"
 

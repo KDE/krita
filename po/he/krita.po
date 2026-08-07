@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-01 02:39+0000\n"
-"PO-Revision-Date: 2026-08-04 09:43+0300\n"
+"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"PO-Revision-Date: 2026-08-06 13:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2200,12 +2200,12 @@ msgid "Grid square 25"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_crispy.kpp"
 msgid "Hatch crispy"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2224,36 +2224,36 @@ msgid "Hatch cross small"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_diag_S.kpp"
 msgid "Hatch diag S"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_diag_fat.kpp"
 msgid "Hatch diag fat"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_moire.kpp"
 msgid "Hatch moire"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_noisy.kpp"
 msgid "Hatch noisy"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2432,12 +2432,12 @@ msgid "Pixelart dither"
 msgstr "&תמונה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_round.kpp"
 msgid "Pixelart round"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2522,28 +2522,28 @@ msgid "Shape smooth"
 msgstr "עובי קו:"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/Sketch."
 "kpp"
 msgid "Sketch"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_chrome.kpp"
 msgid "Sketch chrome"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_fur.kpp"
 msgid "Sketch fur"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2562,12 +2562,12 @@ msgid "Sketch ink small"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_line.kpp"
 msgid "Sketch line"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2602,12 +2602,12 @@ msgid "Sketch speedpaint shade"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_wires.kpp"
 msgid "Sketch wires"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2618,20 +2618,20 @@ msgid "Smudge block tilt"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_rake.kpp"
 msgid "Smudge rake"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_rake_2.kpp"
 msgid "Smudge rake 2"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2747,12 +2747,12 @@ msgid "Sponge texture"
 msgstr "תבניות"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Spray_splat.kpp"
 msgid "Spray splat"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -8746,7 +8746,7 @@ msgstr "צביעה"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color lighter"
-msgstr "הבהרת צבע המברשת"
+msgstr "הבהרת צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_darker), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_darker), Actions (Painting), ActionCollection (Krita)
@@ -8758,7 +8758,7 @@ msgstr "הבהרת צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color darker"
-msgstr "הכהיית צבע המברשת"
+msgstr "הכהיית צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_saturated), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_saturated), Actions (Painting), ActionCollection (Krita)
@@ -8818,7 +8818,7 @@ msgstr "הזחת גוון צבע המכחול נגד כיוון השעון"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more red"
-msgstr "להאדים את צבע המברשת"
+msgstr "להאדים את צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_greener), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_greener), Actions (Painting), ActionCollection (Krita)
@@ -8830,7 +8830,7 @@ msgstr "להאדים את צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more green"
-msgstr "להוריק את צבע המברשת"
+msgstr "להוריק את צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_bluer), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_bluer), Actions (Painting), ActionCollection (Krita)
@@ -8842,7 +8842,7 @@ msgstr "להוריק את צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more blue"
-msgstr "להכחיל את צבע המברשת"
+msgstr "להכחיל את צבע המכחול"
 
 #. i18n: context: text @ Action (make_brush_color_yellower), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_yellower), Actions (Painting), ActionCollection (Krita)
@@ -8854,7 +8854,7 @@ msgstr "להכחיל את צבע המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Make brush color more yellow"
-msgstr "להצהיב את צבע המברשת"
+msgstr "להצהיב את צבע המכחול"
 
 #. i18n: context: text @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
@@ -8871,7 +8871,7 @@ msgstr "הגברת האטימות"
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Opacity"
-msgstr "הגברת אטימות המברשת"
+msgstr "הגברת אטימות המכחול"
 
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
@@ -8888,7 +8888,7 @@ msgstr "הפחתת האטימות"
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Opacity"
-msgstr "הפחתת אטימות המברשת"
+msgstr "הפחתת אטימות המכחול"
 
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
@@ -8902,10 +8902,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:476
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Flow"
-msgstr "&מברשת"
+msgstr "הגברת זרימת מכחול"
 
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
@@ -8919,10 +8919,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:488
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Flow"
-msgstr "מברשות"
+msgstr "הפחתת זרימת מכחול"
 
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
@@ -8936,10 +8936,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:500
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "&מברשת"
+msgstr "הגדלת עמעום מכחול"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
@@ -8953,10 +8953,10 @@ msgstr "שינוי הזחה"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:512
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "מברשות"
+msgstr "הפחתת עמעום מכחול"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
@@ -9370,7 +9370,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Disabled"
-msgstr "החלקת מברשת: כבויה"
+msgstr "החלקת מכחול: כבויה"
 
 #. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9382,7 +9382,7 @@ msgstr "החלקת מברשת: כבויה"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "החלקת מברשת: פיקסל"
+msgstr "החלקת מכחול: פיקסל"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9394,7 +9394,7 @@ msgstr "החלקת מברשת: פיקסל"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "החלקת מברשת: מייצב"
+msgstr "החלקת מכחול: מייצב"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9406,7 +9406,7 @@ msgstr "החלקת מברשת: מייצב"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Brush Size"
-msgstr "הקטנת גודל המברשת"
+msgstr "הקטנת גודל המכחול"
 
 #. i18n: context: text @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9418,7 +9418,7 @@ msgstr "הקטנת גודל המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Basic"
-msgstr "החלקת מברשת: בסיסית"
+msgstr "החלקת מכחול: בסיסית"
 
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9430,7 +9430,7 @@ msgstr "החלקת מברשת: בסיסית"
 #, kde-format
 msgctxt "action"
 msgid "Increase Brush Size"
-msgstr "הגדלת גודל המברשת"
+msgstr "הגדלת גודל המכחול"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9442,7 +9442,7 @@ msgstr "הגדלת גודל המברשת"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "סיבוב קצה המברשת עם כיוון השעון"
+msgstr "סיבוב קצה המכחול עם כיוון השעון"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9466,7 +9466,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "סיבוב קצה המברשת נגד כיוון השעון"
+msgstr "סיבוב קצה המכחול נגד כיוון השעון"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9478,7 +9478,7 @@ msgstr "סיבוב קצה המברשת נגד כיוון השעון"
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "סיבוב קצה המברשת נגד כיוון השעון (מדויק)"
+msgstr "סיבוב קצה המכחול נגד כיוון השעון (מדויק)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -10974,10 +10974,10 @@ msgstr "התמונית האחרונה"
 
 #. i18n: context: text @ Action (auto_key), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2086
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Auto Frame Mode"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: context: text @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2097
@@ -11215,52 +11215,52 @@ msgstr "הסרת N תמוניות החזקה כל תמונית מפתח"
 
 #. i18n: context: text @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2287
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Hold Column"
-msgstr "הוסף טור"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2289
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert a hold column into the frame at the current position"
-msgstr "הזז בחירה"
+msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2299
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert Multiple Hold Columns"
-msgstr "הוסף טור"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2301
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Insert N hold columns into the frame at the current position"
-msgstr "הזז בחירה"
+msgstr ""
 
 #. i18n: context: text @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2311
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Hold Column"
-msgstr "הסר בחירה"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2313
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove a hold column from the frame at the current position"
-msgstr "הזז בחירה"
+msgstr ""
 
 #. i18n: context: text @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2323
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Multiple Hold Columns"
-msgstr "כפתור איפוס"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2325
@@ -13054,20 +13054,20 @@ msgstr "הסרת שכבה"
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
-msgstr "הסר שכבה"
+msgstr "העלאת שכבה או מסכה למעלה"
 
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3620 krita/krita.action:3622
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
-msgstr "הסר שכבה"
+msgstr "הורדת שכבה או מסכה למטה"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3630
@@ -13322,7 +13322,7 @@ msgstr "עריכה"
 #: krita/krita5.xmlgui:446
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr "מברשות וכו׳"
+msgstr "מכחולים וכו׳"
 
 #: krita/krita5.xmlgui:463
 #, kde-format
@@ -24602,12 +24602,10 @@ msgstr "לשכתב על תגית?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
-msgstr ""
-"כבר קיים מסמך בשם זה.\n"
-"האם ברצונך לכתוב עליו?"
+msgstr "כבר קיימת תגית בשם הייחודי הזה. להחליף אותה?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:275
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
@@ -24791,33 +24789,29 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "כל סוגי הקבצים הנתמכים"
+msgstr "תסדיר לא נתמך"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "קובץ וידאו:"
+msgstr "מקודד וידאו:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "קובץ וידאו:"
+msgstr "קצב סיביות של וידאו:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "תפריט שמע"
+msgstr "מקודד שמע:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "סובב &90"
+msgstr "קצב סיביות של שמע:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25214,11 +25208,9 @@ msgid "Loading video data... %1 frames examined."
 msgstr "נתוני הווידאו נטענים… %1 תמוניות נבחנו."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Intersect (%1)"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "חצייה (%1)"
+msgstr "שגיאה פנימית (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
@@ -25226,10 +25218,9 @@ msgid "LibAV: %1"
 msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "העדפות הצללה קווית"
+msgstr "לתסדיר הזה אין העדפות."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, fuzzy, kde-format
@@ -25239,11 +25230,9 @@ msgid "No frame files found"
 msgstr "לא נמצא פרופיל"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "&תיצוג הנפשה…"
+msgstr "ההנפשה מתוצגת…"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25251,11 +25240,9 @@ msgid "No encoder for the selected format found"
 msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "שגיאה במהלך שמירת %1: %2"
+msgstr "שגיאה במהלך הכנת קובץ שמע: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -27703,7 +27690,7 @@ msgstr "מחבר"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2653
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "יוצר"
@@ -31398,7 +31385,7 @@ msgstr "שינוי קנה מידה של שכבה..."
 #: libs/ui/forms/wdgpaintopsettings.ui:871
 #, kde-format
 msgid "Fill area with brush preset icon"
-msgstr "מילוי האזור בסמל ערכת מברשות"
+msgstr "מילוי האזור בסמל ערכת מכחולים"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
 #: libs/ui/forms/wdgpaintopsettings.ui:890
@@ -51828,7 +51815,7 @@ msgstr "&צבע"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Other"
 msgstr "אחר"
@@ -58415,7 +58402,7 @@ msgstr "זיפים"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
-msgstr "מברשת זיפים (הקווים יהיו דקים יותר מאשר בתצוגה המקדימה)"
+msgstr "מכחול זיפים (הקווים יהיו דקים יותר מאשר בתצוגה המקדימה)"
 
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format
@@ -61483,13 +61470,13 @@ msgstr "ייצוא עבור {key}"
 msgid "Export not happening because there are no pages."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:631
+#: plugins/python/comics_project_management_tools/comics_exporter.py:643
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:641
+#: plugins/python/comics_project_management_tools/comics_exporter.py:653
 msgid "Packaging CBZ"
 msgstr ""
 
@@ -61602,12 +61589,12 @@ msgid "Writer"
 msgstr "כתיבה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Adapter"
 msgstr "תיאום"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Artist"
 msgstr "אומנות"
 
@@ -61620,7 +61607,7 @@ msgid "Inker"
 msgstr "עבודת דיו"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Colorist"
 msgstr "צביעה"
 
@@ -61638,7 +61625,7 @@ msgid "Photographer"
 msgstr "צילום"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Editor"
 msgstr "עריכה"
 
@@ -61647,12 +61634,12 @@ msgid "Assistant Editor"
 msgstr "סיוע בעריכה"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Designer"
 msgstr "עיצוב"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Translator"
 msgstr "תרגום"
 
@@ -61818,7 +61805,7 @@ msgid "Database:"
 msgstr "מסד נתונים:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Publisher"
 msgstr "הוצאה לאור"
 
@@ -62248,241 +62235,241 @@ msgstr "רקע"
 msgid "Creating template"
 msgstr "יצירת תבנית"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Abridger"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Art copyist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Actor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Art director"
 msgstr "ניהול אומנותי"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Annotator"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Bibliographic antecedent"
 msgstr "הוסף מעבר שורה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Architect"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Artistic director"
 msgstr "הדבקת בחירה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Associated name"
 msgstr "שם משויך"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Autographer"
 msgstr "זוויות:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Attributed name"
 msgstr "מחיקת טקסט"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Author of dialog"
 msgstr "כתיבת הדו־שיח"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Binding designer"
 msgstr "עיצוב כריכה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookjacket designer"
 msgstr "עיצוב עטיפת הספר"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book designer"
 msgstr "עיצוב ספר"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book producer"
 msgstr "הפקת ספר"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Blurb writer"
 msgstr "כתיבת תקציר"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Binder"
 msgstr "איגוד"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookplate designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Bookseller"
 msgstr "מכירת ספרים"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Calligrapher"
 msgstr "קליגרפיה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Censor"
 msgstr "צנזורה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Cover designer"
 msgstr "עיצוב עטיפה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Copyright holder"
 msgstr "בעלות זכויות יוצרים"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Creator"
 msgstr "יצירה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Contributor"
 msgstr "תרומה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Curator"
 msgstr "אצירה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Commentator for written text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Draftsman"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Dubious author"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Etcher"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Expert"
 msgstr "ייעוץ מומחה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Funder"
 msgstr "ייסוד"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Illustrator"
 msgstr "איור"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Illuminator"
 msgstr "תאורה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Inscriber"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Licensee"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Licensor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Lithographer"
 msgstr "ליתוגרפיה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Metadata contact"
 msgstr "פרטי קשר לנתוני על"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Owner"
 msgstr "בעלות"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Patron"
 msgstr "מימון"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Publishing director"
 msgstr "הפקת הוצאה לאור"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Printer"
 msgstr "מדפסת"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Scenarist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Scribe"
 msgstr "כתב תחתי"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Sponsor"
 msgstr "מימון"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Storyteller"
 msgstr "סיפורת"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, fuzzy
 msgid "Transcriber"
 msgstr "מצבע הקידמה לשקוף"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Type designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Typographer"
 msgstr "טיפוגרפיה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added commentary"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added lyrics"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of accompanying material"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of introduction"
 msgstr "כתיבת המבוא"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of preface"
 msgstr "כתיבת ההקדמה"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of supplementary textual content"
 msgstr ""
 

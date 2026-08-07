@@ -4,9 +4,9 @@
 -->
 <RCC>
     <qresource prefix="/kconfig">
-        <file alias="kritarc">data/kritarc</file>
+        <file alias="kritarc">@KRITARC_PATH@</file>
     </qresource>
     <qresource prefix="/kxmlgui5">
-        <file alias="krita5.xmlgui">krita5.xmlgui</file>
+        <file alias="krita5.xmlgui">@KRITA5_XMLGUI_PATH@</file>
     </qresource>
 </RCC>

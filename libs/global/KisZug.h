@@ -63,6 +63,9 @@ inline constexpr auto map_less_equal<qreal> = [] (qreal value) { return zug::map
 
 constexpr auto map_round = zug::map([](qreal x) -> int { return qRound(x); });
 
+// a state getter for an std::optional
+constexpr auto has_value = zug::map([](auto&& x) -> bool { return x.has_value(); });
+
 struct empty_t
 {
 };

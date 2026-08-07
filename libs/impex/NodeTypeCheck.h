@@ -33,8 +33,11 @@ public:
         KisCountVisitor v(nodetypes, props);
         image->rootLayer()->accept(v);
 
-        // There is always one group layer, the root layer.
-        if (m_nodeType == "KisGroupLayer") {
+        // There is always one group layer, the root layer. When checking
+        // selection masks, discount the global selection mask, since that's
+        // ephemeral and not worth warning about.
+        if (m_nodeType == QStringLiteral("KisGroupLayer")
+            || (m_nodeType == QStringLiteral("KisSelectionMask") && image->rootLayer()->selectionMask())) {
             return (v.count() > 1);
         }
         else {

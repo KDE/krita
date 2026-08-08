@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 00:43+0000\n"
+"POT-Creation-Date: 2026-08-08 00:42+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -31127,7 +31127,7 @@ msgstr "색상:"
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1988
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
 msgstr "크기:"
@@ -32524,10 +32524,12 @@ msgstr "회전:"
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeScale)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2164
 #, kde-format
 msgid "Scale:"
 msgstr "크기 조정:"
@@ -36467,6 +36469,7 @@ msgstr "흐름:"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeRotation)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
@@ -36474,6 +36477,7 @@ msgstr "흐름:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
 msgid "Rotation:"
 msgstr "회전:"
@@ -36499,7 +36503,7 @@ msgstr "불투명도:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:274
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2035
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
 #, kde-format
 msgid "Flow:"
 msgstr "흐름:"
@@ -42071,7 +42075,7 @@ msgstr "누름 단추"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:646
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:824
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2411
 #, kde-format
 msgid "Rows:"
 msgstr "줄:"
@@ -42086,7 +42090,7 @@ msgstr "줄:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:296
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2184
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2401
 #, kde-format
 msgid "Columns:"
 msgstr "칸:"
@@ -54836,7 +54840,7 @@ msgstr "독립된 채널"
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:67
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1991
 #, kde-format
 msgid "Mode:"
 msgstr "모드:"
@@ -56137,7 +56141,7 @@ msgstr "앤티에일리어싱 임곗값:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2070
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2092
 #, kde-format
 msgid "Reverse:"
 msgstr "반전:"
@@ -56848,8 +56852,8 @@ msgstr "증분"
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1995
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2122
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
 #, kde-format
 msgid "Pressure"
 msgstr "압력"
@@ -56884,7 +56888,7 @@ msgstr "등위"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2150
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
 #, kde-format
 msgid "Spacing:"
 msgstr "간격:"
@@ -62703,7 +62707,7 @@ msgstr "덧칠"
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2111
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2328
 #, kde-format
 msgid "Wash"
 msgstr "워시"
@@ -71765,55 +71769,100 @@ msgctxt "@info:tooltip"
 msgid "Reverse direction of the current deformation tool"
 msgstr "현재 변형 도구의 방향 반전"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move: drag the image along the brush stroke"
 msgstr "이동: 브러시를 긋는 방향으로 이미지를 드래그"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:277
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
 msgstr "크기 조정: 커서 아래의 이미지 확장/수축"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate: twirl image under cursor"
 msgstr "회전: 커서 아래의 이미지 회전"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:281
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
 msgstr "오프셋: 브러시를 긋는 방향의 오른쪽으로 이미지를 이동"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:280
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Undo: erase actions of other tools"
 msgstr "실행 취소: 다른 도구의 동작 지우기"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:621
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:284
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Restore Shape: reduce local liquify stretching and bunching while keeping "
+"the affected area centered"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:304
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate the affected area back toward its original orientation"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:305
+#, fuzzy, kde-format
+#| msgid "Set the master opacity for the layer"
+msgctxt "@info:tooltip"
+msgid "Keep the current rotation of the affected area"
+msgstr "레이어의 마스터 불투명도 설정"
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:306
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Scale the affected area back toward its original size"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:307
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Keep the current overall scale of the affected area"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:308
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove simple stretch or squash from the affected area"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:309
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Keep simple stretch or squash while removing shear-like distortion"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:737
 #, kde-format
 msgid "Switch between editing and deforming cage"
 msgstr "케이지 편집과 왜곡을 전환"
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:682
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:801
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1629
 #, kde-format
 msgid "Lock Points"
 msgstr "점 잠금"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:684
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:803
 #, kde-format
 msgid "Unlock Points"
 msgstr "점 잠금 해제"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:761
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:880
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
@@ -72194,39 +72243,76 @@ msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
 msgstr "실수"
 
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Reorder shapes"
+msgid "Restore Shape"
+msgstr "모양 재정렬"
+
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeStretchOriginal)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
+#, fuzzy, kde-format
+#| msgid "Original"
+msgid "To original"
+msgstr "원본"
+
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeStretchPreserve)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
+#, fuzzy, kde-format
+#| msgid "Pressure"
+msgid "Preserve"
+msgstr "압력"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
+#, fuzzy, kde-format
+#| msgid "Stretched"
+msgid "Stretch:"
+msgstr "늘임"
+
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2089
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306
 #, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "양:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2106
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2323
 #, kde-format
 msgid "Build Up"
 msgstr "덧칠"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2395
 #, kde-format
 msgid "Mesh size"
 msgstr "메시 크기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2207
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2424
 #, kde-format
 msgid "Show handles"
 msgstr "핸들 표시"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2214
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2431
 #, kde-format
 msgid "Lock handles symmetrically"
 msgstr "대칭적으로 핸들 잠그기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2221
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2438
 #, kde-format
 msgid "Scale handles proportionally"
 msgstr "비율을 유지하며 핸들 크기 조정"
@@ -77727,9 +77813,6 @@ msgstr ""
 
 #~ msgid "Tiled"
 #~ msgstr "바둑판식 배열"
-
-#~ msgid "Stretched"
-#~ msgstr "늘임"
 
 #~ msgid "Bottom Left"
 #~ msgstr "왼쪽 아래"

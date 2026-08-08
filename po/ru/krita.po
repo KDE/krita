@@ -82,7 +82,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 00:43+0000\n"
+"POT-Creation-Date: 2026-08-08 00:42+0000\n"
 "PO-Revision-Date: 2026-08-06 10:39+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -30192,7 +30192,7 @@ msgstr "Цвет 2:"
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1988
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
 msgstr "Размер:"
@@ -31575,10 +31575,12 @@ msgstr "Вращать:"
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeScale)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2164
 #, kde-format
 msgid "Scale:"
 msgstr "Масштаб:"
@@ -35524,6 +35526,7 @@ msgstr "Нажим: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeRotation)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
@@ -35531,6 +35534,7 @@ msgstr "Нажим: {n}%"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
 msgid "Rotation:"
 msgstr "Поворот:"
@@ -35556,7 +35560,7 @@ msgstr "Непрозрачность:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:274
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2035
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
 #, kde-format
 msgid "Flow:"
 msgstr "Нажим:"
@@ -41048,7 +41052,7 @@ msgstr "Кнопка"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:646
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:824
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2411
 #, kde-format
 msgid "Rows:"
 msgstr "Строк:"
@@ -41063,7 +41067,7 @@ msgstr "Строк:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:296
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2184
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2401
 #, kde-format
 msgid "Columns:"
 msgstr "Столбцов:"
@@ -53705,7 +53709,7 @@ msgstr "Независимые каналы"
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:67
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1991
 #, kde-format
 msgid "Mode:"
 msgstr "Режим:"
@@ -54988,7 +54992,7 @@ msgstr "Порог сглаживания:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2070
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2092
 #, kde-format
 msgid "Reverse:"
 msgstr "Инвертировать:"
@@ -55686,8 +55690,8 @@ msgstr "Инкрементальный"
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1995
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2122
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
 #, kde-format
 msgid "Pressure"
 msgstr "Давление"
@@ -55722,7 +55726,7 @@ msgstr "Место"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2150
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
 #, kde-format
 msgid "Spacing:"
 msgstr "Интервал:"
@@ -61670,7 +61674,7 @@ msgstr "Накопление"
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2111
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2328
 #, kde-format
 msgid "Wash"
 msgstr "Равномерный"
@@ -70544,55 +70548,100 @@ msgctxt "@info:tooltip"
 msgid "Reverse direction of the current deformation tool"
 msgstr "Обратить направление текущей деформации"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move: drag the image along the brush stroke"
 msgstr "Перемещение изображения вдоль мазка"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:277
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
 msgstr "Масштабировать: увеличить или уменьшить под курсором"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate: twirl image under cursor"
 msgstr "Повернуть: поворачивает изображение под курсором"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:281
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
 msgstr "Сдвинуть: смещает изображение вправо от направления мазка"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:280
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:282
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Undo: erase actions of other tools"
 msgstr "Отменить: отменяет действия других инструментов"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:621
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:284
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Restore Shape: reduce local liquify stretching and bunching while keeping "
+"the affected area centered"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:304
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate the affected area back toward its original orientation"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:305
+#, fuzzy, kde-format
+#| msgid "Set the rotation of the pattern"
+msgctxt "@info:tooltip"
+msgid "Keep the current rotation of the affected area"
+msgstr "Установить вращение текстуры"
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:306
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Scale the affected area back toward its original size"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:307
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Keep the current overall scale of the affected area"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:308
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove simple stretch or squash from the affected area"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:309
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Keep simple stretch or squash while removing shear-like distortion"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:737
 #, kde-format
 msgid "Switch between editing and deforming cage"
 msgstr "Переключение между редактированием и деформацией клетки"
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:682
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:801
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1629
 #, kde-format
 msgid "Lock Points"
 msgstr "Заблокировать точки"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:684
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:803
 #, kde-format
 msgid "Unlock Points"
 msgstr "Разблокировать точки"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:761
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:880
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
@@ -70968,40 +71017,80 @@ msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
 msgstr "Реальный"
 
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Reorder shapes"
+msgid "Restore Shape"
+msgstr ""
+"Изменение порядка объектов\n"
+"изменение порядка объектов"
+
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeStretchOriginal)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
+#, fuzzy, kde-format
+#| msgid "Original"
+msgid "To original"
+msgstr "Оригинал"
+
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
+#. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeStretchPreserve)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
+#, fuzzy, kde-format
+#| msgctxt "Transparency behavior button in propagate colors filter"
+#| msgid "Preserve"
+msgid "Preserve"
+msgstr "Сохранить"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
+#, fuzzy, kde-format
+#| msgid "Stretched"
+msgid "Stretch:"
+msgstr "Растянутая текстура"
+
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2089
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306
 #, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "Величина:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2106
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2323
 #, kde-format
 msgid "Build Up"
 msgstr "Накопление"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2395
 #, kde-format
 msgid "Mesh size"
 msgstr "Размер сетки"
 
 # https://bugs.kde.org/show_bug.cgi?id=253458
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2207
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2424
 #, kde-format
 msgid "Show handles"
 msgstr "Отображение точек управления"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2214
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2431
 #, kde-format
 msgid "Lock handles symmetrically"
 msgstr "Симметрично заблокировать точки управления"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2221
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2438
 #, kde-format
 msgid "Scale handles proportionally"
 msgstr "Пропорционально масштабировать точки управления"
@@ -76349,9 +76438,6 @@ msgstr ""
 
 #~ msgid "Tiled"
 #~ msgstr "Мозаикой"
-
-#~ msgid "Stretched"
-#~ msgstr "Растянутая текстура"
 
 #~ msgid "Bottom Left"
 #~ msgstr "Внизу слева"

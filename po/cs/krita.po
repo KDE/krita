@@ -68212,10 +68212,9 @@ msgstr "Zachovat"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Stretch:"
-msgstr "Síla:"
+msgstr "Roztáhnout:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306

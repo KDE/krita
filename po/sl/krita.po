@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:42+0000\n"
-"PO-Revision-Date: 2026-07-28 14:53+0200\n"
+"PO-Revision-Date: 2026-08-08 09:00+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -69515,43 +69515,46 @@ msgid ""
 "Restore Shape: reduce local liquify stretching and bunching while keeping "
 "the affected area centered"
 msgstr ""
+"Obnovi obliko: zmanjša krajevno raztezanje in gubanje pri uporabi orodja "
+"Utekočini, pri čemer ostane prizadeto območje v sredini"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate the affected area back toward its original orientation"
-msgstr ""
+msgstr "Prizadeto mesto zavrtite nazaj v prvotno lego"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:305
-#, fuzzy, kde-format
-#| msgid "Set the rotation of the pattern"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep the current rotation of the affected area"
-msgstr "Določite vrtenje vzorca"
+msgstr "Ohranite trenutno rotacijo prizadetega območja"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:306
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale the affected area back toward its original size"
-msgstr ""
+msgstr "Prilagodite prizadeto območje nazaj na prvotno velikost"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep the current overall scale of the affected area"
-msgstr ""
+msgstr "Ohranite trenutno skupno velikost prizadetega območja"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove simple stretch or squash from the affected area"
-msgstr ""
+msgstr "S prizadetega območja odstranite preprosto raztezanje ali stiskanje"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:309
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep simple stretch or squash while removing shear-like distortion"
 msgstr ""
+"Ohranite preprosto raztezanje ali stiskanje, hkrati pa odpravite striženju "
+"podobno popačenje"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:737
 #, kde-format
@@ -69947,11 +69950,9 @@ msgstr "Realna"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
+#, kde-format
 msgid "Restore Shape"
-msgstr "Prerazporedi like"
+msgstr "Obnovi obliko"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
@@ -69959,10 +69960,9 @@ msgstr "Prerazporedi like"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgid "To original"
-msgstr "Izvirnik"
+msgstr "V izvirnik"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
@@ -69970,18 +69970,15 @@ msgstr "Izvirnik"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
-#, fuzzy, kde-format
-#| msgctxt "Transparency behavior button in propagate colors filter"
-#| msgid "Preserve"
+#, kde-format
 msgid "Preserve"
 msgstr "Ohrani"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Stretch:"
-msgstr "Moč:"
+msgstr "Raztegni:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306

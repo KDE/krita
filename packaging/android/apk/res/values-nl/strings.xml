@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Druk</string>
+  <string name="remote_action_doubleclick">Dubbelklik</string>
+  <string name="remote_action_swipeup">Veeg omhoog</string>
+  <string name="remote_action_swipedown">Veeg omlaag</string>
+  <string name="remote_action_swipeleft">Veeg naar links</string>
+  <string name="remote_action_swiperight">Veeg naar rechts</string>
+  <string name="remote_action_circlecw">Cirkel rechtsom</string>
+  <string name="remote_action_circleccw">Cirkel linksom</string>
+  <string name="something_wrong">Er ging iets fout...</string>
+  <string name="cancelled">Geannuleerd</string>
+  <string name="save_notification_text">Document wordt opgeslagen</string>
+  <string name="cancel_save_notification">Annuleren</string>
+  <string name="donation_dialog_loading">Krita bezig met laden…</string>
+  <string name="donation_dialog_loaded">Krita is gereed!</string>
+  <string name="donation_dialog_button_back">Terug</string>
+  <string name="donation_dialog_button_close">Sluiten</string>
+  <string name="donation_dialog_header_support">Krita ondersteunen</string>
+  <string name="donation_dialog_header_button">♥︎ Opties voor supporters tonen</string>
+  <string name="donation_dialog_supporter_text">Bedankt voor het steunen van Krita! Uw bijdrage helpt de verdere ontwikkeling ervan mogelijk te maken.</string>
+  <string name="product_donations_description">&lt;h2&gt;Donaties&lt;/h2&gt;&lt;p&gt;Help de verdere ontwikkeling van Krita met een directe donatie via PayPal, creditcard of betaalpas en vele andere betaalmethoden.&lt;/p&gt;</string>
+  <string name="product_donations_button">Doneren</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Ontwikkelingsfonds&lt;/h2&gt;&lt;p&gt;Sluit u aan bij het ontwikkelingsfonds van Krita en ondersteun de verdere ontwikkeling met een maandelijkse bijdrage. Er zijn verschillende niveaus met bijbehorende voordelen beschikbaar.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Sluit u aan bij het fonds</string>
+  <string name="product_button_subscribe">Inschrijven</string>
+  <string name="product_button_subscribe_for_month">Schrijf u in voor %s/maand</string>
+  <string name="product_button_buy">Koop</string>
+  <string name="product_button_buy_for">Koop voor %s</string>
+  <string name="product_supporter_badge_title">Ondersteunersbadge</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Een badge voor vroege ondersteuners van Krita op Android.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Ondersteunersinschrijving</string>
+  <string name="product_subscription_description">&lt;p&gt;Steun de ontwikkeling van Krita met een maandelijkse bijdrage. Zolang u ingeschreven bent, krijgt u toegang tot &lt;strong&gt;alle&lt;/strong&gt; voordelen voor supporters zodra deze beschikbaar komen. U ontvangt momenteel %1$d hulpbron-pakketten met in totaal meer dan %2$d penselen – waaronder het betaalde Digital Atelier-pakket – en er staan ​​in de toekomst meer pakketten gepland.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Krita 5.3 Ondersteuningspakket</string>
+  <string name="product_onetime_description">&lt;p&gt;In dit pakket ontvangt u %1$d bundels met in totaal meer dan %2$d penselen, waaronder de betaalde Digital Atelier-bundel. Dit is een &lt;strong&gt;eenmalige aankoop&lt;/strong&gt;; u gaat geen abonnement aan.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Toon dit dialoogvenster bij het opstarten van Krita</string>
+  <string name="ok">OK</string>
+  <string name="interface_scale_default">Schaal van interface: %d%% (standaard)</string>
+  <string name="interface_scale">Schaal van interface: %d%%</string>
+</resources>

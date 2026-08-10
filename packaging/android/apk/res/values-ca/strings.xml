@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Prémer</string>
+  <string name="remote_action_doubleclick">Prémer dues vegades</string>
+  <string name="remote_action_swipeup">Llisca cap amunt</string>
+  <string name="remote_action_swipedown">Llisca cap avall</string>
+  <string name="remote_action_swipeleft">Llisca cap a l\'esquerre</string>
+  <string name="remote_action_swiperight">Llisca cap a la dreta</string>
+  <string name="remote_action_circlecw">Cercle en sentit horari</string>
+  <string name="remote_action_circleccw">Cercle en sentit antihorari</string>
+  <string name="something_wrong">Alguna cosa ha anat malament...</string>
+  <string name="cancelled">Cancel·lat</string>
+  <string name="save_notification_text">S\'està desant el document</string>
+  <string name="cancel_save_notification">Cancel·la</string>
+  <string name="donation_dialog_loading">S\'està carregant el Krita…</string>
+  <string name="donation_dialog_loaded">El Krita està preparat!</string>
+  <string name="donation_dialog_button_back">Enrere</string>
+  <string name="donation_dialog_button_close">Tanca</string>
+  <string name="donation_dialog_header_support">Contribució al Krita</string>
+  <string name="donation_dialog_header_button">♥ Mostra les opcions de contribució</string>
+  <string name="donation_dialog_supporter_text">Gràcies per donar suport al Krita! La vostra contribució ajuda a continuar el seu desenvolupament.</string>
+  <string name="product_donations_description">&lt;h2&gt;Donacions&lt;/h2&gt;&lt;p&gt;Ajudeu al desenvolupament continu del Krita amb una donació directa a través de PayPal, mitjançant targeta de crèdit o dèbit i molts altres mètodes de pagament.&lt;/p&gt;</string>
+  <string name="product_donations_button">Donació</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Patrocini de desenvolupament&lt;/h2&gt;&lt;p&gt;Uniu-vos al patrocini de desenvolupament del Krita i ajudeu al seu desenvolupament continu amb una contribució mensual. Hi ha disponibles nivells diferents amb beneficis.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Uniu-vos al patrocini</string>
+  <string name="product_button_subscribe">Subscriviu-vos</string>
+  <string name="product_button_subscribe_for_month">Subscriviu-vos amb %s/mes</string>
+  <string name="product_button_buy">Compreu</string>
+  <string name="product_button_buy_for">Compreu %s</string>
+  <string name="product_supporter_badge_title">Insígnia de seguidor</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Una insígnia per als col·laboradors inicials del Krita a l\'Android.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Subscripció de seguidor</string>
+  <string name="product_subscription_description">&lt;p&gt;Doneu suport al desenvolupament del Krita amb una contribució mensual. Mentre estigueu subscrit, obteniu accés als beneficis de &lt;strong&gt;tots&lt;/strong&gt; els seguidors a mesura que es publiquin. Actualment rebeu %1$d paquets de recursos que contenen més de %2$d pinzells, inclòs el paquet Atelier Digital de pagament, amb altres planificats en el futur.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Paquet de seguidor del Krita 5.3</string>
+  <string name="product_onetime_description">&lt;p&gt;En aquest paquet rebreu %1$d paquets de recursos que contenen més de %2$d pinzells, inclòs el paquet de pagament Atelier Digital. Aquesta és una &lt;strong&gt;compra única&lt;/strong&gt;, no hi ha cap subscripció.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Mostra aquest diàleg quan s\'iniciï el Krita</string>
+  <string name="ok">D\'acord</string>
+  <string name="interface_scale_default">Escala de la interfície: %d%% (predeterminada)</string>
+  <string name="interface_scale">Escala de la interfície: %d%%</string>
+</resources>

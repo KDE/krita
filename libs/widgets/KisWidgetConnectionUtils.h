@@ -21,6 +21,7 @@ class QDoubleSpinBox;
 class QObject;
 class QSlider;
 class QCheckBox;
+class QGroupBox;
 class KisSpacingSelectionWidget;
 class KisAngleSelector;
 class KisColorButton;
@@ -148,6 +149,7 @@ void KRITAWIDGETS_EXPORT connectControl(QButtonGroup *button, QObject *source, c
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControlState(QAbstractButton *button, QObject *source, const char *readStateProperty, const char *writeProperty);
+void KRITAWIDGETS_EXPORT connectControlState(QGroupBox *button, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControlState(QButtonGroup *group, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControlState(QComboBox *button, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControl(KisSpacingSelectionWidget *widget, QObject *source, const char *property);

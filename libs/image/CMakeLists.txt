@@ -362,6 +362,8 @@ set(kritaimage_LIB_SRCS
 
    kis_convex_hull.cpp
    KisSpatialContainer.cpp
+   kis_hdr_metadata.cpp
+   kis_hdr_metadata_models.cpp
 )
 
 set(einspline_SRCS

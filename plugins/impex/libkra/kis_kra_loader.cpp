@@ -1559,8 +1559,8 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
         }
         if (child.tagName() == CONTENTLIGHTLEVEL) {
             KisRelativeContentLightLevelInformation clli;
-            clli.maxContentLightLevel = child.attribute(MAXCLL, "0.0").toDouble();
-            clli.maxFrameAverageLightLevel = child.attribute(MAXFALL, "0.0").toDouble();
+            clli.maxContentLightLevel = KisDomUtils::toDouble(child.attribute(MAXCLL, "0.0"));
+            clli.maxFrameAverageLightLevel = KisDomUtils::toDouble(child.attribute(MAXFALL, "0.0"));
             const QString type = child.attribute(CLLI_CALCTYPE);
             if (type == CLLI_CALC_RGB_XYZ_FALLBACK) {
                 clli.type = KisRelativeContentLightLevelInformation::RGBComponent;
@@ -1574,17 +1574,32 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
         }
         if (child.tagName() == COLORVOLUME) {
             KisColorVolumeInformation cv;
-            cv.maxLuminance = child.attribute(COLORVOLUMEMAXLUMINANCE, "0.0").toDouble();
-            cv.minLuminance = child.attribute(COLORVOLUMEMINLUMINANCE, "0.0").toDouble();
+            //TODO: Kisdomutils!!!
+            cv.maxLuminance = KisDomUtils::toDouble(child.attribute(COLORVOLUMEMAXLUMINANCE, "0.0"));
+            cv.minLuminance = KisDomUtils::toDouble(child.attribute(COLORVOLUMEMINLUMINANCE, "0.0"));
 
             QDomElement red = child.firstChildElement(COLORVOLUMERED);
             QDomElement green = child.firstChildElement(COLORVOLUMEGREEN);
             QDomElement blue = child.firstChildElement(COLORVOLUMEBLUE);
             QDomElement white = child.firstChildElement(COLORVOLUMEWHITE);
-            KisDomUtils::loadValue(red, &cv.red);
-            KisDomUtils::loadValue(green, &cv.green);
-            KisDomUtils::loadValue(blue, &cv.blue);
-            KisDomUtils::loadValue(white, &cv.white);
+
+            QPointF temp;
+            if (KisDomUtils::loadValue(red, &temp)) {
+                cv.red.x = temp.x();
+                cv.red.y = temp.y();
+            }
+            if (KisDomUtils::loadValue(green, &temp)) {
+                cv.green.x = temp.x();
+                cv.green.y = temp.y();
+            }
+            if (KisDomUtils::loadValue(blue, &temp)) {
+                cv.blue.x = temp.x();
+                cv.blue.y = temp.y();
+            }
+            if (KisDomUtils::loadValue(white, &temp)) {
+                cv.white.x = temp.x();
+                cv.white.y = temp.y();
+            }
             std::optional<KisColorVolumeInformation> cvi = std::make_optional(cv);
             image->setColorVolumeInformation(cvi);
         }

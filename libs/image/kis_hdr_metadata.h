@@ -7,14 +7,17 @@
 #define KIS_HDR_METADATA_H
 
 #include <QPointF>
+#include <KoColorimetryUtils.h>
 #include <boost/operators.hpp>
+
+#include "kritaimage_export.h"
 /**
  * KisRelativeContentLightLevelInformation is a struct that represents
  * HDR10 metadata. It is similar to the same values in MasteringInfo in
  * KisSurfaceColorimetry.h, though typically relative to the diffuse white.
  */
 
-struct KisRelativeContentLightLevelInformation: public boost::equality_comparable<KisRelativeContentLightLevelInformation> {
+struct KRITAIMAGE_EXPORT KisRelativeContentLightLevelInformation: public boost::equality_comparable<KisRelativeContentLightLevelInformation> {
     /**
      * MaxContentLightLevel or MaxCLL is the brightest pixel in the frame sequence.
      */
@@ -34,11 +37,7 @@ struct KisRelativeContentLightLevelInformation: public boost::equality_comparabl
 
     CalculationType type = XYZLuminance;
 
-    bool operator==(const KisRelativeContentLightLevelInformation & other) const {
-        return qFuzzyCompare(maxContentLightLevel, other.maxContentLightLevel)
-            && qFuzzyCompare(maxFrameAverageLightLevel, other.maxFrameAverageLightLevel)
-            && (type == other.type);
-    };
+    bool operator==(const KisRelativeContentLightLevelInformation & other) const;;
 };
 
 /**
@@ -46,21 +45,18 @@ struct KisRelativeContentLightLevelInformation: public boost::equality_comparabl
  * is a struct that represents the 'mastering' display. It's primary purpose
  * is to provide extra information for gamutmapping.
  */
-struct KisColorVolumeInformation: public boost::equality_comparable<KisColorVolumeInformation> {
-    QPointF white; ///< xyY location of the whitepoint.
-    QPointF red; ///< xyY location of the red colorant.
-    QPointF green; ///< xyY location of the green colorant.
-    QPointF blue; ///< xyY location of the blue colorant.
+struct KRITAIMAGE_EXPORT KisColorVolumeInformation: public boost::equality_comparable<KisColorVolumeInformation> {
+    KoColorimetryUtils::xy white; ///< xyY location of the whitepoint.
+    KoColorimetryUtils::xy red; ///< xyY location of the red colorant.
+    KoColorimetryUtils::xy green; ///< xyY location of the green colorant.
+    KoColorimetryUtils::xy blue; ///< xyY location of the blue colorant.
 
     double maxLuminance = 0.0; ///< Maximum screen brightness in cd/m²
     double minLuminance = 0.0; ///< Minimum screen brightness in cd/m²
 
-    bool operator==(const KisColorVolumeInformation & other) const {
-        return qFuzzyCompare(maxLuminance, other.maxLuminance)
-        && qFuzzyCompare(minLuminance, other.minLuminance)
-            && white == other.white && red == other.red
-            && green == other.green && blue == other.blue;
-    };
+    bool operator==(const KisColorVolumeInformation & other) const;;
 };
+
+Q_DECLARE_METATYPE(KisRelativeContentLightLevelInformation::CalculationType);
 
 #endif // KIS_HDR_METADATA_H

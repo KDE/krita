@@ -732,10 +732,10 @@ void KisKraSaver::saveHDRMetadata(QDomDocument &doc, QDomElement &element, KisIm
         cvi.setAttribute(COLORVOLUMEMAXLUMINANCE, KisDomUtils::toString(cv.maxLuminance));
         cvi.setAttribute(COLORVOLUMEMINLUMINANCE, KisDomUtils::toString(cv.minLuminance));
 
-        KisDomUtils::saveValue(&cvi, COLORVOLUMERED, cv.red);
-        KisDomUtils::saveValue(&cvi, COLORVOLUMEGREEN, cv.green);
-        KisDomUtils::saveValue(&cvi, COLORVOLUMEBLUE, cv.blue);
-        KisDomUtils::saveValue(&cvi, COLORVOLUMEWHITE, cv.white);
+        KisDomUtils::saveValue(&cvi, COLORVOLUMERED, cv.red.asVector().toPointF());
+        KisDomUtils::saveValue(&cvi, COLORVOLUMEGREEN, cv.green.asVector().toPointF());
+        KisDomUtils::saveValue(&cvi, COLORVOLUMEBLUE, cv.blue.asVector().toPointF());
+        KisDomUtils::saveValue(&cvi, COLORVOLUMEWHITE, cv.white.asVector().toPointF());
 
         hdr.appendChild(cvi);
     }

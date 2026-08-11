@@ -908,12 +908,12 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
     endif()
 
     find_package(Qt${QT_MAJOR_VERSION}DBus ${MIN_QT_VERSION})
-    set_package_properties(Qt5DBus PROPERTIES
+    set_package_properties(Qt${QT_MAJOR_VERSION}DBus PROPERTIES
         DESCRIPTION "Qt DBUS integration"
         URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
-    macro_bool_to_01(Qt${QT_MAJOR_VERSION}DBUS_FOUND HAVE_QT_DBUS)
+    macro_bool_to_01(Qt${QT_MAJOR_VERSION}DBus_FOUND HAVE_DBUS)
 
     find_package(KF${KF_MAJOR}Crash ${MIN_FRAMEWORKS_VERSION})
     macro_bool_to_01(KF${KF_MAJOR}Crash_FOUND HAVE_KCRASH)

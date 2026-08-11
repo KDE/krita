@@ -682,7 +682,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 
         if (count < 2 && eventPointCount > count) {
-            d->touchHasBlockedPressEvents = false;
             retval = d->matcher.touchEndEvent(touchEvent);
         } else {
 #endif

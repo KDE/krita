@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:42+0000\n"
-"PO-Revision-Date: 2026-07-15 19:42+0400\n"
+"PO-Revision-Date: 2026-08-10 16:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -24813,6 +24813,8 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"مُعاملات صوت غير مدعومة، حاول إعادة ترميز ملف الصوت بصيغة عينات ومعدل أخذ "
+"عينات وعدد قنوات أكثر شيوعًا"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -24820,28 +24822,24 @@ msgid "Unsupported format"
 msgstr "تنسيق غير مدعوم"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "ملف الفيديو:"
+msgstr "مرمِز الفيديو:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "ملف الفيديو:"
+msgstr "معدّل بتّات الفيديو:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "قائمة الصوت"
+msgstr "مرمِز الصوت:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "حالة التكيف:"
+msgstr "معدّل بتّات الصّوت:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -24958,13 +24956,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "معدلات الإطارات التي تتجاوز 30 غير مدعومة على نطاق واسع."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "الأبعاد الأكبر من 1920 بكسل غير مدعومة على نطاق واسع."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2435
@@ -24976,7 +24974,7 @@ msgstr "تحذير (تحذيرات):"
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
-msgstr ""
+msgstr "قد يفشل التصدير وقد لا تتمكن بعض الأجهزة من تشغيله."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25253,13 +25251,12 @@ msgstr "خطأ داخلي (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "تفضيلات التظليل"
+msgstr "لا تفضيلات لهذه الصيغة."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25267,11 +25264,9 @@ msgid "No frame files found"
 msgstr "لم يُعثر على ملفات إطارات"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "&صيّر الحركة..."
+msgstr "جارٍ عرض الحركة..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25279,11 +25274,9 @@ msgid "No encoder for the selected format found"
 msgstr "لم يُعثر على مُرمِّز للتنسيق المحدد"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "خطأ أثناء حفظ %1: ‏%2"
+msgstr "خطأ في تجهيز ملف الصوت: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26362,14 +26355,13 @@ msgstr "آخر إطار:"
 #: libs/ui/animation/wdg_animationrenderer.ui:72
 #, kde-format
 msgid "Images"
-msgstr "الصّور"
+msgstr "الصور"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "ف&ديو"
+msgstr "الفيديو"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -30255,10 +30247,9 @@ msgstr "لا تظهر المحتويات عند تحريك النوافذ الف
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "قائمة قشور البصل"
+msgstr "الأيقونات في القائمة:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -34207,32 +34198,24 @@ msgid "&Choose foreground and background colors"
 msgstr "&اختر لوني المقدمة والخلفية"
 
 #: libs/ui/kis_control_frame.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Foreground Color"
+#, kde-format
 msgid "&Choose foreground colour"
-msgstr "&اختَر لون المقدمة"
+msgstr "اختر &لون المقدمة"
 
 #: libs/ui/kis_control_frame.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Background Color"
+#, kde-format
 msgid "&Choose background colour"
-msgstr "&اختَر لون الخلفية"
+msgstr "اختر &لون الخلفية"
 
 #: libs/ui/kis_control_frame.cpp:160
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap Foreground and Background Colors"
+#, kde-format
 msgid "&Swap Foreground and Background Colors"
-msgstr "بدّل بين لوني المقدمة والخلفية"
+msgstr "&بدّل لوني المقدمة والخلفية"
 
 #: libs/ui/kis_control_frame.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap Foreground and Background Colors"
+#, kde-format
 msgid "&reset Foreground and Background Colors"
-msgstr "بدّل بين لوني المقدمة والخلفية"
+msgstr "أ&عد ضبط لوني المقدمة والخلفية"
 
 #: libs/ui/kis_control_frame.cpp:195
 #, kde-format
@@ -44959,7 +44942,7 @@ msgstr "فيديو مرور الزمن كُتِب إلى:"
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Show in folder"
-msgstr "أعرض في مجلد"
+msgstr "اعرض في مجلد"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRemoveSnapshots)
 #: plugins/dockers/recorder/recorder_export.ui:1090
@@ -65677,13 +65660,14 @@ msgid "Show Guideline"
 msgstr "أظهر دليل"
 
 #: plugins/tools/basictools/kis_tool_line.cc:467
-#, fuzzy, kde-format
-#| msgid "Length: %1 px"
+#, kde-format
 msgctxt "%1=length in pixels %2=angle in degrees"
 msgid ""
 "Length: %1 px\n"
 "Angle: %2°"
-msgstr "الطول: %1 بكسل"
+msgstr ""
+"الطول: %1 بكسل\n"
+"الزاوية: %2°"
 
 #: plugins/tools/basictools/kis_tool_line.cc:487
 #, kde-format
@@ -69026,43 +69010,44 @@ msgid ""
 "Restore Shape: reduce local liquify stretching and bunching while keeping "
 "the affected area centered"
 msgstr ""
+"استعادة الشكل: تقليل التمدد والتجمع الموضعي للتسييل مع إبقاء المنطقة "
+"المتأثرة في المنتصف"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate the affected area back toward its original orientation"
-msgstr ""
+msgstr "أدر المنطقة المتأثرة عائدة نحو اتجاهها الأصلي"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:305
-#, fuzzy, kde-format
-#| msgid "Set the rotation of the pattern"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep the current rotation of the affected area"
-msgstr "عين دوران النمط"
+msgstr "أبقِ الدوران الحالي للمنطقة المتأثرة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:306
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale the affected area back toward its original size"
-msgstr ""
+msgstr "غيّر مقياس المنطقة المتأثرة عائدة نحو حجمها الأصلي"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep the current overall scale of the affected area"
-msgstr ""
+msgstr "أبقِ المقياس الكلي الحالي للمنطقة المتأثرة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove simple stretch or squash from the affected area"
-msgstr ""
+msgstr "أزل التمدد أو الانضغاط البسيط من المنطقة المتأثرة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:309
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep simple stretch or squash while removing shear-like distortion"
-msgstr ""
+msgstr "أبقِ التمدد أو الانضغاط البسيط مع إزالة التشوه الشبيه بالقص"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:737
 #, kde-format
@@ -69458,11 +69443,9 @@ msgstr "الحقيقي"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
+#, kde-format
 msgid "Restore Shape"
-msgstr "إعادة ترتيب الأشكال"
+msgstr "استعادة الشكل"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
@@ -69470,10 +69453,9 @@ msgstr "إعادة ترتيب الأشكال"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgid "To original"
-msgstr "الأصلي"
+msgstr "إلى الأصل"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
@@ -69481,18 +69463,15 @@ msgstr "الأصلي"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
-#, fuzzy, kde-format
-#| msgctxt "Transparency behavior button in propagate colors filter"
-#| msgid "Preserve"
+#, kde-format
 msgid "Preserve"
-msgstr "احفظ"
+msgstr "حافظ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Stretch:"
-msgstr "القوّة:"
+msgstr "التمدد:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306

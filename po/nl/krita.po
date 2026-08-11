@@ -63,14 +63,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:42+0000\n"
-"PO-Revision-Date: 2026-08-08 18:35+0200\n"
-"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-08-10 06:40+0200\n"
+"Last-Translator: Ronald Stroethoff <stroet43@zonnet.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -46473,7 +46473,7 @@ msgid ""
 "the parent text."
 msgstr ""
 "Uitlijning van basislijn biedt besturing over hoe de reeks van tekst "
-"uitgelijnd wordt met de oudertekst."
+"uitgelijnd wordt met de hoofdtekst."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:18
 #, kde-format
@@ -46599,7 +46599,7 @@ msgstr "Bovenkant van tekst"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
-msgstr "Uitlijnen met de opklimmende."
+msgstr "Uitlijnen op stokhoogte."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
@@ -46613,7 +46613,7 @@ msgstr "Onderkant van tekst"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
-msgstr "Uitlijnen met de afgaande."
+msgstr "Uitlijnen op staartlengte."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
 #, kde-format
@@ -47235,7 +47235,7 @@ msgstr "Deze taal tussen sessies opslaan."
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Script:"
-msgstr "Script:"
+msgstr "Schrift:"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, kde-format
@@ -48065,7 +48065,7 @@ msgstr "Wanneer relevant"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr "Indien gezet"
+msgstr "Indien ingesteld"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -48200,7 +48200,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
-msgstr "Geval:"
+msgstr "Hoofdletters:"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
 #, kde-format

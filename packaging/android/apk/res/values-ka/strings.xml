@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">დააჭირე</string>
+  <string name="remote_action_doubleclick">ორმაგი დაწოლა</string>
+  <string name="remote_action_swipeup">ზემოთ აუსვით</string>
+  <string name="remote_action_swipedown">ქვემოთ ჩამოუსვით</string>
+  <string name="remote_action_swipeleft">მარცხნვ გაუსვით</string>
+  <string name="remote_action_swiperight">მარჯვნივ გაუსვით</string>
+  <string name="remote_action_circlecw">წრე საათის ისრის მიმართულებით</string>
+  <string name="remote_action_circleccw">წრე საათის ისრის საწინააღმდეგოდ</string>
+  <string name="something_wrong">რაღაც არასწორად წავიდა...</string>
+  <string name="cancelled">გაუქმებულია</string>
+  <string name="save_notification_text">მიმდინარეობს დოკუმენტის შენახვა</string>
+  <string name="cancel_save_notification">გაუქმება</string>
+  <string name="donation_dialog_loading">Krita იტვირთება…</string>
+  <string name="donation_dialog_loaded">Krita მზადაა!</string>
+  <string name="donation_dialog_button_back">უკან</string>
+  <string name="donation_dialog_button_close">დახურვა</string>
+  <string name="donation_dialog_header_support">Krita-ის მხარდაჭერა</string>
+  <string name="donation_dialog_header_button">♥︎ მხარდამჭერის პარამეტრების ჩვენება</string>
+  <string name="donation_dialog_supporter_text">მადლობა Krita-ის მხარდაჭერისთვის! თქვენი წვლილი გვეხმარება, მისი განვითარება გავაგრძელოთ.</string>
+  <string name="product_donations_description">&lt;h2&gt;Donations&lt;/h2&gt;&lt;p&gt;დაეხმარეთ Krita-ის მუდმივ განვითარებას პირდაპირი დონაციით PayPal-ის, საკრედიტო/სადებეტო ბარათების და ბევრი სხვა გადახდის საშუალებით..&lt;/p&gt;</string>
+  <string name="product_donations_button">შემოწირულობა</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Development Fund&lt;/h2&gt;&lt;p&gt;შეუერთდით Krita-ის განვითარების ფონდს და დაგვეხმარეთ მის მუდმივ განვითარებაში ყოველთვიური შენატანით. ხელმისაწვდომია შემოწირულობების სხვადასხვა დონე სხვადასხვა უპირატესობით.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">შემოუერთდით ფონდს</string>
+  <string name="product_button_subscribe">გამოწერა</string>
+  <string name="product_button_subscribe_for_month">გამოწერა %s/თვეში</string>
+  <string name="product_button_buy">შეძენა</string>
+  <string name="product_button_buy_for">შეძენა %s-ად</string>
+  <string name="product_supporter_badge_title">მხარდამჭერის სამკერდე ნიშანი</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;სამკერდე ნიშანი Krita-ის Android-ზე ადრეული მხარდამჭერებისთვის.&lt;/p&gt;</string>
+  <string name="product_subscription_title">მხარდამჭერის გამოწერა</string>
+  <string name="product_subscription_description">&lt;p&gt;მხარი დაუჭირეთ Krita_ის განვითარებას ყოველთვიური წვლილით. გამოწერისას თქვენ მიიღებთ წვდომას &lt;ძლიერი&gt;ყველა&lt;/ძლიერი&gt; მხარდამჭერების უპირატესობებზე, როდესაც ისინი გამოვა. ამჟამად თქვენ იღებთ %1$d რესურსების პაკეტს, რომლებიც შეიცავს %2$d-ზე მეტ ფუნჯს, მათ შორის ფასიანი ციფრული ატელიეს პაკეტს, მომავალში უფრო მეტი დაგეგმილია.&lt;/გვ&gt;</string>
+  <string name="product_onetime_title">Krita 5.3-ის მხარდამჭერის პაკეტი</string>
+  <string name="product_onetime_description">&lt;p&gt;ამ პაკეტში თქვენ მიიღებთ %1$d რესურსის პაკეტს, რომელიც შეიცავს %2$d-ზე მეტ ფუნჯს, მათ შორის ფასიანი ციფრული ატელიეს პაკეტს. ეს არის &lt;ძლიერი&gt;ერთჯერადი შესყიდვა&lt;/ძლიერი&gt;, თქვენ არ შეხვალთ გამოწერაში.&lt;/გვ&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">ამ დიალოგის ჩვენება Krita-ის გაშვებისას</string>
+  <string name="ok">დიახ</string>
+  <string name="interface_scale_default">ინტერფეისის მასშტაბი: %d%% (ნაგულისხმევი)</string>
+  <string name="interface_scale">ინტერფეისის მასშტაბი: %d%%</string>
+</resources>

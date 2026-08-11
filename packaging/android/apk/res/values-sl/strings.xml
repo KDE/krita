@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Pritisnite</string>
+  <string name="remote_action_doubleclick">Dvakrat pritisnite</string>
+  <string name="remote_action_swipeup">Podrsaj navzgor</string>
+  <string name="remote_action_swipedown">Podrsaj navzdol</string>
+  <string name="remote_action_swipeleft">Podrsaj levo</string>
+  <string name="remote_action_swiperight">Podrsaj desno</string>
+  <string name="remote_action_circlecw">Kroži v SUK</string>
+  <string name="remote_action_circleccw">Kroži v nasprotni SUK</string>
+  <string name="something_wrong">Nekaj je šlo narobe …</string>
+  <string name="cancelled">Preklicano</string>
+  <string name="save_notification_text">Shranjevanje dokumenta …</string>
+  <string name="cancel_save_notification">Prekliči</string>
+  <string name="donation_dialog_loading">Krita se nalaga …</string>
+  <string name="donation_dialog_loaded">Krita je pripravljena!</string>
+  <string name="donation_dialog_button_back">Nazaj</string>
+  <string name="donation_dialog_button_close">Zapri</string>
+  <string name="donation_dialog_header_support">Podpri Krito</string>
+  <string name="donation_dialog_header_button">♥︎ Pokaži možnosti za podpornike</string>
+  <string name="donation_dialog_supporter_text">Hvala, ker podpirate Krito! Vaš prispevek pomaga ohranjati njen stalen razvoj.</string>
+  <string name="product_donations_description">&lt;h2&gt;Donacije&lt;/h2&gt;&lt;p&gt;Pomagajte neprekinjenemu razvoju Krite z neposredno donacijo prek PayPala, s kreditno ali debetno kartico ter številnimi drugimi načini plačila.&lt;/p&gt;</string>
+  <string name="product_donations_button">Doniraj</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Razvojni sklad&lt;/h2&gt;&lt;p&gt;Pridružite se Razvojnemu skladu Krita in pomagajte njenemu neprekinjenemu razvoju z mesečnim prispevkom. Na voljo so različne stopnje z ugodnostmi in koristmi.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Pridružite se skladu</string>
+  <string name="product_button_subscribe">Naroči</string>
+  <string name="product_button_subscribe_for_month">Naročite se za %s/mesec</string>
+  <string name="product_button_buy">Kupi</string>
+  <string name="product_button_buy_for">Kupite za %s</string>
+  <string name="product_supporter_badge_title">Značka podpornika</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Značka za zgodnje podpornike Krite na Androidu.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Naročnina podpornika</string>
+  <string name="product_subscription_description">&lt;p&gt;Podprite razvoj Krite z mesečnim prispevkom. Medtem ko ste naročeni, dobite dostop do &lt;strong&gt;vseh&lt;/strong&gt; ugodnosti za podpornike, takoj ko so na voljo. Trenutno prejmete %1$d svežnjev virov, ki skupaj vsebujejo več kot %2$d čopičev, vključno s sicer plačljivim svežnjem Digital Atelier, z novimi, načrtovanimi za v prihodnje.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Krita 5.3 - sveženj za podpornike</string>
+  <string name="product_onetime_description">&lt;p&gt;V tem svežnju boste prejeli %1$d svežnjev virov, ki skupaj vsebujejo več kot %2$d čopičev, med njimi tudi plačljivi sveženj Digital Atelier. To je &lt;strong&gt;enkraten nakup&lt;/strong&gt;, ne boste sprožili naročnine.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Pokaži to pogovorno okno ob zagonu Krite</string>
+  <string name="ok">V redu</string>
+  <string name="interface_scale_default">Merilo vmesnika: %d %% (privzeto)</string>
+  <string name="interface_scale">Merilo vmesnika: %d %%</string>
+</resources>

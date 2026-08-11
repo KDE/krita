@@ -7,6 +7,7 @@
 #include "kis_dlg_image_properties.h"
 
 #include <QLabel>
+#include <QPushButton>
 
 #include <klocalizedstring.h>
 
@@ -161,7 +162,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     KisWidgetConnectionUtils::connectControlState( m_page->spnBlueY, &d->hdrMetadataModel, "cviBlueYState", "cviBlueY");
     KisWidgetConnectionUtils::connectControlState( m_page->spnMinLuminance, &d->hdrMetadataModel, "cviMinLuminanceState", "cviMinLuminance");
     KisWidgetConnectionUtils::connectControlState( m_page->spnMaxLuminance, &d->hdrMetadataModel, "cviMaxLuminanceState", "cviMaxLuminance");
-    connect(m_page->cmbColorVolumePresets, SIGNAL(activated(int)), this, SLOT(changeColorVolumePreset()));
+    connect(m_page->btnApplyColorVolumePreset, &QPushButton::clicked, this, &KisDlgImageProperties::changeColorVolumePreset);
 
     const bool hdr = (d->image->colorSpace()->hasHighDynamicRange()
                       || d->image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ);

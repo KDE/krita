@@ -1368,6 +1368,9 @@ bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
         m_d->nativeGestureShortcut = goodCandidate;
 
         Private::RecursionGuard guard(this);
+
+        DEBUG_SHORTCUT("starting", goodCandidate)
+
         goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
 
@@ -1390,6 +1393,8 @@ bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
     if (m_d->nativeGestureShortcut) {
         // first reset running shortcut to avoid infinite recursion via end()
         KisNativeGestureShortcut *nativeGestureShortcut = m_d->nativeGestureShortcut;
+
+        DEBUG_SHORTCUT("ending", nativeGestureShortcut)
 
         nativeGestureShortcut->action()->end(event);
         nativeGestureShortcut->action()->deactivate(m_d->nativeGestureShortcut->shortcutIndex());

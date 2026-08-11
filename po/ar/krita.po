@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-07 02:42+0000\n"
-"PO-Revision-Date: 2026-07-15 19:42+0400\n"
+"PO-Revision-Date: 2026-08-10 16:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -24795,24 +24795,22 @@ msgstr "فعّل أداة التحويل"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "أندرويد: %1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (hardware)"
-msgstr "%1 (مملوك)"
+msgstr "%1 (عتاد)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1 (owned)"
+#, kde-format
 msgid "%1 (software)"
-msgstr "%1 (مملوك)"
+msgstr "%1 (برمجيات)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
 msgid "Unsupported video parameters, try lowering the video FPS or size"
-msgstr ""
+msgstr "مُعاملات فيديو غير مدعومة، حاول خفض معدل الإطارات أو حجم الفيديو"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
 #, kde-format
@@ -24820,36 +24818,33 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"مُعاملات صوت غير مدعومة، حاول إعادة ترميز ملف الصوت بصيغة عينات ومعدل أخذ "
+"عينات وعدد قنوات أكثر شيوعًا"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "كلّ النُّسق المدعومة"
+msgstr "تنسيق غير مدعوم"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "ملف الفيديو:"
+msgstr "مرمِز الفيديو:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "ملف الفيديو:"
+msgstr "معدّل بتّات الفيديو:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "قائمة الصوت"
+msgstr "مرمِز الصوت:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "حالة التكيف:"
+msgstr "معدّل بتّات الصّوت:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -24966,13 +24961,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "معدلات الإطارات التي تتجاوز 30 غير مدعومة على نطاق واسع."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "الأبعاد الأكبر من 1920 بكسل غير مدعومة على نطاق واسع."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
@@ -24984,7 +24979,7 @@ msgstr "تحذير (تحذيرات):"
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
-msgstr ""
+msgstr "قد يفشل التصدير وقد لا تتمكن بعض الأجهزة من تشغيله."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25254,48 +25249,39 @@ msgid "Loading video data... %1 frames examined."
 msgstr "تحميل بيانات الفيديو... فُحِص %1 إطارًا."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Intersect (%1)"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "قاطع (%1)"
+msgstr "خطأ داخلي (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "تفضيلات التظليل"
+msgstr "لا تفضيلات لهذه الصيغة."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "لم يُعثر على تشكيلة"
+msgstr "لم يُعثر على ملفات إطارات"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "&صيّر الحركة..."
+msgstr "جارٍ عرض الحركة..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
 msgid "No encoder for the selected format found"
-msgstr ""
+msgstr "لم يُعثر على مُرمِّز للتنسيق المحدد"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "خطأ أثناء حفظ %1: ‏%2"
+msgstr "خطأ في تجهيز ملف الصوت: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26372,14 +26358,13 @@ msgstr "آخر إطار:"
 #: libs/ui/animation/wdg_animationrenderer.ui:72
 #, kde-format
 msgid "Images"
-msgstr "الصّور"
+msgstr "الصور"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "ف&ديو"
+msgstr "الفيديو"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -44556,12 +44541,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "أتود إجهاض ترميز فيديو مرور الزمن؟"
 
 #: plugins/dockers/recorder/recorder_export.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "يبدأ FFmpeg..."
+msgstr "جارٍ بدء المُصدِّر..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:440
 #, kde-format
@@ -44627,10 +44610,9 @@ msgid "The timelapse video is being encoded..."
 msgstr "فيديو مرور الزمن قيد الترميز..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:866
-#, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
+#, kde-format
 msgid "Export failed. Error message:"
-msgstr "التصدير أُخفِق. رسالة FFmpeg:"
+msgstr "فشل التصدير. رسالة الخطأ:"
 
 #: plugins/dockers/recorder/recorder_export.cpp:889
 #, kde-format
@@ -44789,6 +44771,8 @@ msgid ""
 "not widely supported. The export may fail and some devices will not be able "
 "to play it."
 msgstr ""
+"<strong>تحذير:</strong> الفيديو بأبعاد أكبر من 1920 بكسل غير مدعوم على نطاق "
+"واسع. قد يفشل التصدير ولن تتمكن بعض الأجهزة من تشغيله."
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
 #: plugins/dockers/recorder/recorder_export.ui:711
@@ -44797,6 +44781,8 @@ msgid ""
 "<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
 "The export may fail and some devices will not be able to play it."
 msgstr ""
+"<strong>تحذير:</strong> الفيديو بمعدل إطارات يتجاوز 30 إطارًا في الثانية غير "
+"مدعوم على نطاق واسع. قد يفشل التصدير ولن تتمكن بعض الأجهزة من تشغيله."
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:757
@@ -44829,7 +44815,7 @@ msgstr "فيديو مرور الزمن كُتِب إلى:"
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Show in folder"
-msgstr "أعرض في مجلد"
+msgstr "اعرض في مجلد"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRemoveSnapshots)
 #: plugins/dockers/recorder/recorder_export.ui:1090

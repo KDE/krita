@@ -17,7 +17,7 @@
 class KisTouchShortcut::Private
 {
 public:
-    Private(GestureAction type)
+    Private(TouchGestureAction type)
         : minTouchPoints(0)
         , maxTouchPoints(0)
         , type(type)
@@ -27,12 +27,12 @@ public:
 
     int minTouchPoints;
     int maxTouchPoints;
-    GestureAction type;
+    TouchGestureAction type;
     bool isTouchPainting;
     qreal minDragThreshold;
 };
 
-KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type)
+KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, TouchGestureAction type)
     : KisAbstractShortcut(action, index)
     , d(new Private(type))
 {
@@ -61,11 +61,7 @@ int KisTouchShortcut::priority() const
 
 bool KisTouchShortcut::isHoldType() const
 {
-#ifdef Q_OS_MACOS
-    return false; // No equivalent gestures on macOS.
-#else
     return d->type == KisShortcutConfiguration::OneFingerHold;
-#endif
 }
 
 void KisTouchShortcut::setMinimumTouchPoints(int min)
@@ -95,20 +91,14 @@ bool KisTouchShortcut::isAvailable(KisInputActionGroupsMask mask) const
 bool KisTouchShortcut::matchTapType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
     return matchTouchPoint(event, allowedStates)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap)
-#endif
-        ;
+        && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap);
 }
 
 bool KisTouchShortcut::matchDragType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
     return touchDragDistance(event, allowedStates) > d->minDragThreshold &&
         matchTouchPoint(event, allowedStates)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
-#endif
-        ;
+        && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag);
 }
 
 bool KisTouchShortcut::matchHoldType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)

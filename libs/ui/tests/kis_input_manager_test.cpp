@@ -189,7 +189,7 @@ KisStrokeShortcut* createStrokeShortcut(KisAbstractInputAction *action,
 
 KisTouchShortcut* createTouchShortcut(KisAbstractInputAction *action,
                                      int shortcutIndex,
-                                     KisShortcutConfiguration::GestureAction gesture)
+                                     KisShortcutConfiguration::TouchGestureAction gesture)
 {
     KisTouchShortcut *s = new KisTouchShortcut(action, shortcutIndex, gesture);
 

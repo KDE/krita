@@ -21,7 +21,8 @@ public:
           type(UnknownType),
           mode(0),
           wheel(NoMovement),
-          gesture(NoGesture)
+          touchGesture(NoGesture),
+          nativeGesture(NoNativeGesture)
     { }
 
     KisAbstractInputAction *action;
@@ -31,7 +32,8 @@ public:
     QList<Qt::Key> keys;
     Qt::MouseButtons buttons;
     MouseWheelMovement wheel;
-    GestureAction gesture;
+    TouchGestureAction touchGesture;
+    NativeGestureAction nativeGesture;
 };
 
 KisShortcutConfiguration::KisShortcutConfiguration()
@@ -49,7 +51,8 @@ KisShortcutConfiguration::KisShortcutConfiguration(const KisShortcutConfiguratio
     d->keys = other.keys();
     d->buttons = other.buttons();
     d->wheel = other.wheel();
-    d->gesture = other.gesture();
+    d->touchGesture = other.touchGesture();
+    d->nativeGesture = other.nativeGesture();
 }
 
 KisShortcutConfiguration &KisShortcutConfiguration::operator=(const KisShortcutConfiguration &other)
@@ -60,7 +63,8 @@ KisShortcutConfiguration &KisShortcutConfiguration::operator=(const KisShortcutC
     d->keys = other.keys();
     d->buttons = other.buttons();
     d->wheel = other.wheel();
-    d->gesture = other.gesture();
+    d->touchGesture = other.touchGesture();
+    d->nativeGesture = other.nativeGesture();
 
     return *this;
 }
@@ -68,7 +72,7 @@ KisShortcutConfiguration &KisShortcutConfiguration::operator=(const KisShortcutC
 bool KisShortcutConfiguration::operator==(const KisShortcutConfiguration &other) const
 {
     return d->type == other.d->type && d->keys == other.d->keys && d->buttons == other.d->buttons
-        && d->wheel == other.d->wheel && d->gesture == other.d->gesture;
+        && d->wheel == other.d->wheel && d->touchGesture == other.d->touchGesture && d->nativeGesture == other.d->nativeGesture;
 }
 
 KisShortcutConfiguration::~KisShortcutConfiguration()
@@ -82,15 +86,7 @@ QString KisShortcutConfiguration::serialize()
 
     serialized.append(QString::number(d->mode, 16));
     serialized.append(';');
-#ifdef Q_OS_MACOS
-    if (d->type == GestureType) {
-        serialized.append(QString::number(MacOSGestureType, 16));
-    } else {
-        serialized.append(QString::number(d->type, 16));
-    }
-#else
     serialized.append(QString::number(d->type, 16));
-#endif
     serialized.append(";[");
 
     for (QList<Qt::Key>::iterator itr = d->keys.begin(); itr != d->keys.end(); ++itr) {
@@ -107,7 +103,11 @@ QString KisShortcutConfiguration::serialize()
     serialized.append(';');
     serialized.append(QString::number(d->wheel, 16));
     serialized.append(';');
-    serialized.append(QString::number(d->gesture, 16));
+    if (d->type == NativeGestureType) {
+        serialized.append(QString::number(d->nativeGesture, 16));
+    } else {
+        serialized.append(QString::number(d->touchGesture, 16));
+    }
     serialized.append('}');
 
     return serialized;
@@ -141,22 +141,6 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
         return false;
     }
 
-#ifdef Q_OS_MACOS
-    // On MacOS, the GestureType gestures aren't handled. But! MacOSGestureType gestures are handled as
-    // GestureTypes. Confusing? Yes, but this is done only here (and when serializing).
-    if (d->type == GestureType) {
-        return false;
-    }
-    if (d->type == MacOSGestureType) {
-        d->type = GestureType;
-    }
-#else
-    // only macOS platform handles these gestures
-    if (d->type == MacOSGestureType) {
-        return false;
-    }
-#endif
-
     //Third entry is the list of keys
     QString serializedKeys = parts.at(2);
     //Remove brackets
@@ -172,7 +156,12 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
     //Fourth entry is the button mask
     d->buttons = static_cast<Qt::MouseButtons>(parts.at(3).toInt(nullptr, 16));
     d->wheel = static_cast<MouseWheelMovement>(parts.at(4).toUInt(nullptr, 16));
-    d->gesture = static_cast<GestureAction>(parts.at(5).toUInt(nullptr, 16));
+
+    if (d->type == NativeGestureType) {
+        d->nativeGesture = static_cast<NativeGestureAction>(parts.at(5).toUInt(nullptr, 16));
+    } else {
+        d->touchGesture = static_cast<TouchGestureAction>(parts.at(5).toUInt(nullptr, 16));
+    }
 
     return true;
 }
@@ -249,16 +238,24 @@ void KisShortcutConfiguration::setWheel(KisShortcutConfiguration::MouseWheelMove
     }
 }
 
-KisShortcutConfiguration::GestureAction KisShortcutConfiguration::gesture() const
+KisShortcutConfiguration::TouchGestureAction KisShortcutConfiguration::touchGesture() const
 {
-    return d->gesture;
+    return d->touchGesture;
 }
 
-void KisShortcutConfiguration::setGesture(KisShortcutConfiguration::GestureAction type)
+void KisShortcutConfiguration::setTouchGesture(KisShortcutConfiguration::TouchGestureAction type)
 {
-    if (d->gesture != type) {
-        d->gesture = type;
-    }
+    d->touchGesture = type;
+}
+
+KisShortcutConfiguration::NativeGestureAction KisShortcutConfiguration::nativeGesture() const
+{
+    return d->nativeGesture;
+}
+
+void KisShortcutConfiguration::setNativeGesture(NativeGestureAction type)
+{
+    d->nativeGesture = type;
 }
 
 bool KisShortcutConfiguration::isNoOp() const
@@ -266,8 +263,11 @@ bool KisShortcutConfiguration::isNoOp() const
     return d->type == UnknownType || (d->type == KeyCombinationType && d->keys.isEmpty())
         || (d->type == MouseButtonType && d->buttons.testFlag(Qt::NoButton))
         || (d->type == MouseWheelType && d->wheel == NoMovement)
-        || ((d->type == GestureType || d->type == MacOSGestureType)
-            && (d->gesture == NoGesture || d->gesture == MaxGesture));
+        || (d->type == TouchGestureType
+            && (d->touchGesture == NoGesture || d->touchGesture == MaxGesture))
+        || (d->type == NativeGestureType
+            && (d->nativeGesture == NoNativeGesture || d->nativeGesture == MaxNativeGesture));
+
 }
 
 QString KisShortcutConfiguration::getInputText() const
@@ -279,9 +279,10 @@ QString KisShortcutConfiguration::getInputText() const
             return buttonsInputToText(d->keys, d->buttons);
         case MouseWheelType:
             return wheelInputToText(d->keys, d->wheel);
-        case GestureType:
-        case MacOSGestureType:
-            return gestureToText(d->gesture);
+        case TouchGestureType:
+            return touchGestureToText(d->touchGesture);
+        case NativeGestureType:
+            return nativeGestureToText(d->nativeGesture);
         default:
             return QString();
     }
@@ -468,10 +469,9 @@ QString KisShortcutConfiguration::wheelInputToText(const QList<Qt::Key> &keys, K
     }
 }
 
-QString KisShortcutConfiguration::gestureToText(GestureAction action)
+QString KisShortcutConfiguration::nativeGestureToText(NativeGestureAction action)
 {
     switch (action) {
-#ifdef Q_OS_MACOS
     case PinchGesture:
         return i18n("Pinch Gesture");
     case PanGesture:
@@ -480,7 +480,14 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
         return i18n("Rotate Gesture");
     case SmartZoomGesture:
         return i18n("Smart Zoom Gesture");
-#else
+    default:
+        return i18n("No Gesture");
+    }
+}
+
+QString KisShortcutConfiguration::touchGestureToText(TouchGestureAction action)
+{
+    switch (action) {
     case OneFingerTap:
         return i18n("One Finger Tap");
     case TwoFingerTap:
@@ -503,7 +510,6 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
         return i18n("Five Finger Drag");
     case OneFingerHold:
         return i18n("One Finger Hold");
-#endif
     default:
         return i18n("No Gesture");
     }

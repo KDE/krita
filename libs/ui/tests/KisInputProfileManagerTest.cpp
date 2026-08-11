@@ -1,0 +1,144 @@
+/*
+ *  SPDX-FileCopyrightText: 2026 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+#include "KisInputProfileManagerTest.h"
+
+#include <simpletest.h>
+
+#include <KisMpl.h>
+
+#include <kis_debug.h>
+#include <kis_config.h>
+
+#include <input/kis_input_profile_manager.h>
+#include <input/kis_input_profile.h>
+#include <input/kis_shortcut_configuration.h>
+#include <input/kis_abstract_input_action.h>
+#include <input/kis_tool_invocation_action.h>
+
+void KisInputProfileManagerTest::testProfileCreation()
+{
+    auto *profileManager = KisInputProfileManager::instance();
+
+    auto *profile = profileManager->addProfile("Testing Profile");
+    QCOMPARE(profileManager->profileNames(), {"Testing Profile"});
+
+    profileManager->setCurrentProfile(profile);
+    QCOMPARE(profileManager->currentProfile(), profile);
+}
+
+void KisInputProfileManagerTest::testShortcutConfigurationTouchGesture_data()
+{
+    QTest::addColumn<KisShortcutConfiguration::TouchGestureAction>("touchGestureAction");
+    QTest::addColumn<QString>("expectedSerializedString");
+
+    QTest::addRow("OneFingerTap") << KisShortcutConfiguration::OneFingerTap << "{3;4;[];0;0;1}";
+    QTest::addRow("TwoFingerTap") << KisShortcutConfiguration::TwoFingerTap << "{3;4;[];0;0;2}";
+    QTest::addRow("ThreeFingerTap") << KisShortcutConfiguration::ThreeFingerTap << "{3;4;[];0;0;3}";
+    QTest::addRow("FourFingerTap") << KisShortcutConfiguration::FourFingerTap << "{3;4;[];0;0;4}";
+    QTest::addRow("FiveFingerTap") << KisShortcutConfiguration::FiveFingerTap << "{3;4;[];0;0;5}";
+    QTest::addRow("OneFingerDrag") << KisShortcutConfiguration::OneFingerDrag << "{3;4;[];0;0;6}";
+    QTest::addRow("TwoFingerDrag") << KisShortcutConfiguration::TwoFingerDrag << "{3;4;[];0;0;7}";
+    QTest::addRow("ThreeFingerDrag") << KisShortcutConfiguration::ThreeFingerDrag << "{3;4;[];0;0;8}";
+    QTest::addRow("FourFingerDrag") << KisShortcutConfiguration::FourFingerDrag << "{3;4;[];0;0;9}";
+    QTest::addRow("FiveFingerDrag") << KisShortcutConfiguration::FiveFingerDrag << "{3;4;[];0;0;a}";
+    QTest::addRow("OneFingerHold") << KisShortcutConfiguration::OneFingerHold << "{3;4;[];0;0;b}";
+}
+
+void KisInputProfileManagerTest::testShortcutConfigurationTouchGesture()
+{
+    QFETCH(KisShortcutConfiguration::TouchGestureAction, touchGestureAction);
+    QFETCH(QString, expectedSerializedString);
+
+    auto *profileManager = KisInputProfileManager::instance();
+    auto actions = profileManager->actions();
+
+    const auto it = std::find_if(actions.begin(),
+                                 actions.end(),
+                                 kismpl::mem_equal_to(&KisAbstractInputAction::id, "Tool Invocation"));
+    QVERIFY(it != actions.end());
+
+    KisAbstractInputAction *action = *it;
+    QVERIFY(action->shortcutIndexes().values().contains(KisToolInvocationAction::LineToolShortcut));
+
+    KisShortcutConfiguration config;
+    config.setType(KisShortcutConfiguration::TouchGestureType);
+    config.setTouchGesture(touchGestureAction);
+    config.setAction(action);
+    config.setMode(KisToolInvocationAction::LineToolShortcut);
+
+    // verify serialized string
+
+    const QString buffer = config.serialize();
+    QCOMPARE(buffer, expectedSerializedString);
+
+    // verify round-trip loading
+
+    KisShortcutConfiguration configLoaded;
+    configLoaded.setAction(action);
+    configLoaded.unserialize(buffer);
+
+    QCOMPARE(configLoaded, config);
+    QCOMPARE(configLoaded.type(), config.type());
+    QCOMPARE(configLoaded.touchGesture(), config.touchGesture());
+
+    QCOMPARE(configLoaded.action(), config.action());
+    QCOMPARE(configLoaded.mode(), config.mode());
+}
+
+void KisInputProfileManagerTest::testShortcutConfigurationNativeGesture_data()
+{
+    QTest::addColumn<KisShortcutConfiguration::NativeGestureAction>("nativeGestureAction");
+    QTest::addColumn<QString>("expectedSerializedString");
+
+    QTest::addRow("PinchGesture") << KisShortcutConfiguration::PinchGesture << "{3;5;[];0;0;1}";
+    QTest::addRow("PanGesture") << KisShortcutConfiguration::PanGesture << "{3;5;[];0;0;2}";
+    QTest::addRow("RotateGesture") << KisShortcutConfiguration::RotateGesture << "{3;5;[];0;0;3}";
+    QTest::addRow("SmartZoomGesture") << KisShortcutConfiguration::SmartZoomGesture << "{3;5;[];0;0;4}";
+}
+
+void KisInputProfileManagerTest::testShortcutConfigurationNativeGesture()
+{
+    QFETCH(KisShortcutConfiguration::NativeGestureAction, nativeGestureAction);
+    QFETCH(QString, expectedSerializedString);
+
+    auto *profileManager = KisInputProfileManager::instance();
+    auto actions = profileManager->actions();
+
+    const auto it = std::find_if(actions.begin(),
+                                 actions.end(),
+                                 kismpl::mem_equal_to(&KisAbstractInputAction::id, "Tool Invocation"));
+    QVERIFY(it != actions.end());
+
+    KisAbstractInputAction *action = *it;
+    QVERIFY(action->shortcutIndexes().values().contains(KisToolInvocationAction::LineToolShortcut));
+
+    KisShortcutConfiguration config;
+    config.setType(KisShortcutConfiguration::NativeGestureType);
+    config.setNativeGesture(nativeGestureAction);
+    config.setAction(action);
+    config.setMode(KisToolInvocationAction::LineToolShortcut);
+
+    // verify serialized string
+
+    const QString buffer = config.serialize();
+    QCOMPARE(buffer, expectedSerializedString);
+
+    // verify round-trip loading
+
+    KisShortcutConfiguration configLoaded;
+    configLoaded.setAction(action);
+    configLoaded.unserialize(buffer);
+
+    QCOMPARE(configLoaded, config);
+    QCOMPARE(configLoaded.type(), config.type());
+    QCOMPARE(configLoaded.nativeGesture(), config.nativeGesture());
+
+    QCOMPARE(configLoaded.action(), config.action());
+    QCOMPARE(configLoaded.mode(), config.mode());
+}
+
+SIMPLE_TEST_MAIN(KisInputProfileManagerTest)

@@ -45,7 +45,8 @@ QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::defaultTouchShortcu
 {
     QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(m_defaultProfile);
     filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {
-        return shortcut.type() == KisShortcutConfiguration::GestureType;
+        return shortcut.type() == KisShortcutConfiguration::TouchGestureType ||
+            shortcut.type() == KisShortcutConfiguration::NativeGestureType;
     });
 
     return shortcuts;
@@ -99,7 +100,7 @@ KisInputProfileMigrator5To6::migrate(const QMap<QString, ProfileEntry> profiles)
 
         // we ignore the touch shortcuts, because they're from an older version
         filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {
-            return shortcut.type() != KisShortcutConfiguration::GestureType;
+            return shortcut.type() != KisShortcutConfiguration::TouchGestureType && shortcut.type() != KisShortcutConfiguration::NativeGestureType;
         });
 
         // now we add the default new shortcuts -- this should complete the migration.

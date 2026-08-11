@@ -11,6 +11,8 @@
 #include <QObject>
 #include <QMetaType>
 
+#include <kritaui_export.h>
+
 class KisAbstractInputAction;
 class KisShortcutConfiguration;
 /**
@@ -18,7 +20,7 @@ class KisShortcutConfiguration;
  *
  *
  */
-class KisInputProfile : public QObject
+class KRITAUI_EXPORT KisInputProfile : public QObject
 {
     Q_OBJECT
 

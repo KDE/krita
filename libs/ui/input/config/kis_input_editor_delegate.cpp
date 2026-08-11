@@ -13,11 +13,11 @@
 
 #include "input/kis_input_profile.h"
 #include "input/kis_shortcut_configuration.h"
-#include "kis_input_button.h"
 #include "kis_mouse_input_editor.h"
 #include "kis_wheel_input_editor.h"
 #include "kis_key_input_editor.h"
 #include "KisGestureSelector.h"
+#include "KisNativeGestureSelector.h"
 
 class KisInputEditorDelegate::Private
 {
@@ -54,8 +54,12 @@ QWidget *KisInputEditorDelegate::createEditor(QWidget *parent, const QStyleOptio
         editor = new KisWheelInputEditor(parent);
         break;
 
-    case KisShortcutConfiguration::GestureType:
+    case KisShortcutConfiguration::TouchGestureType:
         editor = new KisGestureSelector(parent);
+        break;
+
+    case KisShortcutConfiguration::NativeGestureType:
+        editor = new KisNativeGestureSelector(parent);
         break;
 
     default:
@@ -89,9 +93,14 @@ void KisInputEditorDelegate::setEditorData(QWidget *editor, const QModelIndex &i
         e->setWheel(s->wheel());
         break;
     }
-    case KisShortcutConfiguration::GestureType: {
+    case KisShortcutConfiguration::TouchGestureType: {
         KisGestureSelector *e = qobject_cast<KisGestureSelector *>(editor);
-        e->setGesture(s->gesture());
+        e->setTouchGesture(s->touchGesture());
+        break;
+    }
+    case KisShortcutConfiguration::NativeGestureType: {
+        KisNativeGestureSelector *e = qobject_cast<KisNativeGestureSelector *>(editor);
+        e->setNativeGesture(s->nativeGesture());
         break;
     }
 
@@ -124,9 +133,14 @@ void KisInputEditorDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
         s->setWheel(e->wheel());
         break;
     }
-    case KisShortcutConfiguration::GestureType: {
+    case KisShortcutConfiguration::TouchGestureType: {
         KisGestureSelector *e = qobject_cast<KisGestureSelector *>(editor);
-        s->setGesture(e->gesture());
+        s->setTouchGesture(e->touchGesture());
+        break;
+    }
+    case KisShortcutConfiguration::NativeGestureType: {
+        KisNativeGestureSelector *e = qobject_cast<KisNativeGestureSelector *>(editor);
+        s->setNativeGesture(e->nativeGesture());
         break;
     }
     break;

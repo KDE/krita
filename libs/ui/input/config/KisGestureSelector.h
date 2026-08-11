@@ -15,8 +15,8 @@ class KisGestureSelector : public KComboBox
     Q_OBJECT
 public:
     KisGestureSelector(QWidget *parent);
-    void setGesture(KisShortcutConfiguration::GestureAction gestureAction);
-    KisShortcutConfiguration::GestureAction gesture();
+    void setTouchGesture(KisShortcutConfiguration::TouchGestureAction gestureAction);
+    KisShortcutConfiguration::TouchGestureAction touchGesture();
 };
 
 

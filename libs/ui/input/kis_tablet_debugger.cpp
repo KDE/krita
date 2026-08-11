@@ -84,6 +84,7 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
         type == QTouchEvent::TouchUpdate ? "TouchUpdate" :
         type == QTouchEvent::TouchEnd ? "TouchEnd" :
         type == QTouchEvent::TouchCancel ? "TouchCancel" :
+        type == QTouchEvent::NativeGesture ? "NativeGesture" :
         "unknown";
 }
 
@@ -234,6 +235,43 @@ template <class Event>
 QString KisTabletDebugger::eventToString(const QTabletEvent &ev, const QString &prefix)
 {
     return tabletEventToString(ev, prefix);
+}
+
+QString KisTabletDebugger::eventToString(const QNativeGestureEvent &ev, const QString &prefix)
+{
+    const auto gestureTypeToString = [](Qt::NativeGestureType gestureType) -> const char* {
+        switch (gestureType) {
+        case Qt::BeginNativeGesture:
+            return "BeginNativeGesture";
+        case Qt::EndNativeGesture:
+            return "EndNativeGesture";
+        case Qt::PanNativeGesture:
+            return "PanNativeGesture";
+        case Qt::ZoomNativeGesture:
+            return "ZoomNativeGesture";
+        case Qt::SmartZoomNativeGesture:
+            return "SmartZoomNativeGesture";
+        case Qt::RotateNativeGesture:
+            return "RotateNativeGesture";
+        case Qt::SwipeNativeGesture:
+            return "SwipeNativeGesture";
+        default:
+            return "UnknownNativeGesture";
+        }
+    };
+
+    QString string;
+    QTextStream s(&string);
+    KisPortingUtils::setUtf8OnStream(s);
+
+    dumpBaseParams(s, ev, prefix);
+
+    s << gestureTypeToString(ev.gestureType()) << " "
+    << "value: " << ev.value() << " "
+    << "delta: " << ev.delta().x() << "," << ev.delta().y() << " "
+    << "fingerCount: " << ev.fingerCount() << " ";
+
+    return string;
 }
 
 QString KisTabletDebugger::tabletDeviceToString(const QTabletEvent &event)

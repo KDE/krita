@@ -88,6 +88,11 @@ static bool isTouchEventType(QEvent::Type t)
             t == QEvent::TouchCancel);
 }
 
+static bool isNativeGestureEventType(QEvent::Type t)
+{
+    return t == QEvent::NativeGesture;
+}
+
 KisInputManager::Private::EventEater::EventEater()
 {
     KisConfig cfg(true);
@@ -272,6 +277,8 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         KisInputManager::Private::debugEvent<QTabletEvent>(event, NotBlocked);
     } else if (isTouchEventType(event->type())) {
         KisInputManager::Private::debugEvent<QTouchEvent>(event, NotBlocked);
+    } else if (isNativeGestureEventType(event->type())) {
+        KisInputManager::Private::debugEvent<QNativeGestureEvent>(event, NotBlocked);
     }
 
     return false; // All clear - let this one through!
@@ -656,7 +663,7 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut.release());
 }
 
-void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture, bool isTouchPainting)
+void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::TouchGestureAction gesture, bool isTouchPainting)
 {
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index, gesture);
     if (isTouchPainting) {
@@ -665,7 +672,6 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     }
     dbgKrita << "TouchAction:" << action->name() << (isTouchPainting ? "touch-painting" : "");
     switch(gesture) {
-#ifndef Q_OS_MACOS
     case KisShortcutConfiguration::OneFingerTap:
     case KisShortcutConfiguration::OneFingerDrag:
     case KisShortcutConfiguration::OneFingerHold:
@@ -691,19 +697,18 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     case KisShortcutConfiguration::FiveFingerDrag:
         shortcut->setMinimumTouchPoints(5);
         shortcut->setMaximumTouchPoints(5);
-#endif
     default:
         break;
     }
     matcher.addShortcut(shortcut);
 }
 
-bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
+bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::NativeGestureAction gesture)
 {
     // Qt5 only implements QNativeGestureEvent for macOS
+    // Qt6 implements QNativeGestureEvent for macOS and Wayland
     Qt::NativeGestureType type;
     switch (gesture) {
-#ifdef Q_OS_MACOS
         case KisShortcutConfiguration::PinchGesture:
             type = Qt::ZoomNativeGesture;
             break;
@@ -716,7 +721,6 @@ bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* 
         case KisShortcutConfiguration::SmartZoomGesture:
             type = Qt::SmartZoomNativeGesture;
             break;
-#endif
         default:
             return false;
     }

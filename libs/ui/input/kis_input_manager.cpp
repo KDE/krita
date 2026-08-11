@@ -775,6 +775,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 break;
             }
         }
+        retval = true;
+        event->accept();
         break;
     }
 
@@ -875,10 +877,11 @@ void KisInputManager::profileChanged()
             case KisShortcutConfiguration::MouseWheelType:
                 d->addWheelShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->wheel());
                 break;
-            case KisShortcutConfiguration::GestureType:
-                if (!d->addNativeGestureShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture())) {
-                    d->addTouchShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture());
-                }
+            case KisShortcutConfiguration::TouchGestureType:
+                d->addTouchShortcut(shortcut->action(), shortcut->mode(), shortcut->touchGesture());
+                break;
+            case KisShortcutConfiguration::NativeGestureType:
+                d->addNativeGestureShortcut(shortcut->action(), shortcut->mode(), shortcut->nativeGesture());
                 break;
             default:
                 break;
@@ -888,12 +891,11 @@ void KisInputManager::profileChanged()
         {
             KisAbstractInputAction *action = profile->actionForId("Tool Invocation");
             if (action) {
-#ifndef Q_OS_MACOS
                 // Touch painting shortcuts
                 d->addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, KisShortcutConfiguration::OneFingerDrag, true);
                 d->addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, KisShortcutConfiguration::OneFingerTap, true);
-#else
-                // TODO: implement code for MacOS!
+#ifdef Q_OS_MACOS
+                // TODO: do we need some custom code for MacOS?
 #endif
             }
         }

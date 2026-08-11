@@ -768,12 +768,17 @@ bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 
     Private::RecursionNotifier notifier(this);
 
+    DEBUG_EVENT_ACTION("entered", event);
+
     return !notifier.isInRecursion();
 }
 
 bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
 {
     bool retval = false;
+
+    DEBUG_EVENT_ACTION("entered", event);
+
     if (!hasRunningShortcut()) {
         retval = tryRunNativeGestureShortcut( event );
     }
@@ -789,6 +794,9 @@ bool KisShortcutMatcher::nativeGestureEndEvent(QNativeGestureEvent *event)
 {
     Private::RecursionNotifier notifier(this);
 
+    DEBUG_EVENT_ACTION("entered", event);
+
+    // TODO: why &&?
     if ( m_d->nativeGestureShortcut && !m_d->nativeGestureShortcut->match( event ) ) {
         tryEndNativeGestureShortcut( event );
     }

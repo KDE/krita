@@ -20,10 +20,10 @@ class QTouchEvent;
  */
 class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
 {
-        using GestureAction = KisShortcutConfiguration::GestureAction;
+        using TouchGestureAction = KisShortcutConfiguration::TouchGestureAction;
 
     public:
-        KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type);
+        KisTouchShortcut(KisAbstractInputAction* action, int index, TouchGestureAction type);
         ~KisTouchShortcut() override;
 
         int priority() const override;

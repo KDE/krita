@@ -35,7 +35,8 @@ QWidget *KisInputTypeDelegate::createEditor(QWidget *parent, const QStyleOptionV
                     << i18n("Key Combination")
                     << i18n("Mouse Button")
                     << i18n("Mouse Wheel")
-                    << i18n("Gesture")
+                    << i18n("Touch Gesture")
+                    << i18n("Native Gesture")
                    );
     combo->setCurrentIndex(0);
 

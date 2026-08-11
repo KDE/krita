@@ -75,8 +75,11 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
             case KisShortcutConfiguration::MouseWheelType:
                 return i18nc("Shortcut type", "Mouse Wheel");
 
-            case KisShortcutConfiguration::GestureType:
+            case KisShortcutConfiguration::TouchGestureType:
                 return i18nc("Shortcut type", "Gesture");
+
+            case KisShortcutConfiguration::NativeGestureType:
+                return i18nc("Shortcut type", "Native Gesture");
 
             default:
                 return i18n("Unknown Input");
@@ -103,8 +106,12 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
                     s->keys(), s->wheel());
                 break;
 
-            case KisShortcutConfiguration::GestureType:
-                output = KisShortcutConfiguration::gestureToText(s->gesture());
+            case KisShortcutConfiguration::TouchGestureType:
+                output = KisShortcutConfiguration::touchGestureToText(s->touchGesture());
+                break;
+
+            case KisShortcutConfiguration::NativeGestureType:
+                output = KisShortcutConfiguration::nativeGestureToText(s->nativeGesture());
                 break;
 
             default:
@@ -278,7 +285,8 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         oldData->setKeys(newData->keys());
         oldData->setButtons(newData->buttons());
         oldData->setWheel(newData->wheel());
-        oldData->setGesture(newData->gesture());
+        oldData->setTouchGesture(newData->touchGesture());
+        oldData->setNativeGesture(newData->nativeGesture());
 
         break;
     }

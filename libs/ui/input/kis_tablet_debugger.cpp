@@ -268,8 +268,11 @@ QString KisTabletDebugger::eventToString(const QNativeGestureEvent &ev, const QS
 
     s << gestureTypeToString(ev.gestureType()) << " "
     << "value: " << ev.value() << " "
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 2, 0))
     << "delta: " << ev.delta().x() << "," << ev.delta().y() << " "
-    << "fingerCount: " << ev.fingerCount() << " ";
+    << "fingerCount: " << ev.fingerCount() << " "
+#endif
+    ;
 
     return string;
 }

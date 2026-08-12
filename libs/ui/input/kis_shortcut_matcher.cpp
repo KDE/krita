@@ -787,15 +787,25 @@ void KisShortcutMatcher::suppressAllKeyboardActions(bool value)
 void KisShortcutMatcher::clearShortcuts()
 {
     reset("Clearing shortcuts");
+
     qDeleteAll(m_d->singleActionShortcuts);
     m_d->singleActionShortcuts.clear();
+    m_d->suppressedSingleActionShortcuts.clear();
+
     qDeleteAll(m_d->strokeShortcuts);
-    qDeleteAll(m_d->touchShortcuts);
     m_d->strokeShortcuts.clear();
-    m_d->candidateShortcuts.clear();
+
+    qDeleteAll(m_d->touchShortcuts);
     m_d->touchShortcuts.clear();
+
+    qDeleteAll(m_d->nativeGestureShortcuts);
+    m_d->nativeGestureShortcuts.clear();
+
+    m_d->candidateShortcuts.clear();
     m_d->runningShortcut = 0;
     m_d->readyShortcut = 0;
+    m_d->touchShortcut = 0;
+    m_d->nativeGestureShortcut = 0;
 }
 
 void KisShortcutMatcher::setInputActionGroupsMaskCallback(std::function<KisInputActionGroupsMask ()> func)

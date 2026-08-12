@@ -92,6 +92,7 @@ void KisCanvasNavigationActionStrategyNativeGesture::inputEvent(QEvent *event)
         }
     }
     if (gevent->gestureType() == Qt::PanNativeGesture && m_flags.testFlag(PanEnabled)) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
 
         m_accumulatedPan += gevent->delta();
@@ -107,5 +108,6 @@ void KisCanvasNavigationActionStrategyNativeGesture::inputEvent(QEvent *event)
         // could also take that into account
         m_actionStillPoint.second += canvasOffset;
         controller->pan(-canvasOffset);
+#endif
     }
 }

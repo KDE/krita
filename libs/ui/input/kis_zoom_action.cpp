@@ -21,6 +21,8 @@
 #include "kis_input_manager.h"
 #include "kis_config.h"
 
+#include "KisCanvasNavigationActionStrategyNativeGesture.h"
+
 
 class KisZoomAction::Private
 {
@@ -40,6 +42,8 @@ public:
 
     qreal startZoom {1.0};
     qreal lastDiscreteZoomDistance {0.0};
+
+    std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 };
 
 QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
@@ -113,6 +117,28 @@ void KisZoomAction::deactivate(int shortcut)
 void KisZoomAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
+
+    /**
+     * Firstly, try to handle native gestures and touch events
+     */
+    if (event->type() == QEvent::NativeGesture
+        && (shortcut == ZoomModeShortcut || shortcut == RelativeZoomModeShortcut || shortcut == DiscreteZoomModeShortcut
+            || shortcut == RelativeDiscreteZoomModeShortcut)) {
+
+        using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
+        using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
+
+        Flags flags;
+        flags.setFlag(Flag::ZoomEnabled);
+        flags.setFlag(Flag::ZoomDescrete,
+                      shortcut == DiscreteZoomModeShortcut || shortcut == RelativeDiscreteZoomModeShortcut);
+
+        d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+
+        // native gestures don't have cursor tracking by the OS, so they shouldn't show any cursor
+        QApplication::restoreOverrideCursor();
+        return;
+    }
 
     d->lastDistance = 0.f;
 
@@ -190,11 +216,23 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         }
 }
 
+void KisZoomAction::end(QEvent *event)
+{
+    d->actionStrategy.reset();
+    KisAbstractInputAction::end(event);
+}
+
 void KisZoomAction::inputEvent( QEvent* event )
 {
     if(!event) {
         return;
     }
+
+    if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
+        d->actionStrategy->inputEvent(event);
+        return;
+    }
+
     switch (event->type()) {
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
@@ -266,26 +304,6 @@ void KisZoomAction::inputEvent( QEvent* event )
             d->lastDistance = dist;
             d->lastPosition = p0;
             return;  // Don't try to update the cursor during a pinch-zoom
-        }
-        case QEvent::NativeGesture: {
-            QNativeGestureEvent *gevent = static_cast<QNativeGestureEvent*>(event);
-            if (gevent->gestureType() == Qt::ZoomNativeGesture) {
-                KisCanvas2 *canvas = inputManager()->canvas();
-                KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
-                const qreal delta = 1.0f + gevent->value();
-                const qreal newZoom = controller->canvas()->viewConverter()->zoom() * delta;
-                controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, d->actionStillPoint);
-            } else if (gevent->gestureType() == Qt::SmartZoomNativeGesture) {
-                KisCanvas2 *canvas = inputManager()->canvas();
-                KoCanvasController *controller = canvas->canvasController();
-
-                if (controller->zoomState().mode != KoZoomMode::ZOOM_WIDTH) {
-                    controller->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
-                } else {
-                    controller->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
-                }
-            }
-            return;
         }
         default:
             break;

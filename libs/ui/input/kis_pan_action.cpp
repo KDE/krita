@@ -19,6 +19,9 @@
 
 #include "kis_input_manager.h"
 
+#include "KisCanvasNavigationActionStrategyNativeGesture.h"
+
+
 class KisPanAction::Private
 {
 public:
@@ -31,6 +34,8 @@ public:
     QPointF lastPosition;
     QPointF originalPreferredCenter;
     int touchPointsCount { 0 };
+
+    std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 };
 
 KisPanAction::KisPanAction()
@@ -74,6 +79,24 @@ void KisPanAction::deactivate(int shortcut)
 void KisPanAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
+
+    /**
+     * Firstly, try to handle native gestures and touch events
+     */
+    if (event->type() == QEvent::NativeGesture && shortcut == PanModeShortcut) {
+
+        using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
+        using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
+
+        Flags flags;
+        flags.setFlag(Flag::PanEnabled);
+        d->actionStrategy.reset(
+            new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+
+        // native gestures don't have cursor tracking by the OS, so they shouldn't show any cursor
+        QApplication::restoreOverrideCursor();
+        return;
+    }
 
     bool overrideCursor = true;
 
@@ -119,6 +142,7 @@ void KisPanAction::begin(int shortcut, QEvent *event)
 
 void KisPanAction::end(QEvent *event)
 {
+    d->actionStrategy.reset();
     QApplication::restoreOverrideCursor();
     KisAbstractInputAction::end(event);
 }
@@ -128,6 +152,12 @@ void KisPanAction::inputEvent(QEvent *event)
     if(!event) {
         return;
     }
+
+    if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
+        d->actionStrategy->inputEvent(event);
+        return;
+    }
+
     switch (event->type()) {
         case QEvent::Gesture: {
             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);

@@ -14,6 +14,9 @@ class KisInputProfileManagerTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testProfileCreation();
+
+    void testLoadProfileV6();
+
     void testShortcutConfigurationTouchGesture_data();
     void testShortcutConfigurationTouchGesture();
 

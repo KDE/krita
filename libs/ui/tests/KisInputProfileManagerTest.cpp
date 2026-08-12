@@ -7,6 +7,7 @@
 #include "KisInputProfileManagerTest.h"
 
 #include <simpletest.h>
+#include <testutil.h>
 
 #include <KisMpl.h>
 
@@ -19,6 +20,11 @@
 #include <input/kis_abstract_input_action.h>
 #include <input/kis_tool_invocation_action.h>
 
+// for native gestures migration testing
+#include <input/KisInputProfileMigrator.h>
+#include <input/kis_zoom_and_rotate_action.h>
+
+
 void KisInputProfileManagerTest::testProfileCreation()
 {
     auto *profileManager = KisInputProfileManager::instance();
@@ -28,6 +34,57 @@ void KisInputProfileManagerTest::testProfileCreation()
 
     profileManager->setCurrentProfile(profile);
     QCOMPARE(profileManager->currentProfile(), profile);
+}
+
+void KisInputProfileManagerTest::testLoadProfileV6()
+{
+    auto *profileManager = KisInputProfileManager::instance();
+
+    const QString profileFileName = TestUtil::fetchDataFileLazy("krita_default_input_profile_v6.profile");
+
+    ProfileEntry profileEntry;
+    profileEntry.fullpath = profileFileName;
+
+    {
+        KConfig config(profileFileName, KConfig::SimpleConfig);
+        profileEntry.version = config.group("General").readEntry("version", 0);
+        profileEntry.name = config.group("General").readEntry("name");
+    }
+
+    auto *profile = profileManager->loadProfileWithMigration(profileEntry);
+
+    QVERIFY(profile);
+    QCOMPARE(profile->name(), "Test V6 Profile");
+
+    QList< KisShortcutConfiguration* > shortcuts = profile->allShortcuts();
+
+    KisShortcutConfiguration *foundNativeGestureShortcut = nullptr;
+    int numInvalidNativeGestureShortcuts = 0;
+    int totalNativeGestureShortcuts = 0;
+
+    Q_FOREACH(KisShortcutConfiguration *shortcut, shortcuts) {
+        if (shortcut->type() == KisShortcutConfiguration::NativeGestureType) {
+            if (shortcut->nativeGesture() == KisShortcutConfiguration::PinchGesture) {
+                totalNativeGestureShortcuts++;
+                foundNativeGestureShortcut = shortcut;
+            }
+            if (shortcut->nativeGesture() > KisShortcutConfiguration::PinchGesture &&
+                shortcut->nativeGesture() < KisShortcutConfiguration::SmartZoomGesture) {
+                numInvalidNativeGestureShortcuts++;
+            }
+        }
+    }
+
+    if (foundNativeGestureShortcut) {
+        QCOMPARE(foundNativeGestureShortcut->action()->id(), "Zoom and Rotate Canvas");
+        QCOMPARE(foundNativeGestureShortcut->mode(), KisZoomAndRotateAction::PanAndZoomAndRotateMode);
+
+    }
+
+    QCOMPARE(totalNativeGestureShortcuts, 1);
+    QCOMPARE(numInvalidNativeGestureShortcuts, 0);
+
+    profileManager->removeProfile(profile->name());
 }
 
 void KisInputProfileManagerTest::testShortcutConfigurationTouchGesture_data()

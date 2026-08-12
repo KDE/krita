@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:42+0000\n"
+"POT-Creation-Date: 2026-08-12 00:43+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -22275,7 +22275,6 @@ msgstr "Maska transformácie"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Maska priehľadnosti"
@@ -59401,15 +59400,6 @@ msgstr "Filtre:"
 msgid "WebP Image"
 msgstr "Obrázok WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"Tento súbor XCF je príliš nový; Krita nemôže podporovať súbory XCF zapísané "
-"v GIMP 2.9 alebo novšom."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -70420,6 +70410,13 @@ msgstr ""
 "Prepnúť medzi plným a čiastkovým rozsahom.\n"
 "Plný rozsah: [%1, %2]\n"
 "Čiastkový rozsah: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "Tento súbor XCF je príliš nový; Krita nemôže podporovať súbory XCF "
+#~ "zapísané v GIMP 2.9 alebo novšom."
 
 #~ msgctxt "action"
 #~ msgid "Convert to &Animated Layer"

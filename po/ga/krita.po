@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:42+0000\n"
+"POT-Creation-Date: 2026-08-12 00:43+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -22411,7 +22411,6 @@ msgstr "Masc Claochlaithe"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Masc Trédhearcachta"
@@ -59904,15 +59903,6 @@ msgstr "Scagairí:"
 msgid "WebP Image"
 msgstr "Íomhá WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"Tá an comhad XCF seo ró-nua; ní féidir le Krita tacú le comhaid XCF atá "
-"scríofa ag GIMP 2.9 nó níos nuaí."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -70956,6 +70946,13 @@ msgstr ""
 "Athraigh idir raon iomlán agus fo-raon.\n"
 "Raon iomlán: [%1, %2]\n"
 "Fo-raon: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "Tá an comhad XCF seo ró-nua; ní féidir le Krita tacú le comhaid XCF atá "
+#~ "scríofa ag GIMP 2.9 nó níos nuaí."
 
 #~ msgctxt "action"
 #~ msgid "Convert to &Animated Layer"

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:42+0000\n"
+"POT-Creation-Date: 2026-08-12 00:43+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -22684,7 +22684,6 @@ msgstr "Maska przekształcenia"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Maska przezroczystości"
@@ -60153,15 +60152,6 @@ msgstr "Filtry:"
 msgid "WebP Image"
 msgstr "Obraz WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"Plik XCF jest zbyt nowy; Krita nie obsługuje plików XCF zapisanych przez "
-"GIMPa 2.9 lub nowszego."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -71348,6 +71338,13 @@ msgstr ""
 "Przełącz pomiędzy pełnym zakresem, a podzakresem.\n"
 "Pełny zakres: [%1, %2]\n"
 "Podzakres: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "Plik XCF jest zbyt nowy; Krita nie obsługuje plików XCF zapisanych przez "
+#~ "GIMPa 2.9 lub nowszego."
 
 #~ msgctxt "action"
 #~ msgid "Convert to &Animated Layer"

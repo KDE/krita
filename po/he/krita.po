@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:42+0000\n"
+"POT-Creation-Date: 2026-08-12 00:43+0000\n"
 "PO-Revision-Date: 2026-08-06 13:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -22161,7 +22161,6 @@ msgstr "מסכת התמרה"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "מסכת שקיפות"
@@ -57904,15 +57903,6 @@ msgstr "מסננים:"
 msgid "WebP Image"
 msgstr "תמונת WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"קובץ ה־XCF הזה חדש מדי, Krita לא יכולה לתמוך בקובצי XCF שנכתבו על ידי GIMP "
-"2.9 ומעלה."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -68547,6 +68537,13 @@ msgstr ""
 "החלפה בין טווח מלא לטווח משנה.\n"
 "טווח מלא: [%1, %2]\n"
 "טווח משנה: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "קובץ ה־XCF הזה חדש מדי, Krita לא יכולה לתמוך בקובצי XCF שנכתבו על ידי "
+#~ "GIMP 2.9 ומעלה."
 
 #~ msgctxt "action"
 #~ msgid "Convert to &Animated Layer"

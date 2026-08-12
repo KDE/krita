@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:42+0000\n"
+"POT-Creation-Date: 2026-08-12 00:43+0000\n"
 "PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -22494,7 +22494,6 @@ msgstr "Máscara de transformación"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Máscara de transparencia"
@@ -59949,15 +59948,6 @@ msgstr "Filtros:"
 msgid "WebP Image"
 msgstr "Imaxe WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"O ficheiro XCF é novo de máis; Krita non pode permitir ficheiros XCF "
-"escritos pola versión 2.9 de GIMP ou unha versión posterior."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -71173,6 +71163,13 @@ msgstr ""
 "Conmutar entre intervalo total e interno.\n"
 "Intervalo total: [%1, %2]\n"
 "Intervalo interno: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "O ficheiro XCF é novo de máis; Krita non pode permitir ficheiros XCF "
+#~ "escritos pola versión 2.9 de GIMP ou unha versión posterior."
 
 #~ msgctxt "action"
 #~ msgid "Convert to &Animated Layer"

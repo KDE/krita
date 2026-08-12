@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:42+0000\n"
+"POT-Creation-Date: 2026-08-12 00:43+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -22972,7 +22972,6 @@ msgstr "Máscara de Transformação"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Máscara de Transparência"
@@ -60669,15 +60668,6 @@ msgstr "Filtros:"
 msgid "WebP Image"
 msgstr "Imagem WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"Este ficheiro XCF é demasiado recente; o Krita não consegue lidar com os "
-"ficheiros XCF criados pelo GIMP 2.9 ou posteriores."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -71989,6 +71979,13 @@ msgstr ""
 "Comutar entre a gama completa e uma sub-gama.\n"
 "Gama completa: [%1, %2]\n"
 "Sub-gama: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "Este ficheiro XCF é demasiado recente; o Krita não consegue lidar com os "
+#~ "ficheiros XCF criados pelo GIMP 2.9 ou posteriores."
 
 #, fuzzy
 #~| msgctxt "action"

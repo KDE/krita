@@ -10,6 +10,43 @@
 #include <KisLager.h>
 namespace {
 
+QList<double> refWhiteList {
+    80.0,
+    203.0
+};
+
+auto referenceWhiteToInt = [](){
+    return lager::lenses::getset(
+        [] (const double &value) -> int {
+            int index = -1;
+            for (int i = 0; i < refWhiteList.size(); i++) {
+                if (qFuzzyCompare(value, refWhiteList.at(i))) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        },
+        [] (double value, const int &newValue) {
+            value = refWhiteList.value(newValue, 0.0);
+            return value;
+        }
+        );
+};
+
+ComboBoxState whiteTypeToComboBoxState(int index, bool enabled)
+{
+    QStringList values;
+    QStringList toolTips;
+
+    for (int i = 0; i < refWhiteList.size(); i++) {
+        values << i18nc("Image reference white value", "%1 cd/m²", QString::number(refWhiteList.at(i)));
+        toolTips << "";
+    }
+
+    return {values, index, enabled, toolTips};
+}
+
 ComboBoxState calcTypeComboBoxState(KisRelativeContentLightLevelInformation::CalculationType type, bool enabled)
 {
     QStringList values;
@@ -72,79 +109,82 @@ KisHDRMetadataModel::KisHDRMetadataModel(QObject *parent)
     , clliData(lager::make_state(KisRelativeContentLightLevelInformation(), lager::automatic_tag{}))
     , cviData(lager::make_state(KisColorVolumeInformation(), lager::automatic_tag{}))
     , referenceWhiteData(lager::make_state(203.0, lager::automatic_tag{}))
-    , imageProfileRelative(lager::make_state(false, lager::automatic_tag{}))
-    , referenceWhiteEnabledData(lager::make_state(false, lager::automatic_tag{}))
-    , clliEnabledData(lager::make_state(false, lager::automatic_tag{}))
-    , cviEnabledData(lager::make_state(false, lager::automatic_tag{}))
-    , LAGER_QT(refWhiteEnabled){lager::with(referenceWhiteEnabledData)}
-    , LAGER_QT(refWhiteEnabledState){lager::with(LAGER_QT(refWhiteEnabled), lager::make_constant(true)).map(ToControlState{})}
+    , imageProfileRelativeData(lager::make_state(false, lager::automatic_tag{}))
+    , referenceWhiteCheckedData(lager::make_state(false, lager::automatic_tag{}))
+    , clliCheckedData(lager::make_state(false, lager::automatic_tag{}))
+    , cviCheckedData(lager::make_state(false, lager::automatic_tag{}))
+    , LAGER_QT(refWhiteChecked){lager::with(referenceWhiteCheckedData)}
+    , LAGER_QT(refWhiteEnabled){lager::with(imageProfileRelativeData)}
+    , LAGER_QT(refWhiteCheckedState){lager::with(LAGER_QT(refWhiteChecked), LAGER_QT(refWhiteEnabled)).map(ToControlState{})}
     , LAGER_QT(referenceWhite) {referenceWhiteData}
-    , LAGER_QT(clliEnabled){lager::with(clliEnabledData)}
-    , LAGER_QT(clliEnabledState){lager::with(LAGER_QT(clliEnabled), lager::make_constant(true)).map(ToControlState{})}
+    , LAGER_QT(referenceWhiteIndex) {LAGER_QT(referenceWhite).zoom(referenceWhiteToInt())}
+    , LAGER_QT(referenceWhiteState) {lager::with(LAGER_QT(referenceWhiteIndex), LAGER_QT(refWhiteChecked)).map(&whiteTypeToComboBoxState)}
+    , LAGER_QT(clliChecked){lager::with(clliCheckedData)}
+    , LAGER_QT(clliCheckedState){lager::with(LAGER_QT(clliChecked), lager::make_constant(true)).map(ToControlState{})}
     , LAGER_QT(maxContentLightLevel) {clliData[&KisRelativeContentLightLevelInformation::maxContentLightLevel].zoom(multiplyByReferenceWhite(LAGER_QT(referenceWhite).get()))}
     , LAGER_QT(maxContentLightLevelState) {lager::with(LAGER_QT(maxContentLightLevel),
                                                       lager::make_constant(0.0),
                                                       lager::make_constant(100000.0),
-                                                      LAGER_QT(clliEnabled)).map(ToSpinBoxState{})}
+                                                      LAGER_QT(clliChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(maxFrameAverageLightLevel) {clliData[&KisRelativeContentLightLevelInformation::maxFrameAverageLightLevel].zoom(multiplyByReferenceWhite(LAGER_QT(referenceWhite).get()))}
     , LAGER_QT(maxFrameAverageLightLevelState) {lager::with(LAGER_QT(maxFrameAverageLightLevel),
                                                       lager::make_constant(0.0),
                                                       lager::make_constant(100000.0),
-                                                      LAGER_QT(clliEnabled)).map(ToSpinBoxState{})}
+                                                      LAGER_QT(clliChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(clliCalculationType) {clliData[&KisRelativeContentLightLevelInformation::type]}
-    , LAGER_QT(clliCalculationTypeState) {lager::with(LAGER_QT(clliCalculationType), LAGER_QT(clliEnabled)).map(&calcTypeComboBoxState)}
-    , LAGER_QT(cviEnabled){lager::with(cviEnabledData)}
-    , LAGER_QT(cviEnabledState){lager::with(LAGER_QT(cviEnabled), lager::make_constant(true)).map(ToControlState{})}
+    , LAGER_QT(clliCalculationTypeState) {lager::with(LAGER_QT(clliCalculationType), LAGER_QT(clliChecked)).map(&calcTypeComboBoxState)}
+    , LAGER_QT(cviChecked){lager::with(cviCheckedData)}
+    , LAGER_QT(cviCheckedState){lager::with(LAGER_QT(cviChecked), lager::make_constant(true)).map(ToControlState{})}
     , LAGER_QT(cviWhiteX){cviData[&KisColorVolumeInformation::white].zoom(colorimetryXcoord())}
     , LAGER_QT(cviWhiteY){cviData[&KisColorVolumeInformation::white].zoom(colorimetryYcoord())}
     , LAGER_QT(cviWhiteXState){lager::with(LAGER_QT(cviWhiteX),
                                            lager::make_constant(0.0),
                                            lager::make_constant(1.0),
-                                           LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                           LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviWhiteYState){lager::with(LAGER_QT(cviWhiteY),
                                            lager::make_constant(0.0),
                                            lager::make_constant(1.0),
-                                           LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                           LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviRedX){cviData[&KisColorVolumeInformation::red].zoom(colorimetryXcoord())}
     , LAGER_QT(cviRedY){cviData[&KisColorVolumeInformation::red].zoom(colorimetryYcoord())}
     , LAGER_QT(cviRedXState){lager::with(LAGER_QT(cviRedX),
                                          lager::make_constant(0.0),
                                          lager::make_constant(1.0),
-                                         LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                         LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviRedYState){lager::with(LAGER_QT(cviRedY),
                                          lager::make_constant(0.0),
                                          lager::make_constant(1.0),
-                                         LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                         LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviGreenX){cviData[&KisColorVolumeInformation::green].zoom(colorimetryXcoord())}
     , LAGER_QT(cviGreenY){cviData[&KisColorVolumeInformation::green].zoom(colorimetryYcoord())}
     , LAGER_QT(cviGreenXState){lager::with(LAGER_QT(cviGreenX),
                                            lager::make_constant(0.0),
                                            lager::make_constant(1.0),
-                                           LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                           LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviGreenYState){lager::with(LAGER_QT(cviGreenY),
                                            lager::make_constant(0.0),
                                            lager::make_constant(1.0),
-                                           LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                           LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviBlueX){cviData[&KisColorVolumeInformation::blue].zoom(colorimetryXcoord())}
     , LAGER_QT(cviBlueY){cviData[&KisColorVolumeInformation::blue].zoom(colorimetryYcoord())}
     , LAGER_QT(cviBlueXState){lager::with(LAGER_QT(cviBlueX),
                                           lager::make_constant(0.0),
                                           lager::make_constant(1.0),
-                                          LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                          LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviBlueYState){lager::with(LAGER_QT(cviBlueY),
                                           lager::make_constant(0.0),
                                           lager::make_constant(1.0),
-                                          LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                          LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviMaxLuminance){cviData[&KisColorVolumeInformation::maxLuminance]}
     , LAGER_QT(cviMaxLuminanceState){lager::with(LAGER_QT(cviMaxLuminance),
                                                  lager::make_constant(0.0),
                                                  lager::make_constant(10000.0),
-                                                 LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                                                 LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
     , LAGER_QT(cviMinLuminance){cviData[&KisColorVolumeInformation::minLuminance]}
     , LAGER_QT(cviMinLuminanceState){lager::with(LAGER_QT(cviMinLuminance),
                 lager::make_constant(0.0),
                 lager::make_constant(10000.0),
-                LAGER_QT(cviEnabled)).map(ToSpinBoxState{})}
+                LAGER_QT(cviChecked)).map(ToSpinBoxState{})}
 
 {
 
@@ -157,16 +197,16 @@ KisHDRMetadataModel::~KisHDRMetadataModel() {
 void KisHDRMetadataModel::setClli(const std::optional<KisRelativeContentLightLevelInformation> &clli)
 {
     if (clli) {
-        clliEnabledData.set(true);
+        clliCheckedData.set(true);
         clliData.set(*clli);
     } else {
-        clliEnabledData.set(false);
+        clliCheckedData.set(false);
     }
 }
 
 std::optional<KisRelativeContentLightLevelInformation> KisHDRMetadataModel::clli() const
 {
-    const bool enabled = clliEnabledData.get();
+    const bool enabled = clliCheckedData.get();
     if (enabled) {
         return std::make_optional(clliData.get());
     }
@@ -176,16 +216,16 @@ std::optional<KisRelativeContentLightLevelInformation> KisHDRMetadataModel::clli
 void KisHDRMetadataModel::setCvi(const std::optional<KisColorVolumeInformation> &cvi)
 {
     if (cvi) {
-        cviEnabledData.set(true);
+        cviCheckedData.set(true);
         cviData.set(*cvi);
     } else {
-        cviEnabledData.set(false);
+        cviCheckedData.set(false);
     }
 }
 
 std::optional<KisColorVolumeInformation> KisHDRMetadataModel::cvi() const
 {
-    const bool enabled = cviEnabledData.get();
+    const bool enabled = cviCheckedData.get();
     if (enabled) {
         return std::make_optional(cviData.get());
     }
@@ -195,16 +235,16 @@ std::optional<KisColorVolumeInformation> KisHDRMetadataModel::cvi() const
 void KisHDRMetadataModel::setRefWhite(const std::optional<double> &refWhite)
 {
     if (refWhite) {
-        referenceWhiteEnabledData.set(true);
+        referenceWhiteCheckedData.set(true);
         referenceWhiteData.set(*refWhite);
     } else {
-        referenceWhiteEnabledData.set(false);
+        referenceWhiteCheckedData.set(false);
     }
 }
 
 std::optional<double> KisHDRMetadataModel::refWhite() const
 {
-    const bool enabled = referenceWhiteEnabledData.get();
+    const bool enabled = referenceWhiteCheckedData.get();
     if (enabled) {
         return std::make_optional(referenceWhiteData.get());
     }
@@ -214,9 +254,9 @@ std::optional<double> KisHDRMetadataModel::refWhite() const
 void KisHDRMetadataModel::setImageProfileRelative(const std::optional<double> &refWhite)
 {
     if (refWhite) {
-        imageProfileRelative.set(false);
+        imageProfileRelativeData.set(false);
         referenceWhiteData.set(*refWhite);
     } else {
-        imageProfileRelative.set(true);
+        imageProfileRelativeData.set(true);
     }
 }

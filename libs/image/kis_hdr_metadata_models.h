@@ -27,17 +27,20 @@ public:
     lager::cursor<KisRelativeContentLightLevelInformation> clliData;
     lager::cursor<KisColorVolumeInformation> cviData;
     lager::cursor<double> referenceWhiteData;
-    lager::cursor<bool> imageProfileRelative;
-    lager::cursor<bool> referenceWhiteEnabledData;
-    lager::cursor<bool> clliEnabledData;
-    lager::cursor<bool> cviEnabledData;
+    lager::cursor<bool> imageProfileRelativeData;
+    lager::cursor<bool> referenceWhiteCheckedData;
+    lager::cursor<bool> clliCheckedData;
+    lager::cursor<bool> cviCheckedData;
 
-    LAGER_QT_CURSOR(bool, refWhiteEnabled);
-    LAGER_QT_READER(CheckBoxState, refWhiteEnabledState);
+    LAGER_QT_CURSOR(bool, refWhiteChecked);
+    LAGER_QT_READER(bool, refWhiteEnabled);
+    LAGER_QT_READER(CheckBoxState, refWhiteCheckedState);
     LAGER_QT_CURSOR(double, referenceWhite);
+    LAGER_QT_CURSOR(int, referenceWhiteIndex);
+    LAGER_QT_READER(ComboBoxState, referenceWhiteState);
 
-    LAGER_QT_CURSOR(bool, clliEnabled);
-    LAGER_QT_READER(CheckBoxState, clliEnabledState);
+    LAGER_QT_CURSOR(bool, clliChecked);
+    LAGER_QT_READER(CheckBoxState, clliCheckedState);
     LAGER_QT_CURSOR(double, maxContentLightLevel);
     LAGER_QT_READER(DoubleSpinBoxState, maxContentLightLevelState);
     LAGER_QT_CURSOR(double, maxFrameAverageLightLevel);
@@ -45,8 +48,8 @@ public:
     LAGER_QT_CURSOR(KisRelativeContentLightLevelInformation::CalculationType, clliCalculationType);
     LAGER_QT_READER(ComboBoxState, clliCalculationTypeState);
 
-    LAGER_QT_CURSOR(bool, cviEnabled);
-    LAGER_QT_READER(CheckBoxState, cviEnabledState);
+    LAGER_QT_CURSOR(bool, cviChecked);
+    LAGER_QT_READER(CheckBoxState, cviCheckedState);
     LAGER_QT_CURSOR(double, cviWhiteX);
     LAGER_QT_CURSOR(double, cviWhiteY);
     LAGER_QT_READER(DoubleSpinBoxState, cviWhiteXState);

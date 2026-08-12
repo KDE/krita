@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -22828,7 +22828,6 @@ msgstr "Wanneln"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Transparenzmask"
@@ -59676,13 +59675,6 @@ msgstr "Filters:"
 #| msgid "New Image"
 msgid "WebP Image"
 msgstr "Nieg Bild"
-
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -22387,7 +22387,6 @@ msgstr "Ubah"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, fuzzy, kde-format
 msgid "Transparency Mask"
 msgstr "Burning Transparency"
@@ -58119,13 +58118,6 @@ msgstr "Penapis:"
 #| msgid "New Image"
 msgid "WebP Image"
 msgstr "Imej Baru"
-
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2026-07-28 15:35+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -22341,7 +22341,6 @@ msgstr "Máscara de transformación"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Máscara de transparencia"
@@ -59518,15 +59517,6 @@ msgstr "Filtros:"
 msgid "WebP Image"
 msgstr "Imagen WebP"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"Este archivo XCF es demasiado reciente. Krita no admite archivos XCF creados "
-"por GIMP 2.9 o posterior."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -70368,3 +70358,10 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "Este archivo XCF es demasiado reciente. Krita no admite archivos XCF "
+#~ "creados por GIMP 2.9 o posterior."

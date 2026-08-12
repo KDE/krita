@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -22971,7 +22971,6 @@ msgstr "Түрлендіру"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Мөлдірлік қалқасы"
@@ -60207,13 +60206,6 @@ msgstr "Сүзгілер:"
 #| msgid "New Image"
 msgid "WebP Image"
 msgstr "Жаңа кескін"
-
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -22527,7 +22527,6 @@ msgstr "變形遮罩"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "透明度遮罩"
@@ -59210,13 +59209,6 @@ msgstr "過濾工具："
 msgid "WebP Image"
 msgstr "WebP 影像"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr "此 XCF 檔案格式太新。Krita 不支援 GIMP 2.9 或更高版本儲存的 XCF 檔案。"
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -70090,6 +70082,12 @@ msgstr ""
 "在全範圍與子範圍之間切換。\n"
 "全範圍：[%1, %2]\n"
 "子範圍：[%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "此 XCF 檔案格式太新。Krita 不支援 GIMP 2.9 或更高版本儲存的 XCF 檔案。"
 
 #, fuzzy
 #~| msgid "Selection Actions"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2026-07-28 06:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -22243,7 +22243,6 @@ msgstr "ნიღბის ტრასფორმირება"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "გამჭვირვალობის ნიღაბი"
@@ -58279,15 +58278,6 @@ msgstr "ფილტრები:"
 msgid "WebP Image"
 msgstr "WebP გამოსახულება"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"ეს XFC ფაილი მეტისმეტად ახალია. Krita-ს არ აქვს GIMP 2.9 ან უფრო ახლის მიერ "
-"ჩაწერილი XFC ფაილების მხარდაჭერა."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -68921,6 +68911,13 @@ msgstr ""
 "გადართვა სრულ შუალედსა და ქვეშუალედს შორის.\n"
 "სრული შუალედი: [%1, %2]\n"
 "ქვეშუალედი: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "ეს XFC ფაილი მეტისმეტად ახალია. Krita-ს არ აქვს GIMP 2.9 ან უფრო ახლის "
+#~ "მიერ ჩაწერილი XFC ფაილების მხარდაჭერა."
 
 #~ msgid "Selection Actions Bar"
 #~ msgstr "მონიშვნის ქმედებების პანელი"

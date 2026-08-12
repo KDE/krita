@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -23911,7 +23911,6 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Transparency Mask"
@@ -63115,13 +63114,6 @@ msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 #| msgid "New Layer"
 msgid "WebP Image"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
-
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format

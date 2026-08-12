@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2026-08-10 16:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -2065,7 +2065,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_recurvy.kpp"
 msgid "Curve recurvy"
-msgstr "منحنى متعرج مجدداً"
+msgstr "منحنى متعرج مجددًا"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -9275,7 +9275,7 @@ msgid ""
 "if already disabled"
 msgstr ""
 "عطّل إطار الفرشاة الخارجي، أو فعّل شكل إطار الفرشاة الخارجي المستخدم مسبقًا إذا "
-"كان معطلاً"
+"كان معطلًا"
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -10300,7 +10300,7 @@ msgstr "نَقْش أفقي و عمودي"
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
-msgstr "اِختر &عشوائياً..."
+msgstr "اِختر &عشوائيًا..."
 
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
@@ -15599,7 +15599,7 @@ msgstr "طبق المرشح مجددا"
 #, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
-msgstr "طبِّق المُرشِّح مجدداً (أعِد المطالبة)"
+msgstr "طبِّق المُرشِّح مجددًا (أعِد المطالبة)"
 
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
@@ -16372,7 +16372,7 @@ msgid ""
 "This is not recommended. Do not report any bugs.\n"
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
-"أنت تشغِّل إصداراً غير متاح من Windows: %1.\n"
+"أنت تشغِّل إصدارًا غير متاح من Windows: %1.\n"
 "هذا غير موصًّى به. لا تُبْلغ عن أيّة أخطاء.\n"
 "حدِّث إلى إصدار متاح من Windows: Windows 7 أو 8 أو 8.1 أو 10."
 
@@ -16623,7 +16623,7 @@ msgstr "اقتصاص الشّكل"
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
-msgstr[0] "أنشئ شكلاً"
+msgstr[0] "أنشئ شكلًا"
 msgstr[1] "أنشئ %1 شكلين"
 msgstr[2] "أنشئ %1 أشكال"
 msgstr[3] "أنشئ %1 أشكال"
@@ -16846,7 +16846,7 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 "المستند به نص متّجه أُنشِئ في كريتا 4.x. عند حفظ المستند، حوِّل كائن النص إلى "
-"تنسيق كريتا 5 الذي لن يعود متوافقاً مع كريتا 4.x"
+"تنسيق كريتا 5 الذي لن يعود متوافقًا مع كريتا 4.x"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
 #, kde-format
@@ -18910,7 +18910,7 @@ msgstr "بدائل سياقية"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr "استبدل الرسوميات اعتماداً على سياقها ضمن نص."
+msgstr "استبدل الرسوميات اعتمادًا على سياقها ضمن نص."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, kde-format
@@ -18924,7 +18924,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
-msgstr "استبدل تسلسلات الرسوميات بروابط اعتماداً على سياقها ضمن نص."
+msgstr "استبدل تسلسلات الرسوميات بروابط اعتمادًا على سياقها ضمن نص."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
@@ -18937,7 +18937,7 @@ msgstr "تزيين سياقي"
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
-msgstr "استبدل الرسوميات برسوميات متدلّية اعتماداً على سياقها ضمن نص."
+msgstr "استبدل الرسوميات برسوميات متدلّية اعتمادًا على سياقها ضمن نص."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, kde-format
@@ -19046,7 +19046,7 @@ msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
 "Krita."
-msgstr "اضبط الرسوميات بحيث تتماشى مع حدودها البصرية. لا يفعل شيئاً في كريتا."
+msgstr "اضبط الرسوميات بحيث تتماشى مع حدودها البصرية. لا يفعل شيئًا في كريتا."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
 #, kde-format
@@ -19123,7 +19123,7 @@ msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
-"ركّب أو فكّك هذا الرسوميات بحيث ركّبت الرسوميات الناتجة لاحقاً. مستخدَم عامةً "
+"ركّب أو فكّك هذا الرسوميات بحيث ركّبت الرسوميات الناتجة لاحقًا. مستخدَم عامةً "
 "للتعامل مع التشكيلات."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
@@ -19174,7 +19174,7 @@ msgstr "بدائل سياقية مطلوبة"
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
-msgstr "استبدل الرسوميات سياقياً ببدائل، مطلوبة لجعل الخط يعمل."
+msgstr "استبدل الرسوميات سياقيًا ببدائل، مطلوبة لجعل الخط يعمل."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
@@ -19214,7 +19214,7 @@ msgctxt "@tooltip"
 msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
-msgstr "اشر إلى مدى ملاءمة الخط لحجمه الحالي. لا يفعل شيئاً في كريتا."
+msgstr "اشر إلى مدى ملاءمة الخط لحجمه الحالي. لا يفعل شيئًا في كريتا."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
 #, kde-format
@@ -19313,7 +19313,7 @@ msgid ""
 "Replaces oldstyle figures with lining figures, which harmonize well with "
 "uppercase letters."
 msgstr ""
-"استبدل الأرقام ذات الطراز القديم بأرقام على السطر، والتي تتناغم جيداً مع "
+"استبدل الأرقام ذات الطراز القديم بأرقام على السطر، والتي تتناغم جيدًا مع "
 "الأحرف الكبيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
@@ -19368,7 +19368,7 @@ msgid ""
 "Replaces lining figures with oldstyle figures, which harmonize well with "
 "lowercase letters."
 msgstr ""
-"استبدل الأرقام على السطر بأرقام ذات طراز قديم، والتي تتناغم جيداً مع الأحرف "
+"استبدل الأرقام على السطر بأرقام ذات طراز قديم، والتي تتناغم جيدًا مع الأحرف "
 "الصغيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
@@ -19850,7 +19850,7 @@ msgid ""
 "Respaces full-width glyphs to be half-width depending on the context, common "
 "examples include CJK full-width brackets and other punctuation marks."
 msgstr ""
-"اعد تباعد الرسوميات كاملة العرض لتكون نصف العرض اعتماداً على السياق، وتشمل "
+"اعد تباعد الرسوميات كاملة العرض لتكون نصف العرض اعتمادًا على السياق، وتشمل "
 "الأمثلة الشائعة الأقواس كاملة العرض لـ CJK وعلامات ترقيم أخرى."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
@@ -20142,7 +20142,7 @@ msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
 msgstr ""
-"استبدل كانجي الشكل القياسي في الخطوط اليابانية بتلك المستخدمة تقليدياً في "
+"استبدل كانجي الشكل القياسي في الخطوط اليابانية بتلك المستخدمة تقليديًا في "
 "الأسماء."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
@@ -20570,7 +20570,7 @@ msgstr "اسحب لتحريك نقطة التحكم."
 #: libs/flake/tools/KoPathTool.cpp:721
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
-msgstr "اسحب لتغيير المنحنى مباشرة. انقر نقراً مزدوجاً لإدراج نقطة مسار جديدة."
+msgstr "اسحب لتغيير المنحنى مباشرة. انقر نقرًا مزدوجًا لإدراج نقطة مسار جديدة."
 
 #: libs/flake/tools/KoPathTool.cpp:731
 #, kde-format
@@ -21330,7 +21330,7 @@ msgid ""
 "Offers similar results than Bicubic, but maybe a little bit sharper. Can "
 "produce light and dark halos along strong edges."
 msgstr ""
-"قدم نتائج مشابهة لـ Bicubic، ولكن ربما أكثر حدة قليلاً. ينتج هالات فاتحة "
+"قدم نتائج مشابهة لـ Bicubic، ولكن ربما أكثر حدة قليلًا. ينتج هالات فاتحة "
 "وداكنة على طول الحواف القوية."
 
 #: libs/image/kis_filter_strategy.h:163
@@ -22187,7 +22187,6 @@ msgstr "قناع تحويل"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "قناع شفافيّة"
@@ -25540,7 +25539,7 @@ msgstr "فائق السرعة"
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryfast"
-msgstr "سريع جداً"
+msgstr "سريع جدًا"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:42
 #, kde-format
@@ -25582,7 +25581,7 @@ msgstr "أبطأ"
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryslow"
-msgstr "بطيء جداً"
+msgstr "بطيء جدًا"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:48
 #, kde-format
@@ -26783,7 +26782,7 @@ msgstr ""
 "الفنية</h1><p>ما تخلقه بكريتا هو ملكيتك الوحيدة. كل أعمالك الفنية حُرة "
 "لتستخدمها كما تشاء.</p><p>هذا يعني أَن كريتا يُمكِن استخدامه تجاريًا، لأي غرض. "
 "لا توجد أي قيود على الإطلاق.</p><p>ترخيص GNU GPL الخاص بكريتا يضمن لك هذه "
-"الحرية. لا يُسمَح لأي شخص بأَخذها أَبداً، على عكس الإصدارات التجريبية أو "
+"الحرية. لا يُسمَح لأي شخص بأَخذها أَبدًا، على عكس الإصدارات التجريبية أو "
 "التعليمية من البرمجيات التجارية التي تحظر عملك في المواقف التجارية.</p><br/"
 "><hr/><pre>"
 
@@ -27336,7 +27335,7 @@ msgid ""
 msgstr ""
 "<p>تستعمل نسخة حزمة متجر مايكروسوفت لكريتا. على الرغم من أن كريتا يقبل "
 "اضباطه لوضع الموارد ضمن موقع بيانات تطبيق المستخدم (AppData)، قد يضع "
-"الويندوز الملفات فعلاً داخل موقع تطبيق خاص.</p>\n"
+"الويندوز الملفات فعلًا داخل موقع تطبيق خاص.</p>\n"
 "<p>تحقق من كلا الموقعين لتحديد مكان الملفات.</p>\n"
 "<p><b>بيانات تطبيق المستخدم (AppData)</b> (<a href=\"copyuser\">انسخ</a>):"
 "<br/>\n"
@@ -27422,12 +27421,12 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
-"<p>تفعيل إدارة لون لوح الرسم ينشئ آليًا سطحًا أصليًا منفصلاً للوح الرسم. قد يسبب "
+"<p>تفعيل إدارة لون لوح الرسم ينشئ آليًا سطحًا أصليًا منفصلًا للوح الرسم. قد يسبب "
 "ذلك مشكلات في الأداء على بعض الأنظمة.</p><p>إذا عُطِّلت إدارة الألوان، فستُقدِّم "
 "كريتا لوح الرسم في سطح النافذة الرئيسة، والذي يعد sRGB. سيسبب هذا تقييدين:"
 "<ol>    <li>ستُقيّد فسحة الألوان بـ sRGB</li>    <li>سيُقيّد وضع تدقيق الألوان "
 "بـ \"استخدم إعدادات العرض الشاملة\"،         أي سيصبح تدقيق بياض الورق "
-"مستحيلاً</li></ol></p>"
+"مستحيلًا</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1369
 #, kde-format
@@ -28171,7 +28170,7 @@ msgstr "صفوف العينات في المجموعة:"
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:70
 #, kde-format
 msgid "Save New Brush Preset"
-msgstr "احفظ إعداداً مسبقاً جديداً للفرشاة"
+msgstr "احفظ إعدادًا مسبقًا جديدًا للفرشاة"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:79
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:75
@@ -29479,7 +29478,7 @@ msgid ""
 "</p></body></html>"
 msgstr ""
 "<html><head/><body><p>استخدم تخزين الملمس المؤقت. قد يكون هذا أسرع في بعض "
-"مجموعات البطاقات الرسومية/المشغلات (مثل إنتل) أو معطلاً في بعض المجموعات "
+"مجموعات البطاقات الرسومية/المشغلات (مثل إنتل) أو معطلًا في بعض المجموعات "
 "الأخرى (مثل AMD/Radeon).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
@@ -29977,7 +29976,7 @@ msgstr "كل "
 #: libs/ui/forms/wdggeneralsettings.ui:96
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
-msgstr "تُخفَى ملفات الحفظ الآلي غير المسماة مبدئياً"
+msgstr "تُخفَى ملفات الحفظ الآلي غير المسماة مبدئيًا"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:109
@@ -30052,7 +30051,7 @@ msgid ""
 "Use Zip64 (for very large files: cannot be opened in versions of Krita older "
 "than 4.2.0)"
 msgstr ""
-"استخدم Zip64 (للملفات الكبيرة جداً: لا يمكن فتحها في إصدارات كريتا الأقدم من "
+"استخدم Zip64 (للملفات الكبيرة جدًا: لا يمكن فتحها في إصدارات كريتا الأقدم من "
 "4.2.0)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkCompressKra)
@@ -30540,10 +30539,10 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
-"عند تحديده، يضبط هذا الخيار آلياً الإطارات \"البدئية\" و \"النهائية\" للمستند "
-"بحيث تكون الإطارات الرئيسة المنشأة حديثاً ضمن نطاق تشغيل الرسوم المتحركة "
-"دائماً. يوصى بهذه الميزة لتسريع سير عمل الرسوم المتحركة عند ارتجال مشهد بدون "
-"طول محدد سلفاً."
+"عند تحديده، يضبط هذا الخيار آليًا الإطارات \"البدئية\" و \"النهائية\" للمستند "
+"بحيث تكون الإطارات الرئيسة المنشأة حديثًا ضمن نطاق تشغيل الرسوم المتحركة "
+"دائمًا. يوصى بهذه الميزة لتسريع سير عمل الرسوم المتحركة عند ارتجال مشهد بدون "
+"طول محدد سلفًا."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1159
@@ -30560,7 +30559,7 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
-"عند تحديده، سيقوم هذا الخيار آلياً بتغيير حجم عرض إطارات واجهة الخط الزمني "
+"عند تحديده، سيقوم هذا الخيار آليًا بتغيير حجم عرض إطارات واجهة الخط الزمني "
 "للرسوم المتحركة ليناسب أفضل نطاق تشغيل المستند. نطاق تشغيل أصغر يسبب تكبير "
 "الخط الزمني، بينما نطاق تشغيل أكبر يسبب تصغير الخط الزمني."
 
@@ -30774,7 +30773,7 @@ msgstr "أسبِق «Copy of» للطبقات المكررة"
 #: libs/ui/forms/wdggeneralsettings.ui:1633
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr "اضغط مطولاً لفتح قوائم السياق"
+msgstr "اضغط مطولًا لفتح قوائم السياق"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:1640
@@ -31052,7 +31051,7 @@ msgid ""
 "<html><head/><body><p>The first imported frame will be placed in #0 instead "
 "of #1</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ألاطار الأول المستورد سيضع في #0 بدلاً من #1</p></"
+"<html><head/><body><p>ألاطار الأول المستورد سيضع في #0 بدلًا من #1</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, beginFromZeroIndexBox)
@@ -32010,7 +32009,7 @@ msgstr ""
 "<html><head/><body><p>إطارات الرسوم المتحركة تخزّن على القرص الصلب في نفس "
 "المجلد كملف المبادلة. الخبيئة تخزّن بطريقة مضغوطة. تحتاج كمية صغيرة من ذاكرة "
 "الوصول العشوائي الإضافية.</p><p>بما أن سرعة نقل البيانات للقرص الصلب منخفضة، "
-"ربما تريد تحديد حجم الإطار المخبأ لتكون قادراً على تشغيل الفيديو بمعدل 25 "
+"ربما تريد تحديد حجم الإطار المخبأ لتكون قادرًا على تشغيل الفيديو بمعدل 25 "
 "إطار في الثانية. حد 2500 بكسل هو عادة خيار جيد.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optOnDisk)
@@ -32090,8 +32089,8 @@ msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
 msgstr ""
-"<html><head/><body><p>صيّر خبيئة الرسوم المتحركة مسبقاً في الخلفية آلياً عندما "
-"يكون المستخدم خاملاً</p></body></html>"
+"<html><head/><body><p>صيّر خبيئة الرسوم المتحركة مسبقًا في الخلفية آليًا عندما "
+"يكون المستخدم خاملًا</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:532
@@ -33179,7 +33178,7 @@ msgstr "احذف آخر اختصار لهذا ألإجراء!"
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:113
 #, kde-format
 msgid "It is not allowed to erase some default shortcuts. Modify it instead."
-msgstr "لا يسمح بمسح بعض ألاختصارات المبدئية. عدِّله بدلاً من ذلك."
+msgstr "لا يسمح بمسح بعض ألاختصارات المبدئية. عدِّله بدلًا من ذلك."
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:39
@@ -33267,7 +33266,7 @@ msgid ""
 "current tool. For example, using the brush tool it samples a color from the "
 "canvas."
 msgstr ""
-"إجراء <i>ألإستدعاء البديل</i> يؤدي إجراء بديلاً بالأداة الحالية. على سبيل "
+"إجراء <i>ألإستدعاء البديل</i> يؤدي إجراء بديلًا بالأداة الحالية. على سبيل "
 "المثال، باستخدام أداة الفرشاة، هو يعاين لونًا من اللوحة."
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:32
@@ -34177,7 +34176,7 @@ msgstr "أضف إلى النّقوش مسبقة التّعريف"
 #: libs/ui/kis_custom_pattern.cc:126
 #, kde-format
 msgid "This pattern already exists. Do you want to overwrite it?"
-msgstr "هذا النمط موجود مسبقاً. هل تريد الكتابة فوقه؟"
+msgstr "هذا النمط موجود مسبقًا. هل تريد الكتابة فوقه؟"
 
 #: libs/ui/kis_file_layer.cpp:134
 #, kde-format
@@ -34226,7 +34225,7 @@ msgstr "استيراد الصّورة"
 #: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:100
 #, kde-format
 msgid "Select a Color"
-msgstr "اختر لوناً"
+msgstr "اختر لونًا"
 
 #: libs/ui/kis_layer_manager.cc:194
 #, kde-format
@@ -34500,19 +34499,19 @@ msgstr "إزالة العقد"
 #: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "اعكس القناع أفقياً"
+msgstr "اعكس القناع أفقيًا"
 
 #: libs/ui/kis_node_manager.cpp:1131
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "اعكس الطبقة أفقياً"
-msgstr[1] "اعكس %1 طبقة أفقياً"
-msgstr[2] "اعكس %1 طبقات أفقياً"
-msgstr[3] "اعكس %1 طبقات أفقياً"
-msgstr[4] "اعكس %1 طبقة أفقياً"
-msgstr[5] "اعكس %1 طبقة أفقياً"
+msgstr[0] "اعكس الطبقة أفقيًا"
+msgstr[1] "اعكس %1 طبقة أفقيًا"
+msgstr[2] "اعكس %1 طبقات أفقيًا"
+msgstr[3] "اعكس %1 طبقات أفقيًا"
+msgstr[4] "اعكس %1 طبقة أفقيًا"
+msgstr[5] "اعكس %1 طبقة أفقيًا"
 
 #: libs/ui/kis_node_manager.cpp:1142
 msgctxt "(qtundo-format)"
@@ -34534,7 +34533,7 @@ msgstr[5] "اعكس %1 طبقة عموديًا"
 #: libs/ui/kis_node_manager.cpp:1153
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
-msgstr "اعكس جميع الطبقات أفقياً"
+msgstr "اعكس جميع الطبقات أفقيًا"
 
 #: libs/ui/kis_node_manager.cpp:1160
 msgctxt "(qtundo-format)"
@@ -35089,7 +35088,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"تحذير:\tاستغرقت بعض الطبقات وقتًا طويلاً لحساب\n"
+"تحذير:\tاستغرقت بعض الطبقات وقتًا طويلًا لحساب\n"
 "\t\tالصور المصغرة الخاصة بها. حُولت إلى وضع الصور المصغرة منخفضة الجودة\n"
 "\t\t. حاول مسح بيانات الصور غير المستخدمة باستخدام\n"
 "\t\tإجراء صورة->أزل بيانات الصور غير المستخدمة.\n"
@@ -35522,7 +35521,7 @@ msgid ""
 "discarded."
 msgstr ""
 "إذا اخترت ألغ، فاحفظ كل الملفات القابلة للاسترداد.\n"
-"إذا ضغطت حسناً، استرد الملفات المحددة، واهمل الملفات غير المحددة."
+"إذا ضغطت حسنًا، استرد الملفات المحددة، واهمل الملفات غير المحددة."
 
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
@@ -37821,7 +37820,7 @@ msgid ""
 "Shape selection does not fully support wraparound mode. Please use pixel "
 "selection instead"
 msgstr ""
-"اختيار الشكل لا يدعم وضع الالتفاف بشكل كامل. استخدم اختيار البكسل بدلاً من "
+"اختيار الشكل لا يدعم وضع الالتفاف بشكل كامل. استخدم اختيار البكسل بدلًا من "
 "ذلك، من فضلك"
 
 #: libs/ui/tool/kis_selection_tool_helper.cpp:358
@@ -38549,7 +38548,7 @@ msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (أحمر، "
 "أخضر، أزرق)</a></b>، هو نموذج اللون الذي تستخدمه الشاشات ووسائط أخرى قائمة "
 "على الضوء.<br/>RGB هو نموذج لون مضاف: إضافة الألوان معًا يجعلها أكثر إشراقًا. "
-"نموذج اللون هذا هو الأكثر شمولاً من بين جميع نماذج الألوان، ويوصَى به كنموذج "
+"نموذج اللون هذا هو الأكثر شمولًا من بين جميع نماذج الألوان، ويوصَى به كنموذج "
 "للطلاء، والذي يمكن تحويله لاحقًا إلى فضاءات أخرى. RGB هو أيضًا فضاء اللون "
 "الموصَى به لتحرير HDR."
 
@@ -38848,7 +38847,7 @@ msgid ""
 msgstr ""
 "<p>نطاق ألوان هذه التشكيلة هو تقريبًا بنفس حجم وشكل نطاق فضاء لون ACES، ومثل "
 "فضاء لون ACES، يحتوي AllColorsRGB على جميع الألوان الحقيقية الممكنة. لكن "
-"AllColorsRGB يحتوي فعليًا على نطاق ألوان أكبر قليلاً (لالتقاط بعض الألوان "
+"AllColorsRGB يحتوي فعليًا على نطاق ألوان أكبر قليلًا (لالتقاط بعض الألوان "
 "الهامشية التي بالكاد تُعَد حقيقية عند عرضها بواسطة المراقب القياسي) ويستخدِم "
 "نقطة بيضاء D50.</p><p>مثل فضاء لون ACES، يحتوي AllColorsRGB على نسبة عالية "
 "من الألوان الخيالية. راجع <a href=\"https://ninedegreesbelow.com/photography/"
@@ -39209,7 +39208,7 @@ msgstr ""
 "بت. يُقتَرَح استخدام عدد صحيح 16 بت أو أي فضاء لون فاصلة عائمة للتشكيلات "
 "الخطية.\n"
 "\n"
-"اضغط على \"حسناً\" لإنشاء فضاء لون RGB خطي عدد صحيح 8 بت أو \"إلغاء\" للعودة "
+"اضغط على \"حسنًا\" لإنشاء فضاء لون RGB خطي عدد صحيح 8 بت أو \"إلغاء\" للعودة "
 "إلى مربع حوار الإعدادات."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
@@ -39979,7 +39978,7 @@ msgstr "أدخِل اسم التّدرّج:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
-msgstr "الاسم موجود فعلاً"
+msgstr "الاسم موجود فعلًا"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:655
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:207
@@ -40945,7 +40944,7 @@ msgid ""
 "improvement then you are welcome to use the bug tracking system to register "
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
-"<html>التطبيقات في حاجة دائمة للتحسين، وفريق كِيدِي جاهزاً لذلك.لكن عليك "
+"<html>التطبيقات في حاجة دائمة للتحسين، وفريق كِيدِي جاهزًا لذلك.لكن عليك "
 "كمستخدم أن تخبرنا بالأشياء التي لا تعمل كما يجب أو يمكن فعلها بشكل أفضل.<br /"
 "><br />تملك كِيدِي نظام تعقب للعلل البرمجية. زر <a href=\"%1\">%1</a> أو "
 "استخدم المربع الحواري  \"أبلغ عن عله...\" من قائمة \"المساعدة\" للتبليغ عن "
@@ -41081,7 +41080,7 @@ msgid ""
 msgstr ""
 "<qt><p>يرجى قراءة <b><a href=\"https://docs.krita.org/en/"
 "untranslatable_pages/reporting_bugs.html\">هذا الدليل</a></b> للإبلاغ عن "
-"الأخطاء أولاً!</p><p>لإرسال تقرير عن الأخطاء، انقر فوق الزر أدناه. سيؤدي هذا "
+"الأخطاء أولًا!</p><p>لإرسال تقرير عن الأخطاء، انقر فوق الزر أدناه. سيؤدي هذا "
 "إلى فتح نافذة متصفح الويب على <a href=\"https://bugs.kde.org\">https://bugs."
 "kde.org</a> حيث ستجد نموذجًا لملئه. </p><p><b>يرجى لصق المعلومات التالية في "
 "تقرير الأخطاء!</b></p></qt>"
@@ -41089,7 +41088,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/kbugreport.cpp:204
 #, kde-format
 msgid "&Submit Bug Report"
-msgstr "&قدّم تقريراً عن العلة"
+msgstr "&قدّم تقريرًا عن العلة"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
 #, kde-format
@@ -43179,7 +43178,7 @@ msgstr "انسخ إطار رئيس"
 #: plugins/dockers/animation/KisAnimUtils.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
-msgstr "أضف إطارًا رئيساً"
+msgstr "أضف إطارًا رئيسًا"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
@@ -43291,7 +43290,7 @@ msgstr[0] "أزِل الإطار وحرّك"
 msgstr[1] "أزِل الإطار وحرّك"
 msgstr[2] "أزِل إطارين وحركهما"
 msgstr[3] "أزِل %1 إطارات وحرّكها"
-msgstr[4] "أزِل %1 إطاراً وحرّكهن"
+msgstr[4] "أزِل %1 إطارًا وحرّكهن"
 msgstr[5] "أزِل %1 إطار وحرّكهن"
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:453
@@ -43619,7 +43618,7 @@ msgstr "عُد إلى الإعدادات المبدئية"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:52
 #, kde-format
 msgid "Create new mask"
-msgstr "أنشِئ قناعاً جديداً"
+msgstr "أنشِئ قناعًا جديدًا"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskEditor)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:65
@@ -43934,8 +43933,8 @@ msgid ""
 msgstr ""
 "لا شيء: لا تُظهِر أي شيء.\n"
 "بسيط: أظهِر عتامة أو أنماط مزج مُغيَّرة.\n"
-"متوازن: أظهِر كلاً من العتمة ونمط المزج إذا غُيِّر أحدهما.\n"
-"مُفصَّل: أظهِر كلاً من العتمة ونمط المزج حتى لو لم يُغيَّرا."
+"متوازن: أظهِر كلًا من العتمة ونمط المزج إذا غُيِّر أحدهما.\n"
+"مُفصَّل: أظهِر كلًا من العتمة ونمط المزج حتى لو لم يُغيَّرا."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, kde-format
@@ -44413,7 +44412,7 @@ msgstr "تصدير اللوحة نُفِّذ بنجاح"
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
-msgstr "احفظ اللوحة صراحةً، سُينفَّذ آلياً أيضاً عند الخروج من كريتا."
+msgstr "احفظ اللوحة صراحةً، سُينفَّذ آليًا أيضًا عند الخروج من كريتا."
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
 #, kde-format
@@ -44533,7 +44532,7 @@ msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
 "its location manually"
 msgstr ""
-"تعذّر اكتشاف موقع ملف FFmpeg القابل للتنفيذ، رجاءً ثبّته أو حدّد موقعه يدوياً"
+"تعذّر اكتشاف موقع ملف FFmpeg القابل للتنفيذ، رجاءً ثبّته أو حدّد موقعه يدويًا"
 
 #: plugins/dockers/recorder/recorder_export.cpp:231
 #, kde-format
@@ -45076,8 +45075,8 @@ msgid ""
 "Depending on timelapse speed, this may cause flickering in the resulting "
 "video."
 msgstr ""
-"سجّل الإطارات عندما يكون وضع عزل الطبقة أو عزل المجموعة نشطاً.\n"
-"اعتماداً على سرعة مرور الزمن، قد يسبب هذا وميضاً في الفيديو الناتج."
+"سجّل الإطارات عندما يكون وضع عزل الطبقة أو عزل المجموعة نشطًا.\n"
+"اعتمادًا على سرعة مرور الزمن، قد يسبب هذا وميضًا في الفيديو الناتج."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:359
@@ -45091,13 +45090,13 @@ msgstr "سجّل في وضع العزل"
 #: plugins/dockers/recorder/recorderdocker.ui:366
 #, kde-format
 msgid "Start recording after creating a new image or opening an existing one."
-msgstr "ابدأ التسجيل آلياً بعد إنشاء صورة جديدة أو فتح صورة موجودة."
+msgstr "ابدأ التسجيل آليًا بعد إنشاء صورة جديدة أو فتح صورة موجودة."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxAutoRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:369
 #, kde-format
 msgid "Record automatically"
-msgstr "سجّل آلياً"
+msgstr "سجّل آليًا"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:388
@@ -45125,7 +45124,7 @@ msgid ""
 "affect CPU consumption.\n"
 "Values lower than 50 are not recommended due to high artifacts."
 msgstr ""
-"قيمة أكبر تُنتِج ملفاً أكبر وجودة أفضل. لا تؤثر على استهلاك وحدة المعالجة "
+"قيمة أكبر تُنتِج ملفًا أكبر وجودة أفضل. لا تؤثر على استهلاك وحدة المعالجة "
 "المركزية.\n"
 "لا يُوصى بالقيم الأقل من 50 بسبب التشوهات العالية."
 
@@ -45144,7 +45143,7 @@ msgid ""
 "Compression set to 0 is not recommended due to high disk space consumption.\n"
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
-"قيمة أكبر تُنتِج ملفاً أصغر لكنها تتطلب المزيد من وحدة المعالجة المركزية. لا "
+"قيمة أكبر تُنتِج ملفًا أصغر لكنها تتطلب المزيد من وحدة المعالجة المركزية. لا "
 "تؤثر على الجودة.\n"
 "لا يُوصى بتعيين الضغط إلى 0 بسبب الاستهلاك العالي لمساحة القرص.\n"
 "لا يُوصى بالقيم فوق 3 بسبب التأثير العالي على الأداء."
@@ -45221,7 +45220,7 @@ msgid ""
 msgstr ""
 "حدّد عدد خيوط التسجيل.\n"
 "عدد الخيوط يتجاوز العدد الأقصى المثالي لإعداد جهازك.\n"
-"رجاءً كُن على علم بأن عدداً أكبر من %1 ربما لن يعطيك أي تعزيز للأداء."
+"رجاءً كُن على علم بأن عددًا أكبر من %1 ربما لن يعطيك أي تعزيز للأداء."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
@@ -45233,7 +45232,7 @@ msgid ""
 "overall system performance."
 msgstr ""
 "حدّد عدد خيوط التسجيل.\n"
-"وفقاً لإعداد جهازك، يجب أن تُسجّل بما لا يزيد عن %1 خيط.\n"
+"وفقًا لإعداد جهازك، يجب أن تُسجّل بما لا يزيد عن %1 خيط.\n"
 "تستطيع التجربة بخيط أو خيطين إضافيين، لكن راقِب الأداء الكلي لنظامك."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:366
@@ -45250,12 +45249,12 @@ msgstr "المسجل"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:471
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
-msgstr "نظامك ليس فعالاً بما يكفي لهذه الميزة"
+msgstr "نظامك ليس فعالًا بما يكفي لهذه الميزة"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:629
 #, kde-format
 msgid "Select a Directory for Recordings"
-msgstr "حدّد دليلاً للتسجيلات"
+msgstr "حدّد دليلًا للتسجيلات"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:750
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:756
@@ -45386,12 +45385,12 @@ msgstr "رجاءً أدخِل اسم ملف للتصدير إليه."
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #, kde-format
 msgid "Please enter a directory to export to."
-msgstr "رجاءً أدخِل دليلاً للتصدير إليه."
+msgstr "رجاءً أدخِل دليلًا للتصدير إليه."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
 #, kde-format
 msgid "Please enter an existing directory."
-msgstr "رجاءً أدخِل دليلاً موجوداً."
+msgstr "رجاءً أدخِل دليلًا موجودًا."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
 #, kde-format
@@ -45422,7 +45421,7 @@ msgstr "رجاءً اختر ملف svg لتحديد التخطيط للتصدي�
 msgid ""
 "The SVG file to specify layout doesn't exist. Please choose an existing SVG "
 "file."
-msgstr "ملف SVG لتحديد التخطيط غير موجود. رجاءً اختر ملف SVG موجوداً."
+msgstr "ملف SVG لتحديد التخطيط غير موجود. رجاءً اختر ملف SVG موجودًا."
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -47945,7 +47944,7 @@ msgstr "على طول الاتجاه"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
 #, kde-format
 msgid "Laterally"
-msgstr "عرضياً"
+msgstr "عرضيًا"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -51143,7 +51142,7 @@ msgstr "أهمِل قناة ألفا"
 #: plugins/extensions/separate_channels/wdg_separations.ui:113
 #, kde-format
 msgid "Create separate separation from alpha channel"
-msgstr "أنشِئ فصلاً منفصلاً من قناة ألفا"
+msgstr "أنشِئ فصلًا منفصلًا من قناة ألفا"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownscale)
 #: plugins/extensions/separate_channels/wdg_separations.ui:123
@@ -53921,11 +53920,11 @@ msgctxt ""
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "كل {n} تكرار أُفُقِيّاً"
-msgstr[1] "كل تكرار أُفُقِيّاً"
+msgstr[0] "كل {n} تكرار أُفُقِيًّا"
+msgstr[1] "كل تكرار أُفُقِيًّا"
 msgstr[2] "كل تكرارين أُفُقِيين"
-msgstr[3] "كل {n}تكرارات أُفُقِيّاً"
-msgstr[4] "كل {n} تكرارًا أُفُقِيّاً"
+msgstr[3] "كل {n}تكرارات أُفُقِيًّا"
+msgstr[4] "كل {n} تكرارًا أُفُقِيًّا"
 msgstr[5] "كل {n} تكرار أُفُقِيّ"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
@@ -53938,12 +53937,12 @@ msgctxt ""
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "كل {n} تكرار عَمُودِيّاً"
-msgstr[1] "كل تكرار عَمُودِيّاً"
-msgstr[2] "كل {n} تكرارين عَمُودِيّاً"
-msgstr[3] "كل {n}تكرارات عَمُودِيّاً"
-msgstr[4] "كل {n} تكرارًا عَمُودِيّاً"
-msgstr[5] "كل {n} تكرار عَمُودِيّاً"
+msgstr[0] "كل {n} تكرار عَمُودِيًّا"
+msgstr[1] "كل تكرار عَمُودِيًّا"
+msgstr[2] "كل {n} تكرارين عَمُودِيًّا"
+msgstr[3] "كل {n}تكرارات عَمُودِيًّا"
+msgstr[4] "كل {n} تكرارًا عَمُودِيًّا"
+msgstr[5] "كل {n} تكرار عَمُودِيًّا"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -54630,7 +54629,7 @@ msgid ""
 "a perceptual quantizer curve (also known as SMPTE 2048 curve). Recommended "
 "for HDR images where the absolute brightness is important."
 msgstr ""
-"حوِّل الصورة إلى Rec 2020 الخطي أولاً، ثُمَّ ترميزها بمنحنى مكمِّم مدرَك (يُعرف أيضًا "
+"حوِّل الصورة إلى Rec 2020 الخطي أولًا، ثُمَّ ترميزها بمنحنى مكمِّم مدرَك (يُعرف أيضًا "
 "باسم منحنى SMPTE 2048). نوصي بهذا لصور HDR التي يكون فيها السطوع المُطلق مهمًا."
 
 #: plugins/impex/heif/HeifExport.cpp:558
@@ -54642,7 +54641,7 @@ msgid ""
 "a Hybrid Log Gamma curve. Recommended for HDR images where the display may "
 "not understand HDR."
 msgstr ""
-"حوِّل الصورة إلى Rec 2020 الخطي أولاً، ثُمَّ ترميزها بمنحنى هجين لوغاريتمي غاما. "
+"حوِّل الصورة إلى Rec 2020 الخطي أولًا، ثُمَّ ترميزها بمنحنى هجين لوغاريتمي غاما. "
 "نوصي بهذا لصور HDR التي قد لا تفهم فيها الشاشة HDR."
 
 #: plugins/impex/heif/HeifExport.cpp:564
@@ -54661,7 +54660,7 @@ msgid ""
 "quantizer curve (also known as the SMPTE 2048 curve). Recommended for images "
 "where the absolute brightness is important."
 msgstr ""
-"حوِّل الصورة إلى شكل خطي أولاً، ثُمَّ رمِّزها بمنحنى مكمِّم مدرَك (يُعرف أيضًا باسم منحنى "
+"حوِّل الصورة إلى شكل خطي أولًا، ثُمَّ رمِّزها بمنحنى مكمِّم مدرَك (يُعرف أيضًا باسم منحنى "
 "SMPTE 2048). نوصي بهذا للصور التي يكون فيها السطوع المطلق مهمًا."
 
 #: plugins/impex/heif/HeifExport.cpp:569
@@ -54679,7 +54678,7 @@ msgid ""
 "The image will be linearized first, and then encoded with a Hybrid Log Gamma "
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
-"حوِّل الصورة إلى شكل خطي أولاً، ثُمَّ رمِّزها بمنحنى هجين لوغاريتمي غاما. نوصي بهذا "
+"حوِّل الصورة إلى شكل خطي أولًا، ثُمَّ رمِّزها بمنحنى هجين لوغاريتمي غاما. نوصي بهذا "
 "للصور المعدة للشاشات التي لا تستطيع فهم PQ"
 
 #: plugins/impex/heif/HeifExport.cpp:574
@@ -54698,7 +54697,7 @@ msgid ""
 "Krita always opens images like these as linear floating point, this option "
 "is there to reverse that"
 msgstr ""
-"حوِّل الصورة إلى شكل خطي أولاً، ثُمَّ رمِّزها بـ SMPTE ST 428. يفتح كريتا دائمًا "
+"حوِّل الصورة إلى شكل خطي أولًا، ثُمَّ رمِّزها بـ SMPTE ST 428. يفتح كريتا دائمًا "
 "الصور كهذه كنقطة عائمة خطية، هذا الخيار موجود لعكس هذا"
 
 #: plugins/impex/heif/HeifExport.cpp:580
@@ -54826,7 +54825,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>لا تدعم جميع المرمزات لـ AV1 وبالامتداد avif الحفظ إلى "
 "اللون الأحادي وتستخدم YCbCr احتياطي. سيستطيع كريتا فتح هذه الملفات بشكل جيد، "
-"لكن لا تستطيع جميع البرامج ذلك. يُحلُّ التحويل إلى sRGB أولاً قبل الحفظ هذه "
+"لكن لا تستطيع جميع البرامج ذلك. يُحلُّ التحويل إلى sRGB أولًا قبل الحفظ هذه "
 "المشكلة على حساب حجم ملف أكبر.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMonochromesRGB)
@@ -56047,7 +56046,7 @@ msgid ""
 "useful for web content.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>يحدد التسلسل الذي تُرمَّز به مربعات الصورة. يُعطي 'المركز "
-"أولاً' أولوية لمركز الصورة للتحميل التدريجي، وهو مُفيد لمحتوى الويب.</p></"
+"أولًا' أولوية لمركز الصورة للتحميل التدريجي، وهو مُفيد لمحتوى الويب.</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
@@ -57285,7 +57284,7 @@ msgstr ""
 "الخضراء هي نفسها. إذا كانت البكسلات الخضراء في الصفوف الزوجية أكثر حساسية "
 "للضوء فوق البنفسجي من الصفوف الفردية، يتسبب هذا الاختلاف في نمط شبكي في "
 "الإخراج؛ استخدام هذا الخيار يحل هذه المشكلة بأقل قدر من فقدان التفاصيل.</"
-"p><p>للتلخيص، هذا الخيار يطمس الصورة قليلاً، لكنه يزيل الأنماط الشبكية 2x2 "
+"p><p>للتلخيص، هذا الخيار يطمس الصورة قليلًا، لكنه يزيل الأنماط الشبكية 2x2 "
 "الخاطئة مع طريقة جودة VNG أو المتاهات مع طريقة جودة AHD.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:298
@@ -57900,7 +57899,7 @@ msgid ""
 "factors.</p>"
 msgstr ""
 "<title>تصحيح آلي للزيغ اللوني</title><p>إذا فُعِّل هذا الخيار، فحاول إزاحة "
-"قنوات الصورة قليلاً وقيِّم تغيير الزيغ اللوني. لاحظ أنه إذا صورت نمطًا أزرق-"
+"قنوات الصورة قليلًا وقيِّم تغيير الزيغ اللوني. لاحظ أنه إذا صورت نمطًا أزرق-"
 "أحمر، فقد تفشل الطريقة. في هذه الحالة، عطِّل هذا الخيار واضبط عوامل اللون "
 "يدويًا.</p>"
 
@@ -58222,7 +58221,7 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
-"تحتوي صورة TIFF على بيانات PSD صالحة مُضمَّنة. أرِيد استخدام بيانات PSD بدلاً من "
+"تحتوي صورة TIFF على بيانات PSD صالحة مُضمَّنة. أرِيد استخدام بيانات PSD بدلًا من "
 "بيانات TIFF العادية؟"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -58251,7 +58250,7 @@ msgstr "المُتَنَبّئ"
 #, kde-format
 msgid ""
 "Using a predictor can improve the compression (mostly for LZW and deflate.)"
-msgstr "استخدام المُتَنَبّئ يمكن أن يحسِّن الضغط (غالباً لـ LZW و deflate)."
+msgstr "استخدام المُتَنَبّئ يمكن أن يحسِّن الضغط (غالبًا لـ LZW و deflate)."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkPhotoshop)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:79
@@ -58588,7 +58587,7 @@ msgid ""
 "Auto Adjust Filter is enabled."
 msgstr ""
 "0 = بسيط، 1 = قوي. استخدِمه فقط إذا كانت قوة المرشح أعلى من 0 أو كان ضبط "
-"المرشح الآلي مفعلاً."
+"المرشح الآلي مفعلًا."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:391
@@ -58883,15 +58882,6 @@ msgstr "المرشّحات:"
 #, kde-format
 msgid "WebP Image"
 msgstr "صورة WebP"
-
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"ملف XCF هذا جديد للغاية؛ لا يمكن لكريتا دعم ملفات XCF المكتوبة بواسطة GIMP "
-"2.9 أو أحدث."
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
@@ -63347,7 +63337,7 @@ msgstr "إعدادات مشروع القصص المصورة المبدئية"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:81
 msgid "A Project name. This can be different from the eventual title"
-msgstr "اسم مشروع. يمكن أن يكون مختلفاً عن العنوان النهائي"
+msgstr "اسم مشروع. يمكن أن يكون مختلفًا عن العنوان النهائي"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 msgid "Generate"
@@ -63358,14 +63348,14 @@ msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
 msgstr ""
-"إذا لم تستطع التوصل إلى اسم مشروع، فإن مولد أسماء المشاريع المتطور جداً لدينا "
+"إذا لم تستطع التوصل إلى اسم مشروع، فإن مولد أسماء المشاريع المتطور جدًا لدينا "
 "سيخدم لإعطاء اسم راق وبسيط في نفس الوقت."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:89
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
-msgstr "عم تتحدث قصتك المصورة؟ هذا لراحتك خاصة فلا تقلق بشأن ما تقوله كثيراً."
+msgstr "عم تتحدث قصتك المصورة؟ هذا لراحتك خاصة فلا تقلق بشأن ما تقوله كثيرًا."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:91
 msgid "The main language the comic is in"
@@ -63373,7 +63363,7 @@ msgstr "اللغة الرئيسة للقصة المصورة"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:104
 msgid "Make a new directory with the project name."
-msgstr "أنشئ دليلاً جديداً باسم المشروع."
+msgstr "أنشئ دليلًا جديدًا باسم المشروع."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid ""
@@ -63391,7 +63381,7 @@ msgstr "الصّفحات"
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
-msgstr "اسم المجلد الذي يحتوي على الصفحات. إذا لم يكن موجوداً، فسيُنشئ."
+msgstr "اسم المجلد الذي يحتوي على الصفحات. إذا لم يكن موجودًا، فسيُنشئ."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
 msgid "export"
@@ -63401,7 +63391,7 @@ msgstr "صدّر"
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
-msgstr "اسم المجلد الذي يوضع فيه التصدير. إذا لم يكن موجوداً، فسيُنشئ."
+msgstr "اسم المجلد الذي يوضع فيه التصدير. إذا لم يكن موجودًا، فسيُنشئ."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 msgid "templates"
@@ -63463,7 +63453,7 @@ msgstr "ملليمتر"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:81
 msgid "Add new Template"
-msgstr "أضف قالباً جديداً"
+msgstr "أضف قالبًا جديدًا"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:98
 msgid "Import Templates"
@@ -63475,7 +63465,7 @@ msgstr "ما هي الملفات التي يجب إضافتها إلى مجلد 
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
 msgid "Create new Template"
-msgstr "أنشئ قالباً جديداً"
+msgstr "أنشئ قالبًا جديدًا"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:147
 msgid ""
@@ -63840,7 +63830,7 @@ msgstr "امتدادات الصور:"
 
 #: plugins/python/exportlayers/uiexportlayers.py:168
 msgid "Select one document."
-msgstr "اختر مستنداً واحداً."
+msgstr "اختر مستندًا واحدًا."
 
 #: plugins/python/exportlayers/uiexportlayers.py:170
 msgid "Select the initial directory."
@@ -63852,7 +63842,7 @@ msgstr "اكتمل تصدير جميع الطبقات."
 
 #: plugins/python/exportlayers/uiexportlayers.py:244
 msgid "Select a Folder"
-msgstr "اختر مجلداً"
+msgstr "اختر مجلدًا"
 
 #: plugins/python/filtermanager/filtermanager.py:17
 #: plugins/python/filtermanager/uifiltermanager.py:60
@@ -63931,7 +63921,7 @@ msgid ""
 "name of the script. </p></body></html>"
 msgstr ""
 "<html><head/><body><p>ما تريد ظهوره في قائمة الأدوات-&gt;السكريبتات. إذا "
-"تركت هذا فارغاً، سيُنشئ إدراج مبدئي بناءً على اسم السكربت. </p></body></html>"
+"تركت هذا فارغًا، سيُنشئ إدراج مبدئي بناءً على اسم السكربت. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/python/krita_script_starter/bbdkss.ui:92
@@ -63977,9 +63967,9 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>إذا حددت هذا، سيُمكن سكربتك آلياً في كريتا. أي، سيظهر في "
+"<html><head/><body><p>إذا حددت هذا، سيُمكن سكربتك آليًا في كريتا. أي، سيظهر في "
 "قائمة السكريبتات أو قائمة المرسى. إذا لم تحدده، ستحتاج إلى تمكين السكربت "
-"يدوياً من خلال إدراج قائمة كريتا-&gt;إعدادات. </p></body></html>"
+"يدويًا من خلال إدراج قائمة كريتا-&gt;إعدادات. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -64109,8 +64099,8 @@ msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
-"استدعِ إجراء \"طفرة\"، والذي يطفر عشوائياً إعدادات مختلفة للفرشاة والألوان "
-"العالمية استناداً إلى إعدادات الطفرة المُشكلة أعلاه."
+"استدعِ إجراء \"طفرة\"، والذي يطفر عشوائيًا إعدادات مختلفة للفرشاة والألوان "
+"العالمية استنادًا إلى إعدادات الطفرة المُشكلة أعلاه."
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
@@ -64928,7 +64918,7 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 "تأخذ المسافة القابلة للقياس مستوى التكبير بعين الاعتبار وتجعل المسافة ثابتة "
-"بصرياً أيّاً ما كان مستوى التكبير المختار"
+"بصريًا أيًّا ما كان مستوى التكبير المختار"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:539
 #, kde-format
@@ -65157,7 +65147,7 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
-"عين مدى الجزء المعتم من الملء. نقصان الانتشار ينقص تعتيم مناطق الملء اعتماداً "
+"عين مدى الجزء المعتم من الملء. نقصان الانتشار ينقص تعتيم مناطق الملء اعتمادًا "
 "على تشابه اللون."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
@@ -65581,7 +65571,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
-msgstr "اعرض معلومات اللون لكل قناة أدناه كنسب مئوية بدلاً من البايتات."
+msgstr "اعرض معلومات اللون لكل قناة أدناه كنسب مئوية بدلًا من البايتات."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:210
@@ -68173,7 +68163,7 @@ msgid ""
 "layer and a starting shape first."
 msgstr ""
 "هذه الأداة تعمل فقط على الطبقات المتجهة. ربما تريد إنشاء طبقة متجهة وشكل "
-"ابتدائي أولاً."
+"ابتدائي أولًا."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, kde-format
@@ -69555,6 +69545,13 @@ msgstr ""
 "بدّل بين النطاق الكامل والنطاق الفرعي.\n"
 "النطاق الكامل: [%1, %2]\n"
 "النطاق الفرعي: [%3, %4]"
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "ملف XCF هذا جديد للغاية؛ لا يمكن لكريتا دعم ملفات XCF المكتوبة بواسطة "
+#~ "GIMP 2.9 أو أحدث."
 
 #~ msgid "Selection Actions Bar"
 #~ msgstr "شريط إجراءات التحديد"

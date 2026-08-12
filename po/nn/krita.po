@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-07 02:42+0000\n"
+"POT-Creation-Date: 2026-08-12 03:10+0000\n"
 "PO-Revision-Date: 2026-08-08 18:01+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -22201,7 +22201,6 @@ msgstr "Transformeringsmaske"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Gjennomsiktsmaske"
@@ -58884,15 +58883,6 @@ msgstr "Filter:"
 msgid "WebP Image"
 msgstr "WebP-bilete"
 
-#: plugins/impex/xcf/kis_xcf_import.cpp:155
-#, kde-format
-msgid ""
-"This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
-"or newer."
-msgstr ""
-"XCF-fila er for ny. Krita støttar ikkje XCF-filer lagra i GIMP 2.9 eller "
-"nyare."
-
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
 msgid "Iptc"
@@ -69620,3 +69610,10 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid ""
+#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
+#~ "2.9 or newer."
+#~ msgstr ""
+#~ "XCF-fila er for ny. Krita støttar ikkje XCF-filer lagra i GIMP 2.9 eller "
+#~ "nyare."

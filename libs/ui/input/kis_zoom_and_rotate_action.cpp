@@ -93,6 +93,8 @@ void KisZoomAndRotateAction::deactivate(int shortcut)
 
 void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
 {
+    if (!event) return;
+
     QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
 
     if (touchEvent && touchEvent->touchPoints().size() > 0) {

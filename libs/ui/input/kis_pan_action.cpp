@@ -83,7 +83,7 @@ void KisPanAction::begin(int shortcut, QEvent *event)
     /**
      * Firstly, try to handle native gestures and touch events
      */
-    if (event->type() == QEvent::NativeGesture && shortcut == PanModeShortcut) {
+    if (event && event->type() == QEvent::NativeGesture && shortcut == PanModeShortcut) {
 
         using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
         using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;

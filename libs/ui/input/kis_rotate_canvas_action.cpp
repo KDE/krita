@@ -89,7 +89,8 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
     KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
 
-    if (event->type() == QEvent::NativeGesture && (shortcut == RotateModeShortcut || shortcut == DiscreteRotateModeShortcut)) {
+    if (event && event->type() == QEvent::NativeGesture
+        && (shortcut == RotateModeShortcut || shortcut == DiscreteRotateModeShortcut)) {
 
         using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
         using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;

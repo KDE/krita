@@ -121,7 +121,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
     /**
      * Firstly, try to handle native gestures and touch events
      */
-    if (event->type() == QEvent::NativeGesture
+    if (event && event->type() == QEvent::NativeGesture
         && (shortcut == ZoomModeShortcut || shortcut == RelativeZoomModeShortcut || shortcut == DiscreteZoomModeShortcut
             || shortcut == RelativeDiscreteZoomModeShortcut)) {
 

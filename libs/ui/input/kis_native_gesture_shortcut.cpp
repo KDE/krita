@@ -14,11 +14,10 @@ class KisNativeGestureShortcut::Private
 public:
 	Private() { }
 
-    // Coverity requires sane defaults for every variable (CID 248365)
-    Qt::NativeGestureType type {Qt::PanNativeGesture};
+    Type type = PinchNavigation;
 };
 
-KisNativeGestureShortcut::KisNativeGestureShortcut(KisAbstractInputAction* action, int index, Qt::NativeGestureType type)
+KisNativeGestureShortcut::KisNativeGestureShortcut(KisAbstractInputAction* action, int index, Type type)
 	: KisAbstractShortcut(action, index), d(new Private)
 {
 	d->type = type;
@@ -36,6 +35,12 @@ int KisNativeGestureShortcut::priority() const
 
 bool KisNativeGestureShortcut::match(QNativeGestureEvent* event)
 {
-	//printf("checking NativeGesture against KisNativeGestureShortcut %d %d\n", (int)event->gestureType(), (int)d->type);
-	return event->gestureType() == d->type;
+    if (d->type == PinchNavigation) {
+        return event->gestureType() == Qt::PanNativeGesture || event->gestureType() == Qt::ZoomNativeGesture
+            || event->gestureType() == Qt::RotateNativeGesture;
+    } else if (d->type == SmartZoomNativeGesture) {
+        return event->gestureType() == Qt::SmartZoomNativeGesture;
+    }
+
+    return false;
 }

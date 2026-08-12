@@ -474,10 +474,6 @@ QString KisShortcutConfiguration::nativeGestureToText(NativeGestureAction action
     switch (action) {
     case PinchGesture:
         return i18n("Pinch Gesture");
-    case PanGesture:
-        return i18n("Pan Gesture");
-    case RotateGesture:
-        return i18n("Rotate Gesture");
     case SmartZoomGesture:
         return i18n("Smart Zoom Gesture");
     default:

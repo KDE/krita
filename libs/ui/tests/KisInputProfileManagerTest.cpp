@@ -152,8 +152,6 @@ void KisInputProfileManagerTest::testShortcutConfigurationNativeGesture_data()
     QTest::addColumn<QString>("expectedSerializedString");
 
     QTest::addRow("PinchGesture") << KisShortcutConfiguration::PinchGesture << "{3;5;[];0;0;1}";
-    QTest::addRow("PanGesture") << KisShortcutConfiguration::PanGesture << "{3;5;[];0;0;2}";
-    QTest::addRow("RotateGesture") << KisShortcutConfiguration::RotateGesture << "{3;5;[];0;0;3}";
     QTest::addRow("SmartZoomGesture") << KisShortcutConfiguration::SmartZoomGesture << "{3;5;[];0;0;4}";
 }
 

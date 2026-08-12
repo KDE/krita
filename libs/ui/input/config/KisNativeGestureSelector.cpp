@@ -9,19 +9,19 @@
 KisNativeGestureSelector::KisNativeGestureSelector(QWidget *parent)
     : KComboBox(parent)
 {
-    QStringList gestures;
-    for (int i = 1; i < KisShortcutConfiguration::MaxNativeGesture; i++) {
-        gestures << KisShortcutConfiguration::nativeGestureToText(static_cast<KisShortcutConfiguration::NativeGestureAction>(i));
-    }
-    addItems(gestures);
+    insertItem(0, KisShortcutConfiguration::nativeGestureToText(KisShortcutConfiguration::PinchGesture), static_cast<int>(KisShortcutConfiguration::PinchGesture));
+    insertItem(1, KisShortcutConfiguration::nativeGestureToText(KisShortcutConfiguration::SmartZoomGesture), static_cast<int>(KisShortcutConfiguration::SmartZoomGesture));
 }
 
 void KisNativeGestureSelector::setNativeGesture(KisShortcutConfiguration::NativeGestureAction gestureAction)
 {
-    setCurrentIndex(gestureAction - 1);
+    const int index = findData(static_cast<int>(gestureAction));
+    if (index >= 0) {
+        setCurrentIndex(index);
+    }
 }
 
 KisShortcutConfiguration::NativeGestureAction KisNativeGestureSelector::nativeGesture()
 {
-    return static_cast<KisShortcutConfiguration::NativeGestureAction>(currentIndex() + 1);
+    return static_cast<KisShortcutConfiguration::NativeGestureAction>(currentData().toInt());
 }

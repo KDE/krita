@@ -73,11 +73,14 @@ public:
     };
 
     enum NativeGestureAction {
-        NoNativeGesture, ///< No gesture.
-        PinchGesture, ///< Pinch gesture, fingers moving towards or away from each other.
-        PanGesture, ///< Pan gesture, fingers staying together but moving across the screen.
-        RotateGesture, ///<Rotate gesture, two fingers rotating around a pivot point.
-        SmartZoomGesture, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
+        NoNativeGesture = 0, ///< No gesture.
+        PinchGesture = 1, ///< Pinch gesture, a two finger gesture used for navigating the canvas
+
+        // WARNING: elements with indexes 1 and 2 are intentionally skipped,
+        // they used to represent Qt::PanNativeGesture and Qt::RotateNativeGesture,
+        // but now all three gestures are represented as a single PinchGesture.
+
+        SmartZoomGesture = 4, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
         MaxNativeGesture,
     };
 

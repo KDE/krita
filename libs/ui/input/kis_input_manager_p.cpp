@@ -707,19 +707,13 @@ bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* 
 {
     // Qt5 only implements QNativeGestureEvent for macOS
     // Qt6 implements QNativeGestureEvent for macOS and Wayland
-    Qt::NativeGestureType type;
+    KisNativeGestureShortcut::Type type = KisNativeGestureShortcut::PinchNavigation;
     switch (gesture) {
         case KisShortcutConfiguration::PinchGesture:
-            type = Qt::ZoomNativeGesture;
-            break;
-        case KisShortcutConfiguration::PanGesture:
-            type = Qt::PanNativeGesture;
-            break;
-        case KisShortcutConfiguration::RotateGesture:
-            type = Qt::RotateNativeGesture;
+            type = KisNativeGestureShortcut::PinchNavigation;
             break;
         case KisShortcutConfiguration::SmartZoomGesture:
-            type = Qt::SmartZoomNativeGesture;
+            type = KisNativeGestureShortcut::SmartZoomNativeGesture;
             break;
         default:
             return false;

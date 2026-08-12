@@ -36,7 +36,7 @@ QWidget *KisInputTypeDelegate::createEditor(QWidget *parent, const QStyleOptionV
                     << i18n("Mouse Button")
                     << i18n("Mouse Wheel")
                     << i18n("Touch Gesture")
-                    << i18n("Native Gesture")
+                    << i18n("Touchpad Gesture")
                    );
     combo->setCurrentIndex(0);
 

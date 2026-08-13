@@ -91,13 +91,13 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
 inline QString sourceToString(Qt::MouseEventSource source) {
     switch (source) {
         case Qt::MouseEventNotSynthesized:
-            return "MouseEventNotSynthesized";
+            return "NotSynthesized";
         case Qt::MouseEventSynthesizedBySystem:
-            return "MouseEventSynthesizedBySystem";
+            return "SynthesizedBySystem";
         case Qt::MouseEventSynthesizedByQt:
-            return "MouseEventSynthesizedByQt";
+            return "SynthesizedByQt";
         case Qt::MouseEventSynthesizedByApplication:
-            return "MouseEventSynthesizedByApplication";
+            return "SynthesizedByApplication";
     }
 
     return "<unknown>";
@@ -142,7 +142,7 @@ QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &p
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
     s << "hires: " << qSetFieldWidth(8) << ev.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.screenPos().y() << qSetFieldWidth(0) << " ";
-    s << "source:" << sourceToString(ev.source());
+    s << "source: " << sourceToString(ev.source());
 
     return string;
 }
@@ -173,7 +173,10 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
     dumpMouseRelatedParams(s, ev);
 
     s << "delta: x: " << ev.angleDelta().x() << " y: " << ev.angleDelta().y() << " ";
-    s << "source:" << sourceToString(ev.source());
+    s << "source: " << sourceToString(ev.source()) << " ";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s << "dev. type: " << static_cast<int>(ev.device()->type());
+#endif
 
     return string;
 }

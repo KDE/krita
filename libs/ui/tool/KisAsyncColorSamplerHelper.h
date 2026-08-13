@@ -15,6 +15,7 @@
 #include "kis_types.h"
 
 class QPainter;
+class QPainterPath;
 class KoViewConverter;
 class KisStrokesFacade;
 class KisCanvas2;
@@ -74,11 +75,18 @@ private Q_SLOTS:
     void slotAddSamplingJob(const QPointF &docPoint);
     void slotColorSamplingFinished(const KoColor &rawColor);
     void slotUpdateBgColor();
+    void slotCanvasZoomPreviewUpdated(const QImage &canvasImage, QRect canvasRect);
 
 private:
     void activatePreview();
     void paintRectangle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
     void paintCircle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
+
+    void prepareZoomPreview(const QRectF &docRect);
+
+    void paintCircleCrosshair(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor);
+    void paintCircleCanvasPreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip);
+    void paintCircleReferenceImagePreview(QPainter &gc, const QRectF &viewRectF, const QPainterPath &clip);
 
     struct Private;
     QScopedPointer<Private> m_d;

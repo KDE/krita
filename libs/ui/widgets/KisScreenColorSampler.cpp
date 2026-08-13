@@ -171,11 +171,13 @@ KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
 
                 if (image) {
                     QPointF imagePoint = canvas->coordinatesConverter()->widgetToImage(widgetPoint);
+                    // KisReferenceImagesLayer::getPixel use document coordinate
+                    QPointF docPoint = canvas->coordinatesConverter()->widgetToDocument(widgetPoint);
                     // sample from reference images first
                     KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer = view->document()->referenceImagesLayer();
 
                     if (referenceImageLayer && canvas->referenceImagesDecoration()->visible()) {
-                        KoColor color = referenceImageLayer->getPixel(imagePoint);
+                        KoColor color = referenceImageLayer->getPixelForDocPoint(docPoint);
                         if (color.opacityU8() > 0) {
                             return color.convertedTo(image->colorSpace());
                         }

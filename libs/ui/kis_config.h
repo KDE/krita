@@ -159,6 +159,23 @@ public:
     bool colorSamplerPreviewCircleExtraCirclesEnabled(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled);
 
+    bool colorSamplerZoomPreviewEnabled(bool defaultValue = false) const;
+    void setColorSamplerZoomPreviewEnabled(bool enabled);
+
+    qreal colorSamplerZoomPreviewScale(bool defaultValue = false) const;
+    void setColorSamplerZoomPreviewScale(qreal scale);
+
+    enum class ColorSamplerPreviewCirclePosition {
+        Center,
+        Top,
+        TopLeft,
+        TopRight,
+        Count,
+    };
+
+    ColorSamplerPreviewCirclePosition colorSamplerPreviewCirclePosition(bool defaultValue = false) const;
+    void setColorSamplerPreviewCirclePosition(ColorSamplerPreviewCirclePosition position);
+
     /**
      * Controls if the canvas should have a separate color managed surface.
      * Even though the surface can be created on any platform the proper

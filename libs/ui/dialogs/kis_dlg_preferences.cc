@@ -329,6 +329,18 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_chkColorSamplerPreviewExtraCircles->setChecked(cfg.colorSamplerPreviewCircleExtraCirclesEnabled());
 
+    m_grpColorSamplerZoomPreview->setChecked(cfg.colorSamplerZoomPreviewEnabled());
+
+    m_ssbColorSamplerZoomPreviewScale->setRange(1, 50);
+    m_ssbColorSamplerZoomPreviewScale->setSingleStep(1);
+    m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale());
+
+    m_cmbColorSamplerPreviewCirclePosition->addItem(i18n("Center"));
+    m_cmbColorSamplerPreviewCirclePosition->addItem(i18n("Top"));
+    m_cmbColorSamplerPreviewCirclePosition->addItem(i18n("Top Left"));
+    m_cmbColorSamplerPreviewCirclePosition->addItem(i18n("Top Right"));
+    m_cmbColorSamplerPreviewCirclePosition->setCurrentIndex(int(cfg.colorSamplerPreviewCirclePosition()));
+
 
     KisSpinBoxI18nHelper::setText(m_ssbColorSamplerPreviewThickness, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
@@ -788,6 +800,9 @@ void GeneralTab::setDefault()
     m_ssbColorSamplerPreviewThickness->setValue(cfg.colorSamplerPreviewCircleThickness(true));
     m_nmbColorSamplerPreviewSize->setValue(cfg.colorSamplerPreviewCircleDiameter(true));
     m_chkColorSamplerPreviewOutlineEnabled->setChecked(cfg.colorSamplerPreviewCircleOutlineEnabled(true));
+    m_grpColorSamplerZoomPreview->setChecked(cfg.colorSamplerZoomPreviewEnabled(true));
+    m_ssbColorSamplerZoomPreviewScale->setValue(cfg.colorSamplerZoomPreviewScale(true));
+    m_cmbColorSamplerPreviewCirclePosition->setCurrentIndex(int(cfg.colorSamplerPreviewCirclePosition(true)));
 
 
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
@@ -971,6 +986,21 @@ bool GeneralTab::colorSamplerPreviewCircleExtraCirclesEnabled() const
     return m_chkColorSamplerPreviewExtraCircles->isChecked();
 }
 
+qreal GeneralTab::colorSamplerZoomPreviewScale() const
+{
+    return m_ssbColorSamplerZoomPreviewScale->value();
+}
+
+bool GeneralTab::colorSamplerZoomPreviewEnabled() const
+{
+    return m_grpColorSamplerZoomPreview->isChecked();
+}
+
+KisConfig::ColorSamplerPreviewCirclePosition GeneralTab::colorSamplerPreviewCirclePosition() const
+{
+    int index = m_cmbColorSamplerPreviewCirclePosition->currentIndex();
+    return KisConfig::ColorSamplerPreviewCirclePosition(index);
+}
 
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
 {
@@ -3062,6 +3092,9 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setColorSamplerPreviewCircleThickness(m_general->colorSamplerPreviewCircleThickness());
         cfg.setColorSamplerPreviewCircleOutlineEnabled(m_general->colorSamplerPreviewCircleOutlineEnabled());
         cfg.setColorSamplerPreviewCircleExtraCirclesEnabled(m_general->colorSamplerPreviewCircleExtraCirclesEnabled());
+        cfg.setColorSamplerZoomPreviewEnabled(m_general->colorSamplerZoomPreviewEnabled());
+        cfg.setColorSamplerZoomPreviewScale(m_general->colorSamplerZoomPreviewScale());
+        cfg.setColorSamplerPreviewCirclePosition(m_general->colorSamplerPreviewCirclePosition());
 
         cfg.setShowRootLayer(m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());

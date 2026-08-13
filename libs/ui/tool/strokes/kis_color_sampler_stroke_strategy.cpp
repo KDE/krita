@@ -7,6 +7,7 @@
 #include "kis_color_sampler_stroke_strategy.h"
 
 #include "kis_tool_utils.h"
+#include "kis_display_color_converter.h"
 #include "kis_paint_device.h"
 
 struct KisColorSamplerStrokeStrategy::Private
@@ -42,6 +43,7 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     Data *d = dynamic_cast<Data*>(data);
     FinalizeData *finalize = dynamic_cast<FinalizeData*>(data);
+    GenerateCanvasZoomPreviewData *previewData = dynamic_cast<GenerateCanvasZoomPreviewData*>(data);
 
     if (d) {
         KoColor color;
@@ -54,6 +56,26 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         if (m_d->lastSelectedColor) {
             Q_EMIT sigFinalColorSelected(*m_d->lastSelectedColor);
         }
+    } else if (previewData) {
+        bool oldWrapAroundModeSupport = previewData->canvasDev->supportsWraproundMode();
+        previewData->canvasDev->setSupportsWraparoundMode(true);
+
+        KisPaintDeviceSP tmpDev = previewData->canvasDev->createThumbnailDevice(
+            previewData->canvasPixelRect.width(), previewData->canvasPixelRect.height(), previewData->canvasPixelRect);
+
+        previewData->canvasDev->setSupportsWraparoundMode(oldWrapAroundModeSupport);
+
+        QRect effectiveRect = QRect(QPoint(0,0), previewData->canvasPixelRect.size());
+
+        QImage image = previewData->colorConverter->convertImageToDisplayColorSpace(tmpDev, effectiveRect, true);
+
+        if (previewData->outputSize.isValid()) {
+            image = image.scaled(previewData->outputSize);
+
+            effectiveRect = QRect(QPoint(0,0), previewData->outputSize);
+        }
+
+        Q_EMIT sigCanvasZoomPreviewUpdated(image, effectiveRect);
     }
 }
 
@@ -64,6 +86,9 @@ KisStrokeStrategy* KisColorSamplerStrokeStrategy::createLodClone(int levelOfDeta
     KisColorSamplerStrokeStrategy *lodStrategy = new KisColorSamplerStrokeStrategy(m_d->radius, m_d->blend, levelOfDetail);
     connect(lodStrategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
             this, &KisColorSamplerStrokeStrategy::sigColorUpdated,
+            Qt::DirectConnection);
+    connect(lodStrategy, &KisColorSamplerStrokeStrategy::sigCanvasZoomPreviewUpdated,
+            this, &KisColorSamplerStrokeStrategy::sigCanvasZoomPreviewUpdated,
             Qt::DirectConnection);
     return lodStrategy;
 }

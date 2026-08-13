@@ -73,6 +73,9 @@ public:
     qreal colorSamplerPreviewCircleThickness() const;
     bool colorSamplerPreviewCircleOutlineEnabled() const;
     bool colorSamplerPreviewCircleExtraCirclesEnabled() const;
+    qreal colorSamplerZoomPreviewScale() const;
+    bool colorSamplerZoomPreviewEnabled() const;
+    KisConfig::ColorSamplerPreviewCirclePosition colorSamplerPreviewCirclePosition() const;
 
     KisConfig::SessionOnStartup sessionOnStartup() const;
     KisConfig::IconsInMenu iconsInMenu() const;

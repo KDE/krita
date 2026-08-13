@@ -8,6 +8,7 @@
 #include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 
+#include <QtMath>
 #include <QImage>
 #include <QMessageBox>
 #include <QPainter>
@@ -105,6 +106,7 @@ struct KisReferenceImage::Private : public QSharedData
 
     bool loadFromQImage(const QImage &img) {
         image = img;
+
         return !image.isNull();
     }
 
@@ -118,7 +120,10 @@ struct KisReferenceImage::Private : public QSharedData
                 gc2.drawImage(QPoint(), image);
             }
         } else {
+            // Need to convert ref image to ARGB to draw the zoom preview when color sampling
+            // Convert here to make sure already loaded ref images are converted
             cachedImage = image;
+            cachedImage.convertTo(QImage::Format_ARGB32);
         }
 
         mipmap = KisQImagePyramid(cachedImage, false);
@@ -348,17 +353,31 @@ void KisReferenceImage::setFilename(const QString &filename)
     d->externalFilename = filename;
 }
 
+QPointF KisReferenceImage::documentToPixel(const QPointF &docPoint)
+{
+    QSizeF shapeSize = size();
+    QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
+
+    QTransform transform = absoluteTransformation().inverted() * scale;
+    QPointF localPosition = docPoint * transform;
+
+    return localPosition;
+}
+
+
+QPoint KisReferenceImage::documentToPixelFloored(const QPointF &docPoint)
+{
+    QPointF localPoint = documentToPixel(docPoint);
+    return QPoint(qFloor(localPoint.x()), qFloor(localPoint.y()));
+}
+
 KoColor KisReferenceImage::getPixel(QPointF position)
 {
     KoColor transparent;
     transparent.setOpacity(0.0);
     if (transparency() == 1.0) return transparent;
 
-    const QSizeF shapeSize = size();
-    const QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
-
-    const QTransform transform = absoluteTransformation().inverted() * scale;
-    const QPointF localPosition = position * transform;
+    const QPoint localPosition = documentToPixelFloored(position);
 
     if (d->cachedImage.isNull()) {
         d->updateCache();
@@ -372,7 +391,7 @@ KoColor KisReferenceImage::getPixel(QPointF position)
 #endif
 
     KoColor c(cs);
-    QColor pixel = d->cachedImage.pixelColor(localPosition.toPoint());
+    QColor pixel = d->cachedImage.pixelColor(localPosition);
     QVector<float> channels = {
         static_cast<float>(pixel.blueF()),
         static_cast<float>(pixel.greenF()),
@@ -482,6 +501,13 @@ bool KisReferenceImage::loadImage(KoStore *store)
 QImage KisReferenceImage::getImage()
 {
     return d->image;
+}
+
+QImage KisReferenceImage::getCachedImage()
+{
+    if (d->cachedImage.isNull()) d->updateCache();
+
+    return d->cachedImage;
 }
 
 KoShape *KisReferenceImage::cloneShape() const

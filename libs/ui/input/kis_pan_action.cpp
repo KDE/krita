@@ -159,14 +159,6 @@ void KisPanAction::inputEvent(QEvent *event)
     }
 
     switch (event->type()) {
-        case QEvent::Gesture: {
-            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
-            if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
-                QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
-                inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint() * 0.2);
-            }
-            return;
-        }
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
             int newTouchPointsCount;

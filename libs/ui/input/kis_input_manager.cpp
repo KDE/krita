@@ -682,11 +682,34 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 
         if (count < 2 && eventPointCount > count) {
-            retval = d->matcher.touchEndEvent(touchEvent);
+            d->matcher.touchEndEvent(touchEvent);
+            retval = true;
         } else {
 #endif
             KisAbstractInputAction::setInputManager(this);
-            retval = d->matcher.touchUpdateEvent(touchEvent);
+            d->matcher.touchUpdateEvent(touchEvent);
+            /**
+             * We don't try to pass unhandled events to the tool proxy
+             * (via toolProxy->forwardHoverEvent(event)) because of
+             * the following reasons:
+             *
+             * On Windows and Linux touch evetns are generated for
+             * touch screens only. And touch screens have no "hover"
+             * state.
+             *
+             * On MacOS touch events are also generated for the Apple's
+             * trackpad. Though, for single-finger movements, these touch
+             * events are usually unbalanced, i.e. they don't have a
+             * corresponding TouchBegin event.
+             *
+             * We could theoretically pass these events to the tool on
+             * MacOS only, but it seems like the system-generated mouse
+             * events are more precise and granular. That is why we just
+             * allow these mouse events in EventEater when we detect they
+             * are coming from a touchpad/trackpad outside of
+             * TouchBegin/TouchEnd guards.
+             */
+            retval = true;
 
 #ifdef Q_OS_MACOS
         }

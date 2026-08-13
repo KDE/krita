@@ -164,9 +164,43 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
     {
         // handle `touchIsActive` state transitions
 
-        if (event->type() == QEvent::TouchBegin ||
-            event->type() == QEvent::TouchUpdate) {
+        bool assumeTouchStarted = event->type() == QEvent::TouchBegin;
 
+        if (!assumeTouchStarted && event->type() == QEvent::TouchUpdate) {
+            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+            using DeviceType = QInputDevice::DeviceType;
+#else
+            using DeviceType = QTouchDevice::DeviceType;
+#endif
+
+            if (touchEvent->device()->type() == DeviceType::TouchPad) {
+#ifdef Q_OS_MACOS
+                /**
+                 * On MacOS TouchUpdate events arrive for normal touchpad
+                 * movements. These TouchUpdate events have lower resolution
+                 * and they are not wrapped into TouchBegin/TouchEnd pair.
+                 * So we just allow synthesized events for them.
+                 *
+                 * For all other systems TouchUpdate events arrive for
+                 * touch screens only, and only inside a valid gesture, so
+                 * we should block mouse events for them.
+                 *
+                 * Also see a comment about hover events in the handler
+                 * of QEvent::TouchUpdate in KisInputManager::eventFilter.
+                 */
+
+                 // noop, keep assumeTouchStarted false
+#else
+                dbgInputEater << "Received a TouchUpdate for a touchpad device on a non-MacOS system!";
+#endif
+            } else {
+                assumeTouchStarted = true;
+            }
+        }
+
+        if (assumeTouchStarted) {
             if (!touchIsActive) {
                 touchIsActive = true;
                 debugEaterStateTransition("touchIsActive"_L1, true, event->type());

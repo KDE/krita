@@ -495,7 +495,7 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 {
     // the touch action has been overridden by some tablet action,
     // consume and ignore it.
-    if (!m_d->touchActionTracked) return true;
+    if (!m_d->touchActionTracked) return false;
 
     if (m_d->touchHoldEventPostponer) {
         m_d->touchHoldEventPostponer->pushThrough(event);

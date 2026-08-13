@@ -87,6 +87,8 @@ void KisInputProfileManagerTest::testLoadProfileV6()
     profileManager->removeProfile(profile->name());
 }
 
+Q_DECLARE_METATYPE(KisShortcutConfiguration::TouchGestureAction)
+
 void KisInputProfileManagerTest::testShortcutConfigurationTouchGesture_data()
 {
     QTest::addColumn<KisShortcutConfiguration::TouchGestureAction>("touchGestureAction");
@@ -145,6 +147,8 @@ void KisInputProfileManagerTest::testShortcutConfigurationTouchGesture()
     QCOMPARE(configLoaded.action(), config.action());
     QCOMPARE(configLoaded.mode(), config.mode());
 }
+
+Q_DECLARE_METATYPE(KisShortcutConfiguration::NativeGestureAction)
 
 void KisInputProfileManagerTest::testShortcutConfigurationNativeGesture_data()
 {

@@ -466,7 +466,7 @@ QRectF KisAsyncColorSamplerHelper::colorPreviewDocRect(const QPointF &docPoint)
     m_d->style = cfg.colorSamplerPreviewStyle();
     QRectF previewDocRect = m_d->colorPreviewDocRect(docPoint);
 
-    if (previewDocRect != m_d->previewDocRect && m_d->circleZoomPreviewEnabled) prepareZoomPreview(previewDocRect);
+    if (previewDocRect != m_d->previewDocRect) prepareZoomPreview(previewDocRect);
 
     m_d->previewDocRect = previewDocRect;
 
@@ -474,6 +474,9 @@ QRectF KisAsyncColorSamplerHelper::colorPreviewDocRect(const QPointF &docPoint)
 }
 
 void KisAsyncColorSamplerHelper::prepareZoomPreview(const QRectF &docRect) {
+    // This can be called before startAction(), so there may not be a strokeId
+    if (!m_d->circleZoomPreviewEnabled || !m_d->strokeId) return;
+
     KisImageSP image = m_d->canvas->image();
     if (!image) return;
 

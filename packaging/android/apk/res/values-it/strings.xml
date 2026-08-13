@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Pressione</string>
+  <string name="remote_action_doubleclick">Doppia pressione</string>
+  <string name="remote_action_swipeup">Scorri in alto</string>
+  <string name="remote_action_swipedown">Scorri in basso</string>
+  <string name="remote_action_swipeleft">Scorri a sinistra</string>
+  <string name="remote_action_swiperight">Scorri a destra</string>
+  <string name="remote_action_circlecw">Cerchio in senso orario</string>
+  <string name="remote_action_circleccw">Cerchio in senso antiorario</string>
+  <string name="something_wrong">Qualcosa è andato storto...</string>
+  <string name="cancelled">Annullato</string>
+  <string name="save_notification_text">Salvataggio del documento</string>
+  <string name="cancel_save_notification">Annulla</string>
+  <string name="donation_dialog_loading">Krita sta caricando…</string>
+  <string name="donation_dialog_loaded">Krita è pronto!</string>
+  <string name="donation_dialog_button_back">Indietro</string>
+  <string name="donation_dialog_button_close">Chiudi</string>
+  <string name="donation_dialog_header_support">Sostieni Krita</string>
+  <string name="donation_dialog_header_button">♥︎ Mostra le opzioni del sostenitore</string>
+  <string name="donation_dialog_supporter_text">Grazie per il supporto a Krita! Il tuo contributo ci aiuta a mantenere vivo il suo sviluppo.</string>
+  <string name="product_donations_description">&lt;h2&gt;Donazioni&lt;/h2&gt;&lt;p&gt;Aiuta lo sviluppo continuo di Krita con una donazione diretta tramite PayPal, carta di credito, carta di debito e molti altri metodi di pagamento.&lt;/p&gt;</string>
+  <string name="product_donations_button">Fai una donazione</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Fondo per lo sviluppo&lt;/h2&gt;&lt;p&gt;Unisciti al Fondo per lo sviluppo di Krita e aiutaci mantenere costante lo sviluppo con una donazione mensile. Sono disponibili più livelli con diversi tipi di vantaggi.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Unisciti al Fondo</string>
+  <string name="product_button_subscribe">Iscriviti</string>
+  <string name="product_button_subscribe_for_month">Iscriviti per %s/mese</string>
+  <string name="product_button_buy">Acquista</string>
+  <string name="product_button_buy_for">Acquista per %s</string>
+  <string name="product_supporter_badge_title">Distintivo del sostenitore</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Distintivo per i sostenitori iniziali di Krita su Android.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Iscrizione sostenitore</string>
+  <string name="product_subscription_description">&lt;p&gt;Supporta lo sviluppo di Krita con una contribuzione mensile. Durante l\'iscrizione otterrai accesso a &lt;strong&gt;tutti&lt;/strong&gt; i vantaggi per i sostenitori man mano che vengono rilasciati. Attualmente riceverai %1$d pacchetti di risorse assieme contenenti più di %2$d pennelli, incluso il pacchetto a pagamento Digital Atelier. Altri pacchetti sono previsti in futuro.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Pacchetto del sostenitore di Krita 5.3</string>
+  <string name="product_onetime_description">&lt;p&gt;In questo pacchetto riceverai %1$d pacchetti di risorse assieme contenenti più di %2$d pennelli, incluso il pacchetto a pagamento Digital Atelier. Questo è un &lt;strong&gt;acquisto singolo&lt;/strong&gt;, non seguirà un\'iscrizione.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Mostra questa finestra di dialogo all\'avvio di Krita</string>
+  <string name="ok">OK</string>
+  <string name="interface_scale_default">Scala dell\'interfaccia: %d%% (predefinita)</string>
+  <string name="interface_scale">Scala dell\'interfaccia: %d%%</string>
+</resources>

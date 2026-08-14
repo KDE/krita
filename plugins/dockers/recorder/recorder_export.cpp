@@ -524,14 +524,10 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
     connect(d->ui->editVideoFilePath, SIGNAL(textChanged(QString)), SLOT(onEditVideoPathChanged(QString)));
     connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
-#endif
-
-    if (settings->realTimeCaptureMode)
-        d->ui->buttonBox->button(QDialogButtonBox::Close)->setText("OK");
-    d->ui->buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Export"));
-#ifndef Q_OS_ANDROID
     d->ui->editVideoFilePath->installEventFilter(this);
 #endif
+
+    d->ui->buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Export"));
 }
 
 RecorderExport::~RecorderExport()

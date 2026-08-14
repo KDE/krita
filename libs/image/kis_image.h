@@ -835,6 +835,9 @@ public:
     /// Set the diffuse white light level, in cd/m²
     void setDiffuseWhiteLightLevel(const std::optional<double> cdm2);
 
+    std::optional<double> hdrReferenceWhiteLightLevelMetadata() const;
+    void setHdrReferenceWhiteLightLevelMetadata(const std::optional<double> value);
+
 public Q_SLOTS:
     void stopIsolatedMode();
 

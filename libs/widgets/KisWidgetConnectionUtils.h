@@ -139,6 +139,7 @@ using DoubleSpinBoxState = SpinBoxState<qreal>;
 void KRITAWIDGETS_EXPORT connectControl(QAbstractButton *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QAction *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QCheckBox *button, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(QGroupBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QSlider *slider, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *property);

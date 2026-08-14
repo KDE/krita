@@ -162,6 +162,11 @@ void connectControl(QCheckBox *button, QObject *source, const char *property)
     connectButtonLikeControl(button, source, property);
 }
 
+void connectControl(QGroupBox *button, QObject *source, const char *property)
+{
+    connectButtonLikeControl(button, source, property);
+}
+
 void connectControl(QSpinBox *spinBox, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();

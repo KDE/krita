@@ -22,3 +22,22 @@ bool KisColorVolumeInformation::operator==(const KisColorVolumeInformation &othe
         && white == other.white && red == other.red
                                              && green == other.green && blue == other.blue;
 }
+
+const KisColorVolumeInformation KisColorVolumeInformation::BT2100PQ = {
+    {}, // for boost::equality_comparable :(
+    KoColorimetryUtils::Colorimetry::BT2020.white().toxy(),
+    KoColorimetryUtils::Colorimetry::BT2020.red().toxy(),
+    KoColorimetryUtils::Colorimetry::BT2020.green().toxy(),
+    KoColorimetryUtils::Colorimetry::BT2020.blue().toxy(),
+    1000.0,
+    0.005
+};
+const KisColorVolumeInformation KisColorVolumeInformation::DCIP3D65 = {
+    {}, // for boost::equality_comparable :(
+    KoColorimetryUtils::Colorimetry::DCIP3.white().toxy(),
+    KoColorimetryUtils::Colorimetry::DCIP3.red().toxy(),
+    KoColorimetryUtils::Colorimetry::DCIP3.green().toxy(),
+    KoColorimetryUtils::Colorimetry::DCIP3.blue().toxy(),
+    1000.0,
+    0.005
+};

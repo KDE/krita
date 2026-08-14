@@ -2137,6 +2137,16 @@ void KisImage::setDiffuseWhiteLightLevel(const std::optional<double> cdm2)
     }
 }
 
+std::optional<double> KisImage::hdrReferenceWhiteLightLevelMetadata() const
+{
+    return m_d->diffuseWhiteLightLevel;
+}
+
+void KisImage::setHdrReferenceWhiteLightLevelMetadata(const std::optional<double> value)
+{
+    m_d->diffuseWhiteLightLevel = value;
+}
+
 void KisImage::stopIsolatedMode()
 {
     if (!m_d->isolationRootNode)  return;

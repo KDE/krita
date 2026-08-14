@@ -55,6 +55,9 @@ struct KRITAIMAGE_EXPORT KisColorVolumeInformation: public boost::equality_compa
     double minLuminance = 0.0; ///< Minimum screen brightness in cd/m²
 
     bool operator==(const KisColorVolumeInformation & other) const;;
+
+    static const KisColorVolumeInformation BT2100PQ;
+    static const KisColorVolumeInformation DCIP3D65;
 };
 
 Q_DECLARE_METATYPE(KisRelativeContentLightLevelInformation::CalculationType);

@@ -137,30 +137,29 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRDiffuseWhite);
     connect(d->image, &KisImage::sigColorVolumeInformationChanged, this, &KisDlgImageProperties::updateHDRColorVolume);
 
-    m_page->cmbColorVolumePresets->addItem(i18n("Rec. 2100 PQ"), "p2100-pq");
-    m_page->cmbColorVolumePresets->addItem(i18n("DCI-P3 D65"), "dci-p3-d65");
+    KisWidgetConnectionUtils::connectControlState( m_page->cmbDiffuseWhite,  &d->hdrMetadataModel, "referenceWhiteState", "referenceWhiteIndex");
 
-    KisWidgetConnectionUtils::connectControlState( m_page->cmbDiffuseWhite,  &d->hdrMetadataModel, "referenceWhiteState", "referenceWhite");
+    KisWidgetConnectionUtils::connectControlState( m_page->gbxDiffuseWhite,  &d->hdrMetadataModel, "referenceWhitePresentState", "referenceWhitePresent");
 
-    KisWidgetConnectionUtils::connectControlState( m_page->gbxDiffuseWhite,  &d->hdrMetadataModel, "refWhiteCheckedState", "refWhiteChecked");
-
-    KisWidgetConnectionUtils::connectControlState( m_page->gbxContentLightLevel,  &d->hdrMetadataModel, "clliCheckedState", "clliChecked");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnMaxCll,  &d->hdrMetadataModel, "maxContentLightLevelState", "maxContentLightLevel");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnMaxFall,  &d->hdrMetadataModel, "maxFrameAverageLightLevelState", "maxFrameAverageLightLevel");
+    KisWidgetConnectionUtils::connectControlState( m_page->gbxContentLightLevel,  &d->hdrMetadataModel, "clliPresentState", "clliPresent");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMaxCll,  &d->hdrMetadataModel, "maxContentLightLevel");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMaxFall,  &d->hdrMetadataModel, "maxFrameAverageLightLevel");
     KisWidgetConnectionUtils::connectControlState( m_page->cmbLumiCalcType,  &d->hdrMetadataModel, "clliCalculationTypeState", "clliCalculationType");
 
-    KisWidgetConnectionUtils::connectControlState( m_page->gbxColorVolume, &d->hdrMetadataModel, "cviCheckedState", "cviChecked");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnWhiteX, &d->hdrMetadataModel, "cviWhiteXState", "cviWhiteX");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnWhiteY, &d->hdrMetadataModel, "cviWhiteYState", "cviWhiteY");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnRedX, &d->hdrMetadataModel, "cviRedXState", "cviRedX");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnRedY, &d->hdrMetadataModel, "cviRedYState", "cviRedY");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnGreenX, &d->hdrMetadataModel, "cviGreenXState", "cviGreenX");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnGreenY, &d->hdrMetadataModel, "cviGreenYState", "cviGreenY");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnBlueX, &d->hdrMetadataModel, "cviBlueXState", "cviBlueX");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnBlueY, &d->hdrMetadataModel, "cviBlueYState", "cviBlueY");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnMinLuminance, &d->hdrMetadataModel, "cviMinLuminanceState", "cviMinLuminance");
-    KisWidgetConnectionUtils::connectControlState( m_page->spnMaxLuminance, &d->hdrMetadataModel, "cviMaxLuminanceState", "cviMaxLuminance");
-    connect(m_page->btnApplyColorVolumePreset, &QPushButton::clicked, this, &KisDlgImageProperties::changeColorVolumePreset);
+    KisWidgetConnectionUtils::connectControl( m_page->gbxColorVolume, &d->hdrMetadataModel, "cviPresent");
+
+    KisWidgetConnectionUtils::connectControl( m_page->spnWhiteX, &d->hdrMetadataModel, "cviWhiteX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnWhiteY, &d->hdrMetadataModel, "cviWhiteY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnRedX, &d->hdrMetadataModel, "cviRedX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnRedY, &d->hdrMetadataModel, "cviRedY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnGreenX, &d->hdrMetadataModel, "cviGreenX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnGreenY, &d->hdrMetadataModel, "cviGreenY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnBlueX, &d->hdrMetadataModel, "cviBlueX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnBlueY, &d->hdrMetadataModel, "cviBlueY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMinLuminance, &d->hdrMetadataModel, "cviMinLuminance");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMaxLuminance, &d->hdrMetadataModel, "cviMaxLuminance");
+
+    KisWidgetConnectionUtils::connectControlState( m_page->cmbColorVolumePresets, &d->hdrMetadataModel, "cviEffectivePresetIndexState", "cviEffectivePresetIndex");
 
     const bool hdr = (d->image->colorSpace()->hasHighDynamicRange()
                       || d->image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ);
@@ -259,8 +258,8 @@ void KisDlgImageProperties::updateDisplayConfigInfo()
 
 void KisDlgImageProperties::updateHDRDiffuseWhite()
 {
-    d->hdrMetadataModel.setImageProfileRelative(d->image->colorSpace()->profile()->hdrReferenceWhite());
-    d->hdrMetadataModel.setRefWhite(d->image->diffuseWhiteLightLevel());
+    d->hdrMetadataModel.setImageProfileHdrReferenceWhite(d->image->colorSpace()->profile()->hdrReferenceWhite());
+    d->hdrMetadataModel.setImageHdrReferenceWhiteMetadata(d->image->hdrReferenceWhiteLightLevelMetadata());
 }
 
 void KisDlgImageProperties::updateHDRLightLevels()
@@ -285,8 +284,8 @@ void KisDlgImageProperties::setHDRLightLevelsOnImage()
 
 void KisDlgImageProperties::setHDRDiffuseWhiteOnImage()
 {
-    std::optional<double> dw = d->hdrMetadataModel.refWhite();
-    if (d->image->diffuseWhiteLightLevel() != dw) {
+    std::optional<double> dw = d->hdrMetadataModel.imageHdrReferenceWhiteMetadata();
+    if (d->image->hdrReferenceWhiteLightLevelMetadata() != dw) {
         KUndo2Command *cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, dw);
         d->image->undoAdapter()->addCommand(cmd);
     }
@@ -300,47 +299,6 @@ void KisDlgImageProperties::setHDRColorVolumeOnImage()
         d->image->undoAdapter()->addCommand(cmd);
     }
 }
-
-void KisDlgImageProperties::changeColorVolumePreset()
-{
-    const QString displayId = m_page->cmbColorVolumePresets->currentData().toString();
-
-    if (displayId == "p2100-pq") {
-        m_page->spnRedX->setValue(0.708);
-        m_page->spnRedY->setValue(0.292);
-
-        m_page->spnGreenX->setValue(0.170);
-        m_page->spnGreenY->setValue(0.797);
-
-        m_page->spnBlueX->setValue(0.131);
-        m_page->spnBlueY->setValue(0.046);
-
-        m_page->spnWhiteX->setValue(0.3127);
-        m_page->spnWhiteY->setValue(0.3290);
-
-        m_page->spnMinLuminance->setValue(0.005);
-        m_page->spnMaxLuminance->setValue(1000);
-
-    } else if (displayId == "dci-p3-d65") {
-
-        m_page->spnRedX->setValue(0.680);
-        m_page->spnRedY->setValue(0.320);
-
-        m_page->spnGreenX->setValue(0.265);
-        m_page->spnGreenY->setValue(0.690);
-
-        m_page->spnBlueX->setValue(0.150);
-        m_page->spnBlueY->setValue(0.060);
-
-        m_page->spnWhiteX->setValue(0.3127);
-        m_page->spnWhiteY->setValue(0.3290);
-
-        m_page->spnMinLuminance->setValue(0.005);
-        m_page->spnMaxLuminance->setValue(1000);
-
-    }
-}
-
 
 void KisDlgImageProperties::slotCalculateLightLevels()
 {

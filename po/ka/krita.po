@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-12 00:43+0000\n"
+"POT-Creation-Date: 2026-08-14 00:43+0000\n"
 "PO-Revision-Date: 2026-08-08 06:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -20970,7 +20970,7 @@ msgstr "ზომა"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2041
 #: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21292,8 +21292,8 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (ჩადგმული)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:561
-#: libs/ui/dialogs/kis_dlg_preferences.cc:620
+#: libs/ui/dialogs/kis_dlg_preferences.cc:573
+#: libs/ui/dialogs/kis_dlg_preferences.cc:632
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -23881,7 +23881,7 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
@@ -23898,7 +23898,7 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/KisMainWindow.cpp:2230 libs/ui/KisMainWindow.cpp:2291
 #: libs/ui/KisMainWindow.cpp:2310 libs/ui/KisMainWindow.cpp:2953
 #: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
-#: libs/ui/KisReferenceImage.cpp:192 libs/ui/KisRemoteFileFetcher.cpp:40
+#: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
@@ -24171,8 +24171,8 @@ msgstr "ზოგიერთი რესურსი აღმოჩენი�
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2398
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2402
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2428
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2432
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25030,7 +25030,7 @@ msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr "1920 პიქსელზე მეტი ზომები, ყველგან, მხარდაჭერილი არაა."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2435
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2465
 #, kde-format
 msgid "Warning(s):"
 msgstr "გაფრთხილებები:"
@@ -26030,8 +26030,8 @@ msgstr "მთავარი ეკრანი:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2733
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2735
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -26040,10 +26040,11 @@ msgid "Display"
 msgstr "ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:319
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
 #: plugins/dockers/recorder/recorder_export.ui:300
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, kde-format
@@ -26134,8 +26135,8 @@ msgstr "ვიდეო ანიმაციის შემოტანა"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:24
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2703
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2705
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2733
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2735
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27029,13 +27030,13 @@ msgstr "ფენის თვისებები"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1487
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
-#: libs/ui/dialogs/kis_dlg_preferences.cc:333
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1932
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2017
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2486
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2544 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:345
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1954
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1962
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2047
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2516
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2574 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27266,105 +27267,134 @@ msgstr "კონტური დახრით"
 msgid "Eraser"
 msgstr "საშლელი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:400
+#. i18n: ectx: property (text), widget (QCheckBox, boolCenter)
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
+#: plugins/tools/tool_crop/kis_tool_crop.cc:114
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:69
+#, kde-format
+msgid "Center"
+msgstr "ცენტრში"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Top"
+msgid "Top"
+msgstr "თავში"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:340
+#, fuzzy, kde-format
+#| msgctxt "JPEG-XL encoder options"
+#| msgid "Top left"
+msgid "Top Left"
+msgstr "ზედა მარცხენა"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:341
+#, fuzzy, kde-format
+#| msgctxt "JPEG-XL encoder options"
+#| msgid "Top right"
+msgid "Top Right"
+msgstr "ზედა მარჯვენა"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:412
 #, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
 msgstr "ავტო (გამორთულია)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:401
+#: libs/ui/dialogs/kis_dlg_preferences.cc:413
 #, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
 msgstr "ავტო (ჩართულია)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:402
+#: libs/ui/dialogs/kis_dlg_preferences.cc:414
 #, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "ჩართულია"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:403
+#: libs/ui/dialogs/kis_dlg_preferences.cc:415
 #, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:417
+#: libs/ui/dialogs/kis_dlg_preferences.cc:429
 #, kde-format
 msgid "On Touch Drag"
 msgstr "შეხებით გადათრევისას"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:418
+#: libs/ui/dialogs/kis_dlg_preferences.cc:430
 #, kde-format
 msgid "On Click Drag"
 msgstr "დაწკაპუნებით გადათრევისას"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:419
+#: libs/ui/dialogs/kis_dlg_preferences.cc:431
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "შუა-წკაპით გადათრევისას"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:471
+#: libs/ui/dialogs/kis_dlg_preferences.cc:483
 #, kde-format
 msgid "All Supported Files"
 msgstr "ყველა მხარდაჭერილი ფორმატი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:506
+#: libs/ui/dialogs/kis_dlg_preferences.cc:518
 #, kde-format
 msgid "Open default window"
 msgstr "ნაგულისხმევი ფანჯრის გახსნა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:507
+#: libs/ui/dialogs/kis_dlg_preferences.cc:519
 #, kde-format
 msgid "Load previous session"
 msgstr "წინა სესიის ჩატვირთვა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:508
+#: libs/ui/dialogs/kis_dlg_preferences.cc:520
 #, kde-format
 msgid "Show session manager"
 msgstr "სესიების მმართველის ჩვენება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:562
+#: libs/ui/dialogs/kis_dlg_preferences.cc:574
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:47
 #, kde-format
 msgid "Yes"
 msgstr "დიახ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:563
+#: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:47
 #, kde-format
 msgid "No"
 msgstr "არა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:597
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "ამ ცვლილების გასააქტიურებლად გადატვირთეთ Krita."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:591
+#: libs/ui/dialogs/kis_dlg_preferences.cc:603
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "ფაილის ამრჩევში არჩეულ მდებარეობაზე შენახვამ, შეიძლება, გაშვება შეანელოს!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:623
+#: libs/ui/dialogs/kis_dlg_preferences.cc:635
 #, kde-format
 msgid "Internal Storage"
 msgstr "შიდა საცავი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:625
+#: libs/ui/dialogs/kis_dlg_preferences.cc:637
 #, kde-format
 msgid "SD-Card"
 msgstr "SD ბარათი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:663
+#: libs/ui/dialogs/kis_dlg_preferences.cc:675
 #, kde-format
 msgid "Choose Manually"
 msgstr "ხელით არჩევა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:728
+#: libs/ui/dialogs/kis_dlg_preferences.cc:740
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -27379,56 +27409,56 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
 #, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "არაფერი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1126
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
 #, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "წრე"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1127
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
 msgstr "მარცხენა მართკუთხედი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1128
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
 msgstr "მარჯვენა მართკუთხედი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1129
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
 msgstr "ზემო მართკუთხედი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1161
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1191
 #, kde-format
 msgid "Select a Background Image"
 msgstr "ფონური გამოსახულების არჩევა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 გამოსახულებსი სწორი ფაილი არაა!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1223
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>გაფრთხილება:</b> ეს მდებარეობა ჩაწერადი არაა."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1331
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1577
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1678
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1361
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1708
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27436,17 +27466,17 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "ეკრანი %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1359
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1389
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr "ეკრანის ფერთა სივრცე ოპერაციული სისტემის მიერ იმართება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1366
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1396
 #, kde-format
 msgid "Enable canvas color management"
 msgstr "ტილოს ფერების მართვის ჩართვა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1369
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1399
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -27458,44 +27488,44 @@ msgid ""
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1389
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1419
 #, kde-format
 msgid "Canvas surface color space:"
 msgstr "ტილოს ზედაპირის ფერთა სივრცე:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1392
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1422
 #, kde-format
 msgid "Preferred by operating system"
 msgstr "ურჩევნია ოპერაციული სისტემას"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1393
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1423
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr "რეკ 709 გამა 2.2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1394
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr "რეკ 709 წრფივი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1395
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #, kde-format
 msgid "Rec 2020 PQ"
 msgstr "Rec 2020 PQ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1396
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr "უმართავი (მხოლოდ შესამოწმებლად)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1399
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1429
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1406
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #, kde-format
 msgid "Canvas surface bit depth (needs restart):"
 msgstr "ტილოს ზედაპირის ბიტური სიღრმე (სჭირდება გადატვირთვა):"
@@ -27503,7 +27533,7 @@ msgstr "ტილოს ზედაპირის ბიტური სიღ
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1409
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1439
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
@@ -27511,19 +27541,19 @@ msgstr "ტილოს ზედაპირის ბიტური სიღ
 msgid "Auto"
 msgstr "ავტომატური"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1418
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1440
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1448
 #, kde-format
 msgid "8-bit"
 msgstr "8-ბიტიანი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1411
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1418
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1448
 #, kde-format
 msgid "10-bit"
 msgstr "10-ბიტიანი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1414
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
@@ -27531,12 +27561,12 @@ msgid ""
 "display</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1419
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
 #, kde-format
 msgid "Current canvas surface bit depth:"
 msgstr "მიმდინარე ტილოს ზედაპირის ბიტური სიღრმე:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1427
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1457
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
@@ -27545,48 +27575,48 @@ msgstr ""
 "ოპერაციული სისტემისთვის რჩეული ფერთა სივრცე:\n"
 "%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1463
 #, kde-format
 msgid "Diagram:"
 msgstr "დიაგრამა:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1466
 #, kde-format
 msgctxt "@info:radiobutton"
 msgid "Preferred Space"
 msgstr "სასურველი სივრცე"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1438
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space preferred by the operating system."
 msgstr "ეს ოპერაციული სისტემის რჩეული სივრცეა."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1471
 #, kde-format
 msgctxt "@info:radiobutton"
 msgid "Current Display"
 msgstr "მიმდინარე ეკრანი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space representing the currently active display."
 msgstr "ეს არის სივრცე, რომელიც წარმოადგენს ამჟამად აქტიურ ეკრანს."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1535
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1565
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:799
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "ფერის პროფილების დაყენება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1848
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr "ტაბლეტის შეყვანის API (ამჟამად აქტიურია API: \"%1\")"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1832
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1862
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27595,7 +27625,7 @@ msgstr ""
 "ტაბლეტის დრაივერის დროის შტამპების გამოყენება ფუნჯის სიჩქარისთვის (შეუძლია "
 "მძიმე არტეფაქტების გამოწვევა WinTab tablet API-ის გამოყენებისას)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1864
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "ტაბლეტის დრაივერის დროის შტამპების გამოყენება ფუნჯის სიჩქარისთვის"
@@ -27603,7 +27633,7 @@ msgstr "ტაბლეტის დრაივერის დროის შ
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1864
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1894
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27613,26 +27643,26 @@ msgstr[1] "ფუნჯის მაქსიმალური სიჩქა�
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1873
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1903
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "ფუნჯის სიჩქარის მოგლუვება: {n} სინჯი"
 msgstr[1] "ფუნჯის სიჩქარის მოგლუვება: {n} სინჯი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1880
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1910
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "კალმის დახრის მიმართულების წანაცვლება: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " გიბ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2029
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27641,78 +27671,78 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " წმ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2032
 #, kde-format
 msgid " fps"
 msgstr " კადრი/წმ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2271
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2242
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2272
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "პროგრამული რენდერერი (ძალიან ნელი)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11-ი ANGLE-ის საშუალებით"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2277
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL ANGLE-ით"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2286
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "ავტომატური (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2365
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "GLX (მიმდინარე)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2366
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
 msgstr "GLX"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2367
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "EGL (მიმდინარე)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2338
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2368
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
 msgstr "EGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2344
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -27722,140 +27752,140 @@ msgstr ""
 "<p>თუ იყენებთ Krita-ს X11-ზე, ან XWayland-ზე და გრძნობთ, რომ ის შენელდა, "
 "სცადეთ გადართვა EGL-სა და GLX-ს შორის</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2414
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ეკრანის Id: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2415
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "საჩვენებელი სახელი: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2386
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2416
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "მინ. განათებულობა: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2387
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2417
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "მაქს. განათებულობა: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2418
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "მაქს. სრული კადრის განათებულობა: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2389
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2419
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "წითელი ძირითადი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2390
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2420
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "მწვანე ძირითადი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2391
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "ლურჯი ძირითადი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2392
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2422
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "თეთრი წერტილი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2573
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2603
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>გაფრთხილება:</b> მიმდინარე ეკრანს HDR რენდერის მხარდაჭერა არ აქვს"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2696
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2726
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita-ის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2713
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2743
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "კლავიატურის მალსახმობები"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2715
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2745
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "მალსახმობები"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2725
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2755
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "ტილოს შეყვანის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2726
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2756
 #, kde-format
 msgid "Canvas Input"
 msgstr "ტილოს შეყვანა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2743
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2773
 #: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #, kde-format
 msgid "Color Management"
 msgstr "ფერების მართვა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2745
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2775
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "ფერი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2753
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2755
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2783
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2785
 #, kde-format
 msgid "Performance"
 msgstr "წარმადობა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2793
 #, kde-format
 msgid "Tablet settings"
 msgstr "ტაბლეტის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2795
 #, kde-format
 msgid "Tablet"
 msgstr "ტაბლეტი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2773
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2803
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "მხოლოდ-ტილოს მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2775
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2805
 #, kde-format
 msgid "Canvas-only"
 msgstr "მხოლოდ-ტილო"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2783
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2785
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2813
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2815
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "მხტუნარა პალიტრა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2793
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2823
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ავტორი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2795
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2825
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "ავტორი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2802
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2832
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -29682,7 +29712,7 @@ msgstr "ზედა ფენის გაუმჭვირვალობა:
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #: libs/ui/forms/wdgdisplaysettings.ui:524
-#: libs/ui/forms/wdggeneralsettings.ui:1310
+#: libs/ui/forms/wdggeneralsettings.ui:1364
 #, kde-format
 msgid "Miscellaneous"
 msgstr "სხვადასხვა"
@@ -30217,7 +30247,7 @@ msgstr "ხატულები მენიუში:"
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdggeneralsettings.ui:552
-#: libs/ui/forms/wdggeneralsettings.ui:1601
+#: libs/ui/forms/wdggeneralsettings.ui:1655
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(საჭიროებს გადატვირთვას)"
@@ -30251,7 +30281,7 @@ msgstr "წილადი მასშტაბის კოეფიციე�
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:659
-#: libs/ui/forms/wdggeneralsettings.ui:1754
+#: libs/ui/forms/wdggeneralsettings.ui:1808
 #, kde-format
 msgid "(needs restart)"
 msgstr "(საჭიროებს გადატვირთვას)"
@@ -30263,35 +30293,35 @@ msgid "Cursor"
 msgstr "კურსორი"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: libs/ui/forms/wdggeneralsettings.ui:698
+#: libs/ui/forms/wdggeneralsettings.ui:713
 #, kde-format
 msgid "Brush Cursor Icon:"
 msgstr "ფუნჯის კურსორის ხატულა:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
-#: libs/ui/forms/wdggeneralsettings.ui:717
+#: libs/ui/forms/wdggeneralsettings.ui:732
 #, kde-format
 msgid "Brush Outline Shape:"
 msgstr "ფუნჯის კონტურის ფორმა:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdggeneralsettings.ui:742
+#: libs/ui/forms/wdggeneralsettings.ui:757
 #, kde-format
 msgid "While painting..."
 msgstr "ხატვისას..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
 #. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
-#: libs/ui/forms/wdggeneralsettings.ui:772
-#: libs/ui/forms/wdggeneralsettings.ui:901
+#: libs/ui/forms/wdggeneralsettings.ui:787
+#: libs/ui/forms/wdggeneralsettings.ui:916
 #, kde-format
 msgid "Show outline"
 msgstr "კონტურის ჩვენება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_changeEraserBrushOutline)
-#: libs/ui/forms/wdggeneralsettings.ui:779
-#: libs/ui/forms/wdggeneralsettings.ui:908
+#: libs/ui/forms/wdggeneralsettings.ui:794
+#: libs/ui/forms/wdggeneralsettings.ui:923
 #, kde-format
 msgid ""
 "Dynamically adjust outline to match the effective size of the brush. (For "
@@ -30302,50 +30332,50 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
-#: libs/ui/forms/wdggeneralsettings.ui:782
-#: libs/ui/forms/wdggeneralsettings.ui:911
+#: libs/ui/forms/wdggeneralsettings.ui:797
+#: libs/ui/forms/wdggeneralsettings.ui:926
 #, kde-format
 msgid "Use effective outline size"
 msgstr "კონტურის ეფექტური ზომის გამოყენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/forms/wdggeneralsettings.ui:795
+#: libs/ui/forms/wdggeneralsettings.ui:810
 #, kde-format
 msgid "Brush Outline Color:"
 msgstr "ფუნჯის კონტურის ფერი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkSeparateEraserCursor)
-#: libs/ui/forms/wdggeneralsettings.ui:815
+#: libs/ui/forms/wdggeneralsettings.ui:830
 #, kde-format
 msgid "Use separate settings for eraser"
 msgstr "საშლელისთვის განსხვავებული პარამეტრების გამოყენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
-#: libs/ui/forms/wdggeneralsettings.ui:836
+#: libs/ui/forms/wdggeneralsettings.ui:851
 #, kde-format
 msgid "Eraser Cursor Icon:"
 msgstr "საშლელის კურსორის ხატულა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdggeneralsettings.ui:849
+#: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Eraser Outline Shape:"
 msgstr "საშლელის კონტურის მოხაზულობა:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/forms/wdggeneralsettings.ui:886
+#: libs/ui/forms/wdggeneralsettings.ui:901
 #, kde-format
 msgid "While painting with an eraser..."
 msgstr "საშლელით ხატვისას..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
-#: libs/ui/forms/wdggeneralsettings.ui:924
+#: libs/ui/forms/wdggeneralsettings.ui:939
 #, kde-format
 msgid "Eraser Outline Color:"
 msgstr "საშლელის კონტურის ფერი:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
-#: libs/ui/forms/wdggeneralsettings.ui:947
+#: libs/ui/forms/wdggeneralsettings.ui:962
 #, kde-format
 msgid "Color Sampler Shape:"
 msgstr "ფერების მიქსერის მოხაზულობა:"
@@ -30355,7 +30385,7 @@ msgstr "ფერების მიქსერის მოხაზულო�
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, lineWidthLbl)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdggeneralsettings.ui:986
+#: libs/ui/forms/wdggeneralsettings.ui:997
 #: plugins/paintops/gridbrush/wdggridoptions.ui:88
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:170
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:89
@@ -30367,7 +30397,7 @@ msgstr "დიამეტრი:"
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewThickness)
 #. i18n: ectx: property (text), widget (QLabel, thicknessLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdggeneralsettings.ui:1012
+#: libs/ui/forms/wdggeneralsettings.ui:1007
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:54
 #: plugins/paintops/hatching/wdghatchingoptions.ui:110
 #, kde-format
@@ -30375,92 +30405,112 @@ msgid "Thickness:"
 msgstr "სისქე:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
-#: libs/ui/forms/wdggeneralsettings.ui:1022
+#: libs/ui/forms/wdggeneralsettings.ui:1017
 #, kde-format
 msgid "Enable Outline"
 msgstr "კონტურის ჩართვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
-#: libs/ui/forms/wdggeneralsettings.ui:1029
+#: libs/ui/forms/wdggeneralsettings.ui:1024
 #, kde-format
 msgid "Extra Comparison Space"
 msgstr "დამატებითი შედარების სივრცე"
 
-#. i18n: ectx: attribute (title), widget (QWidget, Tools)
+#. i18n: ectx: property (title), widget (QGroupBox, m_grpColorSamplerZoomPreview)
+#: libs/ui/forms/wdggeneralsettings.ui:1031
+#, kde-format
+msgid "Enable Zoom Preview (Pixel-Perfect Color Sampler)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
+#, fuzzy, kde-format
+#| msgid "No Preview"
+msgid "Zoom Preview Scale:"
+msgstr "გადახედვის გარეშე"
+
+#. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
+#: libs/ui/forms/wdggeneralsettings.ui:1066
+#, fuzzy, kde-format
+#| msgid "Color Sampler Tool"
+msgid "Color Sampler Position:"
+msgstr "ხელსაწყო ფერების მიქსერი"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Tools)
+#: libs/ui/forms/wdggeneralsettings.ui:1094
 #: plugins/dockers/logdocker/LogDockerDock.cpp:259
 #, kde-format
 msgid "Tools"
 msgstr "ხელსაწყოები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: libs/ui/forms/wdggeneralsettings.ui:1046
+#: libs/ui/forms/wdggeneralsettings.ui:1100
 #, kde-format
 msgid "Tool Options Location (needs restart)"
 msgstr "ხელსაწყოს პარამეტრების მდებარეობა (საჭიროებს გადატვირთვას)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
-#: libs/ui/forms/wdggeneralsettings.ui:1052
+#: libs/ui/forms/wdggeneralsettings.ui:1106
 #, kde-format
 msgid "In Doc&ker"
 msgstr "პანელშ&ი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
-#: libs/ui/forms/wdggeneralsettings.ui:1059
+#: libs/ui/forms/wdggeneralsettings.ui:1113
 #, kde-format
 msgid "I&n Toolbar"
 msgstr "ხელსაწყოთა &ზოლში"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:1072
+#: libs/ui/forms/wdggeneralsettings.ui:1126
 #, kde-format
 msgid "Brush Flow Mode (needs restart):"
 msgstr "ფუნჯის დინების რეჟიმი (საჭიროებს გადატვირთვას:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:1080
+#: libs/ui/forms/wdggeneralsettings.ui:1134
 #, kde-format
 msgid "Creamy (Krita 4.2+)"
 msgstr "Creamy (Krita 4.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:1085
+#: libs/ui/forms/wdggeneralsettings.ui:1139
 #, kde-format
 msgid "Hard (Krita 4.1 and earlier versions)"
 msgstr "მაგარი (Krita 4.1 და უფრო ძველი ვერსიები)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:1093
+#: libs/ui/forms/wdggeneralsettings.ui:1147
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
 msgstr "CMYK არევის რეჟიმი (საჭიროებს გადატვირთვას)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:1101
+#: libs/ui/forms/wdggeneralsettings.ui:1155
 #, kde-format
 msgid "Subtractive (Krita 5.2+)"
 msgstr "გამოკლებადი (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:1106
+#: libs/ui/forms/wdggeneralsettings.ui:1160
 #, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
 msgstr "ადიტიური (Krita 5.1 და უფრო ძველი ვერსიები)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkSwitchSelectionCtrlAlt)
-#: libs/ui/forms/wdggeneralsettings.ui:1114
+#: libs/ui/forms/wdggeneralsettings.ui:1168
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
 msgstr "Control/Alt მონიშვნის მოდიფიკატორების მიმოცვლა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
-#: libs/ui/forms/wdggeneralsettings.ui:1121
+#: libs/ui/forms/wdggeneralsettings.ui:1175
 #, kde-format
 msgid "Touch Painting:"
 msgstr "შეხებით ხატვა:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1131
+#: libs/ui/forms/wdggeneralsettings.ui:1185
 #, kde-format
 msgid ""
 "Enable reading of pressure state for touch events. This data may be broken "
@@ -30469,31 +30519,31 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1134
+#: libs/ui/forms/wdggeneralsettings.ui:1188
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
 msgstr "შეხების წნევის მგრძნობიარობის ჩართვა (შეიძლება, გაფუჭებული იყოს)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
-#: libs/ui/forms/wdggeneralsettings.ui:1141
+#: libs/ui/forms/wdggeneralsettings.ui:1195
 #, kde-format
 msgid "Activate transform tool after pasting"
 msgstr "გარდაქმნის ხელსაწყოს გააქტიურება ჩასმის შემდეგ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
-#: libs/ui/forms/wdggeneralsettings.ui:1148
+#: libs/ui/forms/wdggeneralsettings.ui:1202
 #, kde-format
 msgid "Zoom steps between powers of 2"
 msgstr "მასშტაბის ნაბიჯები ორის ხარისხებს შორის"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
-#: libs/ui/forms/wdggeneralsettings.ui:1165
+#: libs/ui/forms/wdggeneralsettings.ui:1219
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
 msgstr "ჰორიზონტალური ღერძის გამოყენება ტილოს გადიდების ქმედებისთვის"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1178
+#: libs/ui/forms/wdggeneralsettings.ui:1232
 #: libs/ui/widgets/kis_selection_options.cc:177
 #, kde-format
 msgid ""
@@ -30504,26 +30554,26 @@ msgstr ""
 "ქმედებების შემცველ მცურავ პანელს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1181
+#: libs/ui/forms/wdggeneralsettings.ui:1235
 #: libs/ui/widgets/kis_selection_options.cc:175
 #, kde-format
 msgid "Enable Selection Actions Bar"
 msgstr "მონიშვნის ქმედებების პანელის ჩართვა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1195
+#: libs/ui/forms/wdggeneralsettings.ui:1249
 #, kde-format
 msgid "Animation"
 msgstr "ანიმაცია"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
-#: libs/ui/forms/wdggeneralsettings.ui:1201
+#: libs/ui/forms/wdggeneralsettings.ui:1255
 #, kde-format
 msgid "Animation Settings"
 msgstr "ანიმაციის მორგება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1207
+#: libs/ui/forms/wdggeneralsettings.ui:1261
 #, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
@@ -30533,13 +30583,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1210
+#: libs/ui/forms/wdggeneralsettings.ui:1264
 #, kde-format
 msgid "Automatically pin new layers to timeline"
 msgstr "ახალი ფენების ავტომატური მიმაგრება დროის ხაზზე"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1217
+#: libs/ui/forms/wdggeneralsettings.ui:1271
 #, kde-format
 msgid ""
 "When checked, this option automatically adjusts the document's \"start\" and "
@@ -30549,13 +30599,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1220
+#: libs/ui/forms/wdggeneralsettings.ui:1274
 #, kde-format
 msgid "Automatically adapt playback range to keyframes"
 msgstr "დაკვრის შუალედის ავტომატური ადაპტაცია საკვანძო კადრებთან"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1227
+#: libs/ui/forms/wdggeneralsettings.ui:1281
 #, kde-format
 msgid ""
 "When checked, this option will automatically scale the Animation Timeline "
@@ -30565,83 +30615,83 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1230
+#: libs/ui/forms/wdggeneralsettings.ui:1284
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr "დროის ხაზის ავტომატური გადიდება დაკვრის შუალედის ჩასატევად"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1254
+#: libs/ui/forms/wdggeneralsettings.ui:1308
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "რესურსები"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1260
+#: libs/ui/forms/wdggeneralsettings.ui:1314
 #, kde-format
 msgid "Resource Folder:"
 msgstr "რესურსების საქაღალდე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1364
+#: libs/ui/forms/wdggeneralsettings.ui:1418
 #, kde-format
 msgid "When Krita starts:"
 msgstr "როცა Krita ეშვება:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1381
+#: libs/ui/forms/wdggeneralsettings.ui:1435
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "სესის შენახვა Krita-ის დახურვისას"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1388
+#: libs/ui/forms/wdggeneralsettings.ui:1442
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr "გამოსახულებების ფენის სახით შემოტანისას მისი ფერთა სივრცის გადაყვანა"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1401
-#: libs/ui/forms/wdggeneralsettings.ui:1411
+#: libs/ui/forms/wdggeneralsettings.ui:1455
+#: libs/ui/forms/wdggeneralsettings.ui:1465
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "მხოლოდ ეხება ახალ, ან ახლად გახსნილ გამოსახულებებს."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1404
+#: libs/ui/forms/wdggeneralsettings.ui:1458
 #, kde-format
 msgid "Undo stack size:"
 msgstr "გაუქმების სტეკის ზომა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1432
+#: libs/ui/forms/wdggeneralsettings.ui:1486
 #, kde-format
 msgid "Use cumulative undo"
 msgstr "კუმულაციური გაუქმების გამოყენება"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1452
+#: libs/ui/forms/wdggeneralsettings.ui:1506
 #, kde-format
 msgid "Advanced..."
 msgstr "დამატებით..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1461
+#: libs/ui/forms/wdggeneralsettings.ui:1515
 #, kde-format
 msgid "Show root layer"
 msgstr "ძირითადი ფენის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1468
+#: libs/ui/forms/wdggeneralsettings.ui:1522
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "ჟურნალში ჩაწერის ჩართვა შეცდომის ანგარიშებისთვის"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1499
+#: libs/ui/forms/wdggeneralsettings.ui:1553
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -30651,44 +30701,44 @@ msgstr ""
 "მოქცევას, ამის შესახებ ნუ მოგვწერთ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1502
+#: libs/ui/forms/wdggeneralsettings.ui:1556
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr "სისტემის ფაილის დიალოგების ჩართვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1525
+#: libs/ui/forms/wdggeneralsettings.ui:1579
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(გაფრთხილება: ზოგიერთ სისტემაზე, შეიძლება, არასწორად იმუშაოს)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1535
+#: libs/ui/forms/wdggeneralsettings.ui:1589
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "ფუნჯის მაქსიმალური ზომა:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1563
+#: libs/ui/forms/wdggeneralsettings.ui:1617
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "ფუნჯის მაქს. დიამეტრი პიქსელებში."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1566
+#: libs/ui/forms/wdggeneralsettings.ui:1620
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "px"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1611
+#: libs/ui/forms/wdggeneralsettings.ui:1665
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "ფონტის DPI-ის პრობლემის გადაწყვეტა"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1626
+#: libs/ui/forms/wdggeneralsettings.ui:1680
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -30706,7 +30756,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1629
+#: libs/ui/forms/wdggeneralsettings.ui:1683
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -30714,7 +30764,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1638
+#: libs/ui/forms/wdggeneralsettings.ui:1692
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -30726,55 +30776,55 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1651
+#: libs/ui/forms/wdggeneralsettings.ui:1705
 #, kde-format
 msgid "Automatic layer naming"
 msgstr "ფენების ავტომატური სახელი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1657
+#: libs/ui/forms/wdggeneralsettings.ui:1711
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr "შერწყმული ჯგუფის ფენების სახელის ბოლოში \"Merged\"-ის მიწერა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1664
+#: libs/ui/forms/wdggeneralsettings.ui:1718
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "ჩასმული ფენის სახელების ბოლოში \"(pasted)\"-ის მიწერა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1671
+#: libs/ui/forms/wdggeneralsettings.ui:1725
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "დუბლირებული ფენების თავში \"Copy of\"-ის მიწერა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
-#: libs/ui/forms/wdggeneralsettings.ui:1681
+#: libs/ui/forms/wdggeneralsettings.ui:1735
 #, kde-format
 msgid "Long-press to open context menus"
 msgstr "დიდხანს დაჭერა კონტექსტური მენიუების გასახსნელად"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1688
+#: libs/ui/forms/wdggeneralsettings.ui:1742
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "კინეტიკური გადახვევა (სჭირდება გადატვირთვა)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1703
+#: libs/ui/forms/wdggeneralsettings.ui:1757
 #, kde-format
 msgid "Sensitivity:"
 msgstr "მგრძნობიარობა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1728
+#: libs/ui/forms/wdggeneralsettings.ui:1782
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "ხელსაწყოთა პანელების დამალვა, თუ კინეტიკური გადახვევა ჩართულია"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1780
+#: libs/ui/forms/wdggeneralsettings.ui:1834
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -30785,7 +30835,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1783
+#: libs/ui/forms/wdggeneralsettings.ui:1837
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr "მაღალი ფუნქციური ღილაკების (F13-F24) იგნორი"
@@ -36359,12 +36409,12 @@ msgstr ""
 "%1\n"
 "მიზეზი: %2"
 
-#: libs/ui/KisReferenceImage.cpp:130
+#: libs/ui/KisReferenceImage.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
 msgstr "გაჯერების დაყენება"
 
-#: libs/ui/KisReferenceImage.cpp:192
+#: libs/ui/KisReferenceImage.cpp:197
 #, kde-format
 msgid "Could not load %1."
 msgstr "შეცდომა %1-ის ჩატვირთვისას."
@@ -37863,7 +37913,7 @@ msgstr "ფენის დახატვა, მხოლოდ, გარე�
 msgid "Group not editable."
 msgstr "ჯგუფი ჩასწორებადი არაა."
 
-#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:586
+#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
 #, kde-format
 msgid "Color sampler does not work on this layer."
 msgstr "ფერების შემრევი ამ ფენაზე არ მუშაობს."
@@ -67354,13 +67404,6 @@ msgstr "რედაქტორის ფონი:"
 #, kde-format
 msgid "Crop"
 msgstr "ამოჭრა"
-
-#. i18n: ectx: property (text), widget (QCheckBox, boolCenter)
-#: plugins/tools/tool_crop/kis_tool_crop.cc:114
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:69
-#, kde-format
-msgid "Center"
-msgstr "ცენტრში"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolGrow)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:117

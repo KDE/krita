@@ -197,6 +197,8 @@ public:
             });
         }
 
+        updateHDRMetadataOnColorSpaceChange(colorSpace);
+
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
         connect(undoStore.data(), SIGNAL(historyStateChanged()), &signalRouter, SLOT(emitImageModifiedNotification()));
     }
@@ -299,6 +301,23 @@ public:
                                     bool convertLayers,
                                     KoColorConversionTransformation::Intent renderingIntent,
                                     KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+    void updateHDRMetadataOnColorSpaceChange(const KoColorSpace *newColorSpace) {
+        const KoColorProfile *profile = newColorSpace->profile();
+        if (!profile) return;
+
+        if (profile->hdrReferenceWhite()) {
+            diffuseWhiteLightLevel = profile->hdrReferenceWhite();
+        } else if (profile->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ) {
+            diffuseWhiteLightLevel = 203.0;
+        } else if (!newColorSpace->hasHighDynamicRange()) {
+            relativeContentLightLevelInformation = std::nullopt;
+            colorVolumeInformation = std::nullopt;
+            diffuseWhiteLightLevel = std::nullopt;
+        }
+
+        LEAVE_FUNCTION() << ppVar(diffuseWhiteLightLevel);
+    }
 
     struct SetImageProjectionColorSpace;
 };
@@ -494,15 +513,15 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
         }
     }
 
+    m_d->colorVolumeInformation = rhs.m_d->colorVolumeInformation;
+    m_d->relativeContentLightLevelInformation = rhs.m_d->relativeContentLightLevelInformation;
+    m_d->diffuseWhiteLightLevel = rhs.m_d->diffuseWhiteLightLevel;
+
     bool exactCopy = policy & EXACT_COPY;
 
     if (exactCopy || rhs.m_d->isolationRootNode || rhs.m_d->overlaySelectionMask) {
         m_d->isolateLayer = rhs.m_d->isolateLayer;
         m_d->isolateGroup = rhs.m_d->isolateGroup;
-
-        m_d->colorVolumeInformation = rhs.m_d->colorVolumeInformation;
-        m_d->relativeContentLightLevelInformation = rhs.m_d->relativeContentLightLevelInformation;
-        m_d->diffuseWhiteLightLevel = rhs.m_d->diffuseWhiteLightLevel;
 
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
@@ -1584,6 +1603,7 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUp
 void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
+    m_d->updateHDRMetadataOnColorSpaceChange(m_d->colorSpace);
 }
 
 const KoColorSpace * KisImage::colorSpace() const

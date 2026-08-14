@@ -56,9 +56,18 @@
     * If the profile is Rec2020PQ, it already has CRWL tag declaring its HDR Reference White Level
 2. When loading from .kra
     * Load HDR metadata from .kra (warn if CRWL data in the ICC is inconsistent with the one in .kra)
-        * TODO: should we **remove** the “Diffuse White” level information from KisImage when the profile is Rec2020PQ? To make sure there is only one source of truth
     * If the color space is “scene referred”, then CRWL tag of the ICC profile is **not** used in any way. Only the metadata from KisImage is used
     * if the color space  is Rec2020PQ, then CRWL tag of the ICC profile is used. The metadata from KisImage is **not** used
+3. Automatic setting of the "Diffuse White" level metadata
+    * When the image color space is converted into a display-referred
+      profile with a CRWL tag, the "Diffuse White" metadata is
+      automatically synced with CRWL tag.
+    * When an image is converted back from a display-referred profile
+      into a scene-referred profile, the "Diffuse White" metadata
+      is kept intact. The reason is that resetting this metadata
+      would make relative content light level information invalid.
+    * When and HDR image with HDR metadata is converted into
+      non-HDR space, then HDR metadata is removed.
 
 ## Links
 

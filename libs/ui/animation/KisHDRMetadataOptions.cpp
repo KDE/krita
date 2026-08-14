@@ -38,6 +38,8 @@ KisPropertiesConfigurationSP KisHDRMetadataOptions::toProperties() const
     config->setProperty("maxCLL", clli.maxContentLightLevel);
     config->setProperty("maxFALL", clli.maxFrameAverageLightLevel);
 
+    config->setProperty("hdrReferenceWhite", hdrReferenceWhite);
+
     return config;
 }
 
@@ -62,6 +64,8 @@ void KisHDRMetadataOptions::fromProperties(KisPropertiesConfigurationSP config)
 
     clli.maxContentLightLevel = config->getPropertyLazy("maxCLL", clli.maxContentLightLevel);
     clli.maxFrameAverageLightLevel = config->getPropertyLazy("maxFALL", clli.maxFrameAverageLightLevel);
+
+    hdrReferenceWhite = config->getPropertyLazy("hdrReferenceWhite", hdrReferenceWhite);
 }
 
 QString KisHDRMetadataOptions::generateFFMpegOptions() const
@@ -82,8 +86,8 @@ QString KisHDRMetadataOptions::generateFFMpegOptions() const
     }
     if (clli != KisRelativeContentLightLevelInformation()) {
         x265Params += QString("max-cll=%11,%12:")
-            .arg(int(clli.maxContentLightLevel*diffuseWhite))
-            .arg(int(clli.maxFrameAverageLightLevel*diffuseWhite));
+            .arg(int(clli.maxContentLightLevel*hdrReferenceWhite))
+            .arg(int(clli.maxFrameAverageLightLevel*hdrReferenceWhite));
     }
 
     x265Params += QString(

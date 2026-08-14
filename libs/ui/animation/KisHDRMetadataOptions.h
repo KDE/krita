@@ -21,7 +21,7 @@ struct KisHDRMetadataOptions
 
     KisRelativeContentLightLevelInformation clli;
 
-    double diffuseWhite = 80;
+    double hdrReferenceWhite = 80;
 
     KisPropertiesConfigurationSP toProperties() const;
     void fromProperties(KisPropertiesConfigurationSP config);

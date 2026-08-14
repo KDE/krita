@@ -52,6 +52,7 @@ class KisColorLabelSelectorWidgetMenuWrapper;
 class QWidgetAction;
 class KisKeyframeChannel;
 class KisSelectionActionsAdapter;
+class KisScreenMigrationTracker;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -129,6 +130,7 @@ private Q_SLOTS:
     void updateLayerFiltering();
 
     void slotUpdateThumbnailIconSize();
+    void slotSyncThumbnailIconSize();
     void slotUpdateTreeIndentation();
     void slotUpdateLayerInfoTextStyle();
     void slotUpdateLayerInfoTextOpacity();
@@ -186,6 +188,7 @@ private:
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     KisSignalAutoConnectionsStore m_activeNodeConnections;
+    QScopedPointer<KisScreenMigrationTracker> m_screenMigrationTracker;
 };
 
 class KRITALAYERDOCKER_EXPORT LayerBoxFactory : public KoDockFactoryBase

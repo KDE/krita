@@ -36,6 +36,8 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
+#include <KisScreenMigrationTracker.h>
+
 #include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
@@ -338,7 +340,7 @@ LayerBox::LayerBox()
     thumbnailSizeSlider->setMinimumHeight(20);
     thumbnailSizeSlider->setMinimumWidth(40);
     thumbnailSizeSlider->setTickInterval(5);
-    m_nodeModel->setPreferredThumnalSize(cfg.layerThumbnailSize());
+    m_nodeModel->setPreferredThumnalSize(cfg.layerThumbnailSize() * m_wdgLayerBox->listLayers->devicePixelRatioF());
 
     QWidgetAction *sliderAction= new QWidgetAction(this);
     sliderAction->setDefaultWidget(thumbnailSizeSlider);
@@ -434,6 +436,10 @@ LayerBox::LayerBox()
     layerSelectionAction->setDefaultWidget(layerSelectionCheckBox);
     configureMenu->addAction(layerSelectionAction);
     connect(layerSelectionCheckBox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseLayerSelectionCheckbox()));
+
+    m_screenMigrationTracker.reset(new KisScreenMigrationTracker(m_wdgLayerBox->listLayers));
+    connect(m_screenMigrationTracker.data(), &KisScreenMigrationTracker::sigScreenOrResolutionChanged,
+            this, &LayerBox::slotSyncThumbnailIconSize);
 }
 
 LayerBox::~LayerBox()
@@ -1329,8 +1335,13 @@ void LayerBox::slotUpdateThumbnailIconSize()
     KisConfig cfg(false);
     cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
 
-    m_nodeModel->setPreferredThumnalSize(thumbnailSizeSlider->value());
+    m_nodeModel->setPreferredThumnalSize(thumbnailSizeSlider->value() * m_wdgLayerBox->listLayers->devicePixelRatioF());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
+}
+
+void LayerBox::slotSyncThumbnailIconSize()
+{
+    m_nodeModel->setPreferredThumnalSize(thumbnailSizeSlider->value() * m_wdgLayerBox->listLayers->devicePixelRatioF());
 }
 
 void LayerBox::slotUpdateTreeIndentation()

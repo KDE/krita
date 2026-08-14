@@ -1307,12 +1307,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_colorManagedByOS = KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS();
 
-    if (!m_colorManagedByOS) {
-        m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
-        connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
-    }
-    m_page->chkUseSystemMonitorProfile->setVisible(!m_colorManagedByOS);
-
     m_page->useDefColorSpace->setChecked(cfg.useDefaultColorSpace());
     connect(m_page->useDefColorSpace, SIGNAL(toggled(bool)), this, SLOT(toggleUseDefaultColorSpace(bool)));
     QList<KoID> colorSpaces = KoColorSpaceRegistry::instance()->listKeys();
@@ -1366,13 +1360,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
             monitorProfileGrid->addRow(lbl, cmb);
             m_monitorProfileWidgets << cmb;
         }
-
-        // disable if not Linux as KisColorManager is not yet implemented outside Linux
-#ifndef Q_OS_LINUX
-        m_page->chkUseSystemMonitorProfile->setChecked(false);
-        m_page->chkUseSystemMonitorProfile->setDisabled(true);
-        m_page->chkUseSystemMonitorProfile->setHidden(true);
-#endif
 
         refillMonitorProfiles(KoID("RGBA"));
 
@@ -1671,9 +1658,6 @@ void ColorSettingsTab::setDefault()
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
     m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors(true));
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent(true));
-    if (!m_colorManagedByOS) {
-        m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile(true));
-    }
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour(true));
     Q_ASSERT(button);
     if (button) {
@@ -3195,23 +3179,13 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         KisImageConfig(true).setRenameDuplicatedLayers(m_general->renameDuplicatedLayers());
 
         // Color settings
-        if (!m_colorSettings->m_colorManagedByOS) {
-            cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-            for (int i = 0; i < QApplication::screens().count(); ++i) {
-                if (m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
-                    int currentIndex = m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
-                    QString monitorid = m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
-                    cfg.setMonitorForScreen(i, monitorid);
-                } else {
-                    cfg.setMonitorProfile(i,
-                                          m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText(),
-                                          m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-                }
-            }
-        } else {
-            cfg.setEnableCanvasSurfaceColorSpaceManagement(m_colorSettings->m_chkEnableCanvasColorSpaceManagement->isChecked());
-            cfg.setCanvasSurfaceColorSpaceManagementMode(m_colorSettings->m_canvasSurfaceColorSpace->currentData().value<ColorSettingsTab::CanvasSurfaceMode>());
-            cfg.setCanvasSurfaceBitDepthMode(m_colorSettings->m_canvasSurfaceBitDepth->currentData().value<ColorSettingsTab::CanvasSurfaceBitDepthMode>());
+        if (m_colorSettings->m_colorManagedByOS) {
+            cfg.setEnableCanvasSurfaceColorSpaceManagement(
+                m_colorSettings->m_chkEnableCanvasColorSpaceManagement->isChecked());
+            cfg.setCanvasSurfaceColorSpaceManagementMode(
+                m_colorSettings->m_canvasSurfaceColorSpace->currentData().value<ColorSettingsTab::CanvasSurfaceMode>());
+            cfg.setCanvasSurfaceBitDepthMode(m_colorSettings->m_canvasSurfaceBitDepth->currentData()
+                                                 .value<ColorSettingsTab::CanvasSurfaceBitDepthMode>());
         }
         cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
         if (cfg.useDefaultColorSpace())

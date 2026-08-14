@@ -133,9 +133,9 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
     d->hdrMetadataModel.setCvi(d->image->colorVolumeInformation());
     connect(m_page->btnCalculateClli, &QPushButton::clicked, this, &KisDlgImageProperties::slotCalculateLightLevels);
 
-    KisWidgetConnectionUtils::connectControlState( m_page->cmbDiffuseWhite,  &d->hdrMetadataModel, "referenceWhiteState", "referenceWhiteIndex");
+    KisWidgetConnectionUtils::connectControlState( m_page->cmbHdrReferenceWhite,  &d->hdrMetadataModel, "referenceWhiteState", "referenceWhiteIndex");
 
-    KisWidgetConnectionUtils::connectControlState( m_page->gbxDiffuseWhite,  &d->hdrMetadataModel, "referenceWhitePresentState", "referenceWhitePresent");
+    KisWidgetConnectionUtils::connectControlState( m_page->gbxHdrReferenceWhite,  &d->hdrMetadataModel, "referenceWhitePresentState", "referenceWhitePresent");
 
     KisWidgetConnectionUtils::connectControlState( m_page->gbxContentLightLevel,  &d->hdrMetadataModel, "clliPresentState", "clliPresent");
     KisWidgetConnectionUtils::connectControl( m_page->spnMaxCll,  &d->hdrMetadataModel, "maxContentLightLevel");

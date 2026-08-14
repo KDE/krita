@@ -303,9 +303,9 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
-        <widget class="QGroupBox" name="gbxDiffuseWhite">
+        <widget class="QGroupBox" name="gbxHdrReferenceWhite">
          <property name="title">
-          <string>Diffuse White</string>
+          <string>HDR Reference White</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -315,7 +315,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
-           <widget class="QComboBox" name="cmbDiffuseWhite"/>
+           <widget class="QComboBox" name="cmbHdrReferenceWhite"/>
           </item>
          </layout>
         </widget>

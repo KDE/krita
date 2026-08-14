@@ -469,7 +469,9 @@ bool KisStorageModel::importStorageInternal(const QString &filename,
         QFile::copy(filename, newLocation);
     } else {
         QSaveFile f(newLocation);
-        f.setDirectWriteFallback(false);
+        // If the user selects a custom resource location, atomic renames may
+        // not be available, so a direct write ends up being the only option.
+        f.setDirectWriteFallback(true);
 
         if (!f.open(QIODevice::WriteOnly) || f.write(data) != data.size() || !f.flush()) {
             qWarning() << "Error writing" << data.size() << "bytes to" << newLocation << "storage:" << f.errorString();

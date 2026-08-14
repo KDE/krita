@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">לחיצה</string>
+  <string name="remote_action_doubleclick">לחיצה כפולה</string>
+  <string name="remote_action_swipeup">החלקה למעלה</string>
+  <string name="remote_action_swipedown">החלקה למטה</string>
+  <string name="remote_action_swipeleft">החלקה שמאלה</string>
+  <string name="remote_action_swiperight">החלקה ימינה</string>
+  <string name="remote_action_circlecw">עיגול עם כיוון השעון</string>
+  <string name="remote_action_circleccw">עיגול נגד כיוון השעון</string>
+  <string name="something_wrong">משהו השתבש…</string>
+  <string name="cancelled">בוטל</string>
+  <string name="save_notification_text">מסמך נשמר</string>
+  <string name="cancel_save_notification">ביטול</string>
+  <string name="donation_dialog_loading">Krita נטענת…</string>
+  <string name="donation_dialog_loaded">Krita מוכנה!</string>
+  <string name="donation_dialog_button_back">אחורה</string>
+  <string name="donation_dialog_button_close">סגירה</string>
+  <string name="donation_dialog_header_support">תמיכה ב־Krita</string>
+  <string name="donation_dialog_header_button">♥︎ הצגת אפשרויות לתמיכה</string>
+  <string name="donation_dialog_supporter_text">תודה על התמיכה ב־Krita! התרומה שלך מסייעת לנו להמשיך ולפתח.</string>
+  <string name="product_donations_button">תרומה</string>
+  <string name="product_development_fund_description">&lt;h2&gt;קרן פיתוח&lt;/h2&gt;&lt;p&gt;אפשר להצטרף לקרן הפיתוח של Krita ולסייע בפיתוח המתמשך עם תרומה חודשית. יש מגוון רמות והטבות.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">הצטרפות לקרן</string>
+  <string name="product_button_subscribe">הרשמה</string>
+  <string name="product_button_subscribe_for_month">הרשמה תמורת %s לחודש</string>
+  <string name="product_button_buy">רכישה</string>
+  <string name="product_button_buy_for">רכישה תמורת %s</string>
+  <string name="product_supporter_badge_title">עיטור תרומה</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;עיטורים לתומכים המוקדמים של Krita ב־Android.&lt;/p&gt;</string>
+  <string name="product_subscription_title">מינוי תומכים</string>
+  <string name="product_onetime_title">החבילה של Krita 5.3 לתומכים</string>
+  <string name="show_this_dialog_when_krita_starts">להציג את החלונית הזאת עם הפתיחה של Krita</string>
+  <string name="ok">אישור</string>
+  <string name="interface_scale_default">קנה מידע של ממשק משתמש: %d%% (ברירת מחדל)</string>
+  <string name="interface_scale">קנה מידע של ממשק משתמש: %d%%</string>
+</resources>

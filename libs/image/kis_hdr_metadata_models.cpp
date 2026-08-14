@@ -131,14 +131,14 @@ using KisWidgetConnectionUtils::ToControlState;
 
 KisHDRMetadataModel::KisHDRMetadataModel(QObject *parent)
     : QObject{parent}
-    , clliData(lager::make_state(KisRelativeContentLightLevelInformation(), lager::automatic_tag{}))
-    , cviData(lager::make_state(KisColorVolumeInformation(), lager::automatic_tag{}))
-    , imageProfileReferenceWhiteData(lager::make_state(203.0, lager::automatic_tag{}))
-    , referenceWhiteData(lager::make_state(203.0, lager::automatic_tag{}))
-    , imageProfileIsRelativeData(lager::make_state(false, lager::automatic_tag{}))
-    , referenceWhitePresentData(lager::make_state(false, lager::automatic_tag{}))
-    , clliPresentData(lager::make_state(false, lager::automatic_tag{}))
-    , cviPresentData(lager::make_state(false, lager::automatic_tag{}))
+    , clliData(KisRelativeContentLightLevelInformation())
+    , cviData(KisColorVolumeInformation())
+    , imageProfileReferenceWhiteData(203.0)
+    , referenceWhiteData(203.0)
+    , imageProfileIsRelativeData(false)
+    , referenceWhitePresentData(false)
+    , clliPresentData(false)
+    , cviPresentData(false)
 
     , LAGER_QT(referenceWhitePresent) {referenceWhitePresentData}
     , LAGER_QT(effectiveReferenceWhitePresent){

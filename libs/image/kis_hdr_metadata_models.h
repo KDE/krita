@@ -24,14 +24,14 @@ public:
     explicit KisHDRMetadataModel(QObject *parent = nullptr);
     ~KisHDRMetadataModel();
 
-    lager::cursor<KisRelativeContentLightLevelInformation> clliData;
-    lager::cursor<KisColorVolumeInformation> cviData;
-    lager::cursor<double> imageProfileReferenceWhiteData;
-    lager::cursor<double> referenceWhiteData;
-    lager::cursor<bool> imageProfileIsRelativeData;
-    lager::cursor<bool> referenceWhitePresentData;
-    lager::cursor<bool> clliPresentData;
-    lager::cursor<bool> cviPresentData;
+    lager::state<KisRelativeContentLightLevelInformation, lager::automatic_tag> clliData;
+    lager::state<KisColorVolumeInformation, lager::automatic_tag> cviData;
+    lager::state<double, lager::automatic_tag> imageProfileReferenceWhiteData;
+    lager::state<double, lager::automatic_tag> referenceWhiteData;
+    lager::state<bool, lager::automatic_tag> imageProfileIsRelativeData;
+    lager::state<bool, lager::automatic_tag> referenceWhitePresentData;
+    lager::state<bool, lager::automatic_tag> clliPresentData;
+    lager::state<bool, lager::automatic_tag> cviPresentData;
 
     LAGER_QT_CURSOR(bool, referenceWhitePresent);
     LAGER_QT_READER(bool, effectiveReferenceWhitePresent);

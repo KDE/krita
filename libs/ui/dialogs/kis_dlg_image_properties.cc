@@ -7,6 +7,7 @@
 #include "kis_dlg_image_properties.h"
 
 #include <QLabel>
+#include <QPushButton>
 
 #include <klocalizedstring.h>
 
@@ -19,9 +20,23 @@
 #include <kis_config.h>
 #include <kis_signal_compressor.h>
 #include <kis_image_config.h>
+#include "kis_hdr_metadata.h"
+#include <kis_hdr_metadata_models.h>
 #include "kis_layer_utils.h"
 #include <kis_display_color_converter.h>
 #include <KisWidgetConnectionUtils.h>
+
+#include <kis_processing_applicator.h>
+#include <kis_image_signal_router.h>
+#include <kis_undo_adapter.h>
+#include <kis_types.h>
+#include <kis_group_layer.h>
+
+#include <commands_new/KisChangeImageHdrMetadataCommand.h>
+
+#include <KisContentLightLevelProcessingVistor.h>
+
+#include <kis_signal_compressor_with_param.h>
 
 #include "KisProofingConfigModel.h"
 
@@ -29,6 +44,7 @@ struct KisDlgImageProperties::Private {
     Private(KisDisplayColorConverter *colorConverter)
         : compressor(KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
         , colorConverter(colorConverter)
+        , colorVolumeCompressor(KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
     {
     }
     KisImageWSP image;
@@ -37,6 +53,8 @@ struct KisDlgImageProperties::Private {
     QLabel *colorWarningLabel {0};
     KisSignalCompressor compressor ;
     KisDisplayColorConverter *colorConverter;
+    KisSignalCompressor colorVolumeCompressor;
+    KisHDRMetadataModel hdrMetadataModel;
 };
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorConverter *colorConverter, QWidget *parent, const char *name)
@@ -109,6 +127,40 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
             this,
             &KisDlgImageProperties::setProofingConfigToImage);
 
+    d->hdrMetadataModel.setImageProfileHdrReferenceWhite(d->image->colorSpace()->profile()->hdrReferenceWhite());
+    d->hdrMetadataModel.setImageHdrReferenceWhiteMetadata(d->image->hdrReferenceWhiteLightLevel());
+    d->hdrMetadataModel.setClli(d->image->relativeContentLightLevelInformation());
+    d->hdrMetadataModel.setCvi(d->image->colorVolumeInformation());
+    connect(m_page->btnCalculateClli, &QPushButton::clicked, this, &KisDlgImageProperties::slotCalculateLightLevels);
+
+    KisWidgetConnectionUtils::connectControlState( m_page->cmbHdrReferenceWhite,  &d->hdrMetadataModel, "referenceWhiteState", "referenceWhiteIndex");
+
+    KisWidgetConnectionUtils::connectControlState( m_page->gbxHdrReferenceWhite,  &d->hdrMetadataModel, "referenceWhitePresentState", "referenceWhitePresent");
+
+    KisWidgetConnectionUtils::connectControlState( m_page->gbxContentLightLevel,  &d->hdrMetadataModel, "clliPresentState", "clliPresent");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMaxCll,  &d->hdrMetadataModel, "maxContentLightLevel");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMaxFall,  &d->hdrMetadataModel, "maxFrameAverageLightLevel");
+    KisWidgetConnectionUtils::connectControlState( m_page->cmbLumiCalcType,  &d->hdrMetadataModel, "clliCalculationTypeState", "clliCalculationType");
+
+    KisWidgetConnectionUtils::connectControl( m_page->gbxColorVolume, &d->hdrMetadataModel, "cviPresent");
+
+    KisWidgetConnectionUtils::connectControl( m_page->spnWhiteX, &d->hdrMetadataModel, "cviWhiteX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnWhiteY, &d->hdrMetadataModel, "cviWhiteY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnRedX, &d->hdrMetadataModel, "cviRedX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnRedY, &d->hdrMetadataModel, "cviRedY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnGreenX, &d->hdrMetadataModel, "cviGreenX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnGreenY, &d->hdrMetadataModel, "cviGreenY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnBlueX, &d->hdrMetadataModel, "cviBlueX");
+    KisWidgetConnectionUtils::connectControl( m_page->spnBlueY, &d->hdrMetadataModel, "cviBlueY");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMinLuminance, &d->hdrMetadataModel, "cviMinLuminance");
+    KisWidgetConnectionUtils::connectControl( m_page->spnMaxLuminance, &d->hdrMetadataModel, "cviMaxLuminance");
+
+    KisWidgetConnectionUtils::connectControlState( m_page->cmbColorVolumePresets, &d->hdrMetadataModel, "cviEffectivePresetIndexState", "cviEffectivePresetIndex");
+
+    const bool hdr = d->image->colorSpace()->hasHighDynamicRange() ||
+                     d->image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ;
+    m_page->grpHdrMeta->setEnabled(hdr);
+
     //annotations
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
@@ -156,6 +208,26 @@ int KisDlgImageProperties::exec()
         } else {
             d->image->setProofingConfiguration(nullptr);
         }
+
+        std::optional<double> effectiveHdrReferenceWhite = d->hdrMetadataModel.effectiveReferenceWhite();
+        std::optional<KisRelativeContentLightLevelInformation> effectiveClli;
+        std::optional<KisColorVolumeInformation> effectiveCvi;
+
+        if (d->hdrMetadataModel.effectiveClliPresent()) {
+            effectiveClli = d->hdrMetadataModel.clliData.get();
+        }
+
+        if (d->hdrMetadataModel.cviPresent()) {
+            effectiveCvi = d->hdrMetadataModel.cviData.get();
+        }
+
+        if (effectiveHdrReferenceWhite != d->image->hdrReferenceWhiteLightLevel() ||
+            effectiveClli != d->image->relativeContentLightLevelInformation() ||
+            effectiveCvi != d->image->colorVolumeInformation()) {
+
+            KUndo2Command *cmd = new KisChangeImageHdrMetadataCommand(d->image, effectiveHdrReferenceWhite, effectiveClli, effectiveCvi);
+            KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+        }
     } else {
         d->image->setProofingConfiguration(d->originalProofingConfig);
     }
@@ -195,6 +267,40 @@ void KisDlgImageProperties::setProofingConfigToImage()
 void KisDlgImageProperties::updateDisplayConfigInfo()
 {
     m_page->wdgProofingOptions->setDisplayConfigOptions(d->colorConverter->conversionOptions());
+}
+
+void KisDlgImageProperties::slotCalculateLightLevels()
+{
+    KisRelativeContentLightLevelInformation::CalculationType type = d->hdrMetadataModel.clliCalculationType();
+    KisSharedPtr<KisContentLightLevelProcessingVistor> visitor =
+            new KisContentLightLevelProcessingVistor(type, d->image->bounds());
+
+    KisProcessingApplicator::ProcessingFlags flags =
+        KisProcessingApplicator::RECURSIVE_FRAME_TIMES | KisProcessingApplicator::READ_ONLY_ACTION;
+    KisProcessingApplicator applicator(d->image, d->image->rootLayer(), flags);
+
+    applicator.applyVisitorAllFrames(visitor);
+
+    // a poor-man implementation of a QFuture (which is Qt6-only),
+    // the proxy object will notify us manually when the visitor
+    // has completed its execution
+    QSharedPointer<FunctionToSignalProxy> completionSignalProxy(new FunctionToSignalProxy);
+    connect(completionSignalProxy.get(), &FunctionToSignalProxy::timeout, this,
+        [visitor, model = &d->hdrMetadataModel, image = d->image]() {
+            auto info = visitor->contentLightLevelInformation();
+
+            model->setClli(info);
+        });
+
+    // add the command **after** the signal has been set up; this
+    // is not a QFuture, so it cannot store the actual "finished"
+    // state
+    applicator.applyCommand(new KisCommandUtils::LambdaCommand([completionSignalProxy]() {
+        completionSignalProxy->start();
+        return nullptr;
+    }));
+
+    applicator.end();
 }
 
 void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)

@@ -17,6 +17,7 @@
 #include <QLineEdit>
 #include <QSlider>
 #include <QCheckBox>
+#include <QGroupBox>
 #include "kis_debug.h"
 #include "kis_spacing_selection_widget.h"
 #include "kis_multipliers_double_slider_spinbox.h"
@@ -61,6 +62,29 @@ public Q_SLOTS:
 
 private:
     QAbstractButton *m_button;
+};
+
+class ConnectGroupBoxStateHelper : public QObject
+{
+    Q_OBJECT
+public:
+
+    ConnectGroupBoxStateHelper(QGroupBox *parent)
+        : QObject(parent),
+        m_button(parent)
+    {
+    }
+public Q_SLOTS:
+    void updateState(const CheckBoxState &state) {
+        QSignalBlocker b(m_button);
+        m_button->setEnabled(state.enabled);
+        m_button->setChecked(state.value);
+
+               // TODO: verify if the two properties are equal or the control is disabled
+    }
+
+private:
+    QGroupBox *m_button;
 };
 
 class ConnectComboBoxStateHelper : public QObject
@@ -134,6 +158,11 @@ void connectControl(QAction *button, QObject *source, const char *property)
 }
 
 void connectControl(QCheckBox *button, QObject *source, const char *property)
+{
+    connectButtonLikeControl(button, source, property);
+}
+
+void connectControl(QGroupBox *button, QObject *source, const char *property)
 {
     connectButtonLikeControl(button, source, property);
 }
@@ -490,6 +519,37 @@ void connectControlState(QAbstractButton *button, QObject *source, const char *r
     SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
     if (writeProp.isWritable()) {
         button->connect(button, &QAbstractButton::toggled,
+                        source, [writeProp, source] (bool value) { writeProp.write(source, value); });
+    }
+}
+
+void connectControlState(QGroupBox *button, QObject *source, const char *readStatePropertyName, const char *writePropertyName)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStatePropertyName));
+    SANITY_CHECK_PROPERTY_EXISTS(readStateProp);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
+
+    QMetaMethod signal = readStateProp.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("CheckBoxState"));
+
+    ConnectGroupBoxStateHelper *helper = new ConnectGroupBoxStateHelper(button);
+
+    const QMetaObject* dstMeta = helper->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+        dstMeta->indexOfSlot("updateState(CheckBoxState)"));
+    QObject::connect(source, signal, helper, updateSlot);
+
+    helper->updateState(readStateProp.read(source).value<CheckBoxState>());
+
+    QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
+    SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
+    if (writeProp.isWritable()) {
+        button->connect(button, &QGroupBox::toggled,
                         source, [writeProp, source] (bool value) { writeProp.write(source, value); });
     }
 }

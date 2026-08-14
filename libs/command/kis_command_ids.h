@@ -44,7 +44,8 @@ enum CommandId {
     KoShapeMergeTextPropertiesCommandId,
     ImageAnimSettingCommandId,
     SvgTextChangeTransformsOnRangeCommandId,
-    SvgTextPathInfoChangeCommandId
+    SvgTextPathInfoChangeCommandId,
+    ChangeImageHdrMetadataId,
 };
 
 }

@@ -5,6 +5,7 @@
  */
 #include "kis_kra_saver.h"
 
+#include "kis_hdr_metadata.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_save_visitor.h"
 #include "kis_kra_savexml_visitor.h"
@@ -154,6 +155,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     m_d->nodeFileNames = visitor.nodeFileNames();
     m_d->keyframeFilenames = visitor.keyframeFileNames();
 
+    saveHDRMetadata(doc, imageElement, image);
     saveBackgroundColor(doc, imageElement, image);
     saveAssistantsGlobalColor(doc, imageElement);
     saveWarningColor(doc, imageElement, image);
@@ -699,6 +701,45 @@ void KisKraSaver::saveColorHistory(QDomDocument &doc, QDomElement &element)
     saveKoColors(doc, colorsElement, m_d->doc->colorHistoryColors());
 
     element.appendChild(colorsElement);
+}
+
+void KisKraSaver::saveHDRMetadata(QDomDocument &doc, QDomElement &element, KisImageSP image)
+{
+    if (!image->hdrReferenceWhiteLightLevel() && !image->colorVolumeInformation() && !image->relativeContentLightLevelInformation()) {
+        return;
+    }
+    QDomElement hdr = doc.createElement(HDRMETADATA);
+    if (image->hdrReferenceWhiteLightLevel()) {
+        KisDomUtils::saveValue(&hdr, HDRREFERENCEWHITE, *image->hdrReferenceWhiteLightLevel());
+    }
+    if (image->relativeContentLightLevelInformation()) {
+        KisRelativeContentLightLevelInformation c = *image->relativeContentLightLevelInformation();
+        QDomElement clli = doc.createElement(CONTENTLIGHTLEVEL);
+        clli.setAttribute(MAXCLL, KisDomUtils::toString(c.maxContentLightLevel));
+        clli.setAttribute(MAXFALL, KisDomUtils::toString(c.maxFrameAverageLightLevel));
+        if (c.type == KisRelativeContentLightLevelInformation::XYZLuminance) {
+            clli.setAttribute(CLLI_CALCTYPE, CLLI_CALC_XYZY);
+        } else if (c.type == KisRelativeContentLightLevelInformation::Rec2020Component) {
+            clli.setAttribute(CLLI_CALCTYPE, CLLI_CALC_Rec2020);
+        } else if (c.type == KisRelativeContentLightLevelInformation::RGBComponent) {
+            clli.setAttribute(CLLI_CALCTYPE, CLLI_CALC_RGB_XYZ_FALLBACK);
+        }
+        hdr.appendChild(clli);
+    }
+    if (image->colorVolumeInformation()) {
+        KisColorVolumeInformation cv = *image->colorVolumeInformation();
+        QDomElement cvi = doc.createElement(COLORVOLUME);
+        cvi.setAttribute(COLORVOLUMEMAXLUMINANCE, KisDomUtils::toString(cv.maxLuminance));
+        cvi.setAttribute(COLORVOLUMEMINLUMINANCE, KisDomUtils::toString(cv.minLuminance));
+
+        KisDomUtils::saveValue(&cvi, COLORVOLUMERED, cv.red.asVector().toPointF());
+        KisDomUtils::saveValue(&cvi, COLORVOLUMEGREEN, cv.green.asVector().toPointF());
+        KisDomUtils::saveValue(&cvi, COLORVOLUMEBLUE, cv.blue.asVector().toPointF());
+        KisDomUtils::saveValue(&cvi, COLORVOLUMEWHITE, cv.white.asVector().toPointF());
+
+        hdr.appendChild(cvi);
+    }
+    element.appendChild(hdr);
 }
 
 void KisKraSaver::saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& element)

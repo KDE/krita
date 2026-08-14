@@ -122,6 +122,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisLazyCreateTransformMaskKeyframesCommand.cpp
    commands_new/KisChangeCloneLayersCommand.cpp
    commands_new/KisLayerCollapseCommand.cpp
+   commands_new/KisChangeImageHdrMetadataCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp
@@ -131,6 +132,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_transform_processing_visitor.cpp
    processing/kis_mirror_processing_visitor.cpp
    processing/KisSelectionBasedProcessingHelper.cpp
+   processing/KisContentLightLevelProcessingVistor.cpp
    filter/kis_filter.cc
    filter/kis_filter_category_ids.cpp
    filter/kis_filter_configuration.cc
@@ -358,6 +360,8 @@ set(kritaimage_LIB_SRCS
 
    kis_convex_hull.cpp
    KisSpatialContainer.cpp
+   kis_hdr_metadata.cpp
+   kis_hdr_metadata_models.cpp
 )
 
 set(einspline_SRCS

@@ -1303,4 +1303,134 @@ void KisImageTest::testPaintOverlayMask()
     KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "03_deactivated", "dd");
 }
 
+void KisImageTest::testHdrReferenceWhite_data()
+{
+    QTest::addColumn<const KoColorSpace*>("srcSpace");
+    QTest::addColumn<const KoColorSpace*>("dstSpace");
+    QTest::addColumn<double>("expectedOriginalHdrReferenceWhite");
+    QTest::addColumn<double>("srcHdrReferenceWhite");
+    QTest::addColumn<double>("expectedDstHdrReferenceWhite");
+
+    const double noHdrReferenceWhite = -1;
+
+    auto *sRGBu8 = KoColorSpaceRegistry::instance()->colorSpace(
+        RGBAColorModelID.id(),
+        Integer8BitsColorDepthID.id(),
+        KoColorSpaceRegistry::instance()->p709SRGBProfile());
+
+    auto *rec2020g10u16 = KoColorSpaceRegistry::instance()->colorSpace(
+        RGBAColorModelID.id(),
+        Integer16BitsColorDepthID.id(),
+        KoColorSpaceRegistry::instance()->p2020G10Profile());
+
+    auto *rec2020g10f16 = KoColorSpaceRegistry::instance()->colorSpace(
+        RGBAColorModelID.id(),
+        Float16BitsColorDepthID.id(),
+        KoColorSpaceRegistry::instance()->p2020G10Profile());
+
+    auto *rec2020pqu16_203 = KoColorSpaceRegistry::instance()->colorSpace(
+        RGBAColorModelID.id(),
+        Integer16BitsColorDepthID.id(),
+        KoColorSpaceRegistry::instance()->profileByName("Krita Rec. 2100 Perceptual Quantizer (203cd/m²)"));
+
+    auto *rec2020pqu16_80 = KoColorSpaceRegistry::instance()->colorSpace(
+        RGBAColorModelID.id(),
+        Integer16BitsColorDepthID.id(),
+        KoColorSpaceRegistry::instance()->profileByName("Krita Rec. 2100 Perceptual Quantizer (80cd/m²)"));
+
+    // from SDR to display-referred HDR
+    QTest::addRow("srgb-to-rec2020pq_203")
+        << sRGBu8 << rec2020pqu16_203
+        << noHdrReferenceWhite << noHdrReferenceWhite << 203.0;
+
+    // from scene-referred HDR to display-referred HDR
+    QTest::addRow("rec2020g10f16-to-rec2020pq_203")
+        << rec2020g10f16 << rec2020pqu16_203
+        << noHdrReferenceWhite << noHdrReferenceWhite << 203.0;
+
+    // from scene-referred HDR with custom HDR Reference White
+    // to display-referred HDR
+        QTest::addRow("rec2020g10f16_116-to-rec2020pq_203")
+        << rec2020g10f16 << rec2020pqu16_203
+        << noHdrReferenceWhite << 116.0 << 203.0;
+
+    // from display-referred HDR (80 nits) to another
+    // display-referred HDR (203 nits)
+    QTest::addRow("rec2020pq_80-to-rec2020pq_203")
+        << rec2020pqu16_80 << rec2020pqu16_203
+        << 80.0 << noHdrReferenceWhite << 203.0;
+
+    // from display referred HDR to untagged scene-referred
+    // (the metadata should persist)
+    QTest::addRow("rec2020pq_203-to-rec2020g10f16")
+        << rec2020pqu16_203 << rec2020g10f16
+        << 203.0 << noHdrReferenceWhite << 203.0;
+
+    // from display referred HDR to clipped integer scene-referred
+    // (the metadata should be dropped)
+    QTest::addRow("rec2020pq_203-to-rec2020g10u")
+        << rec2020pqu16_203 << rec2020g10u16
+        << 203.0 << noHdrReferenceWhite << noHdrReferenceWhite;
+
+    // from display referred HDR to clipped integer sRGB
+    // (the metadata should be dropped)
+    QTest::addRow("rec2020pq_203-to-srgb")
+        << rec2020pqu16_203 << sRGBu8
+        << 203.0 << noHdrReferenceWhite << noHdrReferenceWhite;
+}
+
+void KisImageTest::testHdrReferenceWhite()
+{
+    auto optionalFromDouble = [] (double value) {
+        return value >= 0 ? std::make_optional(value) : std::optional<double>();
+    };
+
+    QFETCH(const KoColorSpace*, srcSpace);
+    QFETCH(const KoColorSpace*, dstSpace);
+
+    QFETCH(double, expectedOriginalHdrReferenceWhite);
+    QFETCH(double, srcHdrReferenceWhite);
+    QFETCH(double, expectedDstHdrReferenceWhite);
+
+    const QRect imageRect(0, 0, 32,32);
+
+    KisUndoStore *undoStore = new KisSurrogateUndoStore();
+    KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), srcSpace, "test image");
+
+    QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(expectedOriginalHdrReferenceWhite));
+
+    // assign the new reference white only when requested
+    if (srcHdrReferenceWhite >= 0) {
+        image->setHdrReferenceWhiteLightLevel(optionalFromDouble(srcHdrReferenceWhite));
+        QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(srcHdrReferenceWhite));
+    }
+
+    image->convertImageColorSpace(dstSpace, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    image->waitForDone();
+
+    QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(expectedDstHdrReferenceWhite));
+}
+
+void KisImageTest::testHdrReferenceWhiteCloning()
+{
+    const QRect imageRect(0, 0, 32,32);
+
+    auto *rec2020g10f16 = KoColorSpaceRegistry::instance()->colorSpace(
+        RGBAColorModelID.id(),
+        Float16BitsColorDepthID.id(),
+        KoColorSpaceRegistry::instance()->p2020G10Profile());
+
+    KisUndoStore *undoStore = new KisSurrogateUndoStore();
+    KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), rec2020g10f16, "test image");
+
+    image->setHdrReferenceWhiteLightLevel(116);
+
+    KisImageSP clonedExactCopyImage = image->clone(true);
+    QCOMPARE(clonedExactCopyImage->hdrReferenceWhiteLightLevel(), 116);
+
+    KisImageSP clonedInexactCopyImage = image->clone(false);
+    QCOMPARE(clonedInexactCopyImage->hdrReferenceWhiteLightLevel(), 116);
+
+}
+
 KISTEST_MAIN(KisImageTest)

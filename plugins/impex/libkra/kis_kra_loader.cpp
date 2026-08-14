@@ -43,6 +43,7 @@
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
 #include <kis_transform_mask.h>
+#include "kis_hdr_metadata.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include <kis_group_layer.h>
 #include <kis_image.h>
@@ -337,6 +338,10 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             if(e.tagName() == COLORHISTORY) {
                 QList<KoColor> colors = loadKoColors(e);
                 m_d->document->setColorHistoryColors(colors);
+            }
+
+            if (e.tagName() == HDRMETADATA) {
+                loadHDRMetadata(e, image);
             }
 
             if(e.tagName() == GLOBALASSISTANTSCOLOR) {
@@ -1539,6 +1544,62 @@ void KisKraLoader::loadAudioXML(QDomDocument &xmlDoc, QDomElement &xmlElement, K
 
         kisDoc->setAudioTracks(clipFiles);
         kisDoc->setAudioVolume(volume);
+    }
+}
+
+void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
+{
+    QDomElement child;
+    for (child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+        if (child.tagName() == HDRREFERENCEWHITE) {
+            double diffWhite = 0.0;
+            KisDomUtils::loadValue(child, &diffWhite);
+            image->setHdrReferenceWhiteLightLevel(diffWhite);
+        }
+        if (child.tagName() == CONTENTLIGHTLEVEL) {
+            KisRelativeContentLightLevelInformation clli;
+            clli.maxContentLightLevel = KisDomUtils::toDouble(child.attribute(MAXCLL, "0.0"));
+            clli.maxFrameAverageLightLevel = KisDomUtils::toDouble(child.attribute(MAXFALL, "0.0"));
+            const QString type = child.attribute(CLLI_CALCTYPE);
+            if (type == CLLI_CALC_RGB_XYZ_FALLBACK) {
+                clli.type = KisRelativeContentLightLevelInformation::RGBComponent;
+            } else if (type == CLLI_CALC_Rec2020) {
+                clli.type = KisRelativeContentLightLevelInformation::Rec2020Component;
+            } else {
+                clli.type = KisRelativeContentLightLevelInformation::XYZLuminance;
+            }
+            image->setRelativeContentLightLevelInformation(clli);
+        }
+        if (child.tagName() == COLORVOLUME) {
+            KisColorVolumeInformation cv;
+            //TODO: Kisdomutils!!!
+            cv.maxLuminance = KisDomUtils::toDouble(child.attribute(COLORVOLUMEMAXLUMINANCE, "0.0"));
+            cv.minLuminance = KisDomUtils::toDouble(child.attribute(COLORVOLUMEMINLUMINANCE, "0.0"));
+
+            QDomElement red = child.firstChildElement(COLORVOLUMERED);
+            QDomElement green = child.firstChildElement(COLORVOLUMEGREEN);
+            QDomElement blue = child.firstChildElement(COLORVOLUMEBLUE);
+            QDomElement white = child.firstChildElement(COLORVOLUMEWHITE);
+
+            QPointF temp;
+            if (KisDomUtils::loadValue(red, &temp)) {
+                cv.red.x = temp.x();
+                cv.red.y = temp.y();
+            }
+            if (KisDomUtils::loadValue(green, &temp)) {
+                cv.green.x = temp.x();
+                cv.green.y = temp.y();
+            }
+            if (KisDomUtils::loadValue(blue, &temp)) {
+                cv.blue.x = temp.x();
+                cv.blue.y = temp.y();
+            }
+            if (KisDomUtils::loadValue(white, &temp)) {
+                cv.white.x = temp.x();
+                cv.white.y = temp.y();
+            }
+            image->setColorVolumeInformation(cv);
+        }
     }
 }
 

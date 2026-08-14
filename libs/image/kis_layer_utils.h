@@ -94,6 +94,12 @@ namespace KisLayerUtils
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);
+    /**
+     * @brief updateFrameJobsNonRecursive
+     * updates the frame jobs non-recursively, that is, on the rootNode only.
+     * @param frameTimesRecursive -- whether to make the frame times themselves recursive, or to only use the frames on the root node.
+     */
+    void updateFrameJobsNonRecursive(FrameJobs *jobs, KisNodeSP rootNode, bool frameTimesRecursive = false);
 
     /**
      * @brief The SwitchFrameCommand struct

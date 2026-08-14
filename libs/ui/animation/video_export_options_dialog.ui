@@ -6,6 +6,14 @@
   </author>
  <class>VideoExportOptionsDialog</class>
  <widget class="QWidget" name="VideoExportOptionsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>382</width>
+    <height>338</height>
+   </rect>
+  </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="label_2">
@@ -25,6 +33,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="KisStackedWidget" name="stackedWidget">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
         <widget class="QWidget" name="pgOpenH264">
          <layout class="QFormLayout" name="formLayout_7">
           <property name="leftMargin">
@@ -183,22 +194,10 @@
            <widget class="QComboBox" name="cmbTuneH265"/>
           </item>
           <item row="4" column="0" colspan="2">
-           <widget class="QGroupBox" name="chkUseHDRMetadata">
-            <property name="title">
+           <widget class="QCheckBox" name="chkUseHDRMetadata">
+            <property name="text">
              <string>HDR Mode</string>
             </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <item>
-              <widget class="QPushButton" name="btnHdrMetadata">
-               <property name="text">
-                <string>HDR Metadata...</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
          </layout>
@@ -503,8 +502,6 @@
   <tabstop>cmbPresetH265</tabstop>
   <tabstop>cmbProfileH265</tabstop>
   <tabstop>cmbTuneH265</tabstop>
-  <tabstop>chkUseHDRMetadata</tabstop>
-  <tabstop>btnHdrMetadata</tabstop>
   <tabstop>intBitrate</tabstop>
   <tabstop>vp9Mbits</tabstop>
   <tabstop>vp9Lossless</tabstop>

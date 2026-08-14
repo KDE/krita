@@ -285,7 +285,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_sharedAllFramesToken(new bool(false))
 {
     StrategyWithStatusPromise *strategy =
-            new StrategyWithStatusPromise(name, m_image.data());
+            new StrategyWithStatusPromise(name, !flags.testFlag(READ_ONLY_ACTION) ? m_image.data() : nullptr);
 
     m_successfullyCompletedFuture = strategy->m_successfullyCompleted.get_future();
 
@@ -308,7 +308,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
     }
 
-    if (!m_nodes.isEmpty()) {
+    if (!m_nodes.isEmpty() && !m_flags.testFlag(READ_ONLY_ACTION)) {
         applyCommand(new UpdateCommand(m_image, m_nodes, m_flags,
                                        UpdateCommand::INITIALIZING,
                                        m_sharedAllFramesToken));
@@ -369,11 +369,18 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
 
     // TODO: implement a nonrecursive case when !m_flags.testFlag(RECURSIVE)
     //       (such case is not yet used anywhere)
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
+    //KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
 
     if (!m_nodes.isEmpty()) {
-        Q_FOREACH(KisNodeSP node, m_nodes) {
-            KisLayerUtils::updateFrameJobsRecursive(&jobs, node);
+
+        if (m_flags.testFlag(RECURSIVE)) {
+            Q_FOREACH(KisNodeSP node, m_nodes) {
+                KisLayerUtils::updateFrameJobsRecursive(&jobs, node);
+            }
+        } else {
+            Q_FOREACH(KisNodeSP node, m_nodes) {
+                KisLayerUtils::updateFrameJobsNonRecursive(&jobs, node, m_flags.testFlag(RECURSIVE_FRAME_TIMES));
+            }
         }
     }
 
@@ -441,7 +448,7 @@ void KisProcessingApplicator::explicitlyEmitFinalSignals()
 {
     KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
 
-    if (!m_nodes.isEmpty()) {
+    if (!m_nodes.isEmpty() && !m_flags.testFlag(READ_ONLY_ACTION)) {
         applyCommand(new UpdateCommand(m_image, m_nodes, m_flags,
                                        UpdateCommand::FINALIZING,
                                        m_sharedAllFramesToken));
@@ -478,7 +485,9 @@ void KisProcessingApplicator::runSingleCommandStroke(KisImageSP image, KUndo2Com
     KisProcessingApplicator applicator(image, 0,
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector(),
-                                       cmd->text());
+                                       cmd->text(),
+                                       nullptr,
+                                       cmd->id());
     applicator.applyCommand(cmd, sequentiality, exclusivity);
     applicator.end();
 }

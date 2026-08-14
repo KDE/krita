@@ -45,6 +45,8 @@ private Q_SLOTS:
     void setProofingConfigToImage();
     void updateDisplayConfigInfo();
 
+    void slotCalculateLightLevels();
+
     void slotColorSpaceChanged(const KoColorSpace*);
 private:
 

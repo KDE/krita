@@ -100,6 +100,7 @@
 #include "KisBusyWaitBroker.h"
 #include <KisStaticInitializer.h>
 #include "KisImageGlobalSelectionManagementInterface.h"
+#include "kis_hdr_metadata.h"
 
 
 // #define SANITY_CHECKS
@@ -196,6 +197,8 @@ public:
             });
         }
 
+        updateHDRMetadataOnColorSpaceChange(colorSpace);
+
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
         connect(undoStore.data(), SIGNAL(historyStateChanged()), &signalRouter, SLOT(emitImageModifiedNotification()));
     }
@@ -278,6 +281,10 @@ public:
 
     KisCompositeProgressProxy compositeProgressProxy;
 
+    std::optional<KisRelativeContentLightLevelInformation> relativeContentLightLevelInformation;
+    std::optional<KisColorVolumeInformation> colorVolumeInformation;
+    std::optional<double> diffuseWhiteLightLevel;
+
     QPointF axesCenter;
     bool allowMasksOnRootNode = false;
 
@@ -294,6 +301,23 @@ public:
                                     bool convertLayers,
                                     KoColorConversionTransformation::Intent renderingIntent,
                                     KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+    void updateHDRMetadataOnColorSpaceChange(const KoColorSpace *newColorSpace) {
+        const KoColorProfile *profile = newColorSpace->profile();
+        if (!profile) return;
+
+        if (profile->hdrReferenceWhite()) {
+            diffuseWhiteLightLevel = profile->hdrReferenceWhite();
+        } else if (profile->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ) {
+            diffuseWhiteLightLevel = 203.0;
+        } else if (!newColorSpace->hasHighDynamicRange()) {
+            relativeContentLightLevelInformation = std::nullopt;
+            colorVolumeInformation = std::nullopt;
+            diffuseWhiteLightLevel = std::nullopt;
+        }
+
+        LEAVE_FUNCTION() << ppVar(diffuseWhiteLightLevel);
+    }
 
     struct SetImageProjectionColorSpace;
 };
@@ -488,6 +512,10 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
             m_d->proofingConfig = proofingConfig;
         }
     }
+
+    m_d->colorVolumeInformation = rhs.m_d->colorVolumeInformation;
+    m_d->relativeContentLightLevelInformation = rhs.m_d->relativeContentLightLevelInformation;
+    m_d->diffuseWhiteLightLevel = rhs.m_d->diffuseWhiteLightLevel;
 
     bool exactCopy = policy & EXACT_COPY;
 
@@ -1575,6 +1603,7 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUp
 void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
+    m_d->updateHDRMetadataOnColorSpaceChange(m_d->colorSpace);
 }
 
 const KoColorSpace * KisImage::colorSpace() const
@@ -2077,6 +2106,41 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
     endStroke(id);
 
     return true;
+}
+
+std::optional<KisRelativeContentLightLevelInformation> KisImage::relativeContentLightLevelInformation() const
+{
+    return m_d->relativeContentLightLevelInformation;
+}
+
+void KisImage::setRelativeContentLightLevelInformation(const std::optional<KisRelativeContentLightLevelInformation> clli)
+{
+    m_d->relativeContentLightLevelInformation = clli;
+}
+
+std::optional<KisColorVolumeInformation> KisImage::colorVolumeInformation() const
+{
+    return m_d->colorVolumeInformation;
+}
+
+void KisImage::setColorVolumeInformation(const std::optional<KisColorVolumeInformation> cvi)
+{
+    m_d->colorVolumeInformation = cvi;
+}
+
+std::optional<double> KisImage::hdrReferenceWhiteLightLevel() const
+{
+    return m_d->diffuseWhiteLightLevel;
+}
+
+void KisImage::setHdrReferenceWhiteLightLevel(const std::optional<double> value)
+{
+    if (m_d->colorSpace->profile()->hdrReferenceWhite() && m_d->colorSpace->profile()->hdrReferenceWhite() != value) {
+        qWarning() << "Cannot set the diffuse white metadata on the image: profile provides a different inconsistent value";
+        return;
+    }
+
+    m_d->diffuseWhiteLightLevel = value;
 }
 
 void KisImage::stopIsolatedMode()

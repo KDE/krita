@@ -129,6 +129,7 @@ kis_add_tests(
     KisFourPointInterpolatorTest.cpp
     KisSpatialContainerTest.cpp
     KisGridInterpolationToolsTest.cpp
+    KisContentLightLevelProcessingVisitorTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
     )
 

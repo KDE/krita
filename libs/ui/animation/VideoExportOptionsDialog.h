@@ -11,6 +11,7 @@
 #include <kis_properties_configuration.h>
 
 #include "KisVideoSaver.h"
+#include "KisHDRMetadataOptions.h"
 
 #include <QScopedPointer>
 
@@ -47,7 +48,7 @@ public:
     };
 
 public:
-    explicit KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, QWidget *parent = 0);
+    explicit KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, KisHDRMetadataOptions hdrOptions, QWidget *parent = 0);
     ~KisVideoExportOptionsDialog() override;
 
     void setSupportsHDR(bool value);
@@ -71,7 +72,6 @@ private Q_SLOTS:
     void slotCodecSelected(int index);
 
     void slotH265ProfileChanged(int index);
-    void slotEditHDRMetadata();
     void slotBayerFilterSelected(int index);
 
 private:

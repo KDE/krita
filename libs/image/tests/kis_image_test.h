@@ -47,6 +47,11 @@ private Q_SLOTS:
     void testMergePassThroughOverPaintLayer();
 
     void testPaintOverlayMask();
+
+    void testHdrReferenceWhite_data();
+    void testHdrReferenceWhite();
+
+    void testHdrReferenceWhiteCloning();
 };
 
 #endif

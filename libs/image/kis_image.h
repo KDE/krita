@@ -43,6 +43,9 @@ class KisProofingConfiguration;
 class KisPaintDevice;
 class KisImageGlobalSelectionManagementInterface;
 
+struct KisRelativeContentLightLevelInformation;
+struct KisColorVolumeInformation;
+
 namespace KisMetaData
 {
 class MergeStrategy;
@@ -801,8 +804,42 @@ public:
 
     bool startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup);
 
+    /**
+     * @brief relativeContentLightLevelInformation
+     * This returns (optionally) a KisRelativeContentLightLevelInformation with the
+     * MaxCLL and MaxFALL of the image. Note that MaxCLL and MaxFALL will
+     * not be in cd/m², but rather in linear XYZ Y. To get the cd/m², multiply
+     * these values with diffuseWhiteLightLevel().
+     */
+    std::optional<KisRelativeContentLightLevelInformation> relativeContentLightLevelInformation() const;
+
+    void setRelativeContentLightLevelInformation(const std::optional<KisRelativeContentLightLevelInformation> clli);
+    /**
+     * @brief colorVolumeInformation
+     * @return the KisColorVolumeInformation of the image.
+     * When this is missing, the image color space is assumed, with
+     * 0 as the minimum luminance and 10K as the max luminance.
+     */
+    std::optional<KisColorVolumeInformation> colorVolumeInformation() const;
+
+    /// Set the color volume information.
+    void setColorVolumeInformation(const std::optional<KisColorVolumeInformation> cvi);
+
+    /**
+     * @brief HDR Reference White livel
+     * @return the cd/m² value
+     * Defines at what brightness level the SDR content is supposed
+     * to be converted to this image.
+     * When this is missing, 80cd/m² is assumed.
+     */
+    std::optional<double> hdrReferenceWhiteLightLevel() const;
+
+    /// Set the diffuse white light level, in cd/m²
+    void setHdrReferenceWhiteLightLevel(const std::optional<double> value);
+
 public Q_SLOTS:
     void stopIsolatedMode();
+
 
 public:
     KisNodeSP isolationRootNode() const;

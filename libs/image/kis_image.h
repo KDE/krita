@@ -826,17 +826,16 @@ public:
     void setColorVolumeInformation(const std::optional<KisColorVolumeInformation> cvi);
 
     /**
-     * @brief diffuseWhiteLightLevel
-     * @return the cd/m² value of diffuseWhite.
+     * @brief HDR Reference White livel
+     * @return the cd/m² value
+     * Defines at what brightness level the SDR content is supposed
+     * to be converted to this image.
      * When this is missing, 80cd/m² is assumed.
      */
-    std::optional<double> diffuseWhiteLightLevel() const;
+    std::optional<double> hdrReferenceWhiteLightLevel() const;
 
     /// Set the diffuse white light level, in cd/m²
-    void setDiffuseWhiteLightLevel(const std::optional<double> cdm2);
-
-    std::optional<double> hdrReferenceWhiteLightLevelMetadata() const;
-    void setHdrReferenceWhiteLightLevelMetadata(const std::optional<double> value);
+    void setHdrReferenceWhiteLightLevel(const std::optional<double> value);
 
 public Q_SLOTS:
     void stopIsolatedMode();
@@ -1012,10 +1011,6 @@ Q_SIGNALS:
      * outside KisImage, use sigIsolatedModeChanged() instead.
      */
     void sigInternalStopIsolatedModeRequested();
-
-    void sigContentLightLevelInformationChanged();
-    void sigColorVolumeInformationChanged();
-    void sigDiffuseWhiteLightLevelChanged();
 
 public:
     KisCompositeProgressProxy* compositeProgressProxy();

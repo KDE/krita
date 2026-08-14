@@ -565,8 +565,8 @@ KisHDRMetadataOptions KisDlgAnimationRenderer::optionsFromImage()
     if (m_image->colorVolumeInformation()) {
         hdrOptions.cvi = *m_image->colorVolumeInformation();
     }
-    if (m_image->diffuseWhiteLightLevel()) {
-        hdrOptions.diffuseWhite = *m_image->diffuseWhiteLightLevel();
+    if (m_image->hdrReferenceWhiteLightLevel()) {
+        hdrOptions.diffuseWhite = *m_image->hdrReferenceWhiteLightLevel();
     }
     return hdrOptions;
 }

@@ -1397,18 +1397,18 @@ void KisImageTest::testHdrReferenceWhite()
     KisUndoStore *undoStore = new KisSurrogateUndoStore();
     KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), srcSpace, "test image");
 
-    QCOMPARE(image->hdrReferenceWhiteLightLevelMetadata(), optionalFromDouble(expectedOriginalHdrReferenceWhite));
+    QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(expectedOriginalHdrReferenceWhite));
 
     // assign the new reference white only when requested
     if (srcHdrReferenceWhite >= 0) {
-        image->setHdrReferenceWhiteLightLevelMetadata(optionalFromDouble(srcHdrReferenceWhite));
-        QCOMPARE(image->hdrReferenceWhiteLightLevelMetadata(), optionalFromDouble(srcHdrReferenceWhite));
+        image->setHdrReferenceWhiteLightLevel(optionalFromDouble(srcHdrReferenceWhite));
+        QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(srcHdrReferenceWhite));
     }
 
     image->convertImageColorSpace(dstSpace, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image->waitForDone();
 
-    QCOMPARE(image->hdrReferenceWhiteLightLevelMetadata(), optionalFromDouble(expectedDstHdrReferenceWhite));
+    QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(expectedDstHdrReferenceWhite));
 }
 
 void KisImageTest::testHdrReferenceWhiteCloning()
@@ -1423,13 +1423,13 @@ void KisImageTest::testHdrReferenceWhiteCloning()
     KisUndoStore *undoStore = new KisSurrogateUndoStore();
     KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), rec2020g10f16, "test image");
 
-    image->setHdrReferenceWhiteLightLevelMetadata(116);
+    image->setHdrReferenceWhiteLightLevel(116);
 
     KisImageSP clonedExactCopyImage = image->clone(true);
-    QCOMPARE(clonedExactCopyImage->hdrReferenceWhiteLightLevelMetadata(), 116);
+    QCOMPARE(clonedExactCopyImage->hdrReferenceWhiteLightLevel(), 116);
 
     KisImageSP clonedInexactCopyImage = image->clone(false);
-    QCOMPARE(clonedInexactCopyImage->hdrReferenceWhiteLightLevelMetadata(), 116);
+    QCOMPARE(clonedInexactCopyImage->hdrReferenceWhiteLightLevel(), 116);
 
 }
 

@@ -34,7 +34,7 @@
 
 #include <commands_new/KisChangeImageHdrContentLightLevelCommand.h>
 #include <commands_new/KisChangeImageHdrColorVolumeCommand.h>
-#include <commands_new/KisChangeImageHdrDiffuseWhiteCommand.h>
+#include <commands_new/KisChangeImageHdrReferenceWhiteCommand.h>
 #include <KisContentLightLevelProcessingVistor.h>
 
 #include <kis_signal_compressor_with_param.h>
@@ -128,14 +128,11 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
             this,
             &KisDlgImageProperties::setProofingConfigToImage);
 
-    updateHDRDiffuseWhite();
+    d->hdrMetadataModel.setImageProfileHdrReferenceWhite(d->image->colorSpace()->profile()->hdrReferenceWhite());
+    d->hdrMetadataModel.setImageHdrReferenceWhiteMetadata(d->image->hdrReferenceWhiteLightLevel());
     d->hdrMetadataModel.setClli(d->image->relativeContentLightLevelInformation());
     d->hdrMetadataModel.setCvi(d->image->colorVolumeInformation());
     connect(m_page->btnCalculateClli, &QPushButton::clicked, this, &KisDlgImageProperties::slotCalculateLightLevels);
-    connect(d->image, &KisImage::sigColorSpaceChanged, this, &KisDlgImageProperties::updateHDRDiffuseWhite);
-    connect(d->image, &KisImage::sigContentLightLevelInformationChanged, this, &KisDlgImageProperties::updateHDRLightLevels);
-    connect(d->image, &KisImage::sigDiffuseWhiteLightLevelChanged, this, &KisDlgImageProperties::updateHDRDiffuseWhite);
-    connect(d->image, &KisImage::sigColorVolumeInformationChanged, this, &KisDlgImageProperties::updateHDRColorVolume);
 
     KisWidgetConnectionUtils::connectControlState( m_page->cmbDiffuseWhite,  &d->hdrMetadataModel, "referenceWhiteState", "referenceWhiteIndex");
 
@@ -161,8 +158,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
 
     KisWidgetConnectionUtils::connectControlState( m_page->cmbColorVolumePresets, &d->hdrMetadataModel, "cviEffectivePresetIndexState", "cviEffectivePresetIndex");
 
-    const bool hdr = (d->image->colorSpace()->hasHighDynamicRange()
-                      || d->image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ);
+    const bool hdr = d->image->colorSpace()->hasHighDynamicRange() ||
+                     d->image->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ;
     m_page->grpHdrMeta->setEnabled(hdr);
 
     //annotations
@@ -256,22 +253,6 @@ void KisDlgImageProperties::updateDisplayConfigInfo()
     m_page->wdgProofingOptions->setDisplayConfigOptions(d->colorConverter->conversionOptions());
 }
 
-void KisDlgImageProperties::updateHDRDiffuseWhite()
-{
-    d->hdrMetadataModel.setImageProfileHdrReferenceWhite(d->image->colorSpace()->profile()->hdrReferenceWhite());
-    d->hdrMetadataModel.setImageHdrReferenceWhiteMetadata(d->image->hdrReferenceWhiteLightLevelMetadata());
-}
-
-void KisDlgImageProperties::updateHDRLightLevels()
-{
-    d->hdrMetadataModel.setClli(d->image->relativeContentLightLevelInformation());
-}
-
-void KisDlgImageProperties::updateHDRColorVolume()
-{
-    d->hdrMetadataModel.setCvi(d->image->colorVolumeInformation());
-}
-
 void KisDlgImageProperties::setHDRLightLevelsOnImage()
 {
     std::optional<KisRelativeContentLightLevelInformation> optClli = d->hdrMetadataModel.clli();
@@ -285,8 +266,8 @@ void KisDlgImageProperties::setHDRLightLevelsOnImage()
 void KisDlgImageProperties::setHDRDiffuseWhiteOnImage()
 {
     std::optional<double> dw = d->hdrMetadataModel.imageHdrReferenceWhiteMetadata();
-    if (d->image->hdrReferenceWhiteLightLevelMetadata() != dw) {
-        KUndo2Command *cmd = new KisChangeImageHdrDiffuseWhiteCommand(d->image, dw);
+    if (d->image->hdrReferenceWhiteLightLevel() != dw) {
+        KUndo2Command *cmd = new KisChangeImageHdrReferenceWhiteCommand(d->image, dw);
         d->image->undoAdapter()->addCommand(cmd);
     }
 }

@@ -3,11 +3,11 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisChangeImageHdrDiffuseWhiteCommand.h"
+#include "KisChangeImageHdrReferenceWhiteCommand.h"
 #include "kis_command_ids.h"
 #include <kis_image.h>
 
-KisChangeImageHdrDiffuseWhiteCommand::KisChangeImageHdrDiffuseWhiteCommand(KisImageWSP image,
+KisChangeImageHdrReferenceWhiteCommand::KisChangeImageHdrReferenceWhiteCommand(KisImageWSP image,
                                                                                      std::optional<double> diffuseWhite,
                                                                                      KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Set HDR Diffuse White Light Level"), parent)
@@ -16,34 +16,34 @@ KisChangeImageHdrDiffuseWhiteCommand::KisChangeImageHdrDiffuseWhiteCommand(KisIm
 {
     KisImageSP img = m_image.toStrongRef();
     if (img) {
-        m_oldDiffuseWhite = img->diffuseWhiteLightLevel();
+        m_oldDiffuseWhite = img->hdrReferenceWhiteLightLevel();
     }
 }
 
-void KisChangeImageHdrDiffuseWhiteCommand::redo()
+void KisChangeImageHdrReferenceWhiteCommand::redo()
 {
     KisImageSP img = m_image.toStrongRef();
     if (!img) return;
 
-    img->setDiffuseWhiteLightLevel(m_diffuseWhite);
+    img->setHdrReferenceWhiteLightLevel(m_diffuseWhite);
 }
 
-void KisChangeImageHdrDiffuseWhiteCommand::undo()
+void KisChangeImageHdrReferenceWhiteCommand::undo()
 {
     KisImageSP img = m_image.toStrongRef();
     if (!img) return;
 
-    img->setDiffuseWhiteLightLevel(m_oldDiffuseWhite);
+    img->setHdrReferenceWhiteLightLevel(m_oldDiffuseWhite);
 }
 
-int KisChangeImageHdrDiffuseWhiteCommand::id() const
+int KisChangeImageHdrReferenceWhiteCommand::id() const
 {
     return KisCommandUtils::ChangeImageHdrDiffuseWhiteId;
 }
 
-bool KisChangeImageHdrDiffuseWhiteCommand::mergeWith(const KUndo2Command *otherCommand)
+bool KisChangeImageHdrReferenceWhiteCommand::mergeWith(const KUndo2Command *otherCommand)
 {
-    const KisChangeImageHdrDiffuseWhiteCommand *other = dynamic_cast<const KisChangeImageHdrDiffuseWhiteCommand *>(otherCommand);
+    const KisChangeImageHdrReferenceWhiteCommand *other = dynamic_cast<const KisChangeImageHdrReferenceWhiteCommand *>(otherCommand);
     if (!other || other->m_image != m_image) return false;
 
     m_diffuseWhite = other->m_diffuseWhite;

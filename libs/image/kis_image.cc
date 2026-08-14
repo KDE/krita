@@ -2115,11 +2115,7 @@ std::optional<KisRelativeContentLightLevelInformation> KisImage::relativeContent
 
 void KisImage::setRelativeContentLightLevelInformation(const std::optional<KisRelativeContentLightLevelInformation> clli)
 {
-    if (!m_d->relativeContentLightLevelInformation ||
-        !(*m_d->relativeContentLightLevelInformation == *clli)) {
-        m_d->relativeContentLightLevelInformation = clli;
-        emit sigContentLightLevelInformationChanged();
-    }
+    m_d->relativeContentLightLevelInformation = clli;
 }
 
 std::optional<KisColorVolumeInformation> KisImage::colorVolumeInformation() const
@@ -2129,41 +2125,21 @@ std::optional<KisColorVolumeInformation> KisImage::colorVolumeInformation() cons
 
 void KisImage::setColorVolumeInformation(const std::optional<KisColorVolumeInformation> cvi)
 {
-    if (!m_d->colorVolumeInformation ||
-        !(*m_d->colorVolumeInformation == *cvi)) {
-        m_d->colorVolumeInformation = cvi;
-        emit sigColorVolumeInformationChanged();
-    }
+    m_d->colorVolumeInformation = cvi;
 }
 
-std::optional<double> KisImage::diffuseWhiteLightLevel() const
+std::optional<double> KisImage::hdrReferenceWhiteLightLevel() const
 {
-    if (m_d->colorSpace->profile()->hdrReferenceWhite() && m_d->colorSpace->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ) {
-        return m_d->colorSpace->profile()->hdrReferenceWhite();
-    }
     return m_d->diffuseWhiteLightLevel;
 }
 
-void KisImage::setDiffuseWhiteLightLevel(const std::optional<double> cdm2)
+void KisImage::setHdrReferenceWhiteLightLevel(const std::optional<double> value)
 {
-    if (m_d->colorSpace->profile()->hdrReferenceWhite() && m_d->colorSpace->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ) {
-        qWarning() << "Cannot set diffuse white on image: profile provides the diffuse white for this image.";
+    if (m_d->colorSpace->profile()->hdrReferenceWhite() && m_d->colorSpace->profile()->hdrReferenceWhite() != value) {
+        qWarning() << "Cannot set the diffuse white metadata on the image: profile provides a different inconsistent value";
         return;
     }
-    if (!m_d->diffuseWhiteLightLevel ||
-        !qFuzzyCompare(*m_d->diffuseWhiteLightLevel, *cdm2)) {
-        m_d->diffuseWhiteLightLevel = cdm2;
-        emit sigDiffuseWhiteLightLevelChanged();
-    }
-}
 
-std::optional<double> KisImage::hdrReferenceWhiteLightLevelMetadata() const
-{
-    return m_d->diffuseWhiteLightLevel;
-}
-
-void KisImage::setHdrReferenceWhiteLightLevelMetadata(const std::optional<double> value)
-{
     m_d->diffuseWhiteLightLevel = value;
 }
 

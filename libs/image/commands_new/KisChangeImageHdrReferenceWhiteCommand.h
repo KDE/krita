@@ -3,18 +3,18 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISCHANGEIMAGEHDRDIFFUSEWHITECOMMAND_H
-#define KISCHANGEIMAGEHDRDIFFUSEWHITECOMMAND_H
+#ifndef KISCHANGEIMAGEHDRREFERENCEWHITECOMMAND_H
+#define KISCHANGEIMAGEHDRREFERENCEWHITECOMMAND_H
 
 #include <kundo2command.h>
 #include <kis_types.h>
 #include "kritaimage_export.h"
 #include <optional>
 
-class KRITAIMAGE_EXPORT KisChangeImageHdrDiffuseWhiteCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisChangeImageHdrReferenceWhiteCommand : public KUndo2Command
 {
 public:
-    KisChangeImageHdrDiffuseWhiteCommand(KisImageWSP image,
+    KisChangeImageHdrReferenceWhiteCommand(KisImageWSP image,
                                               std::optional<double> diffuseWhite,
                                               KUndo2Command *parent = nullptr);
 
@@ -29,4 +29,4 @@ private:
     std::optional<double> m_oldDiffuseWhite;
 };
 
-#endif // KISCHANGEIMAGEHDRDIFFUSEWHITECOMMAND_H
+#endif // KISCHANGEIMAGEHDRREFERENCEWHITECOMMAND_H

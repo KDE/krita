@@ -45,10 +45,6 @@ private Q_SLOTS:
     void setProofingConfigToImage();
     void updateDisplayConfigInfo();
 
-    void updateHDRDiffuseWhite();
-    void updateHDRLightLevels();
-    void updateHDRColorVolume();
-
     void setHDRDiffuseWhiteOnImage();
     void setHDRLightLevelsOnImage();
     void setHDRColorVolumeOnImage();

@@ -1551,11 +1551,10 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
 {
     QDomElement child;
     for (child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-        if (child.tagName() == DIFFUSEWHITE) {
+        if (child.tagName() == HDRREFERENCEWHITE) {
             double diffWhite = 0.0;
             KisDomUtils::loadValue(child, &diffWhite);
-            std::optional<double> dW = std::make_optional(diffWhite);
-            image->setDiffuseWhiteLightLevel(dW);
+            image->setHdrReferenceWhiteLightLevel(diffWhite);
         }
         if (child.tagName() == CONTENTLIGHTLEVEL) {
             KisRelativeContentLightLevelInformation clli;
@@ -1569,8 +1568,7 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
             } else {
                 clli.type = KisRelativeContentLightLevelInformation::XYZLuminance;
             }
-            std::optional<KisRelativeContentLightLevelInformation> ci = std::make_optional(clli);
-            image->setRelativeContentLightLevelInformation(ci);
+            image->setRelativeContentLightLevelInformation(clli);
         }
         if (child.tagName() == COLORVOLUME) {
             KisColorVolumeInformation cv;
@@ -1600,8 +1598,7 @@ void KisKraLoader::loadHDRMetadata(const QDomElement &elem, KisImageSP image)
                 cv.white.x = temp.x();
                 cv.white.y = temp.y();
             }
-            std::optional<KisColorVolumeInformation> cvi = std::make_optional(cv);
-            image->setColorVolumeInformation(cvi);
+            image->setColorVolumeInformation(cv);
         }
     }
 }

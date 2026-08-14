@@ -556,7 +556,7 @@ void KisAnimTimelineDocker::establishPlaybackEngineConnections(KisPlaybackEngine
 
         action = actionManager->createAction("first_frame");
         action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-        connect(action, &KisAction::triggered, this, [this, playbackEngine](bool){
+        connect(action, &KisAction::triggered, playbackEngine, [this, playbackEngine](bool){
             if (m_d->canvas) {
                 playbackEngine->firstFrame();
             }
@@ -564,7 +564,7 @@ void KisAnimTimelineDocker::establishPlaybackEngineConnections(KisPlaybackEngine
 
         action = actionManager->createAction("last_frame");
         action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-        connect(action, &KisAction::triggered, this, [this, playbackEngine](bool){
+        connect(action, &KisAction::triggered, playbackEngine, [this, playbackEngine](bool){
             if (m_d->canvas) {
                 playbackEngine->lastFrame();
             }

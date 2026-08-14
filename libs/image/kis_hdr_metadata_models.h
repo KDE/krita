@@ -71,11 +71,8 @@ public:
     LAGER_QT_CURSOR(double, cviMinLuminance);
 
     void setClli(const std::optional<KisRelativeContentLightLevelInformation> &clli);
-    std::optional<KisRelativeContentLightLevelInformation> clli() const;
     void setCvi(const std::optional<KisColorVolumeInformation> &cvi);
-    std::optional<KisColorVolumeInformation> cvi() const;
     void setImageHdrReferenceWhiteMetadata(const std::optional<double> &refWhite);
-    std::optional<double> imageHdrReferenceWhiteMetadata() const;
     void setImageProfileHdrReferenceWhite(const std::optional<double> &refWhite);
 
 };

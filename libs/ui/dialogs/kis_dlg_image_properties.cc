@@ -32,9 +32,8 @@
 #include <kis_types.h>
 #include <kis_group_layer.h>
 
-#include <commands_new/KisChangeImageHdrContentLightLevelCommand.h>
-#include <commands_new/KisChangeImageHdrColorVolumeCommand.h>
-#include <commands_new/KisChangeImageHdrReferenceWhiteCommand.h>
+#include <commands_new/KisChangeImageHdrMetadataCommand.h>
+
 #include <KisContentLightLevelProcessingVistor.h>
 
 #include <kis_signal_compressor_with_param.h>
@@ -209,9 +208,26 @@ int KisDlgImageProperties::exec()
         } else {
             d->image->setProofingConfiguration(nullptr);
         }
-        setHDRDiffuseWhiteOnImage();
-        setHDRLightLevelsOnImage();
-        setHDRColorVolumeOnImage();
+
+        std::optional<double> effectiveHdrReferenceWhite = d->hdrMetadataModel.effectiveReferenceWhite();
+        std::optional<KisRelativeContentLightLevelInformation> effectiveClli;
+        std::optional<KisColorVolumeInformation> effectiveCvi;
+
+        if (d->hdrMetadataModel.effectiveClliPresent()) {
+            effectiveClli = d->hdrMetadataModel.clliData.get();
+        }
+
+        if (d->hdrMetadataModel.cviPresent()) {
+            effectiveCvi = d->hdrMetadataModel.cviData.get();
+        }
+
+        if (effectiveHdrReferenceWhite != d->image->hdrReferenceWhiteLightLevel() ||
+            effectiveClli != d->image->relativeContentLightLevelInformation() ||
+            effectiveCvi != d->image->colorVolumeInformation()) {
+
+            KUndo2Command *cmd = new KisChangeImageHdrMetadataCommand(d->image, effectiveHdrReferenceWhite, effectiveClli, effectiveCvi);
+            KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+        }
     } else {
         d->image->setProofingConfiguration(d->originalProofingConfig);
     }
@@ -251,34 +267,6 @@ void KisDlgImageProperties::setProofingConfigToImage()
 void KisDlgImageProperties::updateDisplayConfigInfo()
 {
     m_page->wdgProofingOptions->setDisplayConfigOptions(d->colorConverter->conversionOptions());
-}
-
-void KisDlgImageProperties::setHDRLightLevelsOnImage()
-{
-    std::optional<KisRelativeContentLightLevelInformation> optClli = d->hdrMetadataModel.clli();
-
-    if (d->image->relativeContentLightLevelInformation() != optClli) {
-        KisProcessingApplicator::runSingleCommandStroke(d->image,
-            new KisChangeImageHdrContentLightLevelCommand(d->image, optClli));
-    }
-}
-
-void KisDlgImageProperties::setHDRDiffuseWhiteOnImage()
-{
-    std::optional<double> dw = d->hdrMetadataModel.imageHdrReferenceWhiteMetadata();
-    if (d->image->hdrReferenceWhiteLightLevel() != dw) {
-        KUndo2Command *cmd = new KisChangeImageHdrReferenceWhiteCommand(d->image, dw);
-        d->image->undoAdapter()->addCommand(cmd);
-    }
-}
-
-void KisDlgImageProperties::setHDRColorVolumeOnImage()
-{
-    std::optional<KisColorVolumeInformation> optCvi = d->hdrMetadataModel.cvi();
-    if (d->image->colorVolumeInformation() != optCvi) {
-        KUndo2Command *cmd = new KisChangeImageHdrColorVolumeCommand(d->image, optCvi);
-        d->image->undoAdapter()->addCommand(cmd);
-    }
 }
 
 void KisDlgImageProperties::slotCalculateLightLevels()

@@ -45,9 +45,7 @@ enum CommandId {
     ImageAnimSettingCommandId,
     SvgTextChangeTransformsOnRangeCommandId,
     SvgTextPathInfoChangeCommandId,
-    ChangeImageHdrContentLightLevelId,
-    ChangeImageHdrColorVolumeId,
-    ChangeImageHdrDiffuseWhiteId
+    ChangeImageHdrMetadataId,
 };
 
 }

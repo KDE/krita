@@ -222,15 +222,6 @@ void KisHDRMetadataModel::setClli(const std::optional<KisRelativeContentLightLev
     }
 }
 
-std::optional<KisRelativeContentLightLevelInformation> KisHDRMetadataModel::clli() const
-{
-    const bool enabled = clliPresentData.get();
-    if (enabled) {
-        return std::make_optional(clliData.get());
-    }
-    return std::nullopt;
-}
-
 void KisHDRMetadataModel::setCvi(const std::optional<KisColorVolumeInformation> &cvi)
 {
     if (cvi) {
@@ -242,15 +233,6 @@ void KisHDRMetadataModel::setCvi(const std::optional<KisColorVolumeInformation> 
     }
 }
 
-std::optional<KisColorVolumeInformation> KisHDRMetadataModel::cvi() const
-{
-    const bool enabled = cviPresentData.get();
-    if (enabled) {
-        return std::make_optional(cviData.get());
-    }
-    return std::nullopt;
-}
-
 void KisHDRMetadataModel::setImageHdrReferenceWhiteMetadata(const std::optional<double> &refWhite)
 {
     if (refWhite) {
@@ -260,14 +242,6 @@ void KisHDRMetadataModel::setImageHdrReferenceWhiteMetadata(const std::optional<
         referenceWhitePresentData.set(false);
         referenceWhiteData.set(203.0);
     }
-}
-
-std::optional<double> KisHDRMetadataModel::imageHdrReferenceWhiteMetadata() const
-{
-    if (referenceWhitePresentData.get() && imageProfileIsRelativeData.get()) {
-        return referenceWhiteData.get();
-    }
-    return std::nullopt;
 }
 
 void KisHDRMetadataModel::setImageProfileHdrReferenceWhite(const std::optional<double> &refWhite)

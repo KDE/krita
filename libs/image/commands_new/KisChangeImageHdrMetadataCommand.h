@@ -7,29 +7,35 @@
 #define KISCHANGEIMAGEHDRMETADATACOMMAND_H
 
 #include <kundo2command.h>
-#include <commands_new/KisAsynchronouslyMergeableCommandInterface.h>
 #include <kis_types.h>
 #include <kis_hdr_metadata.h>
 #include "kritaimage_export.h"
 #include <optional>
 
-class KRITAIMAGE_EXPORT KisChangeImageHdrContentLightLevelCommand : public KUndo2Command, public KisAsynchronouslyMergeableCommandInterface
+class KRITAIMAGE_EXPORT KisChangeImageHdrMetadataCommand : public KUndo2Command
 {
 public:
-    KisChangeImageHdrContentLightLevelCommand(KisImageWSP image,
-                                     std::optional<KisRelativeContentLightLevelInformation> clli,
-                                     KUndo2Command *parent = nullptr);
+    KisChangeImageHdrMetadataCommand(KisImageWSP image,
+                                        std::optional<double> referenceWhite,
+                                        std::optional<KisRelativeContentLightLevelInformation> clli,
+                                        std::optional<KisColorVolumeInformation> cvi,
+                                        KUndo2Command *parent = nullptr);
 
     void redo() override;
     void undo() override;
 
     int id() const override;
-    bool canMergeWith(const KUndo2Command *other) const override;
     bool mergeWith(const KUndo2Command *other) override;
 private:
     KisImageWSP m_image;
+
+    std::optional<double> m_referenceWhite;
     std::optional<KisRelativeContentLightLevelInformation> m_clli;
+    std::optional<KisColorVolumeInformation> m_cvi;
+
+    std::optional<double> m_oldReferenceWhite;
     std::optional<KisRelativeContentLightLevelInformation> m_oldClli;
+    std::optional<KisColorVolumeInformation> m_oldCvi;
 };
 
 #endif // KISCHANGEIMAGEHDRMETADATACOMMAND_H

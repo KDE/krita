@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:43+0000\n"
+"POT-Creation-Date: 2026-08-15 00:43+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -21352,8 +21352,8 @@ msgid "Reselect"
 msgstr "&برگزیدن مجدد‌"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2097
-#: libs/impex/KisExportCheckRegistry.cpp:129
+#: libs/image/kis_layer_utils.cpp:2114
+#: libs/impex/KisExportCheckRegistry.cpp:133
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "پاک‌کن گزینش"
@@ -21365,7 +21365,7 @@ msgid "Node Rename"
 msgstr "نام:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:841
+#: libs/image/kis_image.cc:869
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21408,6 +21408,12 @@ msgstr "&افزودن به گزینش جاری‌"
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "تغییر پالایه"
+
+#: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set HDR Metadata"
+msgstr "&ویرایش فراداده‌"
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 #, fuzzy
@@ -21623,61 +21629,144 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:398
+#: libs/image/kis_hdr_metadata_models.cpp:51
+#, kde-format
+msgctxt "Image reference white value"
+msgid "%1 cd/m²"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:63
+#, fuzzy, kde-format
+msgctxt "CLLI calculation type"
+msgid "XYZ Luminance"
+msgstr "بالا بردن"
+
+#: libs/image/kis_hdr_metadata_models.cpp:64
+#, kde-format
+msgctxt "CLLI calculation type"
+msgid "Rec 2020 Per Component"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:65
+#, fuzzy, kde-format
+msgctxt "CLLI calculation type"
+msgid "RGB Per Component"
+msgstr "محتویات"
+
+#: libs/image/kis_hdr_metadata_models.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Calculate the brightness in nits against XYZ luminance."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Calculate the brightness in nits by testing the components in linear rec "
+"2020."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Calculate the brightness in nits by testing the components in linear RGB, if "
+"possible, falls back to using XYZ luminance."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:117
+#, kde-format
+msgid "Rec. 2100 PQ"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:118
+#, kde-format
+msgid "DCI-P3 D65"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
+#: libs/image/kis_hdr_metadata_models.cpp:119
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
+#, kde-format
+msgid "Custom"
+msgstr "سفارشی"
+
+#: libs/image/kis_hdr_metadata_models.cpp:121
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset color volume to the values defined by Rec. 2100 PQ"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:122
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset color volume to the values defined by DCI-P3 D65"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:123
+#, fuzzy, kde-format
+#| msgid "&Add to current selection"
+msgctxt "@info:tooltip"
+msgid "Use custom values for color volume"
+msgstr "&افزودن به گزینش جاری‌"
+
+#: libs/image/kis_image.cc:422
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "واردات تصویر"
 
 #. i18n.
-#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "زمینه"
 
-#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&لایه نقاشی‌"
 
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:868
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "خط برش تصویر"
 
-#: libs/image/kis_image.cc:887
+#: libs/image/kis_image.cc:915
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:1019
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "لایه &گروه جدید‌"
 
-#: libs/image/kis_image.cc:992
+#: libs/image/kis_image.cc:1020
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "عدم تیز کردن نقاب"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1057
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "مقیاس‌بندی تصویر"
 
-#: libs/image/kis_image.cc:1030
+#: libs/image/kis_image.cc:1058
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "دقت تصویر"
 
-#: libs/image/kis_image.cc:1080
+#: libs/image/kis_image.cc:1108
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21685,20 +21774,20 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "مقیاس‌بندی لایه"
 msgstr[1] "مقیاس‌بندی لایه"
 
-#: libs/image/kis_image.cc:1219
+#: libs/image/kis_image.cc:1247
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "چرخش تصویر"
 
-#: libs/image/kis_image.cc:1229
+#: libs/image/kis_image.cc:1257
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "بالا بردن نقاب"
 
-#: libs/image/kis_image.cc:1232
+#: libs/image/kis_image.cc:1260
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21706,13 +21795,13 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "چرخش لایه"
 msgstr[1] "چرخش لایه"
 
-#: libs/image/kis_image.cc:1333
+#: libs/image/kis_image.cc:1361
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "تغییر اندازه شکلها"
 
-#: libs/image/kis_image.cc:1337
+#: libs/image/kis_image.cc:1365
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -21721,51 +21810,51 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "برش لایه"
 msgstr[1] "برش لایه"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1372
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "برش تصویر"
 
-#: libs/image/kis_image.cc:1362
+#: libs/image/kis_image.cc:1390
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "تبدیل نوع تصویر"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1441
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "تبدیل نوع تصویر"
 
-#: libs/image/kis_image.cc:1414
+#: libs/image/kis_image.cc:1442
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "تبدیل نوع تصویر"
 
-#: libs/image/kis_image.cc:1466
+#: libs/image/kis_image.cc:1494
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "تبدیل نوع تصویر"
 
-#: libs/image/kis_image.cc:1496
+#: libs/image/kis_image.cc:1524
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "اعمال Profile"
 
-#: libs/image/kis_image.cc:1537
+#: libs/image/kis_image.cc:1565
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "اعمال Profile"
 
-#: libs/image/kis_image.cc:2573
+#: libs/image/kis_image.cc:2637
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -21952,68 +22041,68 @@ msgstr ""
 msgid "Merged"
 msgstr "خط برش تصویر"
 
-#: libs/image/kis_layer_utils.cpp:1472
+#: libs/image/kis_layer_utils.cpp:1489
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "گزینه‌ها"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1761
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "شرکت"
 
-#: libs/image/kis_layer_utils.cpp:1822
+#: libs/image/kis_layer_utils.cpp:1839
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "تغییر تورفتگی"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2065
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "حذف رنگ برگزیده"
 
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2083
 #, fuzzy
 #| msgid "No profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "بدون profile"
 
-#: libs/image/kis_layer_utils.cpp:2067
+#: libs/image/kis_layer_utils.cpp:2084
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "مرئی"
 
-#: libs/image/kis_layer_utils.cpp:2146
+#: libs/image/kis_layer_utils.cpp:2163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "پاک‌کن گزینش"
 
-#: libs/image/kis_layer_utils.cpp:2170
+#: libs/image/kis_layer_utils.cpp:2187
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "تخت کردن تصویر"
 
-#: libs/image/kis_layer_utils.cpp:2186
+#: libs/image/kis_layer_utils.cpp:2203
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "تخت کردن تصویر"
 
-#: libs/image/kis_layer_utils.cpp:2420
+#: libs/image/kis_layer_utils.cpp:2437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "گزینه‌های آلفا"
 
-#: libs/image/kis_layer_utils.cpp:2446
+#: libs/image/kis_layer_utils.cpp:2463
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -22028,7 +22117,7 @@ msgstr "فشار"
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1462
-#: plugins/impex/libkra/kis_kra_saver.cpp:89
+#: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
 msgstr "بدون نام"
@@ -22437,6 +22526,14 @@ msgid ""
 "the layer will be converted to a paintlayer"
 msgstr ""
 
+#: libs/impex/HdrMetaDataCheck.h:22
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"This image has <b>HDR metadata</b>. HDR metadata cannot be saved to this "
+"format."
+msgstr ""
+
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
 msgctxt "image conversion warning"
@@ -22446,12 +22543,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "لایه &بدل جدید‌"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1629
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -22459,45 +22556,45 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "گروه:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "گالری &پالایه‌ها‌"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "برش لایه"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "گالری &پالایه‌ها‌"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119
+#: libs/impex/KisExportCheckRegistry.cpp:123
 #, fuzzy, kde-format
 #| msgid "&Group Layer"
 msgid "Generator Layer"
 msgstr "لایه &گروه‌"
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
 #, fuzzy, kde-format
 msgid "Colorize Mask"
 msgstr "&رنگ:‌"
 
-#: libs/impex/KisExportCheckRegistry.cpp:123
+#: libs/impex/KisExportCheckRegistry.cpp:127
 #: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
 #, fuzzy, kde-format
 msgid "Filter Mask"
 msgstr "نقاب پالایه..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
 #, fuzzy, kde-format
 msgid "Transform Mask"
 msgstr "تبدیل"
 
-#: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -24122,7 +24219,7 @@ msgstr "سفارشی"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1944
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:717 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:734 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -24159,9 +24256,9 @@ msgstr "پرونده‌های متن:"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisAnimationRender.cpp:199
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:996
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:999
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
@@ -25260,60 +25357,60 @@ msgstr "خطای تجزیه"
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "ایجاد لایه جدید"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:64
 #: libs/ui/KisMainWindow.cpp:2333
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "جهت"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:145
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
 #, fuzzy, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "دو خطی"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:150
 #, fuzzy, kde-format
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "سینوس"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:156
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:157
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:573
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:590
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:669
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:686
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:693
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -25321,44 +25418,44 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:682
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:699
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:704
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:711
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2465
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "اخطار"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:705
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:722
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
 #, fuzzy, kde-format
 msgid "Please enter a file name to render to."
 msgstr "ذخیره سند"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:996
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:999
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -25655,21 +25752,21 @@ msgid "Creating desired %1 file: %2/%3 frames."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/video_export_options_dialog.ui:13
+#: libs/ui/animation/video_export_options_dialog.ui:21
 #, kde-format
 msgid "Codec:"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
-#: libs/ui/animation/video_export_options_dialog.ui:23
+#: libs/ui/animation/video_export_options_dialog.ui:31
 #, fuzzy, kde-format
 msgid "Codec options"
 msgstr "گزینه‌ها"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/video_export_options_dialog.ui:45
-#: libs/ui/animation/video_export_options_dialog.ui:223
+#: libs/ui/animation/video_export_options_dialog.ui:56
+#: libs/ui/animation/video_export_options_dialog.ui:222
 #, fuzzy, kde-format
 #| msgid "Date:"
 msgid "Bitrate:"
@@ -25677,8 +25774,8 @@ msgstr "تاریخ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
-#: libs/ui/animation/video_export_options_dialog.ui:78
-#: libs/ui/animation/video_export_options_dialog.ui:141
+#: libs/ui/animation/video_export_options_dialog.ui:89
+#: libs/ui/animation/video_export_options_dialog.ui:152
 #, fuzzy, kde-format
 msgid "Constant Rate Factor:"
 msgstr "&تحمیل ویژگیها‌"
@@ -25686,10 +25783,12 @@ msgstr "&تحمیل ویژگیها‌"
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH264)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetWEBP)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
-#: libs/ui/animation/video_export_options_dialog.ui:95
-#: libs/ui/animation/video_export_options_dialog.ui:158
-#: libs/ui/animation/video_export_options_dialog.ui:433
+#: libs/ui/animation/video_export_options_dialog.ui:106
+#: libs/ui/animation/video_export_options_dialog.ui:169
+#: libs/ui/animation/video_export_options_dialog.ui:432
+#: libs/ui/forms/wdgimageproperties.ui:611
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, fuzzy, kde-format
 #| msgid "Presets:"
@@ -25697,7 +25796,7 @@ msgid "Preset:"
 msgstr "پیش تنظیمها:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH264)
-#: libs/ui/animation/video_export_options_dialog.ui:105
+#: libs/ui/animation/video_export_options_dialog.ui:116
 #, fuzzy, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
@@ -25705,34 +25804,28 @@ msgstr "profile"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
-#: libs/ui/animation/video_export_options_dialog.ui:115
-#: libs/ui/animation/video_export_options_dialog.ui:178
+#: libs/ui/animation/video_export_options_dialog.ui:126
+#: libs/ui/animation/video_export_options_dialog.ui:189
 #, kde-format
 msgid "Tune:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
-#: libs/ui/animation/video_export_options_dialog.ui:168
+#: libs/ui/animation/video_export_options_dialog.ui:179
 #, fuzzy, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
 msgstr "profile"
 
-#. i18n: ectx: property (title), widget (QGroupBox, chkUseHDRMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:188
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
+#: libs/ui/animation/video_export_options_dialog.ui:199
 #, fuzzy, kde-format
 #| msgid "Mode"
 msgid "HDR Mode"
 msgstr "حالت"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:197
-#, fuzzy, kde-format
-msgid "HDR Metadata..."
-msgstr "&ویرایش فراداده‌"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/video_export_options_dialog.ui:249
+#: libs/ui/animation/video_export_options_dialog.ui:248
 #, fuzzy, kde-format
 #| msgid "Date:"
 msgid "Bitrate (MBit/s):"
@@ -25740,8 +25833,8 @@ msgstr "تاریخ:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
-#: libs/ui/animation/video_export_options_dialog.ui:263
-#: libs/ui/animation/video_export_options_dialog.ui:406
+#: libs/ui/animation/video_export_options_dialog.ui:262
+#: libs/ui/animation/video_export_options_dialog.ui:405
 #, kde-format
 msgid "Lossless"
 msgstr ""
@@ -25749,29 +25842,29 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:286
-#: libs/ui/animation/video_export_options_dialog.ui:373
-#: libs/ui/animation/video_export_options_dialog.ui:443
+#: libs/ui/animation/video_export_options_dialog.ui:285
+#: libs/ui/animation/video_export_options_dialog.ui:372
+#: libs/ui/animation/video_export_options_dialog.ui:442
 #, fuzzy, kde-format
 #| msgid "Configuration"
 msgid "Loop Animation"
 msgstr "پیکربندی"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:293
+#: libs/ui/animation/video_export_options_dialog.ui:292
 #, fuzzy, kde-format
 msgid "Transparency Difference"
 msgstr "نقاب شفاف"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/video_export_options_dialog.ui:300
+#: libs/ui/animation/video_export_options_dialog.ui:299
 #, kde-format
 msgid "Auto-generate 8bit Palette:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
-#: libs/ui/animation/video_export_options_dialog.ui:310
+#: libs/ui/animation/video_export_options_dialog.ui:309
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, fuzzy, kde-format
 #| msgid "Other"
@@ -25779,19 +25872,19 @@ msgid "Dithering:"
 msgstr "غیره"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:320
+#: libs/ui/animation/video_export_options_dialog.ui:319
 #, fuzzy, kde-format
 msgid "Bayer Scale:"
 msgstr "الگو"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:337
+#: libs/ui/animation/video_export_options_dialog.ui:336
 #, fuzzy, kde-format
 msgid "Difference Mode:"
 msgstr "تنظیمات"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:347
+#: libs/ui/animation/video_export_options_dialog.ui:346
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -25811,37 +25904,37 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:350
+#: libs/ui/animation/video_export_options_dialog.ui:349
 #, fuzzy, kde-format
 msgid "Preserve Transparency"
 msgstr "رنگ به آلفا"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:380
+#: libs/ui/animation/video_export_options_dialog.ui:379
 #, fuzzy, kde-format
 msgid "Prediction Mode:"
 msgstr "حالت گزینش:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:413
+#: libs/ui/animation/video_export_options_dialog.ui:412
 #, fuzzy, kde-format
 msgid "Compression Level:"
 msgstr "ویژگیها"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:423
+#: libs/ui/animation/video_export_options_dialog.ui:422
 #, fuzzy, kde-format
 msgid "Image Quality:"
 msgstr "تاری:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:457
+#: libs/ui/animation/video_export_options_dialog.ui:456
 #, fuzzy, kde-format
 msgid "Custom options"
 msgstr "گزینه‌های هندسی"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:466
+#: libs/ui/animation/video_export_options_dialog.ui:465
 #, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
@@ -25853,7 +25946,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:473
+#: libs/ui/animation/video_export_options_dialog.ui:472
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
@@ -25865,7 +25958,7 @@ msgstr ""
 msgid "Reset"
 msgstr "&برگزیدن مجدد‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:38
 #, fuzzy, kde-format
 #| msgid "Superscript"
 msgctxt ""
@@ -25873,7 +25966,7 @@ msgctxt ""
 msgid "ultrafast"
 msgstr "بالانویس"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
 #, fuzzy, kde-format
 #| msgid "Superscript"
 msgctxt ""
@@ -25881,7 +25974,7 @@ msgctxt ""
 msgid "superfast"
 msgstr "بالانویس"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, fuzzy, kde-format
 #| msgid "Superscript"
 msgctxt ""
@@ -25889,42 +25982,42 @@ msgctxt ""
 msgid "veryfast"
 msgstr "بالانویس"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
 #, fuzzy, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "faster"
 msgstr "تاریخ"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
 #, fuzzy, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "fast"
 msgstr "تاریخ"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "medium"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
 #, fuzzy, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slow"
 msgstr "&نمایش‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
 #, fuzzy, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slower"
 msgstr "&نمایش‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
 #, fuzzy, kde-format
 #| msgid "Superscript"
 msgctxt ""
@@ -25932,7 +26025,7 @@ msgctxt ""
 msgid "veryslow"
 msgstr "بالانویس"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:48
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt ""
@@ -25940,80 +26033,80 @@ msgctxt ""
 msgid "placebo"
 msgstr "جایگزینی"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:49
 #, fuzzy, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
 msgstr "استفاده از الگو"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:57
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:56
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #, fuzzy, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high"
 msgstr "&نمایش‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
 #, fuzzy, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high10"
 msgstr "&نمایش‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
 #, fuzzy, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high422"
 msgstr "&نمایش‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:55
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
 #, fuzzy, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high444"
 msgstr "&نمایش‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:58
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:57
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main10 (HDR)"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:60
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "film"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, fuzzy, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "animation"
 msgstr "پویا‌شده"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "grain"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
 #, fuzzy, kde-format
 #| msgid "Glsl Image"
 msgctxt ""
@@ -26021,403 +26114,265 @@ msgctxt ""
 msgid "stillimage"
 msgstr "تصویر Glsl"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "psnr"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "ssim"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
 #, fuzzy, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
 msgstr "تاریخ"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:68
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:69
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:76
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zero-latency"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:77
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "up"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, fuzzy, kde-format
 msgctxt "apng prediction option name"
 msgid "avg"
 msgstr "تب"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "paeth"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:83
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
 #, fuzzy, kde-format
 msgctxt "apng prediction option name"
 msgid "mixed"
 msgstr "ثابت )%1("
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:84
 #, fuzzy, kde-format
 msgctxt "webp preset option name"
 msgid "default"
 msgstr "پیش‌فرض"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
 #, fuzzy, kde-format
 #| msgid "a drawing"
 msgctxt "webp preset option name"
 msgid "drawing"
 msgstr "یک ترسیم"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, fuzzy, kde-format
 #| msgid "Tool Icon"
 msgctxt "webp preset option name"
 msgid "icon"
 msgstr "شمایل ابزار"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
 #, kde-format
 msgctxt "webp preset option name"
 msgid "photo"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, fuzzy, kde-format
 #| msgid "Picture"
 msgctxt "webp preset option name"
 msgid "picture"
 msgstr "عکس"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:91
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
 #, fuzzy, kde-format
 msgctxt "webp preset option name"
 msgid "text"
 msgstr "فولاد سرد"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:92
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, fuzzy, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "تنظیمات"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:95
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, fuzzy, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "نام لایه:"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:96
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "لایه"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:102
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:103
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:105
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, fuzzy, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "مستطیل"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:149
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:168
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:148
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:167
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:289
 #, fuzzy, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
 msgstr "&باز کردن‌"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:290
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:297
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:299
 #, kde-format
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:311
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
 msgctxt "GIF codec name"
 msgid "GIF"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:580
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:572
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:582
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:574
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
-msgstr ""
-
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
-#, kde-format
-msgid "Rec. 2100 PQ"
-msgstr ""
-
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
-#, kde-format
-msgid "DCI-P3 D65"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
-#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
-#, kde-format
-msgid "Custom"
-msgstr "سفارشی"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
-#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QWidget, VideoHDRMetadataOptionsDialog)
-#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:24
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
-#: libs/ui/forms/wdgimportimagesequence.ui:18
-#: libs/widgets/WdgDlgInternalColorSelector.ui:18
-#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
-#, kde-format
-msgid "Dialog"
-msgstr "محاوره"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
-#, fuzzy, kde-format
-msgid "Master Display:"
-msgstr "نمایش"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
-#. i18n: ectx: attribute (title), widget (QWidget, Display)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
-#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
-#, kde-format
-msgid "Display"
-msgstr "نمایش"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
-#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
-#. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
-#: plugins/dockers/recorder/recorder_export.ui:300
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
-#, fuzzy, kde-format
-#| msgid "Fax:"
-msgid "x"
-msgstr "دورنگار:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:58
-#, fuzzy, kde-format
-msgid "y"
-msgstr "سبک:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
-#, kde-format
-msgid "Red Primary:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
-#, fuzzy, kde-format
-msgid "Green Primary:"
-msgstr "سبز"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
-#, fuzzy, kde-format
-#| msgid "Blue Grid"
-msgid "Blue Primary:"
-msgstr "توری آبی"
-
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:197
-#: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
-#, fuzzy, kde-format
-msgid "White Point:"
-msgstr "گزینه‌ها"
-
-#. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
-#, fuzzy, kde-format
-msgid "Min Luminance:"
-msgstr "بالا بردن"
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMinLuminance)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMaxLuminance)
-#. i18n: ectx: property (suffix), widget (QSpinBox, intMaxCLL)
-#. i18n: ectx: property (suffix), widget (QSpinBox, intMaxFALL)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:257
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:277
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:300
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:317
-#: plugins/impex/heif/WdgHeifExport.ui:116
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
-#, kde-format
-msgid " cd/m²"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
-#, fuzzy, kde-format
-msgid "Max Luminance:"
-msgstr "بالا بردن"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
-#, kde-format
-msgid "MaxCLL:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:310
-#, kde-format
-msgid "MaxFALL:"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VideoImportDialog)
@@ -27180,6 +27135,19 @@ msgctxt "@title:window"
 msgid "Filter: %1"
 msgstr "پالایه:"
 
+#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
+#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
+#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
+#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
+#: libs/ui/forms/wdgimportimagesequence.ui:18
+#: libs/widgets/WdgDlgInternalColorSelector.ui:18
+#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "محاوره"
+
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:20
 #, kde-format
@@ -27237,12 +27205,20 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
+#: libs/ui/forms/wdgimageproperties.ui:369
+#: libs/ui/forms/wdgimageproperties.ui:385
+#: libs/ui/forms/wdgimageproperties.ui:573
+#: libs/ui/forms/wdgimageproperties.ui:596
 #, kde-format
 msgid "cd/m²"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_image_properties.cc:49
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:67
 #, kde-format
 msgid "Image Properties"
 msgstr "ویژگیهای تصویر"
@@ -28114,6 +28090,18 @@ msgstr "تنظیمات رنگ"
 msgid "Canvas Input"
 msgstr "&صفحه مجازی‌"
 
+#. i18n: ectx: attribute (title), widget (QWidget, Display)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
+#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
+#, kde-format
+msgid "Display"
+msgstr "نمایش"
+
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2773
 #: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #, kde-format
@@ -28953,7 +28941,7 @@ msgstr "ارتفاع تصویردانه"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
-#: libs/ui/forms/wdgimageproperties.ui:313
+#: libs/ui/forms/wdgimageproperties.ui:645
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:40
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
@@ -29533,6 +29521,12 @@ msgstr "profile"
 #, fuzzy, kde-format
 msgid "Profile Properties"
 msgstr "ویژگیهای لایه"
+
+#. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
+#: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
+#, fuzzy, kde-format
+msgid "White Point:"
+msgstr "گزینه‌ها"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
@@ -30742,6 +30736,17 @@ msgstr ""
 msgid "Zoom Preview Scale:"
 msgstr "پیش‌نمایش"
 
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
+#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
+#. i18n: ectx: property (text), widget (QLabel, labelX)
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: plugins/dockers/recorder/recorder_export.ui:300
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
+#, fuzzy, kde-format
+#| msgid "Fax:"
+msgid "x"
+msgstr "دورنگار:"
+
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
 #: libs/ui/forms/wdggeneralsettings.ui:1066
 #, fuzzy, kde-format
@@ -31331,8 +31336,119 @@ msgstr "گزینه‌ها"
 msgid "Store Softproofing configuration in the image"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
+#, fuzzy, kde-format
+msgid "HDR Metadata"
+msgstr "&ویرایش فراداده‌"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
+#: libs/ui/forms/wdgimageproperties.ui:308
+#, fuzzy, kde-format
+#| msgid "Reference image:"
+msgid "HDR Reference White"
+msgstr "تصویر مرجع:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
+#: libs/ui/forms/wdgimageproperties.ui:326
+#, fuzzy, kde-format
+#| msgid "Document Information"
+msgid "Content Light Level Information"
+msgstr "اطلاعات سند"
+
+#. i18n: ectx: property (text), widget (QLabel, label_14)
+#: libs/ui/forms/wdgimageproperties.ui:338
+#, fuzzy, kde-format
+msgid "Max Content Light Level:"
+msgstr "تغییر تورفتگی"
+
+#. i18n: ectx: property (text), widget (QLabel, label_15)
+#: libs/ui/forms/wdgimageproperties.ui:345
+#, kde-format
+msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
+#: libs/ui/forms/wdgimageproperties.ui:362
+#, kde-format
+msgid "Calculate"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
+#: libs/ui/forms/wdgimageproperties.ui:404
+#, fuzzy, kde-format
+msgid "Color Volume Information"
+msgstr "پیکربندی"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#. i18n: ectx: property (text), widget (QLabel, GreenLabel)
+#: libs/ui/forms/wdgimageproperties.ui:444
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
+#, fuzzy, kde-format
+msgid "Green:"
+msgstr "سبز"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#. i18n: ectx: property (text), widget (QLabel, BlueLabel)
+#: libs/ui/forms/wdgimageproperties.ui:490
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
+#, fuzzy, kde-format
+msgid "Blue:"
+msgstr "آبی"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, label_offsetX)
+#. i18n: ectx: property (text), widget (QLabel, label_shearX)
+#: libs/ui/forms/wdgimageproperties.ui:510
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
+#, fuzzy, kde-format
+#| msgid "Fax:"
+msgid "x:"
+msgstr "دورنگار:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#. i18n: ectx: property (text), widget (QLabel, RedLabel)
+#: libs/ui/forms/wdgimageproperties.ui:517
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
+#, fuzzy, kde-format
+msgid "Red:"
+msgstr "قرمز"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#. i18n: ectx: property (text), widget (QLabel, label_offsetY)
+#. i18n: ectx: property (text), widget (QLabel, label_shearY)
+#: libs/ui/forms/wdgimageproperties.ui:524
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
+#, fuzzy, kde-format
+msgid "y:"
+msgstr "سبک:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: libs/ui/forms/wdgimageproperties.ui:557
+#: plugins/dockers/lut/black_white_point_chooser.cpp:44
+#, fuzzy, kde-format
+msgid "White:"
+msgstr "توازن سفید:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: libs/ui/forms/wdgimageproperties.ui:566
+#, fuzzy, kde-format
+msgid "Maximum Luminance:"
+msgstr "بالا بردن"
+
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#: libs/ui/forms/wdgimageproperties.ui:589
+#, fuzzy, kde-format
+msgid "Minimum Luminance:"
+msgstr "بالا بردن"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: libs/ui/forms/wdgimageproperties.ui:634
 #, fuzzy, kde-format
 msgid "Annotations"
 msgstr "چرخش"
@@ -31342,7 +31458,7 @@ msgstr "چرخش"
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#: libs/ui/forms/wdgimageproperties.ui:326 plugins/dockers/lut/wdglut.ui:364
+#: libs/ui/forms/wdgimageproperties.ui:658 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
@@ -38758,27 +38874,6 @@ msgctxt "@info:tooltip"
 msgid "This profile has the following xyY colorants:"
 msgstr "پرونده %1 موجود نیست."
 
-#. i18n: ectx: property (text), widget (QLabel, RedLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
-#, fuzzy, kde-format
-msgid "Red:"
-msgstr "قرمز"
-
-#. i18n: ectx: property (text), widget (QLabel, GreenLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
-#, fuzzy, kde-format
-msgid "Green:"
-msgstr "سبز"
-
-#. i18n: ectx: property (text), widget (QLabel, BlueLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
-#, fuzzy, kde-format
-msgid "Blue:"
-msgstr "آبی"
-
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:189
 #, kde-format
 msgctxt ""
@@ -44306,11 +44401,6 @@ msgstr "تأیید ذخیره"
 msgid "Black:"
 msgstr "سیاه"
 
-#: plugins/dockers/lut/black_white_point_chooser.cpp:44
-#, fuzzy, kde-format
-msgid "White:"
-msgstr "توازن سفید:"
-
 #: plugins/dockers/lut/lutdocker_dock.cpp:82
 #, fuzzy, kde-format
 msgid "LUT Management"
@@ -44671,7 +44761,7 @@ msgstr "حالت مرکب"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:531
+#: plugins/dockers/recorder/recorder_export.cpp:530
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -44679,65 +44769,65 @@ msgstr "حالت مرکب"
 msgid "Export"
 msgstr "صادرات"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:544
 #, fuzzy, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "رونوشت گزینش در لایه جدید"
 
-#: plugins/dockers/recorder/recorder_export.cpp:552
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, fuzzy, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "&ضبط‌"
 
-#: plugins/dockers/recorder/recorder_export.cpp:555
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, fuzzy, kde-format
 #| msgid "Fax:"
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "دورنگار:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, fuzzy, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "حذف لایه"
 
-#: plugins/dockers/recorder/recorder_export.cpp:617
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, fuzzy, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "رونوشت گزینش در لایه جدید"
 
-#: plugins/dockers/recorder/recorder_export.cpp:729
+#: plugins/dockers/recorder/recorder_export.cpp:725
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:809
+#: plugins/dockers/recorder/recorder_export.cpp:805
 #, fuzzy, kde-format
 msgid "No frames to export."
 msgstr "رونوشت گزینش در لایه جدید"
 
-#: plugins/dockers/recorder/recorder_export.cpp:823
+#: plugins/dockers/recorder/recorder_export.cpp:819
 #, fuzzy, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr ""
 "سندی با این نام از قبل موجود است.\n"
 "می‌خواهید آن را جای‌نوشت کنید؟"
 
-#: plugins/dockers/recorder/recorder_export.cpp:851
+#: plugins/dockers/recorder/recorder_export.cpp:847
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:866
+#: plugins/dockers/recorder/recorder_export.cpp:862
 #, fuzzy, kde-format
 msgid "Export failed. Error message:"
 msgstr "واردات تصویر"
 
-#: plugins/dockers/recorder/recorder_export.cpp:889
+#: plugins/dockers/recorder/recorder_export.cpp:885
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -44747,7 +44837,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:896
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, fuzzy, kde-format
 #| msgid "Cerulean Blue"
@@ -55005,6 +55095,13 @@ msgid ""
 "to 1000 for converting from PQ.</p></body></html>"
 msgstr ""
 
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
+#: plugins/impex/heif/WdgHeifExport.ui:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
+#, kde-format
+msgid " cd/m²"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
 #: plugins/impex/heif/WdgHeifExport.ui:129
@@ -56502,8 +56599,8 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:148
-#: plugins/impex/libkra/kis_kra_loader.cpp:697
-#: plugins/impex/libkra/kis_kra_loader.cpp:1147
+#: plugins/impex/libkra/kis_kra_loader.cpp:702
+#: plugins/impex/libkra/kis_kra_loader.cpp:1152
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@title:window"
@@ -56609,46 +56706,46 @@ msgstr ""
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:210
+#: plugins/impex/libkra/kis_kra_loader.cpp:211
 #, fuzzy, kde-format
 msgid "Image does not have a name."
 msgstr "ذخیره سند"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:215
+#: plugins/impex/libkra/kis_kra_loader.cpp:216
 #, kde-format
 msgid "Image does not specify a width."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:221
+#: plugins/impex/libkra/kis_kra_loader.cpp:222
 #, kde-format
 msgid "Image does not specify a height."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:271
+#: plugins/impex/libkra/kis_kra_loader.cpp:272
 #, fuzzy, kde-format
 msgid "Image specifies an unsupported color model: %1."
 msgstr "اندازه لایه"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:588
+#: plugins/impex/libkra/kis_kra_loader.cpp:593
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:599
+#: plugins/impex/libkra/kis_kra_loader.cpp:604
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:608
+#: plugins/impex/libkra/kis_kra_loader.cpp:613
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:692
+#: plugins/impex/libkra/kis_kra_loader.cpp:697
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -56660,34 +56757,34 @@ msgid ""
 "Do you want to locate it manually?"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:867
+#: plugins/impex/libkra/kis_kra_loader.cpp:872
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:927
+#: plugins/impex/libkra/kis_kra_loader.cpp:932
 #, fuzzy, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "اندازه لایه"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:955
+#: plugins/impex/libkra/kis_kra_loader.cpp:960
 #, fuzzy, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "اندازه لایه"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:990
+#: plugins/impex/libkra/kis_kra_loader.cpp:995
 #, fuzzy, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "اندازه لایه"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:997
+#: plugins/impex/libkra/kis_kra_loader.cpp:1002
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1021
+#: plugins/impex/libkra/kis_kra_loader.cpp:1026
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -56696,7 +56793,7 @@ msgid ""
 "blending mode"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1142
+#: plugins/impex/libkra/kis_kra_loader.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -56810,95 +56907,95 @@ msgstr "ایجاد لایه جدید"
 msgid "Could not write for %1 metadata to the file."
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:216
+#: plugins/impex/libkra/kis_kra_saver.cpp:218
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
 msgstr "نتوانست برای ذخیره پرونده ایجاد کند"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:231
+#: plugins/impex/libkra/kis_kra_saver.cpp:233
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:243
+#: plugins/impex/libkra/kis_kra_saver.cpp:245
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:249
+#: plugins/impex/libkra/kis_kra_saver.cpp:251
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:266
-#: plugins/impex/libkra/kis_kra_saver.cpp:288
+#: plugins/impex/libkra/kis_kra_saver.cpp:268
+#: plugins/impex/libkra/kis_kra_saver.cpp:290
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:300
-#: plugins/impex/libkra/kis_kra_saver.cpp:324
+#: plugins/impex/libkra/kis_kra_saver.cpp:302
+#: plugins/impex/libkra/kis_kra_saver.cpp:326
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:337
-#: plugins/impex/libkra/kis_kra_saver.cpp:360
+#: plugins/impex/libkra/kis_kra_saver.cpp:339
+#: plugins/impex/libkra/kis_kra_saver.cpp:362
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:473
+#: plugins/impex/libkra/kis_kra_saver.cpp:475
 #, fuzzy, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:517
+#: plugins/impex/libkra/kis_kra_saver.cpp:519
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:551
+#: plugins/impex/libkra/kis_kra_saver.cpp:553
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:581
+#: plugins/impex/libkra/kis_kra_saver.cpp:583
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:616
+#: plugins/impex/libkra/kis_kra_saver.cpp:618
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
 msgstr "گزینش بردار"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:649
+#: plugins/impex/libkra/kis_kra_saver.cpp:651
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:664
+#: plugins/impex/libkra/kis_kra_saver.cpp:666
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:765
+#: plugins/impex/libkra/kis_kra_saver.cpp:806
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
@@ -69506,23 +69603,6 @@ msgstr "٪"
 msgid "Vertical Scale"
 msgstr "موج عمودی"
 
-#. i18n: ectx: property (text), widget (QLabel, label_offsetX)
-#. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
-#, fuzzy, kde-format
-#| msgid "Fax:"
-msgid "x:"
-msgstr "دورنگار:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_offsetY)
-#. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
-#, fuzzy, kde-format
-msgid "y:"
-msgstr "سبک:"
-
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1154
 #, fuzzy, kde-format
@@ -70061,6 +70141,23 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Master Display:"
+#~ msgstr "نمایش"
+
+#, fuzzy
+#~ msgid "y"
+#~ msgstr "سبک:"
+
+#, fuzzy
+#~ msgid "Green Primary:"
+#~ msgstr "سبز"
+
+#, fuzzy
+#~| msgid "Blue Grid"
+#~ msgid "Blue Primary:"
+#~ msgstr "توری آبی"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -73749,10 +73846,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Change paragraph format"
 #~ msgstr "تغییر قالب متغیر"
-
-#, fuzzy
-#~ msgid "Change List Level"
-#~ msgstr "تغییر تورفتگی"
 
 #, fuzzy
 #~ msgid "Change the level the list is at"

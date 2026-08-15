@@ -82,7 +82,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:43+0000\n"
+"POT-Creation-Date: 2026-08-15 00:43+0000\n"
 "PO-Revision-Date: 2026-08-06 10:39+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -21437,8 +21437,8 @@ msgstr ""
 
 # BUGME: please remove ellipsis because no dialogs are opened --aspotashev
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2097
-#: libs/impex/KisExportCheckRegistry.cpp:129
+#: libs/image/kis_layer_utils.cpp:2114
+#: libs/impex/KisExportCheckRegistry.cpp:133
 #, kde-format
 msgid "Selection Mask"
 msgstr "Маска выделения"
@@ -21451,7 +21451,7 @@ msgstr ""
 "переименование узла"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:841
+#: libs/image/kis_image.cc:869
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr ""
@@ -21501,6 +21501,13 @@ msgid "Change Clone Layers"
 msgstr ""
 "Изменение клонирующих слоёв\n"
 "изменение клонирующих слоёв"
+
+#: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
+#, fuzzy
+#| msgid "HDR Metadata..."
+msgctxt "(qtundo-format)"
+msgid "Set HDR Metadata"
+msgstr "Метаданные HDR..."
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
@@ -21722,67 +21729,154 @@ msgstr "Митчелл"
 msgid "Pass Through"
 msgstr "Пропустить"
 
-#: libs/image/kis_image.cc:398
+#: libs/image/kis_hdr_metadata_models.cpp:51
+#, fuzzy, kde-format
+#| msgid " cd/m²"
+msgctxt "Image reference white value"
+msgid "%1 cd/m²"
+msgstr " кд/м²"
+
+#: libs/image/kis_hdr_metadata_models.cpp:63
+#, fuzzy, kde-format
+#| msgid "Luminance"
+msgctxt "CLLI calculation type"
+msgid "XYZ Luminance"
+msgstr "Светлота"
+
+#: libs/image/kis_hdr_metadata_models.cpp:64
+#, fuzzy, kde-format
+#| msgid "Rec 2020 PQ"
+msgctxt "CLLI calculation type"
+msgid "Rec 2020 Per Component"
+msgstr "Rec 2020 PQ"
+
+#: libs/image/kis_hdr_metadata_models.cpp:65
+#, fuzzy, kde-format
+#| msgid "Components:"
+msgctxt "CLLI calculation type"
+msgid "RGB Per Component"
+msgstr "Компоненты:"
+
+#: libs/image/kis_hdr_metadata_models.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Calculate the brightness in nits against XYZ luminance."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Calculate the brightness in nits by testing the components in linear rec "
+"2020."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Calculate the brightness in nits by testing the components in linear RGB, if "
+"possible, falls back to using XYZ luminance."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:117
+#, kde-format
+msgid "Rec. 2100 PQ"
+msgstr "Rec. 2100 PQ"
+
+#: libs/image/kis_hdr_metadata_models.cpp:118
+#, kde-format
+msgid "DCI-P3 D65"
+msgstr "DCI-P3 D65"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
+#: libs/image/kis_hdr_metadata_models.cpp:119
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
+#, kde-format
+msgid "Custom"
+msgstr "Другой"
+
+#: libs/image/kis_hdr_metadata_models.cpp:121
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset color volume to the values defined by Rec. 2100 PQ"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:122
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset color volume to the values defined by DCI-P3 D65"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:123
+#, fuzzy, kde-format
+#| msgid "Use color palette for ... colors or less"
+msgctxt "@info:tooltip"
+msgid "Use custom values for color volume"
+msgstr "Использовать палитру цветов, если цветов не больше"
+
+#: libs/image/kis_image.cc:422
 #, kde-format
 msgid "Imported Image"
 msgstr "Импортированное изображение"
 
 #. i18n.
-#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
 
-#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "Обычный слой"
 
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:868
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr ""
 "Кадрирование изображения\n"
 "кадрирование изображения"
 
-#: libs/image/kis_image.cc:887
+#: libs/image/kis_image.cc:915
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 "Удаление неиспользованных данных\n"
 "удаление неиспользованных данных"
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:1019
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 "Кадрирование слоя\n"
 "кадрирование слоя"
 
-#: libs/image/kis_image.cc:992
+#: libs/image/kis_image.cc:1020
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 "Кадрирование маски\n"
 "кадрирование маски"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1057
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 "Изменение размера изображения\n"
 "изменение размера изображения"
 
-#: libs/image/kis_image.cc:1030
+#: libs/image/kis_image.cc:1058
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 "Изменение разрешения изображения\n"
 "изменение разрешения изображения"
 
-#: libs/image/kis_image.cc:1080
+#: libs/image/kis_image.cc:1108
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21800,21 +21894,21 @@ msgstr[3] ""
 "Масштабирование слоя\n"
 "масштабирование слоя"
 
-#: libs/image/kis_image.cc:1219
+#: libs/image/kis_image.cc:1247
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 "Поворот изображения\n"
 "поворот изображения"
 
-#: libs/image/kis_image.cc:1229
+#: libs/image/kis_image.cc:1257
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 "Поворот маски\n"
 "поворот маски"
 
-#: libs/image/kis_image.cc:1232
+#: libs/image/kis_image.cc:1260
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21832,14 +21926,14 @@ msgstr[3] ""
 "Поворот слоя\n"
 "поворот слоя"
 
-#: libs/image/kis_image.cc:1333
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 "Сдвиг маски\n"
 "сдвиг маски"
 
-#: libs/image/kis_image.cc:1337
+#: libs/image/kis_image.cc:1365
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21857,21 +21951,21 @@ msgstr[3] ""
 "Сдвиг слоя\n"
 "сдвиг слоя"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Сдвиг изображения\n"
 "сдвиг изображения"
 
-#: libs/image/kis_image.cc:1362
+#: libs/image/kis_image.cc:1390
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 "Преобразование цветового пространства слоя\n"
 "преобразование цветового пространства слоя"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1441
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
@@ -21879,35 +21973,35 @@ msgstr ""
 "преобразование цветового пространства изображения"
 
 # BUGME: is it "color space of projection"? --aspotashev
-#: libs/image/kis_image.cc:1414
+#: libs/image/kis_image.cc:1442
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 "Преобразование цветового пространства проекции\n"
 "преобразование цветового пространства проекции"
 
-#: libs/image/kis_image.cc:1466
+#: libs/image/kis_image.cc:1494
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 "Унификация цветового пространства слоёв\n"
 "унификацию цветового пространства слоёв"
 
-#: libs/image/kis_image.cc:1496
+#: libs/image/kis_image.cc:1524
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 "Назначение профиля слою\n"
 "назначение профиля слою"
 
-#: libs/image/kis_image.cc:1537
+#: libs/image/kis_image.cc:1565
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 "Назначение профиля\n"
 "назначение профиля"
 
-#: libs/image/kis_image.cc:2573
+#: libs/image/kis_image.cc:2637
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -22094,74 +22188,74 @@ msgstr ""
 msgid "Merged"
 msgstr "Сведено"
 
-#: libs/image/kis_layer_utils.cpp:1472
+#: libs/image/kis_layer_utils.cpp:1489
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 "Объединение с нижележащим\n"
 "объединение c нижележащим"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1761
 #, kde-format
 msgid "Copy of"
 msgstr "Копия"
 
-#: libs/image/kis_layer_utils.cpp:1822
+#: libs/image/kis_layer_utils.cpp:1839
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Изменение цвета проекции\n"
 "изменение цвета проекции"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2065
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Объединение выбранных узлов\n"
 "объединение выбранных узлов"
 
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2083
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Создание слоя из видимого\n"
 "создание слоя из видимого"
 
-#: libs/image/kis_layer_utils.cpp:2067
+#: libs/image/kis_layer_utils.cpp:2084
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видимый"
 
-#: libs/image/kis_layer_utils.cpp:2146
+#: libs/image/kis_layer_utils.cpp:2163
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Объединение масок выделения\n"
 "объединение масок выделения"
 
-#: libs/image/kis_layer_utils.cpp:2170
+#: libs/image/kis_layer_utils.cpp:2187
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Сведение слоя\n"
 "сведение слоя"
 
-#: libs/image/kis_layer_utils.cpp:2186
+#: libs/image/kis_layer_utils.cpp:2203
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Сведение изображения\n"
 "сведение изображения"
 
-#: libs/image/kis_layer_utils.cpp:2420
+#: libs/image/kis_layer_utils.cpp:2437
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Отделение альфа-канала в маску\n"
 "отделение альфа-канала в маску"
 
-#: libs/image/kis_layer_utils.cpp:2446
+#: libs/image/kis_layer_utils.cpp:2463
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -22177,7 +22271,7 @@ msgstr "Обработка"
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1462
-#: plugins/impex/libkra/kis_kra_saver.cpp:89
+#: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
 msgstr "Безымянный"
@@ -22608,6 +22702,20 @@ msgstr ""
 "Изображение содержит заливаемый слой типа <b>%1</b>, который не "
 "поддерживается; слой будет преобразован в обычный слой"
 
+#: libs/impex/HdrMetaDataCheck.h:22
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "This image has <b>animated layers</b>. Animation cannot be saved to this "
+#| "format."
+msgctxt "image conversion warning"
+msgid ""
+"This image has <b>HDR metadata</b>. HDR metadata cannot be saved to this "
+"format."
+msgstr ""
+"Это изображение имеет <b>анимированные слои</b>. Анимация не может быть "
+"сохранена в этом формате."
+
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
 msgctxt "image conversion warning"
@@ -22620,57 +22728,57 @@ msgstr ""
 "Это не поддерживается форматом, поэтому длительность кадра будет округлена "
 "до ближайшей миллисекунды."
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
 #, kde-format
 msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1629
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Группа"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
 #, kde-format
 msgid "File Layer"
 msgstr "Файловый слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Векторный слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "Filter Layer"
 msgstr "Фильтрующий слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119
+#: libs/impex/KisExportCheckRegistry.cpp:123
 #, kde-format
 msgid "Generator Layer"
 msgstr "Генерирующий слой"
 
 # Не знаю, где это находится...
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
 #, kde-format
 msgid "Colorize Mask"
 msgstr "Тонирующая маска"
 
-#: libs/impex/KisExportCheckRegistry.cpp:123
+#: libs/impex/KisExportCheckRegistry.cpp:127
 #: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
 #, kde-format
 msgid "Filter Mask"
 msgstr "Фильтрующая маска"
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
 #, kde-format
 msgid "Transform Mask"
 msgstr "Трансформирующая маска"
 
-#: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -24276,7 +24384,7 @@ msgstr "Выходной"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1944
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:717 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:734 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24312,9 +24420,9 @@ msgstr "Локальные источники"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisAnimationRender.cpp:199
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:996
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:999
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
@@ -25416,61 +25524,61 @@ msgstr "Ошибка при обработке"
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Не удалось обработать кадры анимации. Конечные файлы неполные."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:64
 #: libs/ui/KisMainWindow.cpp:2333
 #, kde-format
 msgid "Render Animation"
 msgstr "Обработка анимации"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:145
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr "бикубическая"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
 #, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "билинейная"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr "ланцош3"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr "соседняя"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:150
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "сплайн"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:156
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:157
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "н/д"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:573
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:590
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Не найден корректный исполняемый файл FFmpeg…"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:669
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:686
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 "FFmpeg должен иметь версию как минимум 4.2+ для работы прозрачности GIF"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:693
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -25480,25 +25588,25 @@ msgstr ""
 "Анимированные изображения в формате GIF не могут иметь частоту кадров выше "
 "50. Частота кадров будет снижена до 50 кадров в секунду."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:682
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:699
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
 msgstr "Количество кадров в секунду, превышающее «30», редко поддерживается."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:704
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr "Размер, превышающий «1920» (в пикселах), редко поддерживается."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:711
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2465
 #, kde-format
 msgid "Warning(s):"
 msgstr "Предупреждения:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:705
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:722
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
@@ -25506,19 +25614,19 @@ msgstr ""
 "Экспорт может оказаться неудачным, и некоторые устройства не смогут "
 "выполнить воспроизведение."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Укажите имя файла для обработки."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:996
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr "Похоже, что указанный FFmpeg сжат. Сначала извлеките FFmpeg из архива."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:999
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -25831,29 +25939,29 @@ msgid "Creating desired %1 file: %2/%3 frames."
 msgstr "Создание файла %1. Кадров: %2/%3."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/video_export_options_dialog.ui:13
+#: libs/ui/animation/video_export_options_dialog.ui:21
 #, kde-format
 msgid "Codec:"
 msgstr "Кодек:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
-#: libs/ui/animation/video_export_options_dialog.ui:23
+#: libs/ui/animation/video_export_options_dialog.ui:31
 #, kde-format
 msgid "Codec options"
 msgstr "Параметры кодека"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/video_export_options_dialog.ui:45
-#: libs/ui/animation/video_export_options_dialog.ui:223
+#: libs/ui/animation/video_export_options_dialog.ui:56
+#: libs/ui/animation/video_export_options_dialog.ui:222
 #, kde-format
 msgid "Bitrate:"
 msgstr "Битрейт:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
-#: libs/ui/animation/video_export_options_dialog.ui:78
-#: libs/ui/animation/video_export_options_dialog.ui:141
+#: libs/ui/animation/video_export_options_dialog.ui:89
+#: libs/ui/animation/video_export_options_dialog.ui:152
 #, kde-format
 msgid "Constant Rate Factor:"
 msgstr "Постоянный фактор скорости:"
@@ -25861,17 +25969,19 @@ msgstr "Постоянный фактор скорости:"
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH264)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetWEBP)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
-#: libs/ui/animation/video_export_options_dialog.ui:95
-#: libs/ui/animation/video_export_options_dialog.ui:158
-#: libs/ui/animation/video_export_options_dialog.ui:433
+#: libs/ui/animation/video_export_options_dialog.ui:106
+#: libs/ui/animation/video_export_options_dialog.ui:169
+#: libs/ui/animation/video_export_options_dialog.ui:432
+#: libs/ui/forms/wdgimageproperties.ui:611
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, kde-format
 msgid "Preset:"
 msgstr "Профиль:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH264)
-#: libs/ui/animation/video_export_options_dialog.ui:105
+#: libs/ui/animation/video_export_options_dialog.ui:116
 #, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
@@ -25879,41 +25989,35 @@ msgstr "Профиль:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
-#: libs/ui/animation/video_export_options_dialog.ui:115
-#: libs/ui/animation/video_export_options_dialog.ui:178
+#: libs/ui/animation/video_export_options_dialog.ui:126
+#: libs/ui/animation/video_export_options_dialog.ui:189
 #, kde-format
 msgid "Tune:"
 msgstr "Тон:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
-#: libs/ui/animation/video_export_options_dialog.ui:168
+#: libs/ui/animation/video_export_options_dialog.ui:179
 #, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
 msgstr "Профиль:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, chkUseHDRMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:188
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
+#: libs/ui/animation/video_export_options_dialog.ui:199
 #, kde-format
 msgid "HDR Mode"
 msgstr "Режим HDR"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:197
-#, kde-format
-msgid "HDR Metadata..."
-msgstr "Метаданные HDR..."
-
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/video_export_options_dialog.ui:249
+#: libs/ui/animation/video_export_options_dialog.ui:248
 #, kde-format
 msgid "Bitrate (MBit/s):"
 msgstr "Битрейт (Мбит/с):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
-#: libs/ui/animation/video_export_options_dialog.ui:263
-#: libs/ui/animation/video_export_options_dialog.ui:406
+#: libs/ui/animation/video_export_options_dialog.ui:262
+#: libs/ui/animation/video_export_options_dialog.ui:405
 #, kde-format
 msgid "Lossless"
 msgstr "Без потерь"
@@ -25921,21 +26025,21 @@ msgstr "Без потерь"
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:286
-#: libs/ui/animation/video_export_options_dialog.ui:373
-#: libs/ui/animation/video_export_options_dialog.ui:443
+#: libs/ui/animation/video_export_options_dialog.ui:285
+#: libs/ui/animation/video_export_options_dialog.ui:372
+#: libs/ui/animation/video_export_options_dialog.ui:442
 #, kde-format
 msgid "Loop Animation"
 msgstr "Зациклить анимацию"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:293
+#: libs/ui/animation/video_export_options_dialog.ui:292
 #, kde-format
 msgid "Transparency Difference"
 msgstr "Разница в прозрачности"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/video_export_options_dialog.ui:300
+#: libs/ui/animation/video_export_options_dialog.ui:299
 #, kde-format
 msgid "Auto-generate 8bit Palette:"
 msgstr "Автоматическая генерация 8-битной палитры:"
@@ -25943,26 +26047,26 @@ msgstr "Автоматическая генерация 8-битной пали�
 # Фильтры
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
-#: libs/ui/animation/video_export_options_dialog.ui:310
+#: libs/ui/animation/video_export_options_dialog.ui:309
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "Смешивание:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:320
+#: libs/ui/animation/video_export_options_dialog.ui:319
 #, kde-format
 msgid "Bayer Scale:"
 msgstr "Масштаб Байера:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:337
+#: libs/ui/animation/video_export_options_dialog.ui:336
 #, kde-format
 msgid "Difference Mode:"
 msgstr "Режим разницы:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:347
+#: libs/ui/animation/video_export_options_dialog.ui:346
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -25997,37 +26101,37 @@ msgstr ""
 "span><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:350
+#: libs/ui/animation/video_export_options_dialog.ui:349
 #, kde-format
 msgid "Preserve Transparency"
 msgstr "Сохранить прозрачность"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:380
+#: libs/ui/animation/video_export_options_dialog.ui:379
 #, kde-format
 msgid "Prediction Mode:"
 msgstr "Режим предсказания:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:413
+#: libs/ui/animation/video_export_options_dialog.ui:412
 #, kde-format
 msgid "Compression Level:"
 msgstr "Степень сжатия:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:423
+#: libs/ui/animation/video_export_options_dialog.ui:422
 #, kde-format
 msgid "Image Quality:"
 msgstr "Качество изображения:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:457
+#: libs/ui/animation/video_export_options_dialog.ui:456
 #, kde-format
 msgid "Custom options"
 msgstr "Нестандартные параметры"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:466
+#: libs/ui/animation/video_export_options_dialog.ui:465
 #, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
@@ -26041,7 +26145,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:473
+#: libs/ui/animation/video_export_options_dialog.ui:472
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
@@ -26053,548 +26157,412 @@ msgstr ""
 msgid "Reset"
 msgstr "Сброс"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:38
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "ultrafast"
 msgstr "ультрабыстро"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "superfast"
 msgstr "сверхбыстро"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryfast"
 msgstr "очень быстро"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "faster"
 msgstr "быстрее"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "fast"
 msgstr "быстро"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "medium"
 msgstr "средне"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slow"
 msgstr "медленно"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slower"
 msgstr "медленнее"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryslow"
 msgstr "очень медленно"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:48
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "placebo"
 msgstr "плацебо"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:49
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
 msgstr "baseline"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:57
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:56
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main"
 msgstr "main"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high"
 msgstr "high"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high10"
 msgstr "high10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high422"
 msgstr "high422"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:55
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high444"
 msgstr "high444"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:58
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:57
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main10 (HDR)"
 msgstr "main10 (HDR)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:60
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "film"
 msgstr "плёнка"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "animation"
 msgstr "анимация"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "grain"
 msgstr "зерно"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "stillimage"
 msgstr "статичное изображение"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "psnr"
 msgstr "psnr"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "ssim"
 msgstr "ssim"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
 msgstr "быстрое декодирование"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:68
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
 msgstr "нулевая задержка"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:69
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
 msgstr "нет"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:76
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zero-latency"
 msgstr "нулевая задержка"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:77
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
 msgstr "нет"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
 msgstr "нижний"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "up"
 msgstr "верхний"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "avg"
 msgstr "ср."
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "paeth"
 msgstr "пает"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:83
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "mixed"
 msgstr "смешанный"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:84
 #, kde-format
 msgctxt "webp preset option name"
 msgid "default"
 msgstr "по умолчанию"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
 msgstr "нет"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
 #, kde-format
 msgctxt "webp preset option name"
 msgid "drawing"
 msgstr "рисунок"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, kde-format
 msgctxt "webp preset option name"
 msgid "icon"
 msgstr "значок"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
 #, kde-format
 msgctxt "webp preset option name"
 msgid "photo"
 msgstr "фотография"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, kde-format
 msgctxt "webp preset option name"
 msgid "picture"
 msgstr "картинка"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:91
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
 #, kde-format
 msgctxt "webp preset option name"
 msgid "text"
 msgstr "текст"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:92
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Общий/полный"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Разница"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:95
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "На каждый кадр"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:96
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "нет"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "байер"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "флойд_штайнберг"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "гекберт"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "сьерра2"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:102
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "сьерра2_4a"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:103
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "нет"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:105
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "прямоугольник"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:149
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:168
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:148
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:167
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr "кбит/с"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:289
 #, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
 msgstr "OpenH264"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:290
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
 msgstr "H.264, MPEG-4 Part 10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
 msgstr "H.265, MPEG-H Part 2 (HEVC)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:297
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
 msgstr "VP9"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:299
 #, kde-format
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
 msgstr "Theora"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
 msgstr "WEBP"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
 msgstr "APNG"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:311
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
 msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:580
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:572
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Формат экспортированной анимации не поддерживает HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:582
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:574
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
 msgstr "Метаданные HDR доступны только в профиле «main10»"
-
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
-#, kde-format
-msgid "Rec. 2100 PQ"
-msgstr "Rec. 2100 PQ"
-
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
-#, kde-format
-msgid "DCI-P3 D65"
-msgstr "DCI-P3 D65"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
-#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
-#, kde-format
-msgid "Custom"
-msgstr "Другой"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
-#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QWidget, VideoHDRMetadataOptionsDialog)
-#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:24
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
-#: libs/ui/forms/wdgimportimagesequence.ui:18
-#: libs/widgets/WdgDlgInternalColorSelector.ui:18
-#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
-#, kde-format
-msgid "Dialog"
-msgstr "Диалог"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
-#, kde-format
-msgid "Master Display:"
-msgstr "Основной дисплей:"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
-#. i18n: ectx: attribute (title), widget (QWidget, Display)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
-#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
-#, kde-format
-msgid "Display"
-msgstr "Монитор"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
-#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
-#. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
-#: plugins/dockers/recorder/recorder_export.ui:300
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
-#, kde-format
-msgid "x"
-msgstr "x"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:58
-#, kde-format
-msgid "y"
-msgstr "y"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
-#, kde-format
-msgid "Red Primary:"
-msgstr "Основной красный:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
-#, kde-format
-msgid "Green Primary:"
-msgstr "Основной зелёный:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
-#, kde-format
-msgid "Blue Primary:"
-msgstr "Основной синий:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:197
-#: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
-#, kde-format
-msgid "White Point:"
-msgstr "Белая точка:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
-#, kde-format
-msgid "Min Luminance:"
-msgstr "Мин. светлота:"
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMinLuminance)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMaxLuminance)
-#. i18n: ectx: property (suffix), widget (QSpinBox, intMaxCLL)
-#. i18n: ectx: property (suffix), widget (QSpinBox, intMaxFALL)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:257
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:277
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:300
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:317
-#: plugins/impex/heif/WdgHeifExport.ui:116
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
-#, kde-format
-msgid " cd/m²"
-msgstr " кд/м²"
-
-#. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
-#, kde-format
-msgid "Max Luminance:"
-msgstr "Макс. светлота:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
-#, kde-format
-msgid "MaxCLL:"
-msgstr "MaxCLL:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:310
-#, kde-format
-msgid "MaxFALL:"
-msgstr "MaxFALL:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VideoImportDialog)
 #: libs/ui/animation/VideoImportDialog.ui:24
@@ -27416,6 +27384,19 @@ msgctxt "@title:window"
 msgid "Filter: %1"
 msgstr "Фильтр: %1"
 
+#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
+#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
+#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
+#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
+#: libs/ui/forms/wdgimportimagesequence.ui:18
+#: libs/widgets/WdgDlgInternalColorSelector.ui:18
+#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Диалог"
+
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:20
 #, kde-format
@@ -27481,12 +27462,20 @@ msgstr ""
 "равно 1000 для преобразования в линейное отображение.</p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
+#: libs/ui/forms/wdgimageproperties.ui:369
+#: libs/ui/forms/wdgimageproperties.ui:385
+#: libs/ui/forms/wdgimageproperties.ui:573
+#: libs/ui/forms/wdgimageproperties.ui:596
 #, kde-format
 msgid "cd/m²"
 msgstr "кд/м²"
 
-#: libs/ui/dialogs/kis_dlg_image_properties.cc:49
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:67
 #, kde-format
 msgid "Image Properties"
 msgstr "Свойства изображения"
@@ -28378,6 +28367,18 @@ msgstr "Параметры входных данных холста"
 #, kde-format
 msgid "Canvas Input"
 msgstr "Входные данные холста"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Display)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
+#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
+#, kde-format
+msgid "Display"
+msgstr "Монитор"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2773
 #: plugins/dockers/logdocker/LogDockerDock.cpp:315
@@ -29274,7 +29275,7 @@ msgstr "Лицензия/Авторские права:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
-#: libs/ui/forms/wdgimageproperties.ui:313
+#: libs/ui/forms/wdgimageproperties.ui:645
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:40
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
@@ -29858,6 +29859,12 @@ msgstr "Профиль"
 #, kde-format
 msgid "Profile Properties"
 msgstr "Параметры профиля"
+
+#. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
+#: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
+#, kde-format
+msgid "White Point:"
+msgstr "Белая точка:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
@@ -31069,6 +31076,16 @@ msgstr ""
 msgid "Zoom Preview Scale:"
 msgstr "Нет предварительного просмотра"
 
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
+#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
+#. i18n: ectx: property (text), widget (QLabel, labelX)
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: plugins/dockers/recorder/recorder_export.ui:300
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
+#, kde-format
+msgid "x"
+msgstr "x"
+
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
 #: libs/ui/forms/wdggeneralsettings.ui:1066
 #, fuzzy, kde-format
@@ -31697,8 +31714,127 @@ msgstr "Мягкая цветопроба"
 msgid "Store Softproofing configuration in the image"
 msgstr "Сохранить параметры мягкой цветопробы в изображении"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
+#, fuzzy, kde-format
+#| msgid "HDR Metadata..."
+msgid "HDR Metadata"
+msgstr "Метаданные HDR..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
+#: libs/ui/forms/wdgimageproperties.ui:308
+#, fuzzy, kde-format
+#| msgid "Reference images"
+msgid "HDR Reference White"
+msgstr "Эталонные изображения"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
+#: libs/ui/forms/wdgimageproperties.ui:326
+#, fuzzy, kde-format
+#| msgid "Document Information"
+msgid "Content Light Level Information"
+msgstr "Сведения о документе"
+
+#. i18n: ectx: property (text), widget (QLabel, label_14)
+#: libs/ui/forms/wdgimageproperties.ui:338
+#, fuzzy, kde-format
+#| msgid "Change List Level"
+msgid "Max Content Light Level:"
+msgstr "Изменение уровня списка"
+
+#. i18n: ectx: property (text), widget (QLabel, label_15)
+#: libs/ui/forms/wdgimageproperties.ui:345
+#, fuzzy, kde-format
+#| msgid "<html><head/><body><p><br/></p></body></html>"
+msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
+msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
+#: libs/ui/forms/wdgimageproperties.ui:362
+#, fuzzy, kde-format
+#| msgctxt "@label:button"
+#| msgid "Calculate"
+msgid "Calculate"
+msgstr "Вычислить"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
+#: libs/ui/forms/wdgimageproperties.ui:404
+#, fuzzy, kde-format
+#| msgctxt "Rearrange the positions of the pixels under the cursor"
+#| msgid "Color Deformation"
+msgid "Color Volume Information"
+msgstr "Деформация цвета"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#. i18n: ectx: property (text), widget (QLabel, GreenLabel)
+#: libs/ui/forms/wdgimageproperties.ui:444
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
+#, kde-format
+msgid "Green:"
+msgstr "Зелёный:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#. i18n: ectx: property (text), widget (QLabel, BlueLabel)
+#: libs/ui/forms/wdgimageproperties.ui:490
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
+#, kde-format
+msgid "Blue:"
+msgstr "Синий:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, label_offsetX)
+#. i18n: ectx: property (text), widget (QLabel, label_shearX)
+#: libs/ui/forms/wdgimageproperties.ui:510
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
+#, kde-format
+msgid "x:"
+msgstr "x:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#. i18n: ectx: property (text), widget (QLabel, RedLabel)
+#: libs/ui/forms/wdgimageproperties.ui:517
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
+#, kde-format
+msgid "Red:"
+msgstr "Красный:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#. i18n: ectx: property (text), widget (QLabel, label_offsetY)
+#. i18n: ectx: property (text), widget (QLabel, label_shearY)
+#: libs/ui/forms/wdgimageproperties.ui:524
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
+#, kde-format
+msgid "y:"
+msgstr "y:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: libs/ui/forms/wdgimageproperties.ui:557
+#: plugins/dockers/lut/black_white_point_chooser.cpp:44
+#, kde-format
+msgid "White:"
+msgstr "Белый:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: libs/ui/forms/wdgimageproperties.ui:566
+#, fuzzy, kde-format
+#| msgid "Max Luminance:"
+msgid "Maximum Luminance:"
+msgstr "Макс. светлота:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#: libs/ui/forms/wdgimageproperties.ui:589
+#, fuzzy, kde-format
+#| msgid "Min Luminance:"
+msgid "Minimum Luminance:"
+msgstr "Мин. светлота:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: libs/ui/forms/wdgimageproperties.ui:634
 #, kde-format
 msgid "Annotations"
 msgstr "Аннотации"
@@ -31709,7 +31845,7 @@ msgstr "Аннотации"
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#: libs/ui/forms/wdgimageproperties.ui:326 plugins/dockers/lut/wdglut.ui:364
+#: libs/ui/forms/wdgimageproperties.ui:658 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
@@ -39425,27 +39561,6 @@ msgctxt "@info:tooltip"
 msgid "This profile has the following xyY colorants:"
 msgstr "Этот профиль содержит следующие пигменты xyY:"
 
-#. i18n: ectx: property (text), widget (QLabel, RedLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
-#, kde-format
-msgid "Red:"
-msgstr "Красный:"
-
-#. i18n: ectx: property (text), widget (QLabel, GreenLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
-#, kde-format
-msgid "Green:"
-msgstr "Зелёный:"
-
-#. i18n: ectx: property (text), widget (QLabel, BlueLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
-#, kde-format
-msgid "Blue:"
-msgstr "Синий:"
-
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:189
 #, kde-format
 msgctxt ""
@@ -45336,11 +45451,6 @@ msgstr "Параметры журналирования"
 msgid "Black:"
 msgstr "Чёрный:"
 
-#: plugins/dockers/lut/black_white_point_chooser.cpp:44
-#, kde-format
-msgid "White:"
-msgstr "Белый:"
-
 #: plugins/dockers/lut/lutdocker_dock.cpp:82
 #, kde-format
 msgid "LUT Management"
@@ -45710,7 +45820,7 @@ msgstr "Экспортировать ускоренное видео как"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:531
+#: plugins/dockers/recorder/recorder_export.cpp:530
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45718,62 +45828,62 @@ msgstr "Экспортировать ускоренное видео как"
 msgid "Export"
 msgstr "Экспортировать"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:544
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Нет кадров для экспорта"
 
-#: plugins/dockers/recorder/recorder_export.cpp:552
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Сведения о записи"
 
-#: plugins/dockers/recorder/recorder_export.cpp:555
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "пикс."
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "кадр(ы)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:617
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Нет кадров для обзора."
 
-#: plugins/dockers/recorder/recorder_export.cpp:729
+#: plugins/dockers/recorder/recorder_export.cpp:725
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Выбор исполняемого файла FFmpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:809
+#: plugins/dockers/recorder/recorder_export.cpp:805
 #, kde-format
 msgid "No frames to export."
 msgstr "Нет кадров для экспорта."
 
-#: plugins/dockers/recorder/recorder_export.cpp:823
+#: plugins/dockers/recorder/recorder_export.cpp:819
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "Такой видеофайл уже существует. Заменить его?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:851
+#: plugins/dockers/recorder/recorder_export.cpp:847
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "Замедленное видео кодируется..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:866
+#: plugins/dockers/recorder/recorder_export.cpp:862
 #, kde-format
 msgid "Export failed. Error message:"
 msgstr "Не удалось выполнить экспорт. Сообщение об ошибке:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:889
+#: plugins/dockers/recorder/recorder_export.cpp:885
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45788,7 +45898,7 @@ msgstr ""
 "\n"
 "Продолжить?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:896
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -56119,6 +56229,13 @@ msgstr ""
 "<html><head/><body><p>Яркость дисплея. По умолчанию это значение равно 1000 "
 "для преобразования из PQ.</p></body></html>"
 
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
+#: plugins/impex/heif/WdgHeifExport.ui:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
+#, kde-format
+msgid " cd/m²"
+msgstr " кд/м²"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
 #: plugins/impex/heif/WdgHeifExport.ui:129
@@ -57792,8 +57909,8 @@ msgstr ""
 "Выбрать другое место на диске?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:148
-#: plugins/impex/libkra/kis_kra_loader.cpp:697
-#: plugins/impex/libkra/kis_kra_loader.cpp:1147
+#: plugins/impex/libkra/kis_kra_loader.cpp:702
+#: plugins/impex/libkra/kis_kra_loader.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -57900,27 +58017,27 @@ msgstr ""
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Неизвестный тип канала ключевых кадров: %1 in %2"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:210
+#: plugins/impex/libkra/kis_kra_loader.cpp:211
 #, kde-format
 msgid "Image does not have a name."
 msgstr "Не задано название изображения"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:215
+#: plugins/impex/libkra/kis_kra_loader.cpp:216
 #, kde-format
 msgid "Image does not specify a width."
 msgstr "Ширина изображения не задана."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:221
+#: plugins/impex/libkra/kis_kra_loader.cpp:222
 #, kde-format
 msgid "Image does not specify a height."
 msgstr "Высота изображения не задана."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:271
+#: plugins/impex/libkra/kis_kra_loader.cpp:272
 #, kde-format
 msgid "Image specifies an unsupported color model: %1."
 msgstr "Изображение имеет неподдерживаемое цветовое пространство: %1."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:588
+#: plugins/impex/libkra/kis_kra_loader.cpp:593
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
@@ -57929,19 +58046,19 @@ msgstr ""
 "Невозможно загрузить встроенную палитру, так как она пустая. Название "
 "палитры: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:599
+#: plugins/impex/libkra/kis_kra_loader.cpp:604
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr "Невозможно прочитать встроенный источник. Имя файла источника: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:608
+#: plugins/impex/libkra/kis_kra_loader.cpp:613
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr "Невозможно импортировать встроенный источник. Имя файла источника: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:692
+#: plugins/impex/libkra/kis_kra_loader.cpp:697
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -57959,7 +58076,7 @@ msgstr ""
 "\n"
 "Указать путь вручную?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:867
+#: plugins/impex/libkra/kis_kra_loader.cpp:872
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
@@ -57968,27 +58085,27 @@ msgstr ""
 "Найдены две активные маски глобального выделения. «%1» оставлена активной, "
 "«%2» отключена"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:927
+#: plugins/impex/libkra/kis_kra_loader.cpp:932
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "Слой %1 имеет неподдерживаемое цветовое пространство: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:955
+#: plugins/impex/libkra/kis_kra_loader.cpp:960
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "Тип слоя %1 не поддерживается."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:990
+#: plugins/impex/libkra/kis_kra_loader.cpp:995
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "Слой %1 имеет неподдерживаемый тип: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:997
+#: plugins/impex/libkra/kis_kra_loader.cpp:1002
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Ошибка загрузки слоя %1, имеющего тип %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1021
+#: plugins/impex/libkra/kis_kra_loader.cpp:1026
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -58001,7 +58118,7 @@ msgstr ""
 "поддержку устаревшего алгоритма «Аддитивный» в разделе «Настройка->Настроить "
 "Krita…->Общие->Инструменты->Режим наложения CMYK»"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1142
+#: plugins/impex/libkra/kis_kra_loader.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -58120,94 +58237,94 @@ msgstr "Не удалось сохранить метаданные для %1 в
 msgid "Could not write for %1 metadata to the file."
 msgstr "Не удалось записать метаданные для %1 в файл."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:216
+#: plugins/impex/libkra/kis_kra_saver.cpp:218
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
 msgstr "Не удалось экспортировать источник для встраивания: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:231
+#: plugins/impex/libkra/kis_kra_saver.cpp:233
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
 msgstr "Не удалось записать источник: %1."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:243
+#: plugins/impex/libkra/kis_kra_saver.cpp:245
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr "Записанный ресурс пуст: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:249
+#: plugins/impex/libkra/kis_kra_saver.cpp:251
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr "Записанный ресурс заполнен не полностью: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:266
-#: plugins/impex/libkra/kis_kra_saver.cpp:288
+#: plugins/impex/libkra/kis_kra_saver.cpp:268
+#: plugins/impex/libkra/kis_kra_saver.cpp:290
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
 msgstr "Не удалось сохранить раскадровку."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:300
-#: plugins/impex/libkra/kis_kra_saver.cpp:324
+#: plugins/impex/libkra/kis_kra_saver.cpp:302
+#: plugins/impex/libkra/kis_kra_saver.cpp:326
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
 msgstr "Не удалось сохранить метаданные анимации."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:337
-#: plugins/impex/libkra/kis_kra_saver.cpp:360
+#: plugins/impex/libkra/kis_kra_saver.cpp:339
+#: plugins/impex/libkra/kis_kra_saver.cpp:362
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
 msgstr "Не удалось сохранить метаданные аудио."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:473
+#: plugins/impex/libkra/kis_kra_saver.cpp:475
 #, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
 msgstr "Не удалось сохранить ключевые кадры."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:517
+#: plugins/impex/libkra/kis_kra_saver.cpp:519
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
 msgstr "Не удалось сохранить примечания"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:551
+#: plugins/impex/libkra/kis_kra_saver.cpp:553
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
 msgstr "Не удалось сохранить профиль изображения."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:581
+#: plugins/impex/libkra/kis_kra_saver.cpp:583
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
 msgstr "Не удалось сохранить цветовой профиль мягкой цветопробы."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:616
+#: plugins/impex/libkra/kis_kra_saver.cpp:618
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
 msgstr "Не удалось сохранить дополнительные примечания."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:649
+#: plugins/impex/libkra/kis_kra_saver.cpp:651
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
 msgstr "Не удалось сохранить стили слоёв."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:664
+#: plugins/impex/libkra/kis_kra_saver.cpp:666
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
 msgstr "Не удалось сохранить объединённое изображение"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:765
+#: plugins/impex/libkra/kis_kra_saver.cpp:806
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
@@ -70916,22 +71033,6 @@ msgstr " %"
 msgid "Vertical Scale"
 msgstr "Вертикальное масштабирование"
 
-#. i18n: ectx: property (text), widget (QLabel, label_offsetX)
-#. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
-#, kde-format
-msgid "x:"
-msgstr "x:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_offsetY)
-#. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
-#, kde-format
-msgid "y:"
-msgstr "y:"
-
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1154
 #, kde-format
@@ -71474,6 +71575,27 @@ msgstr ""
 "Переключение между полным диапазоном и поддиапазоном.\n"
 "Полный диапазон: [%1, %2]\n"
 "Поддиапазон: [%3, %4]"
+
+#~ msgid "Master Display:"
+#~ msgstr "Основной дисплей:"
+
+#~ msgid "y"
+#~ msgstr "y"
+
+#~ msgid "Red Primary:"
+#~ msgstr "Основной красный:"
+
+#~ msgid "Green Primary:"
+#~ msgstr "Основной зелёный:"
+
+#~ msgid "Blue Primary:"
+#~ msgstr "Основной синий:"
+
+#~ msgid "MaxCLL:"
+#~ msgstr "MaxCLL:"
+
+#~ msgid "MaxFALL:"
+#~ msgstr "MaxFALL:"
 
 #~ msgid ""
 #~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
@@ -75565,9 +75687,6 @@ msgstr ""
 
 #~ msgid "Change paragraph format"
 #~ msgstr "Изменить формат абзаца"
-
-#~ msgid "Change List Level"
-#~ msgstr "Изменение уровня списка"
 
 #~ msgid "Change the level the list is at"
 #~ msgstr "Изменить уровень списка"

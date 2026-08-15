@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:43+0000\n"
+"POT-Creation-Date: 2026-08-15 00:43+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -21436,8 +21436,8 @@ msgid "Reselect"
 msgstr "重新選取"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2097
-#: libs/impex/KisExportCheckRegistry.cpp:129
+#: libs/image/kis_layer_utils.cpp:2114
+#: libs/impex/KisExportCheckRegistry.cpp:133
 #, kde-format
 msgid "Selection Mask"
 msgstr "選取區域遮罩"
@@ -21448,7 +21448,7 @@ msgid "Node Rename"
 msgstr "節點重新命名"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:841
+#: libs/image/kis_image.cc:869
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "調整影像大小"
@@ -21487,6 +21487,13 @@ msgstr "切換目前時間"
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "變更再製圖層"
+
+#: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
+#, fuzzy
+#| msgid "HDR Metadata..."
+msgctxt "(qtundo-format)"
+msgid "Set HDR Metadata"
+msgstr "HDR 中繼資料…"
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 #, fuzzy
@@ -21695,111 +21702,199 @@ msgstr "Mitchell 演算法"
 msgid "Pass Through"
 msgstr "穿透"
 
-#: libs/image/kis_image.cc:398
+#: libs/image/kis_hdr_metadata_models.cpp:51
+#, fuzzy, kde-format
+#| msgid " cd/m²"
+msgctxt "Image reference white value"
+msgid "%1 cd/m²"
+msgstr " cd/m²"
+
+#: libs/image/kis_hdr_metadata_models.cpp:63
+#, fuzzy, kde-format
+#| msgid "Luminance"
+msgctxt "CLLI calculation type"
+msgid "XYZ Luminance"
+msgstr "光度"
+
+#: libs/image/kis_hdr_metadata_models.cpp:64
+#, fuzzy, kde-format
+#| msgctxt "Color space name"
+#| msgid "Rec 2100 PQ"
+msgctxt "CLLI calculation type"
+msgid "Rec 2020 Per Component"
+msgstr "Rec 2100 PQ"
+
+#: libs/image/kis_hdr_metadata_models.cpp:65
+#, fuzzy, kde-format
+#| msgid "Components:"
+msgctxt "CLLI calculation type"
+msgid "RGB Per Component"
+msgstr "色彩分量："
+
+#: libs/image/kis_hdr_metadata_models.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Calculate the brightness in nits against XYZ luminance."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Calculate the brightness in nits by testing the components in linear rec "
+"2020."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Calculate the brightness in nits by testing the components in linear RGB, if "
+"possible, falls back to using XYZ luminance."
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:117
+#, kde-format
+msgid "Rec. 2100 PQ"
+msgstr "Rec. 2100 PQ"
+
+#: libs/image/kis_hdr_metadata_models.cpp:118
+#, kde-format
+msgid "DCI-P3 D65"
+msgstr "DCI-P3 D65"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
+#: libs/image/kis_hdr_metadata_models.cpp:119
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
+#, kde-format
+msgid "Custom"
+msgstr "訂製"
+
+#: libs/image/kis_hdr_metadata_models.cpp:121
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset color volume to the values defined by Rec. 2100 PQ"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:122
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset color volume to the values defined by DCI-P3 D65"
+msgstr ""
+
+#: libs/image/kis_hdr_metadata_models.cpp:123
+#, fuzzy, kde-format
+#| msgid "Use color palette for ... colors or less"
+msgctxt "@info:tooltip"
+msgid "Use custom values for color volume"
+msgstr "色彩數目低於指定值時使用調色板"
+
+#: libs/image/kis_image.cc:422
 #, kde-format
 msgid "Imported Image"
 msgstr "匯入的影像"
 
 #. i18n.
-#: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:741 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "顏料圖層"
 
-#: libs/image/kis_image.cc:840
+#: libs/image/kis_image.cc:868
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "裁切影像"
 
-#: libs/image/kis_image.cc:887
+#: libs/image/kis_image.cc:915
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:1019
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "裁切圖層"
 
-#: libs/image/kis_image.cc:992
+#: libs/image/kis_image.cc:1020
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "裁切遮罩"
 
-#: libs/image/kis_image.cc:1029
+#: libs/image/kis_image.cc:1057
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "縮放影像"
 
-#: libs/image/kis_image.cc:1030
+#: libs/image/kis_image.cc:1058
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "修改影像解析度"
 
-#: libs/image/kis_image.cc:1080
+#: libs/image/kis_image.cc:1108
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "縮放 %1 個圖層"
 
-#: libs/image/kis_image.cc:1219
+#: libs/image/kis_image.cc:1247
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "旋轉影像"
 
-#: libs/image/kis_image.cc:1229
+#: libs/image/kis_image.cc:1257
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "旋轉遮罩"
 
-#: libs/image/kis_image.cc:1232
+#: libs/image/kis_image.cc:1260
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "旋轉 %1 個圖層"
 
-#: libs/image/kis_image.cc:1333
+#: libs/image/kis_image.cc:1361
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "切變遮罩"
 
-#: libs/image/kis_image.cc:1337
+#: libs/image/kis_image.cc:1365
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "切變 %1 個圖層"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "切變影像"
 
-#: libs/image/kis_image.cc:1362
+#: libs/image/kis_image.cc:1390
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "轉換圖層色彩空間"
 
-#: libs/image/kis_image.cc:1413
+#: libs/image/kis_image.cc:1441
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "轉換影像色彩空間"
 
-#: libs/image/kis_image.cc:1414
+#: libs/image/kis_image.cc:1442
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "轉換投影色彩空間"
 
-#: libs/image/kis_image.cc:1466
+#: libs/image/kis_image.cc:1494
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -21807,17 +21902,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "轉換圖層色彩空間"
 
-#: libs/image/kis_image.cc:1496
+#: libs/image/kis_image.cc:1524
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "為影像指定特性檔案"
 
-#: libs/image/kis_image.cc:1537
+#: libs/image/kis_image.cc:1565
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "指定特性檔案"
 
-#: libs/image/kis_image.cc:2573
+#: libs/image/kis_image.cc:2637
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁切選取區域"
@@ -22001,58 +22096,58 @@ msgstr ""
 msgid "Merged"
 msgstr "已合併"
 
-#: libs/image/kis_layer_utils.cpp:1472
+#: libs/image/kis_layer_utils.cpp:1489
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "向下合併"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1761
 #, kde-format
 msgid "Copy of"
 msgstr "副本自"
 
-#: libs/image/kis_layer_utils.cpp:1822
+#: libs/image/kis_layer_utils.cpp:1839
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "變更投影色彩"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2065
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "合併所選節點"
 
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2083
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "從可見圖層建立"
 
-#: libs/image/kis_layer_utils.cpp:2067
+#: libs/image/kis_layer_utils.cpp:2084
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "可見"
 
-#: libs/image/kis_layer_utils.cpp:2146
+#: libs/image/kis_layer_utils.cpp:2163
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "合併選取的遮罩"
 
-#: libs/image/kis_layer_utils.cpp:2170
+#: libs/image/kis_layer_utils.cpp:2187
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "平整圖層"
 
-#: libs/image/kis_layer_utils.cpp:2186
+#: libs/image/kis_layer_utils.cpp:2203
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "平整影像"
 
-#: libs/image/kis_layer_utils.cpp:2420
+#: libs/image/kis_layer_utils.cpp:2437
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "分割 Alpha (透明度) 為遮罩"
 
-#: libs/image/kis_layer_utils.cpp:2446
+#: libs/image/kis_layer_utils.cpp:2463
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "轉成顏料圖層"
@@ -22066,7 +22161,7 @@ msgstr "正在處理"
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1462
-#: plugins/impex/libkra/kis_kra_saver.cpp:89
+#: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
 msgstr "未命名"
@@ -22455,6 +22550,18 @@ msgid ""
 "the layer will be converted to a paintlayer"
 msgstr "此檔案包含有不支援的填充圖層類型「<b>%1</b>」。此圖層將轉成顏料圖層"
 
+#: libs/impex/HdrMetaDataCheck.h:22
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "This image has <b>animated layers</b>. Animation cannot be saved to this "
+#| "format."
+msgctxt "image conversion warning"
+msgid ""
+"This image has <b>HDR metadata</b>. HDR metadata cannot be saved to this "
+"format."
+msgstr "此影像含有<b>動畫圖層</b>。動畫無法被儲存為此格式。"
+
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
 msgctxt "image conversion warning"
@@ -22466,56 +22573,56 @@ msgstr ""
 "此影像包含了影格時長為<b>非整數毫秒</b>的動畫。目標檔案格式不能表達此影格時"
 "長，因此影格時長將會被四捨五入至最近毫秒。"
 
-#: libs/impex/KisExportCheckRegistry.cpp:109 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
 #, kde-format
 msgid "Clone Layer"
 msgstr "再製圖層"
 
-#: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
 #: libs/ui/kis_node_manager.cpp:1629
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "群組"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
 #, kde-format
 msgid "File Layer"
 msgstr "檔案圖層"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "向量圖層"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
 #, kde-format
 msgid "Filter Layer"
 msgstr "濾鏡圖層"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119
+#: libs/impex/KisExportCheckRegistry.cpp:123
 #, kde-format
 msgid "Generator Layer"
 msgstr "產生器圖層"
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
 #, kde-format
 msgid "Colorize Mask"
 msgstr "著色遮罩"
 
-#: libs/impex/KisExportCheckRegistry.cpp:123
+#: libs/impex/KisExportCheckRegistry.cpp:127
 #: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
 #, kde-format
 msgid "Filter Mask"
 msgstr "濾鏡遮罩"
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
 #, kde-format
 msgid "Transform Mask"
 msgstr "變形遮罩"
 
-#: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -24129,7 +24236,7 @@ msgstr "輸出"
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1944
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:717 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:734 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24165,9 +24272,9 @@ msgstr "本機資源"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisAnimationRender.cpp:199
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:996
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:999
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
@@ -25254,60 +25361,60 @@ msgstr "繪製錯誤"
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "動畫影格繪製失敗！輸出檔案不完整。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:64
 #: libs/ui/KisMainWindow.cpp:2333
 #, kde-format
 msgid "Render Animation"
 msgstr "繪製動畫"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:145
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr "雙立方演算法"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:146
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
 #, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "雙線性"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:147
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr "Lanczos3 演算法"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:148
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr "最近相鄰演算法"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:149
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:150
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "樣條插值 (Spline)"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:156
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:157
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "不適用"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:573
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:590
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "未有提供有效的 FFmpeg 執行檔……"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:669
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:686
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr "FFmpeg 必須為版本 4.2 或以上才能支援透明 GIF 功能"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:693
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -25315,43 +25422,43 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "動畫 GIF 影像的影格速率不能超過 50，因此影格速率將被降低到每秒 50 影格"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:682
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:699
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:704
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:711
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2465
 #, kde-format
 msgid "Warning(s):"
 msgstr "警告："
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:705
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:722
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "請輸入繪製目標檔案的名稱。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:977
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:996
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr "指定的 FFmpeg 似乎是壓縮檔。請先將 FFmpeg 從這個壓縮檔解壓縮出來。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:980
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:999
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -25662,29 +25769,29 @@ msgid "Creating desired %1 file: %2/%3 frames."
 msgstr "正在建立目標 %1 檔案：%2 個影格 (共 %3 個)。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/video_export_options_dialog.ui:13
+#: libs/ui/animation/video_export_options_dialog.ui:21
 #, kde-format
 msgid "Codec:"
 msgstr "編解碼器："
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
-#: libs/ui/animation/video_export_options_dialog.ui:23
+#: libs/ui/animation/video_export_options_dialog.ui:31
 #, kde-format
 msgid "Codec options"
 msgstr "編解碼器選項"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/video_export_options_dialog.ui:45
-#: libs/ui/animation/video_export_options_dialog.ui:223
+#: libs/ui/animation/video_export_options_dialog.ui:56
+#: libs/ui/animation/video_export_options_dialog.ui:222
 #, kde-format
 msgid "Bitrate:"
 msgstr "位元率："
 
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
-#: libs/ui/animation/video_export_options_dialog.ui:78
-#: libs/ui/animation/video_export_options_dialog.ui:141
+#: libs/ui/animation/video_export_options_dialog.ui:89
+#: libs/ui/animation/video_export_options_dialog.ui:152
 #, kde-format
 msgid "Constant Rate Factor:"
 msgstr "恆定速率因子 (CRF)："
@@ -25692,17 +25799,19 @@ msgstr "恆定速率因子 (CRF)："
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH264)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetWEBP)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
-#: libs/ui/animation/video_export_options_dialog.ui:95
-#: libs/ui/animation/video_export_options_dialog.ui:158
-#: libs/ui/animation/video_export_options_dialog.ui:433
+#: libs/ui/animation/video_export_options_dialog.ui:106
+#: libs/ui/animation/video_export_options_dialog.ui:169
+#: libs/ui/animation/video_export_options_dialog.ui:432
+#: libs/ui/forms/wdgimageproperties.ui:611
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, kde-format
 msgid "Preset:"
 msgstr "預設："
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH264)
-#: libs/ui/animation/video_export_options_dialog.ui:105
+#: libs/ui/animation/video_export_options_dialog.ui:116
 #, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
@@ -25710,41 +25819,35 @@ msgstr "設定："
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
-#: libs/ui/animation/video_export_options_dialog.ui:115
-#: libs/ui/animation/video_export_options_dialog.ui:178
+#: libs/ui/animation/video_export_options_dialog.ui:126
+#: libs/ui/animation/video_export_options_dialog.ui:189
 #, kde-format
 msgid "Tune:"
 msgstr "微調："
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
-#: libs/ui/animation/video_export_options_dialog.ui:168
+#: libs/ui/animation/video_export_options_dialog.ui:179
 #, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
 msgstr "設定："
 
-#. i18n: ectx: property (title), widget (QGroupBox, chkUseHDRMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:188
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
+#: libs/ui/animation/video_export_options_dialog.ui:199
 #, kde-format
 msgid "HDR Mode"
 msgstr "HDR 模式"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:197
-#, kde-format
-msgid "HDR Metadata..."
-msgstr "HDR 中繼資料…"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/video_export_options_dialog.ui:249
+#: libs/ui/animation/video_export_options_dialog.ui:248
 #, kde-format
 msgid "Bitrate (MBit/s):"
 msgstr "位元率 (MBit/s)："
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
-#: libs/ui/animation/video_export_options_dialog.ui:263
-#: libs/ui/animation/video_export_options_dialog.ui:406
+#: libs/ui/animation/video_export_options_dialog.ui:262
+#: libs/ui/animation/video_export_options_dialog.ui:405
 #, kde-format
 msgid "Lossless"
 msgstr "無損"
@@ -25752,47 +25855,47 @@ msgstr "無損"
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:286
-#: libs/ui/animation/video_export_options_dialog.ui:373
-#: libs/ui/animation/video_export_options_dialog.ui:443
+#: libs/ui/animation/video_export_options_dialog.ui:285
+#: libs/ui/animation/video_export_options_dialog.ui:372
+#: libs/ui/animation/video_export_options_dialog.ui:442
 #, kde-format
 msgid "Loop Animation"
 msgstr "重複動畫"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:293
+#: libs/ui/animation/video_export_options_dialog.ui:292
 #, kde-format
 msgid "Transparency Difference"
 msgstr "透明度差別 (transdiff)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/video_export_options_dialog.ui:300
+#: libs/ui/animation/video_export_options_dialog.ui:299
 #, kde-format
 msgid "Auto-generate 8bit Palette:"
 msgstr "自動產生 8 位元調色板："
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
-#: libs/ui/animation/video_export_options_dialog.ui:310
+#: libs/ui/animation/video_export_options_dialog.ui:309
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "抖色 (dithering)："
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:320
+#: libs/ui/animation/video_export_options_dialog.ui:319
 #, kde-format
 msgid "Bayer Scale:"
 msgstr "Bayer Scale："
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:337
+#: libs/ui/animation/video_export_options_dialog.ui:336
 #, kde-format
 msgid "Difference Mode:"
 msgstr "差別模式："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:347
+#: libs/ui/animation/video_export_options_dialog.ui:346
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -25822,37 +25925,37 @@ msgstr ""
 "用 APNG 或 WEBP 圖像格式。</span><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:350
+#: libs/ui/animation/video_export_options_dialog.ui:349
 #, kde-format
 msgid "Preserve Transparency"
 msgstr "保留透明度"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:380
+#: libs/ui/animation/video_export_options_dialog.ui:379
 #, kde-format
 msgid "Prediction Mode:"
 msgstr "預測模式："
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:413
+#: libs/ui/animation/video_export_options_dialog.ui:412
 #, kde-format
 msgid "Compression Level:"
 msgstr "壓縮級別："
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:423
+#: libs/ui/animation/video_export_options_dialog.ui:422
 #, kde-format
 msgid "Image Quality:"
 msgstr "影像品質："
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:457
+#: libs/ui/animation/video_export_options_dialog.ui:456
 #, kde-format
 msgid "Custom options"
 msgstr "自訂設定"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:466
+#: libs/ui/animation/video_export_options_dialog.ui:465
 #, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
@@ -25865,7 +25968,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:473
+#: libs/ui/animation/video_export_options_dialog.ui:472
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
@@ -25877,77 +25980,77 @@ msgstr ""
 msgid "Reset"
 msgstr "重設"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:38
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "ultrafast"
 msgstr "ultrafast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "superfast"
 msgstr "superfast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryfast"
 msgstr "veryfast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "faster"
 msgstr "faster"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "fast"
 msgstr "fast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "medium"
 msgstr "medium"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slow"
 msgstr "slow"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slower"
 msgstr "slower"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryslow"
 msgstr "veryslow"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:48
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "placebo"
 msgstr "placebo"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:49
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"
@@ -25957,131 +26060,131 @@ msgctxt ""
 msgid "baseline"
 msgstr "baseline"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:57
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:56
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main"
 msgstr "main"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high"
 msgstr "high"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high10"
 msgstr "high10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high422"
 msgstr "high422"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:55
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high444"
 msgstr "high444"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:58
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:57
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main10 (HDR)"
 msgstr "main10 (HDR)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:60
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "film"
 msgstr "film"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "animation"
 msgstr "animation"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "grain"
 msgstr "grain"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "stillimage"
 msgstr "stillimage"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "psnr"
 msgstr "psnr"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "ssim"
 msgstr "ssim"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
 msgstr "fastdecode"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:68
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
 msgstr "zerolatency"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:69
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
 msgstr "none"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:76
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zero-latency"
 msgstr "zero-latency"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:77
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
 msgstr "none"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
 #, fuzzy, kde-format
 #| msgctxt "apng prediction option name"
 #| msgid "sub"
@@ -26089,341 +26192,205 @@ msgctxt "apng prediction option name"
 msgid "sub"
 msgstr "sub"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "up"
 msgstr "up"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "avg"
 msgstr "avg"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "paeth"
 msgstr "paeth"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:83
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "mixed"
 msgstr "mixed"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:84
 #, kde-format
 msgctxt "webp preset option name"
 msgid "default"
 msgstr "default"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
 msgstr "none"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
 #, kde-format
 msgctxt "webp preset option name"
 msgid "drawing"
 msgstr "drawing"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, kde-format
 msgctxt "webp preset option name"
 msgid "icon"
 msgstr "icon"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
 #, kde-format
 msgctxt "webp preset option name"
 msgid "photo"
 msgstr "photo"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, kde-format
 msgctxt "webp preset option name"
 msgid "picture"
 msgstr "picture"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:91
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
 #, kde-format
 msgctxt "webp preset option name"
 msgid "text"
 msgstr "text"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:92
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "全影格"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "差值"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:95
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "每個影格"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:96
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "none (無)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:102
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:103
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "none (無)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:105
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "rectangle"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:149
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:168
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:148
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:167
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr "kbps"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:289
 #, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
 msgstr "OpenH264"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:290
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
 msgstr "H.264, MPEG-4 Part 10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
 msgstr "H.265, MPEG-H Part 2 (HEVC)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:297
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
 msgstr "VP9"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:299
 #, kde-format
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
 msgstr "Theora"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
 msgstr "WEBP"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
 msgstr "APNG"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:311
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
 msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:580
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:572
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "匯出的動影格式不支援 HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:582
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:574
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
 msgstr "HDR 中繼資料僅在使用「main10」設定時可用"
-
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
-#, kde-format
-msgid "Rec. 2100 PQ"
-msgstr "Rec. 2100 PQ"
-
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
-#, kde-format
-msgid "DCI-P3 D65"
-msgstr "DCI-P3 D65"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
-#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
-#, kde-format
-msgid "Custom"
-msgstr "訂製"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
-#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QWidget, VideoHDRMetadataOptionsDialog)
-#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:24
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
-#: libs/ui/forms/wdgimportimagesequence.ui:18
-#: libs/widgets/WdgDlgInternalColorSelector.ui:18
-#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
-#, kde-format
-msgid "Dialog"
-msgstr "對話框"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
-#, kde-format
-msgid "Master Display:"
-msgstr "主顯示器："
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
-#. i18n: ectx: attribute (title), widget (QWidget, Display)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
-#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
-#, kde-format
-msgid "Display"
-msgstr "顯示"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
-#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
-#. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
-#: plugins/dockers/recorder/recorder_export.ui:300
-#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
-#, kde-format
-msgid "x"
-msgstr "x"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:58
-#, kde-format
-msgid "y"
-msgstr "y"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
-#, kde-format
-msgid "Red Primary:"
-msgstr "紅基色："
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
-#, kde-format
-msgid "Green Primary:"
-msgstr "綠基色："
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
-#, kde-format
-msgid "Blue Primary:"
-msgstr "藍基色："
-
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:197
-#: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
-#, kde-format
-msgid "White Point:"
-msgstr "白點："
-
-#. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
-#, kde-format
-msgid "Min Luminance:"
-msgstr "最小光度："
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMinLuminance)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMaxLuminance)
-#. i18n: ectx: property (suffix), widget (QSpinBox, intMaxCLL)
-#. i18n: ectx: property (suffix), widget (QSpinBox, intMaxFALL)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:257
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:277
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:300
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:317
-#: plugins/impex/heif/WdgHeifExport.ui:116
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
-#, kde-format
-msgid " cd/m²"
-msgstr " cd/m²"
-
-#. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
-#, kde-format
-msgid "Max Luminance:"
-msgstr "最大光度："
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
-#, kde-format
-msgid "MaxCLL:"
-msgstr "最大內容亮度 (MaxCLL)："
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:310
-#, kde-format
-msgid "MaxFALL:"
-msgstr "最大影格平均亮度 (MaxFALL)："
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VideoImportDialog)
 #: libs/ui/animation/VideoImportDialog.ui:24
@@ -27208,6 +27175,19 @@ msgctxt "@title:window"
 msgid "Filter: %1"
 msgstr "濾鏡：%1"
 
+#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
+#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
+#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
+#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
+#: libs/ui/forms/wdgimportimagesequence.ui:18
+#: libs/widgets/WdgDlgInternalColorSelector.ui:18
+#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "對話框"
+
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:20
 #, kde-format
@@ -27272,12 +27252,20 @@ msgstr ""
 "1000。</p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
+#: libs/ui/forms/wdgimageproperties.ui:369
+#: libs/ui/forms/wdgimageproperties.ui:385
+#: libs/ui/forms/wdgimageproperties.ui:573
+#: libs/ui/forms/wdgimageproperties.ui:596
 #, kde-format
 msgid "cd/m²"
 msgstr "cd/m²"
 
-#: libs/ui/dialogs/kis_dlg_image_properties.cc:49
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:67
 #, kde-format
 msgid "Image Properties"
 msgstr "影像屬性"
@@ -28166,6 +28154,18 @@ msgstr "畫布輸入設定"
 msgid "Canvas Input"
 msgstr "畫布輸入"
 
+#. i18n: ectx: attribute (title), widget (QWidget, Display)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2763
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2765
+#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
+#, kde-format
+msgid "Display"
+msgstr "顯示"
+
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2773
 #: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #, kde-format
@@ -29050,7 +29050,7 @@ msgstr "許可協議/權利："
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
-#: libs/ui/forms/wdgimageproperties.ui:313
+#: libs/ui/forms/wdgimageproperties.ui:645
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:40
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
@@ -29615,6 +29615,12 @@ msgstr "特性檔案"
 #, kde-format
 msgid "Profile Properties"
 msgstr "特性檔案屬性"
+
+#. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
+#: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
+#, kde-format
+msgid "White Point:"
+msgstr "白點："
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
@@ -30796,6 +30802,16 @@ msgstr ""
 msgid "Zoom Preview Scale:"
 msgstr "無預覽"
 
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
+#. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
+#. i18n: ectx: property (text), widget (QLabel, labelX)
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: plugins/dockers/recorder/recorder_export.ui:300
+#: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
+#, kde-format
+msgid "x"
+msgstr "x"
+
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
 #: libs/ui/forms/wdggeneralsettings.ui:1066
 #, fuzzy, kde-format
@@ -31400,8 +31416,124 @@ msgstr "螢幕校樣"
 msgid "Store Softproofing configuration in the image"
 msgstr "將螢幕校樣設定儲存到影像中"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
+#, fuzzy, kde-format
+#| msgid "HDR Metadata..."
+msgid "HDR Metadata"
+msgstr "HDR 中繼資料…"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
+#: libs/ui/forms/wdgimageproperties.ui:308
+#, fuzzy, kde-format
+#| msgid "Reference images"
+msgid "HDR Reference White"
+msgstr "參考圖"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
+#: libs/ui/forms/wdgimageproperties.ui:326
+#, fuzzy, kde-format
+#| msgid "Document Information"
+msgid "Content Light Level Information"
+msgstr "檔案資訊"
+
+#. i18n: ectx: property (text), widget (QLabel, label_14)
+#: libs/ui/forms/wdgimageproperties.ui:338
+#, kde-format
+msgid "Max Content Light Level:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_15)
+#: libs/ui/forms/wdgimageproperties.ui:345
+#, fuzzy, kde-format
+#| msgid "<html><head/><body><p><br/></p></body></html>"
+msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
+msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
+#: libs/ui/forms/wdgimageproperties.ui:362
+#, kde-format
+msgid "Calculate"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
+#: libs/ui/forms/wdgimageproperties.ui:404
+#, fuzzy, kde-format
+#| msgctxt "Rearrange the positions of the pixels under the cursor"
+#| msgid "Color Deformation"
+msgid "Color Volume Information"
+msgstr "色彩扭曲"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#. i18n: ectx: property (text), widget (QLabel, GreenLabel)
+#: libs/ui/forms/wdgimageproperties.ui:444
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
+#, kde-format
+msgid "Green:"
+msgstr "綠："
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#. i18n: ectx: property (text), widget (QLabel, BlueLabel)
+#: libs/ui/forms/wdgimageproperties.ui:490
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
+#, kde-format
+msgid "Blue:"
+msgstr "藍："
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, label_offsetX)
+#. i18n: ectx: property (text), widget (QLabel, label_shearX)
+#: libs/ui/forms/wdgimageproperties.ui:510
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
+#, kde-format
+msgid "x:"
+msgstr "x："
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#. i18n: ectx: property (text), widget (QLabel, RedLabel)
+#: libs/ui/forms/wdgimageproperties.ui:517
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
+#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
+#, kde-format
+msgid "Red:"
+msgstr "紅："
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#. i18n: ectx: property (text), widget (QLabel, label_offsetY)
+#. i18n: ectx: property (text), widget (QLabel, label_shearY)
+#: libs/ui/forms/wdgimageproperties.ui:524
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
+#, kde-format
+msgid "y:"
+msgstr "y："
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: libs/ui/forms/wdgimageproperties.ui:557
+#: plugins/dockers/lut/black_white_point_chooser.cpp:44
+#, kde-format
+msgid "White:"
+msgstr "白點："
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: libs/ui/forms/wdgimageproperties.ui:566
+#, fuzzy, kde-format
+#| msgid "Max Luminance:"
+msgid "Maximum Luminance:"
+msgstr "最大光度："
+
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#: libs/ui/forms/wdgimageproperties.ui:589
+#, fuzzy, kde-format
+#| msgid "Min Luminance:"
+msgid "Minimum Luminance:"
+msgstr "最小光度："
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: libs/ui/forms/wdgimageproperties.ui:634
 #, kde-format
 msgid "Annotations"
 msgstr "注釋"
@@ -31411,7 +31543,7 @@ msgstr "注釋"
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#: libs/ui/forms/wdgimageproperties.ui:326 plugins/dockers/lut/wdglut.ui:364
+#: libs/ui/forms/wdgimageproperties.ui:658 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
@@ -38975,27 +39107,6 @@ msgctxt "@info:tooltip"
 msgid "This profile has the following xyY colorants:"
 msgstr "此特性檔案含有下列 xyY 色料："
 
-#. i18n: ectx: property (text), widget (QLabel, RedLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
-#, kde-format
-msgid "Red:"
-msgstr "紅："
-
-#. i18n: ectx: property (text), widget (QLabel, GreenLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
-#, kde-format
-msgid "Green:"
-msgstr "綠："
-
-#. i18n: ectx: property (text), widget (QLabel, BlueLabel)
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
-#: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
-#, kde-format
-msgid "Blue:"
-msgstr "藍："
-
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:189
 #, kde-format
 msgctxt ""
@@ -44645,11 +44756,6 @@ msgstr "設定紀錄"
 msgid "Black:"
 msgstr "黑點："
 
-#: plugins/dockers/lut/black_white_point_chooser.cpp:44
-#, kde-format
-msgid "White:"
-msgstr "白點："
-
 #: plugins/dockers/lut/lutdocker_dock.cpp:82
 #, kde-format
 msgid "LUT Management"
@@ -45010,7 +45116,7 @@ msgstr "匯出縮時影片為"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:531
+#: plugins/dockers/recorder/recorder_export.cpp:530
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45018,63 +45124,63 @@ msgstr "匯出縮時影片為"
 msgid "Export"
 msgstr "匯出"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:544
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "沒有要匯出的影格"
 
-#: plugins/dockers/recorder/recorder_export.cpp:552
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "錄影資訊"
 
-#: plugins/dockers/recorder/recorder_export.cpp:555
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "影格"
 
-#: plugins/dockers/recorder/recorder_export.cpp:617
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "沒有可供瀏覽的影格。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:729
+#: plugins/dockers/recorder/recorder_export.cpp:725
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "選擇 FFmpeg 可執行檔"
 
-#: plugins/dockers/recorder/recorder_export.cpp:809
+#: plugins/dockers/recorder/recorder_export.cpp:805
 #, kde-format
 msgid "No frames to export."
 msgstr "沒有要匯出的影格。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:823
+#: plugins/dockers/recorder/recorder_export.cpp:819
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "影片檔已經存在。是否覆寫？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:851
+#: plugins/dockers/recorder/recorder_export.cpp:847
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "正在編碼縮時影片……"
 
-#: plugins/dockers/recorder/recorder_export.cpp:866
+#: plugins/dockers/recorder/recorder_export.cpp:862
 #, fuzzy, kde-format
 #| msgid "Export failed. FFmpeg message:"
 msgid "Export failed. Error message:"
 msgstr "匯出失敗。FFmpeg 訊息："
 
-#: plugins/dockers/recorder/recorder_export.cpp:889
+#: plugins/dockers/recorder/recorder_export.cpp:885
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45088,7 +45194,7 @@ msgstr ""
 "\n"
 "是否繼續？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:896
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -55422,6 +55528,13 @@ msgstr ""
 "<html><head/><body><p>顯示器亮度，以 nits 為單位。由 PQ 轉換時預設為 1000。</"
 "p></body></html>"
 
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
+#: plugins/impex/heif/WdgHeifExport.ui:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
+#, kde-format
+msgid " cd/m²"
+msgstr " cd/m²"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
 #: plugins/impex/heif/WdgHeifExport.ui:129
@@ -56979,8 +57092,8 @@ msgstr ""
 "是否選擇其他位置？"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:148
-#: plugins/impex/libkra/kis_kra_loader.cpp:697
-#: plugins/impex/libkra/kis_kra_loader.cpp:1147
+#: plugins/impex/libkra/kis_kra_loader.cpp:702
+#: plugins/impex/libkra/kis_kra_loader.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -57083,46 +57196,46 @@ msgstr ""
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "未知的關鍵影格通道類型：%1 在 %2 中"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:210
+#: plugins/impex/libkra/kis_kra_loader.cpp:211
 #, kde-format
 msgid "Image does not have a name."
 msgstr "影像沒有名稱。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:215
+#: plugins/impex/libkra/kis_kra_loader.cpp:216
 #, kde-format
 msgid "Image does not specify a width."
 msgstr "影像未指定寬度。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:221
+#: plugins/impex/libkra/kis_kra_loader.cpp:222
 #, kde-format
 msgid "Image does not specify a height."
 msgstr "影像未指定高度。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:271
+#: plugins/impex/libkra/kis_kra_loader.cpp:272
 #, kde-format
 msgid "Image specifies an unsupported color model: %1."
 msgstr "影像指定了一個不支援的色彩模型：%1 。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:588
+#: plugins/impex/libkra/kis_kra_loader.cpp:593
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr "嵌入的調色板為空白而且不能載入。調色板名稱為：%1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:599
+#: plugins/impex/libkra/kis_kra_loader.cpp:604
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr "未能讀取已嵌入的資源。資源名稱為：%1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:608
+#: plugins/impex/libkra/kis_kra_loader.cpp:613
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr "未能匯入已嵌入的資源。資源名稱為：%1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:692
+#: plugins/impex/libkra/kis_kra_loader.cpp:697
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -57140,7 +57253,7 @@ msgstr ""
 "\n"
 "要手動定位該檔案嗎？"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:867
+#: plugins/impex/libkra/kis_kra_loader.cpp:872
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
@@ -57149,27 +57262,27 @@ msgstr ""
 "找到兩個在已啟用狀態的全域選取區域遮罩。「%1」將保持啟用，而「%2」會被取消啟"
 "用"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:927
+#: plugins/impex/libkra/kis_kra_loader.cpp:932
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "圖層 %1 指定了一個不支援的色彩模型：%2"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:955
+#: plugins/impex/libkra/kis_kra_loader.cpp:960
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "圖層 %1 含有不支援的類型。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:990
+#: plugins/impex/libkra/kis_kra_loader.cpp:995
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "圖層 %1 含有不支援的類型：%2 。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:997
+#: plugins/impex/libkra/kis_kra_loader.cpp:1002
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr "載入類型為：%2 的圖層 %1 時出錯。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1021
+#: plugins/impex/libkra/kis_kra_loader.cpp:1026
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -57181,7 +57294,7 @@ msgstr ""
 "的行為。請檢查影像效果，並考慮到設定中啟用與舊版相容的「加色法」混色方法 (設"
 "定→設定 Krita→一般→工具→CMYK 混色模式)"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1142
+#: plugins/impex/libkra/kis_kra_loader.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -57300,94 +57413,94 @@ msgstr "中繼資料後端為 %1 儲存中繼資料失敗"
 msgid "Could not write for %1 metadata to the file."
 msgstr "無法為 %1 中繼資料寫入檔案。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:216
+#: plugins/impex/libkra/kis_kra_saver.cpp:218
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
 msgstr "無法匯出資源以供嵌入：%1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:231
+#: plugins/impex/libkra/kis_kra_saver.cpp:233
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
 msgstr "無法寫入資源：%1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:243
+#: plugins/impex/libkra/kis_kra_saver.cpp:245
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr "被寫入的資源為空白：%1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:249
+#: plugins/impex/libkra/kis_kra_saver.cpp:251
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr "被寫入的資源不完整：%1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:266
-#: plugins/impex/libkra/kis_kra_saver.cpp:288
+#: plugins/impex/libkra/kis_kra_saver.cpp:268
+#: plugins/impex/libkra/kis_kra_saver.cpp:290
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
 msgstr "無法儲存分鏡。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:300
-#: plugins/impex/libkra/kis_kra_saver.cpp:324
+#: plugins/impex/libkra/kis_kra_saver.cpp:302
+#: plugins/impex/libkra/kis_kra_saver.cpp:326
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
 msgstr "無法儲存動畫中繼資料。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:337
-#: plugins/impex/libkra/kis_kra_saver.cpp:360
+#: plugins/impex/libkra/kis_kra_saver.cpp:339
+#: plugins/impex/libkra/kis_kra_saver.cpp:362
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
 msgstr "無法儲存音訊中繼資料。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:473
+#: plugins/impex/libkra/kis_kra_saver.cpp:475
 #, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
 msgstr "無法儲存關鍵影格。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:517
+#: plugins/impex/libkra/kis_kra_saver.cpp:519
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
 msgstr "無法儲存注釋。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:551
+#: plugins/impex/libkra/kis_kra_saver.cpp:553
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
 msgstr "無法儲存影像特性檔案。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:581
+#: plugins/impex/libkra/kis_kra_saver.cpp:583
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
 msgstr "無法儲存螢幕校樣色彩特性檔案。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:616
+#: plugins/impex/libkra/kis_kra_saver.cpp:618
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
 msgstr "無法儲存附加注釋。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:649
+#: plugins/impex/libkra/kis_kra_saver.cpp:651
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
 msgstr "無法儲存圖層樣式。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:664
+#: plugins/impex/libkra/kis_kra_saver.cpp:666
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
 msgstr "無法儲存合併影像。"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:765
+#: plugins/impex/libkra/kis_kra_saver.cpp:806
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
@@ -69938,22 +70051,6 @@ msgstr " %"
 msgid "Vertical Scale"
 msgstr "垂直縮放"
 
-#. i18n: ectx: property (text), widget (QLabel, label_offsetX)
-#. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
-#, kde-format
-msgid "x:"
-msgstr "x："
-
-#. i18n: ectx: property (text), widget (QLabel, label_offsetY)
-#. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
-#, kde-format
-msgid "y:"
-msgstr "y："
-
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1154
 #, kde-format
@@ -70490,6 +70587,27 @@ msgstr ""
 "在全範圍與子範圍之間切換。\n"
 "全範圍：[%1, %2]\n"
 "子範圍：[%3, %4]"
+
+#~ msgid "Master Display:"
+#~ msgstr "主顯示器："
+
+#~ msgid "y"
+#~ msgstr "y"
+
+#~ msgid "Red Primary:"
+#~ msgstr "紅基色："
+
+#~ msgid "Green Primary:"
+#~ msgstr "綠基色："
+
+#~ msgid "Blue Primary:"
+#~ msgstr "藍基色："
+
+#~ msgid "MaxCLL:"
+#~ msgstr "最大內容亮度 (MaxCLL)："
+
+#~ msgid "MaxFALL:"
+#~ msgstr "最大影格平均亮度 (MaxFALL)："
 
 #~ msgid ""
 #~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "

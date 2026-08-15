@@ -19,6 +19,7 @@
   <string name="donation_dialog_header_support">תמיכה ב־Krita</string>
   <string name="donation_dialog_header_button">♥︎ הצגת אפשרויות לתמיכה</string>
   <string name="donation_dialog_supporter_text">תודה על התמיכה ב־Krita! התרומה שלך מסייעת לנו להמשיך ולפתח.</string>
+  <string name="product_donations_description">&lt;h2&gt;תרומות&lt;/h2&gt;&lt;p&gt;אפשר לסייע בפיתוח השוטף של Krita באמצעות תרומות ישירות עם PayPal, כרטיס אשראי או מכוון אמצעי תשלום נוספים.&lt;/p&gt;</string>
   <string name="product_donations_button">תרומה</string>
   <string name="product_development_fund_description">&lt;h2&gt;קרן פיתוח&lt;/h2&gt;&lt;p&gt;אפשר להצטרף לקרן הפיתוח של Krita ולסייע בפיתוח המתמשך עם תרומה חודשית. יש מגוון רמות והטבות.&lt;/p&gt;</string>
   <string name="product_development_fund_button">הצטרפות לקרן</string>
@@ -30,6 +31,7 @@
   <string name="product_supporter_badge_description">&lt;p&gt;עיטורים לתומכים המוקדמים של Krita ב־Android.&lt;/p&gt;</string>
   <string name="product_subscription_title">מינוי תומכים</string>
   <string name="product_onetime_title">החבילה של Krita 5.3 לתומכים</string>
+  <string name="product_onetime_description">&lt;p&gt;בחבילה הזאת יש %1$d מאגדי משאבים יחד שמכילים למעלה מ־%2$d מכחולים, כולל המאגד Digital Atelier שבדרך כלל עולה כסף. זאת &lt;strong&gt;רכישה חד־פעמית&lt;/strong&gt;, זה לא יקנה לך מינוי.&lt;/p&gt;</string>
   <string name="show_this_dialog_when_krita_starts">להציג את החלונית הזאת עם הפתיחה של Krita</string>
   <string name="ok">אישור</string>
   <string name="interface_scale_default">קנה מידע של ממשק משתמש: %d%% (ברירת מחדל)</string>

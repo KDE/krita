@@ -1074,5 +1074,6 @@
     <value key="KDE::macos_store">https://apps.apple.com/us/app/krita/id1594607976?mt=12</value>
     <value key="KDE::mastodon">https://mastodon.art/@Krita/106413722232002973</value>
     <value key="KDE::matrix">#krita:kde.org</value>
+    <value key="KDE::mailinglist">kimageshop@kde.org</value>
   </custom>
 </component>

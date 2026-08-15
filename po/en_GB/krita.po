@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-12 03:10+0000\n"
+"POT-Creation-Date: 2026-08-15 02:51+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -45208,70 +45208,70 @@ msgid "Export Timelapse Video As"
 msgstr "Export Timelapse Video As"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:531
+#: plugins/dockers/recorder/recorder_export.cpp:530
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Export"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:544
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "No frames to export"
 
-#: plugins/dockers/recorder/recorder_export.cpp:552
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Recording info"
 
-#: plugins/dockers/recorder/recorder_export.cpp:555
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "frame(s)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:617
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "No frames to browse."
 
-#: plugins/dockers/recorder/recorder_export.cpp:729
+#: plugins/dockers/recorder/recorder_export.cpp:725
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Select FFmpeg Executable File"
 
-#: plugins/dockers/recorder/recorder_export.cpp:809
+#: plugins/dockers/recorder/recorder_export.cpp:805
 #, kde-format
 msgid "No frames to export."
 msgstr "No frames to export."
 
-#: plugins/dockers/recorder/recorder_export.cpp:823
+#: plugins/dockers/recorder/recorder_export.cpp:819
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "The video file already exists. Do you wish to overwrite it?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:851
+#: plugins/dockers/recorder/recorder_export.cpp:847
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "The timelapse video is being encoded..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:866
+#: plugins/dockers/recorder/recorder_export.cpp:862
 #, fuzzy, kde-format
 #| msgid "Export failed. FFmpeg message:"
 msgid "Export failed. Error message:"
 msgstr "Export failed. FFmpeg message:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:889
+#: plugins/dockers/recorder/recorder_export.cpp:885
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45286,7 +45286,7 @@ msgstr ""
 "\n"
 "Do you wish to continue?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:896
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"

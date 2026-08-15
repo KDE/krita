@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-12 03:10+0000\n"
+"POT-Creation-Date: 2026-08-15 02:51+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16301,106 +16301,92 @@ msgstr "Pracovné plochy"
 
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgctxt "action"
 msgid "Resources"
 msgstr "Zdroje"
 
 #. i18n: context: text @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources..."
-msgstr "Spravovať zdroje..."
+msgstr "Získať ďalšie zdroje..."
 
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources"
-msgstr "Zdroje úložiska"
+msgstr "Získať ďalšie zdroje"
 
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
-#, fuzzy, kde-format
-#| msgid "LUT Management"
+#, kde-format
 msgctxt "action"
 msgid "Management"
-msgstr "Správa LUT"
+msgstr "Správa"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
-msgstr "Spravovať nahrávky..."
+msgstr "Spravovať výhody podporovateľov..."
 
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:24 krita/kritamenu_android.action:25
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr "Spravovať balíky zdrojov"
+msgstr "Spravovať výhody podporovateľov"
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions..."
-msgstr "Spravovať nahrávky..."
+msgstr "Spravovať predplatné..."
 
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:36 krita/kritamenu_android.action:37
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions"
-msgstr "Popis"
+msgstr "Spravovať predplatné"
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr "Používateľské rozhranie"
+msgstr "Rozhranie"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr "Zmeniť obdĺžnik"
+msgstr "Zmeniť mierku rozhrania..."
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:51 krita/kritamenu_android.action:52
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr "Zmeniť obdĺžnik"
+msgstr "Zmeniť mierku rozhrania"
 
 #: krita/main.cc:723
 #, kde-format
@@ -24896,16 +24882,14 @@ msgid "Android: %1"
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
-#, fuzzy, kde-format
-#| msgid "%1 (Copy)"
+#, kde-format
 msgid "%1 (hardware)"
-msgstr "%1 (kopírovať)"
+msgstr "%1 (hardvérovo)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1 (Copy)"
+#, kde-format
 msgid "%1 (software)"
-msgstr "%1 (kopírovať)"
+msgstr "%1 (softvérovo)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
@@ -24920,34 +24904,29 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "Unsupported format"
-msgstr "Všetky podporované formáty"
+msgstr "Nepodporovaný formát"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "Video súbor:"
+msgstr "Video kodér:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "Video súbor:"
+msgstr "Bitový tok videa:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
-#, fuzzy, kde-format
-#| msgid "Audio menu"
+#, kde-format
 msgid "Audio encoder:"
-msgstr "Ponuka pre zvuk"
+msgstr "Zvukový kodér:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "Stav adaptácie"
+msgstr "Bitový tok zvuku:"
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25358,11 +25337,9 @@ msgid "Loading video data... %1 frames examined."
 msgstr "Načítanie video dát... %1 preskúmaných snímok."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Internal error"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "Interná chyba"
+msgstr "Interná chyba (%1)"
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
@@ -25370,24 +25347,19 @@ msgid "LibAV: %1"
 msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "This format has no preferences."
-msgstr "Možnosti šrafovania"
+msgstr "Tento formát nemá žiadne nastavenia."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "Nenašiel sa profil"
+msgstr "Nenašli sa žiadne súbory snímok"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "Vykresliť animáciu..."
+msgstr "Vykresľuje sa animácia..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25395,10 +25367,9 @@ msgid "No encoder for the selected format found"
 msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgid "No office:drawing tag found in file: %1"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "Nenašiel sa tag office:drawing v súbore: %1"
+msgstr "Chyba pri príprave zvukového súboru: %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26480,10 +26451,9 @@ msgstr "Obrázky"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "&Video"
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -28313,16 +28283,14 @@ msgid "Preset Icon Library"
 msgstr "Knižnica ikon predvolieb"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
-#, fuzzy, kde-format
-#| msgid "Unsupported unit"
+#, kde-format
 msgid "Supporter Benefits"
-msgstr "Nepodporovaná jednotka"
+msgstr "Výhody podporovateľov"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscriptions"
-msgstr "Popis"
+msgstr "Spravovať predplatné"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:114
 #, kde-format
@@ -28342,11 +28310,9 @@ msgstr[2] ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Stacked"
+#, kde-format
 msgid "StackedWidget"
-msgstr "Vrstvené"
+msgstr "StackedWidget"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblNoBenefits)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:53
@@ -28720,16 +28686,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgid "Manage Supporter Benefits"
-msgstr "Spravovať balíky zdrojov"
+msgstr "Spravovať výhody podporovateľov"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
-#, fuzzy, kde-format
+#, kde-format
 msgid "Support Krita!"
-msgstr "Podporte Krita"
+msgstr "Podporte Kritu!"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -35025,11 +34990,9 @@ msgid "Crop to Selection"
 msgstr "Orezať na výber."
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure selection actions bar"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "Nastaviť panel akcií výberu"
+msgstr "Prepnúť pripnutie panela akcií výberu"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, kde-format
@@ -40107,16 +40070,14 @@ msgid "Current dockers"
 msgstr "Aktuálne panely"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgid "Download Resource Bundles"
-msgstr "Spravovať balíky zdrojov"
+msgstr "Stiahnuť balíky zdrojov"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscription"
-msgstr "Popis"
+msgstr "Spravovať predplatné"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -44756,12 +44717,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "Prerušiť kódovanie časozberného videa?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "Spúšťanie FFmpeg..."
+msgstr "Spúšťa sa exportér..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:440
 #, kde-format
@@ -44769,70 +44728,69 @@ msgid "Export Timelapse Video As"
 msgstr "Exportovať časozberné video ako"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:531
+#: plugins/dockers/recorder/recorder_export.cpp:530
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Exportovať"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:544
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Žiadne snímky na export"
 
-#: plugins/dockers/recorder/recorder_export.cpp:552
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Informácie o nahrávke"
 
-#: plugins/dockers/recorder/recorder_export.cpp:555
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "snímok(y)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:617
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Žiadne snímky na prezeranie."
 
-#: plugins/dockers/recorder/recorder_export.cpp:729
+#: plugins/dockers/recorder/recorder_export.cpp:725
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Vybrať spustiteľný súbor FFmpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:809
+#: plugins/dockers/recorder/recorder_export.cpp:805
 #, kde-format
 msgid "No frames to export."
 msgstr "Žiadne snímky na export."
 
-#: plugins/dockers/recorder/recorder_export.cpp:823
+#: plugins/dockers/recorder/recorder_export.cpp:819
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "Video súbor už existuje. Chcete ho prepísať?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:851
+#: plugins/dockers/recorder/recorder_export.cpp:847
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "Časozberné video sa kóduje..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:866
-#, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
+#: plugins/dockers/recorder/recorder_export.cpp:862
+#, kde-format
 msgid "Export failed. Error message:"
-msgstr "Export zlyhal. Správa FFmpeg:"
+msgstr "Export zlyhal. Chybová správa:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:889
+#: plugins/dockers/recorder/recorder_export.cpp:885
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -44847,7 +44805,7 @@ msgstr ""
 "\n"
 "Chcete pokračovať?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:896
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -50766,9 +50724,9 @@ msgid "What resource do you want to import these %1 files as?"
 msgstr "Ako ktorý zdroj chcete importovať tieto súbory %1?"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Supporter Bundles"
-msgstr "Importovať balík/zdroj"
+msgstr "Balíky pre podporovateľov"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
@@ -50776,10 +50734,9 @@ msgid "<strong>Error:</strong> %1"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgid "No supporter bundles available."
-msgstr "Nie je dostupný žiadny obrázok."
+msgstr "Nie sú dostupné žiadne balíky pre podporovateľov."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:108
 #, kde-format
@@ -50798,10 +50755,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
-#, fuzzy, kde-format
-#| msgid "Symmetry"
+#, kde-format
 msgid "Retry"
-msgstr "Symetria"
+msgstr "Skúsiť znova"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
@@ -50809,10 +50765,9 @@ msgid "Server responded with error %1."
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
-#, fuzzy, kde-format
-#| msgid "Invalid File"
+#, kde-format
 msgid "Invalid checksums file."
-msgstr "Neplatný súbor"
+msgstr "Neplatný súbor s kontrolnými súčtami."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
@@ -50835,16 +50790,14 @@ msgid "This service is currently unavailable."
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
-#, fuzzy, kde-format
-#| msgid "The document has been modified."
+#, kde-format
 msgid "This service has been discontinued."
-msgstr "Dokument bol zmenený."
+msgstr "Táto služba bola ukončená."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
-#, fuzzy, kde-format
-#| msgid "Unknown error: %1"
+#, kde-format
 msgid "Unknown service error %1."
-msgstr "Neznáma chyba: %1"
+msgstr "Neznáma chyba služby %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
@@ -50852,35 +50805,29 @@ msgid "Not enough data."
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
-#, fuzzy, kde-format
-#| msgid "Invalid value."
+#, kde-format
 msgid "Invalid version."
-msgstr "Zlá hodnota."
+msgstr "Neplatná verzia."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksum."
-msgstr "Neplatný názov."
+msgstr "Neplatný kontrolný súčet."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "Warning message"
-#| msgid "Failed to rename the resource."
+#, kde-format
 msgid "Failed to create directory %1."
-msgstr "Nepodarilo sa premenovať zdroj."
+msgstr "Nepodarilo sa vytvoriť adresár %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to open %1 for writing."
-msgstr "Nemôžem vytvoriť súbor na uloženie"
+msgstr "Nepodarilo sa otvoriť %1 na zápis."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
-#, fuzzy, kde-format
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to write %1."
-msgstr "Nepodarilo sa otvoriť %1."
+msgstr "Nepodarilo sa zapísať %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:317
 #, kde-format
@@ -50888,47 +50835,41 @@ msgid "Failed to retrieve bundle checksums: %1"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
-#, fuzzy, kde-format
-#| msgctxt "a tooltip shown when a file layer cannot load its linked file"
-#| msgid "Failed to load linked file: %1"
+#, kde-format
 msgid "Failed to retrieve bundles: %1"
-msgstr "Zlyhalo načítanie prepojeného súboru: %1"
+msgstr "Nepodarilo sa získať balíky: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
-#, fuzzy, kde-format
-#| msgid "Brush presets"
+#, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "Predvoľby štetcov"
-msgstr[1] "Predvoľby štetcov"
-msgstr[2] "Predvoľby štetcov"
+msgstr[0] "%1 predvoľba štetca"
+msgstr[1] "%1 predvoľby štetcov"
+msgstr[2] "%1 predvolieb štetcov"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
-#, fuzzy, kde-format
-#| msgid "Brush tips"
+#, kde-format
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
-msgstr[0] "Špičky štetcov"
-msgstr[1] "Špičky štetcov"
-msgstr[2] "Špičky štetcov"
+msgstr[0] "%1 špička štetca"
+msgstr[1] "%1 špičky štetcov"
+msgstr[2] "%1 špičiek štetcov"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
+#, kde-format
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
-msgstr[0] "18 textúra-kôra"
-msgstr[1] "18 textúra-kôra"
-msgstr[2] "18 textúra-kôra"
+msgstr[0] "%1 vzor textúry"
+msgstr[1] "%1 vzory textúr"
+msgstr[2] "%1 vzorov textúr"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] "Pracovné plochy"
-msgstr[1] "Pracovné plochy"
-msgstr[2] "Pracovné plochy"
+msgstr[0] "%1 rozloženie pracovnej plochy"
+msgstr[1] "%1 rozloženia pracovných plôch"
+msgstr[2] "%1 rozložení pracovných plôch"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
@@ -50936,33 +50877,29 @@ msgid "%1 (subscribed)"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "%1 (Copy)"
+#, kde-format
 msgid "%1 (owned)"
-msgstr "%1 (kopírovať)"
+msgstr "%1 (vlastnené)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
-msgstr "Kontrast:"
+msgstr "Obsahuje:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
-msgstr "Nie je dostupný žiadny obrázok."
+msgstr "Nie je dostupné."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
-#, fuzzy, kde-format
-#| msgid "Available"
+#, kde-format
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
 msgid "Available with:"
-msgstr "Dostupné"
+msgstr "Dostupné s:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
@@ -50976,10 +50913,9 @@ msgid "%1"
 msgstr "%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:194
-#, fuzzy, kde-format
-#| msgid "Invalid File"
+#, kde-format
 msgid "Invalid bundle size"
-msgstr "Neplatný súbor"
+msgstr "Neplatná veľkosť balíka"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
@@ -50987,37 +50923,30 @@ msgid "Invalid bundle checksum"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Active Bundles"
+#, kde-format
 msgid "Activating bundle…"
-msgstr "Aktívne balíky"
+msgstr "Aktivuje sa balík…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed to import the resource"
+#, kde-format
 msgid "Failed to import bundle"
-msgstr "Nepodarilo sa importovať zdroj"
+msgstr "Nepodarilo sa importovať balík"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgid "Bundle download failed: %1"
-msgstr "Nebolo možné načítať profil: %1."
+msgstr "Sťahovanie balíka zlyhalo: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Download Color Profile"
+#, kde-format
 msgid "Download failed"
-msgstr "Stiahnuť farebný profil"
+msgstr "Sťahovanie zlyhalo"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Down"
+#, kde-format
 msgid "Download"
-msgstr "Dolu"
+msgstr "Stiahnuť"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
@@ -51163,10 +51092,9 @@ msgid "Manage Resources..."
 msgstr "Spravovať zdroje..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:50
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Get More Resources..."
-msgstr "Spravovať zdroje..."
+msgstr "Získať ďalšie zdroje..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -51199,11 +51127,9 @@ msgstr "Upraviť knižnicu zdrojov"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSupport)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
+#, kde-format
 msgid "Get More Bundles"
-msgstr "Vytvoriť balík"
+msgstr "Získať ďalšie balíky"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:433

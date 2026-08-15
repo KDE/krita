@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-12 03:10+0000\n"
-"PO-Revision-Date: 2026-07-28 15:35+0100\n"
+"POT-Creation-Date: 2026-08-15 02:51+0000\n"
+"PO-Revision-Date: 2026-08-15 01:33+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -30571,7 +30571,7 @@ msgstr "Color del contorno del borrador:"
 #: libs/ui/forms/wdggeneralsettings.ui:886
 #, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Forma de toma de muestras de color:"
+msgstr "Forma del muestreador de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -34278,7 +34278,7 @@ msgstr "Conmutar preajuste de pincel anterior"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Toma de muestras de color"
+msgstr "Muestreador de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:91
@@ -44944,69 +44944,69 @@ msgid "Export Timelapse Video As"
 msgstr "Exportar vídeo de lapso de tiempo como"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:531
+#: plugins/dockers/recorder/recorder_export.cpp:530
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Exportar"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:544
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "No hay fotogramas para exportar"
 
-#: plugins/dockers/recorder/recorder_export.cpp:552
+#: plugins/dockers/recorder/recorder_export.cpp:548
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Información de la grabación"
 
-#: plugins/dockers/recorder/recorder_export.cpp:555
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "fotogramas"
 
-#: plugins/dockers/recorder/recorder_export.cpp:617
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "No hay fotogramas para explorar."
 
-#: plugins/dockers/recorder/recorder_export.cpp:729
+#: plugins/dockers/recorder/recorder_export.cpp:725
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Seleccionar archivo ejecutable de FFMpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:809
+#: plugins/dockers/recorder/recorder_export.cpp:805
 #, kde-format
 msgid "No frames to export."
 msgstr "No hay fotogramas para exportar."
 
-#: plugins/dockers/recorder/recorder_export.cpp:823
+#: plugins/dockers/recorder/recorder_export.cpp:819
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "El archivo de vídeo ya existe. ¿Desea sobrescribirlo?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:851
+#: plugins/dockers/recorder/recorder_export.cpp:847
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "El vídeo de lapso de tiempo se está codificando…"
 
-#: plugins/dockers/recorder/recorder_export.cpp:866
+#: plugins/dockers/recorder/recorder_export.cpp:862
 #, kde-format
 msgid "Export failed. Error message:"
 msgstr "La exportación ha fallado. Mensaje de error:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:889
+#: plugins/dockers/recorder/recorder_export.cpp:885
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45021,7 +45021,7 @@ msgstr ""
 "\n"
 "¿Desea continuar?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:896
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -52155,7 +52155,7 @@ msgstr "Umbral:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Toma de muestras de color:"
+msgstr "Muestreador de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -65712,7 +65712,7 @@ msgstr "Herramienta de pincel a mano alzada"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Herramienta de toma de muestras de color"
+msgstr "Herramienta del muestreador de color"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -66283,8 +66283,8 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>Determina si la toma de muestras de colores será</nobr> de colores de "
-"todas las capas visibles o solo de la capa seleccionada."
+"<nobr>Determina si el muestreador de color será</nobr> de colores de todas "
+"las capas visibles o solo de la capa seleccionada."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
@@ -66311,7 +66311,7 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>El radio controla el área de toma de muestras de colores.</nobr> Los "
+"<nobr>El radio controla el área del muestreador de colores.</nobr> Los "
 "colores de píxeles que caen en este radio se mezclan en conjunto."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
@@ -66349,8 +66349,8 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Controla si la toma de muestras de colores actualiza el</nobr> fondo "
-"actual o no."
+"<nobr>Controla si el muestreador de color actualiza el</nobr> fondo actual o "
+"no."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:251
@@ -70107,7 +70107,7 @@ msgstr "Herramienta de selección de formas"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Toma de muestras de color"
+msgstr "Muestreador de color"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
@@ -70358,10 +70358,3 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "Este archivo XCF es demasiado reciente. Krita no admite archivos XCF "
-#~ "creados por GIMP 2.9 o posterior."

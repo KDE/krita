@@ -30906,7 +30906,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 #: libs/ui/forms/wdgimageproperties.ui:362
 #, kde-format
 msgid "Calculate"
-msgstr ""
+msgstr "Spočítat"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404

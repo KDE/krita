@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 00:43+0000\n"
-"PO-Revision-Date: 2026-08-14 19:10+0300\n"
+"PO-Revision-Date: 2026-08-15 20:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21240,11 +21240,9 @@ msgid "Change Clone Layers"
 msgstr "Klon Katmanları Değiştir"
 
 #: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
-#, fuzzy
-#| msgid "HDR Metadata..."
 msgctxt "(qtundo-format)"
 msgid "Set HDR Metadata"
-msgstr "HDR Üst Verisi…"
+msgstr "HDR Üst Verisini Ayarla"
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
@@ -21458,38 +21456,34 @@ msgid "Pass Through"
 msgstr "Geçiş"
 
 #: libs/image/kis_hdr_metadata_models.cpp:51
-#, fuzzy, kde-format
-#| msgid " cd/m²"
+#, kde-format
 msgctxt "Image reference white value"
 msgid "%1 cd/m²"
-msgstr " cd/m²"
+msgstr "%1 cd/m²"
 
 #: libs/image/kis_hdr_metadata_models.cpp:63
-#, fuzzy, kde-format
-#| msgid "Luminance"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "XYZ Luminance"
-msgstr "Aydınlık"
+msgstr "XYZ Aydınlığı"
 
 #: libs/image/kis_hdr_metadata_models.cpp:64
-#, fuzzy, kde-format
-#| msgid "Rec 2020 PQ"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "Rec 2020 Per Component"
-msgstr "Rec 2020 PQ"
+msgstr "Bileşen Başına Rec 2020"
 
 #: libs/image/kis_hdr_metadata_models.cpp:65
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "RGB Per Component"
-msgstr "Bileşenler:"
+msgstr "Bileşen Başına RGB"
 
 #: libs/image/kis_hdr_metadata_models.cpp:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Calculate the brightness in nits against XYZ luminance."
-msgstr ""
+msgstr "XYZ aydınlığına karşı, parlaklığı nit türünden hesaplayın."
 
 #: libs/image/kis_hdr_metadata_models.cpp:68
 #, kde-format
@@ -21498,6 +21492,8 @@ msgid ""
 "Calculate the brightness in nits by testing the components in linear rec "
 "2020."
 msgstr ""
+"Bileşenleri doğrusal Rec 2020 ile sınayarak, parlaklığı nit türünden "
+"hesaplayın."
 
 #: libs/image/kis_hdr_metadata_models.cpp:69
 #, kde-format
@@ -21506,6 +21502,8 @@ msgid ""
 "Calculate the brightness in nits by testing the components in linear RGB, if "
 "possible, falls back to using XYZ luminance."
 msgstr ""
+"Bileşenleri doğrusal RGB ile sınayarak, parlaklığı nit türünden hesaplayın; "
+"olanaklıysa yedek olarak XYZ aydınlığını kullanır."
 
 #: libs/image/kis_hdr_metadata_models.cpp:117
 #, kde-format
@@ -21529,20 +21527,19 @@ msgstr "Özel"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset color volume to the values defined by Rec. 2100 PQ"
-msgstr ""
+msgstr "Renk hacmini, Rec. 2100 PQ tarafından tanımlanmış değerlere sıfırlar."
 
 #: libs/image/kis_hdr_metadata_models.cpp:122
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset color volume to the values defined by DCI-P3 D65"
-msgstr ""
+msgstr "Renk hacmini, DCI-P3 D65 tarafından tanımlanmış değerlere sıfırlar."
 
 #: libs/image/kis_hdr_metadata_models.cpp:123
-#, fuzzy, kde-format
-#| msgid "Use color palette for ... colors or less"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
-msgstr "… renk veya daha azı için renk paleti kullan"
+msgstr "Renk hacmi için özel değerler kullanın."
 
 #: libs/image/kis_image.cc:422
 #, kde-format
@@ -22311,17 +22308,13 @@ msgstr ""
 "boya katmanına dönüştürülecek"
 
 #: libs/impex/HdrMetaDataCheck.h:22
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "This image has <b>animated layers</b>. Animation cannot be saved to this "
-#| "format."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "This image has <b>HDR metadata</b>. HDR metadata cannot be saved to this "
 "format."
 msgstr ""
-"Bu görselde <b>canlandırılmış katmanlar</b> var. Canlandırma, bu biçime "
+"Bu görselde <b>HDR üst verisi var</b> var. HDR üst verisi, bu biçime "
 "kaydedilemez."
 
 #: libs/impex/IntegralFrameDuration.h:32
@@ -31236,53 +31229,46 @@ msgstr "Ekran Provası yapılandırmasını görselde depola"
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
-#, fuzzy, kde-format
-#| msgid "HDR Metadata..."
+#, kde-format
 msgid "HDR Metadata"
-msgstr "HDR Üst Verisi…"
+msgstr "HDR Üst Verisi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
 #: libs/ui/forms/wdgimageproperties.ui:308
-#, fuzzy, kde-format
-#| msgid "Reference images"
+#, kde-format
 msgid "HDR Reference White"
-msgstr "Başvurulan görseller"
+msgstr "HDR Başvuru Beyazı"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
 #: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Content Light Level Information"
-msgstr "Belge Bilgisi"
+msgstr "İçerik Işık Düzeyi Bilgisi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdgimageproperties.ui:338
 #, kde-format
 msgid "Max Content Light Level:"
-msgstr ""
+msgstr "En çok içerik ışık düzeyi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdgimageproperties.ui:345
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p><br/></p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
-msgstr "<html><head/><body><p><br/></p></body></html>"
+msgstr ""
+"<html><head/><body><p>En büyük kare ortalama ışık düzeyi:</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
 #: libs/ui/forms/wdgimageproperties.ui:362
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Calculate"
+#, kde-format
 msgid "Calculate"
 msgstr "Hesapla"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404
-#, fuzzy, kde-format
-#| msgctxt "Rearrange the positions of the pixels under the cursor"
-#| msgid "Color Deformation"
+#, kde-format
 msgid "Color Volume Information"
-msgstr "Renk Deformasyonu"
+msgstr "Renk Hacmi Bilgisi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, GreenLabel)
@@ -31340,17 +31326,15 @@ msgstr "Beyaz:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgimageproperties.ui:566
-#, fuzzy, kde-format
-#| msgid "Max Luminance:"
+#, kde-format
 msgid "Maximum Luminance:"
-msgstr "En yüksek renk aydınlığı:"
+msgstr "En yüksek aydınlık:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdgimageproperties.ui:589
-#, fuzzy, kde-format
-#| msgid "Min Luminance:"
+#, kde-format
 msgid "Minimum Luminance:"
-msgstr "En düşük renk aydınlığı:"
+msgstr "En düşük aydınlık:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgimageproperties.ui:634

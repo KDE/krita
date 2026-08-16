@@ -45,6 +45,7 @@ Name[zh_CN]=最近图像列表面板
 Name[zh_TW]=「最近使用檔案」面板
 Comment=A Python-based docker for show thumbnails to last ten documents
 Comment[ar]=رصيف بِ‍«بيثون» لعرض مصغّرات آخر 10 مستندات مفتوحة
+Comment[bg]=Python-базиран докер за показване на thumbnails на последните десет документа
 Comment[ca]=Un acoblador basat en Python per a mostrar miniatures dels darrers deu documents
 Comment[ca@valencia]=Un acoblador basat en Python per a mostrar miniatures dels darrers deu documents
 Comment[cs]=Dok založený na Pythonu pro zobrazování náhledů na deset nedávných dokumentů

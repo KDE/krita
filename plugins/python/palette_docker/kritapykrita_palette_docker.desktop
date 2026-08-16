@@ -44,6 +44,7 @@ Name[zh_CN]=色板面板
 Name[zh_TW]=「調色板」面板
 Comment=A Python-based docker to edit color palettes.
 Comment[ar]=رصيف بِ‍«بيثون» لتحرير لوحات الألوان.
+Comment[bg]=Докер на базата на Python за редактиране на цветни палети.
 Comment[ca]=Un acoblador basat en Python per a editar paletes de colors.
 Comment[ca@valencia]=Un acoblador basat en Python per a editar paletes de colors.
 Comment[cs]=Dok založený na Pythonu pro editaci barevných palet.

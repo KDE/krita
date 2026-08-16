@@ -45,6 +45,7 @@ Name[zh_CN]=图像参数编辑工具
 Name[zh_TW]=檔案工具
 Comment=Plugin to manipulate properties of selected documents
 Comment[ar]=ملحقة لتعديل خصائص المستندات المحددة
+Comment[bg]=Плугин за управление на свойствата на избраните документи
 Comment[ca]=Un connector per a manipular les propietats dels documents seleccionats
 Comment[ca@valencia]=Un connector per a manipular les propietats dels documents seleccionats
 Comment[cs]=Modul pro správu vlastností vybraných dokumentů

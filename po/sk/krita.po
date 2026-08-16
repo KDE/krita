@@ -24879,7 +24879,7 @@ msgstr "Aktivovať transformačný nástroj"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "Android: %1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
 #, kde-format
@@ -24895,6 +24895,8 @@ msgstr "%1 (softvérovo)"
 #, kde-format
 msgid "Unsupported video parameters, try lowering the video FPS or size"
 msgstr ""
+"Nepodporované parametre videa, skúste znížiť počet snímok za sekundu alebo "
+"veľkosť"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:358
 #, kde-format
@@ -24902,6 +24904,8 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"Nepodporované parametre zvuku, skúste zvukový súbor prekódovať s bežnejším "
+"formátom vzoriek, vzorkovacou frekvenciou a počtom kanálov"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -25045,13 +25049,13 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "Viac než 30 snímok za sekundu nie je široko podporovaných."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "Rozmery väčšie než 1920 pixelov nie sú široko podporované."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
@@ -25063,7 +25067,7 @@ msgstr "Upozornenie(a):"
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
-msgstr ""
+msgstr "Export môže zlyhať a niektoré zariadenia to nemusia dokázať prehrať."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25344,7 +25348,7 @@ msgstr "Interná chyba (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
 #, kde-format
@@ -25364,7 +25368,7 @@ msgstr "Vykresľuje sa animácia..."
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
 msgid "No encoder for the selected format found"
-msgstr ""
+msgstr "Pre vybraný formát sa nenašiel žiadny kodér"
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
 #, kde-format
@@ -28296,17 +28300,17 @@ msgstr "Spravovať predplatné"
 #, kde-format
 msgid "You have %1 supporter benefit:"
 msgid_plural "You have %1 supporter benefits:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Máte %1 výhodu podporovateľa:"
+msgstr[1] "Máte %1 výhody podporovateľa:"
+msgstr[2] "Máte %1 výhod podporovateľa:"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:122
 #, kde-format
 msgid "There is %1 supporter benefit available:"
 msgid_plural "There are %1 supporter benefits available:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "K dispozícii je %1 výhoda podporovateľa:"
+msgstr[1] "K dispozícii sú %1 výhody podporovateľa:"
+msgstr[2] "K dispozícii je %1 výhod podporovateľa:"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
@@ -28321,12 +28325,14 @@ msgid ""
 "No supporter benefits available on this version of Krita.\n"
 "You can still support Krita by donating."
 msgstr ""
+"V tejto verzii Krity nie sú dostupné žiadne výhody podporovateľov.\n"
+"Kritu môžete aj tak podporiť darom."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnNoBenefitsSupport)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Prispieť"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -28682,7 +28688,7 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:1659
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
-msgstr ""
+msgstr "Krita môže existovať vďaka trvalej podpore ľudí, ako ste vy!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
@@ -36912,17 +36918,17 @@ msgstr "Vyžaduje sa reštart."
 #: libs/ui/KisWelcomePageWidget.cpp:843
 #, kde-format
 msgid "Become a Supporter!"
-msgstr ""
+msgstr "Staňte sa podporovateľom!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Supporters get brush packs and more."
-msgstr ""
+msgstr "Podporovatelia dostávajú balíky štetcov a ďalšie veci."
 
 #: libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Contributions keep development going."
-msgstr ""
+msgstr "Príspevky udržiavajú vývoj v chode."
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
@@ -44948,6 +44954,9 @@ msgid ""
 "not widely supported. The export may fail and some devices will not be able "
 "to play it."
 msgstr ""
+"<strong>Upozornenie:</strong> video s rozmermi väčšími než 1920 pixelov nie "
+"je široko podporované. Export môže zlyhať a niektoré zariadenia ho nedokážu "
+"prehrať."
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnFpsText)
 #: plugins/dockers/recorder/recorder_export.ui:711
@@ -44956,6 +44965,9 @@ msgid ""
 "<strong>Warning:</strong> video with FPS beyond 30 is not widely supported. "
 "The export may fail and some devices will not be able to play it."
 msgstr ""
+"<strong>Upozornenie:</strong> video s viac než 30 snímkami za sekundu nie je "
+"široko podporované. Export môže zlyhať a niektoré zariadenia ho nedokážu "
+"prehrať."
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:757
@@ -50731,7 +50743,7 @@ msgstr "Balíky pre podporovateľov"
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
 msgid "<strong>Error:</strong> %1"
-msgstr ""
+msgstr "<strong>Chyba:</strong> %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
 #, kde-format
@@ -50746,12 +50758,15 @@ msgid ""
 "for purchases and may make these bundles in other ways behind the links "
 "below."
 msgstr ""
+"Tieto balíky sprístupnili ich autori ako odmenu za podporu vývoja Krity. Za "
+"nákupy nedostávajú odmenu a balíky môžu ponúkať aj inak, prostredníctvom "
+"odkazov nižšie."
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLoading)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "Načítava sa…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
@@ -50762,7 +50777,7 @@ msgstr "Skúsiť znova"
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
 msgid "Server responded with error %1."
-msgstr ""
+msgstr "Server odpovedal chybou %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
 #, kde-format
@@ -50772,22 +50787,22 @@ msgstr "Neplatný súbor s kontrolnými súčtami."
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
 msgid "Invalid checksums version."
-msgstr ""
+msgstr "Neplatná verzia kontrolných súčtov."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:117
 #, kde-format
 msgid "You have to update Krita to use this service."
-msgstr ""
+msgstr "Na používanie tejto služby musíte aktualizovať Kritu."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:119
 #, kde-format
 msgid "This service is not available in your region."
-msgstr ""
+msgstr "Táto služba nie je vo vašom regióne dostupná."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:121
 #, kde-format
 msgid "This service is currently unavailable."
-msgstr ""
+msgstr "Táto služba je momentálne nedostupná."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
 #, kde-format
@@ -50802,7 +50817,7 @@ msgstr "Neznáma chyba služby %1."
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
 msgid "Not enough data."
-msgstr ""
+msgstr "Nedostatok údajov."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
 #, kde-format
@@ -50832,7 +50847,7 @@ msgstr "Nepodarilo sa zapísať %1."
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:317
 #, kde-format
 msgid "Failed to retrieve bundle checksums: %1"
-msgstr ""
+msgstr "Nepodarilo sa získať kontrolné súčty balíkov: %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
 #, kde-format
@@ -50874,7 +50889,7 @@ msgstr[2] "%1 rozložení pracovných plôch"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
 msgid "%1 (subscribed)"
-msgstr ""
+msgstr "%1 (predplatené)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
 #, kde-format
@@ -50904,7 +50919,7 @@ msgstr "Dostupné s:"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
 msgid "Downloading bundle…"
-msgstr ""
+msgstr "Sťahuje sa balík…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:139
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
@@ -50920,7 +50935,7 @@ msgstr "Neplatná veľkosť balíka"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
 msgid "Invalid bundle checksum"
-msgstr ""
+msgstr "Neplatný kontrolný súčet balíka"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
 #, kde-format
@@ -50952,7 +50967,7 @@ msgstr "Stiahnuť"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
 #, kde-format
 msgid "✔ Owned"
-msgstr ""
+msgstr "✔ Vlastnené"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format

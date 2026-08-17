@@ -1381,6 +1381,7 @@ void KisImageTest::testHdrReferenceWhite_data()
 
 void KisImageTest::testHdrReferenceWhite()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     auto optionalFromDouble = [] (double value) {
         return value >= 0 ? std::make_optional(value) : std::optional<double>();
     };
@@ -1409,6 +1410,7 @@ void KisImageTest::testHdrReferenceWhite()
     image->waitForDone();
 
     QCOMPARE(image->hdrReferenceWhiteLightLevel(), optionalFromDouble(expectedDstHdrReferenceWhite));
+#endif
 }
 
 void KisImageTest::testHdrReferenceWhiteCloning()

@@ -315,8 +315,6 @@ public:
             colorVolumeInformation = std::nullopt;
             diffuseWhiteLightLevel = std::nullopt;
         }
-
-        LEAVE_FUNCTION() << ppVar(diffuseWhiteLightLevel);
     }
 
     struct SetImageProjectionColorSpace;

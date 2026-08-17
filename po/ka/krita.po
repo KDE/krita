@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 00:43+0000\n"
-"PO-Revision-Date: 2026-08-15 04:58+0200\n"
+"PO-Revision-Date: 2026-08-16 08:15+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -30410,7 +30410,7 @@ msgstr "დამატებითი შედარების სივრ�
 #: libs/ui/forms/wdggeneralsettings.ui:1031
 #, kde-format
 msgid "Enable Zoom Preview (Pixel-Perfect Color Sampler)"
-msgstr ""
+msgstr "გადიდების მინიატურის ჩართვა პიქსელი-საუკეთესო ფერის ამრჩევი)"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
@@ -31032,7 +31032,7 @@ msgstr "შემცველობის სინათლის დონი�
 #: libs/ui/forms/wdgimageproperties.ui:338
 #, kde-format
 msgid "Max Content Light Level:"
-msgstr ""
+msgstr "მაქს. შემცველობის სინათლის დონე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdgimageproperties.ui:345

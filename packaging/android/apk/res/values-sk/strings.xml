@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Stlačenie</string>
+  <string name="remote_action_doubleclick">Dvojité stlačenie</string>
+  <string name="remote_action_swipeup">Potiahnutie nahor</string>
+  <string name="remote_action_swipedown">Potiahnutie nadol</string>
+  <string name="remote_action_swipeleft">Potiahnutie doľava</string>
+  <string name="remote_action_swiperight">Potiahnutie doprava</string>
+  <string name="remote_action_circlecw">Kruh v smere hodinových ručičiek</string>
+  <string name="remote_action_circleccw">Kruh proti smeru hodinových ručičiek</string>
+  <string name="something_wrong">Niečo sa pokazilo...</string>
+  <string name="cancelled">Zrušené</string>
+  <string name="save_notification_text">Ukladá sa dokument</string>
+  <string name="cancel_save_notification">Zrušiť</string>
+  <string name="donation_dialog_loading">Krita sa načítava…</string>
+  <string name="donation_dialog_loaded">Krita je pripravená!</string>
+  <string name="donation_dialog_button_back">Späť</string>
+  <string name="donation_dialog_button_close">Zavrieť</string>
+  <string name="donation_dialog_header_support">Podporte Kritu</string>
+  <string name="donation_dialog_header_button">♥︎ Zobraziť možnosti podpory</string>
+  <string name="donation_dialog_supporter_text">Ďakujeme, že podporujete Kritu! Váš príspevok pomáha udržať jej ďalší vývoj v chode.</string>
+  <string name="product_donations_description">&lt;h2&gt;Dary&lt;/h2&gt;&lt;p&gt;Pomôžte ďalšiemu vývoju Krity priamym darom cez PayPal, kreditnou či debetnou kartou a mnohými ďalšími platobnými metódami.&lt;/p&gt;</string>
+  <string name="product_donations_button">Darovať</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Vývojový fond&lt;/h2&gt;&lt;p&gt;Pridajte sa k vývojovému fondu Krity a mesačným príspevkom pomôžte jej ďalšiemu vývoju. K dispozícii sú rôzne úrovne s výhodami.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Pridať sa k fondu</string>
+  <string name="product_button_subscribe">Predplatiť</string>
+  <string name="product_button_subscribe_for_month">Predplatiť za %s/mesiac</string>
+  <string name="product_button_buy">Kúpiť</string>
+  <string name="product_button_buy_for">Kúpiť za %s</string>
+  <string name="product_supporter_badge_title">Odznak podporovateľa</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Odznak pre prvých podporovateľov Krity na Androide.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Predplatné podporovateľa</string>
+  <string name="product_subscription_description">&lt;p&gt;Podporte vývoj Krity mesačným príspevkom. Počas predplatného získate prístup ku &lt;strong&gt;všetkým&lt;/strong&gt; výhodám podporovateľov hneď, ako vyjdú. Momentálne dostávate %1$d balíkov zdrojov, ktoré spolu obsahujú vyše %2$d štetcov vrátane plateného balíka Digital Atelier, a do budúcna sa plánujú ďalšie.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Balík podporovateľa Krity 5.3</string>
+  <string name="product_onetime_description">&lt;p&gt;V tomto balíku dostanete %1$d balíkov zdrojov, ktoré spolu obsahujú vyše %2$d štetcov vrátane plateného balíka Digital Atelier. Ide o &lt;strong&gt;jednorazový nákup&lt;/strong&gt;, nevstupujete tým do predplatného.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Zobraziť tento dialóg pri spustení Krity</string>
+  <string name="ok">OK</string>
+  <string name="interface_scale_default">Mierka rozhrania: %d%% (predvolené)</string>
+  <string name="interface_scale">Mierka rozhrania: %d%%</string>
+</resources>

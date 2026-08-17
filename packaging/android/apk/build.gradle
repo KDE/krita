@@ -206,11 +206,11 @@ android {
         // even though buildToolsVersion is deprecated,
         // we should still explicitly state it. Otherwise,
         // AGP will use the default one
-        buildToolsVersion "35.0.0"
+        buildToolsVersion "36.0.0"
 
         ndkVersion "27.3.13750724"
 
-        targetSdkVersion 35
+        targetSdkVersion 36
         minSdkVersion 24
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
         versionName "5.3.4-prealpha"

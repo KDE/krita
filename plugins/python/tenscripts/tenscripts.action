@@ -110,9 +110,9 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="execute_script_10">
+    <Action name="execute_script_0">
       <icon></icon>
-      <text>Execute Script 10</text>
+      <text>Execute Script 0</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>

@@ -48,7 +48,7 @@ class TenScriptsExtension(Extension):
 
     def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5',
-                                      '6', '7', '8', '9', '10']):
+                                      '6', '7', '8', '9', '0']):
             action = window.createAction(
                 "execute_script_" + item,
                 str(i18n("Execute Script {num}")).format(num=item),

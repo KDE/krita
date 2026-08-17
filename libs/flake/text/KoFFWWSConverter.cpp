@@ -1078,6 +1078,7 @@ std::optional<KoFontFamilyWWSRepresentation> KoFFWWSConverter::representationByF
 {
     for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
         auto counter = childBegin(typographic);
+        if (counter == childEnd(typographic)) continue;
         counter++;
         bool singleFamily = counter == childEnd(typographic);
 

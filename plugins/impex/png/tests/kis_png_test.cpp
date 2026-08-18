@@ -33,7 +33,7 @@ void KisPngTest::testWriteonly()
     TestUtil::testImportFromWriteonly(PngMimetype);
 }
 
-void roudTripHdrImage(const KoColorSpace *savingColorSpace)
+void roundTripHdrImage(const KoColorSpace *savingColorSpace, const QString floatingPointConversion = "KeepSame")
 {
     const KoColorSpace * scRGBF32 =
         KoColorSpaceRegistry::instance()->colorSpace(
@@ -66,7 +66,7 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         doc->setCurrentImage(image);
 
         KisPropertiesConfigurationSP exportConfiguration = new KisPropertiesConfiguration();
-        exportConfiguration->setProperty("floatingPointConversionOption", "Rec2100PQ");
+        exportConfiguration->setProperty("floatingPointConversionOption", floatingPointConversion);
         exportConfiguration->setProperty("writeCicpIfPossible", true);
         exportConfiguration->setProperty("storeColorSpaceInfo", true);
         exportConfiguration->setProperty("forceSRGB", false);
@@ -98,7 +98,7 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         image->projection()->pixel(1, 1, &resultColor);
 //        qDebug() << ppVar(resultColor);
 
-        const float tolerance = savingColorSpace->colorDepthId() == Integer8BitsColorDepthID ? 0.02 : 0.01;
+        const float tolerance = floatingPointConversion == "Rec2100HLG"? 0.02: savingColorSpace->colorDepthId() == Integer8BitsColorDepthID ? 0.02 : 0.01;
         bool resultIsValid = true;
         float *resultPtr = reinterpret_cast<float*>(resultColor.data());
         for (int i = 0; i < 4; i++) {
@@ -106,7 +106,7 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         }
 
         if (!resultIsValid) {
-            qDebug() << ppVar(fillColor) << ppVar(resultColor);
+            qDebug() << floatingPointConversion << savingColorSpace->colorDepthId().id() << ppVar(fillColor) << ppVar(resultColor);
         }
         QVERIFY(resultIsValid);
     }
@@ -146,26 +146,32 @@ void KisPngTest::testSaveHDR()
     Q_FOREACH(const KoID &depth, colorDepthIds) {
         Q_FOREACH(const KoColorProfile *profile, profiles) {
             if (profile) {
-                roudTripHdrImage(
+                roundTripHdrImage(
                     KoColorSpaceRegistry::instance()->colorSpace(
                                 RGBAColorModelID.id(),
                                 depth.id(),
-                                profile));
+                                profile), "Rec2100PQ");
             }
         }
     }
 
-    roudTripHdrImage(
+    roundTripHdrImage(
         KoColorSpaceRegistry::instance()->colorSpace(
                     RGBAColorModelID.id(),
                     Integer16BitsColorDepthID.id(),
                     KoColorSpaceRegistry::instance()->p2020PQProfile()));
 
-    roudTripHdrImage(
+    roundTripHdrImage(
         KoColorSpaceRegistry::instance()->colorSpace(
                     RGBAColorModelID.id(),
                     Integer8BitsColorDepthID.id(),
                     KoColorSpaceRegistry::instance()->p2020PQProfile()));
+
+    roundTripHdrImage(
+        KoColorSpaceRegistry::instance()->colorSpace(
+            RGBAColorModelID.id(),
+            Float32BitsColorDepthID.id(),
+            KoColorSpaceRegistry::instance()->p2020G10Profile()), "Rec2100HLG");
 }
 
 Q_DECLARE_METATYPE(ColorPrimaries)

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2025-10-04 21:46+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -21355,7 +21355,7 @@ msgid "Node Rename"
 msgstr "Denumire:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21696,60 +21696,60 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "&Adaugă la selecția curentă"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "Importă imagine"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fundal"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Plan"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Salvează planul ca imagine..."
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Alfa"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Imagine nouă"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Rezoluția imaginii"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21758,19 +21758,19 @@ msgstr[0] "&Adaugă plan..."
 msgstr[1] "&Adaugă plan..."
 msgstr[2] "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotește imaginea"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Modele"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21779,7 +21779,7 @@ msgstr[0] "Șterge plan"
 msgstr[1] "Șterge plan"
 msgstr[2] "Șterge plan"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -21787,7 +21787,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Taie forme"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21796,51 +21796,51 @@ msgstr[0] "&Adaugă plan..."
 msgstr[1] "&Adaugă plan..."
 msgstr[2] "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Imagine nouă"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 #, fuzzy
 #| msgid "Profile:"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 #, fuzzy
 #| msgid "Profile:"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -64697,7 +64697,7 @@ msgstr "Preconfigurări:"
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "Preconfigurări:"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -64828,12 +64828,12 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Creează obiect"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
 #, fuzzy, kde-format
 #| msgid "Create object"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "Creează obiect"
 
 #: plugins/python/tenscripts/tenscripts.py:27

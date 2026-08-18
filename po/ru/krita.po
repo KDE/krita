@@ -82,7 +82,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2026-08-06 10:39+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -21451,7 +21451,7 @@ msgstr ""
 "переименование узла"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr ""
@@ -21816,67 +21816,67 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "Использовать палитру цветов, если цветов не больше"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, kde-format
 msgid "Imported Image"
 msgstr "Импортированное изображение"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "Обычный слой"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr ""
 "Кадрирование изображения\n"
 "кадрирование изображения"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 "Удаление неиспользованных данных\n"
 "удаление неиспользованных данных"
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 "Кадрирование слоя\n"
 "кадрирование слоя"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 "Кадрирование маски\n"
 "кадрирование маски"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 "Изменение размера изображения\n"
 "изменение размера изображения"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 "Изменение разрешения изображения\n"
 "изменение разрешения изображения"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21894,21 +21894,21 @@ msgstr[3] ""
 "Масштабирование слоя\n"
 "масштабирование слоя"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 "Поворот изображения\n"
 "поворот изображения"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 "Поворот маски\n"
 "поворот маски"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21926,14 +21926,14 @@ msgstr[3] ""
 "Поворот слоя\n"
 "поворот слоя"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 "Сдвиг маски\n"
 "сдвиг маски"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21951,21 +21951,21 @@ msgstr[3] ""
 "Сдвиг слоя\n"
 "сдвиг слоя"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Сдвиг изображения\n"
 "сдвиг изображения"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 "Преобразование цветового пространства слоя\n"
 "преобразование цветового пространства слоя"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
@@ -21973,35 +21973,35 @@ msgstr ""
 "преобразование цветового пространства изображения"
 
 # BUGME: is it "color space of projection"? --aspotashev
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 "Преобразование цветового пространства проекции\n"
 "преобразование цветового пространства проекции"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 "Унификация цветового пространства слоёв\n"
 "унификацию цветового пространства слоёв"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 "Назначение профиля слою\n"
 "назначение профиля слою"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 "Назначение профиля\n"
 "назначение профиля"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -66157,9 +66157,11 @@ msgstr "Активировать профиль кисти 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Activate Brush Preset 10"
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "Активировать профиль кисти 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -66288,11 +66290,13 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Выполнить сценарий 9"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Execute Script 10"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "Выполнить сценарий 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27

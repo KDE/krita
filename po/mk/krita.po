@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -21365,7 +21365,7 @@ msgid "Node Rename"
 msgstr "Име :"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21709,60 +21709,60 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr ""
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "Наслов :"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Отстрани табулатор"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Создади шаблон"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Преглед на страна"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Создади шаблон"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Отстрани шаблон"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Колони"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Отстрани табулатор"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21771,19 +21771,19 @@ msgstr[0] "Создади шаблон"
 msgstr[1] "Создади шаблон"
 msgstr[2] "Создади шаблон"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Колони"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Избери..."
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21792,13 +21792,13 @@ msgstr[0] "Создади шаблон"
 msgstr[1] "Создади шаблон"
 msgstr[2] "Создади шаблон"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Отстрани шаблон"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21807,49 +21807,49 @@ msgstr[0] "Отстрани шаблон"
 msgstr[1] "Отстрани шаблон"
 msgstr[2] "Отстрани шаблон"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Отстрани шаблон"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Создади шаблон"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Колони:"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Создади шаблон"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Создади шаблон"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "inch"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Име :"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -64776,7 +64776,7 @@ msgstr "Хоризонтално"
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "Хоризонтално"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -64897,11 +64897,11 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Скрипта за извршување."
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "Скрипта за извршување."
 
 #: plugins/python/tenscripts/tenscripts.py:27

@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
-"PO-Revision-Date: 2026-08-06 13:24+0300\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"PO-Revision-Date: 2026-08-15 07:42+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21093,7 +21093,7 @@ msgid "Node Rename"
 msgstr "שינוי שם מפרק"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "שינוי גודל תמונה"
@@ -21425,55 +21425,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "להשתמש בצבע מותאם אישית לרקע הבורר."
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, kde-format
 msgid "Imported Image"
 msgstr "תמונה מיובאת"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "רקע"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "שכבת צבע"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "חיתוך תמונה"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr "ניפוי נתונים שלא בשימוש"
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "חיתוך שכבה"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "מסכת חיתוך"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "שינוי קנה מידה לתמונה"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "שינוי רזולוציית התמונה"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21483,17 +21483,17 @@ msgstr[1] "שינוי קנה מידה של שכבות"
 msgstr[2] "שינוי קנה מידה של %1 שכבות"
 msgstr[3] "שינוי קנה מידה של %1 שכבות"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "סיבוב התמונה"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "מסכת סיבוב"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21503,12 +21503,12 @@ msgstr[1] "סיבוב שתי שכבות"
 msgstr[2] "סיבוב %1 שכבות"
 msgstr[3] "סיבוב %1 שכבות"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "מסכת גזירה"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21518,43 +21518,43 @@ msgstr[1] "גזירת שתי שכבות"
 msgstr[2] "גזירת %1 שכבות"
 msgstr[3] "גזירת %1 שכבות"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "גזירת תמונה"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "הוס&פת תמונה בתור שכבה..."
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "המרת מרחב צבע של תמונה"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "המרת מרחב צבע של היטל"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "איחוד מרחבי צבע של שכבות"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "הקצאת פרופיל לשכבה"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "הקצאת פרופיל"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "חיתוך בחירות"
@@ -54816,7 +54816,7 @@ msgstr "פעיל"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr ""
+msgstr "מצב DCT משתנה (למשל לתמונות מצולמות)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, kde-format
@@ -55457,7 +55457,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:650
 #, kde-format
 msgid "Keep color of invisible pixels"
-msgstr ""
+msgstr "לשמור על הצבע של פיקסלים שקופים"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
@@ -55470,10 +55470,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "סדר קבוצות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:670
@@ -55489,7 +55489,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr ""
+msgstr "כרומה-מלומה"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
@@ -55584,7 +55584,7 @@ msgstr "קידוד מדורג"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
+msgstr "הפעלת או כיבוי קידוד מדורג למצב מודולרי."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
@@ -55649,7 +55649,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr ""
+msgstr "להשתמש בלוח צבעים ל־… צבעים או פחות"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:889
@@ -56249,9 +56249,9 @@ msgstr "עמוד %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, PDFImportWidgetBase)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "PDFImportWidget"
-msgstr "ייצוא תמונה"
+msgstr "וידג׳ט ייבוא PDF"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:24
@@ -56420,7 +56420,7 @@ msgstr "גודל קובץ קטן"
 #: plugins/impex/png/kis_wdg_options_png.ui:153
 #, kde-format
 msgid "Save as HDR image (Rec. 2020 PQ)"
-msgstr ""
+msgstr "שמירה כתמונת טווח דינמי רחב (HDR - Rec. 2020 PQ)"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/impex/png/kis_wdg_options_png.ui:167
@@ -56433,7 +56433,7 @@ msgstr "דחיסה (ללא אובדן איכות): "
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:127
 #, kde-format
 msgid "Disable to get smaller files if your image has no transparency"
-msgstr ""
+msgstr "אפשר לכבות כדי שהקבצים יהיו קטנים יותר אם בתמונה שלך אין שקיפות"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:181
@@ -56451,7 +56451,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:184
 #, kde-format
 msgid "Store alpha channel (transparency)"
-msgstr ""
+msgstr "אחסון ערוץ האלפא (שקיפות)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:194
@@ -56490,7 +56490,7 @@ msgstr "חתימה עם נתוני היוצרים"
 #: plugins/impex/png/kis_wdg_options_png.ui:214
 #, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr ""
+msgstr "אילוץ המרה ל־8 סיביות לערוץ"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -57847,9 +57847,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:483
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alpha Plane Quality"
-msgstr "בחירה"
+msgstr "איכות מישור שקיפות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
@@ -63535,9 +63535,11 @@ msgstr "הפעלת ערכת מכחולים 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Activate Brush Preset 10"
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "הפעלת ערכת מכחולים 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -63658,11 +63660,13 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "הרצת סקריפט 9"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Execute Script 10"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "הרצת סקריפט 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27

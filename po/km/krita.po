@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -21402,7 +21402,7 @@ msgid "Node Rename"
 msgstr "ឈ្មោះ ៖"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21750,14 +21750,14 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "យក​ផ្ទៃ​ខាងក្រោយ​ដែល​បាន​ជ្រើស​បច្ចុប្បន្ន​ចេញ"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "នាំ​ចូល​រូបភាព"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -21765,79 +21765,79 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "ផ្ទៃ​ខាងក្រោយ​"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "ស្រទាប់​គូរ"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "​ច្រឹប​រូបភាព"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "ដាក់​ស្រទាប់​ជា​ក្រុម"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "ធ្វើ​ឲ្យ​របាំង​មិន​ច្បាស់"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "ធ្វើ​​មាត្រដ្ឋាន រូបភាព"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "គុណភាព​បង្ហាញ​រូបភាព"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "ធ្វើ​មាត្រដ្ឋាន​ស្រទាប់"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "បង្វិល​រូបភាព"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "បង្វើល​ផ្ទាំង​គំនូរ​ទៅ​ឆ្វេង​"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "បង្វិល​ស្រទាប់"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "ធ្វើ​ឲ្យ​រូបរាង​រលូន​"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -21845,51 +21845,51 @@ msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "កាត់​ស្រទាប់"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "កាត់​រូបភាព​"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "បម្លែង ប្រភេទ​រូបភាព"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "បម្លែង ប្រភេទ​រូបភាព"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "បម្លែង​ចន្លោះ​ពណ៌​នៃ​ការ​បញ្ចាំង"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "បម្លែង ប្រភេទ​រូបភាព"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 #, fuzzy
 #| msgid "Assign Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "ផ្ដល់​ទម្រង់​"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 #, fuzzy
 #| msgid "Assign Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "ផ្ដល់​ទម្រង់​"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -64945,7 +64945,7 @@ msgstr "ទំហំ​ជក់"
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "ទំហំ​ជក់"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -65066,11 +65066,11 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "បង្កើត"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "បង្កើត"
 
 #: plugins/python/tenscripts/tenscripts.py:27

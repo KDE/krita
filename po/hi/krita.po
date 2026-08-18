@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -21541,7 +21541,7 @@ msgid "Node Rename"
 msgstr "नोड का नाम बदलें"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "चित्र का आकार बदलें"
@@ -21888,13 +21888,13 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "चयनकर्ता पृष्ठभूमि के लिए तदनुकूल रंग का प्रयोग करें।"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, kde-format
 msgid "Imported Image"
 msgstr "आयात किया हुआ चित्र"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -21902,42 +21902,42 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "पृष्ठभूमि"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "चित्रकारी परत"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "चित्र काटें"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "परत कतरें"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "काँट-छाँट मास्क"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "चित्र का आकार बदलें"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "चित्र का रेज़ोल्यूशन बदलें"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -21947,17 +21947,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "परत का आकार बदलें"
 msgstr[1] "परत का आकार बदलें"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "चित्र घुमाएँ"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "मास्क घुमाएँ"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -21967,12 +21967,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "परत घुमाएं"
 msgstr[1] "परत घुमाएं"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "मास्क का अपरूपण"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -21982,27 +21982,27 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "परत अपरूपण"
 msgstr[1] "परत अपरूपण"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "चित्र अपरूपण"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "परत का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "चित्र का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "प्रोजेक्शन का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -22010,17 +22010,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "परत का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "परत को प्रोफ़ाइल निर्दिष्ट करें"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "प्रोफ़ाइल निर्दिष्ट करें"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "चयन को काँट छाँट करें"
@@ -65312,9 +65312,11 @@ msgstr "ब्रश प्रीसेट ९ सक्रिय करें"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Activate Brush Preset 10"
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "ब्रश प्रीसेट १० सक्रिय करें"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -65435,11 +65437,13 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "स्क्रिप्ट चलाएं ९"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Execute Script 10"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "स्क्रिप्ट चलाएं १०"
 
 #: plugins/python/tenscripts/tenscripts.py:27

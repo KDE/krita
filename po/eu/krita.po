@@ -1,7 +1,7 @@
 # Translation for krita.po to Euskara/Basque (eu).
 # Copyright (C) 2005-2025 This file is copyright:
 # This package is distributed under the same license as the krita package.
-# SPDX-FileCopyrightText: 2024, 2025, 2026 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2024-2026 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
 #
 # Translators:
 # --- kritalibs
@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
-"PO-Revision-Date: 2026-01-04 16:33+0100\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"PO-Revision-Date: 2026-08-17 11:24+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -21510,7 +21510,7 @@ msgid "Node Rename"
 msgstr "Berrizendatu nodoa"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Aldatu irudia tamainaz"
@@ -21856,55 +21856,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "Erabili paleta ... koloretarako edo gutxiagorako"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, kde-format
 msgid "Imported Image"
 msgstr "Inportatutako irudia"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Atzeko planoa"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "Margo geruza"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Moztu irudia"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Moztu geruza"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Moztu maskara"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Eskalatu irudia"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Aldatu irudi-bereizmena"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21912,17 +21912,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Eskalatu geruza"
 msgstr[1] "Eskalatu %1 geruza"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Biratu irudia"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Biratu maskara"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21930,12 +21930,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Biratu geruza"
 msgstr[1] "Biratu %1 geruza"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Zizailatu maskara"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21943,27 +21943,27 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Zizailatu geruza"
 msgstr[1] "Zizailatu %1 geruza"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Zizailatu irudia"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Bihurtu geruzako kolore-eremua"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Bihurtu irudiko kolore-eremua"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Bihurtu proiekzioko kolore-eremua"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -21971,17 +21971,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Bihurtu geruzako kolore-eremua"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Esleitu profila geruzari"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Esleitu profila"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Moztu hautapenak"
@@ -59988,7 +59988,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
 #, kde-format
 msgid " (caution, pierced brush!)"
-msgstr " (kontzu, pintzel zulatua!)"
+msgstr " (kontuz, pintzel zulatua!)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:112
 #, fuzzy, kde-format
@@ -65535,9 +65535,11 @@ msgstr "Aktibatu 9. pintzel aurrezarpena"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Activate Brush Preset 10"
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "Aktibatu 10. pintzel aurrezarpena"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -65665,11 +65667,13 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Exekutatu 9. gidoia"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Execute Script 10"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "Exekutatu 10. gidoia"
 
 #: plugins/python/tenscripts/tenscripts.py:27

@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2026-04-22 22:20+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
@@ -21088,7 +21088,7 @@ msgid "Node Rename"
 msgstr ""
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Změnit velikost"
@@ -21418,55 +21418,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr ""
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, kde-format
 msgid "Imported Image"
 msgstr "Importovaný obrázek"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadí"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "Vrstva malby"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Ořezat obrázek"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Ořezat vrstvu"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Ořezat masku"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Změnit měřítko obrázku"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Změnit rozlišení obrázku"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21475,17 +21475,17 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Otočit obrázek"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Otočit masku"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21494,12 +21494,12 @@ msgstr[0] "Otočit vrstvu"
 msgstr[1] "Otočit %1 vrstvy"
 msgstr[2] "Otočit %1 vrstev"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Zkosit masku"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21508,42 +21508,42 @@ msgstr[0] "Zkosit vrstvu"
 msgstr[1] "Zkosit %1 vrstvy"
 msgstr[2] "Zkosit %1 vrstev"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Zkosit obrázek"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Převést barevný prostor vrstvy"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Převést barevný prostor obrázku"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Převést barevné prostředí projekce"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Přiřadit profil vrstvě"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Přiřadit profil"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Ořezat výběr"
@@ -63510,9 +63510,11 @@ msgstr "Aktivovat přednastavení štětce 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Activate Brush Preset 10"
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "Aktivovat přednastavení štětce 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -63633,11 +63635,13 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Spustit skript 9"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Execute Script 10"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "Spustit skript 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27

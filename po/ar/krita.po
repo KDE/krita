@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
-"PO-Revision-Date: 2026-08-10 16:44+0400\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"PO-Revision-Date: 2026-08-17 19:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -21091,7 +21091,7 @@ msgid "Node Rename"
 msgstr "تسمية العقدة الجديدة"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "تغيير مقاس الصّورة"
@@ -21347,11 +21347,10 @@ msgid "Pass Through"
 msgstr "مرور"
 
 #: libs/image/kis_hdr_metadata_models.cpp:51
-#, fuzzy, kde-format
-#| msgid " cd/m²"
+#, kde-format
 msgctxt "Image reference white value"
 msgid "%1 cd/m²"
-msgstr " شمعة/م²"
+msgstr "%1 شمعة/م²"
 
 #: libs/image/kis_hdr_metadata_models.cpp:63
 #, fuzzy, kde-format
@@ -21433,55 +21432,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "اِستخدِم لوح الألوان لـ ... ألوان أو أقل"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, kde-format
 msgid "Imported Image"
 msgstr "صورة مستوردة"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "الخلفيّة"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, kde-format
 msgid "Paint Layer"
 msgstr "قناع طلاء"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "اقتصاص الصّورة"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr "أزل البيانات غير المستخدمة"
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "اقتصاص الطّبقة"
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "اقتصاص القناع"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "تغيير حجم الصّورة"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "تغيير ميز الصّور"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21493,17 +21492,17 @@ msgstr[3] "غيّر حجم %1 طبقات"
 msgstr[4] "غيّر حجم %1 طبقة"
 msgstr[5] "غيّر حجم %1 طبقة"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "تدوير الصّورة"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "تدوير القناع"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21515,12 +21514,12 @@ msgstr[3] "دوّر %1 طبقات"
 msgstr[4] "دوّر %1 طبقة"
 msgstr[5] "دوّر %1 طبقة"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "امشط القناع"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21532,42 +21531,42 @@ msgstr[3] "قصّ %1 طبقات"
 msgstr[4] "قصّ %1 طبقة"
 msgstr[5] "قصّ %1 طبقة"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "قصّ الصورة"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "حوّل فضاء ألوان الطّبقة"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "تحويل فضاء الصّورة اللونيّ"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "حَوِّل فضاء لون الإسقاط"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "وحِّد فضاء لون الطبقات"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "عَيِّن تشكيلة للطبقة"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "تعيين خصائص"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "اقتصاص التّحديدات"
@@ -27228,23 +27227,17 @@ msgid "Center"
 msgstr "الوسط"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:339
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgid "Top"
 msgstr "أعلى"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:340
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Top left"
+#, kde-format
 msgid "Top Left"
 msgstr "أعلى اليسار"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:341
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Top right"
+#, kde-format
 msgid "Top Right"
 msgstr "أعلى اليمين"
 
@@ -31131,9 +31124,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
 #: libs/ui/forms/wdgimageproperties.ui:362
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Calculate"
+#, kde-format
 msgid "Calculate"
 msgstr "احسب"
 
@@ -64802,9 +64793,11 @@ msgstr "فعّل الفرشاة مسبقة الضّبط 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Activate Brush Preset 10"
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "فعّل الفرشاة مسبقة الضّبط 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -64928,11 +64921,13 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "نفّذ السّكربت 9"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Execute Script 10"
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "نفّذ السّكربت 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27

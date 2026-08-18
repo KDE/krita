@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-15 00:43+0000\n"
+"POT-Creation-Date: 2026-08-18 00:42+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -21253,7 +21253,7 @@ msgid "Node Rename"
 msgstr "Tên:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:869
+#: libs/image/kis_image.cc:867
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21594,93 +21594,93 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "&Thêm vào lựa chọn"
 
-#: libs/image/kis_image.cc:422
+#: libs/image/kis_image.cc:420
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "Nhập ảnh"
 
 #. i18n.
-#: libs/image/kis_image.cc:765 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "nền"
 
-#: libs/image/kis_image.cc:769 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Layer"
 
-#: libs/image/kis_image.cc:868
+#: libs/image/kis_image.cc:866
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Cắt ảnh"
 
-#: libs/image/kis_image.cc:915
+#: libs/image/kis_image.cc:913
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1019
+#: libs/image/kis_image.cc:1017
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Layer &trước..."
 
-#: libs/image/kis_image.cc:1020
+#: libs/image/kis_image.cc:1018
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Xanh nước biển"
 
-#: libs/image/kis_image.cc:1057
+#: libs/image/kis_image.cc:1055
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Phóng ảnh"
 
-#: libs/image/kis_image.cc:1058
+#: libs/image/kis_image.cc:1056
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Độ phân giải ảnh"
 
-#: libs/image/kis_image.cc:1108
+#: libs/image/kis_image.cc:1106
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "Phóng Lớp"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1245
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Xoay ảnh"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Xoay ảnh"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "Xoay Lớp"
 
-#: libs/image/kis_image.cc:1361
+#: libs/image/kis_image.cc:1359
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Làm méo các hình"
 
-#: libs/image/kis_image.cc:1365
+#: libs/image/kis_image.cc:1363
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -21688,49 +21688,49 @@ msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "Làm méo Lớp"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Làm méo ảnh"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Chuyển đổi loại ảnh"
 
-#: libs/image/kis_image.cc:1441
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Chuyển đổi loại ảnh"
 
-#: libs/image/kis_image.cc:1442
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Chuyển đổi loại ảnh"
 
-#: libs/image/kis_image.cc:1494
+#: libs/image/kis_image.cc:1492
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Chuyển đổi loại ảnh"
 
-#: libs/image/kis_image.cc:1524
+#: libs/image/kis_image.cc:1522
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Xuống dưới cùng"
 
-#: libs/image/kis_image.cc:1565
+#: libs/image/kis_image.cc:1563
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Khoảng màu"
 
-#: libs/image/kis_image.cc:2637
+#: libs/image/kis_image.cc:2635
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -64459,7 +64459,7 @@ msgstr "Định sẵn:"
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Activate Brush Preset 10"
+msgid "Activate Brush Preset 0"
 msgstr "Định sẵn:"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
@@ -64580,11 +64580,11 @@ msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Mở tài liệu"
 
-#. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Execute Script 10"
+msgid "Execute Script 0"
 msgstr "Mở tài liệu"
 
 #: plugins/python/tenscripts/tenscripts.py:27

@@ -43,6 +43,7 @@ Name[zh_CN]=图层导出工具
 Name[zh_TW]=匯出圖層
 Comment=Plugin to export layers from a document
 Comment[ar]=ملحقة لتصدير الطبقات من مستند
+Comment[bg]=Плугин за експортиране на слоеве от документ
 Comment[ca]=Un connector per a exportar les capes d'un document
 Comment[ca@valencia]=Un connector per a exportar les capes d'un document
 Comment[cs]=Modul pro export vrstev z dokumentu

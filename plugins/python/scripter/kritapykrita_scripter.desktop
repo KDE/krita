@@ -44,6 +44,7 @@ Name[zh_CN]=脚本调试工具
 Name[zh_TW]=指令稿執行器
 Comment=Plugin to execute ad-hoc Python code
 Comment[ar]=ملحقة لتنفيذ شيفرة «بيثون» مخصّصة
+Comment[bg]=Допълнение за изпълнение на произволен Python код
 Comment[ca]=Connector per a executar codi «ad hoc» en Python
 Comment[ca@valencia]=Connector per a executar codi «ad hoc» en Python
 Comment[cs]=Zásuvný modul pro vykonávání nahodilého kódu Pythonu

@@ -42,6 +42,7 @@ Name[zh_CN]=罩染画法图像调用面板
 Name[zh_TW]=Krita Photobash 影像
 Comment=A plugin to fetch images from a specified folder. Very useful for photobashing!
 Comment[ar]=ملحقة جلب الصور من مجلد محدد. مفيدة جدًا لـ«فوتوباش»!
+Comment[bg]=Плугин за извличане на изображения от specified папка. Много полезен за photobashing!
 Comment[ca]=Un connector per a obtenir imatges des d'una carpeta específica. Molt útil per a basar-se en les fotografies («foto-bashing»)!
 Comment[ca@valencia]=Un connector per a obtindre imatges des d'una carpeta específica. Molt útil per a basar-se en les fotografies («foto-bashing»)!
 Comment[cs]=Zásuvný modul načítající obrázky ze zadaného adresáře. Velmi užitečný pro photobashing!

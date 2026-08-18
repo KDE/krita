@@ -41,6 +41,7 @@ Name[zh_CN]=选区列表工具面板
 Name[zh_TW]=「選取區域收藏」面板
 Comment=A docker that allow to store a list of selections
 Comment[ar]=رصيف يتيح تخزين قائمة تحديدات
+Comment[bg]=Докер за съхранение на списък с селекции
 Comment[ca]=Un acoblador que permet emmagatzemar una llista de seleccions
 Comment[ca@valencia]=Un acoblador que permet emmagatzemar una llista de seleccions
 Comment[cs]=Dok umožňující uložit seznam výběrů

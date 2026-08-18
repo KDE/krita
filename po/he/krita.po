@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 02:51+0000\n"
-"PO-Revision-Date: 2026-08-06 13:24+0300\n"
+"PO-Revision-Date: 2026-08-15 07:42+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -54506,7 +54506,7 @@ msgstr "פעיל"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr ""
+msgstr "מצב DCT משתנה (למשל לתמונות מצולמות)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, kde-format
@@ -55147,7 +55147,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:650
 #, kde-format
 msgid "Keep color of invisible pixels"
-msgstr ""
+msgstr "לשמור על הצבע של פיקסלים שקופים"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
@@ -55160,10 +55160,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "סדר קבוצות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:670
@@ -55179,7 +55179,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr ""
+msgstr "כרומה-מלומה"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
@@ -55274,7 +55274,7 @@ msgstr "קידוד מדורג"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
+msgstr "הפעלת או כיבוי קידוד מדורג למצב מודולרי."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
@@ -55339,7 +55339,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr ""
+msgstr "להשתמש בלוח צבעים ל־… צבעים או פחות"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:889
@@ -55939,9 +55939,9 @@ msgstr "עמוד %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, PDFImportWidgetBase)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "PDFImportWidget"
-msgstr "ייצוא תמונה"
+msgstr "וידג׳ט ייבוא PDF"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:24
@@ -56110,7 +56110,7 @@ msgstr "גודל קובץ קטן"
 #: plugins/impex/png/kis_wdg_options_png.ui:153
 #, kde-format
 msgid "Save as HDR image (Rec. 2020 PQ)"
-msgstr ""
+msgstr "שמירה כתמונת טווח דינמי רחב (HDR - Rec. 2020 PQ)"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/impex/png/kis_wdg_options_png.ui:167
@@ -56123,7 +56123,7 @@ msgstr "דחיסה (ללא אובדן איכות): "
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:127
 #, kde-format
 msgid "Disable to get smaller files if your image has no transparency"
-msgstr ""
+msgstr "אפשר לכבות כדי שהקבצים יהיו קטנים יותר אם בתמונה שלך אין שקיפות"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:181
@@ -56141,7 +56141,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:184
 #, kde-format
 msgid "Store alpha channel (transparency)"
-msgstr ""
+msgstr "אחסון ערוץ האלפא (שקיפות)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:194
@@ -56180,7 +56180,7 @@ msgstr "חתימה עם נתוני היוצרים"
 #: plugins/impex/png/kis_wdg_options_png.ui:214
 #, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr ""
+msgstr "אילוץ המרה ל־8 סיביות לערוץ"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -57537,9 +57537,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:483
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alpha Plane Quality"
-msgstr "בחירה"
+msgstr "איכות מישור שקיפות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)

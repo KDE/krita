@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 02:51+0000\n"
-"PO-Revision-Date: 2026-07-28 06:27+0200\n"
+"PO-Revision-Date: 2026-08-17 08:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -6623,7 +6623,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/concept-"
 "cookie.gpl"
 msgid "Concept-cookie"
-msgstr ""
+msgstr "Concept-cookie"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl:2
@@ -7114,7 +7114,7 @@ msgstr "ანიმაციის ფერების ნაკრები"
 #, kde-format
 msgctxt "./krita/data/palettes/concept-cookie.gpl"
 msgid "Concept-cookie"
-msgstr ""
+msgstr "Concept-cookie"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/default.gpl:2

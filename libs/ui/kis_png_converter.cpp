@@ -55,6 +55,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_transaction.h>
+#include <kis_hdr_metadata.h>
 
 #include <kis_assert.h>
 
@@ -681,6 +682,28 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         m_image->setResolution(100.0, 100.0);
     }
 
+#if defined(PNG_cLLI_SUPPORTED)
+    KisRelativeContentLightLevelInformation clli;
+    if (png_get_cLLI(png_ptr, info_ptr, &clli.maxContentLightLevel, &clli.maxFrameAverageLightLevel)) {
+        const double refWhiteMultiplier = 1.0/profile->hdrReferenceWhite().value_or(203.0);
+        clli.maxContentLightLevel *= refWhiteMultiplier;
+        clli.maxFrameAverageLightLevel *= refWhiteMultiplier;
+        m_image->setRelativeContentLightLevelInformation(clli);
+    }
+#endif
+
+#if defined(PNG_mDCV_SUPPORTED)
+    KisColorVolumeInformation cvi;
+    if (png_get_mDCV(png_ptr, info_ptr,
+                     &cvi.white.x, &cvi.white.y,
+                     &cvi.red.x, &cvi.red.y,
+                     &cvi.green.x, &cvi.green.y,
+                     &cvi.blue.x, &cvi.blue.y,
+                     &cvi.maxLuminance, &cvi.minLuminance)) {
+        m_image->setColorVolumeInformation(cvi);
+    }
+#endif
+
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
 
@@ -1123,7 +1146,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     const bool sRGB = *device->colorSpace()->profile() == *KoColorSpaceRegistry::instance()->p709SRGBProfile();
-    const bool colorProfilePQ = *device->colorSpace()->profile() == *KoColorSpaceRegistry::instance()->p2020PQProfile();
+    const bool colorProfilePQ = device->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ;
     /*
      * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
      * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
@@ -1262,6 +1285,25 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
 #endif
         }
     }
+#if defined(PNG_cLLI_SUPPORTED)
+    if (colorProfilePQ && m_doc->image().toStrongRef()->relativeContentLightLevelInformation()) {
+        const std::optional<KisRelativeContentLightLevelInformation> clli = m_doc->image().toStrongRef()->relativeContentLightLevelInformation();
+        const double hdrRefWhite = colorProfile->hdrReferenceWhite().value_or(203.0);
+        const double maxcll = clli->maxContentLightLevel * hdrRefWhite;
+        const double maxfall = clli->maxFrameAverageLightLevel * hdrRefWhite;
+        png_set_cLLI(png_ptr, info_ptr, maxcll, maxfall);
+    }
+#endif
+#if defined(PNG_mDCV_SUPPORTED)
+    if (colorProfilePQ && m_doc->image().toStrongRef()->colorVolumeInformation()) {
+        const std::optional<KisColorVolumeInformation> cvi = m_doc->image().toStrongRef()->colorVolumeInformation();
+        png_set_mDCV(png_ptr, info_ptr,
+                     cvi->white.x, cvi->white.y,
+                     cvi->red.x, cvi->red.y,
+                     cvi->green.x,cvi->green.y,
+                     cvi->blue.x, cvi->blue.y, cvi->maxLuminance, cvi->minLuminance);
+    }
+#endif
 
     // save comments from the document information
     // warning: according to the official png spec, the keys need to be capitalized!

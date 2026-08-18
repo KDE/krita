@@ -21,6 +21,9 @@ private Q_SLOTS:
     void testRoundtripCicpIccProfile();
 
     void testLoadPngWithLegacyProfile();
+
+    void testRoundtripHDRMetadata();
+
 };
 
 #endif

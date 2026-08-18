@@ -24,6 +24,10 @@ public:
 
 private Q_SLOTS:
     void on_alpha_toggled(bool checked);
+    void on_conversion_policy_changed();
+
+private:
+    bool m_floatingPoint {false};
 };
 
 class KisPNGExport : public KisImportExportFilter

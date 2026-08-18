@@ -150,6 +150,9 @@ KisWdgOptionsPNG::KisWdgOptionsPNG(QWidget *parent)
     : KisConfigWidget(parent)
 {
     setupUi(this);
+
+    connect(cmbFloatingConversion, SIGNAL(activated(int)), this, SLOT(on_conversion_policy_changed()));
+    connect(chkCICP, SIGNAL(toggled(bool)), this, SLOT(on_conversion_policy_changed()));
 }
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -168,29 +171,29 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
     int cicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag,
                                     static_cast<int>(PRIMARIES_UNSPECIFIED));
-    if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
-        if (cicpPrimaries != PRIMARIES_UNSPECIFIED) {
-            conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode PQ");
-            toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
-                                 " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
-            conversionOptionName << "ApplyPQ";
+    if (cicpPrimaries != PRIMARIES_UNSPECIFIED) {
+        conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode PQ");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
+                             " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
+        conversionOptionName << "ApplyPQ";
 
-            conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode HLG");
-            toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
-                                 " Recommended for images intended for screens which cannot understand PQ");
-            conversionOptionName << "ApplyHLG";
+        conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode HLG");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
+                             " Recommended for images intended for screens which cannot understand PQ");
+        conversionOptionName << "ApplyHLG";
 
-            conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
-            toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428."
-                                 " Krita always opens images like these as linear floating point, this option is there to reverse that");
-            conversionOptionName << "ApplySMPTE428";
-        }
-
-        conversionOptionsList << i18nc("Color space option", "No changes, clip");
-        toolTipList << i18nc("@tooltip", "The image will be converted plainly to 12bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
-        conversionOptionName << "KeepSame";
+        conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428."
+                             " Krita always opens images like these as linear floating point, this option is there to reverse that");
+        conversionOptionName << "ApplySMPTE428";
     }
 
+    conversionOptionsList << i18nc("Color space option", "No changes, clip");
+    toolTipList << i18nc("@tooltip", "The image will be converted plainly to 16bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
+    conversionOptionName << "KeepSame";
+
+
+    cmbFloatingConversion->clear();
     cmbFloatingConversion->addItems(conversionOptionsList);
     for (int i=0; i< toolTipList.size(); i++) {
         cmbFloatingConversion->setItemData(i, toolTipList.at(i), Qt::ToolTipRole);
@@ -204,12 +207,13 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     }
     const QString colorDepthId =
         cfg->getString(KisImportExportFilter::ColorDepthIDTag);
-    if (colorDepthId == Float16BitsColorDepthID.id()
+    if ((colorDepthId == Float16BitsColorDepthID.id()
         || colorDepthId == Float32BitsColorDepthID.id()
-        || colorDepthId == Float64BitsColorDepthID.id()) {
-        cmbFloatingConversion->setEnabled(true);
+        || colorDepthId == Float64BitsColorDepthID.id())
+        && cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
+        m_floatingPoint = true;
     } else {
-        cmbFloatingConversion->setEnabled(false);
+        m_floatingPoint = false;
     }
 
     gbSaveColorInfo->setChecked(cfg->getBool("storeColorSpaceInfo", true));
@@ -252,6 +256,8 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     bnTransparencyFillColor->setColor(cfg->getColor("transparencyFillcolor", background));
 
     chkDownsample->setChecked(cfg->getBool("downsample", false));
+
+    on_conversion_policy_changed();
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
@@ -263,7 +269,7 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     bool interlace = interlacing->isChecked();
     int compression = (int)compressionLevel->value();
     bool tryToSaveAsIndexed = this->tryToSaveAsIndexed->isChecked();
-    bool forceSRGB = chkForceSRGB->isChecked();
+    bool forceSRGB = chkForceSRGB->isEnabled()? chkForceSRGB->isChecked(): false;
     bool storeAuthor = chkAuthor->isChecked();
     bool storeMetaData = chkMetaData->isChecked();
     bool downsample = chkDownsample->isChecked();
@@ -296,6 +302,17 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
 void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
 {
     bnTransparencyFillColor->setEnabled(!checked);
+}
+
+void KisWdgOptionsPNG::on_conversion_policy_changed()
+{
+    cmbFloatingConversion->setEnabled(m_floatingPoint && chkCICP->isChecked());
+    const QString conversionMode = cmbFloatingConversion->currentData(Qt::UserRole+1).toString();
+    if (cmbFloatingConversion->isEnabled()) {
+        chkForceSRGB->setEnabled(conversionMode == "KeepSame");
+    } else {
+        chkForceSRGB->setEnabled(true);
+    }
 }
 
 #include "kis_png_export.moc"

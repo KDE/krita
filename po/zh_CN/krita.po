@@ -24748,6 +24748,8 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"不支持的音频参数，请尝试使用更常见的采样格式、采样率和声道数重新编码您的音频"
+"文件"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -24757,22 +24759,22 @@ msgstr "不支持的格式"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
 #, kde-format
 msgid "Video encoder:"
-msgstr ""
+msgstr "视频编码器："
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
 #, kde-format
 msgid "Video bitrate:"
-msgstr ""
+msgstr "视频码率："
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
 #, kde-format
 msgid "Audio encoder:"
-msgstr ""
+msgstr "音频编码器："
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
 #, kde-format
 msgid "Audio bitrate:"
-msgstr ""
+msgstr "音频码率："
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -24885,13 +24887,13 @@ msgstr "GIF 动画图像的每秒帧数不能超过 50，它将被降低到每�
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "高于 30 的帧率目前尚未得到广泛支持。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "大于 1920 像素的分辨率目前尚未得到广泛支持。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2305
@@ -24903,7 +24905,7 @@ msgstr "警告："
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
-msgstr ""
+msgstr "导出可能失败，某些设备可能无法播放导出的视频。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:971
 #, kde-format
@@ -25176,12 +25178,12 @@ msgstr "内部错误 (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV：%1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
 #, kde-format
 msgid "This format has no preferences."
-msgstr ""
+msgstr "此格式没有首选项。"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25191,7 +25193,7 @@ msgstr "没有找到帧文件"
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
 #, kde-format
 msgid "Rendering animation..."
-msgstr ""
+msgstr "导出动画..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25201,7 +25203,7 @@ msgstr "没有找到所选格式的编码器"
 #: libs/ui/animation/KisVideoSaver.cpp:110
 #, kde-format
 msgid "Error preparing audio file: %1"
-msgstr ""
+msgstr "准备音频文件时发生错误：%1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26271,13 +26273,13 @@ msgstr "结束帧编号："
 #: libs/ui/animation/wdg_animationrenderer.ui:72
 #, kde-format
 msgid "Images"
-msgstr ""
+msgstr "图像"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
 #, kde-format
 msgid "Video"
-msgstr ""
+msgstr "视频"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -54230,7 +54232,7 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved in both dimensions."
 msgstr ""
-"图像的亮度信息将保留完整分辨率，而颜色信息的分辨率则会在水平和垂直方向上同时"
+"图像的亮度信息将保留完整分辨率，而色度信息的分辨率则会在水平和垂直方向上同时"
 "减半。"
 
 #: plugins/impex/heif/HeifExport.cpp:540
@@ -54240,14 +54242,14 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved horizontally."
 msgstr ""
-"图像的亮度信息将保留完整分辨率，而颜色信息的分辨率则会在水平方向上减半。"
+"图像的亮度信息将保留完整分辨率，而色度信息的分辨率则会在水平方向上减半。"
 
 #: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr "图像将保留完整的亮度和颜色分辨率。"
+msgstr "图像将保留完整的亮度和色度分辨率。"
 
 #: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
@@ -69052,9 +69054,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "此 XCF 文件版本太新。Krita 不支持 GIMP 2.9 或更高版本保存的 XCF 文件。"

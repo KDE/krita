@@ -8,6 +8,7 @@
 #define KIS_CANVAS_RESOURCE_PROVIDER_H_
 
 #include <QObject>
+#include <QPointF>
 
 #include <KoColor.h>
 #include <KoID.h>

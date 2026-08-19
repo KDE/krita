@@ -130,8 +130,15 @@ protected:
 private:
     void paint(KisPaintInformation &info );
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
-                                                   QPointF tangent1, QPointF tangent2 
-                                                 );
+                                                    QPointF tangent1, QPointF tangent2 
+                                                  );
+
+    /**
+     * Publishes the current brush position (in image pixel coordinates) to
+     * the canvas resource provider, so scripts can follow where the brush
+     * actually is during a stroke (including stabilization delay).
+     */
+    void updateCurrentBrushPosition(const QPointF &pixelPos);
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();

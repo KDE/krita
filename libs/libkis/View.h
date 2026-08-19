@@ -239,6 +239,15 @@ Application.activeWindow().activeView().setForeGroundColor(color)
     void setBrushRotation(qreal brushRotation);
 
     /**
+     * @brief return the current brush position on the canvas, in canvas
+     * widget coordinates. This is where the brush actually is during a
+     * stroke, which lags the pointer when brush smoothing is active.
+     *
+     * @return the brush position, or a null QPointF when no stroke is active
+     */
+    QPointF brushPosition() const;
+
+    /**
      * @brief return the current flow for brush
      *
      * @return the brush flow value

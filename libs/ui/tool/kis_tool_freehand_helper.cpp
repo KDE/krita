@@ -372,6 +372,16 @@ KoCanvasResourceProvider *KisToolFreehandHelper::resourceManager() const
     return m_d->resourceManager;
 }
 
+void KisToolFreehandHelper::updateCurrentBrushPosition(const QPointF &pixelPos)
+{
+    // Store on the flake-level resource provider (the only provider this
+    // helper holds), keyed by a Krita-specific resource id.
+    if (KoCanvasResourceProvider *manager = resourceManager()) {
+        manager->setResource(KoCanvasResource::CurrentBrushPosition,
+                             QVariant::fromValue(pixelPos));
+    }
+}
+
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                QPointF tangent1, QPointF tangent2)
 {
@@ -1007,6 +1017,7 @@ qreal KisToolFreehandHelper::currentPhysicalZoom() const
 void KisToolFreehandHelper::paintAt(int strokeInfoId,
                                     const KisPaintInformation &pi)
 {
+    updateCurrentBrushPosition(pi.pos());
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(strokeInfoId, pi));
@@ -1017,6 +1028,7 @@ void KisToolFreehandHelper::paintLine(int strokeInfoId,
                                       const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
+    updateCurrentBrushPosition(pi2.pos());
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(strokeInfoId, pi1, pi2));
@@ -1029,6 +1041,7 @@ void KisToolFreehandHelper::paintBezierCurve(int strokeInfoId,
                                              const QPointF &control2,
                                              const KisPaintInformation &pi2)
 {
+    updateCurrentBrushPosition(pi2.pos());
 
 #ifdef DEBUG_BEZIER_CURVES
     KisPaintInformation tpi1;

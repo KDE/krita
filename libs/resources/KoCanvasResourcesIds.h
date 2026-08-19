@@ -60,6 +60,9 @@ enum CanvasResourceId {
     EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
     EffectivePhysicalZoom, ///<-Used by tool for displaying purposes
     BrushRotation,
+    ///< QPointF, the current brush centre in image pixel coordinates,
+    ///< updated while a stroke is being painted.
+    CurrentBrushPosition,
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     DecorationThickness, ///< Integer, the thickness of single px decorations, will be adjusted by HiDPI settings. Because most of our decorations are drawn without anti-aliasing, this is an integer, so that line thickness won't vary as the painter tries round the floating point.
     UsingOtherColor,    ///<- a boolean that is controlled by the tool invocation action

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"POT-Creation-Date: 2026-08-19 16:03+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -67267,77 +67267,81 @@ msgstr ""
 "단축키는 Krita 설정의 <i>키보드 단축키</i> 인터페이스에서 변경할 수 있습니다."
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
+#: plugins/python/tenscripts/tenscripts.action:8
 #, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
 msgstr "스크립트 10개"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:7
+#: plugins/python/tenscripts/tenscripts.action:21
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
 msgstr "스크립트 1 실행"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:19
+#: plugins/python/tenscripts/tenscripts.action:33
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
 msgstr "스크립트 2 실행"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:31
+#: plugins/python/tenscripts/tenscripts.action:45
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
 msgstr "스크립트 3 실행"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:43
+#: plugins/python/tenscripts/tenscripts.action:57
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
 msgstr "스크립트 4 실행"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:55
+#: plugins/python/tenscripts/tenscripts.action:69
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
 msgstr "스크립트 5 실행"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:67
+#: plugins/python/tenscripts/tenscripts.action:81
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
 msgstr "스크립트 6 실행"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:79
+#: plugins/python/tenscripts/tenscripts.action:93
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
 msgstr "스크립트 7 실행"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:91
+#: plugins/python/tenscripts/tenscripts.action:105
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
 msgstr "스크립트 8 실행"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:103
+#: plugins/python/tenscripts/tenscripts.action:117
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
 msgstr "스크립트 9 실행"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:115
+#: plugins/python/tenscripts/tenscripts.action:129
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Execute Script 10"

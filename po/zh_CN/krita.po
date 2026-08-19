@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"POT-Creation-Date: 2026-08-19 16:03+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -21092,11 +21092,9 @@ msgid "Change Clone Layers"
 msgstr "更改克隆图层"
 
 #: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
-#, fuzzy
-#| msgid "HDR Metadata..."
 msgctxt "(qtundo-format)"
 msgid "Set HDR Metadata"
-msgstr "HDR 元数据..."
+msgstr ""
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
@@ -21304,32 +21302,28 @@ msgid "Pass Through"
 msgstr "穿透"
 
 #: libs/image/kis_hdr_metadata_models.cpp:51
-#, fuzzy, kde-format
-#| msgid " cd/m²"
+#, kde-format
 msgctxt "Image reference white value"
 msgid "%1 cd/m²"
-msgstr " cd/m²"
+msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:63
-#, fuzzy, kde-format
-#| msgid "Luminance"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "XYZ Luminance"
-msgstr "亮度"
+msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:64
-#, fuzzy, kde-format
-#| msgid "Rec 2020 PQ"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "Rec 2020 Per Component"
-msgstr "Rec 2020 PQ"
+msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:65
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "RGB Per Component"
-msgstr "颜色分量："
+msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:67
 #, kde-format
@@ -21384,11 +21378,10 @@ msgid "Reset color volume to the values defined by DCI-P3 D65"
 msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:123
-#, fuzzy, kde-format
-#| msgid "Use color palette for ... colors or less"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
-msgstr "为 ... 种或更少的颜色数量使用调色板"
+msgstr ""
 
 #: libs/image/kis_image.cc:420
 #, kde-format
@@ -22146,16 +22139,12 @@ msgstr ""
 "图像包含 <b>%1</b> 类型的填充图层，Krita 不支持这种图层，它将被转换为颜料图层"
 
 #: libs/impex/HdrMetaDataCheck.h:22
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "This image has <b>animated layers</b>. Animation cannot be saved to this "
-#| "format."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "This image has <b>HDR metadata</b>. HDR metadata cannot be saved to this "
 "format."
-msgstr "此图像包含 <b>动画图层</b>。动画无法用此格式保存。"
+msgstr ""
 
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
@@ -24849,6 +24838,8 @@ msgid ""
 "Unsupported audio parameters, try to re-encode your audio file with a more "
 "common sample format, sampling rate and channel count"
 msgstr ""
+"不支持的音频参数，请尝试使用更常见的采样格式、采样率和声道数重新编码您的音频"
+"文件"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, kde-format
@@ -24858,22 +24849,22 @@ msgstr "不支持的格式"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
 #, kde-format
 msgid "Video encoder:"
-msgstr ""
+msgstr "视频编码器："
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
 #, kde-format
 msgid "Video bitrate:"
-msgstr ""
+msgstr "视频码率："
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
 #, kde-format
 msgid "Audio encoder:"
-msgstr ""
+msgstr "音频编码器："
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
 #, kde-format
 msgid "Audio bitrate:"
-msgstr ""
+msgstr "音频码率："
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -24986,13 +24977,13 @@ msgstr "GIF 动画图像的每秒帧数不能超过 50，它将被降低到每�
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
-msgstr ""
+msgstr "高于 30 的帧率目前尚未得到广泛支持。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:704
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "大于 1920 像素的分辨率目前尚未得到广泛支持。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:711
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2465
@@ -25004,7 +24995,7 @@ msgstr "警告："
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
-msgstr ""
+msgstr "导出可能失败，某些设备可能无法播放导出的视频。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:990
 #, kde-format
@@ -25277,12 +25268,12 @@ msgstr "内部错误 (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV：%1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
 #, kde-format
 msgid "This format has no preferences."
-msgstr ""
+msgstr "此格式没有首选项。"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, kde-format
@@ -25292,7 +25283,7 @@ msgstr "没有找到帧文件"
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
 #, kde-format
 msgid "Rendering animation..."
-msgstr ""
+msgstr "导出动画..."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25302,7 +25293,7 @@ msgstr "没有找到所选格式的编码器"
 #: libs/ui/animation/KisVideoSaver.cpp:110
 #, kde-format
 msgid "Error preparing audio file: %1"
-msgstr ""
+msgstr "准备音频文件时发生错误：%1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -26235,13 +26226,13 @@ msgstr "结束帧编号："
 #: libs/ui/animation/wdg_animationrenderer.ui:72
 #, kde-format
 msgid "Images"
-msgstr ""
+msgstr "图像"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
 #, kde-format
 msgid "Video"
-msgstr ""
+msgstr "视频"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -27139,25 +27130,19 @@ msgid "Center"
 msgstr "居中"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:339
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgid "Top"
 msgstr "顶部"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:340
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Top left"
+#, kde-format
 msgid "Top Left"
-msgstr "左上"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:341
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Top right"
+#, kde-format
 msgid "Top Right"
-msgstr "右上"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:412
 #, kde-format
@@ -30143,7 +30128,7 @@ msgstr "移动子窗口时不显示内容"
 #: libs/ui/forms/wdggeneralsettings.ui:501
 #, kde-format
 msgid "Icons in menu:"
-msgstr ""
+msgstr "菜单显示图标："
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -30323,10 +30308,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "No Preview"
+#, kde-format
 msgid "Zoom Preview Scale:"
-msgstr "预览不可用"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
@@ -30340,10 +30324,9 @@ msgstr "x"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
 #: libs/ui/forms/wdggeneralsettings.ui:1066
-#, fuzzy, kde-format
-#| msgid "Color Sampler Tool"
+#, kde-format
 msgid "Color Sampler Position:"
-msgstr "拾色器工具"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -30943,24 +30926,21 @@ msgstr "存储色彩校样设置到图像"
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
-#, fuzzy, kde-format
-#| msgid "HDR Metadata..."
+#, kde-format
 msgid "HDR Metadata"
-msgstr "HDR 元数据..."
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
 #: libs/ui/forms/wdgimageproperties.ui:308
-#, fuzzy, kde-format
-#| msgid "Reference images"
+#, kde-format
 msgid "HDR Reference White"
-msgstr "参考图像"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
 #: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Content Light Level Information"
-msgstr "图像信息"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdgimageproperties.ui:338
@@ -30970,26 +30950,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdgimageproperties.ui:345
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p><br/></p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
-msgstr "<html><head/><body><p><br/></p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
 #: libs/ui/forms/wdgimageproperties.ui:362
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Calculate"
+#, kde-format
 msgid "Calculate"
 msgstr "计算"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404
-#, fuzzy, kde-format
-#| msgctxt "Rearrange the positions of the pixels under the cursor"
-#| msgid "Color Deformation"
+#, kde-format
 msgid "Color Volume Information"
-msgstr "像素随机重排"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, GreenLabel)
@@ -31047,17 +31022,15 @@ msgstr "白点："
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgimageproperties.ui:566
-#, fuzzy, kde-format
-#| msgid "Max Luminance:"
+#, kde-format
 msgid "Maximum Luminance:"
-msgstr "最大亮度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdgimageproperties.ui:589
-#, fuzzy, kde-format
-#| msgid "Min Luminance:"
+#, kde-format
 msgid "Minimum Luminance:"
-msgstr "最小亮度："
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgimageproperties.ui:634
@@ -54528,7 +54501,7 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved in both dimensions."
 msgstr ""
-"图像的亮度信息将保留完整分辨率，而颜色信息的分辨率则会在水平和垂直方向上同时"
+"图像的亮度信息将保留完整分辨率，而色度信息的分辨率则会在水平和垂直方向上同时"
 "减半。"
 
 #: plugins/impex/heif/HeifExport.cpp:541
@@ -54538,14 +54511,14 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved horizontally."
 msgstr ""
-"图像的亮度信息将保留完整分辨率，而颜色信息的分辨率则会在水平方向上减半。"
+"图像的亮度信息将保留完整分辨率，而色度信息的分辨率则会在水平方向上减半。"
 
 #: plugins/impex/heif/HeifExport.cpp:542
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr "图像将保留完整的亮度和颜色分辨率。"
+msgstr "图像将保留完整的亮度和色度分辨率。"
 
 #: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
@@ -64342,12 +64315,10 @@ msgstr "激活笔刷预设 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "激活笔刷预设 10"
+msgstr ""
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -64398,83 +64369,85 @@ msgid ""
 msgstr "快捷键可以通过 Krita 设置中的 <b>键盘快捷键</b> 页面进行配置。"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
+#: plugins/python/tenscripts/tenscripts.action:8
 #, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
 msgstr "常用脚本快捷键"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:7
+#: plugins/python/tenscripts/tenscripts.action:21
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
 msgstr "执行脚本 1"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:19
+#: plugins/python/tenscripts/tenscripts.action:33
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
 msgstr "执行脚本 2"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:31
+#: plugins/python/tenscripts/tenscripts.action:45
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
 msgstr "执行脚本 3"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:43
+#: plugins/python/tenscripts/tenscripts.action:57
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
 msgstr "执行脚本 4"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:55
+#: plugins/python/tenscripts/tenscripts.action:69
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
 msgstr "执行脚本 5"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:67
+#: plugins/python/tenscripts/tenscripts.action:81
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
 msgstr "执行脚本 6"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:79
+#: plugins/python/tenscripts/tenscripts.action:93
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
 msgstr "执行脚本 7"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:91
+#: plugins/python/tenscripts/tenscripts.action:105
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
 msgstr "执行脚本 8"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:103
+#: plugins/python/tenscripts/tenscripts.action:117
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
 msgstr "执行脚本 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#: plugins/python/tenscripts/tenscripts.action:129
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "执行脚本 10"
+msgstr ""
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
@@ -68669,44 +68642,43 @@ msgctxt "@info:tooltip"
 msgid ""
 "Restore Shape: reduce local liquify stretching and bunching while keeping "
 "the affected area centered"
-msgstr ""
+msgstr "恢复形状：减少局部液化拉伸和挤压，同时保持受影响区域居中"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:304
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate the affected area back toward its original orientation"
-msgstr ""
+msgstr "旋转受影响区域回原始方向"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:305
-#, fuzzy, kde-format
-#| msgid "Set the rotation of the pattern"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep the current rotation of the affected area"
-msgstr "设置图案的旋转角度"
+msgstr "保持受影响区域的当前旋转"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:306
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale the affected area back toward its original size"
-msgstr ""
+msgstr "缩放受影响区域回原始大小"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:307
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep the current overall scale of the affected area"
-msgstr ""
+msgstr "保持受影响区域的当前整体缩放"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove simple stretch or squash from the affected area"
-msgstr ""
+msgstr "移除受影响区域的简单拉伸或挤压"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:309
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep simple stretch or squash while removing shear-like distortion"
-msgstr ""
+msgstr "保留简单拉伸或挤压，同时去除剪切状变形"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:737
 #, kde-format
@@ -69086,11 +69058,9 @@ msgstr "真实颗粒度"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
+#, kde-format
 msgid "Restore Shape"
-msgstr "重排形状"
+msgstr "恢复形状"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
@@ -69098,10 +69068,9 @@ msgstr "重排形状"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgid "To original"
-msgstr "原始"
+msgstr "恢复原状"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
@@ -69109,18 +69078,15 @@ msgstr "原始"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
-#, fuzzy, kde-format
-#| msgctxt "Transparency behavior button in propagate colors filter"
-#| msgid "Preserve"
+#, kde-format
 msgid "Preserve"
 msgstr "保留"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Stretch:"
-msgstr "效果强度："
+msgstr "拉伸："
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306
@@ -69506,30 +69472,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgid "Master Display:"
-#~ msgstr "主显示器："
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "Red Primary:"
-#~ msgstr "红原色："
-
-#~ msgid "Green Primary:"
-#~ msgstr "绿原色："
-
-#~ msgid "Blue Primary:"
-#~ msgstr "蓝原色："
-
-#~ msgid "MaxCLL:"
-#~ msgstr "MaxCLL："
-
-#~ msgid "MaxFALL:"
-#~ msgstr "MaxFALL："
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "此 XCF 文件版本太新。Krita 不支持 GIMP 2.9 或更高版本保存的 XCF 文件。"

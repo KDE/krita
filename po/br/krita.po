@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"POT-Creation-Date: 2026-08-19 16:03+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -64280,14 +64280,18 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
+#: plugins/python/tenscripts/tenscripts.action:8
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
 msgstr "U&rzhiaouegoù"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:7
+#: plugins/python/tenscripts/tenscripts.action:21
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64295,7 +64299,7 @@ msgid "Execute Script 1"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:19
+#: plugins/python/tenscripts/tenscripts.action:33
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64303,7 +64307,7 @@ msgid "Execute Script 2"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:31
+#: plugins/python/tenscripts/tenscripts.action:45
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64311,7 +64315,7 @@ msgid "Execute Script 3"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:43
+#: plugins/python/tenscripts/tenscripts.action:57
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64319,7 +64323,7 @@ msgid "Execute Script 4"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:55
+#: plugins/python/tenscripts/tenscripts.action:69
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64327,7 +64331,7 @@ msgid "Execute Script 5"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:67
+#: plugins/python/tenscripts/tenscripts.action:81
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64335,7 +64339,7 @@ msgid "Execute Script 6"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:79
+#: plugins/python/tenscripts/tenscripts.action:93
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64343,7 +64347,7 @@ msgid "Execute Script 7"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:91
+#: plugins/python/tenscripts/tenscripts.action:105
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64351,7 +64355,7 @@ msgid "Execute Script 8"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:103
+#: plugins/python/tenscripts/tenscripts.action:117
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"
@@ -64359,7 +64363,7 @@ msgid "Execute Script 9"
 msgstr "Seveniñ restr an urzhiaoueg ..."
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:115
+#: plugins/python/tenscripts/tenscripts.action:129
 #, fuzzy, kde-format
 #| msgid "Execute Script File..."
 msgctxt "action"

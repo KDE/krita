@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-18 00:42+0000\n"
+"POT-Creation-Date: 2026-08-19 16:03+0000\n"
 "PO-Revision-Date: 2026-04-22 22:20+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
@@ -63566,77 +63566,81 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#. i18n: context: text @ Action (ten_scripts), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
+#: plugins/python/tenscripts/tenscripts.action:8
 #, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
 msgstr "Deset skriptů"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:7
+#: plugins/python/tenscripts/tenscripts.action:21
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
 msgstr "Spustit skript 1"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:19
+#: plugins/python/tenscripts/tenscripts.action:33
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
 msgstr "Spustit skript 2"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:31
+#: plugins/python/tenscripts/tenscripts.action:45
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
 msgstr "Spustit skript 3"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:43
+#: plugins/python/tenscripts/tenscripts.action:57
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
 msgstr "Spustit skript 4"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:55
+#: plugins/python/tenscripts/tenscripts.action:69
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
 msgstr "Spustit skript 5"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:67
+#: plugins/python/tenscripts/tenscripts.action:81
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
 msgstr "Spustit skript 6"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:79
+#: plugins/python/tenscripts/tenscripts.action:93
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
 msgstr "Spustit skript 7"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:91
+#: plugins/python/tenscripts/tenscripts.action:105
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
 msgstr "Spustit skript 8"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:103
+#: plugins/python/tenscripts/tenscripts.action:117
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
 msgstr "Spustit skript 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
-#: plugins/python/tenscripts/tenscripts.action:115
+#: plugins/python/tenscripts/tenscripts.action:129
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Execute Script 10"

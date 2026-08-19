@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 02:51+0000\n"
-"PO-Revision-Date: 2026-07-28 21:14+0300\n"
+"PO-Revision-Date: 2026-08-18 19:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -64963,63 +64963,63 @@ msgstr "On Betik"
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
-msgstr "Betiği Çalıştır 1"
+msgstr "Betik 1’i Yürüt"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:19
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
-msgstr "Betiği Çalıştır 2"
+msgstr "Betik 2’yi Yürüt"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:31
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
-msgstr "Betiği Çalıştır 3"
+msgstr "Betik 3’ü Yürüt"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:43
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
-msgstr "Betiği Çalıştır 4"
+msgstr "Betik 4’ü Yürüt"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:55
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
-msgstr "Betiği Çalıştır 5"
+msgstr "Betik 5’i Yürüt"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:67
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
-msgstr "Betiği Çalıştır 6"
+msgstr "Betik 6’yı Yürüt"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:79
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
-msgstr "Betiği Çalıştır 7"
+msgstr "Betik 7’yi Yürüt"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:91
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
-msgstr "Betiği Çalıştır 8"
+msgstr "Betik 8’i Yürüt"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:103
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
-msgstr "Betiği Çalıştır 9"
+msgstr "Betik 9’u Yürüt"
 
 #. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115

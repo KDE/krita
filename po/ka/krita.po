@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-18 00:42+0000\n"
-"PO-Revision-Date: 2026-08-16 08:15+0200\n"
+"PO-Revision-Date: 2026-08-18 08:15+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -64147,12 +64147,10 @@ msgstr "გააქტიურდეს ფუნჯის პრესეტ�
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "გააქტიურდეს ფუნჯის პრესეტი 10"
+msgstr "გააქტიურდეს ფუნჯის პრესეტი 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -64278,12 +64276,10 @@ msgstr "გაშვება სკრიპტისთვის 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "გაშვება სკრიპტისთვის 10"
+msgstr "გაშვება სკრიპტისთვის 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

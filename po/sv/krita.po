@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-18 00:42+0000\n"
-"PO-Revision-Date: 2026-08-15 08:34+0200\n"
+"PO-Revision-Date: 2026-08-18 18:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -65184,12 +65184,10 @@ msgstr "Aktivera förinställningar av penslar 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "Aktivera förinställningar av penslar 10"
+msgstr "Aktivera förinställningar av penslar 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -65317,12 +65315,10 @@ msgstr "Kör skript 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "Kör skript 10"
+msgstr "Kör skript 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

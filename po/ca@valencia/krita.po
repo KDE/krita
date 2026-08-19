@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-18 00:42+0000\n"
-"PO-Revision-Date: 2026-08-15 12:43+0200\n"
+"PO-Revision-Date: 2026-08-18 10:20+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -21597,7 +21597,7 @@ msgstr "RGB per component"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Calculate the brightness in nits against XYZ luminance."
-msgstr "Calcula la lluminositat en nits enfront la luminància XYZ."
+msgstr "Calcula la brillantor en nits enfront la luminància XYZ."
 
 #: libs/image/kis_hdr_metadata_models.cpp:68
 #, kde-format
@@ -21606,7 +21606,7 @@ msgid ""
 "Calculate the brightness in nits by testing the components in linear rec "
 "2020."
 msgstr ""
-"Calcula la lluminositat en nits provant els components en rec 2020 lineal."
+"Calcula la brillantor en nits provant els components en rec 2020 lineal."
 
 #: libs/image/kis_hdr_metadata_models.cpp:69
 #, kde-format
@@ -21615,7 +21615,7 @@ msgid ""
 "Calculate the brightness in nits by testing the components in linear RGB, if "
 "possible, falls back to using XYZ luminance."
 msgstr ""
-"Calcula la lluminositat en nits provant els components en RGB lineal, si és "
+"Calcula la brillantor en nits provant els components en RGB lineal, si és "
 "possible, i com a alternativa de reserva utilitza la luminància XYZ."
 
 #: libs/image/kis_hdr_metadata_models.cpp:117
@@ -65572,12 +65572,10 @@ msgstr "Activa el pinzell predefinit 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "Activa el pinzell predefinit 10"
+msgstr "Activa el pinzell predefinit 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -65706,12 +65704,10 @@ msgstr "Executa l'script 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "Executa l'script 10"
+msgstr "Executa l'script 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-18 00:42+0000\n"
-"PO-Revision-Date: 2026-08-15 08:06-0300\n"
+"PO-Revision-Date: 2026-08-18 06:49-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -65371,12 +65371,10 @@ msgstr "Ativar predefinição de pincel 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "Ativar predefinição de pincel 10"
+msgstr "Ativar predefinição de pincel 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -65506,12 +65504,10 @@ msgstr "Executar Script 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "Executar Script 10"
+msgstr "Executar Script 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

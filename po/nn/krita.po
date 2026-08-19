@@ -70155,24 +70155,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid "Master Display:"
-#~ msgstr "Hovudvising:"
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "Red Primary:"
-#~ msgstr "Raudfarge:"
-
-#~ msgid "Green Primary:"
-#~ msgstr "Grønfarge:"
-
-#~ msgid "Blue Primary:"
-#~ msgstr "Blåfarge:"
-
-#~ msgid "MaxCLL:"
-#~ msgstr "MaxCLL:"
-
-#~ msgid "MaxFALL:"
-#~ msgstr "MaxFALL:"

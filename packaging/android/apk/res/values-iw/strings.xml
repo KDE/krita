@@ -30,6 +30,7 @@
   <string name="product_supporter_badge_title">עיטור תרומה</string>
   <string name="product_supporter_badge_description">&lt;p&gt;עיטורים לתומכים המוקדמים של Krita ב־Android.&lt;/p&gt;</string>
   <string name="product_subscription_title">מינוי תומכים</string>
+  <string name="product_subscription_description">&lt;p&gt;אפשר לתמוך בפיתוח של Krita עם תרומה חודשית. בזמן המינוי יש לך גישה ל&lt;strong&gt;כל&lt;/strong&gt; יתרונות התורמים ברגע שהם יוצאים לאור. כרגע מגיע לך %1$d מאגדי משאבים שמכילים ביחד למעלהמ־ %2$d מכחולים, כולל מאגד Digital Atelier שעולה כסף, עם עוד יתרונות מתוכננות לעתיד.&lt;/p&gt;</string>
   <string name="product_onetime_title">החבילה של Krita 5.3 לתומכים</string>
   <string name="product_onetime_description">&lt;p&gt;בחבילה הזאת יש %1$d מאגדי משאבים יחד שמכילים למעלה מ־%2$d מכחולים, כולל המאגד Digital Atelier שבדרך כלל עולה כסף. זאת &lt;strong&gt;רכישה חד־פעמית&lt;/strong&gt;, זה לא יקנה לך מינוי.&lt;/p&gt;</string>
   <string name="show_this_dialog_when_krita_starts">להציג את החלונית הזאת עם הפתיחה של Krita</string>

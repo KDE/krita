@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 02:51+0000\n"
-"PO-Revision-Date: 2026-07-28 10:15+0200\n"
+"PO-Revision-Date: 2026-08-18 15:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -47575,7 +47575,7 @@ msgstr "Glifs: Posició"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr "Activa els superíndex o subíndexs al text."
+msgstr "Activa els superíndexs o subíndexs al text."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -70406,10 +70406,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "Este fitxer XCF és massa nou. Krita no admet fitxers XCF escrits per a "
-#~ "GIMP 2.9 o posterior."

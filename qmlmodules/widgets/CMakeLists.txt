@@ -1,4 +1,5 @@
 set(kritaqmlwidgets_SRCS
+    KisQQmlEngineRegistry.cpp
     KisQQuickWidget.cpp
     KisQQuickPopupWidget.cpp
     kisquickwidgets.qrc

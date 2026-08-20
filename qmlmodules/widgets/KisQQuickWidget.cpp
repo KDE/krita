@@ -10,8 +10,6 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QQuickItem>
-#include <QQmlFileSelector>
-#include <QFileSelector>
 
 #include <KLocalizedContext>
 
@@ -19,7 +17,10 @@
 #include <KisSurfaceColorSpaceWrapper.h>
 #include <kis_config_notifier.h>
 
-KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
+#include <KisQQmlEngineRegistry.h>
+
+KisQQuickWidget::KisQQuickWidget(QWidget *parent)
+    : QQuickWidget(KisQQmlEngineRegistry::instance()->qQuickWidgetEngine(), parent)
 {
 #if !defined(Q_OS_MACOS) || QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QSurfaceFormat format;
@@ -40,6 +41,7 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
     setFormat(format);
 #endif
 
+    // TODO: Check what to do with the following?
     engine()->rootContext()->setContextProperty("mainWindow", parent);
     engine()->rootContext()->setContextObject(new KLocalizedContext(parent));
 
@@ -52,33 +54,6 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
     if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE") && QQuickStyle::name() != fusion) {
          QQuickStyle::setStyle(fusion);
     }
-
-    engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    QQmlFileSelector* selector = new QQmlFileSelector(engine());
-    QStringList extraSelectors;
-    /*
-     * This allows for Style specific components, which it'll load from
-     * a "+StyleName" folder.
-     */
-    extraSelectors << QQuickStyle::name();
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    extraSelectors << "qt6";
-#elif QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    extraSelectors << "qt5";
-#endif
-    /**
-     * WARNING: The following selector is *only* for KisQQuickWidget. Do not
-     * copy it to other engines.
-     */
-    extraSelectors << "qquickwidget";
-
-    selector->setExtraSelectors(extraSelectors);
-
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 }

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">单击</string>
+  <string name="remote_action_doubleclick">双击</string>
+  <string name="remote_action_swipeup">上划</string>
+  <string name="remote_action_swipedown">下划</string>
+  <string name="remote_action_swipeleft">左划</string>
+  <string name="remote_action_swiperight">右划</string>
+  <string name="remote_action_circlecw">画圈 (顺时针)</string>
+  <string name="remote_action_circleccw">画圈 (逆时针)</string>
+  <string name="something_wrong">发生错误...</string>
+  <string name="cancelled">已取消</string>
+  <string name="save_notification_text">正在保存图像</string>
+  <string name="cancel_save_notification">取消</string>
+  <string name="donation_dialog_loading">Krita 正在加载…</string>
+  <string name="donation_dialog_loaded">Krita 已就绪</string>
+  <string name="donation_dialog_button_back">返回</string>
+  <string name="donation_dialog_button_close">关闭</string>
+  <string name="donation_dialog_header_support">捐款支持 Krita</string>
+  <string name="donation_dialog_header_button">♥︎ 显示捐款支持者选项</string>
+  <string name="donation_dialog_supporter_text">感谢您捐款支持 Krita！您的贡献将助力项目持续开发进步。</string>
+  <string name="product_donations_description">&lt;h2&gt;直接捐款&lt;/h2&gt;&lt;p&gt;通过 PayPal 直接捐款支持 Krita 项目，支持信用卡、借记卡或多种其他支付方式。&lt;/p&gt;</string>
+  <string name="product_donations_button">捐款</string>
+  <string name="product_development_fund_description">&lt;h2&gt;加入发展基金&lt;/h2&gt;&lt;p&gt;加入 Krita 发展基金，通过每月定期捐款支持 Krita 项目。有多种捐款级别可选，并附带相应权益。&lt;/p&gt;</string>
+  <string name="product_development_fund_button">加入发展基金</string>
+  <string name="product_button_subscribe">订阅</string>
+  <string name="product_button_subscribe_for_month">订阅 (每月 %s)</string>
+  <string name="product_button_buy">购买</string>
+  <string name="product_button_buy_for">购买 (%s)</string>
+  <string name="product_supporter_badge_title">支持者徽章</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Krita 安卓版的早期支持者徽章&lt;/p&gt;</string>
+  <string name="product_subscription_title">捐款支持者订阅</string>
+  <string name="product_subscription_description">&lt;p&gt;通过每月捐款支持 Krita 的开发。订阅期间，您将获得 &lt;strong&gt;全部&lt;/strong&gt; 现有和之后新增的捐款支持者权益。目前您可获取 %1$d 个资源包，内含超过 %2$d 种笔刷，包括付费的 Digital Atelier 数字绘画工作室资源包，未来还将推出更多内容。&lt;/p&gt;</string>
+  <string name="product_onetime_title">Krita 5.3 捐款支持者资源包</string>
+  <string name="product_onetime_description">&lt;p&gt;通过购买此捐款支持者权益，您可获得 %1$d 个资源包，包含 %2$d 种笔刷，包括付费的 Digital Atelier 数字绘画工作室资源包。此权益为 &lt;strong&gt;一次性购买&lt;/strong&gt;，不会自动订阅。&lt;/p&gt;c</string>
+  <string name="show_this_dialog_when_krita_starts">Krita 启动时显示此对话框</string>
+  <string name="ok">确定</string>
+  <string name="interface_scale_default">界面缩放：%d%% (默认)</string>
+  <string name="interface_scale">界面缩放：%d%%</string>
+</resources>

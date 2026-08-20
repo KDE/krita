@@ -6,7 +6,7 @@
 # SPDX-FileCopyrightText: 2002-2007 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2007, 2009-2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2011, 2014-2015 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2011, 2014-2015, 2026 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011-2015 Raul Gonzalez <raulgf83@gmail.com>
 # SPDX-FileCopyrightText: 2015-2017, 2021, 2024-2026 Sofía Priego <spriego@darksylvania.net>
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-19 16:03+0000\n"
-"PO-Revision-Date: 2026-08-16 01:11+0100\n"
+"PO-Revision-Date: 2026-08-20 01:40+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -65509,12 +65509,10 @@ msgstr "Activar el valor predefinido de pincel 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "Activar el valor predefinido de pincel 10"
+msgstr "Activar el valor predefinido de pincel 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -65649,12 +65647,10 @@ msgstr "Ejecutar guion 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:129
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "Ejecutar guion 10"
+msgstr "Ejecutar guion 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

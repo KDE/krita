@@ -53,7 +53,7 @@ const QMatrix4x4 lmsToOkLab {QMatrix4x4(
 const QMatrix4x4 lmsToOkLab_inv = lmsToOkLab.inverted();
 
 struct xyzToOkLabModel {
-    static ALWAYS_INLINE QVector<qreal> toLCH (const QVector<float> &channels) {
+    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
         QVector4D color (channels[0], channels[1], channels[2], 0.0);
 
         const QVector4D lms = XYZtoOkLABLMS * (xyz50To65 * color);
@@ -63,13 +63,13 @@ struct xyzToOkLabModel {
                                              cbrtf(lms.z()), 0.0);
 
         const QVector4D OkLab = lmsToOkLab * lmsPrime;
-        QVector<qreal> lch(3);
+        std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(OkLab.x(), OkLab.y()+0.5, OkLab.z()+0.5, &lch[0], &lch[1], &lch[2]);
         return lch;
     }
 
-    static ALWAYS_INLINE QVector<float> fromLCH (const QVector<qreal> &lch, QVector<float> channels) {
-        QVector<qreal> output(3);
+    static ALWAYS_INLINE QVector<float> fromLCH (const std::array<qreal, 3> &lch, QVector<float> channels) {
+        std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
 
 
@@ -108,7 +108,7 @@ const QMatrix4x4 lmsToICtCp {QMatrix4x4(
 const QMatrix4x4 lmsToICtCp_inv = lmsToICtCp.inverted();
 
 struct xyzToICtCpModel {
-    static ALWAYS_INLINE QVector<qreal> toLCH (const QVector<float> &channels) {
+    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
         QVector4D color (channels[0], channels[1], channels[2], 0.0);
 
         const QVector4D lms =  XYZd65toDolbyLMS * (xyz50To65 * color);
@@ -118,14 +118,14 @@ struct xyzToICtCpModel {
                                              applySmpte2048Curve(lms.z()), 0.0);
 
         const QVector4D ICtCp = lmsToICtCp * lmsPrime;
-        QVector<qreal> lch(3);
+        std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(ICtCp.x(), (ICtCp.y()+0.5), (ICtCp.z()+0.5), &lch[0], &lch[1], &lch[2]);
 
         return lch;
     }
 
-    static ALWAYS_INLINE QVector<float> fromLCH (const QVector<qreal> &lch, QVector<float> channels) {
-        QVector<qreal> output(3);
+    static ALWAYS_INLINE QVector<float> fromLCH (const std::array<qreal, 3> &lch, QVector<float> channels) {
+        std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
 
 
@@ -145,14 +145,14 @@ struct xyzToICtCpModel {
 };
 
 struct labModel {
-    static ALWAYS_INLINE QVector<qreal> toLCH (const QVector<float> &channels) {
-        QVector<qreal> lch(3);
+    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
+        std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(channels[0], channels[1], channels[2], &lch[0], &lch[1], &lch[2]);
         return lch;
     }
 
-    static ALWAYS_INLINE QVector<float> fromLCH (const QVector<qreal> &lch, QVector<float> channels) {
-        QVector<qreal> output(3);
+    static ALWAYS_INLINE QVector<float> fromLCH (const std::array<qreal, 3> &lch, QVector<float> channels) {
+        std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
         channels[0] = output[0];
         channels[1] = output[1];
@@ -199,23 +199,24 @@ public:
             return;
         }
 
+        QVector<float> originalChannels(m_sourceSpace->channelCount());
+        QVector<float> clippedChannels(m_sourceSpace->channelCount());
+        std::unique_ptr<quint8[]> tmpOriginal(new quint8(m_sourceSpace->pixelSize()));
+        std::unique_ptr<quint8[]> tmpTarget (new quint8(targetSpace->pixelSize()));
+        std::unique_ptr<quint8[]> tmpClipped (new quint8(m_sourceSpace->pixelSize()));
+        std::array<qreal, 3> LCH {0.0, 0.0, 0.0};
+
         while (nPixels > 0) {
             // We could make good use of a LUT here.
-            QVector<float> originalChannels(m_sourceSpace->channelCount());
-            QVector<float> clippedChannels(m_sourceSpace->channelCount());
-            quint8* tmpOriginal = new quint8(m_sourceSpace->pixelSize());
-            quint8* tmpTarget = new quint8(targetSpace->pixelSize());
-            quint8* tmpClipped = new quint8(m_sourceSpace->pixelSize());
-
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
-            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal, originalChannels);
+            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
 
-            m_sourceSpace->convertPixelsTo(tmpOriginal, tmpTarget, targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-            targetSpace->convertPixelsTo(tmpTarget, tmpClipped, m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+            m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+            targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
 
-            m_sourceSpace->normalisedChannelsValue(tmpClipped, clippedChannels);
+            m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
 
-            QVector<qreal> LCH(3);
+
             if (DifferenceType::difference(originalChannels, clippedChannels) > 0.02) {
                 LCH = ModelType::toLCH(originalChannels);
                 float min = 0;
@@ -228,10 +229,10 @@ public:
                     originalChannels = ModelType::fromLCH(LCH, originalChannels);
 
 
-                    m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal, originalChannels);
-                    m_sourceSpace->convertPixelsTo(tmpOriginal, tmpTarget, targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                    targetSpace->convertPixelsTo(tmpTarget, tmpClipped, m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                    m_sourceSpace->normalisedChannelsValue(tmpClipped, clippedChannels);
+                    m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+                    m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                    targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                    m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
 
                     if (DifferenceType::difference(originalChannels, clippedChannels) < 0.02) {
                         min = LCH[1];
@@ -241,7 +242,7 @@ public:
                 }
             }
 
-            memcpy(dstU8, tmpOriginal, m_sourceSpace->pixelSize());
+            memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());
 
             --nPixels;
             srcU8 += m_sourceSpace->pixelSize();

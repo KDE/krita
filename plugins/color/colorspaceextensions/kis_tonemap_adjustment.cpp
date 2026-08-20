@@ -63,17 +63,18 @@ public:
             return;
         }
 
+        QVector<float> originalChannels(m_sourceSpace->channelCount());
+        std::unique_ptr<quint8[]> tmpOriginal(new quint8(m_sourceSpace->pixelSize()));
         while (nPixels > 0) {
-            QVector<float> originalChannels(m_sourceSpace->channelCount());
-            quint8* tmpOriginal = new quint8(m_sourceSpace->pixelSize());
+
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
 
             float Y = LuminanceModel::luminance(originalChannels);
             Y = KoGamutMappingUtils::reinhardToneMapping(Y, m_maxWhite);
             originalChannels = LuminanceModel::setLuminance(originalChannels, Y);
 
-            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal, originalChannels);
-            memcpy(dstU8, tmpOriginal, m_sourceSpace->pixelSize());
+            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+            memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());
 
             --nPixels;
             srcU8 += m_sourceSpace->pixelSize();
@@ -130,17 +131,17 @@ public:
         KoGamutMappingUtils::PiecewiseFilmicCurve curve =
             KoGamutMappingUtils::PiecewiseFilmicCurve::fromUserParams(m_toeStrength, m_toeLength, m_shoulderStrength, m_shoulderLength, m_shoulderAngle);
 
+        QVector<float> originalChannels(m_sourceSpace->channelCount());
+        std::unique_ptr<quint8[]> tmpOriginal(new quint8(m_sourceSpace->pixelSize()));
         while (nPixels > 0) {
-            QVector<float> originalChannels(m_sourceSpace->channelCount());
-            quint8* tmpOriginal = new quint8(m_sourceSpace->pixelSize());
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
 
             float Y = LuminanceModel::luminance(originalChannels);
             Y = curve.evalCurve(Y);
             originalChannels = LuminanceModel::setLuminance(originalChannels, Y);
 
-            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal, originalChannels);
-            memcpy(dstU8, tmpOriginal, m_sourceSpace->pixelSize());
+            m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+            memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());
 
             --nPixels;
             srcU8 += m_sourceSpace->pixelSize();

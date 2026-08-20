@@ -151,8 +151,9 @@ KisWdgOptionsPNG::KisWdgOptionsPNG(QWidget *parent)
 {
     setupUi(this);
 
-    connect(cmbFloatingConversion, SIGNAL(activated(int)), this, SLOT(on_conversion_policy_changed()));
-    connect(chkCICP, SIGNAL(toggled(bool)), this, SLOT(on_conversion_policy_changed()));
+    connect(cmbFloatingConversion, SIGNAL(activated(int)), this, SLOT(onConversionPolicyChanged()));
+    connect(chkCICP, SIGNAL(toggled(bool)), this, SLOT(onConversionPolicyChanged()));
+    connect(gbSaveColorInfo, SIGNAL(toggled(bool)), this, SLOT(onConversionPolicyChanged()));
 }
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -257,7 +258,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     chkDownsample->setChecked(cfg->getBool("downsample", false));
 
-    on_conversion_policy_changed();
+    onConversionPolicyChanged();
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
@@ -304,9 +305,9 @@ void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
     bnTransparencyFillColor->setEnabled(!checked);
 }
 
-void KisWdgOptionsPNG::on_conversion_policy_changed()
+void KisWdgOptionsPNG::onConversionPolicyChanged()
 {
-    cmbFloatingConversion->setEnabled(m_floatingPoint && chkCICP->isChecked());
+    cmbFloatingConversion->setEnabled(m_floatingPoint && (chkCICP->isChecked() && chkCICP->isEnabled()));
     const QString conversionMode = cmbFloatingConversion->currentData(Qt::UserRole+1).toString();
     if (cmbFloatingConversion->isEnabled()) {
         chkForceSRGB->setEnabled(conversionMode == "KeepSame");

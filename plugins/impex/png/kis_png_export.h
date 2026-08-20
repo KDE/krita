@@ -24,7 +24,7 @@ public:
 
 private Q_SLOTS:
     void on_alpha_toggled(bool checked);
-    void on_conversion_policy_changed();
+    void onConversionPolicyChanged();
 
 private:
     bool m_floatingPoint {false};

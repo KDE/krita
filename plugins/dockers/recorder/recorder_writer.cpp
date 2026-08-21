@@ -681,7 +681,7 @@ void RecorderWriterManager::onTimer()
 
     // take snapshots only if main window is active
     // else some dialogs like filters may disappear when canvas->image()->lock() is called
-    if (qobject_cast<KisMainWindow*>(QApplication::activeWindow()) == nullptr)
+    if (qobject_cast<KisMainWindow *>(QApplication::activeWindow()) == nullptr && !d->captureTail) {
         return;
 
     if ((!d->settings.recordIsolateLayerMode) &&

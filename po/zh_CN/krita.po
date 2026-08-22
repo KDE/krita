@@ -21985,7 +21985,7 @@ msgctxt "image conversion warning"
 msgid ""
 "This image has <b>animated layers</b>. Animation cannot be saved to this "
 "format."
-msgstr "此图像包含 <b>动画图层</b>。动画无法用此格式保存。"
+msgstr "此图像包含 <b>动画图层</b>。动画无法保存到此格式。"
 
 #: libs/impex/CheckImageSize.h:27 libs/impex/ImageSizeCheck.h:26
 #, kde-format
@@ -21993,7 +21993,7 @@ msgctxt "image conversion warning"
 msgid ""
 "This image is larger than <b>%1 x %2</b>. Images this size cannot be saved "
 "to this format."
-msgstr "此图像尺寸大于 <b>%1 x %2</b> 像素。超过该尺寸的图像无法用此格式保存。"
+msgstr "此图像尺寸大于 <b>%1 x %2</b> 像素。超过该尺寸的图像无法保存到此格式。"
 
 #: libs/impex/ColorModelCheck.h:31
 #, kde-format
@@ -22002,7 +22002,7 @@ msgid ""
 "The color model <b>%1</b> or channel depth <b>%2</b> cannot be saved to this "
 "format. Your image will be converted."
 msgstr ""
-"此图像的 <b>%1</b> 色彩模型或者 <b>%2</b> 色彩深度无法用此格式保存。它的色彩"
+"此图像的 <b>%1</b> 色彩模型或者 <b>%2</b> 色彩深度无法保存到此格式。它的色彩"
 "空间将被转换。"
 
 #: libs/impex/ColorModelHomogenousCheck.h:112
@@ -22020,8 +22020,8 @@ msgid ""
 "Your image contains layers with the color model <b>%1</b> and channel depth "
 "<b>%2</b> which cannot be saved to this format. The layers will be converted."
 msgstr ""
-"此图像包含 <b>%1</b> 色彩模型和 <b>%2</b> 色彩深度的图层，它们无法用此格式保"
-"存。这些图层的色彩空间将被转换。"
+"此图像包含 <b>%1</b> 色彩模型和 <b>%2</b> 色彩深度的图层，它们无法保存到此格"
+"式。这些图层的色彩空间将被转换。"
 
 #: libs/impex/CompositionsCheck.h:23
 #, kde-format

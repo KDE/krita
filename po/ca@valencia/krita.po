@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-19 16:03+0000\n"
-"PO-Revision-Date: 2026-08-18 10:20+0200\n"
+"PO-Revision-Date: 2026-08-18 15:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -47863,7 +47863,7 @@ msgstr "Glifs: Posició"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr "Activa els superíndex o subíndexs al text."
+msgstr "Activa els superíndexs o subíndexs al text."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format

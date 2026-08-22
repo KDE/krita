@@ -21094,7 +21094,7 @@ msgstr "更改克隆图层"
 #: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Set HDR Metadata"
-msgstr ""
+msgstr "设置 HDR 元数据"
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
@@ -21305,31 +21305,31 @@ msgstr "穿透"
 #, kde-format
 msgctxt "Image reference white value"
 msgid "%1 cd/m²"
-msgstr ""
+msgstr "%1 cd/m²"
 
 #: libs/image/kis_hdr_metadata_models.cpp:63
 #, kde-format
 msgctxt "CLLI calculation type"
 msgid "XYZ Luminance"
-msgstr ""
+msgstr "XYZ 亮度"
 
 #: libs/image/kis_hdr_metadata_models.cpp:64
 #, kde-format
 msgctxt "CLLI calculation type"
 msgid "Rec 2020 Per Component"
-msgstr ""
+msgstr "Rec 2020 逐分量"
 
 #: libs/image/kis_hdr_metadata_models.cpp:65
 #, kde-format
 msgctxt "CLLI calculation type"
 msgid "RGB Per Component"
-msgstr ""
+msgstr "RGB 逐分量"
 
 #: libs/image/kis_hdr_metadata_models.cpp:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Calculate the brightness in nits against XYZ luminance."
-msgstr ""
+msgstr "基于 XYZ 亮度计算尼特值。"
 
 #: libs/image/kis_hdr_metadata_models.cpp:68
 #, kde-format
@@ -21337,7 +21337,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Calculate the brightness in nits by testing the components in linear rec "
 "2020."
-msgstr ""
+msgstr "通过测试线性 Rec 2020 分量计算尼特值。"
 
 #: libs/image/kis_hdr_metadata_models.cpp:69
 #, kde-format
@@ -21345,7 +21345,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Calculate the brightness in nits by testing the components in linear RGB, if "
 "possible, falls back to using XYZ luminance."
-msgstr ""
+msgstr "通过测试线性 RGB 分量计算尼特值 (若不可行则回退至使用 XYZ 亮度)"
 
 #: libs/image/kis_hdr_metadata_models.cpp:117
 #, kde-format
@@ -21369,19 +21369,19 @@ msgstr "自定义"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset color volume to the values defined by Rec. 2100 PQ"
-msgstr ""
+msgstr "重置色彩体积为 Rec. 2100 PQ 定义值"
 
 #: libs/image/kis_hdr_metadata_models.cpp:122
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset color volume to the values defined by DCI-P3 D65"
-msgstr ""
+msgstr "重置色彩体积为 DCI-P3 D65 定义值"
 
 #: libs/image/kis_hdr_metadata_models.cpp:123
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
-msgstr ""
+msgstr "使用自定义色彩体积值"
 
 #: libs/image/kis_image.cc:420
 #, kde-format
@@ -22067,7 +22067,7 @@ msgctxt "image conversion warning"
 msgid ""
 "This image has <b>animated layers</b>. Animation cannot be saved to this "
 "format."
-msgstr "此图像包含 <b>动画图层</b>。动画无法用此格式保存。"
+msgstr "此图像包含 <b>动画图层</b>。动画无法保存到此格式。"
 
 #: libs/impex/CheckImageSize.h:27 libs/impex/ImageSizeCheck.h:26
 #, kde-format
@@ -22075,7 +22075,7 @@ msgctxt "image conversion warning"
 msgid ""
 "This image is larger than <b>%1 x %2</b>. Images this size cannot be saved "
 "to this format."
-msgstr "此图像尺寸大于 <b>%1 x %2</b> 像素。超过该尺寸的图像无法用此格式保存。"
+msgstr "此图像尺寸大于 <b>%1 x %2</b> 像素。超过该尺寸的图像无法保存到此格式。"
 
 #: libs/impex/ColorModelCheck.h:31
 #, kde-format
@@ -22084,7 +22084,7 @@ msgid ""
 "The color model <b>%1</b> or channel depth <b>%2</b> cannot be saved to this "
 "format. Your image will be converted."
 msgstr ""
-"此图像的 <b>%1</b> 色彩模型或者 <b>%2</b> 色彩深度无法用此格式保存。它的色彩"
+"此图像的 <b>%1</b> 色彩模型或者 <b>%2</b> 色彩深度无法保存到此格式。它的色彩"
 "空间将被转换。"
 
 #: libs/impex/ColorModelHomogenousCheck.h:112
@@ -22102,8 +22102,8 @@ msgid ""
 "Your image contains layers with the color model <b>%1</b> and channel depth "
 "<b>%2</b> which cannot be saved to this format. The layers will be converted."
 msgstr ""
-"此图像包含 <b>%1</b> 色彩模型和 <b>%2</b> 色彩深度的图层，它们无法用此格式保"
-"存。这些图层的色彩空间将被转换。"
+"此图像包含 <b>%1</b> 色彩模型和 <b>%2</b> 色彩深度的图层，它们无法保存到此格"
+"式。这些图层的色彩空间将被转换。"
 
 #: libs/impex/CompositionsCheck.h:23
 #, kde-format
@@ -22144,7 +22144,7 @@ msgctxt "image conversion warning"
 msgid ""
 "This image has <b>HDR metadata</b>. HDR metadata cannot be saved to this "
 "format."
-msgstr ""
+msgstr "此图像包含 <b>HDR 元数据</b>。HDR 元数据无法保存到此格式。"
 
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
@@ -27137,12 +27137,12 @@ msgstr "顶部"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:340
 #, kde-format
 msgid "Top Left"
-msgstr ""
+msgstr "左上"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:341
 #, kde-format
 msgid "Top Right"
-msgstr ""
+msgstr "右上"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:412
 #, kde-format
@@ -30304,13 +30304,13 @@ msgstr "显示额外的颜色比较空间"
 #: libs/ui/forms/wdggeneralsettings.ui:1031
 #, kde-format
 msgid "Enable Zoom Preview (Pixel-Perfect Color Sampler)"
-msgstr ""
+msgstr "启用缩放预览 (像素级精确拾色器)"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
 #, kde-format
 msgid "Zoom Preview Scale:"
-msgstr ""
+msgstr "缩放预览的缩放级别："
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
@@ -30326,7 +30326,7 @@ msgstr "x"
 #: libs/ui/forms/wdggeneralsettings.ui:1066
 #, kde-format
 msgid "Color Sampler Position:"
-msgstr ""
+msgstr "拾色器位置："
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -30928,31 +30928,31 @@ msgstr "存储色彩校样设置到图像"
 #: libs/ui/forms/wdgimageproperties.ui:302
 #, kde-format
 msgid "HDR Metadata"
-msgstr ""
+msgstr "HDR 元数据"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
 #: libs/ui/forms/wdgimageproperties.ui:308
 #, kde-format
 msgid "HDR Reference White"
-msgstr ""
+msgstr "HDR 参考白"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
 #: libs/ui/forms/wdgimageproperties.ui:326
 #, kde-format
 msgid "Content Light Level Information"
-msgstr ""
+msgstr "内容亮度级别信息"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdgimageproperties.ui:338
 #, kde-format
 msgid "Max Content Light Level:"
-msgstr ""
+msgstr "最大内容亮度级别："
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdgimageproperties.ui:345
 #, kde-format
 msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
-msgstr ""
+msgstr "<html><head/><body><p>最大帧平均亮度级别：</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
 #: libs/ui/forms/wdgimageproperties.ui:362
@@ -30964,7 +30964,7 @@ msgstr "计算"
 #: libs/ui/forms/wdgimageproperties.ui:404
 #, kde-format
 msgid "Color Volume Information"
-msgstr ""
+msgstr "色彩体积信息"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, GreenLabel)
@@ -31024,13 +31024,13 @@ msgstr "白点："
 #: libs/ui/forms/wdgimageproperties.ui:566
 #, kde-format
 msgid "Maximum Luminance:"
-msgstr ""
+msgstr "最大亮度："
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdgimageproperties.ui:589
 #, kde-format
 msgid "Minimum Luminance:"
-msgstr ""
+msgstr "最小亮度："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgimageproperties.ui:634
@@ -64318,7 +64318,7 @@ msgstr "激活笔刷预设 9"
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr ""
+msgstr "激活笔刷预设 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -64447,7 +64447,7 @@ msgstr "执行脚本 9"
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr ""
+msgstr "执行脚本 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

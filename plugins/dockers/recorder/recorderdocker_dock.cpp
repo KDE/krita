@@ -281,10 +281,10 @@ public:
 
     void updateRecordStatus(bool isRecording)
     {
+        QSignalBlocker blocker(ui->buttonRecordToggle);
         recordToggleAction->setChecked(isRecording);
         recordToggleAction->setEnabled(true);
 
-        QSignalBlocker blocker(ui->buttonRecordToggle);
         ui->buttonRecordToggle->setChecked(isRecording);
         ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
         ui->buttonRecordToggle->setText(isRecording ? i18nc("Stop recording the canvas", "Stop")
@@ -505,6 +505,24 @@ RecorderDockerDock::~RecorderDockerDock()
     delete exportSettings;
 }
 
+void RecorderDockerDock::onDocumentAboutToClose(KoCanvasBase *canvas)
+{
+    KisCanvas2 *cptr = dynamic_cast<KisCanvas2 *>(canvas);
+
+    KisCanvas2 *oldCanvas = nullptr;
+    if (d->canvas != cptr) {
+        oldCanvas = d->canvas;
+        setCanvas(canvas);
+    }
+
+    d->writer.stop(false, true);
+
+    if (oldCanvas) {
+        setCanvas((KoCanvasBase *)oldCanvas);
+        d->writer.start(false, false);
+    }
+}
+
 void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 {
     setEnabled(canvas != nullptr);
@@ -517,6 +535,12 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 
     if (!d->canvas)
         return;
+
+    connect(d->canvas->imageView(),
+            SIGNAL(sigDocumentAboutToClose(KoCanvasBase *)),
+            this,
+            SLOT(onDocumentAboutToClose(KoCanvasBase *)),
+            Qt::UniqueConnection);
 
     KisDocument *document = d->canvas->imageView()->document();
     d->updateComboResolution(document->image()->width(), document->image()->height());
@@ -543,7 +567,7 @@ void RecorderDockerDock::unsetCanvas()
     d->updateRecordStatus(false);
     d->recordToggleAction->setChecked(false);
     setEnabled(false);
-    d->writer.stop();
+    d->writer.stop(true, false);
     d->writer.setCanvas(nullptr);
     d->canvas = nullptr;
     d->enabledIds.clear();
@@ -574,8 +598,9 @@ bool RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     d->recordToggleAction->setChecked(checked);
 
-    if (!d->canvas)
+    if (!d->canvas) {
         return false;
+    }
 
     const QString &id = d->canvas->imageView()->document()->linkedResourcesStorageId();
 
@@ -589,16 +614,21 @@ bool RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     if (isEmpty == wasEmpty) {
         d->updateRecordStatus(checked);
+        if (checked) {
+            d->updateWriterSettings();
+            d->writer.restoreState();
+        } else {
+            d->writer.saveState();
+        }
         return false;
     }
-
 
     d->ui->buttonRecordToggle->setEnabled(false);
 
     if (checked) {
         d->updateWriterSettings();
         d->updateUiFormat();
-        d->writer.start();
+        d->writer.start(true, true);
 
         // Calculate Rec symbol activity timeout depending on the capture interval
         // The pausedTimer interval is set to a slightly greater value than the capture interval
@@ -610,7 +640,7 @@ bool RecorderDockerDock::onRecordButtonToggled(bool checked)
             d->pausedTimer.setInterval(qBound(305, static_cast<int>(qMax(d->captureInterval, .1) * 1000.0) + 5, 2005));
         }
     } else {
-        d->writer.stop();
+        d->writer.stop(true, true);
         d->warningTimer.stop();
         d->pausedTimer.stop();
         d->statusBarWarningLabel->hide();

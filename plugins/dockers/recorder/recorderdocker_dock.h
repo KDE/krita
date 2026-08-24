@@ -63,6 +63,8 @@ private Q_SLOTS:
 
     void slotScrollerStateChanged(QScroller::State state);
 
+    void onDocumentAboutToClose(KoCanvasBase* canvas);
+
 #ifdef Q_OS_ANDROID
     void moveFilesFromInternalSnapshotDirectory();
     void slotInternalSnapshotMoveFinished(const QString &srcRoot);

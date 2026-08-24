@@ -558,10 +558,11 @@ RecorderWriterManager::~RecorderWriterManager()
 
 void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
 {
+    saveRegion();
     // Restart writers if canvas changes
     bool restart = d->timer.isActive();
     if (restart) {
-        stop(false);
+        stop(false, false);
     }
 
     if (d->canvas) {
@@ -588,7 +589,7 @@ void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
     }
 
     if (restart) {
-        start(false);
+        start(false, false);
     }
 }
 
@@ -597,7 +598,7 @@ void RecorderWriterManager::setup(const RecorderWriterSettings &settings)
     // Restart writers if setup changes
     bool restart = d->timer.isActive();
     if (restart) {
-        stop(false);
+        stop(false, false);
     }
 
     d->settings = settings;
@@ -606,14 +607,17 @@ void RecorderWriterManager::setup(const RecorderWriterSettings &settings)
     d->partIndex = d->findLastIndex(d->settings.outputDirectory);
 
     if (restart) {
-        start(false);
+        start(false, false);
     }
+
+    tryRestoreRegion();
 }
 
-void RecorderWriterManager::start(bool toggleEnabled)
+void RecorderWriterManager::start(bool toggleEnabled, bool restoreState)
 {
-    removeTails();
-    tryRestoreRegion();
+    if (restoreState) {
+        this->restoreState();
+    }
 
     if (d->timer.isActive())
         return;
@@ -637,27 +641,15 @@ void RecorderWriterManager::start(bool toggleEnabled)
     }
 }
 
-void RecorderWriterManager::removeTails()
-{
-    // Remove all tail frames
-    if(d->outputDir.exists()) {
-        Q_FOREACH (QString f, d->outputDir.entryList({"*-tail.*"}, QDir::Files)) {
-            d->outputDir.remove(f);
-        }
-    }
-}
-
-bool RecorderWriterManager::stop(bool toggleEnabled)
+bool RecorderWriterManager::stop(bool toggleEnabled, bool saveState)
 {
     //Check if the timer is active, so that we don't try to clear the writer pool multiple times
     if (!d->timer.isActive())
         return true;
 
-saveRegion();
-
-    //Capture some tail frame
-    d->captureTail = true;
-    onTimer();
+    if (saveState) {
+      this->saveState();
+    }
 
     d->timer.stop();
     auto result = d->clearWriterPool();
@@ -683,6 +675,7 @@ void RecorderWriterManager::onTimer()
     // else some dialogs like filters may disappear when canvas->image()->lock() is called
     if (qobject_cast<KisMainWindow *>(QApplication::activeWindow()) == nullptr && !d->captureTail) {
         return;
+    }
 
     if ((!d->settings.recordIsolateLayerMode) &&
         (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup())) {
@@ -805,7 +798,7 @@ void RecorderWriterManager::onCapturingDone(int workerId, bool success)
     d->writerPool[workerId].thread->setPriority(QThread::IdlePriority);
     recorderThreads.decUsedAndNotify();
     if (!success) {
-        stop();
+        stop(true, true);
         Q_EMIT frameWriteFailed();
     }
 }
@@ -867,4 +860,23 @@ void RecorderWriterManager::tryRestoreRegion()
     out >> d->oldRegion;
 
     file.close();
+}
+
+void RecorderWriterManager::saveState()
+{
+    saveRegion();
+    // Capture some tail frame
+    d->captureTail = true;
+    onTimer();
+}
+
+void RecorderWriterManager::restoreState()
+{
+    tryRestoreRegion();
+    // Remove all tail frames
+    if(d->outputDir.exists()) {
+        Q_FOREACH (QString f, d->outputDir.entryList({"*-tail.*"}, QDir::Files)) {
+            d->outputDir.remove(f);
+        }
+    }
 }

@@ -120,12 +120,16 @@ public:
     // restarts recorder
     void setup(const RecorderWriterSettings &settings);
 
-    void start(bool toggleEnabled = true);
-    bool stop(bool toggleEnabled = true);
+    void start(bool toggleEnabled, bool restoreState);
+    bool stop(bool toggleEnabled, bool saveState);
 
     void setEnabled(bool enabled);
 
-    void removeTails();
+    ///Generate a tail and save the recording region
+    void saveState();
+    ///Remove the tail and restore region from a file
+    void restoreState();
+
     void saveRegion();
     void tryRestoreRegion();
 

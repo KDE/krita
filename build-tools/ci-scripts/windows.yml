@@ -19,7 +19,12 @@
     KRITACI_SKIP_DEBUG_PACKAGE: True
     KRITACI_BUILD_INSTALLERS: False
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
-    KRITACI_WINDOWS_SIGN_CONFIG: upstream-ci-utilities/signing/signwindowsbinaries.ini
+
+    ## TODO: disable signing of windows packages until the notary service is ported to
+    ## the new signing framework!
+    KRITACI_WINDOWS_SIGN_CONFIG: do-not-sign-windows-packages.non-existent-file.ini
+    # KRITACI_WINDOWS_SIGN_CONFIG: upstream-ci-utilities/signing/signwindowsbinaries.ini
+
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_WINDOWS
     EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_WINDOWS

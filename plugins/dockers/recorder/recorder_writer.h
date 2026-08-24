@@ -65,15 +65,22 @@ private:
     QMutex inUseMutex;
 };
 
+class RecorderWriterManager;
+
 class RecorderWriter : public QObject
 {
     Q_OBJECT
 public:
+    static constexpr int STATUS_OK = 0;
+    static constexpr int STATUS_ERROR = 1;
+    static constexpr int STATUS_BLOCKED = 2;
+
     RecorderWriter(
         unsigned int i,
         QPointer<KisCanvas2> c,
         const RecorderWriterSettings& s,
-        const QDir& d);
+        const QDir& d,
+        RecorderWriterManager *m);
     ~RecorderWriter();
 
     RecorderWriter() = delete;
@@ -83,10 +90,10 @@ public:
     RecorderWriter& operator=(RecorderWriter&&) = delete;
 
 Q_SIGNALS:
-    void capturingDone(int writerId, bool success);
+    void capturingDone(int writerId, int status);
 
 public Q_SLOTS:
-    void onCaptureImage(int writerId, int index);
+    void onCaptureImage(int writerId);
 
 private:
     class Private;
@@ -117,6 +124,20 @@ public:
 
     void setEnabled(bool enabled);
 
+    // This does not do its own synchronization! At the time of writing, the
+    // behavior is:
+    // * Only the main thread writes to this. It takes the capture mutex.
+    // * Reading from the main thread does not take locks.
+    // * Reading from writer threads takes the capture mutex.
+    bool canStartCapture() const;
+
+    // This does not do its own synchronization, make sure access here is
+    // serialized! At the time of writing, this is accomplished by only calling
+    // this while the capture mutex is held.
+    int incrementAndGetIndex();
+
+    QMutex *captureMutex();
+
 Q_SIGNALS:
     void started();
     void stopped();
@@ -124,11 +145,11 @@ Q_SIGNALS:
     void lowPerformanceWarning();
     void recorderStopWarning();
 
-    void startCapturing(int writerId, int index);
+    void startCapturing(int writerId);
 
 private Q_SLOTS:
     void onTimer();
-    void onCapturingDone(int workerId, bool success);
+    void onCapturingDone(int workerId, int status);
     void onImageModified();
     void onToolChanged(const QString &toolId);
     void onToolPrimaryActionActivated(bool activated);

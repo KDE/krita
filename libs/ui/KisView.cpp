@@ -1198,6 +1198,9 @@ bool KisView::queryClose()
         }
     }
 
+
+    Q_EMIT sigDocumentAboutToClose((KoCanvasBase*)&d->canvas);
+
     return true;
 
 }

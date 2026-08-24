@@ -14,6 +14,7 @@
 #include <KoColorProfile.h>
 
 #include <kis_types.h>
+#include "KoCanvasBase.h"
 #include "kritaui_export.h"
 #include <KisNodeAdditionFlags.h>
 
@@ -237,6 +238,9 @@ Q_SIGNALS:
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
+
+    //Needed for the recorder docker
+    void sigDocumentAboutToClose(KoCanvasBase* canvas);
 
 protected:
 

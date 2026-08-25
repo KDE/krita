@@ -1003,9 +1003,9 @@ QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyAxis &axis)
     QDomDocument doc;
     QDomElement root = doc.createElement("axis");
     root.setAttribute("tagName", axis.tag);
-    root.setAttribute("min", axis.min);
-    root.setAttribute("max", axis.max);
-    root.setAttribute("default", axis.defaultValue);
+    root.setAttribute("min", KisDomUtils::toString(axis.min));
+    root.setAttribute("max", KisDomUtils::toString(axis.max));
+    root.setAttribute("default", KisDomUtils::toString(axis.defaultValue));
     root.setAttribute("hidden", axis.axisHidden? "true": "false");
     root.setAttribute("variable", axis.variableAxis? "true": "false");
     for(auto it = axis.localizedLabels.begin(); it != axis.localizedLabels.end(); it++) {
@@ -1027,9 +1027,9 @@ QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis) {
     doc.setContent(xml);
     QDomElement root = doc.childNodes().at(0).toElement();
     axis.tag = root.attribute("tagName");
-    axis.min = root.attribute("min").toDouble();
-    axis.max = root.attribute("max").toDouble();
-    axis.defaultValue = root.attribute("default").toDouble();
+    axis.min = KisDomUtils::toDouble(root.attribute("min"));
+    axis.max = KisDomUtils::toDouble(root.attribute("max"));
+    axis.defaultValue = KisDomUtils::toDouble(root.attribute("default"));
     axis.axisHidden = root.attribute("hidden") == "true"? true: false;
     axis.variableAxis = root.attribute("variable") == "true"? true: false;
     QDomNodeList names =  root.elementsByTagName("name");
@@ -1037,7 +1037,10 @@ QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis) {
         QDomElement name = names.at(i).toElement();
         QString lang = name.attribute("lang");
         QString value = name.attribute("value");
-        axis.localizedLabels.insert(QLocale(lang), value);
+        QLocale l(lang);
+        if (l != QLocale::c()) {
+            axis.localizedLabels.insert(l, value);
+        }
     }
 
     return in;
@@ -1058,7 +1061,7 @@ QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyStyleInfo &
     for(auto it = style.instanceCoords.begin(); it != style.instanceCoords.end(); it++) {
         QDomElement coord = doc.createElement("coord");
         coord.setAttribute("tag", it.key());
-        coord.setAttribute("value", it.value());
+        coord.setAttribute("value", KisDomUtils::toString(it.value()));
         root.appendChild(coord);
     }
     for(auto it = style.localizedLabels.begin(); it != style.localizedLabels.end(); it++) {
@@ -1085,13 +1088,16 @@ QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyStyleInfo &style) 
         QDomElement name = names.at(i).toElement();
         QString lang = name.attribute("lang");
         QString value = name.attribute("value");
-        style.localizedLabels.insert(QLocale(lang), value);
+        QLocale l(lang);
+        if (l != QLocale::c()) {
+            style.localizedLabels.insert(l, value);
+        }
     }
     QDomNodeList coords =  root.elementsByTagName("coord");
     for(int i = 0; i < coords.size(); i++) {
         QDomElement coord = coords.at(i).toElement();
         QString tag = coord.attribute("tag");
-        double value = coord.attribute("value").toDouble();
+        double value = KisDomUtils::toDouble(coord.attribute("value"));
         style.instanceCoords.insert(tag, value);
     }
 

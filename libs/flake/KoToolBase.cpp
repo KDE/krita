@@ -25,6 +25,7 @@
 #include <kis_icon_utils.h>
 #include "KoDerivedResourceConverter.h"
 #include "KoAbstractCanvasResourceInterface.h"
+#include <KisScopedPerformanceLogger.h>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -193,6 +194,7 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 {
     Q_D(KoToolBase);
     if (!d->optionWidgetsCreated) {
+        KisScopedPerformanceLogger perfLog(QStringLiteral("KoToolBase::optionWidgets(%1)").arg(toolId()));
         d->optionWidgets = createOptionWidgets();
         d->optionWidgetsCreated = true;
     }

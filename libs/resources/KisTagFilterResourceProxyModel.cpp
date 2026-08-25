@@ -403,6 +403,7 @@ bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, co
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    return nameLeft.toLower() < nameRight.toLower();
+
+    return nameLeft.compare(nameRight, Qt::CaseInsensitive) < 0;
 }
 

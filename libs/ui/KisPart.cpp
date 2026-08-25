@@ -702,7 +702,7 @@ void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
 
     // Log all changes to playback engine for easier debugging.
     // (See `krita.log` or `Help > Show Krita log for bug reports`.)
-    KisUsageLogger::log("Audio Playback Engine: " + QString(p_playbackEngine->metaObject()->className()));
+    KisUsageLogger::log("Animation Playback Engine: " + QString(p_playbackEngine->metaObject()->className()));
 
     Q_EMIT playbackEngineChanged(p_playbackEngine);
 }

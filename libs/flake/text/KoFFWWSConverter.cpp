@@ -1030,45 +1030,50 @@ QList<KoFontFamilyWWSRepresentation> KoFFWWSConverter::collectFamilies() const
 }
 
 KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamilyNode>::composition_iterator it, KisForest<FontFamilyNode>::composition_iterator endIt, const QString family) {
-    QString familySimplified = family;
+    QString familySimplified;
     // Qt's fontdatabase would add the vendor in [] behind the font name, when there were duplicates,
     // though sometimes there was no such explanation, so we should check against that...
     if (family.endsWith("]") && family.contains("[")) {
         familySimplified = family.split("[", Qt::SkipEmptyParts).first().trimmed();
     }
+
+    auto presentInLocalizedNames = [&familySimplified, &family](const QHash<QLocale, QString> &localizedFontFamilies) {
+        auto matchingLocalizedFamilyIt = std::find_if(
+            localizedFontFamilies.begin(),
+            localizedFontFamilies.end(),
+            [&](const QString &localizedFamily) {
+                return localizedFamily.contains(family, Qt::CaseInsensitive)
+                    || (!familySimplified.isEmpty() && localizedFamily.contains(familySimplified, Qt::CaseInsensitive));
+            });
+
+        return matchingLocalizedFamilyIt != localizedFontFamilies.end();
+    };
+
     for (; it != endIt; it++) {
         if (it.state() == KisForestDetail::Enter) {
             continue;
         }
 
         if (childBegin(it) == childEnd(it)) {
-            // For the lowest nodes, we only want to test the full name.
-            QStringList local = it->localizedFullName.values();
+            if (
+                // For the lowest nodes, we only want to test the full name.
+                presentInLocalizedNames(it->localizedFullName)
 
-            // For some fonts, the full name is the exact same as the typographic family name,
-            // in which case, we want to ignore the full name.
-            QStringList localFamily = it->localizedFontFamilies.values();
-            bool inLocalFamilyToo = (localFamily.contains(familySimplified, Qt::CaseInsensitive)
-                                  || localFamily.contains(family, Qt::CaseInsensitive));
+                // For some fonts, the full name is the exact same as the typographic family name,
+                // in which case, we want to ignore the full name.
+                || presentInLocalizedNames(it->localizedFontFamilies)) {
 
-            if (local.contains(familySimplified, Qt::CaseInsensitive)
-                    || local.contains(family, Qt::CaseInsensitive)) {
-                if (inLocalFamilyToo) continue;
                 break;
             } else {
                 continue;
             }
         }
 
-        QStringList local = it->localizedFontFamilies.values();
-        QString itFamily = it->fontFamily;
-        if (itFamily.compare(familySimplified, Qt::CaseInsensitive) == 0
-                || itFamily.compare(family, Qt::CaseInsensitive) == 0
-                || local.contains(familySimplified, Qt::CaseInsensitive)
-                || local.contains(family, Qt::CaseInsensitive)) {
+        if (it->fontFamily.compare(family, Qt::CaseInsensitive) == 0
+            || (!familySimplified.isEmpty() && it->fontFamily.compare(familySimplified, Qt::CaseInsensitive) == 0)
+            || presentInLocalizedNames(it->localizedFontFamilies)) {
             break;
         }
-
     }
     return it;
 }

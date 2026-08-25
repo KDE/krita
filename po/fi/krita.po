@@ -87,7 +87,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 02:51+0000\n"
-"PO-Revision-Date: 2026-01-19 18:02+0200\n"
+"PO-Revision-Date: 2026-03-08 19:17+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -435,116 +435,100 @@ msgid "HR Wall Paper"
 msgstr "HR Seinäpaperi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern01.pat"
 msgid "Pattern01"
-msgstr "Kuvio"
+msgstr "Kuvio01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern02.pat"
 msgid "Pattern02"
-msgstr "Kuvio"
+msgstr "Kuvio02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern03.pat"
 msgid "Pattern03"
-msgstr "Kuvio"
+msgstr "Kuvio03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern04.pat"
 msgid "Pattern04"
-msgstr "Kuvio"
+msgstr "Kuvio04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern05.pat"
 msgid "Pattern05"
-msgstr "Kuvio"
+msgstr "Kuvio05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern06.pat"
 msgid "Pattern06"
-msgstr "Kuvio"
+msgstr "Kuvio06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares01.pat"
 msgid "Squares01"
-msgstr "Neliö"
+msgstr "Neliöt01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares02.pat"
 msgid "Squares02"
-msgstr "Neliö"
+msgstr "Neliöt02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares03.pat"
 msgid "Squares03"
-msgstr "Neliö"
+msgstr "Neliöt03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares04.pat"
 msgid "Squares04"
-msgstr "Neliö"
+msgstr "Neliöt04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares05.pat"
 msgid "Squares05"
-msgstr "Neliö"
+msgstr "Neliöt05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares06.pat"
 msgid "Squares06"
-msgstr "Neliö"
+msgstr "Neliöt06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares07.pat"
 msgid "Squares07"
-msgstr "Neliö"
+msgstr "Neliöt07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares08.pat"
 msgid "Squares08"
-msgstr "Neliö"
+msgstr "Neliöt08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares09.pat"
 msgid "Squares09"
-msgstr "Neliö"
+msgstr "Neliöt09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt "./krita/data/patterns/Squares10.pat"
 msgid "Squares10"
-msgstr "Neliö"
+msgstr "Neliöt10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -619,10 +603,10 @@ msgid "Zigzag04"
 msgstr "Siksak04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "Lähennä"
+msgstr "01 kangas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -637,11 +621,10 @@ msgid "02b WoofTissue"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "default"
+#, kde-format
 msgctxt "./krita/data/patterns/03_default-paper.png"
 msgid "03 default-paper"
-msgstr "oletus"
+msgstr "03 oletuspaperi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -728,10 +711,10 @@ msgid "17 texture-melt"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/18_texture-bark.png"
 msgid "18 texture-bark"
-msgstr "&Käytä lineaarista interpolaatiota"
+msgstr "18 pintakuvio-kaarna"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -788,19 +771,17 @@ msgid "26 brush-marks"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Abstract 1"
+#, kde-format
 msgctxt "./krita/data/patterns/Abstract_lines.png"
 msgid "Abstract lines"
-msgstr "Tiivistelmä 1"
+msgstr "Abstraktit viivat"
 
 # Konteksti on sisällysluettelon sisennys.
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Use outline"
+#, kde-format
 msgctxt "./krita/data/patterns/Maze_lines.png"
 msgid "Maze lines"
-msgstr "Käytä jäsennystä"
+msgstr "Sokkeloviivat"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -815,11 +796,10 @@ msgid "Rough Wall With Impasto"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt "./krita/data/patterns/Sand_fine.png"
 msgid "Sand fine"
-msgstr "Ei määritetty"
+msgstr "Hieno hiekka"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -966,8 +946,7 @@ msgid "Big Vector"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "./krita/data/workspaces/Default.kws"
 msgid "Default"
 msgstr "Oletus"
@@ -979,11 +958,10 @@ msgid "Minimal"
 msgstr "Minimaalinen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smallest"
+#, kde-format
 msgctxt "./krita/data/workspaces/Small_Vector.kws"
 msgid "Small Vector"
-msgstr "Pienin"
+msgstr "Pieni vektori"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1126,12 +1104,11 @@ msgid "Krita Brush Preset Icon Library"
 msgstr "Kritan sivellinasetukset (*.kpp)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Brushes"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_brush.png"
 msgid "3 brush"
-msgstr "Siveltimet"
+msgstr "3 sivellin"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1142,13 +1119,12 @@ msgid "3 dotted-flat"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Soft brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-brush."
 "png"
 msgid "3 flat-brush"
-msgstr "Pehmeä sivellin"
+msgstr "3 litteä-sivellin"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1167,12 +1143,11 @@ msgid "3 splat"
 msgstr "A_roiske1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_texture.png"
 msgid "3 texture"
-msgstr "Pintakuvio"
+msgstr "3 pintakuvio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -3529,132 +3504,116 @@ msgid "HR Wall Paper"
 msgstr "HR Seinäpaperi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern01.pat"
 msgid "Pattern01"
-msgstr "Kuvio"
+msgstr "Kuvio01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern02.pat"
 msgid "Pattern02"
-msgstr "Kuvio"
+msgstr "Kuvio02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern03.pat"
 msgid "Pattern03"
-msgstr "Kuvio"
+msgstr "Kuvio03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern04.pat"
 msgid "Pattern04"
-msgstr "Kuvio"
+msgstr "Kuvio04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern05.pat"
 msgid "Pattern05"
-msgstr "Kuvio"
+msgstr "Kuvio05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern06.pat"
 msgid "Pattern06"
-msgstr "Kuvio"
+msgstr "Kuvio06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares01.pat"
 msgid "Squares01"
-msgstr "Neliö"
+msgstr "Neliöt01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares02.pat"
 msgid "Squares02"
-msgstr "Neliö"
+msgstr "Neliöt02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares03.pat"
 msgid "Squares03"
-msgstr "Neliö"
+msgstr "Neliöt03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares04.pat"
 msgid "Squares04"
-msgstr "Neliö"
+msgstr "Neliöt04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares05.pat"
 msgid "Squares05"
-msgstr "Neliö"
+msgstr "Neliöt05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares06.pat"
 msgid "Squares06"
-msgstr "Neliö"
+msgstr "Neliöt06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares07.pat"
 msgid "Squares07"
-msgstr "Neliö"
+msgstr "Neliöt07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares08.pat"
 msgid "Squares08"
-msgstr "Neliö"
+msgstr "Neliöt08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares09.pat"
 msgid "Squares09"
-msgstr "Neliö"
+msgstr "Neliöt09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares10.pat"
 msgid "Squares10"
-msgstr "Neliö"
+msgstr "Neliöt10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3741,7 +3700,7 @@ msgid "Zigzag04"
 msgstr "Siksak04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
@@ -3749,7 +3708,7 @@ msgid "Fractal Pattern"
 msgstr "Fraktaalikuvio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
@@ -3757,7 +3716,7 @@ msgid "Generic Paper 2"
 msgstr "Yleinen paperi 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
@@ -3765,7 +3724,7 @@ msgid "Generic Paper 3"
 msgstr "Yleinen paperi 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/granite.pat"
 msgid "Granite 1b"
@@ -4174,13 +4133,12 @@ msgstr "b) Pieni pyyhekumi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Soft.kpp"
 msgid "a) Eraser Soft"
-msgstr "Pyyhin"
+msgstr "a) pyyhekumpi pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4525,13 +4483,12 @@ msgstr "h) Rakeinen liitu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Chisel Soft"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "h)_Chalk_Soft.kpp"
 msgid "h) Chalk Soft"
-msgstr "Pehmeä taltta"
+msgstr "h) liitu pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4581,13 +4538,12 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Circle.kpp"
 msgid "i) Wet Circle"
-msgstr "Ympyrä"
+msgstr "i) märkä ympyrä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4646,13 +4602,12 @@ msgstr "Maalausväri:"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Paint color:"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Watercolor_Texture.kpp"
 msgid "j) Watercolor Texture"
-msgstr "Maalausväri:"
+msgstr "j) vesiväri pintakuvio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4974,22 +4929,21 @@ msgstr "Normaali"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Filter Brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "x)_Filter_Blur.kpp"
 msgid "x) Filter Blur"
-msgstr "Suodinsivellin"
+msgstr "x) suodatin sumenna"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "x)_Filter_Sharpen.kpp"
 msgid "x) Filter Sharpen"
-msgstr "Väriasetukset"
+msgstr "x) suodatin terävöitä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5497,63 +5451,56 @@ msgid "Abstract lines"
 msgstr "Tiivistelmä 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross01.pat"
 msgid "Cross01"
-msgstr "Risti"
+msgstr "Risti01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross02.pat"
 msgid "Cross02"
-msgstr "Risti"
+msgstr "Risti02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross03.pat"
 msgid "Cross03"
-msgstr "Risti"
+msgstr "Risti03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross04.pat"
 msgid "Cross04"
-msgstr "Risti"
+msgstr "Risti04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross05.pat"
 msgid "Cross05"
-msgstr "Risti"
+msgstr "Risti05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross06.pat"
 msgid "Cross06"
-msgstr "Risti"
+msgstr "Risti06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Cross07.pat"
 msgid "Cross07"
-msgstr "Risti"
+msgstr "Risti07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
@@ -5561,7 +5508,7 @@ msgid "Canvas 04"
 msgstr "Kangas 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
@@ -5569,7 +5516,7 @@ msgid "Fractal Pattern"
 msgstr "Fraktaalikuvio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
@@ -5577,7 +5524,7 @@ msgid "Generic Paper 2"
 msgstr "Yleinen paperi 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
@@ -5585,44 +5532,39 @@ msgid "Generic Paper 3"
 msgstr "Yleinen paperi 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Grid01.pat"
 msgid "Grid01"
-msgstr "Ruudukko"
+msgstr "Ruudukko01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Grid02.pat"
 msgid "Grid02"
-msgstr "Ruudukko"
+msgstr "Ruudukko02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Grid03.pat"
 msgid "Grid03"
-msgstr "Ruudukko"
+msgstr "Ruudukko03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Grid04.pat"
 msgid "Grid04"
-msgstr "Ruudukko"
+msgstr "Ruudukko04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Grid05.pat"
 msgid "Grid05"
-msgstr "Ruudukko"
+msgstr "Ruudukko05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5658,52 +5600,46 @@ msgid "Maze lines"
 msgstr "Käytä jäsennystä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Pattern01.pat"
 msgid "Pattern01"
-msgstr "Kuvio"
+msgstr "Kuvio01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Pattern02.pat"
 msgid "Pattern02"
-msgstr "Kuvio"
+msgstr "Kuvio02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Pattern03.pat"
 msgid "Pattern03"
-msgstr "Kuvio"
+msgstr "Kuvio03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Pattern04.pat"
 msgid "Pattern04"
-msgstr "Kuvio"
+msgstr "Kuvio04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Pattern05.pat"
 msgid "Pattern05"
-msgstr "Kuvio"
+msgstr "Kuvio05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Pattern06.pat"
 msgid "Pattern06"
-msgstr "Kuvio"
+msgstr "Kuvio06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5722,92 +5658,81 @@ msgid "Rough Wall With Impasto"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Sand_fine.png"
 msgid "Sand fine"
-msgstr "Ei määritetty"
+msgstr "Hieno hiekka"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares01.pat"
 msgid "Squares01"
-msgstr "Neliö"
+msgstr "Neliöt01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares02.pat"
 msgid "Squares02"
-msgstr "Neliö"
+msgstr "Neliöt02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares03.pat"
 msgid "Squares03"
-msgstr "Neliö"
+msgstr "Neliöt03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares04.pat"
 msgid "Squares04"
-msgstr "Neliö"
+msgstr "Neliöt04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares05.pat"
 msgid "Squares05"
-msgstr "Neliö"
+msgstr "Neliöt05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares06.pat"
 msgid "Squares06"
-msgstr "Neliö"
+msgstr "Neliöt06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares07.pat"
 msgid "Squares07"
-msgstr "Neliö"
+msgstr "Neliöt07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares08.pat"
 msgid "Squares08"
-msgstr "Neliö"
+msgstr "Neliöt08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares09.pat"
 msgid "Squares09"
-msgstr "Neliö"
+msgstr "Neliöt09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Squares10.pat"
 msgid "Squares10"
-msgstr "Neliö"
+msgstr "Neliöt10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -7110,8 +7035,7 @@ msgstr "Konsepti-keksi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl:2
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl"
 msgid "Default"
@@ -8150,11 +8074,10 @@ msgstr "Nollaa muodonmuutos"
 
 #. i18n: context: text @ Action (object_unite), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:261
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgctxt "action"
 msgid "Unite"
-msgstr "Yksikkö:"
+msgstr "Yhdistä"
 
 #. i18n: context: toolTip @ Action (object_unite), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:262
@@ -8165,10 +8088,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (object_intersect), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:271
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Intersect"
-msgstr "Risteä"
+msgstr "Leikkaa"
 
 #. i18n: context: toolTip @ Action (object_intersect), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:272
@@ -8218,12 +8141,12 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
-msgstr "Suorituskyky"
+msgstr "Esimuotoiltu"
 
+# Tuntuu kuin virkkeet olisivat keskenään ristiriidassa?
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
 #, kde-format
@@ -8232,6 +8155,8 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
+"Tekstiä ei rivitetä, ja sen välilyönnit ja rivinvaihdot säästetään. "
+"Rivinvaihto lisätään, jotta rivitetyt tai sijoitellut rivit pysyvät erillään."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
@@ -8289,6 +8214,9 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
+"Teksti käyttää SVG 1.1 -merkkimuunnoksia kunkin rivin sijoittamiseksi. "
+"Välilyönnit ja rivinvaihdot supistetaan takautuvan yhteensopivuuden vuoksi "
+"SVG 1.1:n kanssa."
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
@@ -8398,42 +8326,42 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "Aiemmas ketjussa."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "Siirrä tämä kuvio aiemmas tekstiketjussa."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Siirrä kuviota aiemmas ketjussa."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "Myöhemmäs ketjussa"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "Siirrä tämä kuvio myöhemmäs tekstiketjussa."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Siirrä kuvio myöhemmäs ketjussa."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
@@ -8456,7 +8384,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr ""
+msgstr "Aseta kuvio ketjun ensimmäiseksi"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -9029,12 +8957,10 @@ msgstr "Aseta piirtopöytä"
 #. i18n: context: toolTip @ Action (buginfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (buginfo), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:167 krita/krita.action:169 krita/krita.action:170
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show Krita log for bug reports."
-msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
+msgstr "Näytä Kritan loki vikailmoituksia varten."
 
 #. i18n: context: text @ Action (sysinfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (sysinfo), Actions (General), ActionCollection (Krita)
@@ -9050,28 +8976,24 @@ msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Tiedoston tiedot"
+msgstr "Näytä värinhallintatiedot"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
 #, kde-format
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
-msgstr ""
+msgstr "Näytä nykyisen kuvan pinnan värinhallintatiedot"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
+msgstr "Näytä järjestelmän tiedot vikailmoituksia varten."
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -9080,12 +9002,10 @@ msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:197 krita/krita.action:199 krita/krita.action:200
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show Android log for bug reports."
-msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
+msgstr "Näytä Androidin loki vikailmoituksia varten."
 
 #. i18n: context: text @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
@@ -9094,30 +9014,27 @@ msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:207 krita/krita.action:209 krita/krita.action:210
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show crash log for bug reports."
-msgstr "Näytä järjestelmätiedot vikailmoituksia varten."
+msgstr "Näytä kaatumisloki vikailmoituksia varten."
 
 #. i18n: context: text @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: text @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:217 krita/krita.action:220
-#, fuzzy, kde-format
-#| msgid "Fill entire selection"
+#, kde-format
 msgctxt "action"
 msgid "Search Actions"
-msgstr "Täytä koko valinta"
+msgstr "Hakutoimenpiteet"
 
 #. i18n: context: toolTip @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:219
 #, kde-format
 msgctxt "action"
 msgid "Open the command bar to search through actions."
-msgstr ""
+msgstr "Etsi toiminnoista avaamalla komentorivi."
 
 #. i18n: context: text @ Action (rename_composition), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:227
@@ -9172,22 +9089,17 @@ msgstr "&Käännä valinta"
 
 #. i18n: context: toolTip @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:265
-#, fuzzy, kde-format
-#| msgid "&Add to current selection"
+#, kde-format
 msgctxt "action"
 msgid "Invert current selection"
-msgstr "&Lisää nykyiseen valintaan"
+msgstr "Käännä nykyinen valinta"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:266
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Invert Selection"
-msgstr ""
-"Käännä valinta\n"
-"valinnan kääntäminen"
+msgstr "Käännä valinta"
 
 #. i18n: context: text @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
@@ -12116,37 +12028,31 @@ msgstr "Liitä kuvat leikepöydältä"
 
 #. i18n: context: text @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2455
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgctxt "action"
 msgid "Copy Columns"
-msgstr "Sarakkeet:"
+msgstr "Kopioi sarakkeet"
 
 #. i18n: context: toolTip @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2457
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy layer to clipboard"
+#, kde-format
 msgctxt "action"
 msgid "Copy columns to clipboard"
-msgstr "Kopioi taso leikepöydälle"
+msgstr "Kopioi sarakkeet leikepöydälle"
 
 #. i18n: context: text @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2467
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgctxt "action"
 msgid "Cut Columns"
-msgstr "Sarakkeet:"
+msgstr "Leikkaa sarakkeet"
 
 #. i18n: context: toolTip @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2469
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Cut selection to clipboard"
+#, kde-format
 msgctxt "action"
 msgid "Cut columns to clipboard"
-msgstr "Leikkaa valinta leikepöydälle"
+msgstr "Leikkaa sarakkeet leikepöydälle"
 
 #. i18n: context: text @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2479
@@ -12214,7 +12120,7 @@ msgstr "Aktivoi seuraava taso"
 #, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer, skipping over groups."
-msgstr ""
+msgstr "Aktivoi seuraava sisartaso ryhmät sivuuttaen."
 
 #. i18n: context: toolTip @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
@@ -12245,7 +12151,7 @@ msgstr "Aktivoi edellinen taso"
 #, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer, skipping over groups."
-msgstr ""
+msgstr "Aktivoi edellinen sisartaso ryhmät sivuuttaen."
 
 #. i18n: context: toolTip @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
@@ -12275,12 +12181,10 @@ msgstr "Aktivoi edellinen taso"
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2590
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add &Group Layer"
-msgstr "&Ryhmätaso"
+msgstr "Lisää &ryhmätaso"
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2592
@@ -12293,12 +12197,10 @@ msgstr "Lisää muotoja ryhmään"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2593
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group Layer"
-msgstr "&Ryhmätaso"
+msgstr "Ryhmätaso"
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2602
@@ -12329,44 +12231,38 @@ msgstr "&Kopiotaso"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2614
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Vector Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr "&Vektoritaso"
+msgstr "Lisää &vektoritaso"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2616
-#, fuzzy, kde-format
-#| msgid "Add Animation Vector Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
-msgstr "Lisää animaatiovektoritaso"
+msgstr "Lisää uusi vektoritaso"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2617
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Vector Layer"
 msgstr "Vektoritaso"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2626
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Filter Layer..."
+#, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr "&Suodintaso…"
+msgstr "Lisää &suodatintaso…"
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2628
-#, fuzzy, kde-format
-#| msgid "New Filter Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Filter Layer"
-msgstr "Uusi suodintaso"
+msgstr "Lisää uusi suodatintaso"
 
 #. i18n: context: iconText @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2629
@@ -12377,23 +12273,17 @@ msgstr "Suodintaso"
 
 #. i18n: context: text @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2638
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Fill Layer..."
+#, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr "&Täyttötaso…"
+msgstr "Lisää &täyttötaso…"
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2640
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fill Layer"
-msgstr ""
-"Vaihda suodinta\n"
-"suotimen vaihto"
+msgstr "Lisää uusi täyttötaso"
 
 #. i18n: context: iconText @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2641
@@ -12404,23 +12294,17 @@ msgstr "Täyttötaso"
 
 #. i18n: context: text @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2650
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&File Layer..."
+#, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr "T&iedostotaso…"
+msgstr "Lisää ti&edostotaso…"
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2652
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
+#, kde-format
 msgctxt "action"
 msgid "Add a new File Layer"
-msgstr ""
-"Vaihda suodinta\n"
-"suotimen vaihto"
+msgstr "Lisää uusi tiedostotaso"
 
 #. i18n: context: iconText @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2653
@@ -12938,7 +12822,7 @@ msgstr "Pikarajausryhmä"
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
-msgstr ""
+msgstr "Ryhmitä valitut tasot ja lisää taso, jonka alfakanava on typistetty"
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2950
@@ -13098,6 +12982,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Muuntaa ryhmän lapsitasot yksittäiseksi tasoksi, jolla on useita "
+"animaatiokehyksiä"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3049
@@ -13139,7 +13025,7 @@ msgstr "Muunna tiedostotasoksi"
 #, kde-format
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
-msgstr ""
+msgstr "Tallentaa tasot uudeksi kuvaksi ja sitten viittaa siihen."
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3073
@@ -13383,12 +13269,10 @@ msgstr "Jaa taso"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3238
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Wavelet Noise Reducer..."
+#, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr "&Wavelet-kohinanvähentäjä…"
+msgstr "Aallokehajotus…"
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -13404,339 +13288,275 @@ msgstr "Aallokkeet"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3250
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Peilaa taso &vaakasuunnassa"
+msgstr "Peilaa tasoja &vaakasuunnassa"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3252 krita/krita.action:3253
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
-msgstr "Peilaa taso vaakasuunnassa"
+msgstr "Peilaa tasoja vaakasuunnassa"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3262
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Peilaa taso &pystysuunnassa"
+msgstr "Peilaa tasoja &pystysuunnassa"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3264 krita/krita.action:3265
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr "Peilaa taso pystysuunnassa"
+msgstr "Peilaa tasoja pystysuunnassa"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3274
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "Kie&rrä tasoa…"
+msgstr "Kie&rrä tasoja…"
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3276 krita/krita.action:3277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr "Kierrä tasoa"
+msgstr "Kierrä tasoja"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3286
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr "Kierrä &tasoa 90° oikeaan"
+msgstr "Kierrä &tasoja 90° oikeaan"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3288 krita/krita.action:3289
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr "Kierrä tasoa 90° oikeaan"
+msgstr "Kierrä tasoja 90° oikeaan"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr "Kierrä tasoa &90° vasempaan"
+msgstr "Kierrä tasoja &90° vasempaan"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3300 krita/krita.action:3301
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr "Kierrä tasoa 90° vasempaan"
+msgstr "Kierrä tasoja 90° vasempaan"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3310
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr "Kierrä tasoa &180°"
+msgstr "Kierrä tasoja &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3312 krita/krita.action:3313
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr "Kierrä tasoa 180°"
+msgstr "Kierrä tasoja 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3322
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "&Skaalaa taso uuteen kokoon…"
+msgstr "&Skaalaa tasot uuteen kokoon…"
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3324 krita/krita.action:3325
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr "Skaalaa taso uuteen kokoon"
+msgstr "Skaalaa tasot uuteen kokoon"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3334
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "&Viistoa taso…"
+msgstr "&Viistoa tasot…"
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3336 krita/krita.action:3337
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr "Viistoa taso"
+msgstr "Viistoa tasot"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3346
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
-msgstr "Peilaa taso &vaakasuunnassa"
+msgstr "Peilaa kaikki tasot &vaakasuunnassa"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3348 krita/krita.action:3349
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr "Peilaa taso vaakasuunnassa"
+msgstr "Peilaa kaikki tasot vaakasuunnassa"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3358
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
-msgstr "Peilaa taso &pystysuunnassa"
+msgstr "Peilaa kaikki tasot &pystysuunnassa"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3360 krita/krita.action:3361
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr "Peilaa taso pystysuunnassa"
+msgstr "Peilaa kaikki tasot pystysuunnassa"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3370
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
-msgstr "Kie&rrä tasoa…"
+msgstr "Kierrä k&aikkia tasoa…"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3372 krita/krita.action:3373
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All Layers"
-msgstr "Kierrä tasoa"
+msgstr "Kierrä kaikkia tasoja"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3382
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr "Kierrä &tasoa 90° oikeaan"
+msgstr "Kierrä kaikkia &tasoja 90° oikeaan"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3384 krita/krita.action:3385
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
-msgstr "Kierrä tasoa 90° oikeaan"
+msgstr "Kierrä kaikkia tasoja 90° oikeaan"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3394
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
-msgstr "Kierrä tasoa &90° vasempaan"
+msgstr "Kierrä kaikkia tasoja &90° vasempaan"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3396 krita/krita.action:3397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
-msgstr "Kierrä tasoa 90° vasempaan"
+msgstr "Kierrä kaikkia tasoja 90° vasempaan"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3406
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
-msgstr "Kierrä tasoa &180°"
+msgstr "Kierrä kaikkia tasoja &180°"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3408 krita/krita.action:3409
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
-msgstr "Kierrä tasoa 180°"
+msgstr "Kierrä kaikkia tasoja 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3418
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
-msgstr "&Skaalaa taso uuteen kokoon…"
+msgstr "&Skaalaa kaikki tasot uuteen kokoon…"
 
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3420 krita/krita.action:3421
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale All Layers to new Size"
-msgstr "Skaalaa taso uuteen kokoon"
+msgstr "Skaalaa kaikki tasot uuteen kokoon"
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3430
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr "&Viistoa taso…"
+msgstr "&Viistoa kaikki tasot…"
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3432 krita/krita.action:3433
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
-msgstr "Viistoa taso"
+msgstr "Viistoa kaikki tasot"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3442
@@ -13846,7 +13666,7 @@ msgctxt "action"
 msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
-msgstr ""
+msgstr "Muunna kaikki tasot kuvan väriavaruuteen (jos se niillä eroaa)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3514
@@ -14070,7 +13890,7 @@ msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
-msgstr ""
+msgstr "Pakota värivalitsin valitsemaan värit vain valitusta paletista."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3681
@@ -14118,7 +13938,7 @@ msgstr "Kierrä ympärille tila"
 #: krita/krita5.xmlgui:102
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Lähennä, kierrä ja peilaa"
 
 #: krita/krita5.xmlgui:134
 #, kde-format
@@ -14148,8 +13968,7 @@ msgid "&Layer"
 msgstr "Tas&o"
 
 #: krita/krita5.xmlgui:201
-#, fuzzy, kde-format
-#| msgid "&New"
+#, kde-format
 msgctxt "New layer"
 msgid "&New"
 msgstr "&Uusi"
@@ -14189,16 +14008,14 @@ msgid "&Group"
 msgstr "&Ryhmä"
 
 #: krita/krita5.xmlgui:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Transform"
-msgstr "Muunna"
+msgstr "&Muunna"
 
 #: krita/krita5.xmlgui:280
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Transform Layer"
+#, kde-format
 msgid "Transform &All Layers"
-msgstr "Muunna taso"
+msgstr "Muunna k&aikki taso"
 
 #: krita/krita5.xmlgui:295
 #, kde-format
@@ -14211,11 +14028,9 @@ msgid "S&plit Alpha"
 msgstr "Jaa al&fa"
 
 #: krita/krita5.xmlgui:342
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque"
+#, kde-format
 msgid "Select &Opaque"
-msgstr "V&alitse läpinäkymätön"
+msgstr "Valitse &peittävä"
 
 #: krita/krita5.xmlgui:360
 #, kde-format
@@ -14251,9 +14066,7 @@ msgid "File"
 msgstr "Tiedosto"
 
 #: krita/krita5.xmlgui:441
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Muokkaa"
 
@@ -14263,16 +14076,14 @@ msgid "Brushes and Stuff"
 msgstr "Siveltimet yms."
 
 #: krita/krita5.xmlgui:463
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Mukautettu väri"
+msgstr "Mukautettu työkalurivi 1"
 
 #: krita/krita5.xmlgui:466
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Mukautettu väri"
+msgstr "Mukautettu työkalurivi 1"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -14297,8 +14108,7 @@ msgstr "Luo uusi tiedosto"
 
 #. i18n: context: iconText @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:10
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "action"
 msgid "New"
 msgstr "Uusi"
@@ -14319,8 +14129,7 @@ msgstr "Avaa olemassa oleva tiedosto"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "action"
 msgid "Open"
 msgstr "Avaa"
@@ -14341,12 +14150,10 @@ msgstr "Avaa viimeksi avattu tiedosto"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open &Recent"
+#, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr "Avaa &viimeaikainen"
+msgstr "Avaa viimeaikainen"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
@@ -14381,10 +14188,10 @@ msgstr "Tallenna tiedosto uudella nimellä"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save As"
-msgstr "Tallenna makro"
+msgstr "Tallenna nimellä"
 
 #. i18n: context: text @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:67
@@ -14402,8 +14209,7 @@ msgstr "Avaa istunnonhallinta"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
-#, fuzzy, kde-format
-#| msgid "Sessions"
+#, kde-format
 msgctxt "action"
 msgid "Sessions"
 msgstr "Istunnot"
@@ -14478,24 +14284,20 @@ msgstr "Tuo animaatioruudut"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Import animation"
+#, kde-format
 msgctxt "action"
 msgid "Import video animation..."
-msgstr "Tuo animaatio"
+msgstr "Tuo videoanimaatio…"
 
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:131 krita/kritamenu.action:132
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Import animation"
+#, kde-format
 msgctxt "action"
 msgid "Import video animation"
-msgstr "Tuo animaatio"
+msgstr "Tuo videoanimaatio"
 
 #. i18n: context: text @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:141
@@ -14516,8 +14318,7 @@ msgstr "Hahmonna animaatio GIF-tiedostoksi, kuvajonoksi tai videoksi"
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:144 krita/kritamenu.action:156
-#, fuzzy, kde-format
-#| msgid "Render Animation"
+#, kde-format
 msgctxt "action"
 msgid "Render Animation"
 msgstr "Hahmonna animaatio"
@@ -14675,12 +14476,10 @@ msgstr "Lopeta ohjelma"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Quit"
+#, kde-format
 msgctxt "action"
 msgid "Quit"
-msgstr "&Lopeta"
+msgstr "Lopeta"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
@@ -14739,14 +14538,10 @@ msgstr "Leikkaa valinta leikepöydälle"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Cut"
+#, kde-format
 msgctxt "action"
 msgid "Cut"
-msgstr ""
-"Leikkaa\n"
-"leikkaaminen"
+msgstr "Leikkaa"
 
 #. i18n: context: text @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:301
@@ -14764,8 +14559,7 @@ msgstr "Kopioi valinta leikepöydälle"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
-#, fuzzy, kde-format
-#| msgid "Copy"
+#, kde-format
 msgctxt "action"
 msgid "Copy"
 msgstr "Kopioi"
@@ -14854,9 +14648,7 @@ msgstr "Liitä leikepöydän sisältö"
 
 #. i18n: context: iconText @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:364
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste"
+#, kde-format
 msgctxt "action"
 msgid "Paste"
 msgstr "Liitä"
@@ -16760,7 +16552,7 @@ msgstr "Alku"
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
-msgstr ""
+msgstr "Käytä viimeisintä G’MIC-suodatinta uudelleen"
 
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
@@ -17940,29 +17732,25 @@ msgid "Active tool: %1"
 msgstr "Aktiivinen työkalu: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit View"
-msgstr "Sovita sivulle"
+msgstr "Sovita näkymä"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit Width"
-msgstr "Sovita leveyteen"
+msgstr "Sovita leveys"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit to Page &Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "Sovita sivun &korkeuteen"
+msgstr "Sovita korkeus"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:33
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Tyylipohja"
+msgstr "Tyyliesimerkki"
 
 #: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
@@ -17972,6 +17760,9 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
+"Tiedostossa on Krita 4.x:llä luotua vektoritekstiä. Tallennettaessa "
+"tekstiolio muunnetaan Krita 5 -muotoon, joka ei enää ole yhteensopiva Krita "
+"4.x:n kanssa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
 #, fuzzy, kde-format
@@ -18063,12 +17854,10 @@ msgid "Syriac"
 msgstr "Syyria"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Supplement"
-msgstr "Muuta lohkoa"
+msgstr "Arabian laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:36
 #, kde-format
@@ -18104,16 +17893,16 @@ msgid "Syriac Supplement"
 msgstr "Muuta lohkoa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-B"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Arabian laajennus B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-A"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Arabian laajennus A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:43
 #, kde-format
@@ -18134,8 +17923,7 @@ msgid "Gurmukhi"
 msgstr "Gurmukhi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:46
-#, fuzzy, kde-format
-#| msgid "Gujarati"
+#, kde-format
 msgctxt "@title"
 msgid "Gujarati"
 msgstr "Gudžarati"
@@ -18183,11 +17971,10 @@ msgid "Thai"
 msgstr "Thai"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:54
-#, fuzzy, kde-format
-#| msgid "L*a*b*"
+#, kde-format
 msgctxt "@title"
 msgid "Lao"
-msgstr "L*a*b*"
+msgstr "Lao"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:55
 #, kde-format
@@ -18202,10 +17989,10 @@ msgid "Myanmar"
 msgstr "Myanmar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Georgian"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Georgia"
 
 # Nimi on koreaa, tuskin tarvitsee kääntää
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:58
@@ -18221,11 +18008,10 @@ msgid "Ethiopic"
 msgstr "Etiopialainen"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:60
-#, fuzzy, kde-format
-#| msgid "Remove Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Ethiopic Supplement"
-msgstr "Poista segmentti"
+msgstr "Etiopian laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:61
 #, kde-format
@@ -18252,11 +18038,10 @@ msgid "Runic"
 msgstr "Riimukirjoitus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:65
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@title"
 msgid "Tagalog"
-msgstr "Ikkuna"
+msgstr "Tagalog"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:66
 #, kde-format
@@ -18301,19 +18086,16 @@ msgid "Limbu"
 msgstr "Limbu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgctxt "@title"
 msgid "Tai Le"
-msgstr "Näytä"
+msgstr "Taile"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:74
-#, fuzzy, kde-format
-#| msgid "New Text"
+#, kde-format
 msgctxt "@title"
 msgid "New Tai Lue"
-msgstr "Uusi teksti"
+msgstr "Uusi tailue"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
 #, fuzzy, kde-format
@@ -18374,16 +18156,16 @@ msgid "Ol Chiki"
 msgstr "Ol Chiki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-C"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kyrilliikan laajennus C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Georgian Extended"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Georgian laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:86
 #, fuzzy, kde-format
@@ -18400,16 +18182,16 @@ msgid "Vedic Extensions"
 msgstr "Laajennusten hallinta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr "Viisto X:"
+msgstr "Fonetiikan laajennukset"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions Supplement"
-msgstr "Viisto X:"
+msgstr "Fonetiikan laajennusten lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:90
 #, fuzzy, kde-format
@@ -18424,17 +18206,16 @@ msgid "Latin Extended Additional"
 msgstr "OpenEXR-viennin asetukset"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Greek Extended"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kreikan laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
-#| msgid "General settings"
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "Yleisasetukset"
+msgstr "Yleiset välimerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
@@ -18443,17 +18224,16 @@ msgid "Superscripts and Subscripts"
 msgstr "Ylä- ja alaindeksit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:95
-#, fuzzy, kde-format
-#| msgid "Current color model:"
+#, kde-format
 msgctxt "@title"
 msgid "Currency Symbols"
-msgstr "Nykyinen värimalli"
+msgstr "Valuuttamerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks for Symbols"
-msgstr "Yhdistä polut"
+msgstr "Yhdistävät tarkemerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:97
 #, kde-format
@@ -18462,25 +18242,22 @@ msgid "Letterlike Symbols"
 msgstr "Kirjaimen kaltaiset merkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:98
-#, fuzzy, kde-format
-#| msgid "Number of rows:"
+#, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr "Rivien määrä:"
+msgstr "Numeromerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
-#, fuzzy, kde-format
-#| msgid "Arrows"
+#, kde-format
 msgctxt "@title"
 msgid "Arrows"
 msgstr "Nuolet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
-#, fuzzy, kde-format
-#| msgid "Logical Operations"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
-msgstr "Loogiset operaatiot"
+msgstr "Matemaattiset operaattorit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
 #, fuzzy, kde-format
@@ -18509,32 +18286,28 @@ msgid "Enclosed Alphanumerics"
 msgstr "Ympyröidyt aakkoset"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:105
-#, fuzzy, kde-format
-#| msgid "a drawing"
+#, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr "piirros"
+msgstr "Laatikonpiirto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
-#, fuzzy, kde-format
-#| msgid "- Elements"
+#, kde-format
 msgctxt "@title"
 msgid "Block Elements"
-msgstr "− alkiot"
+msgstr "Lohkoalkiot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:107
-#, fuzzy, kde-format
-#| msgid "Geometrics"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr "Geometriset"
+msgstr "Geometriset muodot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols"
-msgstr "Sekalaista"
+msgstr "Sekalaiset merkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:109
 #, kde-format
@@ -18543,11 +18316,10 @@ msgid "Dingbats"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:110
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Mathematical Symbols-A"
-msgstr "Sekalaista"
+msgstr "Sekalaiset matemaattiset merkit A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:111
 #, kde-format
@@ -18556,11 +18328,10 @@ msgid "Supplemental Arrows-A"
 msgstr "Lisänuolet-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
-#, fuzzy, kde-format
-#| msgid "Fill Patterns"
+#, kde-format
 msgctxt "@title"
 msgid "Braille Patterns"
-msgstr "Täyttökuviot"
+msgstr "Pistekirjoituskuviot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:113
 #, kde-format
@@ -18569,11 +18340,10 @@ msgid "Supplemental Arrows-B"
 msgstr "Lisänuolet-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:114
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Mathematical Symbols-B"
-msgstr "Sekalaista"
+msgstr "Sekalaiset matemaattiset merkit B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:115
 #, kde-format
@@ -18582,24 +18352,22 @@ msgid "Supplemental Mathematical Operators"
 msgstr "Matemaattiset lisäoperaattorit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:116
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Arrows"
-msgstr "Sekalaista"
+msgstr "Sekalaiset merkit ja nuolet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:117
-#, fuzzy, kde-format
-#| msgid "Politics"
+#, kde-format
 msgctxt "@title"
 msgid "Glagolitic"
-msgstr "Politiikka"
+msgstr "Glagoliittiset kirjaimet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-C"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Latinalaisten kirjainten laajennus C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:119
 #, kde-format
@@ -18608,12 +18376,10 @@ msgid "Coptic"
 msgstr "Kopti"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Georgian Supplement"
-msgstr "Muuta lohkoa"
+msgstr "Georgian laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:121
 #, kde-format
@@ -18622,39 +18388,34 @@ msgid "Tifinagh"
 msgstr "Tifinagh"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Etiopian laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-A"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kyrilliikan laajennus A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Hanging Punctuation"
+#, kde-format
 msgctxt "@title"
 msgid "Supplemental Punctuation"
-msgstr "Riippuva sisennys"
+msgstr "Välimerkkien lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:125
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "CJK Radicals Supplement"
-msgstr "Muuta lohkoa"
+msgstr "CJK-radikaalien lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:126
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt "@title"
 msgid "Kangxi Radicals"
-msgstr "Säteittäinen"
+msgstr "Kangxi-radikaalit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:127
 #, kde-format
@@ -18663,12 +18424,10 @@ msgid "Ideographic Description Characters"
 msgstr "Ideografiset kuvausmerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Hanging Punctuation"
+#, kde-format
 msgctxt "@title"
 msgid "CJK Symbols and Punctuation"
-msgstr "Riippuva sisennys"
+msgstr "CJK-merkit ja -välimerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:129
 #, kde-format
@@ -18707,17 +18466,16 @@ msgid "Bopomofo Extended"
 msgstr "Laajennettu bopomofo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:135
-#, fuzzy, kde-format
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr "Veto"
+msgstr "CJK-vedot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Katakana Phonetic Extensions"
-msgstr "Viisto X:"
+msgstr "Katakanan foneettiset laajennukset"
 
 # CJK = kiina, japani, korea. Periaatteessa ”kiinalaiset kirjaimet” voisi käydä, koska kyse on niistä.
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:137
@@ -18748,7 +18506,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs"
-msgstr ""
+msgstr "CJK-yhtenäisideografit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:142
 #, kde-format
@@ -18757,11 +18515,10 @@ msgid "Yi Syllables"
 msgstr "Yi-tavumerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:143
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt "@title"
 msgid "Yi Radicals"
-msgstr "Säteittäinen"
+msgstr "Yi-radikaalit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:144
 #, kde-format
@@ -18776,10 +18533,10 @@ msgid "Vai"
 msgstr "Vai"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-B"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kyrilliikan laajennus B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:147
 #, kde-format
@@ -18788,17 +18545,16 @@ msgid "Bamum"
 msgstr "Bamum"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:148
-#, fuzzy, kde-format
-#| msgid "Modifiers"
+#, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr "Muuntonäppäimet"
+msgstr "Toonimuunnoskirjaimet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-D"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Latinalaisten kirjainten laajennus D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:150
 #, kde-format
@@ -18807,11 +18563,10 @@ msgid "Syloti Nagri"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:151
-#, fuzzy, kde-format
-#| msgid "Number of rows:"
+#, kde-format
 msgctxt "@title"
 msgid "Common Indic Number Forms"
-msgstr "Rivien määrä:"
+msgstr "Yleiset intialaiset numeromuodot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:152
 #, kde-format
@@ -18826,10 +18581,10 @@ msgid "Saurashtra"
 msgstr "Saurashtra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Devanagarin laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:155
 #, kde-format
@@ -18901,11 +18656,10 @@ msgid "Latin Extended-E"
 msgstr "OpenEXR-viennin asetukset"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
-#, fuzzy, kde-format
-#| msgid "Remove Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr "Poista segmentti"
+msgstr "Cherokeen lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
@@ -18946,11 +18700,10 @@ msgid "Low Surrogates"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:173
-#, fuzzy, kde-format
-#| msgid "High Pressure"
+#, kde-format
 msgctxt "@title"
 msgid "Private Use Area"
-msgstr "Korkea paine"
+msgstr "Yksityiskäyttöalue"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:174
 #, kde-format
@@ -18966,11 +18719,10 @@ msgid "Alphabetic Presentation Forms"
 msgstr "esitys"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:176
-#, fuzzy, kde-format
-#| msgid "a presentation"
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-A"
-msgstr "esitys"
+msgstr "Arabian esitysmuodot A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
 #, fuzzy, kde-format
@@ -18980,17 +18732,16 @@ msgid "Variation Selectors"
 msgstr "Taiteellinen värivalitsin"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "Pystyreuna:"
+msgstr "Pystymuodot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "Yhdistä polut"
+msgstr "Yhdistävät puolimerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
@@ -19005,11 +18756,10 @@ msgid "Small Form Variants"
 msgstr "Pienikokoiset muunnelmat"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:182
-#, fuzzy, kde-format
-#| msgid "a presentation"
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-B"
-msgstr "esitys"
+msgstr "Arabian esitysmuodot B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:183
 #, kde-format
@@ -19025,39 +18775,34 @@ msgid "Specials"
 msgstr "Erikoistäyttö"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
-#, fuzzy, kde-format
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr "Lineaarinen poltto"
+msgstr "Lineaari-B-tavumerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
-#, fuzzy, kde-format
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr "Lineaarinen poltto"
+msgstr "Lineaari-B-ideogrammit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
-#, fuzzy, kde-format
-#| msgid "Number:"
+#, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr "Numero:"
+msgstr "Aigeialaiset numerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
-#, fuzzy, kde-format
-#| msgid "Number:"
+#, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Numbers"
-msgstr "Numero:"
+msgstr "Muinaiskreikkalaiset numerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:189
-#, fuzzy, kde-format
-#| msgid "Current color model:"
+#, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr "Nykyinen värimalli"
+msgstr "Muinaiset merkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
@@ -19072,12 +18817,10 @@ msgid "Lycian"
 msgstr "Lyykia"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Variant:"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "Muunnelma:"
+msgstr "Kaaria"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
@@ -19086,11 +18829,10 @@ msgid "Coptic Epact Numbers"
 msgstr "Koptilaiset epaktinumerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "Kursivoitu"
+msgstr "Muinaisitalia"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
@@ -19099,18 +18841,16 @@ msgid "Gothic"
 msgstr "Goottilainen"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Permic"
-msgstr "Kursivoitu"
+msgstr "Muinaispermi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "Logaritminen"
+msgstr "Ugarit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
@@ -19168,25 +18908,22 @@ msgid "Todhri"
 msgstr "Todhri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr "Lineaarinen"
+msgstr "Lineaari-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Latinalaisten kirjainten laajennus F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
-#, fuzzy, kde-format
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr "Lineaarinen poltto"
+msgstr "Kyproslaiset tavumerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
@@ -19287,11 +19024,10 @@ msgid "Psalter Pahlavi"
 msgstr "Psalttaripahlavi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr "Kursivoitu"
+msgstr "Muinaisturkki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
@@ -19315,7 +19051,7 @@ msgstr "Garay"
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "Rumi-numeromerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
@@ -19324,10 +19060,10 @@ msgid "Yezidi"
 msgstr "Yezidi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:232
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-C"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Arabian laajennus C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:233
 #, kde-format
@@ -19375,7 +19111,7 @@ msgstr "Kaithi"
 #, kde-format
 msgctxt "@title"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:241
 #, kde-format
@@ -19459,12 +19195,10 @@ msgid "Modi"
 msgstr "Muutettu:"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Mongolian Supplement"
-msgstr "Muuta lohkoa"
+msgstr "Mongolian lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:255
 #, kde-format
@@ -19473,10 +19207,10 @@ msgid "Takri"
 msgstr "Takri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:256
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-C"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Myanmarin laajennus C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:257
 #, kde-format
@@ -19533,10 +19267,10 @@ msgid "Pau Cin Hau"
 msgstr "Pau Cin Hau"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:266
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended-A"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Devanagarin laajennus A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:267
 #, kde-format
@@ -19639,7 +19373,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr ""
+msgstr "Egyptiläisten hieroglyfien laajennus A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:283
 #, kde-format
@@ -19731,32 +19465,28 @@ msgid "Khitan Small Script"
 msgstr "Käytä skriptiä"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr "Muuta lohkoa"
+msgstr "Tangutin lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kana-laajennus B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "Muuta lohkoa"
+msgstr "Kana-lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kana-laajennus A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
 #, fuzzy, kde-format
@@ -19786,7 +19516,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "Merkit vanhoille tietokonelaitteille"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:306
 #, fuzzy, kde-format
@@ -19801,11 +19531,10 @@ msgid "Byzantine Musical Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:308
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Musical Symbols"
-msgstr "Sekalaista"
+msgstr "Musiikkisymbolit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:309
 #, fuzzy, kde-format
@@ -19820,10 +19549,10 @@ msgid "Kaktovik Numerals"
 msgstr "Pystysuunnassa:"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr "Pystysuunnassa:"
+msgstr "Mayanumerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
@@ -19835,7 +19564,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Counting Rod Numerals"
-msgstr ""
+msgstr "Laskentapuikkonumerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:314
 #, kde-format
@@ -19850,112 +19579,106 @@ msgid "Sutton SignWriting"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:316
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Latin Extended-G"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Latinalaisten kirjainten laajennus G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr "Muuta lohkoa"
+msgstr "Glagoliittisten kirjainten lisäosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-D"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Kyrilliikan laajennus D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:319
 #, kde-format
 msgctxt "@title"
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng Puachue Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:320
 #, kde-format
 msgctxt "@title"
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "Ankkuri:"
+msgstr "Wancho"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
 msgctxt "@title"
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag Mundari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
 #, kde-format
 msgctxt "@title"
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:324
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-B"
-msgstr "OpenEXR-viennin asetukset"
+msgstr "Etiopian laajennus B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:325
 #, kde-format
 msgctxt "@title"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende Kikakui"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:326
 #, kde-format
 msgctxt "@title"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:327
 #, kde-format
 msgctxt "@title"
 msgid "Indic Siyaq Numbers"
-msgstr ""
+msgstr "Intialaiset siyaq-numerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:328
 #, kde-format
 msgctxt "@title"
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Ottomaanien siyaq-numerot"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:329
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "Arabialaiset matemaattiset aakkosmerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Mahjong Tiles"
-msgstr "Pienet tiilet"
+msgstr "Mahjonglaatat"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr "Pienet tiilet"
+msgstr "Dominolaatat"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
-#, fuzzy, kde-format
-#| msgid "Playing back macro"
+#, kde-format
 msgctxt "@title"
 msgid "Playing Cards"
-msgstr "Toistetaan makroa"
+msgstr "Pelikortit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:333
 #, fuzzy, kde-format
@@ -19996,113 +19719,109 @@ msgstr "Väriliu’ut"
 #, kde-format
 msgctxt "@title"
 msgid "Transport and Map Symbols"
-msgstr ""
+msgstr "Liikenne- ja karttamerkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:339
 #, kde-format
 msgctxt "@title"
 msgid "Alchemical Symbols"
-msgstr ""
+msgstr "Alkemistiset merkit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:340
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Shape RunAround"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr "Muuta muodon ympärijuoksutusta"
+msgstr "Geometristen muotojen laajennus"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-C"
-msgstr ""
+msgstr "Lisänuolet-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:342
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "Lisämerkit ja -piktografit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:343
-#, fuzzy, kde-format
-#| msgid "Current color model:"
+#, kde-format
 msgctxt "@title"
 msgid "Chess Symbols"
-msgstr "Nykyinen värimalli"
+msgstr "Šakkisymbolit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:344
 #, kde-format
 msgctxt "@title"
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Merkkien ja piktografien laajennus A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:345
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Merkit vanhalle tietotekniikalle"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:346
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension B"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:347
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension C"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:348
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension D"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:349
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension E"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:350
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension F"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:351
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension I"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus I"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:352
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs Supplement"
-msgstr ""
+msgstr "CJK-yhteensopivuusideografien täydennysosa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:353
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension G"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:354
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension H"
-msgstr ""
+msgstr "CJK-yhtenäisideografien laajennus H"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:355
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgctxt "@title"
 msgid "Tags"
-msgstr "Tunnisteet"
+msgstr "Luokitukset"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:356
 #, fuzzy, kde-format
@@ -20135,7 +19854,7 @@ msgstr "Tasaa molemmat reunat"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
-msgstr ""
+msgstr "%1 glyyfimuunnelmaa."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
 #, fuzzy, kde-format
@@ -20323,8 +20042,7 @@ msgid "Replaces glyphs with ornaments for decorative purposes."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
-#, fuzzy, kde-format
-#| msgid "Randomize"
+#, kde-format
 msgctxt "@title"
 msgid "Randomize"
 msgstr "Satunnaista"
@@ -20348,10 +20066,10 @@ msgid "This adjusts glyphs so there is no space at the right side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "Vaihteleva"
+msgstr "Tyylimuunnelmat"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -20468,11 +20186,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Optimoi"
+msgstr "Optinen koko"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -20496,10 +20213,10 @@ msgid "This controls vertical kerning on the font."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "Vaihdellen"
+msgstr "Vaihtoehtoiset murtoluvut"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
@@ -20508,11 +20225,10 @@ msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
-#, fuzzy, kde-format
-#| msgid "Illuminator"
+#, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "Kuvittaja"
+msgstr "Nimittäjät"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -20552,12 +20268,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Fractions:"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "Murtoluvut:"
+msgstr "Murtoluvut"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -20585,11 +20299,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
-#, fuzzy, kde-format
-#| msgid "Logical Operations"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr "Loogiset operaatiot"
+msgstr "Matematiikan kreikka"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -20611,11 +20324,10 @@ msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "Johtaja"
+msgstr "Osoittajat"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -20626,12 +20338,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Oldstyle"
+#, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "Vanha tyyli"
+msgstr "Vanhan tyylin numerot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -20642,9 +20352,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Ordinals"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
 msgstr "Järjestysluvut"
@@ -20695,11 +20403,10 @@ msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
-#, fuzzy, kde-format
-#| msgid "Subscript"
+#, kde-format
 msgctxt "@title"
 msgid "Subscript"
-msgstr "Alaindeksi"
+msgstr "Alaindeksit"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
 #, kde-format
@@ -20708,11 +20415,10 @@ msgid "Replaces glyphs with ones more suited for subscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
-#, fuzzy, kde-format
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@title"
 msgid "Superscript"
-msgstr "Yläindeksi"
+msgstr "Yläindeksit"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
 #, kde-format
@@ -20738,7 +20444,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Viivallinen nolla"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
 #, kde-format
@@ -20747,6 +20453,8 @@ msgid ""
 "Replaces the number zero with one that has a slash in the middle, which can "
 "help prevent confusion with similar glyphs like the letter 'O'."
 msgstr ""
+"Korvaa numeron nolla sellaisella, jossa on keskellä vinoviiva, joka voi "
+"estää sekaannuksen samankaltaisiin glyyfeihin kuten ”O”-kirjaimeen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:211
 #, fuzzy, kde-format
@@ -20794,13 +20502,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Kapiteelit suuraakkosista"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uppercase letters with small capital forms."
-msgstr ""
+msgstr "Korjaa suuraakkoset kapiteelimuodoilla."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
 #, fuzzy, kde-format
@@ -20817,6 +20525,8 @@ msgid ""
 "Replaces lowercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Korvaa pienaakkoset hyvin pienillä suuraakkosmuodoilla, jotka ovat lähempänä "
+"fontin x-korkeutta kuin pienet suuraakkosmuodot."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
 #, fuzzy, kde-format
@@ -20830,7 +20540,7 @@ msgstr "Kapiteelit"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces lowercase letters with small capital forms."
-msgstr ""
+msgstr "Korvaa pienaakkoset pienillä suuraakkosmuodoilla."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
 #, fuzzy, kde-format
@@ -20843,20 +20553,19 @@ msgstr "Otsikko"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternate forms suited for header text."
-msgstr ""
+msgstr "Korvaa glyyfit, joilla on otsakkeisiin sopivat muotomuunnelmat."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
-#, fuzzy, kde-format
-#| msgid "Uppercase"
+#, kde-format
 msgctxt "@title"
 msgid "Unicase"
-msgstr "Suuraakkoset"
+msgstr "Unicase"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces both upper and lowercase glyphs with unicase glyphs."
-msgstr ""
+msgstr "Korvaa sekä suur- että pienaakkosglyyfit Unicase-glyyfeillä."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:245
 #, kde-format
@@ -20901,13 +20610,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Akhand"
-msgstr ""
+msgstr "Akhand"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr ""
+msgstr "Säätää intialaisten kirjoitusjärjestelmien akhand-ligatuureja."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
@@ -20972,11 +20681,10 @@ msgid "Controls conjunct forms in Indic scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
-#, fuzzy, kde-format
-#| msgid "Distance"
+#, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr "Etäisyys"
+msgstr "Etäisyydet"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
@@ -21154,11 +20862,10 @@ msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
-#, fuzzy, kde-format
-#| msgid "Expert"
+#, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr "Asiantuntija"
+msgstr "Asiantuntijamuodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
@@ -21167,12 +20874,10 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Full width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr "Koko leveys"
+msgstr "Täyslevyiset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
@@ -21189,11 +20894,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "Vaakaviivat"
+msgstr "Vaakasuuntaiset kana-muunnelmat"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -21202,19 +20906,19 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for horizontal "
 "layout."
 msgstr ""
+"Korvaa vakio-kanan japanilaisissa fonteissa vaaka-asetteluun sopivalla."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr "Kulmikas"
+msgstr "Hangul"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
-msgstr ""
+msgstr "Korvaa hanjan koreassa vastaavalla hangulilla. Vanhentunut."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:355
 #, kde-format
@@ -21231,11 +20935,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr "Leveys"
+msgstr "Puolilevyiset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -21246,11 +20949,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr "Kursivoitu"
+msgstr "Kursiivit"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
@@ -21286,25 +20988,26 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "JIS90-muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
-msgstr ""
+msgstr "Korvaa vakiomuotoisen kanjin japanilaisissa fonteissa JIS90-muodoilla."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
 #, kde-format
 msgctxt "@title"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "JIS2004-muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:380
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
 msgstr ""
+"Korvaa vakiomuotoisen kanjin japanilaisissa fonteissa JIS2004-muodoilla."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
 #, kde-format
@@ -21320,11 +21023,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
-#, fuzzy, kde-format
-#| msgid "Loading Resources..."
+#, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr "Ladataan resursseja…"
+msgstr "NLC-kanji-muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
@@ -21333,11 +21035,10 @@ msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr "Suhteellinen"
+msgstr "Suhteelliset vaihtoehtoiset leveydet"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
@@ -21346,11 +21047,10 @@ msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr "Suhteellinen"
+msgstr "Suhteellinen kana"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
@@ -21359,11 +21059,10 @@ msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr "Suhteellinen"
+msgstr "Suhteelliset leveydet"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
@@ -21372,11 +21071,10 @@ msgid "Replaces uniform-width glyphs with proportional glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
-#, fuzzy, kde-format
-#| msgid "Quarter"
+#, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr "Neljännes"
+msgstr "Neljänneslevyiset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
@@ -21399,12 +21097,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Simplified"
+#, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr "Yksinkertaistettu"
+msgstr "Yksinkertaistetut muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -21427,12 +21123,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Traditional"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr "Perinteinen"
+msgstr "Perinteiset nimimuodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -21443,12 +21137,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Traditional"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "Perinteinen"
+msgstr "Perinteiset muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -21457,11 +21149,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Line Width"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "Viivan leveys"
+msgstr "Kolmanneslevyiset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -21470,12 +21161,10 @@ msgid "Replaces glyphs with third-width glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align to vertical center"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Tasaa pystysuorassa keskelle"
+msgstr "Vaihtoehtoinen pystymetriikka"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -21484,10 +21173,10 @@ msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Vaihteleva"
+msgstr "Vaihtoehtoiset puolilevyiset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -21502,11 +21191,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "Pystyviivat"
+msgstr "Pystymuunnelmat"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -21515,12 +21203,10 @@ msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align to vertical center"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr "Tasaa pystysuorassa keskelle"
+msgstr "Vaihtoehtoinen pystypuolimetriikka"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -21601,11 +21287,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
-#, fuzzy, kde-format
-#| msgid "Text Position"
+#, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "Tekstin sijainti"
+msgstr "Kaunokirjoitussijoittelu"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
@@ -21614,11 +21299,10 @@ msgid "Adjusts the position of glyphs so they cursively connect."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr "Pystyreuna:"
+msgstr "Päätemuodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -21629,11 +21313,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr "Pystyreuna:"
+msgstr "Päätemuoto 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -21644,11 +21327,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr "Pystyreuna:"
+msgstr "Päätemuoto 3"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -21660,11 +21342,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
-#, fuzzy, kde-format
-#| msgid "Initials:"
+#, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "Nimikirjaimet:"
+msgstr "Aloittavat muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -21683,12 +21364,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Glyph Alternates"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr "Merkkimuunnelmat"
+msgstr "Vasemmalta oikealla -glyyfimuunnelmat"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
@@ -21697,11 +21376,10 @@ msgid "Replaces glyphs with their left-to-right alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "Vasemmalta oikealle"
+msgstr "Vasemmalta oikealle peilatut muodot"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, fuzzy, kde-format
@@ -21810,11 +21488,10 @@ msgid "Replaces glyphs with alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
-#, fuzzy, kde-format
-#| msgid "Variant (%1)"
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "Muunnelma (%1)"
+msgstr "Merkkimuunnelma %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
 #: libs/flake/text/KoSvgTextShape.cpp:2636
@@ -21824,24 +21501,21 @@ msgid "Placeholder Text"
 msgstr "Paikkavarausteksti"
 
 #: libs/flake/text/KoSvgTextShape.cpp:2615
-#, fuzzy, kde-format
-#| msgid "Text"
+#, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksti"
 
 #: libs/flake/text/KoSvgTextShape.cpp:2617
 #: libs/flake/text/KoSvgTextShape.cpp:2625
-#, fuzzy, kde-format
-#| msgid "Text Shape"
+#, kde-format
 msgid "SVG Text Shape"
-msgstr "Tekstimuoto"
+msgstr "SVG-tekstikuvio"
 
 #: libs/flake/text/KoSvgTextShape.cpp:2623
-#, fuzzy, kde-format
-#| msgid " Text:"
+#, kde-format
 msgid "SVG Text"
-msgstr " Teksti:"
+msgstr "SVG-teksti"
 
 #: libs/flake/text/KoSvgTextShape.cpp:2646
 #, kde-format
@@ -21878,10 +21552,9 @@ msgstr "Muuta lohkoa"
 
 # @title:window
 #: libs/flake/tools/KoPathTool.cpp:130
-#, fuzzy, kde-format
-#| msgid "Add Shape"
+#, kde-format
 msgid "Edit Shape"
-msgstr "Muodon lisäys"
+msgstr "Muokkaa kuviota"
 
 #: libs/flake/tools/KoPathTool.cpp:642
 #, kde-format
@@ -21932,17 +21605,15 @@ msgstr "Lähennys"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:24
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "&Zoom In"
-msgstr "Lähennä"
+msgstr "&Lähennä"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoo&m Out"
-msgstr "Loitonna"
+msgstr "L&oitonna"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -22133,10 +21804,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Virhe: virheellinen tyyppi (%2) arvolle %1, odotettiin %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgid "Could not load raster selection %1."
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Rasterivalintaa %1 ei voitu ladata."
+msgstr "Älä kysy tätä enää"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -22669,8 +22339,7 @@ msgstr ""
 
 #: libs/image/kis_filter_strategy.h:86
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
-#, fuzzy, kde-format
-#| msgid "Nearest Neighbour"
+#, kde-format
 msgid "Nearest Neighbor"
 msgstr "Lähin naapuri"
 
@@ -22740,16 +22409,14 @@ msgid "Pass Through"
 msgstr "Läpivienti"
 
 #: libs/image/kis_image.cc:398
-#, fuzzy, kde-format
-#| msgid "Import Image"
+#, kde-format
 msgid "Imported Image"
-msgstr "Tuo kuva"
+msgstr "Tuotu kuva"
 
 #. i18n.
 #: libs/image/kis_image.cc:737 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2709 plugins/impex/psd/psd_loader.cpp:221
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Tausta"
@@ -22800,18 +22467,12 @@ msgstr ""
 "kuvan tarkkuuden muuttaminen"
 
 #: libs/image/kis_image.cc:1080
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] ""
-"Skaalaa taso\n"
-"tason skaalaus"
-msgstr[1] ""
-"Skaalaa taso\n"
-"tason skaalaus"
+msgstr[0] "Skaalaa taso"
+msgstr[1] "Skaalaa %1 tasoa"
 
 #: libs/image/kis_image.cc:1219
 msgctxt "(qtundo-format)"
@@ -22821,25 +22482,17 @@ msgstr ""
 "kuvan kierto"
 
 #: libs/image/kis_image.cc:1229
-#, fuzzy
-#| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
-msgstr "Tuo maski eteen"
+msgstr "Kierrä tasoa"
 
 #: libs/image/kis_image.cc:1232
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] ""
-"Kierrä tasoa\n"
-"tason kierto"
-msgstr[1] ""
-"Kierrä tasoa\n"
-"tason kierto"
+msgstr[0] "Kierrä tasoa"
+msgstr[1] "Kierrä %1 tasoa"
 
 #: libs/image/kis_image.cc:1333
 #, fuzzy
@@ -22916,28 +22569,24 @@ msgid "Content"
 msgstr "Sisältö"
 
 #: libs/image/kis_keyframe_channel.cpp:28
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Position (X)"
-msgstr "Sijainti"
+msgstr "Sijainti (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:29
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Position (Y)"
-msgstr "Sijainti"
+msgstr "Sijainti (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:30
-#, fuzzy, kde-format
-#| msgid "Scale X"
+#, kde-format
 msgid "Scale (X)"
-msgstr "X-mittakaava"
+msgstr "Mittakaava (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:31
-#, fuzzy, kde-format
-#| msgid "Scale Y"
+#, kde-format
 msgid "Scale (Y)"
-msgstr "Y-mittakaava"
+msgstr "Mittakaava (Y)"
 
 # Vältellään cut=leikkaa
 #: libs/image/kis_keyframe_channel.cpp:32
@@ -22953,22 +22602,19 @@ msgid "Shear (Y)"
 msgstr "Y-katkaisu"
 
 #: libs/image/kis_keyframe_channel.cpp:34
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgid "Rotation (X)"
-msgstr "Kierrä"
+msgstr "Kierto (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:35
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgid "Rotation (Y)"
-msgstr "Kierrä"
+msgstr "Kierto (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgid "Rotation (Z)"
-msgstr "Kierrä"
+msgstr "Kierto (Z)"
 
 #: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
@@ -22984,8 +22630,7 @@ msgid "Blending Mode"
 msgstr "Sekoitustila"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Locked"
 msgstr "Lukittu"
 
@@ -23252,7 +22897,7 @@ msgstr "Näytä valinta"
 #: libs/image/kis_selection_filters.cpp:1200
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr ""
+msgstr "Kasvata valintaa tummimpaan kuvapisteeseen"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:33
 #, fuzzy
@@ -27821,7 +27466,7 @@ msgstr "y"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
 #, kde-format
 msgid "Red Primary:"
-msgstr ""
+msgstr "Punainen pääväri:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
@@ -28195,7 +27840,8 @@ msgstr "Viimeinen ruutu:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Images"
 msgid "Images"
 msgstr "Kuvat"
 
@@ -28350,6 +27996,9 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"VAROITUS: HDR-tila on aktivoitu 8-bittisessä tilassa toimivalle pinnalle!\n"
+"Aktivoi 10-bittinen tila Kritan asetuksissa ja käynnistä Krita uudelleen, "
+"jottei väri raidoitu!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -28381,6 +28030,8 @@ msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
+"Olet aktivoimassa kietaisutilaa, mutta OpenGL ei ole käytössä.\n"
+"Näyttääksesi kietaisutilan vaikutuksen, ota OpenGL käyttöön."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, fuzzy, kde-format
@@ -28390,7 +28041,7 @@ msgstr "Esikatselutila"
 #: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
-msgstr ""
+msgstr "Välitöntä esikatselua tuetaan vain OpenGL aktivoituna"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
@@ -29560,17 +29211,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #, kde-format
 msgid "Red Primary: %1, %2"
-msgstr ""
+msgstr "Punainen pääväri: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #, kde-format
 msgid "Green Primary: %1, %2"
-msgstr ""
+msgstr "Vihreä pääväri: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2261
 #, kde-format
 msgid "Blue Primary: %1, %2"
-msgstr ""
+msgstr "Sininen pääväri: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2262
 #, fuzzy, kde-format
@@ -31974,7 +31625,7 @@ msgstr "Pieni tiedostokoko"
 #: libs/ui/forms/wdggeneralsettings.ui:151
 #, kde-format
 msgid "~"
-msgstr ""
+msgstr "~"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdggeneralsettings.ui:161
@@ -33919,7 +33570,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Tunnista näytöltä"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361
@@ -34482,7 +34133,7 @@ msgstr "Suhde:"
 #: libs/ui/forms/wdgrectangleconstraints.ui:175
 #, kde-format
 msgid "Horizontal radius of rectangle corners"
-msgstr ""
+msgstr "Suorakaiteen kulmien vaakasäde"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intRoundCornersX)
 #: libs/ui/forms/wdgrectangleconstraints.ui:181
@@ -34495,7 +34146,7 @@ msgstr "Pyöreä pääty"
 #: libs/ui/forms/wdgrectangleconstraints.ui:197
 #, kde-format
 msgid "Vertical radius of rectangle corners"
-msgstr ""
+msgstr "Suorakaiteen kulmien pystysäde"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:203
@@ -34552,7 +34203,7 @@ msgstr "Lataa kuva"
 #: libs/ui/forms/wdgsavebrushpreset.ui:164
 #, kde-format
 msgid "Load from Icon Library"
-msgstr ""
+msgstr "Lataa kuvakekirjastosta"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearBrushPresetThumbnailButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearPresetThumbnailButton)
@@ -34858,6 +34509,8 @@ msgid ""
 "Use mouse events for right- and middle-clicks (workaround for convertible "
 "devices, needs restart)"
 msgstr ""
+"Käytä hiiritapahtumia oikean ja keskipainikkeen painalluksiin (korjaus "
+"muunneltaville laitteille, vaatii uudelleenkäynnistyksen)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsePageUpDownMouseButtonEmulationWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:194
@@ -34866,6 +34519,8 @@ msgid ""
 "Treat page up/down keys as right/middle mouse buttons (workaround for Xiaomi "
 "styluses)"
 msgstr ""
+"Käytä PgUp/PgDn-näppäimiä hiiren oikeana ja keskipainikkeena (korjaus "
+"Xiaomin osoitinkynälle)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseIgnoreHistoricTabletEventsWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:201
@@ -34874,6 +34529,8 @@ msgid ""
 "Disregard tablet position history (workaround for jagged lines with Xiaomi "
 "styluses)"
 msgstr ""
+"Jätä huomiotta tabletin sijaintihistoria (korjaus Xiaomin osoitinkynien "
+"rosoviivoille)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:214
@@ -34890,6 +34547,8 @@ msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
 "hardware-dependent"
 msgstr ""
+"Kritan nopeusanturille tekemän pehmennyksen määrä. Arvo on hyvin "
+"laiteriippuvainen"
 
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, tiltDirectionOffsetAngle)
 #: libs/ui/forms/wdgtabletsettings.ui:240
@@ -36487,11 +36146,13 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"Ei-animoitu taso yhdistetään nykyiseen kehykseen. Luo vähintään yksi kehys "
+"yhdistääksesi sen koko leikkeeseen"
 
 #: libs/ui/kis_layer_manager.cc:994
 #, kde-format
 msgid "Convert Invisible Groups"
-msgstr ""
+msgstr "Muunna näkymättömät ryhmät"
 
 #: libs/ui/kis_layer_manager.cc:997
 #, kde-format
@@ -37603,6 +37264,9 @@ msgid ""
 "\n"
 "Please make sure no other program is using the file and try again."
 msgstr ""
+"Tyhjentäminen epäonnistui: %1\n"
+"\n"
+"Varmista, ettei mikään toinen ohjelma käytä tiedostoa, ja yritä uudelleen."
 
 #: libs/ui/KisApplication.cpp:1337
 #, kde-format
@@ -37752,7 +37416,7 @@ msgstr "Avaa tiedosto"
 #: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
-msgstr ""
+msgstr "Tiedostoon %1 ei voi kirjoittaa. Tallenna toiselle nimelle."
 
 #: libs/ui/KisDocument.cpp:841
 #, fuzzy, kde-format
@@ -37786,6 +37450,8 @@ msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
+"Tiedoston %1 tallennusta ei voitu aloittaa. Odota nykyisen tallennuksen "
+"päättymistä."
 
 #: libs/ui/KisDocument.cpp:901
 #, fuzzy, kde-format
@@ -39039,6 +38705,15 @@ msgid ""
 "<p><b>Private app location</b>:<br/>\n"
 "%2</p>"
 msgstr ""
+"<p>Käytä Microsoft Storen paketoimaa versiota Kritasta. Vaikka Kritan voi "
+"asettaa sijoittamaan resurssit käyttäjän AppDataan, Windows voi "
+"todellisuudessa tallettaa ne sovelluksen yksityiseen sijaintiin.</p>\n"
+"<p>Määrittääksesi tiedostojen sijainnin, kumpikin paikka tulisi tarkastaa.</"
+"p>\n"
+"<p><b>Käyttäjän AppData</b>:<br/>\n"
+"%1</p>\n"
+"<p><b>Sovelluksen yksityinen sijainti:</b><br/>\n"
+"%2</p>"
 
 #: libs/ui/KisViewManager.cpp:1508
 #, kde-format
@@ -45050,7 +44725,7 @@ msgstr "Lähennysvalitsimen koko:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
 #, kde-format
 msgid "Hide Popup on click."
-msgstr ""
+msgstr "Piilota ponnahdusikkuna napsauttamalla."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:351
@@ -45218,7 +44893,7 @@ msgstr "Salli vieritys"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "Erillinen värihistoria kullekin tiedostolle"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -45249,7 +44924,7 @@ msgstr "Päivitä joka vedon jälkeen"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1065
 #, kde-format
 msgid "Lightness, Saturation and Hue hotkey steps"
-msgstr ""
+msgstr "Valoisuuden, kylläisyyden ja sävyn pikanäppäinaskelet"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1071
@@ -46485,6 +46160,12 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
+"Ei mitään: Älä näytä mitään.\n"
+"Yksinkertainen: Näytä muuttuneet peittävyydet tai sekoitustilat.\n"
+"Tasapainoinen: Näytä sekä peittävyys- että sekoitustila, jos kumpikaan on "
+"muuttunut.\n"
+"Yksityiskohtainen: Näytä sekä peittävyys- että sekoitustila, vaikka "
+"kumpaakaan ei olisi muutettu."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, kde-format
@@ -49060,7 +48741,7 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "koko, pieni, suuri, iso, keskikokoinen"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, fuzzy, kde-format
@@ -49075,7 +48756,7 @@ msgstr "Fonttikoko"
 msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
-msgstr ""
+msgstr "Fonttikoon säätö sallii asettaa suhteen, johon x-korkeutta verrataan."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -49089,13 +48770,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:button"
 msgid "Calculate"
-msgstr ""
+msgstr "Laske"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
-msgstr ""
+msgstr "Laske x-korkeuden ja fonttikoon suhde ensimmäiselle fonttiperheelle."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, fuzzy, kde-format
@@ -49228,6 +48909,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
+"Riippuvat välimerkit sallii alkavien tai päättävien välimerkkien "
+"riippumisen. Tässä toteutuksessa on vain itäaasialaistyyliset riippuvat "
+"välimerkit."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -49235,7 +48919,7 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "riippuva välimerkki, riippuvat välimerkit, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, fuzzy, kde-format
@@ -49260,13 +48944,13 @@ msgstr "Ei riippuva"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "Salli riippuvat pilkut"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "Pakota riippuvat pilkut"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
@@ -49294,7 +48978,7 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "kieli, lokaali, maa-asetus, bcp47"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
@@ -49361,7 +49045,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr ""
+msgstr "Löyhä"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
@@ -49393,7 +49077,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Anywhere"
-msgstr ""
+msgstr "Missä tahansa"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:86
 #: plugins/dockers/textproperties/qml/WordBreak.qml:82
@@ -49432,7 +49116,7 @@ msgstr "Tavallinen"
 #, kde-format
 msgctxt "@label"
 msgid "OpenType Features"
-msgstr ""
+msgstr "OpenType-ominaisuudet"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
 #, fuzzy, kde-format
@@ -49453,7 +49137,7 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "OpenType-ominaisuuksia ei ole asetettuna."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -49478,7 +49162,7 @@ msgstr "Merkit: Suuraakkoset"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr ""
+msgstr "Käytä kapiteeleihin liittyviä OpenType-ominaisuuksia."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -49515,11 +49199,10 @@ msgid "All Petite Caps"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:82
-#, fuzzy, kde-format
-#| msgid "Uppercase"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Unicase"
-msgstr "Suuraakkoset"
+msgstr "Unicase"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
 #, fuzzy, kde-format
@@ -49560,25 +49243,25 @@ msgstr "Muunnelma:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS78"
-msgstr ""
+msgstr "JIS78"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:102
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS83"
-msgstr ""
+msgstr "JIS83"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:103
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS90"
-msgstr ""
+msgstr "JIS90"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:104
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS04"
-msgstr ""
+msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
 #, kde-format
@@ -49746,7 +49429,7 @@ msgstr "Järjestysluvut"
 #, kde-format
 msgctxt "@option:check"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Viivallinen nolla"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
 #, kde-format
@@ -49772,7 +49455,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "Ylivuodon rivitys:"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
 #, kde-format
@@ -49806,7 +49489,7 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr ""
+msgstr "sarkainkoko, sarkauskoko"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
@@ -49826,7 +49509,7 @@ msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
-msgstr ""
+msgstr "tekstin tasaus, tasaus, tekstin ankkuri"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
@@ -49937,6 +49620,7 @@ msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"Tekstin koristelu sallii piirtää tekstiin alle-, ylle- ja yliviivauksia."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -49944,7 +49628,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration property, matching is "
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
-msgstr ""
+msgstr "alleviivaus, yliviivaus"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -50243,8 +49927,7 @@ msgid "Capitalize"
 msgstr "Suuraakkostus"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
-#, fuzzy, kde-format
-#| msgid "Uppercase"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
 msgstr "Suuraakkoset"
@@ -50265,7 +49948,7 @@ msgstr "Koko leveys"
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "Täyskokoinen kana"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, kde-format
@@ -50277,7 +49960,7 @@ msgstr "Alleviivauksen sijainti"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "Määritä alleviivauksen sijainti tekstinkoristelussa."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -50335,11 +50018,10 @@ msgid "Pre"
 msgstr "Edellinen"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:124
-#, fuzzy, kde-format
-#| msgid "Wrap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr "Kietaise"
+msgstr "Ei rivitystä"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, fuzzy, kde-format
@@ -50367,14 +50049,10 @@ msgstr ""
 "viivan piirto"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Break"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Word Break"
-msgstr ""
-"Lisää vaihto\n"
-"vaihdon lisäys"
+msgstr "Sanan katkaisu"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:16
 #, kde-format
@@ -50384,6 +50062,8 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"Sanan katkaisu sallii rivityksen hienosäädön asettamalla, rivitetäänkö vain "
+"sanojen välistä vai myös niiden sisältä. Avuksi koreaan ja etiopiaan."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -50391,7 +50071,7 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "sanan katkaisu, rivitys"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
@@ -50403,7 +50083,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "Pidä kaikki"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
@@ -50416,7 +50096,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "Katkaise kaikki"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
@@ -50899,7 +50579,7 @@ msgstr "Lisää värin kylläisyyttä"
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "Kasvata valitun värin kylläisyyttä"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -50917,7 +50597,7 @@ msgstr "Vähennä värin kylläisyyttä"
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "Vähennä valitun värin kylläisyyttä"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -52891,6 +52571,10 @@ msgid ""
 "style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
 "School</span></a>!</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Jos haluat oppia kirjoittamaan Krita-skriptejä, katso "
+"<a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">Kritan skriptikoulua</span></a>!"
+"</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:59
 #, kde-format
@@ -52901,7 +52585,7 @@ msgstr "Python-liitännäisten hallinta"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
-msgstr ""
+msgstr "Annettua moduulia ei löydetty: <application>%1</application>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
 #, kde-format
@@ -52910,12 +52594,14 @@ msgid ""
 "<p>Specified version has invalid format for dependency <application>%1</"
 "application>: <icode>%2</icode>. Skipped</p>"
 msgstr ""
+"<p>Annetulla versiolla on virheellinen muoto riippuvuudelle <application>%1</"
+"application>: <icode>%2</icode>. Ohitetaan</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
-msgstr ""
+msgstr "<title>Riippuvuustarkistus</title>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
 #, kde-format
@@ -52925,12 +52611,15 @@ msgid ""
 "Module do not have PEP396 <code>__version__</code> attribute. It is not "
 "disabled, but behaviour is unpredictable...</p>"
 msgstr ""
+"<p>Riippuvuuden <application>%1</application> riippuvuudentarkistus "
+"epäonnistui: moduulilla ei ole PEP396:n <code>__version__</code>-määritettä. "
+"Sitä ei poistettu käytöstä, mutta toiminta on epävarmaa…</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
-msgstr ""
+msgstr "<p><application>%1</application>: odottamaton moduuliversion muoto"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format
@@ -52939,6 +52628,8 @@ msgid ""
 "<p><application>%1</application>: No suitable version found. Required "
 "version %2 %3, but found %4</p>"
 msgstr ""
+"<p><application>%1</application>: sopivaa versiota ei löytynyt. Vaaditaan "
+"versio %2 %3, löytyi %4</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
 #, kde-format
@@ -52946,6 +52637,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
+"<p>Virhe ladattaessa moduulia <application>%1</application>:</p><pre>%2</pre>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
 #, kde-format
@@ -52982,10 +52674,11 @@ msgid "The GMic plugin is not installed or could not be loaded."
 msgstr "GMic-liitännäistä ei ole asennettu tai ei voi ladata."
 
 #: plugins/extensions/qmic/QMic.cpp:79
-#, fuzzy, kde-format
-#| msgid "Krita cannot find any brush presets! Krita will quit now."
+#, kde-format
 msgid "Krita cannot launch the gmic-qt plugin. No bundled library found."
-msgstr "Krita ei löydä lainkaan sivellinesiasetuksia! Krita lopetetaan nyt."
+msgstr ""
+"Krita ei voi käynnistää qmic-qt-liitännäistä. Paketoitua kirjastoa ei "
+"löytynyt."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:136
 #, kde-format
@@ -53029,6 +52722,10 @@ msgid ""
 "presets before continuing.\n"
 "If there are no bundles, please import a bundle before continuing."
 msgstr ""
+"\n"
+"Sivellinesiasetuksia ei ole käytettävissä. Jatka ottamalla ensin käyttöön "
+"esiasetuksinen paketti.\n"
+"Ellei paketteja ole, tuo sellainen ennen kuin jatkat."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:219
 #, fuzzy, kde-format
@@ -53148,6 +52845,7 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
+"Useammalla resurssilla on sama tiedostonimi ”%1”. Vie ne eri paketteina."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
 #, kde-format
@@ -53249,7 +52947,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the PNG "
 "files belong to: brush tips or patterns"
 msgid "What resource do you want to import these PNG files as?"
-msgstr ""
+msgstr "Miksi resurssiksi haluat nämä PNG-tiedostot tuotavan?"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:37
 #, kde-format
@@ -53257,15 +52955,16 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the SVG "
 "files belong to: brush tips or patterns or symbols"
 msgid "What resource do you want to import these SVG files as?"
-msgstr ""
+msgstr "Miksi resurssiksi haluat nämä SVG-tiedostot tuotavan?"
 
+# Lainausmerkit auttavat, jos %1 voi sisältää välilyönnin
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:40
 #, kde-format
 msgctxt ""
 "Question in a dialog so the user can choose which resource type the files of "
 "type %1 belongs to; % will be rather untranslatable noun (a mimetype)"
 msgid "What resource do you want to import these %1 files as?"
-msgstr ""
+msgstr "Miksi resurssiksi haluat nämä ”%1”-tiedostot tuotavan?"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
 #, fuzzy, kde-format
@@ -53606,7 +53305,7 @@ msgstr "Poista valitut avainruudut"
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
 msgid "Import of some files failed"
-msgstr ""
+msgstr "Joidenkin tiedostojen tuonti epäonnistui"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:54
 #, fuzzy, kde-format
@@ -53758,6 +53457,8 @@ msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
 "on upgrading Krita"
 msgstr ""
+"Tee kaikista luokituksista varmuuskopio resurssikansioon, niin ne eivät "
+"katoa Kritaa päivitettäessä"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
@@ -54157,7 +53858,7 @@ msgstr "Pyöritä vastapäivään"
 msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
-msgstr ""
+msgstr "Seuraavia eleitä tuetaan Note 10-, Tab S6- ja Tab S9 -laitteilla."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, fuzzy, kde-format
@@ -54509,10 +54210,9 @@ msgstr "Harmaasävy (ilman läpinäkyvyyttä)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
-#, fuzzy, kde-format
-#| msgid "To layers"
+#, kde-format
 msgid "Tint  (opaque layers)"
-msgstr "Tasoille"
+msgstr "Sävy (peittävät tasot)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
@@ -58059,7 +57759,7 @@ msgstr "Profiilia %1 ei voitu ladata."
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Virheellinen JPEG-XL-tason nimen pituus"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:927
 #, kde-format
@@ -58415,7 +58115,7 @@ msgstr "Monitasoinen kuva"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Useampisivuinen kuva"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -58453,6 +58153,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
+"Aseta JPEG-XL-viennin häviöllinen laatu.\n"
+"Oletus: 90 (visuaalisesti häviötön)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:140
@@ -58846,6 +58548,8 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
+"Määrittää järjestyksen, jossa etenevässä hahmonnuksessa 256×256 alueet "
+"talletetaan koodivirtaan."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:647
@@ -58860,7 +58564,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:650
 #, kde-format
 msgid "Keep color of invisible pixels"
-msgstr ""
+msgstr "Säilytä näkymättömien kuvapisteiden väri"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
@@ -59995,6 +59699,9 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
+"Löytyi tekstiolioita: haluatko ladata ne muokattaviksi tekstikuvioiksi? "
+"Ellei, ne ladataan kuvapistetietona, joka visuaalisesti on alkuperäistä "
+"tiedostoa tarkempaa."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
@@ -60007,7 +59714,7 @@ msgstr "WebP-asetukset"
 #, kde-format
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Highest quality"
-msgstr ""
+msgstr "Paras laatu"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:65
@@ -60023,6 +59730,7 @@ msgstr "Heikoin laatu"
 #, kde-format
 msgid "Note:  100 uses lossless compression, everything below is lossy."
 msgstr ""
+"Huom! 100 käyttää häviötöntä pakkausta, kaikki sen alle on häviöllistä."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1)
 #. i18n: ectx: property (whatsThis), widget (KisDoubleSliderSpinBox, imageQuality)
@@ -60034,6 +59742,9 @@ msgid ""
 "artifacts get introduced. <br/>Note: A quality of 100 switches to lossless "
 "compression similar to (but often more efficient than) PNG.</p>"
 msgstr ""
+"<p>Säädä kuvan laatua. Mitä huonompi laatu, sitä enemmän pakkausartefakteja "
+"ilmenee.<br/>Huom! Jos laatu on 100, käytetään samankaltaista (mutta "
+"tehokkaampaa) häviötöntä pakkausta kuin PNG:ssä.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:263
 #, kde-format
@@ -60500,7 +60211,7 @@ msgstr "Sekoita"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
-msgstr ""
+msgstr "Koosta uudelleen"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:501
 #, fuzzy, kde-format
@@ -61203,7 +60914,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "TIFF-kuva, jossa PSD-dataa"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1580
 #, kde-format
@@ -61257,13 +60968,13 @@ msgstr "Tason pakkaus"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:99
 #, kde-format
 msgid "RLE"
-msgstr ""
+msgstr "RLE"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kComboBoxPSDCompressionType)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:104
 #, kde-format
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #. i18n: ectx: property (text), widget (QCheckBox, alpha)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:134
@@ -61575,6 +61286,8 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
+"0 = yksinkertainen, 1 = voimakas. Käytetään vain, jos suodattimen vahvuus on "
+"0 tai automaattinen suodattimensäätö on käytössä."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:391
@@ -61587,7 +61300,7 @@ msgstr "Suotimen tyyppi"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr ""
+msgstr "Automaattisen suodattimensäädön voimakkuus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -61614,6 +61327,8 @@ msgid ""
 "Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP "
 "lossless). Default is 1."
 msgstr ""
+"Alfatason koodausalgoritmi (0 = ei mitään, 1 = häviöttömästi WebP-pakattu). "
+"Oletus on 1."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:422
@@ -61625,7 +61340,7 @@ msgstr "Alfatason pakkaus"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:432
 #, kde-format
 msgid "Predictive Filtering for Alpha Plane"
-msgstr ""
+msgstr "Alfatason ennustava suodatus"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
@@ -61642,7 +61357,7 @@ msgstr "Nopea"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:490
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
-msgstr ""
+msgstr "0 = pienin koko, 100 = häviötön. Oletus on 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:483
@@ -61747,7 +61462,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "Emulate JPEG Size"
-msgstr ""
+msgstr "Jäljittele JPEGin kokoa"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblThreadLevel)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, threadLevel)
@@ -61755,7 +61470,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:668
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
-msgstr ""
+msgstr "Jos valittu, yritetään käyttää monisäikeistä koodausta."
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:661
@@ -61770,12 +61485,13 @@ msgstr "Monisäikeinen koodaus"
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
+"Jos valittu, muistinkäyttöä vähennetään (mutta suoritinkäyttö lisääntyy)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:681
 #, kde-format
 msgid "Reduce Memory Usage"
-msgstr ""
+msgstr "Vähennä muistinkäyttöä"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNearLossless)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, nearLossless)
@@ -65612,7 +65328,7 @@ msgstr "Vienti ei mahdollista"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
-msgstr ""
+msgstr "Ei mitään vietävää: verkko-osoitetta ei ole asetettu."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""
@@ -66520,7 +66236,7 @@ msgstr "Kirjan suunnittelija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Book producer"
-msgstr ""
+msgstr "Kirjan tuottaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Blurb writer"
@@ -66544,7 +66260,7 @@ msgstr "Kalligrafi"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Censor"
-msgstr ""
+msgstr "Sensori"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Cover designer"
@@ -66568,7 +66284,7 @@ msgstr "Johtaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Commentator for written text"
-msgstr ""
+msgstr "Kirjoitetun tekstin kommentoija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Draftsman"
@@ -66648,7 +66364,7 @@ msgstr "Sponsori"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Storyteller"
-msgstr ""
+msgstr "Kertoja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Transcriber"
@@ -66664,19 +66380,19 @@ msgstr "Typografi"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added commentary"
-msgstr ""
+msgstr "Lisätyn kommentoinnin kirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added lyrics"
-msgstr ""
+msgstr "Lisättyjen sanoitusten kirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of accompanying material"
-msgstr ""
+msgstr "Lisäaineiston kirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of added text"
-msgstr ""
+msgstr "Lisätyn tekstin kirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 msgid "Writer of introduction"
@@ -66708,7 +66424,7 @@ msgstr "Pyöritä"
 
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:27
 msgid "Negative degrees will rotate the image to the left"
-msgstr ""
+msgstr "Negatiiviset asteet kiertävät kuvaa vasempaan"
 
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:29
 msgid "Degrees:"
@@ -66736,7 +66452,7 @@ msgstr "Vie tasot"
 
 #: plugins/python/exportlayers/exportlayers.py:18
 msgid "Plugin to export layers from a document."
-msgstr ""
+msgstr "Liitännäinen tasojen viemiseksi tiedostosta."
 
 #: plugins/python/exportlayers/uiexportlayers.py:40
 msgid "Export filter layers"
@@ -66760,7 +66476,7 @@ msgstr "Sovita vientikoko tason sisältöön"
 
 #: plugins/python/exportlayers/uiexportlayers.py:48
 msgid "Add incrementing prefix"
-msgstr ""
+msgstr "Lisää kasvava etuliite"
 
 #: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "JPEG"
@@ -66800,7 +66516,7 @@ msgstr "Valitse aloituskansio."
 
 #: plugins/python/exportlayers/uiexportlayers.py:174
 msgid "All layers have been exported."
-msgstr ""
+msgstr "Kaikki tasot on viety."
 
 #: plugins/python/exportlayers/uiexportlayers.py:244
 msgid "Select a Folder"
@@ -66867,12 +66583,15 @@ msgid ""
 "the name of your package, the name of the class in your package and the "
 "associated directory.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skriptille antamasi nimi. Tätä käytetään rakentamaan "
+"pakettisi, pakettisi sisältämän luokan ja siihen liittyvän kansion nimet.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/python/krita_script_starter/bbdkss.ui:74
 #, kde-format
 msgid "Menu Entry for Script"
-msgstr ""
+msgstr "Skriptin valikkokohta"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_menu_entry)
 #: plugins/python/krita_script_starter/bbdkss.ui:81
@@ -67102,7 +66821,7 @@ msgstr "Vie Gimpin palettitiedostoksi"
 
 #: plugins/python/palette_docker/palette_docker.py:112
 msgid "Export as Inkscape SVG with Swatches"
-msgstr ""
+msgstr "Vie Swatchesilla Inkscapen SVG:ksi"
 
 #: plugins/python/palette_docker/palette_docker.py:116
 msgid "Sort Colors"
@@ -71079,7 +70798,7 @@ msgstr "Bézier-käyrä"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
 #, kde-format
 msgid "Lasso"
-msgstr ""
+msgstr "Lasso"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:554
 #, kde-format

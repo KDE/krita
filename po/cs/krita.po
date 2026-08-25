@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-15 02:51+0000\n"
-"PO-Revision-Date: 2026-04-22 22:20+0200\n"
+"PO-Revision-Date: 2026-08-24 22:51+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -58,7 +58,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7830,7 +7830,7 @@ msgstr "Odstranit z této značky"
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr ""
+msgstr "Odebrat tvary z textového řetězce a přidat je do vrstvy."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -8681,7 +8681,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr ""
+msgstr "&Vzorek barvy na obrazovce"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:313
@@ -8695,14 +8695,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr ""
+msgstr "Vzorek barvy na obrazovce"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Vzorek barvy na obrazovce (Vzorek skutečného &plátna)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:323
@@ -8718,7 +8718,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Vzorek barvy na obrazovce (Vzorek skutečného plátna)"
 
 #. i18n: context: text @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
@@ -11013,6 +11013,8 @@ msgid ""
 "If checked, layer becomes pinned to the timeline, making it visible even "
 "when inactive."
 msgstr ""
+"Pokud je zatrženo, vrstva se připne k časové ose, což ji učiní viditelnou i "
+"když je neaktivní."
 
 #. i18n: context: text @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2119
@@ -11501,7 +11503,7 @@ msgstr "Aktivovat další vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer, skipping over groups."
-msgstr ""
+msgstr "Aktivovat následující příbuznou vrstvu, přeskakování přes skupiny."
 
 #. i18n: context: toolTip @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
@@ -11511,7 +11513,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer"
-msgstr ""
+msgstr "Aktivovat následující příbuznou vrstvu"
 
 #. i18n: context: text @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
@@ -11530,7 +11532,7 @@ msgstr "Aktivovat předchozí vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer, skipping over groups."
-msgstr ""
+msgstr "Aktivovat předchozí příbuznou vrstvu, přeskakování přes skupiny."
 
 #. i18n: context: toolTip @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
@@ -11540,7 +11542,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer"
-msgstr ""
+msgstr "Aktivovat předchozí příbuznou vrstvu"
 
 #. i18n: context: text @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
@@ -11552,21 +11554,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Activate previously selected layer"
-msgstr ""
+msgstr "Aktivovat předchozí vybranou vrstvu"
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2590
 #, kde-format
 msgctxt "action"
 msgid "Add &Group Layer"
-msgstr ""
+msgstr "Přidat &Skupinovou vrstvu"
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2592
 #, kde-format
 msgctxt "action"
 msgid "Add a new Group Layer"
-msgstr ""
+msgstr "Přidat novou skupinovou vrstvu"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2593
@@ -11580,14 +11582,14 @@ msgstr "Seskupit vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Add &Clone Layer"
-msgstr ""
+msgstr "Přidat &Klonovanou vrstvu"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2604
 #, kde-format
 msgctxt "action"
 msgid "Add a new Clone Layer"
-msgstr ""
+msgstr "Přidat nový klon vrstvy"
 
 #. i18n: context: iconText @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2605
@@ -11601,14 +11603,14 @@ msgstr "Klonovat vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr ""
+msgstr "Přidat &Vektorovou vrstvu"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2616
 #, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
-msgstr ""
+msgstr "Přidat novou vektorovou vrstvu"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2617
@@ -11622,14 +11624,14 @@ msgstr "Vektorová vrstva"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr ""
+msgstr "Přidat &Filtrovací vrstvu..."
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2628
 #, kde-format
 msgctxt "action"
 msgid "Add a new Filter Layer"
-msgstr ""
+msgstr "Přidat novou filtrovací vrstvu"
 
 #. i18n: context: iconText @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2629
@@ -11643,14 +11645,14 @@ msgstr "Vrstva &filtrů"
 #, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr ""
+msgstr "Přidat &Výplňovou vrstvu..."
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2640
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fill Layer"
-msgstr ""
+msgstr "Přidat novou výplňovou vrstvu"
 
 #. i18n: context: iconText @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2641
@@ -11664,7 +11666,7 @@ msgstr "Vyplnit vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr ""
+msgstr "Přidat &Souborovou vrstvu..."
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2652
@@ -11811,7 +11813,7 @@ msgstr "Lokální výběr"
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
-msgstr ""
+msgstr "&Izolovat aktivní vrstvu"
 
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
@@ -11821,7 +11823,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
-msgstr ""
+msgstr "Izolovat aktivní vrstvu"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2746
@@ -11845,7 +11847,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Toggle layer lock"
-msgstr ""
+msgstr "Přepnou&t zámek vrstvy"
 
 #. i18n: context: toolTip @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
@@ -11855,14 +11857,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer lock"
-msgstr ""
+msgstr "Přepnout zámek vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2770
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &visibility"
-msgstr ""
+msgstr "Přepnout &viditelnost vrstvy"
 
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
@@ -11872,14 +11874,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer visibility"
-msgstr ""
+msgstr "Přepnout viditelnost vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2782
 #, kde-format
 msgctxt "action"
 msgid "Toggle Layer Soloing"
-msgstr ""
+msgstr "Přepnout samostatnost vrstvy"
 
 #. i18n: context: toolTip @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2784
@@ -11889,20 +11891,22 @@ msgid ""
 "Toggle layer soloing, temporarily disabling visibility of all non-child "
 "layers."
 msgstr ""
+"Přepnout samostatnost vrstvy, dočasně zakazující viditelnost všech vrstev, "
+"které nejsou potomky."
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2785
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer soloing"
-msgstr ""
+msgstr "Přepnout samostatnost vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2794
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &alpha"
-msgstr ""
+msgstr "Přepnout &alfu vrstvy"
 
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
@@ -11912,14 +11916,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha"
-msgstr ""
+msgstr "Přepnout alfu vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2806
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha &inheritance"
-msgstr ""
+msgstr "Přepnout děd&ičnost alfy vrstvy"
 
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
@@ -11929,21 +11933,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha inheritance"
-msgstr ""
+msgstr "Přepnout dědičnost alfy vrstvy"
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2818
 #, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
-msgstr ""
+msgstr "Přidat &vrstvu malby"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2820
 #, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
-msgstr ""
+msgstr "Přidat novou vrstvu malby"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2821
@@ -11957,7 +11961,7 @@ msgstr "Vrstva malby"
 #, kde-format
 msgctxt "action"
 msgid "&New Layer From Visible"
-msgstr ""
+msgstr "&Nová vrstva z viditelného"
 
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
@@ -11967,7 +11971,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "New layer from visible"
-msgstr ""
+msgstr "Nová vrstva z viditelného"
 
 #. i18n: context: text @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2842
@@ -12035,7 +12039,7 @@ msgstr "Kopírovat vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Copy layer to clipboard"
-msgstr ""
+msgstr "Kopírovat vrstvu do schránky"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2890
@@ -12086,7 +12090,7 @@ msgstr "Rychlé seskupení"
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
-msgstr ""
+msgstr "Vytvořit skupinu vrstev obsahující vybrané vrstvy"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -12103,7 +12107,7 @@ msgstr "Rychlé zrušení seskupení"
 #, kde-format
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
-msgstr ""
+msgstr "Odebrat seskupení vrstev nebo odebrat jednu vrstvu ze skupiny"
 
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
@@ -12120,7 +12124,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
-msgstr ""
+msgstr "Seskupit vybrané vrstvy a přidat vrstvu s oříznutým alfa kanálem"
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2950
@@ -12171,7 +12175,7 @@ msgstr "Uzamčené vrstvy"
 #, kde-format
 msgctxt "action"
 msgid "Select all locked layers"
-msgstr ""
+msgstr "Vybrat všechny zamknuté vrstvy"
 
 #. i18n: context: text @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2986
@@ -12188,14 +12192,14 @@ msgstr "Neviditelné vrstvy"
 #, kde-format
 msgctxt "action"
 msgid "Select all invisible layers"
-msgstr ""
+msgstr "Vybrat všechny neviditelné vrstvy"
 
 #. i18n: context: text @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2998
 #, kde-format
 msgctxt "action"
 msgid "Unlocked Layers"
-msgstr ""
+msgstr "Odemknuté vrstvy"
 
 #. i18n: context: toolTip @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
@@ -12205,7 +12209,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Select all unlocked layers"
-msgstr ""
+msgstr "Vybrat všechny odemknuté vrstvy"
 
 #. i18n: context: text @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3010
@@ -12263,7 +12267,7 @@ msgstr "Uložit seskupení vrstev"
 #, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
-msgstr ""
+msgstr "Konvertovat skupinu na &animovanou vrstvu"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3048
@@ -12273,20 +12277,22 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Konvertuje skupinové potomstvo vrstev do jediné vrstvy s vícero snímky "
+"animace"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3049
 #, kde-format
 msgctxt "action"
 msgid "Convert child layers into animation frames"
-msgstr ""
+msgstr "Konvertovat potomstvo vrstev do animačních snímků"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3058
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
-msgstr ""
+msgstr "Konvertovat na &Animovanou vrstvu"
 
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -12296,28 +12302,28 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert layer into animation frames"
-msgstr ""
+msgstr "Konvertovat vrstvu na animační snímky"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3070
 #, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr ""
+msgstr "Konvertovat na &Souborovou vrstvu..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3072
 #, kde-format
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
-msgstr ""
+msgstr "Uloží vrstvy do nového obrázku a pak na tento obrázek odkazuje"
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3073
 #, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
-msgstr ""
+msgstr "Konvertovat na Souborovou vrstvu"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3082
@@ -12409,7 +12415,7 @@ msgstr "jako masku výběru"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
-msgstr ""
+msgstr "Konvertovat na &vrstvu malby"
 
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12545,7 +12551,7 @@ msgstr "Rozdělit vrstvu"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr ""
+msgstr "Vlnkový rozklad ..."
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -12555,7 +12561,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose"
-msgstr ""
+msgstr "Vlnkový rozklad"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3250
@@ -12698,7 +12704,7 @@ msgstr "Zkosit vrstvy"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
-msgstr ""
+msgstr "Zrcadlit všechny vrstvy vo&dorovně"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
@@ -12708,14 +12714,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr ""
+msgstr "Zrcadlit všechny vrstvy vodorovně"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3358
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
-msgstr ""
+msgstr "Zrcadlit všechny vrstvy s&visle"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
@@ -12725,14 +12731,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr ""
+msgstr "Zrcadlit všechny vrstvy svisle"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3370
 #, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
-msgstr ""
+msgstr "O&točit všechny vrstvy..."
 
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12742,14 +12748,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers"
-msgstr ""
+msgstr "Otočit všechny vrstvy"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3382
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr ""
+msgstr "Otočit všech&ny vrstvy o 90° doprava"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
@@ -12759,14 +12765,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
-msgstr ""
+msgstr "Otočit všechny vrstvy o 90° doprava"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3394
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
-msgstr ""
+msgstr "Otočit všechny vrstvy o 90° dol&eva"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12776,14 +12782,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
-msgstr ""
+msgstr "Otočit všechny vrstvy o 90° doleva"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3406
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
-msgstr ""
+msgstr "Otočit všechny vrstvy o 1&80°"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
@@ -12793,14 +12799,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
-msgstr ""
+msgstr "Otočit všechny vrstvy o 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3418
 #, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
-msgstr ""
+msgstr "Škálovat všechny &vrstvy na novou velikost..."
 
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12810,14 +12816,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Scale All Layers to new Size"
-msgstr ""
+msgstr "Škálovat všechny vrstvy na novou velikost"
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3430
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr ""
+msgstr "Na&klonit všechny vrstvy..."
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12827,7 +12833,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
-msgstr ""
+msgstr "Naklonit všechny vrstvy"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3442
@@ -12932,6 +12938,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Konvertovat všechny vrstvy do obrázkového barevného prostoru (pokud se "
+"stane, že máte jiný barevný prostor)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3514
@@ -13103,7 +13111,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
-msgstr ""
+msgstr "Nastavit zdroj pro vybrané klonované vrstvy"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3645
@@ -13190,12 +13198,12 @@ msgstr "&Pohled"
 #: krita/krita5.xmlgui:92
 #, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr ""
+msgstr "Směr režimu zalamování okolí"
 
 #: krita/krita5.xmlgui:102
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Zvětšení, otočení a zrcadlení"
 
 #: krita/krita5.xmlgui:134
 #, kde-format
@@ -13271,7 +13279,7 @@ msgstr "&Transformovat"
 #: krita/krita5.xmlgui:280
 #, kde-format
 msgid "Transform &All Layers"
-msgstr ""
+msgstr "Transformovat &všechny vrstvy"
 
 #: krita/krita5.xmlgui:295
 #, kde-format
@@ -16803,7 +16811,7 @@ msgstr "Změnit vlastnosti tvaru textu"
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
-msgstr ""
+msgstr "Ukládání KoShapeLayer do html není implementováno!"
 
 #: libs/flake/html/HtmlWriter.cpp:76
 #, kde-format
@@ -21129,7 +21137,7 @@ msgstr "Přepnout aktuální čas na klíčový rámec"
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
-msgstr ""
+msgstr "Změnit klonované vrstvy"
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
@@ -21140,7 +21148,7 @@ msgstr ""
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr ""
+msgstr "Svinout uzel %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
@@ -21211,7 +21219,7 @@ msgstr "Generátor"
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr ""
+msgstr "Vyplnit vrstvu vykreslení"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -21330,7 +21338,7 @@ msgstr "Mitchell"
 #: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
 msgid "Pass Through"
-msgstr ""
+msgstr "Projít skrz"
 
 #: libs/image/kis_image.cc:398
 #, kde-format
@@ -21385,9 +21393,9 @@ msgstr "Změnit rozlišení obrázku"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Škálovat vrstvu"
+msgstr[1] "Škálovat %1 vrstvy"
+msgstr[2] "Škálovat %1 vrstev"
 
 #: libs/image/kis_image.cc:1219
 msgctxt "(qtundo-format)"
@@ -21445,7 +21453,7 @@ msgstr "Převést barevné prostředí projekce"
 #: libs/image/kis_image.cc:1466
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr ""
+msgstr "Sjednotit barevný prostor vrstev"
 
 #: libs/image/kis_image.cc:1496
 msgctxt "(qtundo-format)"
@@ -21581,22 +21589,22 @@ msgstr "Barevný popisek"
 #: libs/ui/layerstyles/wdglayerstyles.ui:114
 #, kde-format
 msgid "Color Overlay"
-msgstr ""
+msgstr "Barevný překryv"
 
 #: libs/image/kis_layer_properties_icons.cpp:33
 #, kde-format
 msgid "Update Result"
-msgstr ""
+msgstr "Aktualizovat výsledek"
 
 #: libs/image/kis_layer_properties_icons.cpp:34
 #, kde-format
 msgid "Edit Key Strokes"
-msgstr ""
+msgstr "Upravit klíčové tahy"
 
 #: libs/image/kis_layer_properties_icons.cpp:35
 #, kde-format
 msgid "Show Coloring"
-msgstr ""
+msgstr "Zobrazit vybarvení"
 
 #: libs/image/kis_layer_properties_icons.cpp:36
 #, kde-format
@@ -21612,7 +21620,7 @@ msgstr "Chyba"
 #: libs/image/kis_layer_properties_icons.cpp:38
 #, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr ""
+msgstr "Neshoda barevného prostoru vrstev"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -21632,6 +21640,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Barevný prostor vrstvy je jiný od barevného prostoru obrázku:\n"
+"%1 [%2],\n"
+"operace může být pomalá"
 
 #: libs/image/kis_layer_utils.cpp:627
 #, kde-format
@@ -21641,7 +21652,7 @@ msgstr "Sloučeno"
 #: libs/image/kis_layer_utils.cpp:1472
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
-msgstr ""
+msgstr "Sloučit dolů"
 
 #: libs/image/kis_layer_utils.cpp:1744
 #, kde-format
@@ -28107,6 +28118,10 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
+"Pro tento soubor existuje soubor automatického ukládání. Jak chcete "
+"pokračovat?\n"
+"Upozornění: pokud nyní zahodíte automatické ukládání, pak bude soubor "
+"odstraněn."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
@@ -28119,13 +28134,13 @@ msgstr "Krita"
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:37
 #, kde-format
 msgid "Open the autosave file"
-msgstr ""
+msgstr "Otevřít soubor automatického ukládání"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbDiscardAutosave)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:44
 #, kde-format
 msgid "Discard autosave, open the main file"
-msgstr ""
+msgstr "Zahodit soubor automatického ukládání, otevřít hlavní soubor"
 
 #. i18n: ectx: property (text), widget (QPushButton, btOk)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:53
@@ -34107,7 +34122,7 @@ msgstr "Zrcadlit pohled okolo kurzoru"
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "Zrcadlit pohled okolo plátna"
 
 #: libs/ui/kis_node_manager.cpp:488
 #, kde-format
@@ -35157,15 +35172,17 @@ msgstr "Obnovit soubory"
 msgid "Discard All"
 msgstr "Zahodit vše"
 
+# 50168 AttribValues/delnotify
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:184
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr ""
+msgstr "Následující soubor automatického ukládání může být obnoven:"
 
+# 50168 AttribValues/delnotify
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:187
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr ""
+msgstr "Následující soubory automatického ukládání mohou být obnoveny:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:241
 #, kde-format
@@ -35174,6 +35191,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Pokud zvolíte Storno, všechny soubory k obnovení budou zachovány.\n"
+"Pokud stisknete OK, vybrané soubory budou obnoveny, ostatní budou zahozeny."
 
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
@@ -50588,30 +50607,30 @@ msgstr ""
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
 msgid "WaveletDecompose"
-msgstr ""
+msgstr "VlnkovýRozklad"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgWaveletDecompose)
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:64
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:18
 #, kde-format
 msgid "Wavelet Decompose"
-msgstr ""
+msgstr "Vlnkový rozklad"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Wavelet decompose"
-msgstr ""
+msgstr "Vlnkový rozklad"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:118
 #, kde-format
 msgid "Wavelet decompose"
-msgstr ""
+msgstr "Vlnkový rozklad"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWaveletScales)
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:24
 #, kde-format
 msgid "Wavelet scales:"
-msgstr ""
+msgstr "Vlnkové škálování:"
 
 #. i18n: context: text @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)

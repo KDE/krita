@@ -449,15 +449,28 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     if (tags.isEmpty()) return bcp;
 
-    const QRegularExpression alphas("^[A-Za-z]+$");
-    const QRegularExpression digits("^\\d+$");
+    auto isAlphaOnly = [] (const QString &string) {
+        auto resultIt = std::find_if(string.begin(), string.end(), [] (QChar ch) {
+            return !ch.isLetter();
+        });
+
+        return resultIt == string.end();
+    };
+
+    auto isDigitOnly = [] (const QString &string) {
+        auto resultIt = std::find_if(string.begin(), string.end(), [] (QChar ch) {
+            return !ch.isDigit();
+        });
+
+        return resultIt == string.end();
+    };
 
     // Language -- single primary language, followed by optional 3 letter extended tags.
     if (tags.first().size() == 2 || tags.first().size() == 3) {
         bcp.languageTags.append(tags.takeFirst().toLower());
 
         // extensions only happen when first tag is 2 or 3 long.
-        while (!tags.isEmpty() && tags.first().size() == 3 && tags.first().contains(alphas)) {
+        while (!tags.isEmpty() && tags.first().size() == 3 && isAlphaOnly(tags.first())) {
             bcp.languageTags.append(tags.takeFirst().toLower());
         }
     } else if (tags.first().size() >= 4 || tags.first().size() <= 8) {
@@ -473,7 +486,7 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     // Script -- This is an 4 letter alpha only.
 
-    if (tags.first().contains(alphas) && tags.first().size() == 4) {
+    if (isAlphaOnly(tags.first()) && tags.first().size() == 4) {
         bcp.scriptTag = tags.takeFirst().toLower();
         bcp.scriptTag = bcp.scriptTag.at(0).toUpper()+bcp.scriptTag.mid(1);
     }
@@ -482,8 +495,8 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     // Region -- 2 letter alpha only.
 
-    if ((tags.first().contains(alphas) && tags.first().size() == 2)
-            || (tags.first().contains(digits) && tags.first().size() == 3)) {
+    if ((isAlphaOnly(tags.first()) && tags.first().size() == 2)
+            || (isDigitOnly(tags.first()) && tags.first().size() == 3)) {
         bcp.regionTag = tags.takeFirst().toUpper();
     }
 
@@ -491,11 +504,17 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     // Variants -- [0+] alpha numerics, either between 5-8 char long, or 4 but starting with a digit.
 
-    const QRegularExpression variantAlphaNumeric("^\\d[A-Za-z0-9]{3}$");
+    auto isVariantAlphaNumeric = [] (const QString &string) {
+        if (string.size() != 4) return false;
+        if (!string.at(0).isDigit()) return false;
+        if (!string.at(1).isLetterOrNumber() || !string.at(2).isLetterOrNumber() || !string.at(3).isLetterOrNumber())
+            return false;
+        return true;
+    };
 
     while (!tags.isEmpty()
            && ( (tags.first().size() >= 5 && tags.first().size() <= 8)
-               || (tags.first().contains(variantAlphaNumeric) && tags.first().size() == 4) )
+               || isVariantAlphaNumeric(tags.first()) )
            ) {
         bcp.variantTags.append(tags.takeFirst().toLower());
     }

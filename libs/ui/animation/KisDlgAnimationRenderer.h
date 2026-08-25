@@ -74,6 +74,9 @@ private Q_SLOTS:
 
     void slotCheckWarnings();
 
+    static void setPngHdr(KisPropertiesConfigurationSP cfg, bool enable = true);
+    static bool getPngHdr(KisPropertiesConfigurationSP cfg, bool wantsRenderWithHdr);
+
 protected Q_SLOTS:
 #ifndef Q_OS_ANDROID
     void slotButtonClicked(int button) override;

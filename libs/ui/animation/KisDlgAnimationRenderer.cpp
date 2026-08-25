@@ -1,3 +1,4 @@
+
 /*
  *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -342,7 +343,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     {
         KisPropertiesConfigurationSP settings = loadLastConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
-        m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
+        m_wantsRenderWithHDR = getPngHdr(settings, m_wantsRenderWithHDR);
     }
 
     m_page->ffmpegLocation->setFileName(likelyFFmpegPath);
@@ -857,7 +858,7 @@ void KisDlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
             //Important -- m_useHDR allows the synchronization of both the video and image render settings.
 #ifndef Q_OS_ANDROID
             if(imageMimeSupportsHDR(mimetype)) {
-                exportConfig->setProperty("saveAsHDR", m_wantsRenderWithHDR);
+                setPngHdr(exportConfig, m_wantsRenderWithHDR);
                 if (m_wantsRenderWithHDR) {
                     exportConfig->setProperty("forceSRGB", false);
                 }
@@ -870,7 +871,7 @@ void KisDlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (dlg.exec() == QDialog::Accepted) {
 #ifndef Q_OS_ANDROID
-                m_wantsRenderWithHDR = frameExportConfigWidget->configuration()->getPropertyLazy("saveAsHDR", false);
+                m_wantsRenderWithHDR = getPngHdr(frameExportConfigWidget->configuration(), false);
 #endif
                 saveLastUsedConfiguration("img_sequence/" + mimetype, frameExportConfigWidget->configuration());
             }
@@ -949,7 +950,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
         if (forceNecessaryHDRSettings) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(options.frameMimeType == "image/png");
             cfg->setProperty("forceSRGB", false);
-            cfg->setProperty("saveAsHDR", true);
+            setPngHdr(cfg);
         }
 #endif
 
@@ -1040,6 +1041,23 @@ void KisDlgAnimationRenderer::slotDialogAccepted()
     m_image->animationInterface()->setExportSequenceBaseName(options.basename);
     m_image->animationInterface()->setExportSequenceFilePath(options.directory);
     m_image->animationInterface()->setExportInitialFrameNumber(options.sequenceStart);
+}
+
+void KisDlgAnimationRenderer::setPngHdr(KisPropertiesConfigurationSP cfg, bool enable)
+{
+    cfg->setProperty("storeColorSpaceInfo", enable);
+    cfg->setProperty("writeCicpIfPossible", enable);
+    if (enable) {
+        cfg->setProperty("storeExtraColorChunks", false);
+        cfg->setProperty("floatingPointConversionOption", "Rec2100PQ");
+    }
+}
+
+bool KisDlgAnimationRenderer::getPngHdr(KisPropertiesConfigurationSP cfg, bool wantsRenderWithHdr)
+{
+    return cfg->getPropertyLazy("storeColorSpaceInfo", wantsRenderWithHdr)
+        && cfg->getPropertyLazy("writeCicpIfPossible", wantsRenderWithHdr)
+        && (cfg->getPropertyLazy("floatingPointConversionOption", wantsRenderWithHdr? "Rec2100PQ": "KeepSame") == "Rec2100PQ");
 }
 
 void KisDlgAnimationRenderer::slotExportTypeChanged()

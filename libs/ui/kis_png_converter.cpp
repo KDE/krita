@@ -34,6 +34,8 @@
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoColorProfileQuery.h>
+#include <KoColorTransferFunctions.h>
 #include <KoColor.h>
 #include <KoUnit.h>
 
@@ -54,6 +56,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_transaction.h>
+#include <kis_hdr_metadata.h>
 
 #include <kis_assert.h>
 
@@ -68,7 +71,7 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
     if (id == "GRAYA" || id == "GRAYAU16" || id == "GRAYA16") {
         return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
     }
-    if (id == "RGBA" || id == "RGBA16") {
+    if (id == "RGBA" || id == "RGBA16" || id == "RGBAF16" || id == "RGBAF32") {
         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
@@ -410,6 +413,51 @@ void _flush_fn(png_structp png_ptr)
     Q_UNUSED(png_ptr);
 }
 
+// Templates for converting the HDR curves.
+
+template <typename src_channel_type,
+         typename dst_channel_type>
+struct ConversionPolicyApplicator {
+    static ALWAYS_INLINE dst_channel_type apply(ConversionPolicy linearizePolicy, src_channel_type value, float refWhite = 203.0) {
+        if (linearizePolicy == ConversionPolicy::ApplyPQ) {
+            return KoColorSpaceMaths<float, dst_channel_type>::scaleToA(
+                applySmpte2048Curve(
+                    KoColorSpaceMaths<src_channel_type, float>::scaleToA(
+                        value), refWhite));
+        } else if (linearizePolicy == ConversionPolicy::ApplyHLG) {
+            return KoColorSpaceMaths<float, dst_channel_type>::scaleToA(
+                applyHLGCurve(
+                    KoColorSpaceMaths<src_channel_type, float>::scaleToA(
+                        value)));
+        } else if (linearizePolicy == ConversionPolicy::ApplySMPTE428) {
+            return KoColorSpaceMaths<float, dst_channel_type>::scaleToA(
+                applySMPTE_ST_428Curve(
+                    KoColorSpaceMaths<src_channel_type, float>::scaleToA(
+                        value)));
+        }
+        return KoColorSpaceMaths<src_channel_type, dst_channel_type>::scaleToA(value);
+    }
+    static ALWAYS_INLINE dst_channel_type remove(ConversionPolicy linearizePolicy, src_channel_type value, float refWhite = 203.0) {
+        if (linearizePolicy == ConversionPolicy::ApplyPQ) {
+            return KoColorSpaceMaths<float, dst_channel_type>::scaleToA(
+                removeSmpte2048Curve(
+                    KoColorSpaceMaths<src_channel_type, float>::scaleToA(
+                        value), refWhite));
+        } else if (linearizePolicy == ConversionPolicy::ApplyHLG) {
+            return KoColorSpaceMaths<float, dst_channel_type>::scaleToA(
+                removeHLGCurve(
+                    KoColorSpaceMaths<src_channel_type, float>::scaleToA(
+                        value)));
+        }  else if (linearizePolicy == ConversionPolicy::ApplySMPTE428) {
+            return KoColorSpaceMaths<float, dst_channel_type>::scaleToA(
+                removeSMPTE_ST_428Curve(
+                    KoColorSpaceMaths<src_channel_type, float>::scaleToA(
+                        value)));
+        }
+        return KoColorSpaceMaths<src_channel_type, dst_channel_type>::scaleToA(value);
+    }
+};
+
 KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 {
     dbgFile << "Start decoding PNG File";
@@ -564,36 +612,67 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
 
-    bool loadedImageIsHDR = false;
+    bool loadedImageHasLegacyHDRDummyProfile = false;
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
-        QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), proflen);
-        profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
-        if (profile) {
-            if (!profile->isSuitableForWorkspace()) {
-                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile";
-            }
-        }
+    bool loadedCICP = false;
 
-        loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
-    }
-    else if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
-        // Ask the user which color profile to use
-        KisConfig cfg(true);
-        quint32 behaviour = cfg.pasteBehaviour();
-        if (behaviour == KisClipboard::PASTE_ASK) {
-            KisDlgPngImport dlg(m_path, csName.first, csName.second);
-            KisCursorOverrideHijacker hijacker;
-            Q_UNUSED(hijacker);
-            dlg.exec();
-            if (!dlg.profile().isEmpty()) {
-                profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
-            }
+    ConversionPolicy linearConversionPolicy = ConversionPolicy::KeepTheSame;
+#if defined(PNG_cICP_SUPPORTED)
+    png_byte primaries = 0;
+    png_byte transfer = 0;
+    png_byte matrix = 0;
+    png_byte fullrange = 0;
+    if (png_get_cICP(png_ptr, info_ptr, &primaries, &transfer, &matrix, &fullrange)) {
+        // TODO: in theory we could use chroma chunk here if non-zero.
+        dbgFile << "load cicp" << primaries << transfer << matrix << fullrange;
+        if (transfer == TRC_ITU_R_BT_2100_0_HLG) {
+            linearConversionPolicy = ConversionPolicy::ApplyHLG;
+            transfer = TRC_LINEAR;
+            csName.second = Float32BitsColorDepthID.id();
+        } else if (transfer == TRC_SMPTE_ST_428_1){
+            linearConversionPolicy = ConversionPolicy::ApplySMPTE428;
+            transfer = TRC_LINEAR;
+            csName.second = Float32BitsColorDepthID.id();
+        }
+        const KoColorProfile *cicpProfile = KoColorSpaceRegistry::instance()->profileFor(KoColorProfileQuery(ColorPrimaries(primaries), TransferCharacteristics(transfer)), true);
+
+        if (cicpProfile && cicpProfile->isSuitableForWorkspace()) {
+            profile = cicpProfile;
+            loadedCICP = true;
         }
     }
-    else {
-        dbgFile << "no embedded profile, will use the default sRGB profile";
+#endif
+
+    if (!loadedCICP) {
+        if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
+            QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), proflen);
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
+            if (profile) {
+                if (!profile->isSuitableForWorkspace()) {
+                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile";
+                }
+            }
+
+            loadedImageHasLegacyHDRDummyProfile = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
+        }
+        else if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
+            // Ask the user which color profile to use
+            KisConfig cfg(true);
+            quint32 behaviour = cfg.pasteBehaviour();
+            if (behaviour == KisClipboard::PASTE_ASK) {
+                KisDlgPngImport dlg(m_path, csName.first, csName.second);
+                KisCursorOverrideHijacker hijacker;
+                Q_UNUSED(hijacker);
+                dlg.exec();
+                if (!dlg.profile().isEmpty()) {
+                    profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
+                }
+            }
+        }
+        else {
+            dbgFile << "no embedded profile, will use the default sRGB profile";
+        }
     }
 
     const QString colorSpaceId =
@@ -611,7 +690,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     KoColorConversionTransformation* transform = 0;
     const KoColorSpace* cs = 0;
 
-    if (loadedImageIsHDR &&
+    if (loadedImageHasLegacyHDRDummyProfile &&
         csName.first == RGBAColorModelID.id() &&
         csName.second == Integer16BitsColorDepthID.id()) {
 
@@ -658,6 +737,28 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     } else if (unit_type == PNG_RESOLUTION_UNKNOWN) {
         m_image->setResolution(100.0, 100.0);
     }
+
+#if defined(PNG_cLLI_SUPPORTED)
+    KisRelativeContentLightLevelInformation clli;
+    if (png_get_cLLI(png_ptr, info_ptr, &clli.maxContentLightLevel, &clli.maxFrameAverageLightLevel)) {
+        const double refWhiteMultiplier = 1.0/profile->hdrReferenceWhite().value_or(203.0);
+        clli.maxContentLightLevel *= refWhiteMultiplier;
+        clli.maxFrameAverageLightLevel *= refWhiteMultiplier;
+        m_image->setRelativeContentLightLevelInformation(clli);
+    }
+#endif
+
+#if defined(PNG_mDCV_SUPPORTED)
+    KisColorVolumeInformation cvi;
+    if (png_get_mDCV(png_ptr, info_ptr,
+                     &cvi.white.x, &cvi.white.y,
+                     &cvi.red.x, &cvi.red.y,
+                     &cvi.green.x, &cvi.green.y,
+                     &cvi.blue.x, &cvi.blue.y,
+                     &cvi.maxLuminance, &cvi.minLuminance)) {
+        m_image->setColorVolumeInformation(cvi);
+    }
+#endif
 
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
@@ -766,28 +867,56 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
             break;
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
-            if (color_nb_bits == 16) {
-                quint16 *src = reinterpret_cast<quint16 *>(row_pointer);
-                do {
-                    quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
-                    d[2] = *(src++);
-                    d[1] = *(src++);
-                    d[0] = *(src++);
-                    if (hasalpha) d[3] = *(src++);
-                    else d[3] = quint16_MAX;
-                    if (transform) transform->transformInPlace(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
-                } while (it->nextPixel());
+            if (linearConversionPolicy != ConversionPolicy::KeepTheSame) {
+                if (color_nb_bits == 16) {
+                    auto policy = ConversionPolicyApplicator<quint16, float>();
+                    quint16 *src = reinterpret_cast<quint16 *>(row_pointer);
+                    do {
+                        float *d = reinterpret_cast<float *>(it->rawData());
+                        d[0] = policy.remove(linearConversionPolicy, *(src++));
+                        d[1] = policy.remove(linearConversionPolicy, *(src++));
+                        d[2] = policy.remove(linearConversionPolicy, *(src++));
+                        if (hasalpha) d[3] = policy.remove(ConversionPolicy::KeepTheSame, *(src++));
+                        else d[3] = 1.0;
+                        if (transform) transform->transformInPlace(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
+                    } while (it->nextPixel());
+                } else {
+                    auto policy = ConversionPolicyApplicator<quint8, float>();
+                    quint8 *src = reinterpret_cast<quint8 *>(row_pointer);
+                    do {
+                        float *d = reinterpret_cast<float *>(it->rawData());
+                        d[0] = policy.remove(linearConversionPolicy, *(src++));
+                        d[1] = policy.remove(linearConversionPolicy, *(src++));
+                        d[2] = policy.remove(linearConversionPolicy, *(src++));
+                        if (hasalpha) d[3] = policy.remove(ConversionPolicy::KeepTheSame, *(src++));
+                        else d[3] = 1.0;
+                        if (transform) transform->transformInPlace(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
+                    } while (it->nextPixel());
+                }
             } else {
-                KisPNGReadStream stream(row_pointer, color_nb_bits);
-                do {
-                    quint8 *d = it->rawData();
-                    d[2] = (quint8)(stream.nextValue() * coeff);
-                    d[1] = (quint8)(stream.nextValue() * coeff);
-                    d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
-                    else d[3] = UCHAR_MAX;
-                    if (transform) transform->transformInPlace(d, d, 1);
-                } while (it->nextPixel());
+                if (color_nb_bits == 16) {
+                    quint16 *src = reinterpret_cast<quint16 *>(row_pointer);
+                    do {
+                        quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
+                        d[2] = *(src++);
+                        d[1] = *(src++);
+                        d[0] = *(src++);
+                        if (hasalpha) d[3] = *(src++);
+                        else d[3] = quint16_MAX;
+                        if (transform) transform->transformInPlace(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
+                    } while (it->nextPixel());
+                } else {
+                    KisPNGReadStream stream(row_pointer, color_nb_bits);
+                    do {
+                        quint8 *d = it->rawData();
+                        d[2] = (quint8)(stream.nextValue() * coeff);
+                        d[1] = (quint8)(stream.nextValue() * coeff);
+                        d[0] = (quint8)(stream.nextValue() * coeff);
+                        if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
+                        else d[3] = UCHAR_MAX;
+                        if (transform) transform->transformInPlace(d, d, 1);
+                    } while (it->nextPixel());
+                }
             }
             break;
         case PNG_COLOR_TYPE_PALETTE: {
@@ -865,7 +994,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
         options.interlace = false;
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
-        options.saveSRGBProfile = false;
+        options.storeColorSpaceInfo = true;
         options.downsample = false;
 
         if (dev->colorSpace()->id() != "RGBA") {
@@ -922,31 +1051,48 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         device = tmp;
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
+    KIS_SAFE_ASSERT_RECOVER(!(options.convertFloatToRec2020 && options.forceSRGB)) {
         options.forceSRGB = false;
     }
 
     QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
     QString dstModel = device->colorSpace()->colorModelId().id();
     QString dstDepth = device->colorSpace()->colorDepthId().id();
+    bool isFloatingPoint = device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
+        || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
+        || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID;
     const KoColorProfile *dstProfile = device->colorSpace()->profile();
     bool needColorTransform = false;
 
-    if (options.saveAsHDR || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
+    dbgFile << "Converting to... sRgb" << options.forceSRGB << "rec2020" << options.convertFloatToRec2020 << "policy" << int(options.floatingPointConversion);
+    if ((options.convertFloatToRec2020 & isFloatingPoint) || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         dstModel = RGBAColorModelID.id();
         dstProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
         needColorTransform = true;
 
-        if (options.saveAsHDR) {
-            dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+        if (options.convertFloatToRec2020 && isFloatingPoint) {
+            if (options.floatingPointConversion == ConversionPolicy::ApplyPQ) {
+                dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+            } else {
+                dstProfile = KoColorSpaceRegistry::instance()->p2020G10Profile();
+            }
         }
     }
+    // If the profile is a pq profile, but not one with 203 reference white, use the default rec2100 203 profile.
+    // Once png can export diffuse white, we won't need this anymore.
+    if (dstProfile->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ
+        && !qFuzzyCompare(dstProfile->hdrReferenceWhite().value_or(203.0), 203.0)) {
+        dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+    }
 
-    if (options.downsample
-            || device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
+    // We want to downsample when...
+    // Option.downsample is on and we're not fp (because we manually handle fp 8bit)
+    // When model is not rgba (no cicp writing, so no hdr, sadly).
+    // When we're fp but the tf is not linear (fp+linear is also a situation we handle ourselves!)
+    if (dstModel != RGBAColorModelID.id()
+         || (!isFloatingPoint && options.downsample)
+         || (isFloatingPoint && dstProfile->getTransferCharacteristics() != TRC_LINEAR)) {
         dstDepth = Integer16BitsColorDepthID.id();
 
         needColorTransform = true;
@@ -965,9 +1111,12 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
 
         device = new KisPaintDevice(*device);
         device->convertTo(dstCs);
+        isFloatingPoint = device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID;
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
+    KIS_SAFE_ASSERT_RECOVER(!options.convertFloatToRec2020 || !options.tryToSaveAsIndexed) {
         options.tryToSaveAsIndexed = false;
     }
 
@@ -1027,7 +1176,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     png_set_compression_method(png_ptr, 8);
     png_set_compression_buffer_size(png_ptr, 8192);
 
-    int color_nb_bits = 8 * device->pixelSize() / device->channelCount();
+    int color_nb_bits = isFloatingPoint? options.downsample? 8: 16: 8 * device->pixelSize() / device->channelCount();
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
     Q_ASSERT(color_type > -1);
@@ -1095,14 +1244,16 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     const bool sRGB = *device->colorSpace()->profile() == *KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    const bool colorProfilePQ = (device->colorSpace()->profile()->getTransferCharacteristics() == TRC_ITU_R_BT_2100_0_PQ
+                                 && device->colorSpace()->profile()->getColorPrimaries() == PRIMARIES_ITU_R_BT_2020_2_AND_2100_0);
     /*
      * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
      * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
      * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
      */
-    /*if (!options.saveSRGBProfile && sRGB) {
+    if (options.storeExtraColorChunks && options.storeColorSpaceInfo && sRGB) {
         png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
-    }*/
+    }
 
 
     /** TODO: Firefox still opens the image incorrectly if there is gAMA+cHRM tags
@@ -1114,18 +1265,24 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
      *  the iCCP chunk instead and interpret it according to [ICC-1] and [ICC-1A]"
      */
 
-#if 0
-    if (options.saveAsHDR) {
+    if (options.storeExtraColorChunks && options.storeColorSpaceInfo && !sRGB) {
         // https://www.w3.org/TR/PNG/#11gAMA
 #if defined(PNG_GAMMA_SUPPORTED)
-        // the values are set in accordance of HDR-PNG standard:
-        // https://www.w3.org/TR/png-hdr-pq/
 
-        png_set_gAMA_fixed(png_ptr, info_ptr, 15000);
-        dbgFile << "gAMA" << "(Rec 2100)";
+
+        if (colorProfilePQ) {
+            // the values are set in accordance of HDR-PNG standard:
+            // https://www.w3.org/TR/png-hdr-pq/
+            png_set_gAMA_fixed(png_ptr, info_ptr, 15000);
+            dbgFile << "gAMA" << "(Rec 2100)";
+        } else {
+            double gamma = device->colorSpace()->profile()->getEstimatedTRC().first();
+            png_set_gAMA(png_ptr, info_ptr, gamma);
+        }
 #endif
 
 #if defined PNG_cHRM_SUPPORTED
+        if (colorProfilePQ) {
         png_set_cHRM_fixed(png_ptr, info_ptr,
                            31270, 32900, // white point
                            70800, 29200, // red
@@ -1133,9 +1290,17 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
                            13100, 4600 // blue
                            );
         dbgFile << "cHRM" << "(Rec 2100)";
+        } else {
+            const QVector<KoColorimetryUtils::xyY> colorants = device->colorSpace()->profile()->getColorantsxyY();
+            const KoColorimetryUtils::xyY whitePoint = device->colorSpace()->profile()->getWhitePointxyY();
+            png_set_cHRM(png_ptr, info_ptr,
+                         whitePoint.x, whitePoint.y,
+                         colorants[0].x, colorants[0].y,
+                         colorants[1].x, colorants[1].y,
+                         colorants[2].x, colorants[2].y);
+        }
 #endif
     }
-#endif
 
 
     // we should ensure we don't access non-existing palette object
@@ -1179,19 +1344,65 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     // Save the color profile
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
-    if (!sRGB || options.saveSRGBProfile) {
 
+    if (options.storeColorSpaceInfo && !(sRGB && options.storeExtraColorChunks)) {
+
+
+        const bool cicpPossible = (colorProfile->getColorPrimaries() != PRIMARIES_UNSPECIFIED && colorProfile->getTransferCharacteristics() != TRC_UNSPECIFIED
+                                   && colorProfile->getColorPrimaries() < 256 && colorProfile->getTransferCharacteristics() < 256);
+        dbgFile << options.writeCicpIfPossible << cicpPossible << colorProfilePQ << colorProfile->name();
+        bool wroteCICP = false;
+        if (options.writeCicpIfPossible && (cicpPossible || colorProfilePQ)) {
+            png_byte primaries = colorProfile->getColorPrimaries();
+            png_byte transfer = colorProfile->getTransferCharacteristics();
+            if (colorProfilePQ) {
+                transfer = TRC_ITU_R_BT_2100_0_PQ;
+                primaries = PRIMARIES_ITU_R_BT_2020_2_AND_2100_0;
+            }
+            if (options.floatingPointConversion == ConversionPolicy::ApplyPQ) {
+                transfer = TRC_ITU_R_BT_2100_0_PQ;
+            } else if (options.floatingPointConversion == ConversionPolicy::ApplyHLG) {
+                transfer = TRC_ITU_R_BT_2100_0_HLG;
+            } else if (options.floatingPointConversion == ConversionPolicy::ApplySMPTE428) {
+                transfer = TRC_SMPTE_ST_428_1;
+            }
+            png_byte matrixCoef = 0;
+            png_byte fullRange = 1;
+            dbgFile << "Writing cicp" << primaries << transfer << matrixCoef << fullRange;
+            png_set_cICP(png_ptr, info_ptr, primaries, transfer, matrixCoef, fullRange);
+            wroteCICP = true;
+        }
+        if (!wroteCICP) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        const char *typeString = !options.saveAsHDR ? "icc" : "ITUR_2100_PQ_FULL";
+        const char *typeString = "icc";
         png_set_iCCP(png_ptr, info_ptr, (png_const_charp)typeString, PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
         // older version of libpng has a problem with constness on the parameters
         char typeStringICC[] = "icc";
-        char typeStringHDR[] = "ITUR_2100_PQ_FULL";
-        char *typeString = !options.saveAsHDR ? typeStringICC : typeStringHDR;
+        char *typeString = typeStringICC;
         png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
+        }
     }
+#if defined(PNG_cLLI_SUPPORTED)
+    if (colorProfilePQ && m_doc->image().toStrongRef()->relativeContentLightLevelInformation()) {
+        const std::optional<KisRelativeContentLightLevelInformation> clli = m_doc->image().toStrongRef()->relativeContentLightLevelInformation();
+        const double hdrRefWhite = colorProfile->hdrReferenceWhite().value_or(203.0);
+        const double maxcll = clli->maxContentLightLevel * hdrRefWhite;
+        const double maxfall = clli->maxFrameAverageLightLevel * hdrRefWhite;
+        png_set_cLLI(png_ptr, info_ptr, maxcll, maxfall);
+    }
+#endif
+#if defined(PNG_mDCV_SUPPORTED)
+    if (colorProfilePQ && m_doc->image().toStrongRef()->colorVolumeInformation()) {
+        const std::optional<KisColorVolumeInformation> cvi = m_doc->image().toStrongRef()->colorVolumeInformation();
+        png_set_mDCV(png_ptr, info_ptr,
+                     cvi->white.x, cvi->white.y,
+                     cvi->red.x, cvi->red.y,
+                     cvi->green.x,cvi->green.y,
+                     cvi->blue.x, cvi->blue.y, cvi->maxLuminance, cvi->minLuminance);
+    }
+#endif
 
     // save comments from the document information
     // warning: according to the official png spec, the keys need to be capitalized!
@@ -1348,24 +1559,79 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
             break;
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
-            if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(rowPointers.rows[row]);
-                do {
-                    const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                    *(dst++) = d[2];
-                    *(dst++) = d[1];
-                    *(dst++) = d[0];
-                    if (options.alpha) *(dst++) = d[3];
-                } while (it->nextPixel());
+            if (isFloatingPoint) {
+                if (color_nb_bits == 16) {
+                    if (device->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+                        auto policyApplicator = ConversionPolicyApplicator<float, quint16>();
+                        quint16 *dst = reinterpret_cast<quint16 *>(rowPointers.rows[row]);
+                        do {
+                            const float *d = reinterpret_cast<const float *>(it->oldRawData());
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[0]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[1]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[2]);
+                            if (options.alpha) *(dst++) = policyApplicator.apply(ConversionPolicy::KeepTheSame, d[3]);
+                        } while (it->nextPixel());
+                    }
+#ifdef HAVE_OPENEXR
+                    else if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+                        auto policyApplicator = ConversionPolicyApplicator<half, quint16>();
+                        quint16 *dst = reinterpret_cast<quint16 *>(rowPointers.rows[row]);
+                        do {
+                            const half *d = reinterpret_cast<const half *>(it->oldRawData());
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[0]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[1]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[2]);
+                            if (options.alpha) *(dst++) = policyApplicator.apply(ConversionPolicy::KeepTheSame, d[3]);
+                        } while (it->nextPixel());
+                    }
+#endif
+                    // forcing to 8bit.
+                } else {
+                    if (device->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+                        auto policyApplicator = ConversionPolicyApplicator<float, quint8>();
+                        quint8 *dst = reinterpret_cast<quint8 *>(rowPointers.rows[row]);
+                        do {
+                            const float *d = reinterpret_cast<const float *>(it->oldRawData());
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[0]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[1]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[2]);
+                            if (options.alpha) *(dst++) = policyApplicator.apply(ConversionPolicy::KeepTheSame, d[3]);
+                        } while (it->nextPixel());
+                    }
+#ifdef HAVE_OPENEXR
+                    else if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+                        auto policyApplicator = ConversionPolicyApplicator<half, quint8>();
+                        quint8 *dst = reinterpret_cast<quint8 *>(rowPointers.rows[row]);
+                        do {
+                            const half *d = reinterpret_cast<const half *>(it->oldRawData());
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[0]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[1]);
+                            *(dst++) = policyApplicator.apply(options.floatingPointConversion, d[2]);
+                            if (options.alpha) *(dst++) = policyApplicator.apply(ConversionPolicy::KeepTheSame, d[3]);
+                        } while (it->nextPixel());
+                    }
+#endif
+                }
             } else {
-                quint8 *dst = rowPointers.rows[row];
-                do {
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = d[2];
-                    *(dst++) = d[1];
-                    *(dst++) = d[0];
-                    if (options.alpha) *(dst++) = d[3];
-                } while (it->nextPixel());
+                if (color_nb_bits == 16) {
+                    quint16 *dst = reinterpret_cast<quint16 *>(rowPointers.rows[row]);
+                    do {
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                        *(dst++) = d[2];
+                        *(dst++) = d[1];
+                        *(dst++) = d[0];
+                        if (options.alpha) *(dst++) = d[3];
+                    } while (it->nextPixel());
+                } else {
+                    quint8 *dst = rowPointers.rows[row];
+                    do {
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = d[2];
+                        *(dst++) = d[1];
+                        *(dst++) = d[0];
+                        if (options.alpha) *(dst++) = d[3];
+                    } while (it->nextPixel());
+                }
             }
             break;
         case PNG_COLOR_TYPE_PALETTE: {

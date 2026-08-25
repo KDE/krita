@@ -57,12 +57,29 @@ KisImportExportErrorCode KisPNGExport::convert(KisDocument *document, QIODevice 
     KoColor c(KoColorSpaceRegistry::instance()->rgb8());
     c.fromQColor(Qt::white);
     options.transparencyFillColor = configuration->getColor("transparencyFillcolor", c).toQColor();
-    options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
     options.forceSRGB = configuration->getBool("forceSRGB", true);
     options.storeAuthor = configuration->getBool("storeAuthor", false);
     options.storeMetaData = configuration->getBool("storeMetaData", false);
-    options.saveAsHDR = configuration->getBool("saveAsHDR", false);
     options.downsample = configuration->getBool("downsample", false);
+    options.storeColorSpaceInfo = configuration->getBool("storeColorSpaceInfo", true);
+    options.writeCicpIfPossible = configuration->getBool("writeCicpIfPossible", false);
+    options.storeExtraColorChunks = configuration->getBool("storeExtraColorChunks", false);
+
+    const QString conversionOption = configuration->getString("floatingPointConversionOption", "KeepSame");
+    options.convertFloatToRec2020 = false;
+    if (conversionOption == "Rec2100PQ") {
+        options.convertFloatToRec2020 = true;
+        options.floatingPointConversion = ConversionPolicy::ApplyPQ;
+    } else if (conversionOption == "Rec2100HLG") {
+        options.convertFloatToRec2020 = true;
+        options.floatingPointConversion = ConversionPolicy::ApplyHLG;
+    } else if (conversionOption == "ApplyPQ") {
+        options.floatingPointConversion = ConversionPolicy::ApplyPQ;
+    } else if (conversionOption == "ApplyHLG") {
+        options.floatingPointConversion = ConversionPolicy::ApplyHLG;
+    }  else if (conversionOption == "ApplySMPTE428") {
+        options.floatingPointConversion = ConversionPolicy::ApplySMPTE428;
+    }
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
@@ -101,12 +118,14 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     v.setValue(fill_color);
 
     cfg->setProperty("transparencyFillcolor", v);
-    cfg->setProperty("saveSRGBProfile", false);
     cfg->setProperty("forceSRGB", true);
-    cfg->setProperty("saveAsHDR", false);
     cfg->setProperty("storeMetaData", false);
     cfg->setProperty("storeAuthor", false);
     cfg->setProperty("downsample", false);
+    cfg->setProperty("storeColorSpaceInfo", true);
+    cfg->setProperty("writeCicpIfPossible", false);
+    cfg->setProperty("storeExtraColorChunks", false);
+    cfg->setProperty("floatingPointConversionOption", "KeepSame");
     return cfg;
 }
 
@@ -132,7 +151,9 @@ KisWdgOptionsPNG::KisWdgOptionsPNG(QWidget *parent)
 {
     setupUi(this);
 
-    connect(chkSaveAsHDR, SIGNAL(toggled(bool)), this, SLOT(slotUseHDRChanged(bool)));
+    connect(cmbFloatingConversion, SIGNAL(activated(int)), this, SLOT(onConversionPolicyChanged()));
+    connect(chkCICP, SIGNAL(toggled(bool)), this, SLOT(onConversionPolicyChanged()));
+    connect(gbSaveColorInfo, SIGNAL(toggled(bool)), this, SLOT(onConversionPolicyChanged()));
 }
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -141,6 +162,65 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::ImageContainsTransparencyTag));
     KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::ColorModelIDTag));
     KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::sRGBTag));
+
+    // Setup the floating point conversion options.
+    QStringList conversionOptionsList = { i18nc("Color space name", "Rec 2100 PQ"), i18nc("Color space name", "Rec 2100 HLG")};
+    QStringList toolTipList = {i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a perceptual quantizer curve"
+                                     " (also known as SMPTE 2048 curve). Recommended for HDR images where the absolute brightness is important."),
+                               i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a Hybrid Log Gamma curve."
+                                     " Recommended for HDR images where the display may not understand HDR.")};
+    QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
+    int cicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag,
+                                    static_cast<int>(PRIMARIES_UNSPECIFIED));
+    if (cicpPrimaries != PRIMARIES_UNSPECIFIED) {
+        conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode PQ");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
+                             " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
+        conversionOptionName << "ApplyPQ";
+
+        conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode HLG");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
+                             " Recommended for images intended for screens which cannot understand PQ");
+        conversionOptionName << "ApplyHLG";
+
+        conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428."
+                             " Krita always opens images like these as linear floating point, this option is there to reverse that");
+        conversionOptionName << "ApplySMPTE428";
+    }
+
+    conversionOptionsList << i18nc("Color space option", "No changes, clip");
+    toolTipList << i18nc("@tooltip", "The image will be converted plainly to 16bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
+    conversionOptionName << "KeepSame";
+
+
+    cmbFloatingConversion->clear();
+    cmbFloatingConversion->addItems(conversionOptionsList);
+    for (int i=0; i< toolTipList.size(); i++) {
+        cmbFloatingConversion->setItemData(i, toolTipList.at(i), Qt::ToolTipRole);
+        cmbFloatingConversion->setItemData(i, conversionOptionName.at(i), Qt::UserRole+1);
+    }
+    QString optionName =
+        cfg->getString("floatingPointConversionOption", "KeepSame");
+    if (conversionOptionName.contains(optionName)) {
+        cmbFloatingConversion->setCurrentIndex(
+            conversionOptionName.indexOf(optionName));
+    }
+    const QString colorDepthId =
+        cfg->getString(KisImportExportFilter::ColorDepthIDTag);
+    if ((colorDepthId == Float16BitsColorDepthID.id()
+        || colorDepthId == Float32BitsColorDepthID.id()
+        || colorDepthId == Float64BitsColorDepthID.id())
+        && cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
+        m_floatingPoint = true;
+    } else {
+        m_floatingPoint = false;
+    }
+
+    gbSaveColorInfo->setChecked(cfg->getBool("storeColorSpaceInfo", true));
+    chkCICP->setChecked(cfg->getBool("writeCicpIfPossible", true));
+    chkExtraColorChunks->setChecked(cfg->getBool("storeExtraColorChunks", true));
+
 
     const bool isThereAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag);
 
@@ -166,16 +246,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
 
-    //const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
-
-    //chkSRGB->setEnabled(sRGB);
-    chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));
-
-    //chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
-
-    chkSaveAsHDR->setChecked(cfg->getBool("saveAsHDR", false));
-    slotUseHDRChanged(chkSaveAsHDR->isChecked());
 
     chkAuthor->setChecked(cfg->getBool("storeAuthor", false));
     chkMetaData->setChecked(cfg->getBool("storeMetaData", false));
@@ -186,6 +257,8 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     bnTransparencyFillColor->setColor(cfg->getColor("transparencyFillcolor", background));
 
     chkDownsample->setChecked(cfg->getBool("downsample", false));
+
+    onConversionPolicyChanged();
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
@@ -196,14 +269,17 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     bool alpha = this->alpha->isChecked();
     bool interlace = interlacing->isChecked();
     int compression = (int)compressionLevel->value();
-    bool saveAsHDR = chkSaveAsHDR->isChecked();
-    bool tryToSaveAsIndexed = !saveAsHDR && this->tryToSaveAsIndexed->isChecked();
-    bool saveSRGB = !saveAsHDR && chkSRGB->isChecked();
-    bool forceSRGB = !saveAsHDR && chkForceSRGB->isChecked();
+    bool tryToSaveAsIndexed = this->tryToSaveAsIndexed->isChecked();
+    bool forceSRGB = chkForceSRGB->isEnabled()? chkForceSRGB->isChecked(): false;
     bool storeAuthor = chkAuthor->isChecked();
     bool storeMetaData = chkMetaData->isChecked();
     bool downsample = chkDownsample->isChecked();
 
+    bool saveColorInfo = gbSaveColorInfo->isChecked();
+    bool saveCICP = chkCICP->isChecked();
+    bool extraColor = chkExtraColorChunks->isChecked();
+
+    QString conversionMode = cmbFloatingConversion->currentData(Qt::UserRole+1).toString();
 
     QVariant transparencyFillcolor;
     transparencyFillcolor.setValue(bnTransparencyFillColor->color());
@@ -213,12 +289,14 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     cfg->setProperty("compression", compression);
     cfg->setProperty("interlaced", interlace);
     cfg->setProperty("transparencyFillcolor", transparencyFillcolor);
-    cfg->setProperty("saveAsHDR", saveAsHDR);
-    cfg->setProperty("saveSRGBProfile", saveSRGB);
     cfg->setProperty("forceSRGB", forceSRGB);
     cfg->setProperty("storeAuthor", storeAuthor);
     cfg->setProperty("storeMetaData", storeMetaData);
     cfg->setProperty("downsample", downsample);
+    cfg->setProperty("storeColorSpaceInfo", saveColorInfo);
+    cfg->setProperty("writeCicpIfPossible", saveCICP);
+    cfg->setProperty("storeExtraColorChunks", extraColor);
+    cfg->setProperty("floatingPointConversionOption", conversionMode);
     return cfg;
 }
 
@@ -227,11 +305,15 @@ void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
     bnTransparencyFillColor->setEnabled(!checked);
 }
 
-void KisWdgOptionsPNG::slotUseHDRChanged(bool value)
+void KisWdgOptionsPNG::onConversionPolicyChanged()
 {
-    tryToSaveAsIndexed->setDisabled(value);
-    chkForceSRGB->setDisabled(value);
-    chkSRGB->setDisabled(value);
+    cmbFloatingConversion->setEnabled(m_floatingPoint && (chkCICP->isChecked() && chkCICP->isEnabled()));
+    const QString conversionMode = cmbFloatingConversion->currentData(Qt::UserRole+1).toString();
+    if (cmbFloatingConversion->isEnabled()) {
+        chkForceSRGB->setEnabled(conversionMode == "KeepSame");
+    } else {
+        chkForceSRGB->setEnabled(true);
+    }
 }
 
 #include "kis_png_export.moc"

@@ -358,7 +358,14 @@ bool LanguagesFilterModel::filterAcceptsRow(int source_row, const QModelIndex &s
     const QString name = sourceModel()->data(idx).toString();
     const QString code = sourceModel()->data(idx, AllLanguagesModel::Code).toString();
 
-    return (name.contains(filterRegularExpression()) || code.contains(filterRegularExpression()));
+    QRegularExpression newRegexp = filterRegularExpression();
+
+    if (m_cachedRegexp != newRegexp) {
+        m_cachedRegexp = newRegexp;
+        m_cachedRegexp.optimize();
+    }
+
+    return (name.contains(m_cachedRegexp) || code.contains(m_cachedRegexp));
 }
 
 

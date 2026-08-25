@@ -140,6 +140,9 @@ public:
     LanguagesFilterModel(QObject *parent = nullptr);
 
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+
+private:
+    mutable QRegularExpression m_cachedRegexp;
 };
 
 #endif // LOCALEHANDLER_H

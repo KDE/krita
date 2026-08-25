@@ -612,7 +612,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
 
-    bool loadedImageIsHDR = false;
+    bool loadedImageHasLegacyHDRDummyProfile = false;
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
     bool loadedCICP = false;
@@ -654,7 +654,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
                 }
             }
 
-            loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
+            loadedImageHasLegacyHDRDummyProfile = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
         }
         else if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
             // Ask the user which color profile to use
@@ -690,7 +690,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     KoColorConversionTransformation* transform = 0;
     const KoColorSpace* cs = 0;
 
-    if (loadedImageIsHDR &&
+    if (loadedImageHasLegacyHDRDummyProfile &&
         csName.first == RGBAColorModelID.id() &&
         csName.second == Integer16BitsColorDepthID.id()) {
 

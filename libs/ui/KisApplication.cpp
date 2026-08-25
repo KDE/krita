@@ -81,6 +81,7 @@
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
+#include <KisScopedPerformanceLogger.h>
 #include <KisUsageLogger.h>
 
 #include <dialogs/KisSessionManagerDialog.h>
@@ -350,6 +351,8 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
+    KisScopedPerformanceLogger perfLog(QStringLiteral("KisApplication::addResourceTypes"));
+
     // All Krita's resource types
     KoResourcePaths::addAssetType("markers", "data", "/styles/");
     KoResourcePaths::addAssetType("kis_pics", "data", "/pics/");
@@ -397,6 +400,8 @@ bool KisApplication::event(QEvent *event)
 
 bool KisApplication::registerResources()
 {
+    KisScopedPerformanceLogger perfLog(QStringLiteral("KisApplication::registerResources"));
+
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
     reg->add(new KisResourceLoader<KisPaintOpPreset>(ResourceSubType::KritaPaintOpPresets, ResourceType::PaintOpPresets, i18n("Brush presets"),
@@ -464,7 +469,7 @@ bool KisApplication::registerResources()
 
 void KisApplication::loadPlugins()
 {
-    //    qDebug() << "loadPlugins();";
+    KisScopedPerformanceLogger perfLog(QStringLiteral("KisApplication::loadPlugins"));
 
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
@@ -480,6 +485,7 @@ void KisApplication::loadPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
+    KisScopedPerformanceLogger perfLog(QStringLiteral("KisApplication::start"));
 #ifdef Q_OS_ANDROID
     KisAndroidDonations::showDonationDialog(true);
 #endif

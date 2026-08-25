@@ -105,6 +105,7 @@
 #include <KisAndroidUtils.h>
 #endif
 
+#include <KisScopedPerformanceLogger.h>
 #include <KisUsageLogger.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
@@ -363,6 +364,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
+    KisScopedPerformanceLogger perfLog(QStringLiteral("KisMainWindow::KisMainWindow"));
+
     KAcceleratorManager::setNoAccel(this);
 
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
@@ -2443,6 +2446,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
+        KisScopedPerformanceLogger perfLog(QStringLiteral("KisMainWindow::createDockWidget(%1)").arg(factory->id()));
         dockWidget = factory->createDockWidget();
         KAcceleratorManager::setNoAccel(dockWidget);
 

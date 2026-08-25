@@ -312,6 +312,10 @@ void LogDockerDock::settings()
     chkMetaData->setChecked(cfg.readEntry("metadata_41016", false));
     layout->addWidget(chkMetaData);
 
+    QCheckBox *chkPerformance = new QCheckBox(i18n("Performance"), page);
+    chkPerformance->setChecked(cfg.readEntry("performance_41021", false));
+    layout->addWidget(chkPerformance);
+
     QCheckBox *chkPigment = new QCheckBox(i18n("Color Management"), page);
     chkPigment->setChecked(cfg.readEntry("pigment", false));
     layout->addWidget(chkPigment);
@@ -337,6 +341,7 @@ void LogDockerDock::settings()
         cfg.writeEntry("tablet_41014", chkTablet->isChecked());
         cfg.writeEntry("opengl_41015", chkOpenGL->isChecked());
         cfg.writeEntry("metadata_41016", chkMetaData->isChecked());
+        cfg.writeEntry("performance_41021", chkPerformance->isChecked());
         cfg.writeEntry("pigment", chkPigment->isChecked());
 
         if (bnToggle->isChecked()) {
@@ -389,6 +394,7 @@ void LogDockerDock::applyCategories()
     filters << cfgToString("krita.tablet", cfg.readEntry("tablet_41014", false));
     filters << cfgToString("krita.opengl", cfg.readEntry("opengl_41015", false));
     filters << cfgToString("krita.metadata", cfg.readEntry("metadata_41016", false));
+    filters << cfgToString("krita.performance", cfg.readEntry("performance_41021", false));
 
     filters << cfgToString("krita.lib.pigment", cfg.readEntry("pigment", false));
 

@@ -121,7 +121,9 @@ void KoDualColorButton::updateArrows() {
 }
 
 void KoDualColorButton::setColorDialogState(Selection state){
-    d->colorDialogState->selection = state;
+    if (d->colorDialogState.has_value()) {
+        d->colorDialogState->selection = state;
+    }
     d->tmpSelection = state;
 }
 

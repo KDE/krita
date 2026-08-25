@@ -1031,11 +1031,10 @@ QList<KoFontFamilyWWSRepresentation> KoFFWWSConverter::collectFamilies() const
 
 KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamilyNode>::composition_iterator it, KisForest<FontFamilyNode>::composition_iterator endIt, const QString family) {
     QString familySimplified = family;
-    QString familyLower = family.toLower();
     // Qt's fontdatabase would add the vendor in [] behind the font name, when there were duplicates,
     // though sometimes there was no such explanation, so we should check against that...
     if (family.endsWith("]") && family.contains("[")) {
-        familySimplified = family.split("[", Qt::SkipEmptyParts).first().trimmed().toLower();
+        familySimplified = family.split("[", Qt::SkipEmptyParts).first().trimmed();
     }
     for (; it != endIt; it++) {
         if (it.state() == KisForestDetail::Enter) {
@@ -1050,10 +1049,10 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
             // in which case, we want to ignore the full name.
             QStringList localFamily = it->localizedFontFamilies.values();
             bool inLocalFamilyToo = (localFamily.contains(familySimplified, Qt::CaseInsensitive)
-                                  || localFamily.contains(familyLower, Qt::CaseInsensitive));
+                                  || localFamily.contains(family, Qt::CaseInsensitive));
 
             if (local.contains(familySimplified, Qt::CaseInsensitive)
-                    || local.contains(familyLower, Qt::CaseInsensitive)) {
+                    || local.contains(family, Qt::CaseInsensitive)) {
                 if (inLocalFamilyToo) continue;
                 break;
             } else {
@@ -1062,11 +1061,11 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
         }
 
         QStringList local = it->localizedFontFamilies.values();
-        QString itFamilyLower = QString(it->fontFamily).toLower();
-        if (itFamilyLower == familySimplified
-                || itFamilyLower == familyLower
+        QString itFamily = it->fontFamily;
+        if (itFamily.compare(familySimplified, Qt::CaseInsensitive) == 0
+                || itFamily.compare(family, Qt::CaseInsensitive) == 0
                 || local.contains(familySimplified, Qt::CaseInsensitive)
-                || local.contains(familyLower, Qt::CaseInsensitive)) {
+                || local.contains(family, Qt::CaseInsensitive)) {
             break;
         }
 

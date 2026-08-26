@@ -146,32 +146,17 @@ public:
                                                      Integer8BitsColorDepthID.id(),
                                                      KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
-    void captureImage(QRect area, KisPaintDevice* greaterImage)
+    void captureImage(QRect area, KisPaintDevice* device)
     {
-        KisImageSP image = canvas->image();
-
-        KisPaintDeviceSP device;
-
-        if (!greaterImage) {
-            // Create detached paint device that can be converted to target colorspace
-            device = new KisPaintDevice(image->colorSpace());
-            // we don't want image->barrierLock() because it will wait until the full stroke is finished
-            image->immediateLockForReadOnly();
-            device->makeCloneFromRough(image->projection(), area);
-            image->unlock();
-        } else {
-            device = greaterImage;
-        }
-
         const bool needSrgbConversion = [&]() {
-            if (image->colorSpace()->colorDepthId() != Integer8BitsColorDepthID
-                || image->colorSpace()->colorModelId() != RGBAColorModelID) {
+            if (device->colorSpace()->colorDepthId() != Integer8BitsColorDepthID
+                || device->colorSpace()->colorModelId() != RGBAColorModelID) {
                 return true;
             }
-            const bool hasPrimaries = image->colorSpace()->profile()->hasColorants();
-            const TransferCharacteristics gamma = image->colorSpace()->profile()->getTransferCharacteristics();
+            const bool hasPrimaries = device->colorSpace()->profile()->hasColorants();
+            const TransferCharacteristics gamma = device->colorSpace()->profile()->getTransferCharacteristics();
             if (hasPrimaries) {
-                const ColorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
+                const ColorPrimaries primaries = device->colorSpace()->profile()->getColorPrimaries();
                 if (gamma == TRC_IEC_61966_2_1 && primaries == PRIMARIES_ITU_R_BT_709_5) {
                     return false;
                 }
@@ -295,7 +280,10 @@ public:
         bool result = frame.save(filePath, RecorderFormatInfo::fileFormat(settings->format).data(), factor);
         if (!result) {
             QFile(filePath).remove(); // remove corrupted frame
-        return result;
+            return false;
+        }
+
+        return true;
     }
 };
 
@@ -343,27 +331,10 @@ void RecorderWriter::onCaptureImage(int writerId, int index, QVector<QRect> regi
     // Sanity check
     KIS_ASSERT(!regions.isEmpty());
 
-    KisPaintDeviceSP device;
-
-    if (regions.length() > 1) {
-        KisImageSP image = d->canvas->image();
-        device = new KisPaintDevice(image->colorSpace());
-
-        QRect united = regions.first();
-
-        Q_FOREACH (QRect r, regions) {
-            united = united.united(r);
-        }
-
-        image->immediateLockForReadOnly();
-        device->makeCloneFromRough(image->projection(), united);
-        image->unlock();
-    }
-
     bool framesWrittens = true;
 
     Q_FOREACH (QRect region, regions) {
-        framesWrittens &= onCaptureImageImpl(index, tail, region, regions.length() > 1 ? device.data() : nullptr);
+        framesWrittens &= onCaptureImageImpl(index, tail, region, device.data());
         index++;
     }
 
@@ -471,7 +442,7 @@ public:
         for (auto &el : writerPool) {
             el.thread->quit();
             el.thread->wait(RecorderConst::waitThreadTimeoutMs);
-            disconnect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>)), el.writer.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>)));
+            disconnect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>, KisPaintDeviceSP)));
             disconnect(el.writer.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             if (el.thread->isRunning())
             {
@@ -515,7 +486,7 @@ public:
             auto writerPtr = writerPool[newWorkerId].writer;
             auto threadPtr = writerPool[newWorkerId].thread;
             threadPtr->setObjectName(QString("Krita-Recorder-WriterPool#%1").arg(newWorkerId));
-            connect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>)), writerPtr.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>)));
+            connect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>, KisPaintDeviceSP)), writerPtr.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>, KisPaintDeviceSP)));
             connect(writerPtr.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             writerPtr->moveToThread(threadPtr.get());
             threadPtr->start(QThread::IdlePriority);

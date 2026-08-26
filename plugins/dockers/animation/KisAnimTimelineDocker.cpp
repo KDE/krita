@@ -556,19 +556,11 @@ void KisAnimTimelineDocker::establishPlaybackEngineConnections(KisPlaybackEngine
 
         action = actionManager->createAction("first_frame");
         action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-        connect(action, &KisAction::triggered, playbackEngine, [this, playbackEngine](bool){
-            if (m_d->canvas) {
-                playbackEngine->firstFrame();
-            }
-        });
+        connect(action, SIGNAL(triggered(bool)), playbackEngine, SLOT(firstFrame()));
 
         action = actionManager->createAction("last_frame");
         action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-        connect(action, &KisAction::triggered, playbackEngine, [this, playbackEngine](bool){
-            if (m_d->canvas) {
-                playbackEngine->lastFrame();
-            }
-        });
+        connect(action, SIGNAL(triggered(bool)), playbackEngine, SLOT(lastFrame()));
     }
 
     // Connect transport controls gui..

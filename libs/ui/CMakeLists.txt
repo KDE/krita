@@ -722,7 +722,6 @@ target_link_libraries(kritaui
 
         kritaversion
         kritaimpex
-        kritacolor
         kritaimage
         kritalibbrush
         kritawidgets

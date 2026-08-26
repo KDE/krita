@@ -554,9 +554,6 @@ public:
     bool ocioLockColorVisualRepresentation(bool defaultValue = false) const;
     void setOcioLockColorVisualRepresentation(bool value);
 
-    bool useSystemMonitorProfile(bool defaultValue = false) const;
-    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
-
     QString defaultPalette(bool defaultValue = false) const;
     void setDefaultPalette(const QString& name) const;
 
@@ -905,10 +902,6 @@ public:
     QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
         return m_cfg.readEntry(name, defaultValue);
     }
-
-
-    /// get the profile the color management system has stored for the given screen
-    static const KoColorProfile* getScreenProfile(int screen);
 
 private:
     KisConfig(const KisConfig&);

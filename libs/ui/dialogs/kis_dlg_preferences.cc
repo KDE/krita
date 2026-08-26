@@ -77,7 +77,6 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_color_manager.h"
 #include "kis_config.h"
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
@@ -1457,7 +1456,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     }
 
     if (!m_colorManagedByOS) {
-        toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
+        refillMonitorProfiles(KoID("RGBA"));
+
+        for(int i = 0; i < QApplication::screens().count(); ++i) {
+            if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
+                m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
+            }
+        }
     }
 }
 
@@ -1493,39 +1498,6 @@ void ColorSettingsTab::installProfile()
         }
     }
 
-}
-
-void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_colorManagedByOS);
-
-    KisConfig cfg(true);
-
-    if (useSystemProfile) {
-        QStringList devices = KisColorManager::instance()->devices();
-        if (devices.size() == QApplication::screens().count()) {
-            for(int i = 0; i < QApplication::screens().count(); ++i) {
-                m_monitorProfileWidgets[i]->clear();
-                QString monitorForScreen = cfg.monitorForScreen(i, devices[i]);
-                Q_FOREACH (const QString &device, devices) {
-                    m_monitorProfileLabels[i]->setText(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
-                    m_monitorProfileWidgets[i]->addSqueezedItem(KisColorManager::instance()->deviceName(device), device);
-                    if (devices[i] == monitorForScreen) {
-                        m_monitorProfileWidgets[i]->setCurrentIndex(i);
-                    }
-                }
-            }
-        }
-    }
-    else {
-        refillMonitorProfiles(KoID("RGBA"));
-
-        for(int i = 0; i < QApplication::screens().count(); ++i) {
-            if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
-                m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
-            }
-        }
-    }
 }
 
 void ColorSettingsTab::toggleUseDefaultColorSpace(bool useDefColorSpace)

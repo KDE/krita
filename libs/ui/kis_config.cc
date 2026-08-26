@@ -37,7 +37,6 @@
 
 #include <config-ocio.h>
 
-#include <kis_color_manager.h>
 #include <KisOcioConfiguration.h>
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
@@ -827,49 +826,13 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
     }
 }
 
-// TODO: rename into getSystemScreenProfile
-const KoColorProfile *KisConfig::getScreenProfile(int screen)
-{
-    if (screen < 0) return 0;
-
-    KisConfig cfg(true);
-    QString monitorId;
-    if (KisColorManager::instance()->devices().size() > screen) {
-        monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
-    }
-    //dbgKrita << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;
-
-    if (monitorId.isEmpty()) {
-        return 0;
-    }
-
-    QByteArray bytes = KisColorManager::instance()->displayProfile(monitorId);
-
-    //dbgKrita << "\tgetScreenProfile()" << bytes.size();
-    const KoColorProfile * profile = 0;
-    if (bytes.length() > 0) {
-        profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
-        //dbgKrita << "\tKisConfig::getScreenProfile for screen" << screen << profile->name();
-    }
-    return profile;
-}
-
 const KoColorProfile *KisConfig::displayProfile(int screen) const
 {
     if (screen < 0) return 0;
 
-    // if the user plays with the settings, they can override the display profile, in which case
-    // we don't want the system setting.
-    bool override = useSystemMonitorProfile();
-    //dbgKrita << "KisConfig::displayProfile(). Override X11:" << override;
     const KoColorProfile *profile = 0;
-    if (override) {
-        //dbgKrita << "\tGoing to get the screen profile";
-        profile = KisConfig::getScreenProfile(screen);
-    }
 
-    // if it fails. check the configuration
-    if (!profile || !profile->isSuitableForDisplay()) {
+    {
         //dbgKrita << "\tGoing to get the monitor profile";
         QString monitorProfileName = monitorProfile(screen);
         //dbgKrita << "\t\tmonitorProfileName:" << monitorProfileName;
@@ -2122,16 +2085,6 @@ QString KisConfig::currentInputProfile(bool defaultValue) const
 void KisConfig::setCurrentInputProfile(const QString& name)
 {
     m_cfg.writeEntry("currentInputProfile", name);
-}
-
-bool KisConfig::useSystemMonitorProfile(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false));
-}
-
-void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const
-{
-    m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
 }
 
 bool KisConfig::presetStripVisible(bool defaultValue) const

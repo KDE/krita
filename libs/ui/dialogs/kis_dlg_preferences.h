@@ -200,7 +200,6 @@ private Q_SLOTS:
 
     void refillMonitorProfiles(const KoID & s);
     void installProfile();
-    void toggleAllowMonitorProfileSelection(bool useSystemProfile);
     void toggleUseDefaultColorSpace(bool useDefColorSpace);
 
     void updateProofingDisplayInfo();

@@ -18,6 +18,7 @@
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"
 #include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
 #include "kis_node.h"
@@ -32,7 +33,9 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisPaintDeviceSP paintDevice,
                                              const QString &layerName,
                                              const QString &caption,
-                                             KisViewManager *view, QWidget *parent)
+                                             KisViewManager *view,
+                                             QWidget *parent,
+                                             KisFilterConfigurationSP initialFilterConfig)
     : KoDialog(parent, Qt::Dialog)
     , m_node(node)
     , m_nodeFilterInterface(nfi)
@@ -64,6 +67,14 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
 
     wdgFilterNodeCreation.filterSelector->setPaintDevice(false, paintDevice);
     wdgFilterNodeCreation.layerName->setText(layerName);
+
+    if (initialFilterConfig) {
+        KisFilterSP filter = KisFilterRegistry::instance()->get(initialFilterConfig->name()).data();
+        if (filter) {
+            wdgFilterNodeCreation.filterSelector->setFilter(filter, initialFilterConfig);
+            m_previousFilterName = filter->name();
+        }
+    }
 
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
     connect(wdgFilterNodeCreation.layerName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
@@ -105,14 +116,40 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 
     if (m_currentFilter) {
         m_nodeFilterInterface->setFilter(m_currentFilter->cloneWithResourcesSnapshot());
-        if (!m_customName) {
-            wdgFilterNodeCreation.layerName->blockSignals(true);
-            wdgFilterNodeCreation.layerName->setText(m_layerName + " (" + wdgFilterNodeCreation.filterSelector->currentFilter()->name() + ")");
-            wdgFilterNodeCreation.layerName->blockSignals(false);
+        const QString newFilterName = wdgFilterNodeCreation.filterSelector->currentFilter()->name();
+        if (newFilterName != m_previousFilterName) {
+            updateLayerNameForNewFilter(newFilterName);
+            m_previousFilterName = newFilterName;
         }
     }
 
     m_node->setDirty();
+}
+
+void KisDlgAdjustmentLayer::updateLayerNameForNewFilter(const QString &newFilterName)
+{
+    if (m_customName) return;
+
+    const QString text = wdgFilterNodeCreation.layerName->text();
+    QString newText = text;
+
+    if (m_previousFilterName.isEmpty()) {
+        newText = m_layerName + " (" + newFilterName + ")";
+    } else if (text == m_previousFilterName) {
+        newText = newFilterName;
+    } else {
+        const QString oldSuffix = "(" + m_previousFilterName + ")";
+        if (text.endsWith(oldSuffix)) {
+            newText.chop(oldSuffix.size());
+            newText += "(" + newFilterName + ")";
+        }
+    }
+
+    if (newText != text) {
+        wdgFilterNodeCreation.layerName->blockSignals(true);
+        wdgFilterNodeCreation.layerName->setText(newText);
+        wdgFilterNodeCreation.layerName->blockSignals(false);
+    }
 }
 
 void KisDlgAdjustmentLayer::adjustSize()
@@ -124,4 +161,3 @@ void KisDlgAdjustmentLayer::slotFilterWidgetSizeChanged()
 {
     QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
 }
-

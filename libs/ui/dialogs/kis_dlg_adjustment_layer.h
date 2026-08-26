@@ -35,6 +35,8 @@ public:
      * @param caption the caption for the dialog -- create or properties
      * @param view the view manager
      * @param parent the widget parent of this dialog
+     * @param initialFilterConfig the configuration to preload when editing an
+     *        existing filter node; leave null for new nodes.
      */
     KisDlgAdjustmentLayer(KisNodeSP node,
                           KisNodeFilterInterface* nfi,
@@ -42,7 +44,8 @@ public:
                           const QString & layerName,
                           const QString & caption,
                           KisViewManager *view,
-                          QWidget *parent = 0);
+                          QWidget *parent = 0,
+                          KisFilterConfigurationSP initialFilterConfig = KisFilterConfigurationSP());
     ~KisDlgAdjustmentLayer() override;
     KisFilterConfigurationSP  filterConfiguration() const;
     QString layerName() const;
@@ -62,6 +65,9 @@ private:
     KisFilterConfigurationSP m_currentFilter;
     bool m_customName;
     QString m_layerName;
+    QString m_previousFilterName;
+
+    void updateLayerNameForNewFilter(const QString &newFilterName);
 
 };
 

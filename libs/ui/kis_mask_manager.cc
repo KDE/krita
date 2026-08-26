@@ -31,7 +31,8 @@
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_pixel_selection.h>
-#include "dialogs/kis_dlg_adj_layer_props.h"
+#include "commands/KisNodeRenameCommand.h"
+#include <kis_command_utils.h>
 #include <kis_image.h>
 #include <kis_transform_worker.h>
 #include <KoColorSpace.h>
@@ -349,7 +350,9 @@ void KisMaskManager::maskProperties()
             return;
         }
 
-        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view->mainWindowAsQWidget(), "dlgeffectmaskprops");
+        KisDlgAdjustmentLayer dlg(mask, mask, dev, mask->name(),
+                                  i18n("Filter Mask Properties"), m_view,
+                                  m_view->mainWindowAsQWidget(), mask->filter());
 
         KisFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
@@ -361,16 +364,21 @@ void KisMaskManager::maskProperties()
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
-            mask->setName(dlg.layerName());
+            KUndo2Command *cmd = nullptr;
 
             if(xmlBefore != xmlAfter) {
-                KisChangeFilterCmd *cmd
-                    = new KisChangeFilterCmd(mask,
-                                             configBefore->cloneWithResourcesSnapshot(),
-                                             configAfter->cloneWithResourcesSnapshot());
+                cmd = KisCommandUtils::composeCommands(cmd,
+                    new KisChangeFilterCmd(mask,
+                                           configBefore->cloneWithResourcesSnapshot(),
+                                           configAfter->cloneWithResourcesSnapshot()));
+            }
 
-                // FIXME: check whether is needed
-                cmd->redo();
+            if (mask->name() != dlg.layerName()) {
+                cmd = KisCommandUtils::composeCommands(cmd,
+                    new KisNodeRenameCommand(mask, mask->name(), dlg.layerName()));
+            }
+
+            if (cmd) {
                 m_view->undoAdapter()->addCommand(cmd);
                 m_view->document()->setModified(true);
             }

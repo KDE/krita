@@ -59,7 +59,6 @@
 
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "dialogs/kis_dlg_adj_layer_props.h"
 #include "dialogs/kis_dlg_adjustment_layer.h"
 #include "dialogs/kis_dlg_layer_properties.h"
 #include "dialogs/kis_dlg_generator_layer.h"
@@ -263,7 +262,9 @@ void KisLayerManager::layerProperties()
     if (adjustmentLayer && !multipleLayersSelected) {
         KisPaintDeviceSP dev = adjustmentLayer->projection();
 
-        KisDlgAdjLayerProps dlg(adjustmentLayer, adjustmentLayer.data(), dev, m_view, adjustmentLayer->filter().data(), adjustmentLayer->name(), i18n("Filter Layer Properties"), m_view->mainWindow(), "dlgadjlayerprops");
+        KisDlgAdjustmentLayer dlg(adjustmentLayer, adjustmentLayer.data(), dev,
+                                  adjustmentLayer->name(), i18n("Filter Layer Properties"),
+                                  m_view, m_view->mainWindow(), adjustmentLayer->filter());
         dlg.resize(dlg.minimumSizeHint());
 
         KisFilterConfigurationSP configBefore(adjustmentLayer->filter());
@@ -1106,4 +1107,3 @@ void KisLayerManager::layerStyle()
         image->postExecutionUndoAdapter()->addCommand(command);
     }
 }
-

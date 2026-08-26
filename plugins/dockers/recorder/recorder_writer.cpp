@@ -529,7 +529,9 @@ RecorderWriterManager::~RecorderWriterManager()
 
 void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
 {
+    //Saving previous region as a precaution, so that we don't have to externally manage its state
     saveRegion();
+
     // Restart writers if canvas changes
     bool restart = d->timer.isActive();
     if (restart) {
@@ -581,11 +583,14 @@ void RecorderWriterManager::setup(const RecorderWriterSettings &settings)
         start(false, false);
     }
 
+    //Settings change whenever a different document is about to be recorder, so instead of externally tracking old region, we can just read it from a file
     tryRestoreRegion();
 }
 
 void RecorderWriterManager::start(bool toggleEnabled, bool restoreState)
 {
+    // This function is called in a lot of places, so we need to restore state very slectively to avoid huge performance
+    // losses. Even tho restoring state is a lot cheaper than saving it, it's still better to be careful
     if (restoreState) {
         this->restoreState();
     }
@@ -618,6 +623,8 @@ bool RecorderWriterManager::stop(bool toggleEnabled, bool saveState)
     if (!d->timer.isActive())
         return true;
 
+    // This function is called in a lot of places, so we need to save state very slectively to avoid huge performance
+    // losses
     if (saveState) {
       this->saveState();
     }

@@ -130,6 +130,23 @@ public:
     ///Remove the tail and restore region from a file
     void restoreState();
 
+    // A note about tail frames:
+    // They are needed for focused recording. It is possible that the recording is stopped with the last frame being
+    // very zoomed in, so if a user tries to export the timelapse in this state, it won't properly dispaly the resulting
+    // artwork. One option to fix that is to capture an overview frame whenever a timelapse is epxorted, but the artwork
+    // may have changed while recording was off, so we can't do that
+    //
+    // My solution is a "tail" frame, an overivew captured whenever recording is stopped, and removed if recording is
+    // resumed, to avoid adding dead air to timelapses.
+    //
+    // To avoid big jumps we capture multiple of them with interpolated motion with the last frame, like any other
+    // frame.
+    //
+    // They are technically not needed if the user isn't using focused recording, but they don't hurt to have.
+
+    // Saving the oldRegion varaible, for smooth frame motion, it is very cheap to do as it's literally just 16 bytes,
+    // so we're free to do it excessively without worrying. We also use it to keep track of the region with multiple
+    // files open, instead of doing that with some global state
     void saveRegion();
     void tryRestoreRegion();
 

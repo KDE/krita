@@ -505,6 +505,9 @@ RecorderDockerDock::~RecorderDockerDock()
     delete exportSettings;
 }
 
+// This signal is called when the last view of a document is closed. We can use it to properly stop recording for that
+// document and create tail frame(s), knowing that it won't be called too often. Creating tail frames can be very
+// expensive, depending on how zoomed in the user is, so doing that overzealously is unviable.
 void RecorderDockerDock::onDocumentAboutToClose(KoCanvasBase *canvas)
 {
     KisCanvas2 *cptr = dynamic_cast<KisCanvas2 *>(canvas);
@@ -523,7 +526,9 @@ void RecorderDockerDock::onDocumentAboutToClose(KoCanvasBase *canvas)
     }
 }
 
-void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
+// This is called whenever a tab is switched, be that when a user clicks on a tab, or another tab closing, so we only do
+// basic recorder state save. We can not rely on this function to create tail frames, as it's called too often
+void RecorderDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != nullptr);
 
@@ -562,6 +567,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->updateRecordStatus(enabled);
 }
 
+// This function is only called when the last document/canvas is closed, in all other cases setCanvas is called instead.
 void RecorderDockerDock::unsetCanvas()
 {
     d->updateRecordStatus(false);

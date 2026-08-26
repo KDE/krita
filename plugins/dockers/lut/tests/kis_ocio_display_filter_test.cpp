@@ -72,7 +72,7 @@ void KisOcioDisplayFilterTest::test()
             utils::createResourceManager(image,
                                          image->root(), "");
 
-    KisDisplayColorConverter converter(resourceManager, 0);
+    KisDisplayColorConverter converter(resourceManager, 0, false);
 
     dbgKrita << ppVar(image->root()->firstChild());
 

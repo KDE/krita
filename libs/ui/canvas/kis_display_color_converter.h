@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
 
 public:
     KisDisplayColorConverter();
-    KisDisplayColorConverter(KoCanvasResourceProvider *resourceManager, QObject *parent);
+    KisDisplayColorConverter(KoCanvasResourceProvider *resourceManager, QObject *parent, bool reactOnThemeChange = true);
     ~KisDisplayColorConverter() override;
 
     void setImage(KisImageSP image);

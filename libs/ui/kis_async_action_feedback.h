@@ -14,7 +14,7 @@
 class QWidget;
 class QMutex;
 
-class KisAsyncActionFeedback
+class KRITAUI_EXPORT KisAsyncActionFeedback
 {
 private:
     struct DefaultWaitingMessageCallback {

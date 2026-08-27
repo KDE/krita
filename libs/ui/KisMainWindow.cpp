@@ -422,8 +422,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (toolbox) {
         dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
     }
-    Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
-        KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
+
+    for (KoDockFactoryBase *factory : KoDockRegistry::instance()->sortedDockWidgetFactories()) {
         QDockWidget *dw = createDockWidget(factory);
         if (dw) {
             dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();

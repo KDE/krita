@@ -21,6 +21,9 @@ class QDockWidget;
 class KRITAFLAKE_EXPORT KoDockFactoryBase
 {
 public:
+    static constexpr int DEFAULT_PRIORITY = 100;
+    static constexpr int HIGHEST_PRIORITY = 0;
+
     enum DockPosition {
         DockTornOff, ///< Floating as its own top level window
         DockTop,    ///< Above the central widget
@@ -35,6 +38,14 @@ public:
 
     /// @return the id of the dock widget
     virtual QString id() const = 0;
+
+    /// @return the priority of the dock widget, lower numbers have higher
+    // priority, HIGHEST_PRIORITY is the highest. Only the log docker should
+    // have that priority so that it starts logging at the earliest chance.
+    virtual int priority() const
+    {
+        return DEFAULT_PRIORITY;
+    }
 
     /// @return the dock widget area the widget should appear in by default
     virtual DockPosition defaultDockPosition() const = 0;

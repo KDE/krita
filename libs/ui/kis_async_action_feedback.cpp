@@ -55,6 +55,11 @@ KisImportExportErrorCode KisAsyncActionFeedback::runAction(std::function<KisImpo
     return runActionImpl(func);
 }
 
+bool KisAsyncActionFeedback::runAction(std::function<bool()> func)
+{
+    return runActionImpl(func);
+}
+
 void KisAsyncActionFeedback::runVoidAction(std::function<void()> func)
 {
     QFuture<void> result = QtConcurrent::run(func);

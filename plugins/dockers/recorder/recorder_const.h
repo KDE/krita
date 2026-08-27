@@ -15,7 +15,7 @@ class QRegularExpression;
 namespace RecorderConst
 {
 
-constexpr int waitThreadTimeoutMs = 5000;
+constexpr int waitThreadTimeoutMs = 30000;
 
 QRegularExpression snapshotFilePatternFor(const QString &extension);
 

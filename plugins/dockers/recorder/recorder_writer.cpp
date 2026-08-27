@@ -6,6 +6,7 @@
 
 #include "recorder_writer.h"
 #include "recorder_image_copying_job.h"
+#include "kis_async_action_feedback.h"
 #include "recorder_const.h"
 #include "recorder_export_settings.h"
 
@@ -630,7 +631,19 @@ bool RecorderWriterManager::stop(bool toggleEnabled, bool saveState)
     }
 
     d->timer.stop();
-    auto result = d->clearWriterPool();
+
+    bool result = false;
+
+    // Not sure if this is necessary, but, this may prevent the message from popping up when switching tabs
+    if (saveState) {
+        KisAsyncActionFeedback f(i18n("Stopping recording"), nullptr);
+        result = f.runAction([&] {
+            return d->clearWriterPool();
+        });
+    } else {
+        result = d->clearWriterPool();
+    }
+
     recorderThreads.setUsed(0);
     if (toggleEnabled) {
         Q_EMIT stopped();

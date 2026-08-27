@@ -856,9 +856,11 @@ void RecorderWriterManager::tryRestoreRegion()
 void RecorderWriterManager::saveState()
 {
     saveRegion();
-    // Capture some tail frame
-    d->captureTail = true;
-    onTimer();
+    // Capture some tail frames, but only if we're zoomed in, and if some frames were captured
+    if (d->oldRegion != d->canvas->image()->bounds() && d->oldRegion != QRect(-1, -1, -1, -1)) {
+        d->captureTail = true;
+        onTimer();
+    }
 }
 
 void RecorderWriterManager::restoreState()

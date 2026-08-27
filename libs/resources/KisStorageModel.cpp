@@ -471,6 +471,12 @@ bool KisStorageModel::importStorageInternal(const QString &filename,
         QSaveFile f(newLocation);
         // If the user selects a custom resource location, atomic renames may
         // not be available, so a direct write ends up being the only option.
+        // On Android, we don't do the same writing to a temporary file and
+        // then copying it into the destination as in KisImportExportManager
+        // because we already have the file contents in memory, so we're
+        // already writing it as fast and atomically as we can in the face of
+        // a non-atomic external storage file system. The internal file system
+        // supports atomic renames, so there we get proper QSaveFile behavior.
         f.setDirectWriteFallback(true);
 
         if (!f.open(QIODevice::WriteOnly) || f.write(data) != data.size() || !f.flush()) {

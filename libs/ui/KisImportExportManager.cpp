@@ -789,6 +789,16 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 //                    It can work if user gives access to the container dir, but
 //                    we cannot guarantee the user gave us permission.
 // 12-05-2025 update: Also Android because we gotta play in the sandbox.
+//                    External storage does not support atomic renames, so
+//                    QSaveFile does not work properly and will always fall back
+//                    to a direct write, which means it would truncate the file
+//                    as the first step, which leaves a very large time window
+//                    for Krita to get terminated by Android, leaving the user
+//                    with an incomplete file. Instead, we write to a temporary
+//                    file and then copy the contents over. This is still not
+//                    atomic and can end up with a partial file, but the time
+//                    window is much shorter and the likelihood of data loss
+//                    significantly lower because of it.
 #if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_ANDROID))
 #define USE_QSAVEFILE
 #endif

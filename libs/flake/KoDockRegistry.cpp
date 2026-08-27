@@ -17,6 +17,24 @@
 
 Q_GLOBAL_STATIC(KoDockRegistry, s_instance)
 
+namespace
+{
+struct SortableDockFactoryBase {
+    QString id;
+    KoDockFactoryBase *factory;
+    int priority;
+
+    bool operator<(const SortableDockFactoryBase &other) const
+    {
+        if (priority == other.priority) {
+            return id.compare(other.id, Qt::CaseInsensitive) < 0;
+        } else {
+            return priority < other.priority;
+        }
+    }
+};
+} // namespace
+
 KoDockRegistry::KoDockRegistry()
     : d(0)
 {
@@ -36,6 +54,24 @@ KoDockRegistry::~KoDockRegistry()
     Q_FOREACH(const KoDockFactoryBase *a, values()) {
         delete a;
     }
+}
+
+QList<KoDockFactoryBase *> KoDockRegistry::sortedDockWidgetFactories()
+{
+    QList<SortableDockFactoryBase> sortables;
+    sortables.reserve(count());
+    for (const QString &id : keys()) {
+        KoDockFactoryBase *factory = value(id);
+        sortables.append({id, factory, factory->priority()});
+    }
+    std::sort(sortables.begin(), sortables.end());
+
+    QList<KoDockFactoryBase *> factories;
+    factories.reserve(sortables.size());
+    for (const SortableDockFactoryBase &s : sortables) {
+        factories.append(s.factory);
+    }
+    return factories;
 }
 
 KoDockRegistry* KoDockRegistry::instance()

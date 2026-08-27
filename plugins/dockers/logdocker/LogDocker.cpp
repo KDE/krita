@@ -32,6 +32,11 @@ public:
         return QString( "LogDocker" );
     }
 
+    int priority() const override
+    {
+        return HIGHEST_PRIORITY;
+    }
+
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
     {
         return Qt::RightDockWidgetArea;

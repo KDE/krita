@@ -29,6 +29,12 @@ public:
     ~KoDockRegistry() override;
 
     /**
+     * Returns the registered docks in a predictable order: first sorted by
+     * priority, then sorted case-insensitively by their id.
+     */
+    QList<KoDockFactoryBase *> sortedDockWidgetFactories();
+
+    /**
      * Return an instance of the KoDockRegistry
      * Create a new instance on first call and return the singleton.
      */

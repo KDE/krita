@@ -133,6 +133,7 @@ QAction *Window::createAction(const QString &id, const QString &text, const QStr
     }
     action->setObjectName(id);
     action->setProperty("menulocation", menuLocation);
+    action->setProperty("defaultmenulocation", "tools/scripts");
     return action;
 }
 

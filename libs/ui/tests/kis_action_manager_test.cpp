@@ -193,8 +193,6 @@ void KisActionManagerTest::testDynamicActionUpdate_data()
 
 void KisActionManagerTest::testDynamicActionUpdate()
 {
-    using namespace Qt::StringLiterals;
-
     QFETCH(QString, newActionPath);
     QFETCH(QString, newActionName);
     QFETCH(QString, expectedNewPath);
@@ -208,19 +206,19 @@ void KisActionManagerTest::testDynamicActionUpdate()
 
     QList<QAction*> menuBarActions;
 
-    QAction *fileAction = createAction("file"_L1);
-    QAction *exitAction = createAction("exit"_L1);
-    QAction *toolsAction = createAction("tools"_L1);
+    QAction *fileAction = createAction(QLatin1String("file"));
+    QAction *exitAction = createAction(QLatin1String("exit"));
+    QAction *toolsAction = createAction(QLatin1String("tools"));
 
     menuBarActions.append(fileAction);
     menuBarActions.append(exitAction);
     menuBarActions.append(toolsAction);
 
-    QAction *scriptsAction = createAction("scripts"_L1);
-    QAction *existingScriptBAction = createAction("scriptB"_L1);
-    QAction *existingScriptCAction = createAction("scriptC"_L1);
+    QAction *scriptsAction = createAction(QLatin1String("scripts"));
+    QAction *existingScriptBAction = createAction(QLatin1String("scriptB"));
+    QAction *existingScriptCAction = createAction(QLatin1String("scriptC"));
 
-    QAction *fallbackAction = createAction("fallback"_L1);
+    QAction *fallbackAction = createAction(QLatin1String("fallback"));
 
     // just an empty "File" menu
     fileAction->setMenu(new QMenu());

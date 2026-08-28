@@ -142,7 +142,12 @@ QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &p
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
     s << "hires: " << qSetFieldWidth(8) << ev.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.screenPos().y() << qSetFieldWidth(0) << " ";
-    s << "source: " << sourceToString(ev.source());
+    s << "source: " << sourceToString(ev.source()) << " ";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s << "dev. type: " << static_cast<int>(ev.device()->type()) << " ";
+    s << "dev. caps: " << static_cast<int>(ev.device()->capabilities()) << " ";
+    s << "dev. name: " << ev.device()->name() << " ";
+#endif
 
     return string;
 }
@@ -175,7 +180,9 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
     s << "delta: x: " << ev.angleDelta().x() << " y: " << ev.angleDelta().y() << " ";
     s << "source: " << sourceToString(ev.source()) << " ";
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    s << "dev. type: " << static_cast<int>(ev.device()->type());
+    s << "dev. type: " << static_cast<int>(ev.device()->type()) << " ";
+    s << "dev. caps: " << static_cast<int>(ev.device()->capabilities()) << " ";
+    s << "dev. name: " << ev.device()->name() << " ";
 #endif
 
     return string;

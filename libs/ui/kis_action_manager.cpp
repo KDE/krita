@@ -496,3 +496,91 @@ void KisActionManager::dumpActionFlags()
         }
     }
 }
+
+void KisActionManager::synchronizeOneDynamicAction(QAction* action, const QList<QAction*> &menuBarActions, const QString &menuLocation, const QString &fallbackMenuLocation)
+{
+    if (menuLocation.isEmpty()) return;
+
+    QAction *found = 0;
+    QList<QAction *> nextCandidates = menuBarActions;
+
+    const QStringList menuLocationComponents = menuLocation.split('/', Qt::SkipEmptyParts);
+
+    for (auto it = menuLocationComponents.begin(); it != menuLocationComponents.end(); ++it) {
+        const QString &name = *it;
+
+        QList<QAction *> candidates;
+        std::swap(nextCandidates, candidates);
+
+        bool foundComponent = false;
+
+        Q_FOREACH (QAction *candidate, candidates) {
+            if (candidate->objectName().compare(name, Qt::CaseInsensitive) == 0) {
+                if (candidate->menu()) {
+                    found = candidate;
+                    nextCandidates = candidate->menu()->actions();
+                    foundComponent = true;
+                } else {
+                    warnUI << "Failed to add action" << action->objectName() << "to another action"
+                           << candidate->objectName()
+                           << "; This action does not have a menu! Requested menu location:" << menuLocation;
+                }
+                break;
+            }
+        }
+
+        if (!foundComponent) {
+            warnUI << "Couldn't find the menu location for action" << action->objectName()
+                   << "; requested menu location:" << menuLocation;
+            if (!fallbackMenuLocation.isEmpty()) {
+                warnUI << "Using fallback menu location" << fallbackMenuLocation << "for action" << action->objectName();
+                synchronizeOneDynamicAction(action, menuBarActions, fallbackMenuLocation, "");
+            }
+            return;
+        }
+    }
+
+    if (found && found->menu()) {
+        QList<QAction *> existingActions = found->menu()->actions();
+
+        auto existingActionIt = std::find_if(existingActions.begin(),
+                                             existingActions.end(),
+                                             kismpl::mem_equal_to(&QAction::objectName, action->objectName()));
+
+        if (existingActionIt == existingActions.end()) {
+            if (std::is_sorted(existingActions.begin(),
+                               existingActions.end(),
+                               kismpl::mem_less(&QAction::objectName))) {
+                auto it = std::upper_bound(existingActions.begin(),
+                                           existingActions.end(),
+                                           action->objectName(),
+                                           kismpl::mem_less(&QAction::objectName));
+                found->menu()->insertAction(it != existingActions.end() ? *it : nullptr, action);
+
+            } else {
+                found->menu()->addAction(action);
+            }
+        } else {
+            // replacing the existing action with the newly provided one
+            if (*existingActionIt != action) {
+                auto nextIt = std::next(existingActionIt);
+                QAction *insertBefore = nextIt != existingActions.end() ? *nextIt : nullptr;
+                found->menu()->removeAction(*existingActionIt);
+                found->menu()->insertAction(insertBefore, action);
+            }
+        }
+    }
+}
+
+void KisActionManager::synchronizeDynamicActions(QList<QAction*> newActions, const QList<QAction*> &menuBarActions)
+{
+    Q_FOREACH (QAction *action, newActions) {
+        QString menuLocation = action->property("menulocation").toString();
+        QString defaultMenuLocation = action->property("defaultmenulocation").toString();
+
+        // actions with empty menu location are considered as not for the menus
+        if (!menuLocation.isEmpty()) {
+            synchronizeOneDynamicAction(action, menuBarActions, menuLocation, defaultMenuLocation);
+        }
+    }
+}

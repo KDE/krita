@@ -85,6 +85,34 @@ public:
 
     static void safePopulateMenu(QMenu *menu, const QString &actionId, KisActionManager *actionManager);
 
+    /**
+     * Adds one action \p action into the menu hierarchy \p menuBarActions
+     *
+     * The function first tries to add the action into location \p menuLocation.
+     * If the location is invalid, then it tried to add into
+     * location \p fallbackMenuLocation.
+     */
+    static void synchronizeOneDynamicAction(QAction* action, const QList<QAction*> &menuBarActions, const QString &menuLocation, const QString &fallbackMenuLocation);
+
+    /**
+     * Synchronize actions from the list \p newActions with the actions in \p menuBarActions
+     *
+     * For every action in \p newActions the function will inspect
+     * property "menulocation" and will try to add this action into
+     * the proper position in menus represente.
+     *
+     * If "menulocation" property is missing or empty, the the action
+     * is not added to the menu hierarchy at all.
+     *
+     * If the path mentioned in "menulocation" is not found, then
+     * the function also checks property "defaultmenulocation" and
+     * tries to add the action there.
+     *
+     * WARNING: due to current design limitation, it is impossible
+     * to add an action to the toplevel menu!
+     */
+    static void synchronizeDynamicActions(QList<QAction*> newActions, const QList<QAction*> &menuBarActions);
+
 private Q_SLOTS:
     void slotActionAddedToCollection(QAction *action);
 

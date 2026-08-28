@@ -79,10 +79,9 @@ class Mutator(Extension):
         '''
         Adds an "action" to the Krita menus, which connects to the mutate function.
         '''
-        action = window.createAction("mutate", i18n("Mutate"), "tools/scripting")
+        action = window.createAction("mutate", i18n("Mutate"), "tools/scripts")
         action.triggered.connect(self.mutate)
-    
-    
+
     def mutate(self):
         '''
         Mutates current brush/color/etc. settings by some user-configurable amount.

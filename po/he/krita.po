@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-27 00:42+0000\n"
-"PO-Revision-Date: 2026-08-15 07:42+0300\n"
+"POT-Creation-Date: 2026-08-28 00:43+0000\n"
+"PO-Revision-Date: 2026-08-27 08:37+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -6729,23 +6729,23 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-"
 "colored-grey.gpl"
 msgid "Swatch colored grey"
-msgstr ""
+msgstr "מקבץ בצבע אפור"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-rgb.gpl:2
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-rgb.gpl"
 msgid "Swatch RGB"
-msgstr "&בוחר צבעים"
+msgstr "מקבץ RGB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl:2
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
 msgid "Swatches"
-msgstr "&בוחר צבעים"
+msgstr "מקבצים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/web.gpl:2
@@ -7209,7 +7209,7 @@ msgstr "מקבץ CMYK"
 #, kde-format
 msgctxt "./krita/data/palettes/swatch-colored-grey.gpl"
 msgid "Swatch colored grey"
-msgstr ""
+msgstr "מקבץ בצבע אפור"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/swatch-rgb.gpl:2
@@ -8486,7 +8486,7 @@ msgstr "הצגת ערכות מכחולים"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Tablet Debugger"
-msgstr ""
+msgstr "החלפת מצב מאבחן לוח ציור"
 
 #. i18n: context: text @ Action (buginfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (buginfo), Actions (General), ActionCollection (Krita)
@@ -9031,7 +9031,7 @@ msgstr "בחירת ערכת מחיקה"
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
-msgstr ""
+msgstr "בחירת ערכת מוחקים, לצד כלי המכחול ביד חופשית"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -9048,7 +9048,7 @@ msgstr "בחירת ערכת מכחולים"
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr ""
+msgstr "בחירת ערכת מכחולים, לצד כלי המכחול ביד חופשית"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -12267,7 +12267,7 @@ msgctxt "action"
 msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
-msgstr ""
+msgstr "המרת השכבות הצאצאיות של קבוצה לשכבה אחיד עם כמה תמוניות הנפשה"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3049
@@ -12909,7 +12909,7 @@ msgctxt "action"
 msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
-msgstr ""
+msgstr "המרת כל השכבות למרחב הצבע של התמונה (אם יש להן מרחב צבע שונה במקרה)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3502
@@ -13543,7 +13543,7 @@ msgstr "&תיצוג הנפשה…"
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr ""
+msgstr "תיצוג הנפשה ל־GIF, רצף תמונות או סרטון"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -14560,7 +14560,7 @@ msgstr "הצגת גודל הדפסה"
 #, kde-format
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
-msgstr ""
+msgstr "מיפוי תצוגת משטח הציור לגודל ההדפסה, לפי רזולוציית המסמך."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -14578,6 +14578,9 @@ msgid ""
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
+"הסרגלים מציגים את המקומות האופקיים והאנכיים של העכבר על גבי התמונה ואפשר "
+"להשתמש בהם כדי למקם את העכבר במקום הנכון על משטח הציור. <p>ביטול הסימון הזה "
+"יסתיר את הסרגלים.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -14610,6 +14613,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"הסרגלים יעקבו אחרי מקום העכבר הנוכחי ויציגו אותו במסך. זה עלול לגרום להאטת "
+"ביצועים מסוימת"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -16367,8 +16372,8 @@ msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 מפתחי Krita"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:501
-#: libs/ui/KisApplication.cpp:834
+#: krita/main.cc:820 libs/ui/KisApplication.cpp:507
+#: libs/ui/KisApplication.cpp:840
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16850,6 +16855,8 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
+"במסמך יש טקסט וקטורי שנוצר עם Krita 4.x. בשמירת המסמך, עצם הטקסט יומר לתסדיר "
+"של Krita 5 שאינו נתמך ב־Krita 4.x"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
 #, kde-format
@@ -18056,7 +18063,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Manichaean"
-msgstr ""
+msgstr "מניכאית"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:222
 #, kde-format
@@ -18130,7 +18137,7 @@ msgstr "ערבית מורחבת ג׳"
 #, kde-format
 msgctxt "@title"
 msgid "Old Sogdian"
-msgstr ""
+msgstr "סוגדיאנית עתיקה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:234
 #, kde-format
@@ -18154,7 +18161,7 @@ msgstr "ח׳ווארזמית"
 #, kde-format
 msgctxt "@title"
 msgid "Elymaic"
-msgstr ""
+msgstr "אלימאי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:238
 #, kde-format
@@ -19415,13 +19422,13 @@ msgstr "החלפת גליפים בצורות שמתאימות להצגת מספ�
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "חלופות סגנון כתיב מתמטי"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for super- and subscripts."
-msgstr ""
+msgstr "החלפת גליפים בכאלו שיותר מתאימים לכתב עילי ותחתי."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
 #, fuzzy, kde-format
@@ -19586,14 +19593,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "צורות מעל לבסיס"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
-msgstr ""
+msgstr "שליטה בהחלפה לצורות מעל הבסיס בקמרית ובסוגי כתב הודיים נוספים"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, fuzzy, kde-format
@@ -19605,7 +19612,7 @@ msgstr "מיקום"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
-msgstr ""
+msgstr "שליטה בהצגת סימון מעל לבסיס בסוגי כתב הודיים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
 #, fuzzy, kde-format
@@ -19617,7 +19624,7 @@ msgstr "תיאור:"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
-msgstr ""
+msgstr "שליטה בסימון מעל הבסיס של ליגטורות בסוגי כתב הודיים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
 #, kde-format
@@ -19635,13 +19642,13 @@ msgstr "שליטה בליגטורות היתוך אותיות לצורות כת�
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "צורות מתחת לבסיס"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
-msgstr ""
+msgstr "שליטה בהחלפה בצורות מתחת לבסיס בסוגי כתב הודיים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, fuzzy, kde-format
@@ -19653,7 +19660,7 @@ msgstr "מיקום"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
-msgstr ""
+msgstr "שליטה בהצגת סימון מתחת לבסיס בסוגי כתב הודיים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
 #, fuzzy, kde-format
@@ -19665,7 +19672,7 @@ msgstr "תיאור:"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
-msgstr ""
+msgstr "שליטה בסימון מתחת הבסיס של ליגטורות בסוגי כתב הודיים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
 #, kde-format
@@ -20136,6 +20143,7 @@ msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
 msgstr ""
+"החלפת הצורה הרגילה בקאנג׳י בגופנים יפניים בכאלו שבדרך כלל משתמשים בהם בשמות."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
 #, kde-format
@@ -20147,7 +20155,7 @@ msgstr "צורות מסורתיות"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
-msgstr ""
+msgstr "החלפת גליפים בגופני סינית/יפנית/קוריאנית בצורות ‚מסורתיות’."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
 #, fuzzy, kde-format
@@ -21370,7 +21378,7 @@ msgstr "רכיבים:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Calculate the brightness in nits against XYZ luminance."
-msgstr ""
+msgstr "חישוב הבהירות בניטים כנגד הארת XYZ."
 
 #: libs/image/kis_hdr_metadata_models.cpp:68
 #, kde-format
@@ -21378,7 +21386,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Calculate the brightness in nits by testing the components in linear rec "
 "2020."
-msgstr ""
+msgstr "חישוב הבהירות בניטים על ידי בדיקת הרכיבים ב־rec 2020 קווי."
 
 #: libs/image/kis_hdr_metadata_models.cpp:69
 #, kde-format
@@ -21410,13 +21418,13 @@ msgstr "התאמה אישית"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset color volume to the values defined by Rec. 2100 PQ"
-msgstr ""
+msgstr "איפוס נפח הצבע לערכים שמוגדרים על ידי Rec. 2100 PQ"
 
 #: libs/image/kis_hdr_metadata_models.cpp:122
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset color volume to the values defined by DCI-P3 D65"
-msgstr ""
+msgstr "איפוס נפח הצבע לערכים שמוגדרים על ידי DCI-P3 D65"
 
 #: libs/image/kis_hdr_metadata_models.cpp:123
 #, fuzzy, kde-format
@@ -21659,7 +21667,7 @@ msgstr "קליפות בצל"
 
 #: libs/image/kis_layer_properties_icons.cpp:30
 #: libs/resources/KisResourceModel.cpp:116
-#: libs/resources/KisStorageModel.cpp:512
+#: libs/resources/KisStorageModel.cpp:520
 #: libs/resources/KisTagResourceModel.cpp:641
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #, kde-format
@@ -21802,7 +21810,7 @@ msgstr "עיבוד"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1462
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1465
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -22308,7 +22316,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
-msgstr ""
+msgstr "התמונה מכילה <b>סגנונות שכבה</b>. סגנונות השכבה לא יישמרו."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
 #, kde-format
@@ -22556,8 +22564,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "שינוי שם התמונה"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2222
-#: libs/ui/KisMainWindow.cpp:2303
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2225
+#: libs/ui/KisMainWindow.cpp:2306
 #, kde-format
 msgid "Import frames"
 msgstr "ייבוא תמוניות"
@@ -22616,7 +22624,7 @@ msgstr ""
 #: libs/metadata/kis_meta_data_merge_strategy_p.cc:112
 #, kde-format
 msgid "Only identical"
-msgstr ""
+msgstr "זהה בלבד"
 
 #: libs/metadata/kis_meta_data_merge_strategy_p.cc:117
 #, kde-format
@@ -23672,31 +23680,31 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
-msgstr ""
+msgstr "החלשה"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:165
 #, kde-format
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
-msgstr ""
+msgstr "חיזוק"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
-msgstr ""
+msgstr "צבע ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
-msgstr ""
+msgstr "גוון ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
-msgstr ""
+msgstr "רוויה ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:170
 #, kde-format
@@ -23708,13 +23716,13 @@ msgstr "בהירות"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
-msgstr ""
+msgstr "הפחתת רוויה ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
-msgstr ""
+msgstr "הגברת רוויה ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
@@ -23732,19 +23740,19 @@ msgstr "החשכת הבהירות"
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
-msgstr ""
+msgstr "צבע ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
-msgstr ""
+msgstr "גוון ב־HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:178
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
-msgstr ""
+msgstr "רוויה ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:179
 #, kde-format
@@ -23756,13 +23764,13 @@ msgstr "ערך"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
-msgstr ""
+msgstr "הפחתת רוויה ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:181
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
-msgstr ""
+msgstr "הגברת רוויה ב־HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:182
 #, kde-format
@@ -23899,17 +23907,17 @@ msgstr "משאבים מקומיים"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1235
-#: libs/ui/KisApplication.cpp:1238 libs/ui/KisApplication.cpp:1254
-#: libs/ui/KisApplication.cpp:1286 libs/ui/KisApplication.cpp:1300
-#: libs/ui/KisApplication.cpp:1328 libs/ui/KisDocument.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
+#: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
+#: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
+#: libs/ui/KisApplication.cpp:1334 libs/ui/KisDocument.cpp:1057
 #: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
 #: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
-#: libs/ui/KisMainWindow.cpp:1024 libs/ui/KisMainWindow.cpp:1094
-#: libs/ui/KisMainWindow.cpp:1238 libs/ui/KisMainWindow.cpp:1335
-#: libs/ui/KisMainWindow.cpp:2082 libs/ui/KisMainWindow.cpp:2091
-#: libs/ui/KisMainWindow.cpp:2230 libs/ui/KisMainWindow.cpp:2291
-#: libs/ui/KisMainWindow.cpp:2310 libs/ui/KisMainWindow.cpp:2953
+#: libs/ui/KisMainWindow.cpp:1027 libs/ui/KisMainWindow.cpp:1097
+#: libs/ui/KisMainWindow.cpp:1241 libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:2085 libs/ui/KisMainWindow.cpp:2094
+#: libs/ui/KisMainWindow.cpp:2233 libs/ui/KisMainWindow.cpp:2294
+#: libs/ui/KisMainWindow.cpp:2313 libs/ui/KisMainWindow.cpp:2957
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24040,7 +24048,7 @@ msgid "Could not synchronize %1 with the database"
 msgstr "לא ניתן לסנכרן את %1 עם מסד הנתונים"
 
 #: libs/resources/KisResourceModel.cpp:98
-#: libs/resources/KisStorageModel.cpp:502
+#: libs/resources/KisStorageModel.cpp:510
 #: libs/resources/KisTagResourceModel.cpp:623
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
@@ -24057,7 +24065,7 @@ msgid "Storage ID"
 msgstr "מזהה אחסון"
 
 #: libs/resources/KisResourceModel.cpp:102
-#: libs/resources/KisStorageModel.cpp:516
+#: libs/resources/KisStorageModel.cpp:524
 #: libs/resources/KisTagResourceModel.cpp:627
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
@@ -24101,7 +24109,7 @@ msgid "Status"
 msgstr "מצב"
 
 #: libs/resources/KisResourceModel.cpp:112
-#: libs/resources/KisStorageModel.cpp:506
+#: libs/resources/KisStorageModel.cpp:514
 #: libs/resources/KisTagResourceModel.cpp:637
 #: libs/resourcewidgets/KisIconToolTip.cpp:115
 #, kde-format
@@ -24315,7 +24323,7 @@ msgctxt "resource type"
 msgid "Style Presets"
 msgstr "ערכות סגנון"
 
-#: libs/resources/KisStorageModel.cpp:504
+#: libs/resources/KisStorageModel.cpp:512
 #: libs/widgets/KoConfigAuthorPage.cpp:89
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:105
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
@@ -24325,20 +24333,20 @@ msgstr "ערכות סגנון"
 msgid "Type"
 msgstr "סוג"
 
-#: libs/resources/KisStorageModel.cpp:508
+#: libs/resources/KisStorageModel.cpp:516
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:88
 #, kde-format
 msgid "Creation Date"
 msgstr "תאריך יצירה"
 
-#: libs/resources/KisStorageModel.cpp:510
+#: libs/resources/KisStorageModel.cpp:518
 #, kde-format
 msgid "Preinstalled"
 msgstr "מותקן מראש"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
-#: libs/resources/KisStorageModel.cpp:514
+#: libs/resources/KisStorageModel.cpp:522
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
@@ -24455,7 +24463,7 @@ msgid "Delete resource"
 msgstr "מחיקת משאב"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2750
+#: libs/ui/KisMainWindow.cpp:2754
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -24860,17 +24868,17 @@ msgstr "הפעלת כלי התמרה"
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "Android: %1"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
 #, kde-format
 msgid "%1 (hardware)"
-msgstr ""
+msgstr "%1 (חומרה)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
 #, kde-format
 msgid "%1 (software)"
-msgstr ""
+msgstr "%1 (תוכנה)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
@@ -24957,7 +24965,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "תיצוג תמוניות ההנפשה נכשל! קובצי הפלט חלקיים."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:65
-#: libs/ui/KisMainWindow.cpp:2333
+#: libs/ui/KisMainWindow.cpp:2336
 #, kde-format
 msgid "Render Animation"
 msgstr "תיצוג הנפשה"
@@ -25029,7 +25037,7 @@ msgstr ""
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
-msgstr ""
+msgstr "ממדים מעל 1920 פיקסלים לא זוכים לתמיכה נרחבת."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
@@ -25041,7 +25049,7 @@ msgstr "אזהרה/ות:"
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
-msgstr ""
+msgstr "הייצוא עלול להיכשל ויכול להיות שמכשירים מסוימים לא יצליחו להפעיל אותו."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:991
 #, kde-format
@@ -25073,13 +25081,13 @@ msgstr "ייבוא הנפשת וידאו"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
-msgstr ""
+msgstr "FFMpeg לא נמצא! נא להוסיף נתיב ל־FFMpeg בלשונית „מתקדם”"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
-msgstr ""
+msgstr "  תמוניות לשנייה"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
@@ -25224,7 +25232,7 @@ msgstr "<b>אזהרה:</b> ניסית לייבא %1 תמוניות, הכמות �
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
-msgstr ""
+msgstr "יש להשתמש ב<a href=\"https://kdenlive.org\">עורך וידאו</a> במקום!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:504
 #, kde-format
@@ -25248,7 +25256,7 @@ msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
-msgstr ""
+msgstr "Krita לא תומכת בעקומת העברת וידאו (%1), הוא ייטען כקווי."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:554
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:556
@@ -25311,7 +25319,7 @@ msgstr "שגיאה פנימית (%1)"
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
 msgid "LibAV: %1"
-msgstr ""
+msgstr "LibAV: %1"
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
 #, kde-format
@@ -26854,7 +26862,7 @@ msgid "Numerical"
 msgstr "מספרי"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1203
+#: libs/ui/KisMainWindow.cpp:1206
 #, kde-format
 msgid "Import Images"
 msgstr "ייבוא תמונות"
@@ -26971,7 +26979,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "נא למלא שם חדש לסגנון"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2761
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2765
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27705,7 +27713,7 @@ msgid "Display"
 msgstr "תצוגה"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:319
 #, kde-format
 msgid "Color Management"
 msgstr "ניהול צבעים"
@@ -27718,6 +27726,7 @@ msgstr "צבע"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
+#: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #, kde-format
 msgid "Performance"
 msgstr "ביצועים"
@@ -28041,10 +28050,9 @@ msgstr "היסט ב־Y:"
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:36
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
-#, fuzzy, kde-format
-#| msgid "Add Group"
+#, kde-format
 msgid "Add a swatch group"
-msgstr "הוספת קבוצה"
+msgstr "הוספת קבוצת מקבצים"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:37
@@ -28086,24 +28094,23 @@ msgstr "שם לוח הצבעים:"
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
-#, fuzzy, kde-format
-#| msgid "Enter group name:"
+#, kde-format
 msgid "Swatch Group options"
-msgstr "הזן שם לקבוצה:"
+msgstr "אפשרויות קבוצת מקבצים"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Columns of swatches:"
-msgstr "&בוחר צבעים"
+msgstr "עמודות של מקבצים:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:51
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:249
 #, kde-format
 msgid "Rows of swatches in group:"
-msgstr ""
+msgstr "שורות של מקבצים בקבוצה:"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:70
 #, kde-format
@@ -29312,9 +29319,9 @@ msgstr "גל משולש"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:162
-#, fuzzy, kde-format
+#, kde-format
 msgid "High Quality Filtering"
-msgstr "&בוחר צבעים"
+msgstr "סינון באיכות גבוהה"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:176
@@ -29340,9 +29347,9 @@ msgstr "ישיר (מומלץ)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "&שכבה"
+msgstr "מטמון מפת פיקסלים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:210
@@ -29361,9 +29368,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use texture buffer"
-msgstr "&בוחר צבעים"
+msgstr "להשתמש בחוצץ מרקמים"
 
 #. i18n: ectx: attribute (title), widget (QWidget, HDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:261
@@ -29373,9 +29380,9 @@ msgstr "הגדרות HDR (טווח דינמי רחב)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:267
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current Display Format"
-msgstr "הסר שכבה נוכחית"
+msgstr "תסדיר תצוגה נוכחי"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:274
@@ -30088,10 +30095,9 @@ msgstr "לא להציג תוכן בעת הזזת תת־חלונות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Onion skins menu"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "תפריט קליפות בצל"
+msgstr "סמלים בתפריט:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -30271,10 +30277,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "No Preview"
+#, kde-format
 msgid "Zoom Preview Scale:"
-msgstr "אין תצוגה מקדימה"
+msgstr "קנה מידה של תצוגת תקריב מקדימה:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
@@ -30288,10 +30293,9 @@ msgstr "x"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
 #: libs/ui/forms/wdggeneralsettings.ui:1066
-#, fuzzy, kde-format
-#| msgid "Color Sampler Tool"
+#, kde-format
 msgid "Color Sampler Position:"
-msgstr "כלי דוגם צבעים"
+msgstr "מקום דוגם צבע:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -30776,9 +30780,9 @@ msgstr "מכחול (צבע רקע)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPatternTransform)
 #: libs/ui/forms/wdggeometryoptions.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pattern Transform"
-msgstr "שינוי"
+msgstr "התמרת תבנית"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeometryoptions.ui:120
@@ -30796,9 +30800,9 @@ msgstr "סיבוב:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2164
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale:"
-msgstr "גוו&ני אפור"
+msgstr "קנה מידה:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -30869,52 +30873,46 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
-#, fuzzy, kde-format
+#, kde-format
 msgid "HDR Metadata"
-msgstr "לוחות צבעים"
+msgstr "נתוני על של טווח דינמי רחב"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
 #: libs/ui/forms/wdgimageproperties.ui:308
-#, fuzzy, kde-format
-#| msgid "Reference images"
+#, kde-format
 msgid "HDR Reference White"
-msgstr "תמונות סימוכין"
+msgstr "לבן לסימוכין לטווח דינמי רחב"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
 #: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Content Light Level Information"
-msgstr "פרטי מסמך"
+msgstr "פרטי רמת הארת תוכן"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdgimageproperties.ui:338
-#, fuzzy, kde-format
+#, kde-format
 msgid "Max Content Light Level:"
-msgstr "שינוי משפחת תווים"
+msgstr "רמת הארת תוכן מרבית:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdgimageproperties.ui:345
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Max Frame Average Light Level:</p></body></html>"
-msgstr "<html><head/><body><p>תיאור פעולה</p></body></html>"
+msgstr ""
+"<html><head/><body><p>רמת תאורה ממוצעת מרבית לתמונית:</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
 #: libs/ui/forms/wdgimageproperties.ui:362
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Calculate"
+#, kde-format
 msgid "Calculate"
 msgstr "חישוב"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404
-#, fuzzy, kde-format
-#| msgctxt "Rearrange the positions of the pixels under the cursor"
-#| msgid "Color Deformation"
+#, kde-format
 msgid "Color Volume Information"
-msgstr "עיוות צבעים"
+msgstr "פרטי נפח צבע"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, GreenLabel)
@@ -30972,15 +30970,15 @@ msgstr "לבן:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgimageproperties.ui:566
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum Luminance:"
-msgstr "רוחב:"
+msgstr "הארה מרבית:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdgimageproperties.ui:589
-#, fuzzy, kde-format
+#, kde-format
 msgid "Minimum Luminance:"
-msgstr "רוחב:"
+msgstr "הארה מזערית:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgimageproperties.ui:634
@@ -31515,13 +31513,13 @@ msgstr "עורך מכחולים"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushNameLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current brush preset"
-msgstr "מאפייני שכבה..."
+msgstr "ערכת המכחולים הנוכחית"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1069
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1072
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -31548,9 +31546,9 @@ msgstr "שמירת ערכת מכחולים חדשה…"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:387
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overwrite Brush Preset"
-msgstr "מאפייני שכבה..."
+msgstr "דריסת ערכת מכחולים"
 
 #. i18n: ectx: property (text), widget (QLabel, presetsSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:455
@@ -31632,9 +31630,9 @@ msgstr "איפוס האזור ללבן"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPasteFormat)
 #: libs/ui/forms/wdgPasteFormat.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Multiple Formats Detected"
-msgstr "שכפל תמונה"
+msgstr "זוהו מגוון תסדירים"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgPasteFormat.ui:32
@@ -31686,9 +31684,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRemember)
 #: libs/ui/forms/wdgPasteFormat.ui:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Remember"
-msgstr "מיספור"
+msgstr "ל&זכור"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgperformancesettings.ui:38
@@ -32572,7 +32570,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:429
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:434
 #, kde-format
 msgid "Sessions"
 msgstr "הפעלות"
@@ -32840,9 +32838,9 @@ msgstr "שינוי גודל משטח ציור"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
 #: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale To New Size"
-msgstr "שמירת שכבה בתור תמונה..."
+msgstr "שינוי קנה מידה לגודל חדש"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgLayerSize)
 #: libs/ui/imagesize/dlg_layersize.cc:44 libs/ui/imagesize/wdg_layersize.ui:18
@@ -32860,9 +32858,9 @@ msgstr[2] "שינוי גודל ל־%1 שכבות"
 msgstr[3] "שינוי גודל ל־%1 שכבות"
 
 #: libs/ui/imagesize/imagesize.cc:174
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale Selection"
-msgstr "הדבקת בחירה"
+msgstr "שינוי קנה מידה לבחירה"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgCanvasSize)
 #: libs/ui/imagesize/wdg_canvassize.ui:24
@@ -34015,16 +34013,16 @@ msgid "Brush Opacity: %1%"
 msgstr "אטימות מכחול: %1%"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:324
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
-msgstr "הס&תר\\הצג שכבה"
+msgstr "זרימה: %1%"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:352
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
-msgstr "&צבעים"
+msgstr "עמעום: %1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:380
 #, kde-format
@@ -34077,32 +34075,24 @@ msgid "&Choose foreground and background colors"
 msgstr "&בחירת צבעי חזית ורקע"
 
 #: libs/ui/kis_control_frame.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Foreground Color"
+#, kde-format
 msgid "&Choose foreground colour"
 msgstr "בחירת צבע &חזית"
 
 #: libs/ui/kis_control_frame.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Background Color"
+#, kde-format
 msgid "&Choose background colour"
 msgstr "בחירת צבע &רקע"
 
 #: libs/ui/kis_control_frame.cpp:160
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap Foreground and Background Colors"
+#, kde-format
 msgid "&Swap Foreground and Background Colors"
-msgstr "החלפה בין צבעי חזית ורקע"
+msgstr "החלפה בין &צבעי חזית ורקע"
 
 #: libs/ui/kis_control_frame.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap Foreground and Background Colors"
+#, kde-format
 msgid "&reset Foreground and Background Colors"
-msgstr "החלפה בין צבעי חזית ורקע"
+msgstr "&איפוס צבעי חזית ורקע"
 
 #: libs/ui/kis_control_frame.cpp:195
 #, kde-format
@@ -34114,7 +34104,7 @@ msgstr "&כלי ציור"
 msgid "&Docker Box"
 msgstr "&תיבת מעגן"
 
-#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:425
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34128,8 +34118,8 @@ msgstr "תבניות"
 msgid "Custom Pattern"
 msgstr "תבנית מותאמת אישית"
 
-#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:415
+#: libs/ui/KisApplication.cpp:416
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:272
@@ -34377,9 +34367,9 @@ msgid "Add Fast Color Overlay"
 msgstr "הוספת שכבת צבע מהירה"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "בחירה"
+msgstr "מסכת שכבת צבע עליונה"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -34387,19 +34377,19 @@ msgid "Filter Mask Properties"
 msgstr "מאפייני מסכת סינון"
 
 #: libs/ui/kis_mirror_manager.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror View"
-msgstr "שכבה לתמונה"
+msgstr "שיקוף התצוגה"
 
 #: libs/ui/kis_mirror_manager.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror View Around Cursor"
-msgstr "שכבה לתמונה"
+msgstr "שיקוף התצוגה סביב הסמן"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "שכבה לתמונה"
+msgstr "שיקוף התצוגה סביב משטח הציור"
 
 #: libs/ui/kis_node_manager.cpp:486
 #, kde-format
@@ -34564,10 +34554,9 @@ msgid "Quick Group"
 msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1670
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
-msgstr "הסר שכבה"
+msgstr "שכבת חיתוך מהירה"
 
 #: libs/ui/kis_node_manager.cpp:1677
 #, kde-format
@@ -34636,9 +34625,9 @@ msgid "Edit brush settings"
 msgstr "עריכת הגדרות מכחול"
 
 #: libs/ui/kis_paintop_box.cc:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Choose brush preset"
-msgstr "מאפייני שכבה..."
+msgstr "בחירת ערכת מכחולים"
 
 #: libs/ui/kis_paintop_box.cc:265
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
@@ -34657,10 +34646,10 @@ msgid "Opacity: {n}%"
 msgstr "אטימות: {n}%"
 
 #: libs/ui/kis_paintop_box.cc:267
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "הס&תר\\הצג שכבה"
+msgstr "זרימה: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -34678,9 +34667,9 @@ msgid "Rotation:"
 msgstr "סיבוב:"
 
 #: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pattern Scale:"
-msgstr "גודל דף"
+msgstr "קנה מידה של תבנית:"
 
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -34699,9 +34688,9 @@ msgstr "אטימות:"
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flow:"
-msgstr "הס&תר\\הצג שכבה"
+msgstr "זרימה:"
 
 #: libs/ui/kis_paintop_box.cc:336
 #, kde-format
@@ -34715,11 +34704,13 @@ msgstr "תרכובת מכחולים"
 
 #: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
 #: libs/ui/kis_paintop_box.cc:1374
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "%1\n"
 "selected"
-msgstr "בחירה"
+msgstr ""
+"%1\n"
+"נבחרו"
 
 #: libs/ui/kis_paintop_options_model.cpp:25
 #, kde-format
@@ -34752,9 +34743,9 @@ msgid "Masked Brush"
 msgstr "מכחול ממוסך"
 
 #: libs/ui/kis_popup_palette.cpp:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "Popup Palette"
-msgstr "ירקרק"
+msgstr "לוח צבעים צץ"
 
 #: libs/ui/kis_popup_palette.cpp:175
 #, kde-format
@@ -35110,20 +35101,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "תקריב: %1 %"
 
-#: libs/ui/KisApplication.cpp:402
+#: libs/ui/KisApplication.cpp:407
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
 #, kde-format
 msgid "Brush presets"
 msgstr "ערכות מכחולים"
 
-#: libs/ui/KisApplication.cpp:405 libs/ui/KisApplication.cpp:406
-#: libs/ui/KisApplication.cpp:407 libs/ui/KisApplication.cpp:408
+#: libs/ui/KisApplication.cpp:410 libs/ui/KisApplication.cpp:411
+#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:413
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:267
 #, kde-format
 msgid "Brush tips"
 msgstr "קצוות מכחולים"
 
-#: libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:418
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:270
@@ -35131,7 +35122,7 @@ msgstr "קצוות מכחולים"
 msgid "Palettes"
 msgstr "לוחות צבעים"
 
-#: libs/ui/KisApplication.cpp:426 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:431 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:268
@@ -35139,44 +35130,44 @@ msgstr "לוחות צבעים"
 msgid "Workspaces"
 msgstr "מרחבי עבודה"
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:432
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "ספריות סמלי SVG"
 
-#: libs/ui/KisApplication.cpp:428 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:433 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "פריסות חלונות"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:435
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:273
 #, kde-format
 msgid "Gamut masks"
 msgstr "מסכות מנעד"
 
-#: libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:437
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "סקריפטים מסוג SeExpr"
 
-#: libs/ui/KisApplication.cpp:437
+#: libs/ui/KisApplication.cpp:442
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "סגנונות שכבות"
 
-#: libs/ui/KisApplication.cpp:440
+#: libs/ui/KisApplication.cpp:445
 #, kde-format
 msgid "Font Families"
 msgstr "משפחות גופנים"
 
-#: libs/ui/KisApplication.cpp:441
+#: libs/ui/KisApplication.cpp:446
 #, kde-format
 msgid "Style Presets"
 msgstr "ערכות סגנון"
 
-#: libs/ui/KisApplication.cpp:453
+#: libs/ui/KisApplication.cpp:458
 #, kde-format
 msgid ""
 "%1\n"
@@ -35187,13 +35178,13 @@ msgstr ""
 "\n"
 "Krita תיסגר כעת."
 
-#: libs/ui/KisApplication.cpp:453 libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:458 libs/ui/KisApplication.cpp:464
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: שגיאה משמעותית"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:464
 #, kde-format
 msgid ""
 "\n"
@@ -35204,7 +35195,7 @@ msgstr ""
 "\n"
 "Krita תיסגר כעת."
 
-#: libs/ui/KisApplication.cpp:502
+#: libs/ui/KisApplication.cpp:508
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35215,65 +35206,65 @@ msgstr ""
 "זה לא מצב מומלץ.\n"
 "נא להוריד ולהתקין את מהדורת x64 במקום."
 
-#: libs/ui/KisApplication.cpp:519
+#: libs/ui/KisApplication.cpp:525
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "ערוצים"
 
-#: libs/ui/KisApplication.cpp:557
+#: libs/ui/KisApplication.cpp:563
 #, kde-format
 msgid "Adding resource types..."
 msgstr "סוגי המשאבים נוספים…"
 
-#: libs/ui/KisApplication.cpp:561
+#: libs/ui/KisApplication.cpp:567
 #, kde-format
 msgid "Loading plugins..."
 msgstr "התוספים נטענים…"
 
-#: libs/ui/KisApplication.cpp:567
+#: libs/ui/KisApplication.cpp:573
 #, kde-format
 msgid "Loading resources..."
 msgstr "המשאבים נטענים…"
 
-#: libs/ui/KisApplication.cpp:576
+#: libs/ui/KisApplication.cpp:582
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "החלון הראשי נטען…"
 
-#: libs/ui/KisApplication.cpp:608
+#: libs/ui/KisApplication.cpp:614
 #, kde-format
 msgid "Launching..."
 msgstr "מתבצעת טעינה…"
 
-#: libs/ui/KisApplication.cpp:729
+#: libs/ui/KisApplication.cpp:735
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "סוג התוכן (MIME) לא נמצא. נא לנסות להשתמש באפשרות mimetype-"
 
-#: libs/ui/KisApplication.cpp:790
+#: libs/ui/KisApplication.cpp:796
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "תיצוג תמוניות הנפשה נכשל!"
 
-#: libs/ui/KisApplication.cpp:815 libs/ui/KisApplication.cpp:1094
+#: libs/ui/KisApplication.cpp:821 libs/ui/KisApplication.cpp:1100
 #, kde-format
 msgid "File layer"
 msgstr "שכבת קובץ"
 
-#: libs/ui/KisApplication.cpp:823 libs/ui/KisApplication.cpp:828
-#: libs/ui/KisApplication.cpp:1088 libs/ui/KisApplication.cpp:1102
-#: libs/ui/KisApplication.cpp:1107
+#: libs/ui/KisApplication.cpp:829 libs/ui/KisApplication.cpp:834
+#: libs/ui/KisApplication.cpp:1094 libs/ui/KisApplication.cpp:1108
+#: libs/ui/KisApplication.cpp:1113
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:אזהרה"
 
-#: libs/ui/KisApplication.cpp:824 libs/ui/KisApplication.cpp:1103
+#: libs/ui/KisApplication.cpp:830 libs/ui/KisApplication.cpp:1109
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:829
+#: libs/ui/KisApplication.cpp:835
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35286,7 +35277,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:835
+#: libs/ui/KisApplication.cpp:841
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35294,32 +35285,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1089
+#: libs/ui/KisApplication.cpp:1095
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "לא ניתן לפתוח את הקובץ %1"
 
-#: libs/ui/KisApplication.cpp:1108
+#: libs/ui/KisApplication.cpp:1114
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "לא ניתן להוסיף את שכבת הקובץ: אין מסמך פתוח."
 
-#: libs/ui/KisApplication.cpp:1236
+#: libs/ui/KisApplication.cpp:1242
 #, kde-format
 msgid "No template found for: %1"
 msgstr "לא נמצאה תבנית עבור: %1"
 
-#: libs/ui/KisApplication.cpp:1239
+#: libs/ui/KisApplication.cpp:1245
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "נמצאו יותר מדי תבניות עבור: %1"
 
-#: libs/ui/KisApplication.cpp:1255
+#: libs/ui/KisApplication.cpp:1261
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "טעינת התבנית %1 לא הצליחה."
 
-#: libs/ui/KisApplication.cpp:1287
+#: libs/ui/KisApplication.cpp:1293
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35334,7 +35325,7 @@ msgstr ""
 "\n"
 "יש להפעיל את Krita מחדש כדי שהשינויים יהיו בתוקף."
 
-#: libs/ui/KisApplication.cpp:1301
+#: libs/ui/KisApplication.cpp:1307
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35345,7 +35336,7 @@ msgstr ""
 "\n"
 "נא לוודא שאף תוכנית אחרת לא משתמשת בקובץ ולנסות שוב."
 
-#: libs/ui/KisApplication.cpp:1329
+#: libs/ui/KisApplication.cpp:1335
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "לאפס את קובץ ההגדרות?"
@@ -35813,10 +35804,9 @@ msgstr ""
 "אחר."
 
 #: libs/ui/KisImportExportFilter.cpp:179
-#, fuzzy, kde-format
-#| msgid "The file could not be opened."
+#, kde-format
 msgid "%1 could not be opened"
-msgstr "לא ניתן לפתוח את הקובץ."
+msgstr "אי אפשר לפתוח את %1."
 
 #: libs/ui/KisImportExportFilter.cpp:191
 #, kde-format
@@ -36009,67 +35999,66 @@ msgstr ""
 "להמרה לטובת עריכה: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:31
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "אלפא"
+msgstr "עדכון תמוניות ממוזערות של שכבה"
 
-#: libs/ui/KisMainWindow.cpp:194
+#: libs/ui/KisMainWindow.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "סגנונות"
 
-#: libs/ui/KisMainWindow.cpp:195
+#: libs/ui/KisMainWindow.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "מ&עגנים"
 
-#: libs/ui/KisMainWindow.cpp:196
+#: libs/ui/KisMainWindow.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&חלון"
 
-#: libs/ui/KisMainWindow.cpp:197
+#: libs/ui/KisMainWindow.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "ת&צוגה חדשה"
 
-#: libs/ui/KisMainWindow.cpp:198
+#: libs/ui/KisMainWindow.cpp:199
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "מ&רחב עבודה"
 
-#: libs/ui/KisMainWindow.cpp:591
+#: libs/ui/KisMainWindow.cpp:594
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "הצגת סרגל הכלים %1"
 
-#: libs/ui/KisMainWindow.cpp:593
+#: libs/ui/KisMainWindow.cpp:596
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "הסתרת סרגל הכלים %1"
 
-#: libs/ui/KisMainWindow.cpp:1066
+#: libs/ui/KisMainWindow.cpp:1069
 #, kde-format
 msgid "Save as %1"
 msgstr "שמירה בתור %1"
 
-#: libs/ui/KisMainWindow.cpp:1094
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "הקובץ %1 לא קיים."
 
-#: libs/ui/KisMainWindow.cpp:1203
+#: libs/ui/KisMainWindow.cpp:1206
 #, kde-format
 msgid "Open Images"
 msgstr "פתיחת תמונות"
 
-#: libs/ui/KisMainWindow.cpp:1336
+#: libs/ui/KisMainWindow.cpp:1339
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36078,29 +36067,29 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1397
+#: libs/ui/KisMainWindow.cpp:1400
 #, kde-format
 msgid "Exporting"
 msgstr "מתבצע ייצוא"
 
-#: libs/ui/KisMainWindow.cpp:1397
+#: libs/ui/KisMainWindow.cpp:1400
 #, kde-format
 msgid "Saving As"
 msgstr "שמירה בתור"
 
-#: libs/ui/KisMainWindow.cpp:2051
+#: libs/ui/KisMainWindow.cpp:2054
 #, kde-format
 msgid "Layers/Masks"
 msgstr "שכבות/מסכות"
 
-#: libs/ui/KisMainWindow.cpp:2077
+#: libs/ui/KisMainWindow.cpp:2080
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "אין לך מאגדי משאבים פעילים."
 
-#: libs/ui/KisMainWindow.cpp:2081
+#: libs/ui/KisMainWindow.cpp:2084
 #, kde-format
 msgid ""
 "\n"
@@ -36110,7 +36099,7 @@ msgstr ""
 "\n"
 "אין ערכות מכחולים זמינות. נא להפעיל מאגד שיש בו ערכות לפני המשך הפעילות.\n"
 
-#: libs/ui/KisMainWindow.cpp:2091
+#: libs/ui/KisMainWindow.cpp:2094
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -36121,7 +36110,7 @@ msgstr ""
 "\n"
 "רק המשאבים המקומיים שלך זמינים."
 
-#: libs/ui/KisMainWindow.cpp:2230 libs/ui/KisMainWindow.cpp:2310
+#: libs/ui/KisMainWindow.cpp:2233 libs/ui/KisMainWindow.cpp:2313
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36130,62 +36119,62 @@ msgstr ""
 "לא ניתן לסיים לייבא את ההנפשה:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2291
+#: libs/ui/KisMainWindow.cpp:2294
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "יצירת מסמך חדש נכשלה. ייבוא ההנפשה בוטל."
 
-#: libs/ui/KisMainWindow.cpp:2741
+#: libs/ui/KisMainWindow.cpp:2745
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "ייבוא מ&רחב עבודה…"
 
-#: libs/ui/KisMainWindow.cpp:2756
+#: libs/ui/KisMainWindow.cpp:2760
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "סביבת &עבודה חדשה…"
 
-#: libs/ui/KisMainWindow.cpp:2760
+#: libs/ui/KisMainWindow.cpp:2764
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "סביבת עבודה חדשה…"
 
-#: libs/ui/KisMainWindow.cpp:2804
+#: libs/ui/KisMainWindow.cpp:2808
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2807
+#: libs/ui/KisMainWindow.cpp:2811
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2976
+#: libs/ui/KisMainWindow.cpp:2980
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "תוסף ניהול הצבע LittleCMS של Krita לא מותקן. Krita תיסגר כעת."
 
-#: libs/ui/KisMainWindow.cpp:2992
+#: libs/ui/KisMainWindow.cpp:2996
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "שגיאת התקנה"
 
-#: libs/ui/KisMainWindow.cpp:3105
+#: libs/ui/KisMainWindow.cpp:3109
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&ערכות עיצוב"
 
-#: libs/ui/KisMainWindow.cpp:3191
-#, fuzzy, kde-format
+#: libs/ui/KisMainWindow.cpp:3195
+#, kde-format
 msgid "Expanding Spacer"
-msgstr "תבניות"
+msgstr "מפריד מתרחב"
 
 #: libs/ui/KisNodeActivationActionCreatorVisitor.cpp:25
 #, kde-format
@@ -36210,21 +36199,21 @@ msgid "New palette name:"
 msgstr "שם לוח הצבעים החדש:"
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "&בוחר צבעים"
+msgstr "לוח צבעים של Krita‏ (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "תבניות"
+msgstr "לוח צבעים של GIMP‏ (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Palette in the Current Document"
-msgstr "אין אפשרות ליצור את הקובץ לשמירה"
+msgstr "שמירת לוח הצבעים במסמך הנוכחי"
 
 #: libs/ui/KisPaletteEditor.cpp:141
 #, kde-format
@@ -36237,16 +36226,15 @@ msgid "Do you want to store this palette in your current image?"
 msgstr "לאחסן את לוח הצבעים הזה בתמונה הנוכחית שלך?"
 
 #: libs/ui/KisPaletteEditor.cpp:245 libs/ui/KisPaletteEditor.cpp:308
-#, fuzzy, kde-format
-#| msgid "Enter group name:"
+#, kde-format
 msgid "New swatch group name:"
-msgstr "הזן שם לקבוצה:"
+msgstr "שם חדש לקבוצת מקבצים:"
 
 #: libs/ui/KisPaletteEditor.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
-msgstr "הסר שכבה"
+msgstr "הסרת קבוצת מקבצים"
 
 #: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
 #, kde-format
@@ -36262,10 +36250,10 @@ msgstr "צבע %1"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
 #: libs/widgets/kis_palette_view.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
-msgstr "מאפייני שכבה..."
+msgstr "הוספת מקבץ צבעים חדש"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
 #: libs/widgets/kis_palette_view.cpp:113
@@ -36278,15 +36266,15 @@ msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
 #: libs/widgets/kis_palette_view.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Swatch ID:"
-msgstr "&בוחר צבעים"
+msgstr "מזהה מקבץ:"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color swatch name:"
-msgstr "&בוחר צבעים"
+msgstr "שם מקבץ צבעים:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:117
@@ -36302,10 +36290,9 @@ msgid "Spot color:"
 msgstr "&צבע"
 
 #: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
-#, fuzzy, kde-format
-#| msgid "Enter group name:"
+#, kde-format
 msgid "Swatch Group:"
-msgstr "הזן שם לקבוצה:"
+msgstr "קבוצת מקבצים:"
 
 #: libs/ui/KisPaletteEditor.cpp:620 libs/ui/KisPaletteEditor.cpp:623
 #, kde-format
@@ -36931,9 +36918,9 @@ msgstr "מוחלק קצוות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:272
-#, fuzzy, kde-format
+#, kde-format
 msgid "H&ighlight Mode:"
-msgstr "&גובה:"
+msgstr "מצב ה&דגשה:"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbCompositeOp)
 #. i18n: ectx: property (toolTip), widget (KisLayerStyleCompositeOpComboBox, cmbCompositeOp)
@@ -37145,9 +37132,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_9)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:261
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Transparency Shapes Layer"
-msgstr "מצבע הקידמה לשקוף"
+msgstr "שכבת צורות &שקיפות"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBox_10)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBox_11)
@@ -37161,21 +37148,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_10)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:271
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer Mask Hid&es Effect"
-msgstr "יצירת שכבה חדשה"
+msgstr "מסכת השכבה מ&סתירה את האפקט"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_11)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:281
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vector Mask &Hides Effect"
-msgstr "יצירת שכבה חדשה"
+msgstr "מסכת הווקטורים מ&סתירה את האפקט"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBlendIf)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:291
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blend If"
-msgstr "בחירה"
+msgstr "מיזוג אם"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:302
@@ -37991,10 +37978,10 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:135
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Choose a preset gradient from the button popup"
 msgid "Choose Gradient Preset"
-msgstr "מאפייני שכבה..."
+msgstr "בחירת ערכת מדרגים"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:152
 #, kde-format
@@ -38012,16 +37999,16 @@ msgid "Add the current gradient to the presets"
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:174
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Show the gradient preset chooser as a pop-up in a button or inline"
 msgid "Use a pop-up gradient preset chooser"
-msgstr "מספר תווים"
+msgstr "להשתמש בבורר ערכות מדרגים צץ"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Hide/show option widgets around the gradient preset chooser"
 msgid "Show compact gradient preset chooser"
-msgstr "מספר תווים"
+msgstr "הצגצ בבורר ערכות מדרגים מצומצם"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:529
 #, kde-format
@@ -38349,11 +38336,10 @@ msgid "N/A"
 msgstr "לא זמין"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:156
-#, fuzzy, kde-format
-#| msgid "The file %1 does not exist."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This profile has no colorants."
-msgstr "הקובץ %1 לא קיים."
+msgstr "לפרופיל הזה אין צבענים."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:157
 #, kde-format
@@ -38932,11 +38918,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
-msgstr "הזז בחירה"
+msgstr ""
+"לא ניתן לשמור את %1.\n"
+"סיבה: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
@@ -38993,9 +38981,9 @@ msgid "Instant preview threshold:"
 msgstr "סף תצוגה מקדימה מיידית:"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enable after:"
-msgstr "אפק&טים"
+msgstr "להפעיל לאחר:"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:133
 #, kde-format
@@ -39018,12 +39006,12 @@ msgstr ""
 "p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview may look different from the final result. In case of "
 "troubles try disabling the following options:<ul>%1</ul></p>"
-msgstr "שינוי גודל תמונה"
+msgstr ""
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, kde-format
@@ -39420,19 +39408,19 @@ msgstr "כוונון ניגודיות לפי ערוץ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
-msgstr "הדבקת בחירה"
+msgstr "חיתוך צללים:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the highlights side in auto levels"
 msgid "Highlights clipping:"
-msgstr "&גובה:"
+msgstr "חיתוך הדגשות:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:97
@@ -41018,9 +41006,9 @@ msgstr "ראשי:"
 #. i18n: ectx: property (text), widget (QLabel, altLabel)
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:263
 #: libs/widgetutils/xmlgui/kshortcutwidget.ui:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alternate:"
-msgstr "כלי ציור"
+msgstr "חלופי:"
 
 #. i18n: ectx: property (text), widget (QLabel, maskDescriptionLabel)
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:286
@@ -41085,9 +41073,9 @@ msgid "Reassign"
 msgstr "הקצאה מחדש"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shortcut conflict"
-msgstr "רוחב:"
+msgstr "סתירת מקשי קיצור"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:197
 #, kde-format
@@ -43228,9 +43216,9 @@ msgid "Select a Directory"
 msgstr "נא לבחור תיקייה"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:271
-#, fuzzy, kde-format
+#, kde-format
 msgid "Exporting Compositions..."
-msgstr "מיקום"
+msgstr "תרכובות מיוצאות…"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:297
 #, kde-format
@@ -43248,9 +43236,9 @@ msgid "New Name:"
 msgstr "שם חדש:"
 
 #: plugins/dockers/compositiondocker/compositionmodel.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Composition"
-msgstr "מיקום"
+msgstr "תרכובת"
 
 #. i18n: ectx: property (toolTip), widget (QListView, compositionView)
 #: plugins/dockers/compositiondocker/wdgcompositiondocker.ui:24
@@ -43260,14 +43248,14 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, exportCompositions)
 #: plugins/dockers/compositiondocker/wdgcompositiondocker.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export checked compositions."
-msgstr "מיקום"
+msgstr "ייצוא תרכובות מסומנות."
 
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Digital Colors Mixer"
-msgstr "כלי ציור"
+msgstr "מערבל צבעים דיגיטלי"
 
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #, kde-format
@@ -43540,11 +43528,10 @@ msgid "Histogram"
 msgstr "היסטוגרמה"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:32
-#, fuzzy, kde-format
-#| msgid "Show logarithmic histogram"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle logarithmic histogram."
-msgstr "הצגת היסטוגרמה לוגריתמית"
+msgstr "הצגת/הסתרת היסטוגרמה לוגריתמית."
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
 #, kde-format
@@ -43570,9 +43557,9 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgid "Thumbnail Size"
-msgstr "אלפא"
+msgstr "גודל תמונות ממוזערות"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:351
 #, kde-format
@@ -44015,19 +44002,19 @@ msgstr ""
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
 msgid "Add a new color swatch"
-msgstr ""
+msgstr "הוספת מקבץ צבעים חדש"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:105
 #, kde-format
 msgid "Remove swatch or group"
-msgstr ""
+msgstr "הסרת מקבץ או קבוצה"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
 msgid "Edit swatch or group"
-msgstr ""
+msgstr "עריכת מקבץ או קבוצה"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, kde-format
@@ -63182,7 +63169,7 @@ msgstr "ייצוא כקובץ ערכת צבעים של GIMP"
 
 #: plugins/python/palette_docker/palette_docker.py:112
 msgid "Export as Inkscape SVG with Swatches"
-msgstr ""
+msgstr "ייצוא כ־SVG של אינקסקייפ עם מקבצים"
 
 #: plugins/python/palette_docker/palette_docker.py:116
 msgid "Sort Colors"
@@ -64717,7 +64704,7 @@ msgstr "הזזת הבחירה"
 msgid ""
 "<nobr>Checking this box will add a new color swatch</nobr> to a palette each "
 "time you sample a color."
-msgstr ""
+msgstr "<nobr>סימון התיבה הזאת יוסיף מקבץ צבע חדש</nobr> ללוח עם כל דגימת צבע."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:70
@@ -68280,11 +68267,9 @@ msgstr "אמיתי"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
+#, kde-format
 msgid "Restore Shape"
-msgstr "סידור צורות מחדש"
+msgstr "שחזור צורה"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
@@ -68292,10 +68277,9 @@ msgstr "סידור צורות מחדש"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgid "To original"
-msgstr "מקור"
+msgstr "למקור"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
@@ -68303,18 +68287,15 @@ msgstr "מקור"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
-#, fuzzy, kde-format
-#| msgctxt "Transparency behavior button in propagate colors filter"
-#| msgid "Preserve"
+#, kde-format
 msgid "Preserve"
 msgstr "שימור"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
-#, fuzzy, kde-format
-#| msgid "Stretched"
+#, kde-format
 msgid "Stretch:"
-msgstr "מתוח"
+msgstr "מתיחה:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306

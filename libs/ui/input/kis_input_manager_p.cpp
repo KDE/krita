@@ -828,6 +828,14 @@ void KisInputManager::Private::fixShortcutMatcherModifiersState(QVector<Qt::Key>
         }
     }
 
+    /**
+     * This function may be called from slotConfigChanged() from
+     * the constructor of KisInputManager. It may theoretically
+     * happen that we haven't recieved any sensible events to
+     * set up the link to the input manager.
+     */
+    KisAbstractInputAction::setInputManager(q);
+
     Q_FOREACH (Qt::Key key, danglingKeys) {
         QKeyEvent kevent(QEvent::KeyRelease, key, modifiers);
         processUnhandledEvent(&kevent);

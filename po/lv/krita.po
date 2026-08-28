@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-27 02:41+0000\n"
+"POT-Creation-Date: 2026-08-28 02:43+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -16465,8 +16465,8 @@ msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "(c) 1999-2006 Krita izstrādes komanda.\n"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:517
-#: libs/ui/KisApplication.cpp:842
+#: krita/main.cc:820 libs/ui/KisApplication.cpp:523
+#: libs/ui/KisApplication.cpp:848
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -21737,7 +21737,7 @@ msgstr "Alfa Opcijas"
 
 #: libs/image/kis_layer_properties_icons.cpp:30
 #: libs/resources/KisResourceModel.cpp:116
-#: libs/resources/KisStorageModel.cpp:512
+#: libs/resources/KisStorageModel.cpp:520
 #: libs/resources/KisTagResourceModel.cpp:641
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #, fuzzy, kde-format
@@ -21887,7 +21887,7 @@ msgstr "Spiediens"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1461
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1464
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22651,8 +22651,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Atsevišķs Attēls"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2221
-#: libs/ui/KisMainWindow.cpp:2302
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2305
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Imports, importēt Attēls"
@@ -24002,17 +24002,17 @@ msgstr "Avots:"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
-#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1243
-#: libs/ui/KisApplication.cpp:1246 libs/ui/KisApplication.cpp:1262
-#: libs/ui/KisApplication.cpp:1294 libs/ui/KisApplication.cpp:1308
-#: libs/ui/KisApplication.cpp:1336 libs/ui/KisDocument.cpp:1055
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1252 libs/ui/KisApplication.cpp:1268
+#: libs/ui/KisApplication.cpp:1300 libs/ui/KisApplication.cpp:1314
+#: libs/ui/KisApplication.cpp:1342 libs/ui/KisDocument.cpp:1055
 #: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
-#: libs/ui/KisMainWindow.cpp:1023 libs/ui/KisMainWindow.cpp:1093
-#: libs/ui/KisMainWindow.cpp:1237 libs/ui/KisMainWindow.cpp:1334
-#: libs/ui/KisMainWindow.cpp:2081 libs/ui/KisMainWindow.cpp:2090
-#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2290
-#: libs/ui/KisMainWindow.cpp:2309 libs/ui/KisMainWindow.cpp:2951
+#: libs/ui/KisMainWindow.cpp:1026 libs/ui/KisMainWindow.cpp:1096
+#: libs/ui/KisMainWindow.cpp:1240 libs/ui/KisMainWindow.cpp:1337
+#: libs/ui/KisMainWindow.cpp:2084 libs/ui/KisMainWindow.cpp:2093
+#: libs/ui/KisMainWindow.cpp:2232 libs/ui/KisMainWindow.cpp:2293
+#: libs/ui/KisMainWindow.cpp:2312 libs/ui/KisMainWindow.cpp:2955
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24149,7 +24149,7 @@ msgid "Could not synchronize %1 with the database"
 msgstr "Neizdevās izveidot failu saglabāšanai"
 
 #: libs/resources/KisResourceModel.cpp:98
-#: libs/resources/KisStorageModel.cpp:502
+#: libs/resources/KisStorageModel.cpp:510
 #: libs/resources/KisTagResourceModel.cpp:623
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
@@ -24166,7 +24166,7 @@ msgid "Storage ID"
 msgstr "Priekš"
 
 #: libs/resources/KisResourceModel.cpp:102
-#: libs/resources/KisStorageModel.cpp:516
+#: libs/resources/KisStorageModel.cpp:524
 #: libs/resources/KisTagResourceModel.cpp:627
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
@@ -24210,7 +24210,7 @@ msgid "Status"
 msgstr "Rādīt orģinālo slāni"
 
 #: libs/resources/KisResourceModel.cpp:112
-#: libs/resources/KisStorageModel.cpp:506
+#: libs/resources/KisStorageModel.cpp:514
 #: libs/resources/KisTagResourceModel.cpp:637
 #: libs/resourcewidgets/KisIconToolTip.cpp:115
 #, fuzzy, kde-format
@@ -24427,7 +24427,7 @@ msgctxt "resource type"
 msgid "Style Presets"
 msgstr "Nospiediens:"
 
-#: libs/resources/KisStorageModel.cpp:504
+#: libs/resources/KisStorageModel.cpp:512
 #: libs/widgets/KoConfigAuthorPage.cpp:89
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:105
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
@@ -24437,20 +24437,20 @@ msgstr "Nospiediens:"
 msgid "Type"
 msgstr "&Tips"
 
-#: libs/resources/KisStorageModel.cpp:508
+#: libs/resources/KisStorageModel.cpp:516
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:88
 #, fuzzy, kde-format
 msgid "Creation Date"
 msgstr "Izveidot"
 
-#: libs/resources/KisStorageModel.cpp:510
+#: libs/resources/KisStorageModel.cpp:518
 #, fuzzy, kde-format
 msgid "Preinstalled"
 msgstr "Mainīgs"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
-#: libs/resources/KisStorageModel.cpp:514
+#: libs/resources/KisStorageModel.cpp:522
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
@@ -24567,7 +24567,7 @@ msgid "Delete resource"
 msgstr "Dzēst tekstu"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2748
+#: libs/ui/KisMainWindow.cpp:2752
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -25074,7 +25074,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Izveidot jaunu slāni"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
-#: libs/ui/KisMainWindow.cpp:2332
+#: libs/ui/KisMainWindow.cpp:2335
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Krāsu pāreja:"
@@ -27060,7 +27060,7 @@ msgid "Numerical"
 msgstr "Virsotnes:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1202
+#: libs/ui/KisMainWindow.cpp:1205
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Imports, importēt Attēls"
@@ -27179,7 +27179,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ievadiet grupas nosaukumu:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2759
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2763
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27832,7 +27832,7 @@ msgid "Canvas Input"
 msgstr "Audekla krāsa:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2557
-#: plugins/dockers/logdocker/LogDockerDock.cpp:200
+#: plugins/dockers/logdocker/LogDockerDock.cpp:204
 #, fuzzy, kde-format
 msgid "Color Management"
 msgstr "Krāsa Vadība"
@@ -27846,6 +27846,7 @@ msgstr "Krāsa"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2567
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2569
+#: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Performance"
 msgstr "Veiktspēja"
@@ -31458,7 +31459,7 @@ msgstr "Pašreizējais slānis"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -32477,7 +32478,7 @@ msgid "HSV CCW"
 msgstr "HSV PrP"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:452
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:457
 #, fuzzy, kde-format
 msgid "Sessions"
 msgstr "&Pikselis Gabarīti"
@@ -33992,7 +33993,7 @@ msgstr "Fona krāsa"
 msgid "&Docker Box"
 msgstr "Klintis"
 
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:448
+#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34006,8 +34007,8 @@ msgstr "Raksti"
 msgid "Custom Pattern"
 msgstr "Pielāgots Modelis"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:433
-#: libs/ui/KisApplication.cpp:434
+#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:272
@@ -34969,20 +34970,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Tuvināt"
 
-#: libs/ui/KisApplication.cpp:425
+#: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
 #, fuzzy, kde-format
 msgid "Brush presets"
 msgstr "Nospiediens:"
 
-#: libs/ui/KisApplication.cpp:428 libs/ui/KisApplication.cpp:429
-#: libs/ui/KisApplication.cpp:430 libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:433 libs/ui/KisApplication.cpp:434
+#: libs/ui/KisApplication.cpp:435 libs/ui/KisApplication.cpp:436
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:267
 #, fuzzy, kde-format
 msgid "Brush tips"
 msgstr "Ota"
 
-#: libs/ui/KisApplication.cpp:436
+#: libs/ui/KisApplication.cpp:441
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:270
@@ -34990,7 +34991,7 @@ msgstr "Ota"
 msgid "Palettes"
 msgstr "Paletes"
 
-#: libs/ui/KisApplication.cpp:449 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:454 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:268
@@ -34998,46 +34999,46 @@ msgstr "Paletes"
 msgid "Workspaces"
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:455
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "Slānis"
 
-#: libs/ui/KisApplication.cpp:451 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:456 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "Nomest"
 
-#: libs/ui/KisApplication.cpp:453
+#: libs/ui/KisApplication.cpp:458
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:273
 #, fuzzy, kde-format
 #| msgid "Create Mask"
 msgid "Gamut masks"
 msgstr "Izveidot masku"
 
-#: libs/ui/KisApplication.cpp:455
+#: libs/ui/KisApplication.cpp:460
 #, fuzzy, kde-format
 msgid "SeExpr Scripts"
 msgstr "Apraksts:"
 
-#: libs/ui/KisApplication.cpp:460
+#: libs/ui/KisApplication.cpp:465
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Slānis Lielums"
 
-#: libs/ui/KisApplication.cpp:463
+#: libs/ui/KisApplication.cpp:468
 #, fuzzy, kde-format
 msgid "Font Families"
 msgstr "Kopa:"
 
-#: libs/ui/KisApplication.cpp:464
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 #| msgid "Pressure:"
 msgid "Style Presets"
 msgstr "Nospiediens:"
 
-#: libs/ui/KisApplication.cpp:476
+#: libs/ui/KisApplication.cpp:481
 #, kde-format
 msgid ""
 "%1\n"
@@ -35045,13 +35046,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:476 libs/ui/KisApplication.cpp:482
+#: libs/ui/KisApplication.cpp:481 libs/ui/KisApplication.cpp:487
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Izšķi&rtspēja:"
 
-#: libs/ui/KisApplication.cpp:482
+#: libs/ui/KisApplication.cpp:487
 #, kde-format
 msgid ""
 "\n"
@@ -35059,7 +35060,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:518
+#: libs/ui/KisApplication.cpp:524
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35067,65 +35068,65 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:535
+#: libs/ui/KisApplication.cpp:541
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "&Resursi"
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:579
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Resursi"
 
-#: libs/ui/KisApplication.cpp:577
+#: libs/ui/KisApplication.cpp:583
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Pikselis Ota"
 
-#: libs/ui/KisApplication.cpp:583
+#: libs/ui/KisApplication.cpp:589
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Avots:"
 
-#: libs/ui/KisApplication.cpp:592
+#: libs/ui/KisApplication.cpp:598
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Krāsu pāreja"
 
-#: libs/ui/KisApplication.cpp:624
+#: libs/ui/KisApplication.cpp:630
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "Autosaglabāšana..."
 
-#: libs/ui/KisApplication.cpp:737
+#: libs/ui/KisApplication.cpp:743
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:798
+#: libs/ui/KisApplication.cpp:804
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Izveidot jaunu slāni"
 
-#: libs/ui/KisApplication.cpp:823 libs/ui/KisApplication.cpp:1102
+#: libs/ui/KisApplication.cpp:829 libs/ui/KisApplication.cpp:1108
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Filtri Galerija"
 
-#: libs/ui/KisApplication.cpp:831 libs/ui/KisApplication.cpp:836
-#: libs/ui/KisApplication.cpp:1096 libs/ui/KisApplication.cpp:1110
-#: libs/ui/KisApplication.cpp:1115
+#: libs/ui/KisApplication.cpp:837 libs/ui/KisApplication.cpp:842
+#: libs/ui/KisApplication.cpp:1102 libs/ui/KisApplication.cpp:1116
+#: libs/ui/KisApplication.cpp:1121
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Brīdinājums!"
 
-#: libs/ui/KisApplication.cpp:832 libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:838 libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:837
+#: libs/ui/KisApplication.cpp:843
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35138,7 +35139,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:843
+#: libs/ui/KisApplication.cpp:849
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35146,32 +35147,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1097
+#: libs/ui/KisApplication.cpp:1103
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "&Monitora profils:"
 
-#: libs/ui/KisApplication.cpp:1116
+#: libs/ui/KisApplication.cpp:1122
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1244
+#: libs/ui/KisApplication.cpp:1250
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Šablons priekš %1 nav atrasts"
 
-#: libs/ui/KisApplication.cpp:1247
+#: libs/ui/KisApplication.cpp:1253
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Priekš %1 ir atrasti pārāk daudzi šabloni"
 
-#: libs/ui/KisApplication.cpp:1263
+#: libs/ui/KisApplication.cpp:1269
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "Atla&sīt Visi"
 
-#: libs/ui/KisApplication.cpp:1295
+#: libs/ui/KisApplication.cpp:1301
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35181,7 +35182,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1309
+#: libs/ui/KisApplication.cpp:1315
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35189,7 +35190,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1337
+#: libs/ui/KisApplication.cpp:1343
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -35876,62 +35877,62 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Imports, importēt Attēls"
 
-#: libs/ui/KisMainWindow.cpp:194
+#: libs/ui/KisMainWindow.cpp:195
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Stili"
 
-#: libs/ui/KisMainWindow.cpp:195
+#: libs/ui/KisMainWindow.cpp:196
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "Klintis"
 
-#: libs/ui/KisMainWindow.cpp:196
+#: libs/ui/KisMainWindow.cpp:197
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Slānis"
 
-#: libs/ui/KisMainWindow.cpp:197
+#: libs/ui/KisMainWindow.cpp:198
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Attēls Lielums"
 
-#: libs/ui/KisMainWindow.cpp:198
+#: libs/ui/KisMainWindow.cpp:199
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:606
+#: libs/ui/KisMainWindow.cpp:609
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Rādīt orģinālo slāni"
 
-#: libs/ui/KisMainWindow.cpp:608
+#: libs/ui/KisMainWindow.cpp:611
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Uz slāņiem"
 
-#: libs/ui/KisMainWindow.cpp:1065
+#: libs/ui/KisMainWindow.cpp:1068
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Plazma"
 
-#: libs/ui/KisMainWindow.cpp:1093
+#: libs/ui/KisMainWindow.cpp:1096
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fails %1 neeksistē."
 
-#: libs/ui/KisMainWindow.cpp:1202
+#: libs/ui/KisMainWindow.cpp:1205
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Attēls"
 
-#: libs/ui/KisMainWindow.cpp:1335
+#: libs/ui/KisMainWindow.cpp:1338
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35940,29 +35941,29 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1396
+#: libs/ui/KisMainWindow.cpp:1399
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Tuvinājums:"
 
-#: libs/ui/KisMainWindow.cpp:1396
+#: libs/ui/KisMainWindow.cpp:1399
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "Datuma formāts"
 
-#: libs/ui/KisMainWindow.cpp:2050
+#: libs/ui/KisMainWindow.cpp:2053
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Saglabāt Slānis Attēls."
 
-#: libs/ui/KisMainWindow.cpp:2076
+#: libs/ui/KisMainWindow.cpp:2079
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Neizdevās izveidot failu saglabāšanai"
 
-#: libs/ui/KisMainWindow.cpp:2080
+#: libs/ui/KisMainWindow.cpp:2083
 #, kde-format
 msgid ""
 "\n"
@@ -35970,7 +35971,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2090
+#: libs/ui/KisMainWindow.cpp:2093
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -35979,7 +35980,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2229 libs/ui/KisMainWindow.cpp:2309
+#: libs/ui/KisMainWindow.cpp:2232 libs/ui/KisMainWindow.cpp:2312
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35988,59 +35989,59 @@ msgstr ""
 "Nevar atvērt\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2290
+#: libs/ui/KisMainWindow.cpp:2293
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Izveidot jaunu slāni"
 
-#: libs/ui/KisMainWindow.cpp:2739
+#: libs/ui/KisMainWindow.cpp:2743
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2754
+#: libs/ui/KisMainWindow.cpp:2758
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2758
+#: libs/ui/KisMainWindow.cpp:2762
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2802
+#: libs/ui/KisMainWindow.cpp:2806
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2805
+#: libs/ui/KisMainWindow.cpp:2809
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2974
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2990
+#: libs/ui/KisMainWindow.cpp:2994
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Slānis Kļūda"
 
-#: libs/ui/KisMainWindow.cpp:3103
+#: libs/ui/KisMainWindow.cpp:3107
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3189
+#: libs/ui/KisMainWindow.cpp:3193
 #, fuzzy, kde-format
 msgid "Expanding Spacer"
 msgstr "Pielāgots Modelis"

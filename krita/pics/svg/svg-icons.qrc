@@ -4,6 +4,16 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_layers-select-all.svg</file>
+        <file>dark_layers-select-invisible.svg</file>
+        <file>dark_layers-select-locked.svg</file>
+        <file>dark_layers-select-unlocked.svg</file>
+        <file>dark_layers-select-visible.svg</file>
+        <file>light_layers-select-all.svg</file>
+        <file>light_layers-select-invisible.svg</file>
+        <file>light_layers-select-locked.svg</file>
+        <file>light_layers-select-unlocked.svg</file>
+        <file>light_layers-select-visible.svg</file>
         <file>light_10_scripts.svg</file>
         <file>light_10_brushes.svg</file>
         <file>light_script_0.svg</file>

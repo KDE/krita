@@ -2946,7 +2946,7 @@
       <statusTip/>
     </Action>
     <Action name="select_all_layers">
-      <icon/>
+      <icon>layers-select-all</icon>
       <text>All Layers</text>
       <whatsThis/>
       <toolTip>Select all layers</toolTip>
@@ -2958,7 +2958,7 @@
       <statusTip/>
     </Action>
     <Action name="select_visible_layers">
-      <icon/>
+      <icon>layers-select-visible</icon>
       <text>Visible Layers</text>
       <whatsThis/>
       <toolTip>Select all visible layers</toolTip>
@@ -2970,7 +2970,7 @@
       <statusTip/>
     </Action>
     <Action name="select_locked_layers">
-      <icon></icon>
+      <icon>layers-select-locked</icon>
       <text>Locked Layers</text>
       <whatsThis/>
       <toolTip>Select all locked layers</toolTip>
@@ -2982,7 +2982,7 @@
       <statusTip/>
     </Action>
     <Action name="select_invisible_layers">
-      <icon/>
+      <icon>layers-select-invisible</icon>
       <text>Invisible Layers</text>
       <whatsThis/>
       <toolTip>Select all invisible layers</toolTip>
@@ -2994,7 +2994,7 @@
       <statusTip/>
     </Action>
     <Action name="select_unlocked_layers">
-      <icon></icon>
+      <icon>layers-select-unlocked</icon>
       <text>Unlocked Layers</text>
       <whatsThis/>
       <toolTip>Select all unlocked layers</toolTip>

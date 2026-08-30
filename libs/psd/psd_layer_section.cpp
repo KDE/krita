@@ -672,6 +672,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
 
                 const bool nodeVisible = node->visible();
+                const bool nodeLocked = node->userLocked();
                 const KoColorSpace *colorSpace = node->colorSpace();
                 const quint8 nodeOpacity = node->opacity();
                 const quint8 nodeClipping = 0;
@@ -967,6 +968,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layerRecord->transparencyProtected = alphaLocked;
                 layerRecord->visible = nodeVisible;
                 layerRecord->irrelevant = nodeIrrelevant;
+                layerRecord->userLocked = nodeLocked;
 
                 layerRecord->layerName = nodeName.isEmpty() ? i18n("Unnamed Layer") : nodeName;
 

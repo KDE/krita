@@ -301,6 +301,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
+                groupLayer->setUserLocked(layerRecord->userLocked);
 
                 if (layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) {
                     groupLayer->setCollapsed(true);
@@ -566,6 +567,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 m_image->addNode(layer, m_image->root());
             }
             layer->setVisible(layerRecord->visible);
+            layer->setUserLocked(layerRecord->userLocked);
             newLayer = layer;
 
         }

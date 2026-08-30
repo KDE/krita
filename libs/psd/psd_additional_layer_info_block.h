@@ -1364,6 +1364,7 @@ public:
     void writeLsctBlockEx(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey);
     void writeLfx2BlockEx(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat);
     void writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc);
+    void writeLspfBlockEx(QIODevice &io, const bool lock);
     void writeLclrBlockEx(QIODevice &io, const quint16 &labelColor);
 
     void writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
@@ -1385,6 +1386,7 @@ public:
     QVector<QDomDocument> embeddedPatterns;
     QVariantHash txt2Data;
 
+    bool userLock{false};
     quint16 labelColor{0}; // layer color.
 
     QDomDocument fillConfig;
@@ -1415,6 +1417,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeLspfBlockExImpl(QIODevice &io, const bool &lock);
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeLclrBlockExImpl(QIODevice &io, const quint16 &lclr);

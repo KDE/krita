@@ -510,6 +510,9 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
             layerName = infoBlocks.unicodeLayerName;
         }
 
+        if (infoBlocks.keys.contains("lspf")) {
+            userLocked = infoBlocks.userLock;
+        }
         labelColor = kritaColorLabelIndex(infoBlocks.labelColor);
     }
 
@@ -668,6 +671,7 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
             // write 'luni' data block
             additionalInfoBlock.writeLuniBlockEx(io, layerName);
 
+            additionalInfoBlock.writeLspfBlockEx(io, userLocked);
             additionalInfoBlock.writeLclrBlockEx(io, psdLabelColor(labelColor));
 
             // write 'lsct' data block
@@ -1024,7 +1028,8 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", clipping: " << layer.clipping;
     dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
-    dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
+    dbg.nospace() << ", irrelevant: " << layer.irrelevant;
+    dbg.nospace() << ", locked: " << layer.userLocked << "\n";
     Q_FOREACH (const ChannelInfo *channel, layer.channelInfoRecords) {
         dbg.space() << channel;
     }

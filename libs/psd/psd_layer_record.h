@@ -130,6 +130,7 @@ public:
     bool transparencyProtected {false};
     bool visible {true};
     bool irrelevant {false};
+    bool userLocked {false};
 
     int labelColor {0};
 

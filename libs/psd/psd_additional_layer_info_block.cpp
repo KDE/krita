@@ -190,7 +190,13 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "clbl") {
         } else if (key == "infx") {
         } else if (key == "knko") {
-        } else if (key == "spf") {
+        } else if (key == "lspf") {
+            // Protected setting. Only the (undocumented) complete
+            // lock flag is supported. Other flags include
+            // transparency, composite and position (bits 0-2).
+            quint32 protection;
+            psdread<byteOrder>(io, protection);
+            userLock = protection & (1 << 31)? true: false;
         } else if (key == "lclr") {
             // layer label color.
             quint16 col1 = 0;
@@ -464,6 +470,18 @@ void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice &io, const QDomDocu
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeLspfBlockEx(QIODevice &io, const bool lock)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeLspfBlockExImpl<psd_byte_order::psdLittleEndian>(io, lock);
+        break;
+    default:
+        writeLspfBlockExImpl(io, lock);
+        break;
+    }
+}
+
 void PsdAdditionalLayerInfoBlock::writeLclrBlockEx(QIODevice &io, const quint16 &labelColor)
 {
     switch (m_header.byteOrder) {
@@ -554,6 +572,21 @@ void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDom
         // TODO: make this error recoverable!
         throw e;
     }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeLspfBlockExImpl(QIODevice &io, const bool &lock)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("lspf", io);
+    const quint32 len = 4;
+    SAFE_WRITE_EX(byteOrder, io, len);
+
+    quint32 flags = 0;
+    if (lock) {
+        flags |= (1 << 31);
+    }
+    SAFE_WRITE_EX(byteOrder, io, flags);
 }
 
 template<psd_byte_order byteOrder>

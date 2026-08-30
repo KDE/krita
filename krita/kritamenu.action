@@ -1401,7 +1401,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="reselect">
-      <icon></icon>
+      <icon>reselect</icon>
       <text>&amp;Reselect</text>
       <whatsThis></whatsThis>
       <toolTip>Reselect</toolTip>

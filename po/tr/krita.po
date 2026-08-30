@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-29 00:43+0000\n"
-"PO-Revision-Date: 2026-08-26 13:00+0300\n"
+"PO-Revision-Date: 2026-08-29 20:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -45654,7 +45654,7 @@ msgstr "Kayıt Yap"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Görsel, kaydı yapılmak için pek büyük"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format

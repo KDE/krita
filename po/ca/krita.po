@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-29 00:43+0000\n"
-"PO-Revision-Date: 2026-08-26 09:15+0200\n"
+"PO-Revision-Date: 2026-08-29 08:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -30688,7 +30688,7 @@ msgstr "Color del contorn d'esborrador:"
 #: libs/ui/forms/wdggeneralsettings.ui:962
 #, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Forma de la mostra de color:"
+msgstr "Forma del mostrejador de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -30730,7 +30730,8 @@ msgstr "Espai extra de comparació"
 #: libs/ui/forms/wdggeneralsettings.ui:1031
 #, kde-format
 msgid "Enable Zoom Preview (Pixel-Perfect Color Sampler)"
-msgstr "Activa el zoom de la vista prèvia (Mostra de color de píxel perfecte)"
+msgstr ""
+"Activa el zoom de la vista prèvia (Mostrejador de color de píxel perfecte)"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
@@ -30752,7 +30753,7 @@ msgstr "x"
 #: libs/ui/forms/wdggeneralsettings.ui:1066
 #, kde-format
 msgid "Color Sampler Position:"
-msgstr "Posició de la mostra de color:"
+msgstr "Posició del mostrejador de color:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -34566,7 +34567,7 @@ msgstr "Commuta la predefinició del pinzell previ"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Mostra de color"
+msgstr "Mostrejador de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:94
@@ -38542,7 +38543,7 @@ msgstr "Grup no editable."
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
 #, kde-format
 msgid "Color sampler does not work on this layer."
-msgstr "La mostra de color no funciona sobre aquesta capa."
+msgstr "El mostrejador de color no funciona sobre aquesta capa."
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
 #, kde-format
@@ -45908,7 +45909,7 @@ msgstr "Enregistra"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Imatge massa gran per a enregistrar-la"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -52481,7 +52482,7 @@ msgstr "Llindar:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Mostra de color:"
+msgstr "Mostrejador de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -66269,7 +66270,7 @@ msgstr "Activa l'ajust quan s'usen esborradors"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Eina de mostra de color"
+msgstr "Eina de mostreig de color"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -66795,8 +66796,8 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>Determina si el selector de color mostrarà</nobr> els colors de totes "
-"les capes visibles o només de la capa actualment seleccionada."
+"<nobr>Determina si el mostrejador de color mostrarà</nobr> els colors de "
+"totes les capes visibles o només de la capa actualment seleccionada."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
@@ -66823,8 +66824,8 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>El radi controla l'àrea de mostreig del selector de color.</nobr> Els "
-"colors dels píxels dins d'aquest radi es mesclaran conjuntament."
+"<nobr>El radi controla l'àrea de mostreig del mostrejador de color.</nobr> "
+"Els colors dels píxels dins d'aquest radi es mesclaran conjuntament."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:207
@@ -66861,8 +66862,8 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Controla si el selector de color actualitzarà el </nobr> fons actual o "
-"no."
+"<nobr>Controla si el mostrejador de color actualitzarà el </nobr> fons "
+"actual o no."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:251
@@ -70586,7 +70587,7 @@ msgstr "Eina de selecció de formes"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Mostra de color"
+msgstr "Mostrejador de color"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76

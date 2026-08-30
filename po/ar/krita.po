@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-29 00:43+0000\n"
-"PO-Revision-Date: 2026-08-18 18:00+0400\n"
+"PO-Revision-Date: 2026-08-29 17:46+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -57229,17 +57229,13 @@ msgid "Resolution:"
 msgstr "الميز:"
 
 #: plugins/impex/png/kis_png_export.cc:193
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "The image will be converted plainly to 12bit integer, and values that are "
-#| "out of bounds are clipped, the icc profile will be embedded."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "The image will be converted plainly to 16bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
-"حوِّل الصورة بوضوح إلى عدد صحيح 12 بت، وتُقصُّ القيم الخارجة عن الحدود، وستُضمَّن "
+"حوِّل الصورة بوضوح إلى عدد صحيح 16 بت، وتُقصُّ القيم الخارجة عن الحدود، وستُضمَّن "
 "تشكيلة icc."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
@@ -57434,37 +57430,33 @@ msgstr "تعشيق"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbSaveColorInfo)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
-#, fuzzy, kde-format
-#| msgid "Color Volume Information"
+#, kde-format
 msgid "Save Color Space Information"
-msgstr "معلومات حجم اللون"
+msgstr "احفظ معلومات الفضاء اللوني"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCICP)
 #: plugins/impex/png/kis_wdg_options_png.ui:213
-#, fuzzy, kde-format
-#| msgid "Save as indexed PNG, if possible"
+#, kde-format
 msgid "Save CICP if possible"
-msgstr "احفظ كـ PNG مفهرس، إذا أمكن"
+msgstr "احفظ CICP إذا أمكن"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/png/kis_wdg_options_png.ui:220
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Connection Tool"
+#, kde-format
 msgid "Convert Floating Point:"
-msgstr "أداة الوصل"
+msgstr "حوّل الأرقام العائمة:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:230
 #, kde-format
 msgid "Save Chroma, Gamma and sRGB chunks in addition to ICC or CICP data"
-msgstr ""
+msgstr "احفظ مقاطع كروما وغاما وsRGB بالإضافة إلى بيانات ICC أو CICP"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:233
 #, kde-format
 msgid "Save Extra Color Chunks"
-msgstr ""
+msgstr "احفظ أجزاء إضافية من الألوان"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format

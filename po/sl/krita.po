@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-29 00:43+0000\n"
-"PO-Revision-Date: 2026-08-18 08:03+0200\n"
+"PO-Revision-Date: 2026-08-28 17:40+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -57583,17 +57583,13 @@ msgid "Resolution:"
 msgstr "Ločljivost:"
 
 #: plugins/impex/png/kis_png_export.cc:193
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "The image will be converted plainly to 12bit integer, and values that are "
-#| "out of bounds are clipped, the icc profile will be embedded."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "The image will be converted plainly to 16bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
-"Slika bo pretvorjena v 12-bitno število, vrednosti, ki so zunaj meja, pa "
+"Slika bo pretvorjena v 16-bitno število, vrednosti, ki so zunaj meja, pa "
 "bodo porezane; profil icc bo vdelan."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
@@ -57794,37 +57790,33 @@ msgstr "Prepletanje"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbSaveColorInfo)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
-#, fuzzy, kde-format
-#| msgid "Color Volume Information"
+#, kde-format
 msgid "Save Color Space Information"
-msgstr "Podatki o barvni prostornini"
+msgstr "Shrani podatke o barvnem prostoru"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCICP)
 #: plugins/impex/png/kis_wdg_options_png.ui:213
-#, fuzzy, kde-format
-#| msgid "Save as indexed PNG, if possible"
+#, kde-format
 msgid "Save CICP if possible"
-msgstr "Shrani kot indeksirani PNG, če je mogoče"
+msgstr "Shrani CICP, če je mogoče"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/png/kis_wdg_options_png.ui:220
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to a Paint Layer"
+#, kde-format
 msgid "Convert Floating Point:"
-msgstr "Pretvori v plast za slikanje"
+msgstr "Pretvori plavajočo vejico:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:230
 #, kde-format
 msgid "Save Chroma, Gamma and sRGB chunks in addition to ICC or CICP data"
-msgstr ""
+msgstr "Shrani odlomke krome, game in sRGB poleg podatkov ICC in CICP"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:233
 #, kde-format
 msgid "Save Extra Color Chunks"
-msgstr ""
+msgstr "Shrani dodatne barvne odlomke"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -70507,29 +70499,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Use system monitor profile"
-#~ msgstr "Uporabi sistemski profil zaslona"
-
-#~ msgid "Save as HDR image (Rec. 2020 PQ)"
-#~ msgstr "Shrani kot sliko HDR (Rec. 2020 PQ)"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">PNG</span> files "
-#~ "have <span style=\" font-style:italic;\">two</span> options to save <span "
-#~ "style=\" font-weight:600;\">sRGB</span> information: as a tag or as an "
-#~ "explicit profile. For use with in websites, <span style=\" font-style:"
-#~ "italic;\">disable</span> this option. For interchange with other "
-#~ "applications, <span style=\" font-style:italic;\">enable</span> this "
-#~ "option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Datoteke <span style=\" font-weight:600;\">PNG</"
-#~ "span> imajo <span style=\" font-style:italic;\">dve</span> možnosti za "
-#~ "shranjevanje informacij <span style=\" font-weight:600;\">sRGB</span>: "
-#~ "kot oznako ali kot izrecni profil. Za uporabo s spletnimi mesti <span "
-#~ "style=\" font-style:italic;\">onemogočite</span> to možnost. Za izmenjavo "
-#~ "z drugimi programi <span style=\" font-style:italic;\">omogočite</span> "
-#~ "to možnost.</p></body></html>"
-
-#~ msgid "Embed sRGB profile"
-#~ msgstr "Vdelaj profil sRGB"

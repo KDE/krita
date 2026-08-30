@@ -2911,7 +2911,7 @@
     </Action>
     <Action name="create_quick_group">
       <icon>quick_group</icon>
-      <text>Quick Group</text>
+      <text>Group layer(s)</text>
       <whatsThis/>
       <toolTip>Create a group layer containing selected layers</toolTip>
       <iconText>Quick Group</iconText>
@@ -2923,7 +2923,7 @@
     </Action>
     <Action name="quick_ungroup">
       <icon>quick_ungroup</icon>
-      <text>Quick Ungroup</text>
+      <text>Ungroup layer(s)</text>
       <whatsThis/>
       <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
       <iconText>Quick Ungroup</iconText>

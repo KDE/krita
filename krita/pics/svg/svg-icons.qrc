@@ -4,6 +4,8 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>dark_reselect.svg</file>
+        <file>light_reselect.svg</file>
         <file>dark_layers-select-all.svg</file>
         <file>dark_layers-select-invisible.svg</file>
         <file>dark_layers-select-locked.svg</file>

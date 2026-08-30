@@ -8,7 +8,7 @@
         <dc:date>2026</dc:date>
         <dc:creator>
           <cc:Agent>
-            <dc:title>superfurryfrog and Timothée Giet</dc:title>
+            <dc:title>superfurryfrog</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
@@ -31,13 +31,13 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-<g clip-path="url(#clip0_764_44)">
-<circle cx="8" cy="8" r="7.5" stroke="#D2D2D2" stroke-dasharray="4 2"/>
-<path d="M12 10.5L5.5 4L4 5.5L10.5 12L12 10.5Z" fill="#D2D2D2"/>
-<path d="M10.4749 4L4 10.5L5.5 12L12 5.5L10.4749 4Z" fill="#D2D2D2"/>
+<g clip-path="url(#clip0_763_2)">
+<path d="M5 4L8 6V2L5 4Z" fill="#373737"/>
+<path d="M8 4C10.2091 4 12 5.79086 12 8C12 10.2091 10.2091 12 8 12C5.79086 12 4 10.2091 4 8" stroke="#373737" stroke-miterlimit="11.4737" stroke-linejoin="round"/>
+<circle cx="8" cy="8" r="7.5" stroke="#373737" stroke-dasharray="4 2"/>
 </g>
 <defs>
-<clipPath id="clip0_764_44">
+<clipPath id="clip0_763_2">
 <rect width="16" height="16" fill="white"/>
 </clipPath>
 </defs>

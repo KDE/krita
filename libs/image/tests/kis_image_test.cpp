@@ -18,6 +18,8 @@
 #include "filter/kis_filter_registry.h"
 
 #include "kis_image.h"
+#include "kis_node_visitor.h"
+#include "kis_external_layer_iface.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
@@ -210,7 +212,9 @@ void KisImageTest::testConvertImageColorSpace()
 
 void KisImageTest::testChannelFlagsAfterColorSpaceConversion_data()
 {
+    QTest::addColumn<QString>("layerType"); // "paint", "external", "group",
     QTest::addColumn<QString>("channelsMode"); // "empty", "inheritAlpha", "alphaOnly", "firstChannel"
+    QTest::addColumn<QString>("imageColorSpaceModelMode"); // "src", "dst", "cmyk"
     QTest::addColumn<QString>("srcColorSpaceModel");
     QTest::addColumn<QString>("dstColorSpaceModel");
     QTest::addColumn<QBitArray>("expectedChannelFlags");
@@ -233,32 +237,149 @@ void KisImageTest::testChannelFlagsAfterColorSpaceConversion_data()
      *    the channel flags object is reset into empty state
      */
 
-    QTest::addRow("rgb2gray-empty") << "empty" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("");
-    QTest::addRow("rgb2gray-inheritAlpha") << "inheritAlpha" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("10");
-    QTest::addRow("rgb2gray-alphaOnly") << "alphaOnly" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("");
-    QTest::addRow("rgb2gray-firstChannel") << "firstChannel" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("10");
+    for (const char *imageColorSpaceModelMode : {"src", "dst", "cmyk"}) {
+        for (const char *layerType : {"paint", "external", "group"}) {
+            QTest::addRow("img_cs_%s-%s-rgb2gray-empty", imageColorSpaceModelMode, layerType)
+                << layerType << "empty" << imageColorSpaceModelMode << RGBAColorModelID.id() << GrayAColorModelID.id()
+                << strToBitArray("");
+            QTest::addRow("img_cs_%s-%s-rgb2gray-inheritAlpha", imageColorSpaceModelMode, layerType)
+                << layerType << "inheritAlpha" << imageColorSpaceModelMode << RGBAColorModelID.id()
+                << GrayAColorModelID.id() << strToBitArray("10");
+            QTest::addRow("img_cs_%s-%s-rgb2gray-alphaOnly", imageColorSpaceModelMode, layerType)
+                << layerType << "alphaOnly" << imageColorSpaceModelMode << RGBAColorModelID.id()
+                << GrayAColorModelID.id() << strToBitArray("");
+            QTest::addRow("img_cs_%s-%s-rgb2gray-firstChannel", imageColorSpaceModelMode, layerType)
+                << layerType << "firstChannel" << imageColorSpaceModelMode << RGBAColorModelID.id()
+                << GrayAColorModelID.id() << strToBitArray("10");
 
-    QTest::addRow("gray2rgb-empty") << "empty" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("");
-    QTest::addRow("gray2rgb-inheritAlpha") << "inheritAlpha" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("1110");
-    QTest::addRow("gray2rgb-alphaOnly") << "alphaOnly" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("");
-    QTest::addRow("gray2rgb-firstChannel") << "firstChannel" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("1110");
+            QTest::addRow("img_cs_%s-%s-gray2rgb-empty", imageColorSpaceModelMode, layerType)
+                << layerType << "empty" << imageColorSpaceModelMode << GrayAColorModelID.id() << RGBAColorModelID.id()
+                << strToBitArray("");
+            QTest::addRow("img_cs_%s-%s-gray2rgb-inheritAlpha", imageColorSpaceModelMode, layerType)
+                << layerType << "inheritAlpha" << imageColorSpaceModelMode << GrayAColorModelID.id()
+                << RGBAColorModelID.id() << strToBitArray("1110");
+            QTest::addRow("img_cs_%s-%s-gray2rgb-alphaOnly", imageColorSpaceModelMode, layerType)
+                << layerType << "alphaOnly" << imageColorSpaceModelMode << GrayAColorModelID.id()
+                << RGBAColorModelID.id() << strToBitArray("");
+            QTest::addRow("img_cs_%s-%s-gray2rgb-firstChannel", imageColorSpaceModelMode, layerType)
+                << layerType << "firstChannel" << imageColorSpaceModelMode << GrayAColorModelID.id()
+                << RGBAColorModelID.id() << strToBitArray("1110");
+        }
+    }
 }
+
+namespace
+{
+class TestingExternalLayer : public KisExternalLayer
+{
+public:
+    TestingExternalLayer(KisImageWSP image, const QString &name, quint8 opacity, const KoColorSpace *cs)
+        : KisExternalLayer(image, name, opacity)
+        , m_original(new KisPaintDevice(cs))
+    {
+    }
+
+    KisNodeSP clone() const override
+    {
+        TestingExternalLayer *result = new TestingExternalLayer(image(), name(), opacity(), m_original->colorSpace());
+        result->m_original->makeCloneFromRough(m_original, m_original->extent());
+        return result;
+    }
+
+    bool allowAsChild(KisNodeSP) const override
+    {
+        return true;
+    }
+
+    KisPaintDeviceSP original() const override
+    {
+        return m_original;
+    }
+
+    KisPaintDeviceSP paintDevice() const override
+    {
+        return 0;
+    }
+
+    bool accept(KisNodeVisitor &visitor) override
+    {
+        return visitor.visit(this);
+    }
+
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override
+    {
+        return visitor.visit(this, undoAdapter);
+    }
+
+    KUndo2Command *setProfile(const KoColorProfile *profile) override
+    {
+        KUndo2Command *cmd = new KUndo2Command();
+        m_original->setProfile(profile, cmd);
+
+        return cmd;
+    }
+
+    KUndo2Command *convertTo(const KoColorSpace *dstColorSpace,
+                             KoColorConversionTransformation::Intent renderingIntent,
+                             KoColorConversionTransformation::ConversionFlags conversionFlags) override
+    {
+        KUndo2Command *cmd = new KUndo2Command();
+        m_original->convertTo(dstColorSpace, renderingIntent, conversionFlags, cmd);
+        return cmd;
+    }
+
+private:
+    KisPaintDeviceSP m_original;
+};
+
+} // namespace
 
 void KisImageTest::testChannelFlagsAfterColorSpaceConversion()
 {
+    QFETCH(QString, layerType);
     QFETCH(QString, channelsMode);
+    QFETCH(QString, imageColorSpaceModelMode);
     QFETCH(QString, srcColorSpaceModel);
     QFETCH(QString, dstColorSpaceModel);
     QFETCH(QBitArray, expectedChannelFlags);
 
+    QString imageColorSpaceModel;
+    QString imageColorSpaceBitDepth = Integer8BitsColorDepthID.id();
+
+    if (imageColorSpaceModelMode == "src") {
+        imageColorSpaceModel = srcColorSpaceModel;
+    } else if (imageColorSpaceModelMode == "dst") {
+        // when converting into the same color model, make sure
+        // we also change the bit depth, otherfise the whole
+        // operation will be skipped
+        imageColorSpaceModel = dstColorSpaceModel;
+        imageColorSpaceBitDepth = Integer16BitsColorDepthID.id();
+    } else if (imageColorSpaceModelMode == "cmyk") {
+        imageColorSpaceModel = CMYKAColorModelID.id();
+    } else {
+        qFatal("Unknown image color space model testing mode: %s", imageColorSpaceModelMode.toLatin1().data());
+    }
+
     const KoColorSpace *srcCS = KoColorSpaceRegistry::instance()->colorSpace(srcColorSpaceModel, Integer8BitsColorDepthID.id(), nullptr);
+    const KoColorSpace *imageCS = KoColorSpaceRegistry::instance()->colorSpace(imageColorSpaceModel, imageColorSpaceBitDepth, nullptr);
     auto *undoStore = new KisSurrogateUndoStore();
-    KisImageSP image = new KisImage(undoStore, 1000, 1000, srcCS, "stest");
+    KisImageSP image = new KisImage(undoStore, 1000, 1000, imageCS, "stest");
 
-    KisPaintDeviceSP device1 = new KisPaintDevice(srcCS);
-    KisLayerSP paint1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
 
-    image->addNode(paint1, image->root());
+    KisLayerSP layer1;
+
+    if (layerType == "paint") {
+        KisPaintDeviceSP device1 = new KisPaintDevice(srcCS);
+        layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    } else if (layerType == "external") {
+        layer1 = new TestingExternalLayer(image, "external1", OPACITY_OPAQUE_U8, srcCS);
+    } else if (layerType == "group") {
+        layer1 = new KisGroupLayer(image, "group1", OPACITY_OPAQUE_U8, srcCS);
+    } else {
+        qFatal("Unknown layer type: %s", layerType.toLatin1().data());
+    }
+
+    image->addNode(layer1, image->root());
 
     const QBitArray initialChannelFlags = [&] () {
         if (channelsMode == "empty") {
@@ -277,20 +398,22 @@ void KisImageTest::testChannelFlagsAfterColorSpaceConversion()
         Q_UNREACHABLE_RETURN(QBitArray());
     }();
 
-    paint1->setChannelFlags(initialChannelFlags);
+    layer1->setChannelFlags(initialChannelFlags);
     image->initialRefreshGraph();
-    QCOMPARE(paint1->channelFlags(), initialChannelFlags);
+    QCOMPARE(*layer1->colorSpace(), *srcCS);
+    QCOMPARE(layer1->channelFlags(), initialChannelFlags);
 
     const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->colorSpace(dstColorSpaceModel, Integer8BitsColorDepthID.id(), nullptr);
     image->convertImageColorSpace(dstCS,
                                   KoColorConversionTransformation::internalRenderingIntent(),
                                   KoColorConversionTransformation::internalConversionFlags());
     image->waitForDone();
-    QCOMPARE(paint1->channelFlags(), expectedChannelFlags);
+    QCOMPARE(*layer1->colorSpace(), *dstCS);
+    QCOMPARE(layer1->channelFlags(), expectedChannelFlags);
 
     undoStore->undo();
     image->waitForDone();
-    QCOMPARE(paint1->channelFlags(), initialChannelFlags);
+    QCOMPARE(layer1->channelFlags(), initialChannelFlags);
 }
 
 void KisImageTest::testAssignImageProfile()

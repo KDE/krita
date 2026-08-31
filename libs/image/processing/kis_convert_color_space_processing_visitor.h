@@ -36,7 +36,6 @@ public:
     using KisSimpleProcessingVisitor::visit;
 
 private:
-    const KoColorSpace *m_srcColorSpace;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;

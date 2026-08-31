@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-29 00:43+0000\n"
-"PO-Revision-Date: 2026-08-18 17:59+0200\n"
+"POT-Creation-Date: 2026-08-31 00:41+0000\n"
+"PO-Revision-Date: 2026-08-30 18:41+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7277,18 +7277,24 @@ msgid "Align Right"
 msgstr "Allinea a destra"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Ungroup shapes"
+msgctxt "action"
+msgid "Ungroup shape(s)"
+msgstr "Separa le forme"
+
+#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
 #: krita/data/actions/InteractionTool.action:33
 #, kde-format
 msgctxt "action"
-msgid "Ungroup"
-msgstr "Separa"
+msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
+msgstr ""
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7342,21 +7348,28 @@ msgstr "Centra verticalmente"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
 msgctxt "action"
+msgid "Group shape(s)"
+msgstr "Raggruppa le forme"
+
+#. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:68
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group"
+msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Raggruppa"
 
-#. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: krita/data/actions/InteractionTool.action:68
 #: krita/data/actions/InteractionTool.action:73
-#: plugins/dockers/arrangedocker/arrange_docker_widget.ui:338
-#, kde-format
-msgctxt "Group in the context of Vector Interaction Tool"
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group"
+msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Raggruppa"
 
@@ -12122,14 +12135,13 @@ msgid "Paste layer from clipboard"
 msgstr "Incolla il livello negli appunti"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2914 krita/krita.action:2917
-#, kde-format
+#: krita/krita.action:2914
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group Layer"
 msgctxt "action"
-msgid "Quick Group"
-msgstr "Gruppo rapido"
+msgid "Group layer(s)"
+msgstr "Livello di gruppo"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12138,15 +12150,21 @@ msgctxt "action"
 msgid "Create a group layer containing selected layers"
 msgstr "Crea un livello di gruppo che contiene i livelli selezionati"
 
-#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2926 krita/krita.action:2929
+#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2917
 #, kde-format
 msgctxt "action"
-msgid "Quick Ungroup"
-msgstr "Separa rapido"
+msgid "Quick Group"
+msgstr "Gruppo rapido"
+
+#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2926
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Ungroup shapes"
+msgctxt "action"
+msgid "Ungroup layer(s)"
+msgstr "Separa le forme"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -12154,6 +12172,13 @@ msgstr "Separa rapido"
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
 msgstr "Rimuovi il raggruppamento dei livelli o rimuovi un livello dal gruppo"
+
+#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2929
+#, kde-format
+msgctxt "action"
+msgid "Quick Ungroup"
+msgstr "Separa rapido"
 
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
@@ -44051,6 +44076,13 @@ msgstr "Per disporre gli oggetti, attiva lo strumento Seleziona forme."
 msgid "Align"
 msgstr "Allinea"
 
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: plugins/dockers/arrangedocker/arrange_docker_widget.ui:338
+#, kde-format
+msgctxt "Group in the context of Vector Interaction Tool"
+msgid "Group"
+msgstr "Raggruppa"
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:654
 #, kde-format
@@ -45922,7 +45954,7 @@ msgstr "Registra"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Immagine troppo grande per essere registrata"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -57874,17 +57906,13 @@ msgid "Resolution:"
 msgstr "Risoluzione:"
 
 #: plugins/impex/png/kis_png_export.cc:193
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "The image will be converted plainly to 12bit integer, and values that are "
-#| "out of bounds are clipped, the icc profile will be embedded."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "The image will be converted plainly to 16bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
-"L'immagine sarà convertita semplicemente in intero a 12 bit, e i valori che "
+"L'immagine sarà convertita semplicemente in intero a 16 bit, e i valori che "
 "sono fuori limite verranno tagliati, il profilo ICC incorporato."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
@@ -58087,36 +58115,34 @@ msgstr "Interlacciamento"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbSaveColorInfo)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
-#, fuzzy, kde-format
-#| msgid "Color Volume Information"
+#, kde-format
 msgid "Save Color Space Information"
-msgstr "Informazioni sul Volume dei colori"
+msgstr "Salva informazioni sullo spazio dei colori"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCICP)
 #: plugins/impex/png/kis_wdg_options_png.ui:213
-#, fuzzy, kde-format
-#| msgid "Save as indexed PNG, if possible"
+#, kde-format
 msgid "Save CICP if possible"
-msgstr "Salva come PNG indicizzata, se possibile"
+msgstr "Salva CICP, se possibile"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/png/kis_wdg_options_png.ui:220
-#, fuzzy, kde-format
-#| msgid "Connection Point"
+#, kde-format
 msgid "Convert Floating Point:"
-msgstr "Punto di connessione"
+msgstr "Converti virgola mobile:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:230
 #, kde-format
 msgid "Save Chroma, Gamma and sRGB chunks in addition to ICC or CICP data"
 msgstr ""
+"Salva i blocchi Crominanza, Gamma e sRGB in aggiunta ai dati ICC o CICP"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:233
 #, kde-format
 msgid "Save Extra Color Chunks"
-msgstr ""
+msgstr "Salva i blocchi di colore aggiuntivi"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -70894,6 +70920,10 @@ msgstr ""
 "Alterna tra intervallo intero e subintervallo.\n"
 "Intervallo intero: [%1, %2]\n"
 "Subintervallo: [%3, %4]"
+
+#~ msgctxt "action"
+#~ msgid "Ungroup"
+#~ msgstr "Separa"
 
 #~ msgid "Use system monitor profile"
 #~ msgstr "Usa profilo del monitor di sistema"

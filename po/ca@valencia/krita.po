@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-29 00:43+0000\n"
-"PO-Revision-Date: 2026-08-26 09:15+0200\n"
+"POT-Creation-Date: 2026-08-31 00:41+0000\n"
+"PO-Revision-Date: 2026-08-29 08:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7255,18 +7255,24 @@ msgid "Align Right"
 msgstr "Alinea a la dreta"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Ungroup shapes"
+msgctxt "action"
+msgid "Ungroup shape(s)"
+msgstr "Desagrupa les formes"
+
+#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
 #: krita/data/actions/InteractionTool.action:33
 #, kde-format
 msgctxt "action"
-msgid "Ungroup"
-msgstr "Desagrupa"
+msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
+msgstr ""
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7320,23 +7326,30 @@ msgstr "Centra verticalment"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
 msgctxt "action"
+msgid "Group shape(s)"
+msgstr "Agrupa les formes"
+
+#. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:68
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group"
+msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Agrupa"
 
-#. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: krita/data/actions/InteractionTool.action:68
 #: krita/data/actions/InteractionTool.action:73
-#: plugins/dockers/arrangedocker/arrange_docker_widget.ui:338
-#, kde-format
-msgctxt "Group in the context of Vector Interaction Tool"
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group"
+msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "Grup"
+msgstr "Agrupa"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12085,14 +12098,13 @@ msgid "Paste layer from clipboard"
 msgstr "Apega la capa des del porta-retalls"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2914 krita/krita.action:2917
-#, kde-format
+#: krita/krita.action:2914
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group Layer"
 msgctxt "action"
-msgid "Quick Group"
-msgstr "Agrupa ràpid"
+msgid "Group layer(s)"
+msgstr "Capa de grup"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12101,15 +12113,21 @@ msgctxt "action"
 msgid "Create a group layer containing selected layers"
 msgstr "Crea una capa de grup que continga les capes seleccionades"
 
-#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2926 krita/krita.action:2929
+#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2917
 #, kde-format
 msgctxt "action"
-msgid "Quick Ungroup"
-msgstr "Desagrupa ràpid"
+msgid "Quick Group"
+msgstr "Agrupa ràpid"
+
+#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2926
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Ungroup shapes"
+msgctxt "action"
+msgid "Ungroup layer(s)"
+msgstr "Desagrupa les formes"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -12117,6 +12135,13 @@ msgstr "Desagrupa ràpid"
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
 msgstr "Elimina el grup de capes o elimina una capa fora del grup"
+
+#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2929
+#, kde-format
+msgctxt "action"
+msgid "Quick Ungroup"
+msgstr "Desagrupa ràpid"
 
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
@@ -30696,7 +30721,7 @@ msgstr "Color del contorn d'esborrador:"
 #: libs/ui/forms/wdggeneralsettings.ui:962
 #, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Forma de la mostra de color:"
+msgstr "Forma del mostrejador de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -30738,7 +30763,8 @@ msgstr "«Espai» extra de comparació"
 #: libs/ui/forms/wdggeneralsettings.ui:1031
 #, kde-format
 msgid "Enable Zoom Preview (Pixel-Perfect Color Sampler)"
-msgstr "Activa el zoom de la vista prèvia (Color de mostra de píxel perfecte)"
+msgstr ""
+"Activa el zoom de la vista prèvia (Mostrejador de color de píxel perfecte)"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
@@ -30760,7 +30786,7 @@ msgstr "x"
 #: libs/ui/forms/wdggeneralsettings.ui:1066
 #, kde-format
 msgid "Color Sampler Position:"
-msgstr "Posició de la mostra de color:"
+msgstr "Posició del mostrejador de color:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -34572,7 +34598,7 @@ msgstr "Canvia el pinzell predefinit previ"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Color de mostra"
+msgstr "Mostrejador de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:94
@@ -38548,7 +38574,7 @@ msgstr "Grup no editable."
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
 #, kde-format
 msgid "Color sampler does not work on this layer."
-msgstr "La mostra de color no funciona sobre esta capa."
+msgstr "El mostrejador de color no funciona sobre esta capa."
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
 #, kde-format
@@ -44044,6 +44070,13 @@ msgstr "Activa l'eina de selecció de formes per a organitzar els objectes."
 msgid "Align"
 msgstr "Alinea"
 
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: plugins/dockers/arrangedocker/arrange_docker_widget.ui:338
+#, kde-format
+msgctxt "Group in the context of Vector Interaction Tool"
+msgid "Group"
+msgstr "Grup"
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:654
 #, kde-format
@@ -45917,7 +45950,7 @@ msgstr "Grava"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Imatge massa gran per a gravar-la"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -52493,7 +52526,7 @@ msgstr "Llindar:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Color de mostra:"
+msgstr "Mostrejador de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -66290,7 +66323,7 @@ msgstr "Activa l'ajust quan s'utilitzen esborradors"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Eina de mostra de color"
+msgstr "Eina de mostreig de color"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -66816,8 +66849,8 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>Determina si el selector de color mostrarà</nobr> els colors de totes "
-"les capes visibles o només de la capa actualment seleccionada."
+"<nobr>Determina si el mostrejador de color mostrarà</nobr> els colors de "
+"totes les capes visibles o només de la capa actualment seleccionada."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
@@ -66844,8 +66877,8 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>El radi controla l'àrea de mostreig del selector de color.</nobr> Els "
-"colors dels píxels dins d'este radi es mesclaran conjuntament."
+"<nobr>El radi controla l'àrea de mostreig del mostrejador de color.</nobr> "
+"Els colors dels píxels dins d'este radi es mesclaran conjuntament."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:207
@@ -66882,8 +66915,8 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Controla si el selector de color actualitzarà el </nobr> fons actual o "
-"no."
+"<nobr>Controla si el mostrejador de color actualitzarà el </nobr> fons "
+"actual o no."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:251
@@ -70606,7 +70639,7 @@ msgstr "Eina de selecció de formes"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Color de mostra"
+msgstr "Mostrejador de color"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
@@ -70858,5 +70891,6 @@ msgstr ""
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
 
-#~ msgid "Use system monitor profile"
-#~ msgstr "Utilitza el perfil del monitor del sistema"
+#~ msgctxt "action"
+#~ msgid "Ungroup"
+#~ msgstr "Desagrupa"

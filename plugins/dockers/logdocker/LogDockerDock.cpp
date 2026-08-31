@@ -17,6 +17,7 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include "kcolorscheme.h"
 
 #include <KisPart.h>
 #include <KoDialog.h>
@@ -439,21 +440,14 @@ void LogDockerDock::insertMessage(QtMsgType type, const QString &msg)
 void LogDockerDock::changeTheme()
 {
     clearLog();
-    QColor background = qApp->palette().window().color();
-    if (background.value() > 100) {
-        s_debug.setForeground(Qt::black);
-        s_info.setForeground(Qt::darkGreen);
-        s_warning.setForeground(Qt::darkYellow);
-        s_critical.setForeground(Qt::darkRed);
-        s_fatal.setForeground(Qt::darkRed);
-    }
-    else {
-        s_debug.setForeground(Qt::white);
-        s_info.setForeground(Qt::green);
-        s_warning.setForeground(Qt::yellow);
-        s_critical.setForeground(Qt::red);
-        s_fatal.setForeground(Qt::red);
-    }
+
+    KColorScheme scheme(QPalette::Active, KColorScheme::Window);
+    s_debug.setForeground(scheme.foreground(KColorScheme::NormalText));
+    s_info.setForeground(scheme.foreground(KColorScheme::PositiveText));
+    s_warning.setForeground(scheme.foreground(KColorScheme::NeutralText));
+    s_critical.setForeground(scheme.foreground(KColorScheme::NegativeText));
+    s_fatal.setForeground(scheme.foreground(KColorScheme::NegativeText));
+
     s_fatal.setFontWeight(QFont::Bold);
 }
 

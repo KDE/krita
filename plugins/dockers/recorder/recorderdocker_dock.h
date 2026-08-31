@@ -35,6 +35,7 @@ public:
 
 private Q_SLOTS:
     void onMainWindowIsBeingCreated(KisMainWindow *window);
+    void onThemeChanged();
 
     void onRecordIsolateLayerModeToggled(bool checked);
     void onAutoRecordToggled(bool checked);

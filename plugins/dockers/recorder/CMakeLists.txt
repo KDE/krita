@@ -39,5 +39,8 @@ install(FILES
 
 kis_add_library(kritarecorderdocker MODULE ${KRITA_RECORDERDOCKER_SOURCES})
 target_link_libraries(kritarecorderdocker kritaui Threads::Threads)
+if (QT_MAJOR_VERSION STREQUAL "6")
+target_link_libraries(kritarecorderdocker KF6::ColorScheme)
+endif()
 
 install(TARGETS kritarecorderdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

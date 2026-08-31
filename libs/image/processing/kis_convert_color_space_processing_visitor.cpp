@@ -33,19 +33,36 @@ KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(con
                                                                              const KoColorSpace *dstColorSpace,
                                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                                              KoColorConversionTransformation::ConversionFlags conversionFlags)
-    : m_srcColorSpace(srcColorSpace)
-    , m_dstColorSpace(dstColorSpace)
+    : m_dstColorSpace(dstColorSpace)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
 {
+    Q_UNUSED(srcColorSpace);
 }
 
 void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
+    const KoColorSpace *srcColorSpace = layer->colorSpace();
+    const KoColorSpace *dstColorSpace = m_dstColorSpace;
+
+    const bool alphaDisabled = layer->alphaChannelDisabled();
+    const bool colorModelChanged = srcColorSpace->colorModelId() != dstColorSpace->colorModelId();
+
+    if (colorModelChanged) {
+        // first reset the flags completely
+        undoAdapter->addCommand(new KisChangeChannelFlagsCommand(QBitArray(), layer));
+    }
+
     KisProcessingVisitor::ProgressHelper helper(layer);
     KoUpdater *updater = helper.updater();
     undoAdapter->addCommand(layer->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
     updater->setProgress(100);
+
+    if (colorModelChanged && alphaDisabled) {
+        // then recover the alpha lock in the destination color space
+        const QBitArray newChannelFlags = dstColorSpace->channelFlags(true, false);
+        undoAdapter->addCommand(new KisChangeChannelFlagsCommand(newChannelFlags, layer));
+    }
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
@@ -74,8 +91,12 @@ void KisConvertColorSpaceProcessingVisitor::visit(KisFilterMask *mask, KisUndoAd
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
+    // color space of the layer may be not the same of the image!
+    const KoColorSpace *srcColorSpace = node->colorSpace();
+    const KoColorSpace *dstColorSpace = m_dstColorSpace;
+
     if (!node->projectionLeaf()->isLayer()) return;
-    if (*m_dstColorSpace == *node->colorSpace()) return;
+    if (*srcColorSpace == *dstColorSpace) return;
 
     bool alphaLock = false;
     bool alphaDisabled = false;
@@ -89,7 +110,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
 
     KUndo2Command *parentConversionCommand = new KUndo2Command();
 
-    if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
+    if (srcColorSpace->colorModelId() != dstColorSpace->colorModelId()) {
         alphaDisabled = layer->alphaChannelDisabled();
         new KisChangeChannelFlagsCommand(QBitArray(), layer, parentConversionCommand);
         if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
@@ -99,19 +120,19 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
     }
 
     if (layer->original()) {
-        layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
+        layer->original()->convertTo(dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
     if (layer->paintDevice() && layer->paintDevice()->colorSpace()->colorModelId() != AlphaColorModelID) {
-        layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
+        layer->paintDevice()->convertTo(dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
     if (layer->projection()) {
-        layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
+        layer->projection()->convertTo(dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
     if (alphaDisabled) {
-        new KisChangeChannelFlagsCommand(m_dstColorSpace->channelFlags(true, false),
+        new KisChangeChannelFlagsCommand(dstColorSpace->channelFlags(true, false),
                                          // we have reset the flags in a command a lines above,
                                          // so set the old flags to zero
                                          QBitArray(),
@@ -120,7 +141,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
     }
 
     if (paintLayer && alphaLock) {
-        new KisChangeChannelLockFlagsCommand(m_dstColorSpace->channelFlags(true, false),
+        new KisChangeChannelLockFlagsCommand(dstColorSpace->channelFlags(true, false),
                                              // we have reset the flags in a command a lines above,
                                              // so set the old flags to zero
                                              QBitArray(),

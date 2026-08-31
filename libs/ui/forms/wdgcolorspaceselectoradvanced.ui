@@ -24,7 +24,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Color_space&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#006e28;&quot;&gt;Color Spaces&lt;/span&gt;&lt;/a&gt;  determine how colors are encoded in your files. Different color spaces have different properties and are used for different purposes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Color_space&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; &quot;&gt;Color Spaces&lt;/span&gt;&lt;/a&gt;  determine how colors are encoded in your files. Different color spaces have different properties and are used for different purposes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>

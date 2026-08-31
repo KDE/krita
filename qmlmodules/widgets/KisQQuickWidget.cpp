@@ -21,7 +21,7 @@
 
 KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
 {
-#if !defined(Q_OS_MACOS) || QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if !defined(Q_OS_MACOS)
     QSurfaceFormat format;
 
     {

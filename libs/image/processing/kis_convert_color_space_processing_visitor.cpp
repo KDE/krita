@@ -112,12 +112,20 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
 
     if (alphaDisabled) {
         new KisChangeChannelFlagsCommand(m_dstColorSpace->channelFlags(true, false),
-                                         layer, parentConversionCommand);
+                                         // we have reset the flags in a command a lines above,
+                                         // so set the old flags to zero
+                                         QBitArray(),
+                                         layer,
+                                         parentConversionCommand);
     }
 
     if (paintLayer && alphaLock) {
         new KisChangeChannelLockFlagsCommand(m_dstColorSpace->channelFlags(true, false),
-                                             paintLayer, parentConversionCommand);
+                                             // we have reset the flags in a command a lines above,
+                                             // so set the old flags to zero
+                                             QBitArray(),
+                                             paintLayer,
+                                             parentConversionCommand);
     }
 
     undoAdapter->addCommand(parentConversionCommand);

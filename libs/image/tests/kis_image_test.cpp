@@ -208,6 +208,91 @@ void KisImageTest::testConvertImageColorSpace()
     image->waitForDone();
 }
 
+void KisImageTest::testChannelFlagsAfterColorSpaceConversion_data()
+{
+    QTest::addColumn<QString>("channelsMode"); // "empty", "inheritAlpha", "alphaOnly", "firstChannel"
+    QTest::addColumn<QString>("srcColorSpaceModel");
+    QTest::addColumn<QString>("dstColorSpaceModel");
+    QTest::addColumn<QBitArray>("expectedChannelFlags");
+
+    auto strToBitArray = [] (const QString &str) {
+        QBitArray result(str.size());
+        for (auto it = str.begin(); it != str.end(); ++it) {
+            result.setBit(std::distance(str.begin(), it), *it == '1');
+        }
+        return result;
+    };
+
+    /**
+     * The general requirements for channel flags preservation on color space change:
+     *
+     * 1) Color channels are always reset into "all enabled" state
+     * 2) If alpha channel was disabled, this disabled state will be preserved
+     *    during the conversion stage.
+     * 3) If all the channel are enabled after the conversion, then
+     *    the channel flags object is reset into empty state
+     */
+
+    QTest::addRow("rgb2gray-empty") << "empty" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("");
+    QTest::addRow("rgb2gray-inheritAlpha") << "inheritAlpha" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("10");
+    QTest::addRow("rgb2gray-alphaOnly") << "alphaOnly" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("");
+    QTest::addRow("rgb2gray-firstChannel") << "firstChannel" << RGBAColorModelID.id() << GrayAColorModelID.id() << strToBitArray("10");
+
+    QTest::addRow("gray2rgb-empty") << "empty" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("");
+    QTest::addRow("gray2rgb-inheritAlpha") << "inheritAlpha" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("1110");
+    QTest::addRow("gray2rgb-alphaOnly") << "alphaOnly" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("");
+    QTest::addRow("gray2rgb-firstChannel") << "firstChannel" << GrayAColorModelID.id() << RGBAColorModelID.id() << strToBitArray("1110");
+}
+
+void KisImageTest::testChannelFlagsAfterColorSpaceConversion()
+{
+    QFETCH(QString, channelsMode);
+    QFETCH(QString, srcColorSpaceModel);
+    QFETCH(QString, dstColorSpaceModel);
+    QFETCH(QBitArray, expectedChannelFlags);
+
+    const KoColorSpace *srcCS = KoColorSpaceRegistry::instance()->colorSpace(srcColorSpaceModel, Integer8BitsColorDepthID.id(), nullptr);
+    auto *undoStore = new KisSurrogateUndoStore();
+    KisImageSP image = new KisImage(undoStore, 1000, 1000, srcCS, "stest");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(srcCS);
+    KisLayerSP paint1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+
+    image->addNode(paint1, image->root());
+
+    const QBitArray initialChannelFlags = [&] () {
+        if (channelsMode == "empty") {
+            return QBitArray();
+        } else if (channelsMode == "inheritAlpha") {
+            return srcCS->channelFlags(true, false);
+        } else if (channelsMode == "alphaOnly") {
+            return srcCS->channelFlags(false, true);
+        } else if (channelsMode == "firstChannel") {
+            QBitArray channelFlags = srcCS->channelFlags(false, false);
+            channelFlags.setBit(0, true);
+            return channelFlags;
+        } else {
+            qFatal("Unknown channel flags testing mode!");
+        }
+        Q_UNREACHABLE_RETURN(QBitArray());
+    }();
+
+    paint1->setChannelFlags(initialChannelFlags);
+    image->initialRefreshGraph();
+    QCOMPARE(paint1->channelFlags(), initialChannelFlags);
+
+    const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->colorSpace(dstColorSpaceModel, Integer8BitsColorDepthID.id(), nullptr);
+    image->convertImageColorSpace(dstCS,
+                                  KoColorConversionTransformation::internalRenderingIntent(),
+                                  KoColorConversionTransformation::internalConversionFlags());
+    image->waitForDone();
+    QCOMPARE(paint1->channelFlags(), expectedChannelFlags);
+
+    undoStore->undo();
+    image->waitForDone();
+    QCOMPARE(paint1->channelFlags(), initialChannelFlags);
+}
+
 void KisImageTest::testAssignImageProfile()
 {
     const KoColorSpace *rgb8 = KoColorSpaceRegistry::instance()->rgb8();

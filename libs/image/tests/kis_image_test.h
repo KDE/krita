@@ -20,6 +20,8 @@ private Q_SLOTS:
     void benchmarkCreation();
     void testBlockLevelOfDetail();
     void testConvertImageColorSpace();
+    void testChannelFlagsAfterColorSpaceConversion_data();
+    void testChannelFlagsAfterColorSpaceConversion();
     void testAssignImageProfile();
     void testGlobalSelection();
     void testCloneImage();

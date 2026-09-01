@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:41+0000\n"
-"PO-Revision-Date: 2026-08-29 08:45+0200\n"
+"PO-Revision-Date: 2026-08-31 09:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7256,12 +7256,10 @@ msgstr "Alinea a la dreta"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
-msgstr "Desagrupa les formes"
+msgstr "Desagrupa forma/es"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7272,7 +7270,7 @@ msgstr "Desagrupa les formes"
 #, kde-format
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
+msgstr "«Desagrupa forma/es en el context de l'eina d'interacció vectorial»"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7326,27 +7324,21 @@ msgstr "Centra verticalment"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
-msgstr "Agrupa les formes"
+msgstr "Agrupa forma/es"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Agrupa"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Agrupa"
@@ -12104,12 +12096,10 @@ msgstr "Enganxa la capa des del porta-retalls"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Capa de grup"
+msgstr "Agrupa capa/es"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12127,12 +12117,10 @@ msgstr "Agrupa ràpid"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "Desagrupa les formes"
+msgstr "Desagrupa capa/es"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928

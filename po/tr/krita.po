@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:41+0000\n"
-"PO-Revision-Date: 2026-08-29 20:40+0300\n"
+"PO-Revision-Date: 2026-08-31 20:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7249,9 +7249,7 @@ msgstr "Sağa Hizala"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
 msgstr "Şekillerin Gruplamasını Kaldır"
@@ -7265,7 +7263,7 @@ msgstr "Şekillerin Gruplamasını Kaldır"
 #, kde-format
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
+msgstr "Vektör Etkileşim Aracı bağlamında şekillerin gruplandırmasını kaldır"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7319,27 +7317,21 @@ msgstr "Dikey Ortala"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
 msgstr "Şekilleri Grupla"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Grupla"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Grupla"
@@ -12074,12 +12066,10 @@ msgstr "Panodan katman yapıştır"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Grup Katman"
+msgstr "Katmanları Grupla"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12097,12 +12087,10 @@ msgstr "Tez Grupla"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "Şekillerin Gruplamasını Kaldır"
+msgstr "Katmanların Gruplamasını Kaldır"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928

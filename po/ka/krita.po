@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:41+0000\n"
-"PO-Revision-Date: 2026-08-26 06:43+0200\n"
+"PO-Revision-Date: 2026-08-31 06:01+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7243,12 +7243,10 @@ msgstr "მარჯვნივ სწორება"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
-msgstr "ფორმების განჯგუფება"
+msgstr "ფორმ(ებ)-ის განჯგუფება"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7313,30 +7311,24 @@ msgstr "დაცენტრება ვერტიკალურად"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
-msgstr "ფორმების დაჯგუფება"
+msgstr "ფორმ(ებ)-ის დაჯგუფება"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "ჯგუფი"
+msgstr "დაჯგუფება"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "ჯგუფი"
+msgstr "დაჯგუფება"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12077,12 +12069,10 @@ msgstr "ფენის ჩასმა ბუფერიდან"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "ჯგუფური ფენა"
+msgstr "ფენ(ებ)-ის დაჯგუფება"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12100,12 +12090,10 @@ msgstr "სწრაფი დაჯგუფება"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "ფორმების განჯგუფება"
+msgstr "ფენ(ებ)-ის განჯგუფება"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928

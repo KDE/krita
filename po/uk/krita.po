@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:41+0000\n"
-"PO-Revision-Date: 2026-08-29 21:50+0300\n"
+"PO-Revision-Date: 2026-08-31 15:56+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7247,14 +7247,10 @@ msgstr "Вирівняти праворуч"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
-msgstr ""
-"Розгрупувати форми\n"
-"розгрупування форм"
+msgstr "Розгрупувати форми"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7265,7 +7261,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
+msgstr "\"Розгруповує форми у контексті інструменту векторної взаємодії\""
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7319,29 +7315,21 @@ msgstr "Вертикально за центром"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
-msgstr ""
-"Згрупувати форми\n"
-"групування форм"
+msgstr "Згрупувати форми"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Згрупувати"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Згрупувати"
@@ -12087,12 +12075,10 @@ msgstr "Вставити шар з буфера"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Шар групування"
+msgstr "Згрупувати шари"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12110,14 +12096,10 @@ msgstr "Швидко згрупувати"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr ""
-"Розгрупувати форми\n"
-"розгрупування форм"
+msgstr "Розгрупувати шари"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928

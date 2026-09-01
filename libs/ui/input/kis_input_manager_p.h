@@ -76,10 +76,6 @@ public:
     int priorityEventFilterSeqNo;
 
     bool popupWasActive = false;
-    int lastPointCount = 0;
-
-    QPointF startingPos;
-    QPointF previousPos;
 
     bool useUnbalancedKeyPressEventWorkaround = false;
     bool shouldSynchronizeOnNextKeyPress = false;

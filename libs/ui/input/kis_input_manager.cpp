@@ -635,9 +635,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->popupWasActive = false;
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
         KisAbstractInputAction::setInputManager(this);
-        d->lastPointCount = touchEvent->touchPoints().size();
-        d->startingPos = touchEvent->touchPoints().at(0).pos();
-        d->previousPos = d->startingPos;
 
         retval = d->matcher.touchBeginEvent(touchEvent);
 
@@ -656,18 +653,11 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
 
-        int eventPointCount = touchEvent->touchPoints().size();
-        d->lastPointCount = eventPointCount;
-
 #ifdef Q_OS_MAC
-        int count = 0;
-        Q_FOREACH (const QTouchEvent::TouchPoint &point, touchEvent->touchPoints()) {
-            if (point.state() != Qt::TouchPointReleased) {
-                count++;
-            }
-        }
+        const int pressedCount = KisTouchShortcut::countTouchPoints(touchEvent, KisTouchShortcut::pressedOnlyTouchStates());
+        const int totalPointCount = KisTouchShortcut::countTouchPoints(touchEvent, KisTouchShortcut::allTouchStates());
 
-        if (count < 2 && eventPointCount > count) {
+        if (pressedCount < 2 && totalPointCount > pressedCount) {
             d->matcher.touchEndEvent(touchEvent);
             retval = true;
         } else {
@@ -746,10 +736,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         } else {
             d->matcher.touchCancelEvent(touchEvent);
         }
-        // reset state
-        d->lastPointCount = 0;
-        d->startingPos = {0, 0};
-        d->previousPos = {0, 0};
+
         retval = true;
 
         // we accept tablet events unconditionally to disable
@@ -902,9 +889,6 @@ void KisInputManager::profileChanged()
                 // Touch painting shortcuts
                 d->addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, KisShortcutConfiguration::OneFingerDrag, true);
                 d->addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, KisShortcutConfiguration::OneFingerTap, true);
-#ifdef Q_OS_MACOS
-                // TODO: do we need some custom code for MacOS?
-#endif
             }
         }
     }

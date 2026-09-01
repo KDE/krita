@@ -18,7 +18,7 @@ variables:
 
   VM_IMAGE_NAME_WINDOWS: 'storage.kde.org/vm-images/krita-windows-clang21-twinpy'
   VM_IMAGE_NAME_LINUX: 'storage.kde.org/vm-images/krita-appimage-2204'
-  VM_IMAGE_NAME_ANDROID: 'storage.kde.org/vm-images/krita-android-sdk35-2204'
+  VM_IMAGE_NAME_ANDROID: 'storage.kde.org/vm-images/krita-android-sdk36-2204'
 
   # The name of python executable that will be used for initializing
   # the initial virtual envioronment. After venv is initialized, the chosen

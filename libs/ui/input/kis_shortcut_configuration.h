@@ -50,7 +50,6 @@ public:
         WheelDown, ///< Downwards movement, toward the user.
         WheelLeft, ///< Left movement.
         WheelRight, ///< Right movement.
-        WheelTrackpad, ///< A pan movement on a trackpad.
     };
 
     /**

@@ -492,20 +492,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QWheelEvent>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
 
-#ifdef Q_OS_MACOS
-        // Some QT wheel events are actually touch pad pan events. From the QT docs:
-        // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
-
-        // We differentiate between touchpad events and real mouse wheels by inspecting the
-        // event source.
-
-        if (wheelEvent->source() == Qt::MouseEventSource::MouseEventSynthesizedBySystem) {
-            KisAbstractInputAction::setInputManager(this);
-            retval = d->matcher.wheelEvent(KisSingleActionShortcut::WheelTrackpad, wheelEvent);
-            break;
-        }
-#endif
-
         d->accumulatedScrollDelta += wheelEvent->angleDelta().y();
         KisSingleActionShortcut::WheelAction action;
 

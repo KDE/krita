@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-29 02:42+0000\n"
-"PO-Revision-Date: 2026-07-17 17:16+0200\n"
+"PO-Revision-Date: 2026-08-31 12:09+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -25441,21 +25441,21 @@ msgid "Activate transform tool"
 msgstr "Computo de rango"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
-#, kde-format
+#, fuzzy, kde-format
 msgid "Android: %1"
-msgstr ""
+msgstr "Android"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
 #, fuzzy, kde-format
 #| msgid "%1 (Copy)"
 msgid "%1 (hardware)"
-msgstr "%1 (Copia)"
+msgstr "Hardware"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
 #, fuzzy, kde-format
 #| msgid "%1 (Copy)"
 msgid "%1 (software)"
-msgstr "%1 (Copia)"
+msgstr "Software"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:353
 #, kde-format
@@ -27015,10 +27015,9 @@ msgstr "Imagines"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
-#| msgid "&Video"
+#, kde-format
 msgid "Video"
-msgstr "&Video"
+msgstr "Video"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134

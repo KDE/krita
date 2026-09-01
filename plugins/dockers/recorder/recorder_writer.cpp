@@ -531,7 +531,9 @@ RecorderWriterManager::~RecorderWriterManager()
 void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
 {
     //Saving previous region as a precaution, so that we don't have to externally manage its state
-    saveRegion();
+    if (d->canvas) {
+        saveRegion();
+    }
 
     // Restart writers if canvas changes
     bool restart = d->timer.isActive();

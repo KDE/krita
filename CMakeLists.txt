@@ -1145,7 +1145,7 @@ if (ANDROID)
     find_package(unwindstack REQUIRED)
 endif()
 
-find_package(PNG REQUIRED "1.2.6")
+find_package(PNG REQUIRED "1.6.0")
 
 if (APPLE)
     # this is not added correctly on OSX -- see https://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242

@@ -183,7 +183,7 @@ public:
         return suppressAllActions || !cursorEntered;
 #else
         // when S-pen is not pointing the canvas, actions on canvas are disabled, till it points back to canvas.
-        return false;
+        return suppressAllActions;
 #endif
     }
 

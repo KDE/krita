@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:41+0000\n"
+"POT-Creation-Date: 2026-09-02 00:41+0000\n"
 "PO-Revision-Date: 2026-08-12 15:01+0200\n"
 "Last-Translator: Benedek Péter <benedekppeter@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -13294,7 +13294,7 @@ msgstr "&Importálás/Exportálás"
 msgid "Import"
 msgstr "Importálás"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1263
 #, kde-format
 msgid "&Convert"
 msgstr "Á&talakítás"
@@ -13302,14 +13302,14 @@ msgstr "Á&talakítás"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "Ki&jelölés"
 
-#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13330,7 +13330,7 @@ msgstr "Minden réteg &átalakítása"
 msgid "S&plit"
 msgstr "&Szétvágás"
 
-#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1272
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Alfa &szétvágása"
@@ -27225,7 +27225,7 @@ msgstr "Réteg tulajdonságai"
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:48
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
@@ -35220,8 +35220,8 @@ msgstr "Ecsetkészlet kiválasztása"
 
 #: libs/ui/kis_paintop_box.cc:265
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:208
-#: plugins/dockers/layerdocker/LayerBox.cpp:396
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:52
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
@@ -44523,18 +44523,18 @@ msgstr "Logaritmikus hisztogram ki/be."
 msgid "Undo History"
 msgstr "Visszavonási előzmények"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:161
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
 #, kde-format
 msgid "Layers"
 msgstr "Rétegek"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:252
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "&Globális kijelölési maszk megjelenítése"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:255
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -44543,24 +44543,24 @@ msgstr ""
 "A globális kijelölést szokásos kijelölési maszkként jeleníti meg a "
 "<b>Rétegek</b> dokkolóban"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:323
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Miniatűr mérete"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:351
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Fa behúzása"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Keverési információ stílusa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -44574,43 +44574,43 @@ msgstr ""
 "Kiegyensúlyozott: Mindkettőt mutatja, ha bármelyik módosult.\n"
 "Részletes: Mindig mutatja az átlátszatlanságot és a keverési módot is."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:381
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Nincs"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Egyszerű"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Kiegyensúlyozott"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Részletes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Keverési információ szövegének átlátszatlansága"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:415
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Soron belüli"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:417
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -44620,35 +44620,35 @@ msgstr ""
 "Ha engedélyezve van, a keverési adatok a rétegnév mellett jelennek meg.\n"
 "Ha ki van kapcsolva, a rétegnév alatt látszanak (ha van elég hely)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:429
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Jelölőnégyzet a rétegek kijelöléséhez"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Jelölőnégyzet megjelenítése a rétegek kijelöléséhez vagy elvetéséhez."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1008
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Gyorskijelölési maszk"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1030
+#: plugins/dockers/layerdocker/LayerBox.cpp:1036
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Gyorskijelölési maszk elvetése"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Zárolás és lá&thatóság ki/be"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1247
-#: plugins/dockers/layerdocker/LayerBox.cpp:1271
+#: plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: plugins/dockers/layerdocker/LayerBox.cpp:1277
 #, kde-format
 msgid "&Add"
 msgstr "Hozzá&adás"

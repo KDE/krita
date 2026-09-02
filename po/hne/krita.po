@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:41+0000\n"
+"POT-Creation-Date: 2026-09-02 00:41+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -13440,7 +13440,7 @@ msgstr "फोटू आयात करव"
 msgid "Import"
 msgstr "फोटू आयात करव"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1263
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "उलटव (&I)"
@@ -13448,14 +13448,14 @@ msgstr "उलटव (&I)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "चुनव (&S)"
 
-#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -13477,7 +13477,7 @@ msgstr "रूपांतरन"
 msgid "S&plit"
 msgstr "रंग मं अल्फा"
 
-#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1272
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "रंग मं अल्फा"
@@ -27387,7 +27387,7 @@ msgstr "परत गुन"
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:48
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
@@ -35202,8 +35202,8 @@ msgstr "ब्रुस प्रीसेट संपादित करव"
 
 #: libs/ui/kis_paintop_box.cc:265
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:208
-#: plugins/dockers/layerdocker/LayerBox.cpp:396
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:52
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
@@ -44208,44 +44208,44 @@ msgstr "छोटा रंग चुनइया"
 msgid "Undo History"
 msgstr "छोटा रंग चुनइया"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:161
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
 #, fuzzy, kde-format
 msgid "Layers"
 msgstr "लेयर"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:252
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, fuzzy, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "चयन मास्क..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:255
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:323
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Thumbnail Size"
 msgstr "फोटू आयात करव"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:351
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "दिसा"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "ब्लेंडिंग मोड"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -44255,46 +44255,46 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:381
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "कुछ नइ"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, fuzzy, kde-format
 #| msgid "simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "सादा"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "रंग सीमा"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "विस्तृत दृस्य"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, fuzzy, kde-format
 #| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "परत अपारदर्सिता"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:415
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "बीस्प्लाइन"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:417
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -44302,37 +44302,37 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:429
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "परत के आकार बदलव"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, fuzzy, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "परत के आकार बदलव"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1008
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "चयन मास्क..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1030
+#: plugins/dockers/layerdocker/LayerBox.cpp:1036
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "चयन मास्क..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "क्लिपबोर्ड से पहिली परत"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1247
-#: plugins/dockers/layerdocker/LayerBox.cpp:1271
+#: plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: plugins/dockers/layerdocker/LayerBox.cpp:1277
 #, kde-format
 msgid "&Add"
 msgstr ""

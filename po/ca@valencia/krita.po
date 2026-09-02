@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:41+0000\n"
-"PO-Revision-Date: 2026-08-29 08:45+0200\n"
+"POT-Creation-Date: 2026-09-02 00:41+0000\n"
+"PO-Revision-Date: 2026-08-31 09:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -775,7 +775,7 @@ msgstr "j) Línies humides d'aquarel·la bàsica"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Fringe_02.kpp"
 msgid "j) WaterC Basic Round-Fringe 02"
-msgstr "j) Serrell arredonit d'aquarel·la bàsica 02"
+msgstr "j) Serrell arredoniit d'aquarel·la bàsica 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -789,7 +789,7 @@ msgstr "j) Gra rodó d'aquarel·la bàsica"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Grunge.kpp"
 msgid "j) WaterC Basic Round-Grunge"
-msgstr "j) Motes arredonides d'aquarel·la bàsica"
+msgstr "j) Motes arredoniides d'aquarel·la bàsica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -1695,7 +1695,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel_4x4_rounded.gbr"
 msgid "Z_Pixel 4x4 rounded"
-msgstr "Z_Píxel 4x4 arredonit"
+msgstr "Z_Píxel 4x4 arredoniit"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4470,7 +4470,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "t)_Shapes_Rounded.kpp"
 msgid "t) Shapes Rounded"
-msgstr "t) Formes arredonides"
+msgstr "t) Formes arredoniides"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5954,7 +5954,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-"
 "cercle-anim.gih"
 msgid "A -18 Round eroded anim"
-msgstr "A -18 Anim arredonida desgastada"
+msgstr "A -18 Anim arredoniida desgastada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-chinese-anim.gih:1
@@ -7256,12 +7256,10 @@ msgstr "Alinea a la dreta"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
-msgstr "Desagrupa les formes"
+msgstr "Desagrupa formes"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7272,7 +7270,7 @@ msgstr "Desagrupa les formes"
 #, kde-format
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
+msgstr "«Desagrupa formes en el context de l'eina d'interacció vectorial»"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7326,27 +7324,21 @@ msgstr "Centra verticalment"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
-msgstr "Agrupa les formes"
+msgstr "Agrupa formes"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Agrupa"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Agrupa"
@@ -10279,7 +10271,7 @@ msgstr "Cantons a&rredonits…"
 #, kde-format
 msgctxt "action"
 msgid "Round Corners"
-msgstr "Cantons arredonits"
+msgstr "Cantons arredoniides"
 
 #. i18n: context: text @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1474
@@ -12099,12 +12091,10 @@ msgstr "Apega la capa des del porta-retalls"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Capa de grup"
+msgstr "Agrupa capes"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12122,12 +12112,10 @@ msgstr "Agrupa ràpid"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "Desagrupa les formes"
+msgstr "Desagrupa capes"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -13272,7 +13260,7 @@ msgstr "&Importa/exporta"
 msgid "Import"
 msgstr "Importa"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1263
 #, kde-format
 msgid "&Convert"
 msgstr "Con&vertix"
@@ -13280,14 +13268,14 @@ msgstr "Con&vertix"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Tria"
 
-#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13308,7 +13296,7 @@ msgstr "Transforma &totes les capes"
 msgid "S&plit"
 msgstr "&Dividix"
 
-#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1272
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Dividix l'alfa"
@@ -22467,7 +22455,7 @@ msgid ""
 msgstr ""
 "La imatge s'animarà amb una duració de fotograma en <b>fraccions d'un "
 "mil·lisegon</b>. El format no pot representar açò, i la duració del "
-"fotograma s'arredonirà al mil·lisegon més proper."
+"fotograma s'arredoniirà al mil·lisegon més proper."
 
 #: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
 #, kde-format
@@ -27276,7 +27264,7 @@ msgstr "Propietats de la capa"
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:48
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
@@ -33052,7 +33040,7 @@ msgstr "El radi horitzontal dels cantons del rectangle"
 #: libs/ui/forms/wdgrectangleconstraints.ui:181
 #, kde-format
 msgid "Round X: "
-msgstr "Arredoniment de X: "
+msgstr "Arredoniiment de X: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:197
@@ -33064,7 +33052,7 @@ msgstr "El radi vertical dels cantons del rectangle"
 #: libs/ui/forms/wdgrectangleconstraints.ui:203
 #, kde-format
 msgid "Round Y: "
-msgstr "Arredoniment de Y: "
+msgstr "Arredoniiment de Y: "
 
 #. i18n: ectx: property (text), widget (QLabel, newBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:35
@@ -35283,8 +35271,8 @@ msgstr "Tria el pinzell predefinit"
 
 #: libs/ui/kis_paintop_box.cc:265
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:208
-#: plugins/dockers/layerdocker/LayerBox.cpp:396
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:52
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
@@ -40835,7 +40823,7 @@ msgstr "Punta xafada"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:100
 #, kde-format
 msgid "Round cap"
-msgstr "Punta arredonida"
+msgstr "Punta arredoniida"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:107
 #, kde-format
@@ -40850,7 +40838,7 @@ msgstr "Unió en biaix"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:125
 #, kde-format
 msgid "Round join"
-msgstr "Unió arredonida"
+msgstr "Unió arredoniida"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:132
 #, kde-format
@@ -44624,18 +44612,18 @@ msgstr "Canvia l'histograma logarítmic."
 msgid "Undo History"
 msgstr "Historial de desfer"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:161
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
 #, kde-format
 msgid "Layers"
 msgstr "Capes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:252
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Mostra la màscara de &selecció global"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:255
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -44644,24 +44632,24 @@ msgstr ""
 "Mostra la selecció global com a una màscara de selecció normal en "
 "l'acoblador de <b>Capes</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:323
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Mida de les miniatures"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:351
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Sagnat de l'arbre"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Estil d'informació de la barreja"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -44675,43 +44663,43 @@ msgstr ""
 "Equilibrat: Mostra l'opacitat i el mode de barreja si canvien.\n"
 "Detallat: Mostra l'opacitat i el mode de barreja encara que no canvien."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:381
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Cap"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Senzill"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Equilibrat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Detallat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Opacitat del text d'informació de la barreja"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:415
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Inclosa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:417
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -44723,35 +44711,35 @@ msgstr ""
 "Si no està marcada, mostra davall els noms de les capes (si hi ha prou "
 "espai)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:429
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Casella de selecció per a seleccionar capes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Mostra una casella de selecció per a seleccionar/desseleccionar capes."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1008
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1030
+#: plugins/dockers/layerdocker/LayerBox.cpp:1036
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancel·la la màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Can&via els bloquejos i la visibilitat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1247
-#: plugins/dockers/layerdocker/LayerBox.cpp:1271
+#: plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: plugins/dockers/layerdocker/LayerBox.cpp:1277
 #, kde-format
 msgid "&Add"
 msgstr "Afi&g"
@@ -54089,7 +54077,7 @@ msgstr "Radi"
 #: plugins/filters/roundcorners/kis_round_corners_filter.h:27
 #, kde-format
 msgid "Round Corners"
-msgstr "Cantons arredonits"
+msgstr "Cantons arredoniides"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:43
 #, kde-format
@@ -55017,7 +55005,7 @@ msgstr "Línies"
 #, kde-format
 msgctxt "Screentone Pattern - Round Dots"
 msgid "Round"
-msgstr "Arredonit"
+msgstr "Arredoniit"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:30
 #, kde-format
@@ -61805,7 +61793,7 @@ msgstr "Bloqueja"
 #, kde-format
 msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
 msgid "Fan Corners"
-msgstr "Cantons arredonits"
+msgstr "Cantons arredoniides"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:77
 #, kde-format
@@ -70890,7 +70878,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "Ungroup"
-#~ msgstr "Desagrupa"

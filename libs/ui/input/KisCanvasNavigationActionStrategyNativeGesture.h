@@ -7,7 +7,6 @@
 #ifndef KISCANVASNAVIGATIONACTIONSTRATEGYNATIVEGESTURE_H
 #define KISCANVASNAVIGATIONACTIONSTRATEGYNATIVEGESTURE_H
 
-#include <QFlags>
 #include <QPointF>
 #include <KoViewTransformStillPoint.h>
 #include "KisCanvasNavigationActionStrategy.h"
@@ -18,16 +17,6 @@ class KisCanvas2;
 class KisCanvasNavigationActionStrategyNativeGesture : public KisCanvasNavigationActionStrategy
 {
 public:
-    enum Flag {
-        None = 0x0,
-        PanEnabled = 0x1,
-        ZoomEnabled = 0x2,
-        RotationEnabled = 0x4,
-        ZoomDescrete = 0x8,
-        RotationDescrete = 0x10,
-    };
-    Q_DECLARE_FLAGS(Flags, Flag)
-public:
     KisCanvasNavigationActionStrategyNativeGesture(Flags flags, const QPointF &startViewPos, KisCanvas2 *canvas);
 
     bool supportsEvent(QEvent* event) const override;
@@ -35,7 +24,6 @@ public:
 
 private:
     KisCanvas2 *m_canvas;
-    Flags m_flags;
 
     QPointF m_accumulatedPan;
     qreal m_nonRoundedZoom {0.0};

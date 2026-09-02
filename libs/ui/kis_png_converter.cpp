@@ -1352,6 +1352,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
                                    && colorProfile->getColorPrimaries() < 256 && colorProfile->getTransferCharacteristics() < 256);
         dbgFile << options.writeCicpIfPossible << cicpPossible << colorProfilePQ << colorProfile->name();
         bool wroteCICP = false;
+#if defined(PNG_cICP_SUPPORTED)
         if (options.writeCicpIfPossible && (cicpPossible || colorProfilePQ)) {
             png_byte primaries = colorProfile->getColorPrimaries();
             png_byte transfer = colorProfile->getTransferCharacteristics();
@@ -1372,6 +1373,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
             png_set_cICP(png_ptr, info_ptr, primaries, transfer, matrixCoef, fullRange);
             wroteCICP = true;
         }
+#endif
         if (!wroteCICP) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
         const char *typeString = "icc";

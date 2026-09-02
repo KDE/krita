@@ -346,6 +346,7 @@ set(kritaui_LIB_SRCS
 
     input/KisCanvasNavigationActionStrategy.cpp
     input/KisCanvasNavigationActionStrategyNativeGesture.cpp
+    input/KisCanvasNavigationActionStrategyTouch.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

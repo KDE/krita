@@ -18,6 +18,7 @@
 #include "kis_input_manager.h"
 #include <KoViewTransformStillPoint.h>
 
+#include "KisCanvasNavigationActionStrategyTouch.h"
 #include "KisCanvasNavigationActionStrategyNativeGesture.h"
 
 class KisZoomAndRotateAction::Private {
@@ -95,9 +96,9 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
 {
     if (!event) return;
 
-    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
+    //QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
 
-    if (touchEvent && touchEvent->touchPoints().size() > 0) {
+    /*if (touchEvent && touchEvent->touchPoints().size() > 0) {
         d->shortcutIndex = shortcut;
         const QPointF lastPosition = touchEvent->touchPoints().at(0).pos();
 
@@ -106,10 +107,12 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
         d->rotationData = {};
 
         d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(lastPosition);
-    } else if (event->type() == QEvent::NativeGesture) {
+    } else*/ if (event->type() == QEvent::NativeGesture ||
+                 event->type() == QEvent::TouchBegin ||
+                 event->type() == QEvent::TouchUpdate) {
 
-        using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
-        using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
+        using Flag = KisCanvasNavigationActionStrategy::Flag;
+        using Flags = KisCanvasNavigationActionStrategy::Flags;
 
         Flags flags;
         flags.setFlag(Flag::PanEnabled, d->hasPanAction(shortcut));
@@ -118,7 +121,11 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
         flags.setFlag(Flag::ZoomEnabled);
         flags.setFlag(Flag::ZoomDescrete, d->zoomIsDiscrete(shortcut));
 
-        d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+        if (event->type() == QEvent::NativeGesture) {
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+        } else {
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyTouch(flags, eventPosF(event), inputManager()->canvas()));
+        }
 
         d->shortcutIndex = shortcut;
     }

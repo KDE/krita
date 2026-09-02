@@ -72,3 +72,13 @@ qreal KisCanvasNavigationActionStrategy::canvasRotationAngleDescrete(qreal curre
     }
     return rotationAngle;
 }
+
+KisCanvasNavigationActionStrategy::KisCanvasNavigationActionStrategy(const Flags &flags)
+    : m_flags(flags)
+{
+}
+
+KisCanvasNavigationActionStrategy::Flags KisCanvasNavigationActionStrategy::flags() const
+{
+    return m_flags;
+}

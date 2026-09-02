@@ -1,0 +1,152 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+#include "KisCanvasNavigationActionStrategyTouch.h"
+
+#include <QTouchEvent>
+
+#include <kis_algebra_2d.h>
+#include <kis_canvas2.h>
+#include <kis_canvas_controller.h>
+
+#include <input/kis_touch_shortcut.h>
+
+
+KisCanvasNavigationActionStrategyTouch::KisCanvasNavigationActionStrategyTouch(Flags flags, const QPointF &startViewPos, KisCanvas2 *canvas)
+    : KisCanvasNavigationActionStrategy(flags)
+    , m_canvas(canvas)
+{
+    m_actionStillPoint = canvas->coordinatesConverter()->makeWidgetStillPoint(startViewPos);
+    m_nonRoundedZoom = canvas->viewConverter()->zoom();
+}
+
+bool KisCanvasNavigationActionStrategyTouch::supportsEvent(QEvent* event) const
+{
+    return event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchUpdate
+        || event->type() == QEvent::TouchEnd;
+}
+
+void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
+{
+    if (event->type() != QEvent::TouchUpdate) return;
+
+    QTouchEvent *tevent = dynamic_cast<QTouchEvent *>(event);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = tevent->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = tevent->points();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#endif
+
+    auto testIfPressed = [](const TouchPoint &point) {
+        auto state = static_cast<Qt::TouchPointState>(point.state());
+        return KisTouchShortcut::pressedOnlyTouchStates().testFlag(state);
+    };
+
+    auto point0_it = std::find_if(points.begin(), points.end(), testIfPressed);
+    if (point0_it == points.end())
+        return;
+
+    auto point1_it = std::find_if(point0_it, points.end(), testIfPressed);
+    if (point1_it == points.end())
+        return;
+
+    const QPointF p0 = point0_it->position();
+    const QPointF p1 = point1_it->position();
+
+    const QPointF slope = p1 - p0;
+
+    KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
+
+    KoViewTransformStillPoint adjustedStillPoint = m_actionStillPoint;
+
+    /**
+     * Zoom and Rotate actions will perform pan as part of
+     * the post-action recentering stage, so we should track
+     * if we really need to perform a separate pan action.
+     */
+    bool needsSeparatePanAction = true;
+
+    if (flags().testFlag(PanEnabled)) {
+        adjustedStillPoint.second = p0;
+    }
+
+    if (flags().testFlag(ZoomEnabled)) {
+        const qreal dist = KisAlgebra2D::norm(slope);
+
+        qreal scaleDelta = qFuzzyIsNull(m_lastDistance) ? 1.0 : dist / m_lastDistance;
+
+        // Make sure none of the TouchPoints are too close together, which
+        // throws off the zoom calculations. This also addresses a glitch
+        // where a newly pressed TouchPoint can incorrectly report another
+        // existing TouchPoint's coordinates instead of its own.
+
+        if (dist < 10) {
+            scaleDelta = 1.0;
+        }
+
+        // Workaround: only apply the zoom delta if it's not too
+        // outlandish. TouchPoint coordinates are not always 100% reliable.
+
+        if (qAbs(scaleDelta) < 0.8 || qAbs(scaleDelta) > 1.2) {
+            // just skip the current zoom step
+            scaleDelta = 1.0;
+        }
+
+        const qreal newNonRoundedZoom = m_nonRoundedZoom * scaleDelta;
+
+        if (flags().testFlag(ZoomDescrete)) {
+            const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+            if (scaleDelta > 1.0) {
+                const qreal nextExpectedZoom =
+                    converter->findNextZoom(converter->zoom(), converter->standardZoomLevels());
+                if (newNonRoundedZoom >= nextExpectedZoom) {
+                    controller->setZoom(KoZoomMode::ZOOM_CONSTANT, nextExpectedZoom, adjustedStillPoint);
+                    needsSeparatePanAction = false;
+                }
+            } else if (scaleDelta < 1.0) {
+                const qreal prevExpectedZoom =
+                    converter->findPrevZoom(converter->zoom(), converter->standardZoomLevels());
+                if (newNonRoundedZoom <= prevExpectedZoom) {
+                    controller->setZoom(KoZoomMode::ZOOM_CONSTANT, prevExpectedZoom, adjustedStillPoint);
+                    needsSeparatePanAction = false;
+                }
+            }
+
+        } else {
+            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newNonRoundedZoom, adjustedStillPoint);
+            needsSeparatePanAction = false;
+        }
+
+        m_lastDistance = dist;
+        m_nonRoundedZoom = newNonRoundedZoom;
+    }
+
+    if (flags().testFlag(RotationEnabled)) {
+        const qreal currentAngle = std::atan2(slope.y(), slope.x());
+
+        const qreal rotationAngle = [this, currentAngle]() {
+            if (flags().testFlag(RotationDescrete)) {
+                return canvasRotationAngleDescrete(currentAngle, m_rotationData);
+            } else {
+                KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
+                return canvasRotationAngleContinuous(currentAngle, controller->rotation(), m_rotationData);
+            }
+        }();
+
+        if (!qFuzzyIsNull(rotationAngle)) {
+            controller->rotateCanvas(rotationAngle, adjustedStillPoint);
+            needsSeparatePanAction = false;
+        }
+    }
+
+    if (needsSeparatePanAction) {
+        const QPoint canvasOffset((adjustedStillPoint.viewPoint() - m_actionStillPoint.viewPoint()).toPoint());
+        controller->pan(-canvasOffset);
+    }
+}

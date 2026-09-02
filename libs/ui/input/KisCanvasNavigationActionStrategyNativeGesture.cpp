@@ -12,8 +12,8 @@
 #include <kis_canvas_controller.h>
 
 KisCanvasNavigationActionStrategyNativeGesture::KisCanvasNavigationActionStrategyNativeGesture(Flags flags, const QPointF &startViewPos, KisCanvas2 *canvas)
-    : m_canvas(canvas)
-    , m_flags(flags)
+    : KisCanvasNavigationActionStrategy(flags)
+    , m_canvas(canvas)
 {
     m_actionStillPoint = canvas->coordinatesConverter()->makeWidgetStillPoint(startViewPos);
     m_nonRoundedZoom = canvas->viewConverter()->zoom();
@@ -35,7 +35,7 @@ void KisCanvasNavigationActionStrategyNativeGesture::inputEvent(QEvent *event)
         } else {
             controller->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
         }
-    } else if (gevent->gestureType() == Qt::ZoomNativeGesture && m_flags.testFlag(ZoomEnabled)) {
+    } else if (gevent->gestureType() == Qt::ZoomNativeGesture && flags().testFlag(ZoomEnabled)) {
         KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
         const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
 
@@ -50,7 +50,7 @@ void KisCanvasNavigationActionStrategyNativeGesture::inputEvent(QEvent *event)
 
         const qreal newZoom = m_nonRoundedZoom * delta;
 
-        if (m_flags.testFlag(ZoomDescrete)) {
+        if (flags().testFlag(ZoomDescrete)) {
             if (delta > 1.0) {
                 const qreal nextExpectedZoom =
                     converter->findNextZoom(converter->zoom(), converter->standardZoomLevels());
@@ -71,13 +71,13 @@ void KisCanvasNavigationActionStrategyNativeGesture::inputEvent(QEvent *event)
 
         m_nonRoundedZoom = converter->clampZoom(newZoom);
 
-    } else if (gevent->gestureType() == Qt::RotateNativeGesture && m_flags.testFlag(RotationEnabled)) {
+    } else if (gevent->gestureType() == Qt::RotateNativeGesture && flags().testFlag(RotationEnabled)) {
         KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
 
         m_nonRoundedRelativeRotation += gevent->value();
 
         const qreal rotationAngle = [&]() {
-            if (m_flags.testFlag(RotationDescrete)) {
+            if (flags().testFlag(RotationDescrete)) {
                 return canvasRotationAngleDescrete(kisDegreesToRadians(m_nonRoundedRelativeRotation),
                                                    m_rotationData);
             } else {
@@ -91,7 +91,7 @@ void KisCanvasNavigationActionStrategyNativeGesture::inputEvent(QEvent *event)
             controller->rotateCanvas(rotationAngle, m_actionStillPoint, true);
         }
     }
-    if (gevent->gestureType() == Qt::PanNativeGesture && m_flags.testFlag(PanEnabled)) {
+    if (gevent->gestureType() == Qt::PanNativeGesture && flags().testFlag(PanEnabled)) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
 

@@ -44,17 +44,6 @@ public:
     KisInputActionGroup inputActionGroup(int shortcut) const override;
 
 private:
-    struct SnappedRotationData {
-        qreal previousAngle {0.0};
-        qreal initialReferenceAngle {0.0};
-        qreal accumRotationAngle {0.0};
-    };
-
-    static qreal canvasRotationAngleContinuous(qreal currentRotationOffset, qreal currectCanvasRotation, SnappedRotationData &data);
-    static qreal canvasRotationAngleDescrete(qreal currentRotationOffset, SnappedRotationData &data);
-    qreal canvasRotationAngle(qreal currentAngle);
-
-private:
     class Private;
     const QScopedPointer<Private> d;
 };

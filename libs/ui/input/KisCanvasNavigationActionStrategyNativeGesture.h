@@ -33,6 +33,4 @@ private:
     SnappedRotationData m_rotationData;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KisCanvasNavigationActionStrategyNativeGesture::Flags)
-
 #endif // KISCANVASNAVIGATIONACTIONSTRATEGYNATIVEGESTURE_H

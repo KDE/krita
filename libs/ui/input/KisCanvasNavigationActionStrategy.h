@@ -47,6 +47,6 @@ private:
     Flags m_flags {None};
 };
 
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisCanvasNavigationActionStrategy::Flags);
 
 #endif // KISCANVASNAVIGATIONACTIONSTRATEGY_H

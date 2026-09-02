@@ -25,13 +25,6 @@ class KisZoomAndRotateAction::Private {
 public:
     Private() {}
 
-    int shortcutIndex {0};
-    float lastDistance {0.0};
-
-    KisCanvasNavigationActionStrategy::SnappedRotationData rotationData;
-
-    KoViewTransformStillPoint actionStillPoint;
-
     std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 
     static bool zoomIsDiscrete(int shortcutIndex) {
@@ -96,20 +89,8 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
 {
     if (!event) return;
 
-    //QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
-
-    /*if (touchEvent && touchEvent->touchPoints().size() > 0) {
-        d->shortcutIndex = shortcut;
-        const QPointF lastPosition = touchEvent->touchPoints().at(0).pos();
-
-        d->lastDistance = 0;
-
-        d->rotationData = {};
-
-        d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(lastPosition);
-    } else*/ if (event->type() == QEvent::NativeGesture ||
-                 event->type() == QEvent::TouchBegin ||
-                 event->type() == QEvent::TouchUpdate) {
+    if (event->type() == QEvent::NativeGesture || event->type() == QEvent::TouchBegin
+        || event->type() == QEvent::TouchUpdate) {
 
         using Flag = KisCanvasNavigationActionStrategy::Flag;
         using Flags = KisCanvasNavigationActionStrategy::Flags;
@@ -124,10 +105,9 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
         if (event->type() == QEvent::NativeGesture) {
             d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
         } else {
-            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyTouch(flags, eventPosF(event), inputManager()->canvas()));
+            const QTouchEvent *tevent = static_cast<const QTouchEvent*>(event);
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyTouch(flags, tevent, inputManager()->canvas()));
         }
-
-        d->shortcutIndex = shortcut;
     }
 }
 
@@ -146,48 +126,9 @@ void KisZoomAndRotateAction::inputEvent(QEvent *event)
 {
     if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
         d->actionStrategy->inputEvent(event);
-        return;
+    } else {
+        KisAbstractInputAction::inputEvent(event);
     }
-
-    switch (event->type()) {
-    case QEvent::TouchUpdate: {
-        QTouchEvent *tevent = dynamic_cast<QTouchEvent *>(event);
-        if (tevent && tevent->touchPoints().size() > 1) {
-
-            const QPointF p0 = tevent->touchPoints().at(0).pos();
-            const QPointF p1 = tevent->touchPoints().at(1).pos();
-
-            const QPointF slope = p1 - p0;
-            const qreal currentAngle = std::atan2(slope.y(), slope.x());
-
-            const qreal rotationAngle = canvasRotationAngle(currentAngle);
-            const qreal dist = QLineF(p0, p1).length();
-            qreal scaleDelta = qFuzzyCompare(1.0, 1.0 + d->lastDistance) ? 1.0 : dist / d->lastDistance;
-
-            // Workaround: only apply the zoom delta if it's not too
-            // outlandish. TouchPoint coordinates are not always 100% reliable.
-
-            if(qAbs(scaleDelta) < 0.8 || qAbs(scaleDelta) > 1.2) {
-                // just skip the current zoom step
-                d->lastDistance = dist;
-                scaleDelta = 1.0;
-            }
-
-            KisCanvas2 *canvas = inputManager()->canvas();
-            KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
-            const qreal newZoom = canvas->viewConverter()->zoom() * scaleDelta;
-            KoViewTransformStillPoint adjustedStillPoint = d->actionStillPoint;
-            adjustedStillPoint.second = p0;
-            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, adjustedStillPoint);
-            controller->rotateCanvas(rotationAngle, adjustedStillPoint);
-
-            return;
-        }
-    }
-    default:
-        break;
-    }
-    KisAbstractInputAction::inputEvent(event);
 }
 
 KisInputActionGroup KisZoomAndRotateAction::inputActionGroup(int shortcut) const
@@ -195,15 +136,3 @@ KisInputActionGroup KisZoomAndRotateAction::inputActionGroup(int shortcut) const
     Q_UNUSED(shortcut);
     return ViewTransformActionGroup;
 }
-
-qreal KisZoomAndRotateAction::canvasRotationAngle(qreal currentAngle)
-{
-    if (d->rotationIsDiscrete(d->shortcutIndex)) {
-        return KisCanvasNavigationActionStrategy::canvasRotationAngleDescrete(currentAngle, d->rotationData);
-    } else {
-        KisCanvas2 *canvas = inputManager()->canvas();
-        KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
-        return KisCanvasNavigationActionStrategy::canvasRotationAngleContinuous(currentAngle, controller->rotation(), d->rotationData);
-    }
-}
-

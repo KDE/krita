@@ -15,13 +15,12 @@
 
 class QEvent;
 class KisCanvas2;
-
-
+class QTouchEvent;
 
 class KisCanvasNavigationActionStrategyTouch : public KisCanvasNavigationActionStrategy
 {
 public:
-    KisCanvasNavigationActionStrategyTouch(Flags flags, const QPointF &startViewPos, KisCanvas2 *canvas);
+    KisCanvasNavigationActionStrategyTouch(Flags flags, const QTouchEvent *startEvent, KisCanvas2 *canvas);
 
     bool supportsEvent(QEvent* event) const override;
     void inputEvent(QEvent* event) override;
@@ -29,13 +28,13 @@ public:
 private:
     KisCanvas2 *m_canvas;
 
-    //QPointF m_accumulatedPan;
     qreal m_nonRoundedZoom {0.0};
-    //qreal m_nonRoundedRelativeRotation {0.0};
     KoViewTransformStillPoint m_actionStillPoint;
 
     SnappedRotationData m_rotationData;
     qreal m_lastDistance {0.0};
+
+    const bool m_transformAroundTheFirstFinger = {false};
 };
 
 

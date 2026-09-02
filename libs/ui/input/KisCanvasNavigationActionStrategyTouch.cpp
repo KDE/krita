@@ -14,12 +14,103 @@
 
 #include <input/kis_touch_shortcut.h>
 
+namespace
+{
 
-KisCanvasNavigationActionStrategyTouch::KisCanvasNavigationActionStrategyTouch(Flags flags, const QPointF &startViewPos, KisCanvas2 *canvas)
+template <typename PointFunctor>
+QPointF calcAverageForEachPressedPoint(const QTouchEvent *tevent, PointFunctor pointFunctor)
+{
+    QPointF result;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = tevent->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = tevent->points();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#endif
+
+    auto [sum, count] =
+        std::accumulate(points.begin(),
+                        points.end(),
+                        std::pair<QPointF, int>{},
+                        [&](std::pair<QPointF, int> result, const TouchPoint &point) {
+                            auto allowedStates = KisTouchShortcut::pressedOnlyTouchStates();
+                            auto state = static_cast<Qt::TouchPointState>(point.state());
+                            if (!allowedStates.testFlag(state)) {
+                                return result;
+                            }
+                            result.first += pointFunctor(point);
+                            result.second++;
+
+                            return result;
+                        });
+
+    if (count > 0) {
+        result = sum / qreal(count);
+    }
+
+    return result;
+}
+
+template <typename PointFunctor>
+QPointF calcForTheFirstPressedPoint(const QTouchEvent *tevent, PointFunctor pointFunctor)
+{
+    QPointF result;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = tevent->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = tevent->points();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#endif
+
+    auto testIfPressed = [](const TouchPoint &point) {
+        auto state = static_cast<Qt::TouchPointState>(point.state());
+        return KisTouchShortcut::pressedOnlyTouchStates().testFlag(state);
+    };
+
+    auto it = std::find_if(points.begin(), points.end(), testIfPressed);
+    if (it != points.end()) {
+        result = pointFunctor(*it);
+    }
+
+    return result;
+}
+
+QPointF calculateBasePointFromEvent(const QTouchEvent *tevent, bool aroundTheFirstFinger)
+{
+    auto functor = [] (const auto &point) { return point.position(); };
+
+    if (aroundTheFirstFinger) {
+        return calcForTheFirstPressedPoint(tevent, functor);
+    } else {
+        return calcAverageForEachPressedPoint(tevent, functor);
+    }
+}
+
+bool effectiveTransformAroundTheFirstFinger(KisCanvasNavigationActionStrategy::Flags flags) {
+    using Flag = KisCanvasNavigationActionStrategy::Flag;
+
+    // for pan-mode we force the average calculation mode, for all
+    // the rest the value from the config
+    return !flags.testAnyFlags(Flag::ZoomEnabled | Flag::RotationEnabled)
+        ? false
+        : KisConfig(true).readEntry("touchGestureAroundTheFirstFinger", true);
+}
+
+} // namespace
+
+KisCanvasNavigationActionStrategyTouch::KisCanvasNavigationActionStrategyTouch(Flags flags,
+                                                                               const QTouchEvent *startEvent,
+                                                                               KisCanvas2 *canvas)
     : KisCanvasNavigationActionStrategy(flags)
     , m_canvas(canvas)
+    , m_transformAroundTheFirstFinger(effectiveTransformAroundTheFirstFinger(flags))
 {
-    m_actionStillPoint = canvas->coordinatesConverter()->makeWidgetStillPoint(startViewPos);
+    m_actionStillPoint = canvas->coordinatesConverter()->makeWidgetStillPoint(
+        calculateBasePointFromEvent(startEvent, m_transformAroundTheFirstFinger));
     m_nonRoundedZoom = canvas->viewConverter()->zoom();
 }
 
@@ -52,9 +143,16 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
     if (point0_it == points.end())
         return;
 
-    auto point1_it = std::find_if(point0_it, points.end(), testIfPressed);
-    if (point1_it == points.end())
-        return;
+    auto point1_it = std::find_if(std::next(point0_it), points.end(), testIfPressed);
+    if (point1_it == points.end()) {
+        if (flags().testAnyFlags(ZoomEnabled | RotationEnabled)) {
+            return;
+        } else {
+            // we are doing pan-only, this action can be connected to
+            // a single-finger gesture
+            point1_it = point0_it;
+        }
+    }
 
     const QPointF p0 = point0_it->position();
     const QPointF p1 = point1_it->position();
@@ -73,7 +171,7 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
     bool needsSeparatePanAction = true;
 
     if (flags().testFlag(PanEnabled)) {
-        adjustedStillPoint.second = p0;
+        adjustedStillPoint.second = calculateBasePointFromEvent(tevent, m_transformAroundTheFirstFinger);
     }
 
     if (flags().testFlag(ZoomEnabled)) {
@@ -129,15 +227,14 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
 
     if (flags().testFlag(RotationEnabled)) {
         const qreal currentAngle = std::atan2(slope.y(), slope.x());
+        qreal rotationAngle = 0.0;
 
-        const qreal rotationAngle = [this, currentAngle]() {
-            if (flags().testFlag(RotationDescrete)) {
-                return canvasRotationAngleDescrete(currentAngle, m_rotationData);
-            } else {
-                KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
-                return canvasRotationAngleContinuous(currentAngle, controller->rotation(), m_rotationData);
-            }
-        }();
+        if (flags().testFlag(RotationDescrete)) {
+            rotationAngle = canvasRotationAngleDescrete(currentAngle, m_rotationData);
+        } else {
+            KisCanvasController *controller = static_cast<KisCanvasController *>(m_canvas->canvasController());
+            rotationAngle = canvasRotationAngleContinuous(currentAngle, controller->rotation(), m_rotationData);
+        }
 
         if (!qFuzzyIsNull(rotationAngle)) {
             controller->rotateCanvas(rotationAngle, adjustedStillPoint);
@@ -146,7 +243,9 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
     }
 
     if (needsSeparatePanAction) {
-        const QPoint canvasOffset((adjustedStillPoint.viewPoint() - m_actionStillPoint.viewPoint()).toPoint());
+        const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+        const QPointF currentStillPointViewPosition = converter->documentToWidget(m_actionStillPoint.docPoint());
+        const QPoint canvasOffset((adjustedStillPoint.viewPoint() - currentStillPointViewPosition).toPoint());
         controller->pan(-canvasOffset);
     }
 }

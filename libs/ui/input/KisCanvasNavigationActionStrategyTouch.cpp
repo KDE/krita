@@ -17,6 +17,17 @@
 namespace
 {
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    using TouchPoint = QEventPoint;
+#endif
+
+bool testIfPointPressed(const TouchPoint &point) {
+    auto state = static_cast<Qt::TouchPointState>(point.state());
+    return KisTouchShortcut::pressedOnlyTouchStates().testFlag(state);
+}
+
 template <typename PointFunctor>
 QPointF calcAverageForEachPressedPoint(const QTouchEvent *tevent, PointFunctor pointFunctor)
 {
@@ -24,10 +35,8 @@ QPointF calcAverageForEachPressedPoint(const QTouchEvent *tevent, PointFunctor p
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = tevent->touchPoints();
-    using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = tevent->points();
-    using TouchPoint = QEventPoint;
 #endif
 
     auto [sum, count] =
@@ -35,9 +44,7 @@ QPointF calcAverageForEachPressedPoint(const QTouchEvent *tevent, PointFunctor p
                         points.end(),
                         std::pair<QPointF, int>{},
                         [&](std::pair<QPointF, int> result, const TouchPoint &point) {
-                            auto allowedStates = KisTouchShortcut::pressedOnlyTouchStates();
-                            auto state = static_cast<Qt::TouchPointState>(point.state());
-                            if (!allowedStates.testFlag(state)) {
+                            if (!testIfPointPressed(point)) {
                                 return result;
                             }
                             result.first += pointFunctor(point);
@@ -60,18 +67,11 @@ QPointF calcForTheFirstPressedPoint(const QTouchEvent *tevent, PointFunctor poin
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = tevent->touchPoints();
-    using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = tevent->points();
-    using TouchPoint = QEventPoint;
 #endif
 
-    auto testIfPressed = [](const TouchPoint &point) {
-        auto state = static_cast<Qt::TouchPointState>(point.state());
-        return KisTouchShortcut::pressedOnlyTouchStates().testFlag(state);
-    };
-
-    auto it = std::find_if(points.begin(), points.end(), testIfPressed);
+    auto it = std::find_if(points.begin(), points.end(), &testIfPointPressed);
     if (it != points.end()) {
         result = pointFunctor(*it);
     }
@@ -128,22 +128,15 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto points = tevent->touchPoints();
-    using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = tevent->points();
-    using TouchPoint = QEventPoint;
 #endif
 
-    auto testIfPressed = [](const TouchPoint &point) {
-        auto state = static_cast<Qt::TouchPointState>(point.state());
-        return KisTouchShortcut::pressedOnlyTouchStates().testFlag(state);
-    };
-
-    auto point0_it = std::find_if(points.begin(), points.end(), testIfPressed);
+    auto point0_it = std::find_if(points.begin(), points.end(), &testIfPointPressed);
     if (point0_it == points.end())
         return;
 
-    auto point1_it = std::find_if(std::next(point0_it), points.end(), testIfPressed);
+    auto point1_it = std::find_if(std::next(point0_it), points.end(), &testIfPointPressed);
     if (point1_it == points.end()) {
         if (flags().testAnyFlags(ZoomEnabled | RotationEnabled)) {
             return;

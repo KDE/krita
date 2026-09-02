@@ -8,7 +8,7 @@
 #include "kis_input_type_delegate.h"
 
 #include <kcombobox.h>
-#include <klocalizedstring.h>
+#include <input/kis_shortcut_configuration.h>
 
 class KisInputTypeDelegate::Private
 {
@@ -32,11 +32,11 @@ QWidget *KisInputTypeDelegate::createEditor(QWidget *parent, const QStyleOptionV
 {
     KComboBox *combo = new KComboBox(parent);
     combo->addItems(QStringList()
-                    << i18n("Key Combination")
-                    << i18n("Mouse Button")
-                    << i18n("Mouse Wheel")
-                    << i18n("Touch Gesture")
-                    << i18n("Touchpad Gesture")
+                    << KisShortcutConfiguration::shortcutTypeToText(KisShortcutConfiguration::KeyCombinationType)
+                    << KisShortcutConfiguration::shortcutTypeToText(KisShortcutConfiguration::MouseButtonType)
+                    << KisShortcutConfiguration::shortcutTypeToText(KisShortcutConfiguration::MouseWheelType)
+                    << KisShortcutConfiguration::shortcutTypeToText(KisShortcutConfiguration::TouchGestureType)
+                    << KisShortcutConfiguration::shortcutTypeToText(KisShortcutConfiguration::NativeGestureType)
                    );
     combo->setCurrentIndex(0);
 

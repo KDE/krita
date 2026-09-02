@@ -65,28 +65,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
-            switch (d->shortcuts.at(index.row())->type()) {
-            case KisShortcutConfiguration::KeyCombinationType:
-                return i18nc("Shortcut type", "Key Combination");
-
-            case KisShortcutConfiguration::MouseButtonType:
-                return i18nc("Shortcut type", "Mouse Button");
-
-            case KisShortcutConfiguration::MouseWheelType:
-                return i18nc("Shortcut type", "Mouse Wheel");
-
-            case KisShortcutConfiguration::TouchGestureType:
-                return i18nc("Shortcut type", "Gesture");
-
-            case KisShortcutConfiguration::NativeGestureType:
-                return i18nc("Shortcut type", "Native Gesture");
-
-            default:
-                return i18n("Unknown Input");
-            }
-
-            break;
-
+            return KisShortcutConfiguration::shortcutTypeToText(d->shortcuts.at(index.row())->type());
         case 1: {
             KisShortcutConfiguration *s = d->shortcuts.at(index.row());
             QString output;

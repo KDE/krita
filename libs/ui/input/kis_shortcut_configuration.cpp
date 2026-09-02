@@ -506,3 +506,26 @@ QString KisShortcutConfiguration::touchGestureToText(TouchGestureAction action)
         return i18n("No Gesture");
     }
 }
+
+QString KisShortcutConfiguration::shortcutTypeToText(ShortcutType type)
+{
+    switch (type) {
+    case KisShortcutConfiguration::KeyCombinationType:
+        return i18nc("Shortcut type", "Key Combination");
+
+    case KisShortcutConfiguration::MouseButtonType:
+        return i18nc("Shortcut type", "Mouse Button");
+
+    case KisShortcutConfiguration::MouseWheelType:
+        return i18nc("Shortcut type", "Mouse Wheel");
+
+    case KisShortcutConfiguration::TouchGestureType:
+        return i18nc("Shortcut type", "Touch Gesture");
+
+    case KisShortcutConfiguration::NativeGestureType:
+        return i18nc("Shortcut type", "Touchpad Gesture");
+
+    default:
+        return i18n("Unknown Input");
+    }
+}

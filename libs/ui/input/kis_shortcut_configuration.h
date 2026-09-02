@@ -345,6 +345,7 @@ public:
 
     static QString touchGestureToText(TouchGestureAction action);
     static QString nativeGestureToText(NativeGestureAction action);
+    static QString shortcutTypeToText(ShortcutType type);
 
 private:
     class Private;

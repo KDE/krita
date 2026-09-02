@@ -27,7 +27,7 @@ QPointF calcAverageForEachPressedPoint(const QTouchEvent *tevent, PointFunctor p
     using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = tevent->points();
-    using TouchPoint = QTouchEvent::TouchPoint;
+    using TouchPoint = QEventPoint;
 #endif
 
     auto [sum, count] =
@@ -63,7 +63,7 @@ QPointF calcForTheFirstPressedPoint(const QTouchEvent *tevent, PointFunctor poin
     using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = tevent->points();
-    using TouchPoint = QTouchEvent::TouchPoint;
+    using TouchPoint = QEventPoint;
 #endif
 
     auto testIfPressed = [](const TouchPoint &point) {
@@ -131,7 +131,7 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
     using TouchPoint = QTouchEvent::TouchPoint;
 #else
     auto points = tevent->points();
-    using TouchPoint = QTouchEvent::TouchPoint;
+    using TouchPoint = QEventPoint;
 #endif
 
     auto testIfPressed = [](const TouchPoint &point) {

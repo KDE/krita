@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-29 02:42+0000\n"
+"POT-Creation-Date: 2026-09-02 02:40+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -13649,7 +13649,7 @@ msgstr "&Importar/Exportar"
 msgid "Import"
 msgstr "Importar"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1257
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1263
 #, kde-format
 msgid "&Convert"
 msgstr "&Converter"
@@ -13657,14 +13657,14 @@ msgstr "&Converter"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:249 krita/krita5.xmlgui:320
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Seleccionar"
 
-#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:257 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13685,7 +13685,7 @@ msgstr "Transformar Tod&as as Camadas"
 msgid "S&plit"
 msgstr "&Dividir"
 
-#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1266
+#: krita/krita5.xmlgui:297 plugins/dockers/layerdocker/LayerBox.cpp:1272
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Dividir o Alfa"
@@ -27878,7 +27878,7 @@ msgstr "Propriedades da Camada"
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:48
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
@@ -35668,8 +35668,8 @@ msgstr "Escolher a predefinição do pincel"
 
 #: libs/ui/kis_paintop_box.cc:265
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:208
-#: plugins/dockers/layerdocker/LayerBox.cpp:396
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:52
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
@@ -45118,18 +45118,18 @@ msgstr "Histograma"
 msgid "Undo History"
 msgstr "Histórico de Anulações"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:161
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
 #, kde-format
 msgid "Layers"
 msgstr "Camadas"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:252
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Mo&strar a Máscara de Selecção Global"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:255
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -45138,24 +45138,24 @@ msgstr ""
 "Mostra a selecção global como uma máscara de selecção normal na área de "
 "<b>Camadas</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:323
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Tamanho da Miniatura"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:351
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Indentação da Árvore"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Estilo dos Dados de Mistura"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -45170,43 +45170,43 @@ msgstr ""
 "modificado.\n"
 "Detalhado: Mostra a opacidade e o modo de mistura mesmo que inalterados."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:381
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Nenhum"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Simples"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Balanceado"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Detalhado"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Opacidade do texto dos dados de mistura"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:415
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Incorporado"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:417
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -45217,35 +45217,35 @@ msgstr ""
 "camadas.\n"
 "Se estiver inactivo, mostra debaixo dos nomes das camadas (se tiver espaço)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:429
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Opção de Selecção das Camadas"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Mostrar uma opção para seleccionar/deseleccionar as camadas."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1008
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Máscara de Selecção Rápida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1030
+#: plugins/dockers/layerdocker/LayerBox.cpp:1036
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancelar a Máscara de Selecção Rápida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Comu&tar os Bloqueios && Visibilidade"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1247
-#: plugins/dockers/layerdocker/LayerBox.cpp:1271
+#: plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: plugins/dockers/layerdocker/LayerBox.cpp:1277
 #, kde-format
 msgid "&Add"
 msgstr "&Adicionar"

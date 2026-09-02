@@ -81,7 +81,13 @@ QPointF calcForTheFirstPressedPoint(const QTouchEvent *tevent, PointFunctor poin
 
 QPointF calculateBasePointFromEvent(const QTouchEvent *tevent, bool aroundTheFirstFinger)
 {
-    auto functor = [] (const auto &point) { return point.position(); };
+    auto functor = [] (const auto &point) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        return point.pos();
+#else
+        return point.position();
+#endif
+    };
 
     if (aroundTheFirstFinger) {
         return calcForTheFirstPressedPoint(tevent, functor);
@@ -95,7 +101,7 @@ bool effectiveTransformAroundTheFirstFinger(KisCanvasNavigationActionStrategy::F
 
     // for pan-mode we force the average calculation mode, for all
     // the rest the value from the config
-    return !flags.testAnyFlags(Flag::ZoomEnabled | Flag::RotationEnabled)
+    return !(flags & (Flag::ZoomEnabled | Flag::RotationEnabled))
         ? false
         : KisConfig(true).readEntry("touchGestureAroundTheFirstFinger", true);
 }
@@ -138,7 +144,7 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
 
     auto point1_it = std::find_if(std::next(point0_it), points.end(), &testIfPointPressed);
     if (point1_it == points.end()) {
-        if (flags().testAnyFlags(ZoomEnabled | RotationEnabled)) {
+        if (flags() & (ZoomEnabled | RotationEnabled)) {
             return;
         } else {
             // we are doing pan-only, this action can be connected to
@@ -147,8 +153,13 @@ void KisCanvasNavigationActionStrategyTouch::inputEvent(QEvent* event)
         }
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    const QPointF p0 = point0_it->pos();
+    const QPointF p1 = point1_it->pos();
+#else
     const QPointF p0 = point0_it->position();
     const QPointF p1 = point1_it->position();
+#endif
 
     const QPointF slope = p1 - p0;
 

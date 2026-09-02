@@ -379,12 +379,12 @@ void EXRConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
 {
     typedef Rgba<_T_> Rgba;
 
-    QVector<Rgba> pixels(width * height);
+    std::unique_ptr<Rgba[]> pixels(new Rgba[width * height]);
 
     bool hasAlpha = info.channelMap.contains("A");
 
     Imf::FrameBuffer frameBuffer;
-    Rgba* frameBufferData = (pixels.data()) - xstart - ystart * width;
+    Rgba* frameBufferData = pixels.get() - xstart - ystart * width;
     frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
             Imf::Slice(ptype, (char *) &frameBufferData->r,
                        sizeof(Rgba) * 1,
@@ -406,7 +406,7 @@ void EXRConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
 
     file.setFrameBuffer(frameBuffer);
     file.readPixels(ystart, height + ystart - 1);
-    Rgba *rgba = pixels.data();
+    Rgba *rgba = pixels.get();
 
     QRect paintRegion(xstart, ystart, width, height);
     KisSequentialIterator it(layer->paintDevice(), paintRegion);

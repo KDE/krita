@@ -394,7 +394,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         break;
     }
     case QEvent::ShortcutOverride: {
-        d->debugEvent<QKeyEvent>(event);
+        KisInputEventsEater::debugEvent<QKeyEvent>(event);
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
         Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
@@ -439,7 +439,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         break;
     }
     case QEvent::KeyRelease: {
-        d->debugEvent<QKeyEvent>(event);
+        KisInputEventsEater::debugEvent<QKeyEvent>(event);
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
         if (!keyEvent->isAutoRepeat()) {
@@ -489,7 +489,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         break;
     }
     case QEvent::Wheel: {
-        d->debugEvent<QWheelEvent>(event);
+        KisInputEventsEater::debugEvent<QWheelEvent>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
 
         d->accumulatedScrollDelta += wheelEvent->angleDelta().y();
@@ -539,18 +539,18 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
 #ifndef Q_OS_ANDROID
     case QEvent::Enter:
-        d->debugEvent<QEvent>(event);
+        KisInputEventsEater::debugEvent<QEvent>(event);
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
         d->matcher.enterEvent();
         break;
     case QEvent::Leave:
-        d->debugEvent<QEvent>(event);
+        KisInputEventsEater::debugEvent<QEvent>(event);
         d->matcher.leaveEvent();
         break;
 #endif
     case QEvent::FocusIn:
-        d->debugEvent<QEvent>(event);
+        KisInputEventsEater::debugEvent<QEvent>(event);
         KisAbstractInputAction::setInputManager(this);
 
         d->fixShortcutMatcherModifiersState();
@@ -558,7 +558,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         break;
 
     case QEvent::FocusOut: {
-        d->debugEvent<QEvent>(event);
+        KisInputEventsEater::debugEvent<QEvent>(event);
         KisAbstractInputAction::setInputManager(this);
 
         QPointF currentLocalPos =

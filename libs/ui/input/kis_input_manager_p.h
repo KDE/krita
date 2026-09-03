@@ -8,35 +8,20 @@
 #include <QList>
 #include <QPointer>
 #include <QEvent>
-#include <QTouchEvent>
 #include <QScopedPointer>
-#include <QQueue>
 
+#include "KisInputEventsEater.h"
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"
 #include "kis_shortcut_configuration.h"
 #include "kis_canvas2.h"
 #include "kis_tool_proxy.h"
 #include "kis_signal_compressor.h"
-#include "input/kis_tablet_debugger.h"
 #include "kis_timed_signal_threshold.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_latency_tracker.h"
 
 class KisToolInvocationAction;
-
-enum EventBlockingReason {
-    NotBlocked = 0x0,
-    BlockedByTabletProximity = 0x01,
-    BlockedByTabletHover = 0x02,
-    BlockedByTabletPress = 0x04,
-    BlockedByTouchPress = 0x08,
-    BlockedByNextPressSuppression = 0x10,
-    BlockedByButtonsWorkaround = 0x20,
-    BlockedBySynthetic = 0x40
-};
-Q_DECLARE_FLAGS(EventBlockingReasons, EventBlockingReason)
-Q_DECLARE_OPERATORS_FOR_FLAGS(EventBlockingReasons)
 
 class KisInputManager::Private
 {
@@ -85,42 +70,6 @@ public:
     void setMaskSyntheticEvents(bool value);
     void resetCompressor();
 
-    template <class Event>
-    static void debugEvent(QEvent *event, EventBlockingReasons reasons = NotBlocked)
-    {
-        if (!KisTabletDebugger::instance()->debugEnabled()) return;
-
-        QString reasonsString;
-
-        if (reasons.testFlag(BlockedByTabletProximity)) {
-            reasonsString += "Prx";
-        }
-
-        if (reasons.testFlag(BlockedByTabletHover)) {
-            reasonsString += "Hov";
-        }
-
-        if (reasons.testFlag(BlockedByTabletPress)) {
-            reasonsString += "Prs";
-        }
-
-        if (reasons.testFlag(BlockedByNextPressSuppression)) {
-            reasonsString += "Nxt";
-        }
-
-        if (reasons.testFlag(BlockedByTouchPress)) {
-            reasonsString += "Tch";
-        }
-
-        if (reasons.testFlag(BlockedBySynthetic)) {
-            reasonsString += "Syn";
-        }
-
-        QString msg1 = QString("[%1] ").arg(reasonsString, 15);
-        Event *specificEvent = static_cast<Event*>(event);
-        dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
-    }
-
     class ProximityNotifier : public QObject
     {
     public:
@@ -150,29 +99,7 @@ public:
     };
     CanvasSwitcher canvasSwitcher;
 
-    struct EventEater
-    {
-        EventEater();
-
-        bool eventFilter(QObject* target, QEvent* event);
-
-        void notifyTabletEnterProximity();
-        void notifyTabletLeaveProximity();
-
-        // On Windows, we sometimes receive mouse events very late, so watch & wait.
-        void eatOneMousePress();
-
-        bool eatOneMousePressEvent{false};  // Eat a single mouse press event
-        bool activateSecondaryButtonsWorkaround{false}; // Use mouse events for right- and middle-clicks
-
-        bool tabletIsInProximity {false};
-        bool tabletIsHovering {false};
-        bool tabletIsPressed {false};
-        bool touchIsActive {false};
-
-        void debugEaterStateTransition(const QLatin1String &stateName, bool newValue, QEvent::Type eventType, const QLatin1String &comment = QLatin1String());
-    };
-    EventEater eventEater;
+    KisInputEventsEater eventEater;
 
     int accumulatedScrollDelta = 0;
 

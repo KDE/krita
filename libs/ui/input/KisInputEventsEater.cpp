@@ -110,7 +110,32 @@ bool KisInputEventsEater::eventFilter(QObject* target, QEvent* event )
                 tabletIsPressed = newTabletIsPressed;
                 debugEaterStateTransition("tabletIsPressed"_L1, newTabletIsPressed, event->type());
             }
+
+#ifdef KRITA_ENABLE_MISSING_PROXIMITY_ENTER_WORKAROUND
+            if (!tabletIsInProximity && !missingTabletProximityEventsWorkaround) {
+                warnInputEater << "WARNING: received a tablet event while the tablet is not in proximity! Activating a workaround...";
+                missingTabletProximityEventsWorkaround = MissingTabletProximityEnterWorkaround();
+            } else if (tabletIsInProximity && missingTabletProximityEventsWorkaround) {
+                warnInputEater << "WARNING: received a delayed tablet proximity event, disabling the workaround...";
+                missingTabletProximityEventsWorkaround = std::nullopt;
+            } else if (missingTabletProximityEventsWorkaround) {
+                missingTabletProximityEventsWorkaround->notifyTabletEventArrived();
+            }
+#endif /* KRITA_ENABLE_MISSING_PROXIMITY_ENTER_WORKAROUND */
         }
+
+#ifdef KRITA_ENABLE_MISSING_PROXIMITY_ENTER_WORKAROUND
+        if (missingTabletProximityEventsWorkaround && !tabletIsPressed && isMouseEventType(event->type())) {
+            missingTabletProximityEventsWorkaround->notifyMouseEventArrived();
+            if (missingTabletProximityEventsWorkaround->shouldForgetAboutTabletInProximity()) {
+                if (tabletIsHovering) {
+                    tabletIsHovering = false;
+                    debugEaterStateTransition("tabletIsHovering"_L1, false, event->type(), "missing proximity workaround"_L1);
+                }
+                missingTabletProximityEventsWorkaround = std::nullopt;
+            }
+        }
+#endif /* KRITA_ENABLE_MISSING_PROXIMITY_ENTER_WORKAROUND */
 
         if (event->type() == QEvent::FocusOut ||
             event->type() == QEvent::Leave ||
@@ -135,6 +160,10 @@ bool KisInputEventsEater::eventFilter(QObject* target, QEvent* event )
                 tabletIsPressed = false;
                 debugEaterStateTransition("tabletIsPressed"_L1, false, event->type());
             }
+
+#ifdef KRITA_ENABLE_MISSING_PROXIMITY_ENTER_WORKAROUND
+            missingTabletProximityEventsWorkaround = std::nullopt;
+#endif /* KRITA_ENABLE_MISSING_PROXIMITY_ENTER_WORKAROUND */
         }
 
         // also proximity-leave in a corresponding function...

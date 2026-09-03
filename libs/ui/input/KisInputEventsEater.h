@@ -12,21 +12,21 @@
 
 class KisToolInvocationAction;
 
-enum EventBlockingReason {
-    NotBlocked = 0x0,
-    BlockedByTabletProximity = 0x01,
-    BlockedByTabletHover = 0x02,
-    BlockedByTabletPress = 0x04,
-    BlockedByTouchPress = 0x08,
-    BlockedByNextPressSuppression = 0x10,
-    BlockedByButtonsWorkaround = 0x20,
-    BlockedBySynthetic = 0x40
-};
-Q_DECLARE_FLAGS(EventBlockingReasons, EventBlockingReason)
-Q_DECLARE_OPERATORS_FOR_FLAGS(EventBlockingReasons)
 
 class KRITAUI_EXPORT KisInputEventsEater
 {
+public:
+    enum EventBlockingReason {
+        NotBlocked = 0x0,
+        BlockedByTabletProximity = 0x01,
+        BlockedByTabletHover = 0x02,
+        BlockedByTabletPress = 0x04,
+        BlockedByTouchPress = 0x08,
+        BlockedByNextPressSuppression = 0x10,
+        BlockedByButtonsWorkaround = 0x20,
+        BlockedBySynthetic = 0x40
+    };
+    Q_DECLARE_FLAGS(EventBlockingReasons, EventBlockingReason)
 public:
     KisInputEventsEater();
 
@@ -91,3 +91,5 @@ private:
                                    QEvent::Type eventType,
                                    const QLatin1String &comment = QLatin1String());
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisInputEventsEater::EventBlockingReasons)

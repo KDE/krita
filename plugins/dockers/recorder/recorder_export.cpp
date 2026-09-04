@@ -5,6 +5,7 @@
  */
 
 #include "recorder_export.h"
+#include "recorder_export_preprocessor.h"
 #include "ui_recorder_export.h"
 #include "recorder_export_config.h"
 #include "recorder_export_settings.h"
@@ -67,6 +68,7 @@ public:
     QScopedPointer<Ui::RecorderExport> ui;
     RecorderExportSettings *settings;
 
+    QScopedPointer<RecorderExportPreprocessor> preprocessor;
     QScopedPointer<Exporter> exporter;
     RecorderDirectoryCleaner *cleaner = nullptr;
 
@@ -79,6 +81,7 @@ public:
         : q(q_ptr)
         , ui(new Ui::RecorderExport)
         , settings(q_ptr->settings)
+        , preprocessor(new RecorderExportPreprocessor(settings->inputDirectory, settings->format))
     {
     }
 
@@ -282,6 +285,9 @@ public:
     void startExport()
     {
         Q_ASSERT(exporter == nullptr);
+
+        preprocessor->updateSettings(settings->inputDirectory, settings->format);
+        preprocessor->doPreprocessing();
 
 #ifndef Q_OS_ANDROID
         // We don't do this again on Android, it's mind-bogglingly slow.

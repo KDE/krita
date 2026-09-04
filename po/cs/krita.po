@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 02:40+0000\n"
-"PO-Revision-Date: 2026-08-24 22:51+0200\n"
+"PO-Revision-Date: 2026-09-03 22:44+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -33684,7 +33684,7 @@ msgstr ""
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr ""
+msgstr "Barevný vzorkovník"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:91
@@ -37470,7 +37470,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
-msgstr ""
+msgstr "Stroj štětce MyPaint není v tomto barevném prostoru dostupný"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
@@ -37497,6 +37497,8 @@ msgid ""
 "X: %1 px\n"
 "Y: %2 px"
 msgstr ""
+"X: %1 px\n"
+"Y: %2 px"
 
 #: libs/ui/tool/kis_tool_utils.cpp:213 libs/ui/tool/kis_tool_utils.cpp:225
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
@@ -38915,7 +38917,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr ""
+msgstr "Zastavit růst na nejtmavších a/nebo nejneprůhlednějších pixelech"
 
 #: libs/ui/widgets/kis_selection_options.cc:250
 #, kde-format
@@ -41413,7 +41415,7 @@ msgstr "Asistenční nástroj"
 #, kde-format
 msgctxt "action"
 msgid "Tool Shortcuts"
-msgstr ""
+msgstr "Zkratky nástroje"
 
 #. i18n: context: text @ Action (KisAssistantTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisAssistantTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -42294,7 +42296,7 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:506
 #, kde-format
 msgid "Bezier curve interpolation."
-msgstr ""
+msgstr "Interpolace Beziérovy křivky."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:513
 #, kde-format
@@ -52848,7 +52850,7 @@ msgstr "Spirála"
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
-msgstr ""
+msgstr "Obrácená spirála"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
 #: plugins/tools/basictools/kis_tool_gradient.cc:252
@@ -52876,7 +52878,7 @@ msgstr "Dopředu"
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
-msgstr ""
+msgstr "Střídavý"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
 #, kde-format
@@ -63534,22 +63536,22 @@ msgstr "Tah štětcem volnou rukou"
 #: plugins/tools/basictools/kis_tool_brush.cc:216
 #, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr ""
+msgstr "Počet vzorků na maximální rychlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:226
 #, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr ""
+msgstr "Počet vzorků na minimální rychlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:236
 #, kde-format
 msgid "Distance at Max Speed:"
-msgstr ""
+msgstr "Vzdálenost na maximální rychlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:246
 #, kde-format
 msgid "Distance at Min Speed:"
-msgstr ""
+msgstr "Vzdálenost na minimální rychlosti:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
@@ -63573,7 +63575,7 @@ msgstr "Vážené"
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
-msgstr ""
+msgstr "Stabilizátor"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:419
 #, kde-format
@@ -63594,12 +63596,12 @@ msgstr "Prodleva:"
 #: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
-msgstr ""
+msgstr "Zpozdit tah štětcem, aby byla linka plynulejší"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:495
 #, kde-format
 msgid "Radius where the brush is blocked"
-msgstr ""
+msgstr "Poloměr, na kterém je štětec blokovaný"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:502
 #, kde-format
@@ -63609,7 +63611,7 @@ msgstr "Dokončit čáru:"
 #: plugins/tools/basictools/kis_tool_brush.cc:514
 #, kde-format
 msgid "Stabilize Sensors:"
-msgstr ""
+msgstr "Stabilizovat senzory:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:522
 #, kde-format
@@ -63628,37 +63630,39 @@ msgid ""
 "Scalable distance takes zoom level into account and makes the distance be "
 "visually constant whatever zoom level is chosen"
 msgstr ""
+"Škálovatelná vzdálenost počítá s úrovní přiblížení a činí vzdálenost "
+"vizuálně konstantní bez ohledu na vybranou úroveň přiblížení"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:539
 #, kde-format
 msgid "Scalable Distance"
-msgstr ""
+msgstr "Škálovatelná vzdálenost"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:554
 #: plugins/tools/basictools/kis_tool_line.cc:111
 #, kde-format
 msgid "Snap to Assistants"
-msgstr ""
+msgstr "Přichytávat k asistentům"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:556
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
-msgstr ""
+msgstr "Před prací s tímto nástrojem potřebujete přidat asistenty."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:561
 #, kde-format
 msgid "Assistant Magnetism"
-msgstr ""
+msgstr "Asistent magnetismu"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:567
 #, kde-format
 msgid "Magnetism:"
-msgstr ""
+msgstr "Magnetismus:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:570
 #, kde-format
 msgid "Snap to Single Line"
-msgstr ""
+msgstr "Přichytit k jediné čáře"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:573
 #, kde-format
@@ -63667,18 +63671,20 @@ msgid ""
 "Make it only snap to a single assistant line, prevents snapping mess while "
 "using the infinite assistants."
 msgstr ""
+"Donutit se přichytávat pouze k jedné asistenční čáře, předchází "
+"přichytávacímu zmatku při používání nekonečných asistentů."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:578
 #: plugins/tools/basictools/kis_tool_line.cc:114
 #, kde-format
 msgid "Snap Eraser"
-msgstr ""
+msgstr "Přichytávat gumu"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:581
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr ""
+msgstr "Povolit přichytávání při používání gumy"
 
 #: plugins/tools/basictools/kis_tool_brush.h:146
 #, kde-format
@@ -63688,7 +63694,7 @@ msgstr "Nástroj pro tah štětcem volnou rukou"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr ""
+msgstr "Nástroj barevného vzorkovníku"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -63704,7 +63710,7 @@ msgstr "Nástroj pro elipsy"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
 #, kde-format
 msgid "You cannot use this tool with the selected layer type"
-msgstr ""
+msgstr "Tento nástroj nemůžete na vybraném typu vrstvy použít."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:252
 msgctxt "(qtundo-format)"
@@ -63717,7 +63723,7 @@ msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr ""
+msgstr "Měřítko: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
@@ -63737,13 +63743,13 @@ msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr ""
+msgstr "Rozptyl: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr ""
+msgstr "Uzavřená mezera: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -63751,7 +63757,7 @@ msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr ""
+msgstr "Použít výběr jako ohraničení"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:595
 #, kde-format
@@ -63763,13 +63769,13 @@ msgstr "Zvětšit: "
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
-msgstr ""
+msgstr "Rozčepýřit: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
 #, kde-format
 msgid "Use active layer"
-msgstr ""
+msgstr "Použít aktivní vrstvu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -63780,35 +63786,35 @@ msgstr "Obnovit"
 #: plugins/tools/basictools/kis_tool_fill.cc:640
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr ""
+msgstr "Vyplnit aktivní výběr nebo celé plátno"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
 #, kde-format
 msgid "Fill a contiguous region"
-msgstr ""
+msgstr "Vyplnit přilehlou oblast"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:642
 #, kde-format
 msgid "Fill all regions of a similar color"
-msgstr ""
+msgstr "Vyplnit všechny oblasti podobnou barvou"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
 #, kde-format
 msgid "Set the scale of the pattern"
-msgstr ""
+msgstr "Nastavit měřítko vzorku"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:560
 #, kde-format
 msgid "Set the rotation of the pattern"
-msgstr ""
+msgstr "Nastavit otočení vzorku"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
-msgstr ""
+msgstr "Nastavit vlastní volby mísení namísto použití těch u štětce"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:650
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:562
@@ -63825,18 +63831,18 @@ msgstr "Nastavit vlastní režim mísení výplně"
 #: plugins/tools/basictools/kis_tool_fill.cc:653
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
-msgstr ""
+msgstr "Vyplnit oblasti podobnou barvou z kliknuté oblasti"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr ""
+msgstr "Vyplnit všechny oblasti až po zadanou barvu ohraničení"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:655
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Boundary color"
-msgstr ""
+msgstr "Barva ohraničení"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
@@ -63845,6 +63851,8 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
+"Nastavit toleranci barevné podobnosti výplně. Zvýšení prahu zvýší rozsah "
+"podobných barev k vyplnění."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
@@ -63853,12 +63861,14 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
+"Nastavit rozsah neprůhledné části výplně. Snížením rozptylu snížíte sytost "
+"oblastí výplně v závislosti na barevné podobnosti."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr ""
+msgstr "Uzavírání mezer v čarách až do nastavené hodnoty"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:659
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
@@ -63867,36 +63877,38 @@ msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
+"Nastavit zda by kontura aktivního výběru měla být brána jako ohraničení při "
+"vyplňování oblasti"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:661
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:570
 #, kde-format
 msgid "Smooths the edges of the fill"
-msgstr ""
+msgstr "Vyhlazuje hrany výplně"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:662
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr ""
+msgstr "Roztáhnout nebo smrštit výplň o zadanou hodnotu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:664
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:573
 #, kde-format
 msgid "Blur the fill by the set amount"
-msgstr ""
+msgstr "Rozmazat výplň o zadanou hodnotu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:666
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:575
 #, kde-format
 msgid "Fill regions found from the active layer"
-msgstr ""
+msgstr "Vyplnit oblasti nalezené z aktivní vrstvy"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:667
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:576
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr ""
+msgstr "Vyplnit oblasti nalezené ze sloučení všech vrstev"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:577
@@ -63904,6 +63916,7 @@ msgstr ""
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
 msgstr ""
+"Vyplnit oblasti nalezené ze sloučení všech vrstev s zadanými barevnými štítky"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
@@ -63912,16 +63925,18 @@ msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
+"Zahrnuje aktivní vrstvu v oblastech nalezených při sloučení vrstev podle "
+"zadaných barevných štítků"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format
 msgid "Dragging will not fill different regions"
-msgstr ""
+msgstr "Potažení nevyplní odlišné oblasti"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr ""
+msgstr "Potažení vyplní oblasti jakékoliv barvy"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:673
 #, kde-format
@@ -63929,24 +63944,26 @@ msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
+"Potažení vyplní pouze oblasti podobné barvy z úvodní oblasti (užitečné pro "
+"umění vyplňování čar)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:675
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:580
 #, kde-format
 msgid "Reset the options to their default values"
-msgstr ""
+msgstr "Obnovit možnosti na jejich výchozí hodnoty"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:684
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr ""
+msgstr "Vyplňovací režim"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:691
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr ""
+msgstr "Zdroj vyplňování"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:710
 #, kde-format
@@ -63958,7 +63975,7 @@ msgstr "Odkaz"
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr ""
+msgstr "Rozsah výplně"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:732
 #, kde-format
@@ -63970,7 +63987,7 @@ msgstr "Přizpůsobení"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr ""
+msgstr "Režim vyplňování potažením"
 
 #: plugins/tools/basictools/kis_tool_fill.h:242
 #, kde-format
@@ -63992,7 +64009,7 @@ msgstr "Opačné"
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
-msgstr ""
+msgstr "Kolísat"
 
 #: plugins/tools/basictools/kis_tool_gradient.h:106
 #, kde-format
@@ -64017,7 +64034,7 @@ msgstr "Zobrazit náhled"
 #: plugins/tools/basictools/kis_tool_line.cc:108
 #, kde-format
 msgid "Show Guideline"
-msgstr ""
+msgstr "Zobrazit pomocnou čáru"
 
 #: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
@@ -64030,6 +64047,8 @@ msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
 "+Drag will force you to draw straight lines"
 msgstr ""
+"Alt+potažení přesune původ v součanosti zobrazené čáry okolo, Shift+potažení "
+"vás donutí kreslit přímé čáry"
 
 #: plugins/tools/basictools/kis_tool_line.h:116
 #, kde-format
@@ -64067,7 +64086,7 @@ msgstr "X: %1 px, Y: %2 px"
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
-msgstr ""
+msgstr "Vybraná oblast nemá žádné pixely"
 
 #: plugins/tools/basictools/kis_tool_move.h:183
 #, kde-format
@@ -64098,23 +64117,24 @@ msgstr "Posunout"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgid "Snowflake"
-msgstr ""
+msgstr "Sněhová vločka"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Copy Translate"
-msgstr ""
+msgstr "Zkopírovat překlad"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Copy Translate at Intervals"
-msgstr ""
+msgstr "Zkopírovat překlad v intervalech"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:565
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"Víceštětcový nástroj nepodporuje více než %1 štětců; použijte větší interval."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:99
 #, kde-format
@@ -64144,7 +64164,7 @@ msgstr "Nakreslit cestu od ruky"
 #: plugins/tools/basictools/kis_tool_pencil.h:76
 #, kde-format
 msgid "Freehand Path Tool"
-msgstr ""
+msgstr "Nástroj cesty volnou rukou"
 
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
@@ -64173,6 +64193,8 @@ msgstr "Nástroj pro Beziérovy křivky"
 msgctxt "action"
 msgid "Bezier Curve Tool. Shift-mouseclick or double-click ends the curve."
 msgstr ""
+"Nástroj pro Beziérovy křivky: Shift+kliknutí myši nebo dvojkliknutí kreslení "
+"ukončí."
 
 #. i18n: context: text @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -64186,12 +64208,12 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Freehand Path Tool"
-msgstr ""
+msgstr "Nástroj cesty volnou rukou"
 
 #: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Move Selection"
-msgstr ""
+msgstr "Přesunout výběr"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:67
@@ -64200,6 +64222,8 @@ msgid ""
 "<nobr>Checking this box will add a new color swatch</nobr> to a palette each "
 "time you sample a color."
 msgstr ""
+"<nobr>Zatržením tohoto políčka přidáte nový vzorník barev</nobr> do palety "
+"pokaždé, když vzorkujete barvu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:70
@@ -64222,6 +64246,9 @@ msgid ""
 "mixed with your current brush color. A full blending value samples colors "
 "completely, ignoring brush color."
 msgstr ""
+"<nobr>Ovládání směšování určuje procenta barvy, která je vzorkována</nobr> a "
+"smíšena se současnou barvou štětce. Plná hodnota směšování barev vybarvuje "
+"úplně a ignoruje barvu štětce."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:133
@@ -64230,6 +64257,8 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
+"<nobr>Určuje zda barevní vzorkovník bude vzorkovat</nobr> barvy ze všech "
+"viditelných vrstev nebo pouze ze současně vybrané vrstvy."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
@@ -64241,7 +64270,7 @@ msgstr "Vzorkovat všechny viditelné vrstvy"
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
 #, kde-format
 msgid "Sample Current Layer"
-msgstr ""
+msgstr "Vzorkovat současnou vrstvu"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:170
@@ -64256,6 +64285,8 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
+"<nobr>Poloměr ovládá oblast vzorkování barevného vzorkovníku.</nobr> Barvy "
+"pixelů s tímto poloměrem jsou smíšeny dohromady."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:207
@@ -64263,6 +64294,7 @@ msgstr ""
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
 msgstr ""
+"Zobrazí barevné informace podle kanálů níže v procentech namísto bajtů."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:210
@@ -64290,12 +64322,14 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
+"<nobr>Ovládá zda barevní vzorkovník aktualizuje</nobr> současné popředí nebo "
+"ne."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:251
 #, kde-format
 msgid "Update color"
-msgstr ""
+msgstr "Aktualizovat barvu"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbPreviewStyle)
@@ -64303,7 +64337,7 @@ msgstr ""
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "Styl vyskakovacích bublin na plátně v porovnání vzorkovaných barev"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:42
@@ -64318,6 +64352,8 @@ msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
 "masks. Shortcut: ctrl-click."
 msgstr ""
+"Přesunout vrstvu, která je v současnosti vybrána v panelu vrstev, s jejími "
+"maskami. Zkratka: ctrl-kliknutí."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:51
@@ -64329,7 +64365,7 @@ msgstr "Posu&nout aktuální vrstvu"
 #: plugins/tools/basictools/wdgmovetool.ui:61
 #, kde-format
 msgid "Move the first layer with visible content at the place where you click."
-msgstr ""
+msgstr "Přesunout první vrstvu s viditelným obsahem na místo, kam kliknete."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:64
@@ -64344,24 +64380,27 @@ msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
+"Přesunout skupinu obsahující první vrstvu s viditelným obsahem. Zkratka: "
+"ctrl-kliknutí."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77
 #, kde-format
 msgid "Move &the whole group"
-msgstr ""
+msgstr "Přesunout &celou skupinu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:93
 #, kde-format
 msgid "Move Shortcut"
-msgstr ""
+msgstr "Zkratka přesunu"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveScale)
 #: plugins/tools/basictools/wdgmovetool.ui:105
 #, kde-format
 msgid "When holding shift, move keyboard shortcuts scale up by this amount."
 msgstr ""
+"Když podržíte shift, klávesové zkratky pohybu se navýší o tuto hodnotu."
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:127
@@ -64373,7 +64412,7 @@ msgstr "Násobič:"
 #: plugins/tools/basictools/wdgmovetool.ui:143
 #, kde-format
 msgid "Number of units to move after move shortcut keypress."
-msgstr ""
+msgstr "Počet jednotek k přesunu po stisknutí klávesové zkratky na přesun."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:165
@@ -64430,7 +64469,7 @@ msgstr "&y:"
 #: plugins/tools/basictools/wdgmovetool.ui:322
 #, kde-format
 msgid "Show coordinates on canvas"
-msgstr ""
+msgstr "Zobrazovat na plátně souřadnice"
 
 #. i18n: ectx: property (text), widget (QLabel, brushesLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
@@ -64442,7 +64481,7 @@ msgstr "Štětce:"
 #: plugins/tools/basictools/wdgmultihandtool.ui:74
 #, kde-format
 msgid "Subbrushes:"
-msgstr ""
+msgstr "Podštětce:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87
@@ -64492,13 +64531,13 @@ msgstr "Odstranit vše"
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
 #, kde-format
 msgid "Interval X:"
-msgstr ""
+msgstr "Interval X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
 #, kde-format
 msgid "Interval Y:"
-msgstr ""
+msgstr "Interval Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
 msgctxt "(qtundo-format)"
@@ -65142,7 +65181,7 @@ msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr ""
+msgstr "Rozptyl: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, kde-format
@@ -65302,7 +65341,7 @@ msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr ""
+msgstr "Rozptyl: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -66662,7 +66701,7 @@ msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr ""
+msgstr "Rozptyl: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format

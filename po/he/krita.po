@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-02 00:41+0000\n"
-"PO-Revision-Date: 2026-09-02 09:26+0300\n"
+"POT-Creation-Date: 2026-09-05 00:43+0000\n"
+"PO-Revision-Date: 2026-09-04 10:55+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -44180,7 +44180,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:109
+#: plugins/dockers/recorder/recorder_export.cpp:112
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -44188,32 +44188,32 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[לא נמצא]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:110
+#: plugins/dockers/recorder/recorder_export.cpp:113
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
 "its location manually"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:231
+#: plugins/dockers/recorder/recorder_export.cpp:234
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:321
+#: plugins/dockers/recorder/recorder_export.cpp:327
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "המייצא מופעל…"
 
-#: plugins/dockers/recorder/recorder_export.cpp:440
+#: plugins/dockers/recorder/recorder_export.cpp:446
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:530
+#: plugins/dockers/recorder/recorder_export.cpp:536
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -44221,62 +44221,62 @@ msgstr ""
 msgid "Export"
 msgstr "ייצוא"
 
-#: plugins/dockers/recorder/recorder_export.cpp:544
+#: plugins/dockers/recorder/recorder_export.cpp:550
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "אין תמוניות לייצוא"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:554
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "פרטי הקלטה"
 
-#: plugins/dockers/recorder/recorder_export.cpp:551
+#: plugins/dockers/recorder/recorder_export.cpp:557
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "פיקסלים"
 
-#: plugins/dockers/recorder/recorder_export.cpp:553
+#: plugins/dockers/recorder/recorder_export.cpp:559
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "תמוניות"
 
-#: plugins/dockers/recorder/recorder_export.cpp:613
+#: plugins/dockers/recorder/recorder_export.cpp:619
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "אין תמוניות לעיון."
 
-#: plugins/dockers/recorder/recorder_export.cpp:725
+#: plugins/dockers/recorder/recorder_export.cpp:731
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "בחירת קובץ הרצה של FFmpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:805
+#: plugins/dockers/recorder/recorder_export.cpp:811
 #, kde-format
 msgid "No frames to export."
 msgstr "אין תמוניות לייצוא."
 
-#: plugins/dockers/recorder/recorder_export.cpp:819
+#: plugins/dockers/recorder/recorder_export.cpp:825
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "הסרטון כבר קיים. לשכתב אותו?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:847
+#: plugins/dockers/recorder/recorder_export.cpp:853
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:862
+#: plugins/dockers/recorder/recorder_export.cpp:868
 #, kde-format
 msgid "Export failed. Error message:"
 msgstr "הייצוא נכשל. הודעת שגיאה:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:885
+#: plugins/dockers/recorder/recorder_export.cpp:891
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -44286,7 +44286,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:892
+#: plugins/dockers/recorder/recorder_export.cpp:898
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -63721,7 +63721,7 @@ msgstr "עשרה סקריפטים"
 
 #: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
-msgstr ""
+msgstr "הקצאת עשרה שקריפטים לעשרה מקשי קיצור."
 
 #: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
@@ -64189,7 +64189,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_brush.cc:502
 #, kde-format
 msgid "Finish line:"
-msgstr ""
+msgstr "קו הסיום:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:514
 #, kde-format
@@ -67262,22 +67262,22 @@ msgid "All, excluding a specific color or transparency"
 msgstr "הכול, למעט צבע מסוים או שקיפות"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:927
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "מלא עם צבע הקידמה"
+msgstr "אלו שמוקפים בצבע מסוים"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:930
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "&צבע רקע"
+msgstr "אלו שמוקפים בשקיפות"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:933
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "&צבע רקע"
+msgstr "אלו שמוקפים בצבע מסוים או שקיפות"
 
 #: plugins/tools/tool_knife/CutThroughShapeStrategy.cpp:256
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:219

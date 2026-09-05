@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-02 00:41+0000\n"
-"PO-Revision-Date: 2026-08-30 10:26+0200\n"
+"POT-Creation-Date: 2026-09-05 00:43+0000\n"
+"PO-Revision-Date: 2026-09-04 11:16+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7260,9 +7260,7 @@ msgstr "Poravnaj desno"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
 msgstr "Razdruži like"
@@ -7276,7 +7274,7 @@ msgstr "Razdruži like"
 #, kde-format
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
+msgstr "»Razdruži like v okviru orodja za vektorsko interakcijo«"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7330,27 +7328,21 @@ msgstr "Usredini navpično"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
 msgstr "Združi like"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Združi"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "Združi"
@@ -12083,12 +12075,10 @@ msgstr "Prilepi plast iz odložišča"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Skupina plasti"
+msgstr "Združi plasti"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12106,12 +12096,10 @@ msgstr "Hitro združi"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "Razdruži like"
+msgstr "Razdruži plasti"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -45045,7 +45033,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "Izvozi video, posnet v časovnih presledkih …"
 
-#: plugins/dockers/recorder/recorder_export.cpp:109
+#: plugins/dockers/recorder/recorder_export.cpp:112
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -45053,7 +45041,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[NI MOGOČE NAJTI]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:110
+#: plugins/dockers/recorder/recorder_export.cpp:113
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -45062,25 +45050,25 @@ msgstr ""
 "Mesta izvršilne datoteke FFMpeg ni mogoče zaznati; prosimo, namestite jo ali "
 "izberite njeno mesto ročno."
 
-#: plugins/dockers/recorder/recorder_export.cpp:231
+#: plugins/dockers/recorder/recorder_export.cpp:234
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "Ali želite ustaviti kodiranje videa, posnetega v časovnih presledkih?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:321
+#: plugins/dockers/recorder/recorder_export.cpp:327
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "Zagon izvoznika ..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:440
+#: plugins/dockers/recorder/recorder_export.cpp:446
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Izvozi video, posnet v časovnih presledkih, kot"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:530
+#: plugins/dockers/recorder/recorder_export.cpp:536
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45088,63 +45076,63 @@ msgstr "Izvozi video, posnet v časovnih presledkih, kot"
 msgid "Export"
 msgstr "Izvozi"
 
-#: plugins/dockers/recorder/recorder_export.cpp:544
+#: plugins/dockers/recorder/recorder_export.cpp:550
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Ni sličic za izvoz"
 
-#: plugins/dockers/recorder/recorder_export.cpp:548
+#: plugins/dockers/recorder/recorder_export.cpp:554
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Podatki o posnetku"
 
-#: plugins/dockers/recorder/recorder_export.cpp:551
+#: plugins/dockers/recorder/recorder_export.cpp:557
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "sl. točk"
 
-#: plugins/dockers/recorder/recorder_export.cpp:553
+#: plugins/dockers/recorder/recorder_export.cpp:559
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "sličic"
 
-#: plugins/dockers/recorder/recorder_export.cpp:613
+#: plugins/dockers/recorder/recorder_export.cpp:619
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Ni sličic za brskanje."
 
-#: plugins/dockers/recorder/recorder_export.cpp:725
+#: plugins/dockers/recorder/recorder_export.cpp:731
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Izberite izvršljivo datoteko FFMpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:805
+#: plugins/dockers/recorder/recorder_export.cpp:811
 #, kde-format
 msgid "No frames to export."
 msgstr "Ni sličic za izvoz."
 
-#: plugins/dockers/recorder/recorder_export.cpp:819
+#: plugins/dockers/recorder/recorder_export.cpp:825
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr ""
 "Datoteka videoposnetka s tem imenom že obstaja. Ali jo želite prepisati?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:847
+#: plugins/dockers/recorder/recorder_export.cpp:853
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "Video, posnet v časovnih presledkih, se kodira …"
 
-#: plugins/dockers/recorder/recorder_export.cpp:862
+#: plugins/dockers/recorder/recorder_export.cpp:868
 #, kde-format
 msgid "Export failed. Error message:"
 msgstr "Izvoz je spodletel. Sporočilo o napaki:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:885
+#: plugins/dockers/recorder/recorder_export.cpp:891
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45159,7 +45147,7 @@ msgstr ""
 "\n"
 "Ali želite nadaljevati?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:892
+#: plugins/dockers/recorder/recorder_export.cpp:898
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -70531,7 +70519,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "Ungroup"
-#~ msgstr "Razdruži"

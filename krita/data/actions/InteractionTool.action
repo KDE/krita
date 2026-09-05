@@ -23,14 +23,14 @@
       <text>Align Right</text>
     </Action>
     <Action name="object_ungroup">
-      <iconText>Ungroup shape(s)</iconText>
+      <iconText>Ungroup shapes</iconText>
       <shortcut></shortcut>
-      <toolTip>"Ungroups shape(s) in the context of Vector Interaction Tool"</toolTip>
+      <toolTip>Remove the selected shape group</toolTip>
       <icon>object-ungroup-calligra</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
-      <text>"Ungroups shape(s) in the context of Vector Interaction Tool"</text>
+      <text>Ungroup shapes</text>
     </Action>
     <Action name="object_order_back">
       <iconText>Send to Back</iconText>
@@ -63,14 +63,14 @@
       <text>Vertically Center</text>
     </Action>
     <Action name="object_group">
-      <iconText>Group shape(s)</iconText>
+      <iconText>Group shapes</iconText>
       <shortcut></shortcut>
-      <toolTip context="Groups shape(s) in the context of Vector Interaction Tool">Group</toolTip>
+      <toolTip>Create a shape group containing selected shapes</toolTip>
       <icon>object-group-calligra</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
-      <text context="Group shape(s) in the context of Vector Interaction Tool">Group</text>
+      <text>Group shapes</text>
     </Action>
     <Action name="object_align_horizontal_left">
       <iconText>Align Left</iconText>

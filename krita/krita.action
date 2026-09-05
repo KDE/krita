@@ -2914,7 +2914,7 @@
       <text>Group layer(s)</text>
       <whatsThis/>
       <toolTip>Create a group layer containing selected layers</toolTip>
-      <iconText>Quick Group</iconText>
+      <iconText>Group layer(s)</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
@@ -2926,7 +2926,7 @@
       <text>Ungroup layer(s)</text>
       <whatsThis/>
       <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
-      <iconText>Quick Ungroup</iconText>
+      <iconText>Ungroup layer(s)</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+G</shortcut>

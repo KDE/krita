@@ -262,7 +262,9 @@ def kritaStripPythonFramework(frameworkPath: pathlib.Path):
     files_for_rm.append(frameworkPath.joinpath('Versions','Current', 'Resources','Python.app'))
 
     for file in files_for_rm:
-        if file.exists(follow_symlinks=False):
+        # TODO: change to `file.exists(follow_symlinks=False)` when
+        # Python 3.12 becomes the minimum version
+        if file.is_symlink() or file.exists():
             if file.is_dir():
                 shutil.rmtree(file, ignore_errors=True)
             else:

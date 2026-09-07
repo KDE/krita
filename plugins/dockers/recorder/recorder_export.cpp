@@ -286,10 +286,11 @@ public:
     {
         Q_ASSERT(exporter == nullptr);
 
+#ifndef Q_OS_ANDROID
+        // The android export system is robust enough to not need this
         preprocessor->updateSettings(settings->inputDirectory, settings->format);
         preprocessor->doPreprocessing();
 
-#ifndef Q_OS_ANDROID
         // We don't do this again on Android, it's mind-bogglingly slow.
         updateFrameInfo();
 #endif

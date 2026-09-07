@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-05 02:43+0000\n"
-"PO-Revision-Date: 2026-09-02 08:52+0200\n"
+"PO-Revision-Date: 2026-09-06 18:41+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -14523,14 +14523,14 @@ msgstr "Ajusta el llenç a l'amplada de la vista"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Ajusta a l'alçada de la vista"
+msgstr "Ajusta a l'altura de la vista"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Ajusta el llenç a l'alçada de la vista"
+msgstr "Ajusta el llenç a l'altura de la vista"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -16889,7 +16889,7 @@ msgstr "Ajusta a l'amplada"
 #: libs/flake/KoZoomMode.cpp:29
 #, kde-format
 msgid "Fit Height"
-msgstr "Ajusta a l'alçada"
+msgstr "Ajusta a l'altura"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:33
 #, kde-format
@@ -19615,7 +19615,7 @@ msgid ""
 "the x-height of a font than small capital forms."
 msgstr ""
 "Substitueix les lletres majúscules per formes majúscules petites, que estan "
-"més a prop de l'alçada x d'una lletra que de les formes majúscules petites."
+"més a prop de l'altura x d'una lletra que de les formes majúscules petites."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
 #, kde-format
@@ -19643,7 +19643,7 @@ msgid ""
 "the x-height of a font than small capital forms."
 msgstr ""
 "Substitueix les lletres en minúscula per formes majúscules petites, que són "
-"més properes a l'alçada x d'una lletra que les formes majúscules menudes."
+"més properes a l'altura x d'una lletra que les formes majúscules menudes."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
 #, kde-format
@@ -22524,19 +22524,19 @@ msgstr "Assistent del Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "R32 Heightmap"
-msgstr "Mapa d'alçades R32"
+msgstr "Mapa d'altures R32"
 
 #: libs/koplugin/KisMimeDatabase.cpp:204
 #, kde-format
 msgctxt "description of a file type"
 msgid "R16 Heightmap"
-msgstr "Mapa d'alçades R16"
+msgstr "Mapa d'altures R16"
 
 #: libs/koplugin/KisMimeDatabase.cpp:209
 #, kde-format
 msgctxt "description of a file type"
 msgid "R8 Heightmap"
-msgstr "Mapa d'alçades R8"
+msgstr "Mapa d'altures R8"
 
 #: libs/koplugin/KisMimeDatabase.cpp:214
 #, kde-format
@@ -25084,7 +25084,7 @@ msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
-"%1 requereix que l'amplada i l'alçada siguin nombres senars.  Redimensioneu "
+"%1 requereix que l'amplada i l'altura siguin nombres senars.  Redimensioneu "
 "o escapceu la imatge abans d'exportar-la."
 
 #: libs/ui/animation/KisAnimationRender.cpp:113
@@ -25354,7 +25354,7 @@ msgstr "Amplada: %1 px"
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
-msgstr "Alçada: %1 px"
+msgstr "Altura: %1 px"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
 #, kde-format
@@ -26547,7 +26547,7 @@ msgstr "Amplada:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
 msgid "Height:"
-msgstr "Alçada:"
+msgstr "Altura:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsImportVideoScaleGroup)
 #: libs/ui/animation/VideoImportDialog.ui:553
@@ -31625,7 +31625,7 @@ msgstr "A&mplada:"
 #: libs/ui/forms/wdgnewimage.ui:118
 #, kde-format
 msgid "&Height:"
-msgstr "A&lçada:"
+msgstr "A&ltura:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
@@ -32751,7 +32751,7 @@ msgstr "Amplada: "
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:253
 #, kde-format
 msgid "Height"
-msgstr "Alçada"
+msgstr "Altura"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intHeight)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -32759,7 +32759,7 @@ msgstr "Alçada"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:665
 #, kde-format
 msgid "Height: "
-msgstr "Alçada: "
+msgstr "Altura: "
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, doubleRatio)
 #: libs/ui/forms/wdgrectangleconstraints.ui:134
@@ -33349,7 +33349,7 @@ msgstr "Mida de la impressió"
 #: libs/ui/imagesize/wdg_imagesize.ui:167
 #, kde-format
 msgid "Hei&ght:"
-msgstr "A&lçada:"
+msgstr "A&ltura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrintWidth)
 #: libs/ui/imagesize/wdg_imagesize.ui:202
@@ -34249,7 +34249,7 @@ msgstr "Ajusta a l'amplada de la vista"
 #: libs/ui/input/kis_zoom_action.cpp:83
 #, kde-format
 msgid "Fit to View Height"
-msgstr "Ajusta a l'alçada de la vista"
+msgstr "Ajusta a l'altura de la vista"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
@@ -35442,7 +35442,7 @@ msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
 "Display Mode: %5"
 msgstr ""
-"Selecció: x = %1 y = %2 amplada = %3 alçada = %4\n"
+"Selecció: x = %1 y = %2 amplada = %3 altura = %4\n"
 "Mode de visualització: %5"
 
 #: libs/ui/kis_statusbar.cc:425
@@ -38248,7 +38248,7 @@ msgid ""
 "Height: %2 px"
 msgstr ""
 "Amplada: %1 px\n"
-"Alçada: %2 px"
+"Altura: %2 px"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:313
@@ -41212,7 +41212,7 @@ msgstr "percentatge de l'amplada de la vista (vam)"
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
-msgstr "percentatge de l'alçada de la vista (val)"
+msgstr "percentatge de l'altura de la vista (val)"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:518
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
@@ -43077,7 +43077,7 @@ msgstr "Nombre de línies: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
 #, kde-format
 msgid "Line Height: "
-msgstr "Alçada de la línia: "
+msgstr "Altura de la línia: "
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
@@ -46224,13 +46224,13 @@ msgstr "Mida de la lletra (em)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Alçada X (ex)"
+msgstr "Altura X (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "Alçada majúscules (cap)"
+msgstr "Altura majúscules (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
 #, kde-format
@@ -46248,7 +46248,7 @@ msgstr "Avanç ideogràfic (ic)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "Alçada de línia (lh)"
+msgstr "Altura de línia (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
@@ -46427,7 +46427,7 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
-"Alinea al centre entre la línia base alfabètica i l'alçada x quan es "
+"Alinea al centre entre la línia base alfabètica i l'altura x quan es "
 "col·loca horitzontalment, en vertical aquesta és la línia base central."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
@@ -46621,7 +46621,7 @@ msgstr "Amplada:"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
-msgstr "Alçada:"
+msgstr "Altura:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, kde-format
@@ -46854,7 +46854,7 @@ msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
 "L'ajust de la mida de la lletra permet establir una relació per la qual ha "
-"de coincidir l'alçada x."
+"de coincidir l'altura x."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -46875,7 +46875,7 @@ msgstr "Calcula"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
-"Calcula la relació alçada x a la mida de la lletra per a la primera família "
+"Calcula la relació altura x a la mida de la lletra per a la primera família "
 "de la lletra."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
@@ -47202,14 +47202,14 @@ msgstr "Es produiran salts suaus al llarg de qualsevol grafema."
 #, kde-format
 msgctxt "@label"
 msgid "Line Height"
-msgstr "Alçada de la línia"
+msgstr "Altura de la línia"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:19
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr ""
-"L'alçada de la línia controla l'alçada de la línia utilitzada per a "
+"L'altura de la línia controla l'altura de la línia utilitzada per a "
 "l'interval de text."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:21
@@ -47218,7 +47218,7 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr "alçada de línia, espaiat de línia"
+msgstr "altura de línia, espaiat de línia"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:134
 #, kde-format
@@ -48530,7 +48530,7 @@ msgstr "Nombre de línies:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
 #, kde-format
 msgid "Line Height:"
-msgstr "Alçada de la línia:"
+msgstr "Altura de la línia:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:734
@@ -52567,22 +52567,22 @@ msgstr "Controlador del canal"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "Filtre de mapa d'alçades a normal"
+msgstr "Filtre de mapa d'altures a normal"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "Mapa d'a&lçades a normal..."
+msgstr "Mapa d'a&ltures a normal..."
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
 msgid "Height to Normal Map"
-msgstr "Mapa d'alçades a normal"
+msgstr "Mapa d'altures a normal"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:20
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "El mapa d'alçades a normal no funciona en aquest espai de color."
+msgstr "El mapa d'altures a normal no funciona en aquest espai de color."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
@@ -53436,7 +53436,7 @@ msgstr "Ambient"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:334
 #, kde-format
 msgid "Heightmap channel:"
-msgstr "Canal de mapa d'alçades:"
+msgstr "Canal de mapa d'altures:"
 
 #. i18n: Whether or not this filter should only use a given channel or use all channels and treat them as a normal map
 #. i18n: ectx: property (text), widget (QCheckBox, useNormalMap)
@@ -53541,7 +53541,7 @@ msgstr "Amplada del píxel"
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:139
 #, kde-format
 msgid "Pixel height"
-msgstr "Alçada del píxel"
+msgstr "Altura del píxel"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.h:27
 #, kde-format
@@ -54198,7 +54198,7 @@ msgstr "Percentatge de l'amplada"
 #, kde-format
 msgctxt "The position will be a percentage of the height"
 msgid "Percent of the Height"
-msgstr "Percentatge de l'alçada"
+msgstr "Percentatge de l'altura"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
 #, kde-format
@@ -54801,7 +54801,7 @@ msgstr "Amplada de la imatge"
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Image height"
-msgstr "Alçada de la imatge"
+msgstr "Altura de la imatge"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:359
 #, kde-format
@@ -55371,7 +55371,7 @@ msgstr "Tipus de fitxer desconegut"
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:89
 #, kde-format
 msgid "Heightmap Import Options"
-msgstr "Opcions d'importació dels mapes d'alçades"
+msgstr "Opcions d'importació dels mapes d'altures"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:27
 #, kde-format
@@ -55386,7 +55386,7 @@ msgstr "L'entrada no coincideix amb la mida del fitxer"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:107
 #, kde-format
 msgid "Please specify width and height"
-msgstr "Especifiqueu l'amplada i l'alçada"
+msgstr "Especifiqueu l'amplada i l'altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:110
 #, kde-format
@@ -55396,13 +55396,13 @@ msgstr "Especifiqueu l'amplada"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:113
 #, kde-format
 msgid "Please specify height"
-msgstr "Especifiqueu l'alçada"
+msgstr "Especifiqueu l'altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:182
 #, kde-format
 msgid "Too many possible combinations. Input a width or height and try again."
 msgstr ""
-"Hi ha massa combinacions possibles. Introduïu una amplada o una alçada i "
+"Hi ha massa combinacions possibles. Introduïu una amplada o una altura i "
 "torneu-ho a intentar."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:195
@@ -55416,13 +55416,13 @@ msgid ""
 "Unable to calculate an appropriate height. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
-"No s'ha pogut calcular una alçada adequada. El fitxer no conté els píxels "
+"No s'ha pogut calcular una altura adequada. El fitxer no conté els píxels "
 "suficients per a formar un rectangle."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
 #, kde-format
 msgid "Height exceeds available pixels."
-msgstr "L'alçada excedeix els píxels disponibles."
+msgstr "L'altura excedeix els píxels disponibles."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:212
 #, kde-format
@@ -55482,7 +55482,7 @@ msgid ""
 "Guess width and height based on file size and bits per pixel. Only values "
 "set to 0 will be updated."
 msgstr ""
-"Estima l'amplada i l'alçada en funció de la mida del fitxer i dels bits per "
+"Estima l'amplada i l'altura en funció de la mida del fitxer i dels bits per "
 "píxel. Només s'actualitzaran els valors establerts a 0."
 
 #. i18n: ectx: property (text), widget (QPushButton, guessButton)
@@ -55495,7 +55495,7 @@ msgstr "Estima les dimensions"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:132
 #, kde-format
 msgid "Height of image in pixels."
-msgstr "Alçada de la imatge en píxels."
+msgstr "Altura de la imatge en píxels."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, widthInput)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:155
@@ -57114,7 +57114,7 @@ msgstr "La imatge no ha especificat cap amplada."
 #: plugins/impex/libkra/kis_kra_loader.cpp:221
 #, kde-format
 msgid "Image does not specify a height."
-msgstr "La imatge no ha especificat cap alçada."
+msgstr "La imatge no ha especificat cap altura."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:271
 #, kde-format
@@ -60167,7 +60167,7 @@ msgstr "Píxel amb antialiàsing"
 #: plugins/paintops/gridbrush/wdggridoptions.ui:42
 #, kde-format
 msgid "Grid height:"
-msgstr "Alçada de la quadrícula:"
+msgstr "Altura de la quadrícula:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:52
@@ -60724,7 +60724,7 @@ msgid ""
 "by default it is transparent."
 msgstr ""
 "Si està marcada, el pinzell de reixa emplena cada fons de partícula amb el "
-"color de fons. El fons de partícula és el rectangle de l'amplada i alçada de "
+"color de fons. El fons de partícula és el rectangle de l'amplada i altura de "
 "la quadrícula, i que de manera predeterminada és transparent."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fillBackgroundCHBox)
@@ -61321,13 +61321,13 @@ msgstr "Mapa de degradats"
 #, kde-format
 msgctxt "Height blend mode for brush texture"
 msgid "Height"
-msgstr "Alçada"
+msgstr "Altura"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:71
 #, kde-format
 msgctxt "Linear Height blend mode for brush texture"
 msgid "Linear Height"
-msgstr "Alçada lineal"
+msgstr "Altura lineal"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:72
 #, kde-format
@@ -63096,7 +63096,7 @@ msgstr "Amplada màxima"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Maximum Height"
-msgstr "Alçada màxima"
+msgstr "Altura màxima"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:48
 msgid " DPI"
@@ -64222,7 +64222,7 @@ msgid ""
 "bleeds."
 msgstr ""
 "Això permet fer un document de plantilla amb guies.\n"
-"L'amplada i l'alçada són la mida de l'àrea viva, l'àrea segura és l'àrea "
+"L'amplada i l'altura són la mida de l'àrea viva, l'àrea segura és l'àrea "
 "viva menys els marges, i la imatge completa és l'àrea viva més els sagnats."
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:167
@@ -66836,10 +66836,10 @@ msgid ""
 "transformations.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>En el mode «Coordenades globals», els camps d'amplada "
-"i alçada mostren la mida del quadre contenidor de la forma en les "
+"i altura mostren la mida del quadre contenidor de la forma en les "
 "coordenades d'alineació de la imatge, encara que la forma es giri o tingui "
 "qualsevol altra transformació. </p><p>Si es desactiva el mode «Coordenades "
-"globals», els camps d'amplada i alçada mostren la mida «local» de la forma, "
+"globals», els camps d'amplada i altura mostren la mida «local» de la forma, "
 "abans d'aplicar qualsevol transformació.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
@@ -67774,7 +67774,7 @@ msgstr "Central"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
-msgstr "Alçada de la línia"
+msgstr "Altura de la línia"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:498
 #, kde-format
@@ -68567,7 +68567,7 @@ msgstr "Bloqueja l'amplada"
 #: plugins/tools/tool_crop/kis_tool_crop.cc:122
 #, kde-format
 msgid "Lock Height"
-msgstr "Bloqueja l'alçada"
+msgstr "Bloqueja l'altura"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:125
 #, kde-format
@@ -68595,7 +68595,7 @@ msgid ""
 "Height: %2"
 msgstr ""
 "Amplada: %1\n"
-"Alçada: %2"
+"Altura: %2"
 
 #: plugins/tools/tool_crop/kis_tool_crop.h:215
 #, kde-format
@@ -68670,7 +68670,7 @@ msgstr "Bloqueja l'amplada"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:352
 #, kde-format
 msgid "Lock the height"
-msgstr "Bloqueja l'alçada"
+msgstr "Bloqueja l'altura"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockRatioButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:365
@@ -69837,7 +69837,7 @@ msgstr "Coordenada Z de la posició de la càmera sobre l'escena"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:897
 #, kde-format
 msgid "Camera height:"
-msgstr "Alçada de la càmera:"
+msgstr "Altura de la càmera:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)

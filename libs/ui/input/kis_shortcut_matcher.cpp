@@ -133,6 +133,19 @@ public:
     bool touchActionTracked {false};
     int touchHoldDelayMs {400};
 
+
+    // A workaround for some Android systems, which force-cancel all the
+    // actions with 3+ fingers. This workaround just converts the "cancel"
+    // into "end" event, letting Krita handle these events as "tap" events.
+    struct IgnoreMultiFingerCancelWorkaround {
+        // NOTE: we cannot reuse maxTouchPoints for this workaround, because
+        // maxTouchPoints is used at the lower stages of the touch processing
+        // pipeline, **after** the touch events left the hold-postponer. And
+        // we need this workaround to cancel the postponer itself.
+        int lastRawTouchPointsCount = 0;
+    };
+    std::optional<IgnoreMultiFingerCancelWorkaround> ignoreMultiFingerCancelWorkaround;
+
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
     bool suppressAllKeyboardActions;
@@ -461,7 +474,10 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 #endif
 
     // reset state
-    m_d->maxTouchPoints = event->touchPoints().size();
+    m_d->maxTouchPoints = KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::pressedOnlyTouchStates());
+    if (m_d->ignoreMultiFingerCancelWorkaround) {
+        m_d->ignoreMultiFingerCancelWorkaround->lastRawTouchPointsCount = m_d->maxTouchPoints;
+    }
     m_d->matchingIteration = 1;
     m_d->isTouchDragDetected = false;
     m_d->isTouchHeld = false;
@@ -496,6 +512,11 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
     // the touch action has been overridden by some tablet action,
     // consume and ignore it.
     if (!m_d->touchActionTracked) return false;
+
+    if (m_d->ignoreMultiFingerCancelWorkaround) {
+        m_d->ignoreMultiFingerCancelWorkaround->lastRawTouchPointsCount =
+            KisTouchShortcut::countTouchPoints(event, KisTouchShortcut::pressedOnlyTouchStates());
+    }
 
     if (m_d->touchHoldEventPostponer) {
         m_d->touchHoldEventPostponer->pushThrough(event);
@@ -738,7 +759,33 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event)
 {
     Q_UNUSED(event)
 
+    // The design requirement of touch-cancel handling is the following:
+    //
+    // 1) If drag-action has already been started, it is finished normally
+    // 2) If tap-action is pending, it is cancelled
+    // 3) If hold-action is pending, it is cancelled
+    // 4) If hold-action has already been started, it is ended normally
+
+    // On some Android devices, such as Xiaomi Pads, the system always eats
+    // multitouch inputs with more than two fingers, even if the user
+    // disables all gestures related to them in their system settings or
+    // uses the game boost mode that is supposed to disable gestures. So we
+    // handle those inputs even when they are cancelled, if the user wants
+    // to use it for a system gesture, they can disable the Krita shortcut.
+    if (m_d->ignoreMultiFingerCancelWorkaround) {
+        // NOTE: we cannot use the number of touch points from the actual
+        // cancel event, since Qt sets touch points as empty for the cancel
+        // event
+        if (m_d->ignoreMultiFingerCancelWorkaround->lastRawTouchPointsCount >= 3) {
+            DEBUG_ACTION("IgnoreMultiFingerCancelWorkaround: converting a cancelled action into a normally finished action")
+            touchEndEvent(event);
+            return;
+        }
+    }
+
     Private::RecursionNotifier notifier(this);
+
+    DEBUG_TOUCH_ACTION("enter", event);
 
     // the touch action has been overridden by some tablet action,
     // consume and ignore it.
@@ -1422,4 +1469,18 @@ int KisShortcutMatcher::touchHoldDelay() const
 void KisShortcutMatcher::setTouchHoldDelay(int value)
 {
     m_d->touchHoldDelayMs = value;
+}
+
+void KisShortcutMatcher::setIgnoreMultiFingerCancelWorkaroundEnalbed(bool value)
+{
+    if (value) {
+        m_d->ignoreMultiFingerCancelWorkaround = Private::IgnoreMultiFingerCancelWorkaround();
+    } else {
+        m_d->ignoreMultiFingerCancelWorkaround = std::nullopt;
+    }
+}
+
+bool KisShortcutMatcher::ignoreMultiFingerCancelWorkaroundEnalbed() const
+{
+    return m_d->ignoreMultiFingerCancelWorkaround.has_value();
 }

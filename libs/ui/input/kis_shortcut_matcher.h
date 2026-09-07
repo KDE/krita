@@ -291,6 +291,18 @@ public:
      */
     void setTouchHoldDelay(int value);
 
+    /**
+     * Enabled a workaround that allows processing 3+ finger tap
+     * shortcuts, even when the system sends QEvent::TouchCancel
+     * for them. Need on some Android devices.
+     */
+    void setIgnoreMultiFingerCancelWorkaroundEnalbed(bool value);
+
+    /**
+     * \see setIgnoreMultiFingerCancelWorkaroundEnalbed()
+     */
+    bool ignoreMultiFingerCancelWorkaroundEnalbed() const;
+
 private:
 
     friend class KisInputManagerTest;

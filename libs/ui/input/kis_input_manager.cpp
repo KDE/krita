@@ -714,28 +714,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchCancel:
     {
-        // On some Android devices, such as Xiaomi Pads, the system always eats
-        // multitouch inputs with more than two fingers, even if the user
-        // disables all gestures related to them in their system settings or
-        // uses the game boost mode that is supposed to disable gestures. So we
-        // handle those inputs even when they are cancelled, if the user wants
-        // to use it for a system gesture, they can disable the Krita shortcut.
-#ifdef Q_OS_ANDROID
-        bool ignoreCancel = d->lastPointCount > 2;
-#else
-        bool ignoreCancel = false;
-#endif
-
         if (d->popupWasActive) {
             event->setAccepted(true);
             return true;
         }
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-        if (ignoreCancel) {
-            d->matcher.touchEndEvent(touchEvent);
-        } else {
-            d->matcher.touchCancelEvent(touchEvent);
-        }
+        d->matcher.touchCancelEvent(touchEvent);
 
         retval = true;
 

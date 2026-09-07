@@ -58,6 +58,11 @@ KisInputManager::Private::Private(KisInputManager *qq)
             return this->canvas ? this->canvas->inputActionGroupsMaskInterface()->inputActionGroupsMask() : AllActionGroup;
         });
 
+#ifdef Q_OS_ANDROID
+    // a workaround for Xiaomi tablets
+    matcher.setIgnoreMultiFingerCancelWorkaroundEnalbed(true);
+#endif
+
     /**
      * On Windows and Linux we have a proper fix for this bug
      * patched into our local version of Qt. We don't have a fix

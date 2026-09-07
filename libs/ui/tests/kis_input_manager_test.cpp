@@ -860,6 +860,7 @@ void KisInputManagerTest::testTouchMoves_data()
     QTest::addColumn<QPointF>("pointOffset");
     QTest::addColumn<bool>("enableTouchPainting");
     QTest::addColumn<bool>("enableHoldShortcuts");
+    QTest::addColumn<bool>("cancelShortcut");
     QTest::addColumn<QList<int>>("triggeredTouchShortcuts");
     QTest::addColumn<QList<int>>("triggeredPaintShortcuts");
     QTest::addColumn<int>("actionEventsCount"); // `-1` to ignore this test
@@ -872,6 +873,8 @@ void KisInputManagerTest::testTouchMoves_data()
 
     const bool touchPaintingOn = true;
     const bool touchPaintingOff = false;
+    const bool cancelShortcutOn = true;
+    const bool cancelShortcutOff = false;
     const int ignoreActionEventCount = -1;
     const int ignorePaintEventCount = -1;
 
@@ -880,53 +883,53 @@ void KisInputManagerTest::testTouchMoves_data()
 
         const char *holdPrefix = enableHoldShortcuts ? "hold_enabled-" : "";
 
-        QTest::addRow("%sclean-1p-drag", holdPrefix) << "touchCleanDrag" << 1 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{15} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-2p-drag", holdPrefix) << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-3p-drag", holdPrefix) << "touchCleanDrag" << 3 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-drag", holdPrefix) << "touchCleanDrag" << 1 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{15} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-2p-drag", holdPrefix) << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-3p-drag", holdPrefix) << "touchCleanDrag" << 3 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
-        QTest::addRow("%sclean-1p-drag-paint", holdPrefix) << "touchCleanDrag" << 1 << 100 << dragOffset << touchPaintingOn << enableHoldShortcuts << QList<int>{} << QList<int>{30} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-2p-drag-paint", holdPrefix) << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOn << enableHoldShortcuts << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-3p-drag-paint", holdPrefix) << "touchCleanDrag" << 3 << 100 << dragOffset << touchPaintingOn << enableHoldShortcuts << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-drag-paint", holdPrefix) << "touchCleanDrag" << 1 << 100 << dragOffset << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{} << QList<int>{30} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-2p-drag-paint", holdPrefix) << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-3p-drag-paint", holdPrefix) << "touchCleanDrag" << 3 << 100 << dragOffset << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // painting skips only the first two events
-        QTest::addRow("%sclean-1p-drag-paint-delayed-start", holdPrefix) << "touchCleanDrag" << 1 << 100 << QPointF(1.0, 0) << touchPaintingOn << enableHoldShortcuts << QList<int>{} << QList<int>{30} << ignoreActionEventCount << 98;
+        QTest::addRow("%sclean-1p-drag-paint-delayed-start", holdPrefix) << "touchCleanDrag" << 1 << 100 << QPointF(1.0, 0) << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{} << QList<int>{30} << ignoreActionEventCount << 98;
         // action has higher threshold, so it skips the first 17 events
-        QTest::addRow("%sclean-1p-drag-delayed-start", holdPrefix) << "touchCleanDrag" << 1 << 100 << QPointF(1.0, 0) << touchPaintingOff << enableHoldShortcuts << QList<int>{15} << QList<int>{} << 83 << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-drag-delayed-start", holdPrefix) << "touchCleanDrag" << 1 << 100 << QPointF(1.0, 0) << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{15} << QList<int>{} << 83 << ignorePaintEventCount;
 
-        QTest::addRow("%sclean-1p-tap", holdPrefix) << "touchCleanDrag" << 1 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{20} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-2p-tap", holdPrefix) << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{21} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-3p-tap", holdPrefix) << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{22} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-tap", holdPrefix) << "touchCleanDrag" << 1 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{20} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-2p-tap", holdPrefix) << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{21} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-3p-tap", holdPrefix) << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{22} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // touch painting stroke has a lower drag threshold, so we should use smaller offset value for it
-        QTest::addRow("%sclean-1p-tap-paint", holdPrefix) << "touchCleanDrag" << 1 << 10 << smallTapOffset << touchPaintingOn << enableHoldShortcuts << QList<int>{} << QList<int>{31} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-2p-tap-paint", holdPrefix) << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOn << enableHoldShortcuts << QList<int>{21} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-3p-tap-paint", holdPrefix) << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOn << enableHoldShortcuts << QList<int>{22} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-tap-paint", holdPrefix) << "touchCleanDrag" << 1 << 10 << smallTapOffset << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{} << QList<int>{31} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-2p-tap-paint", holdPrefix) << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{21} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-3p-tap-paint", holdPrefix) << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{22} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // 16px is the threshold for distinguishing taps and drags (touch-begin + 16 steps + touch-end)
-        QTest::addRow("%sclean-1p-tap-upper-bound", holdPrefix) << "touchCleanDrag" << 1 << 18 << QPointF(1, 0) << touchPaintingOff << enableHoldShortcuts << QList<int>{20} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sclean-1p-drag-lower-bound", holdPrefix) << "touchCleanDrag" << 1 << 19 << QPointF(1, 0) << touchPaintingOff << enableHoldShortcuts << QList<int>{15} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-tap-upper-bound", holdPrefix) << "touchCleanDrag" << 1 << 18 << QPointF(1, 0) << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{20} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-1p-drag-lower-bound", holdPrefix) << "touchCleanDrag" << 1 << 19 << QPointF(1, 0) << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{15} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
-        QTest::addRow("%sdirty-start-2p-drag", holdPrefix) << "touchDragDirtyStart" << 2 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sdirty-start-3p-drag", holdPrefix) << "touchDragDirtyStart" << 3 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sdirty-start-2p-drag", holdPrefix) << "touchDragDirtyStart" << 2 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sdirty-start-3p-drag", holdPrefix) << "touchDragDirtyStart" << 3 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
-        QTest::addRow("%sdirty-end-2p-drag", holdPrefix) << "touchDragDirtyEnd" << 2 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sdirty-end-3p-drag", holdPrefix) << "touchDragDirtyEnd" << 3 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sdirty-end-2p-drag", holdPrefix) << "touchDragDirtyEnd" << 2 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{16} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sdirty-end-3p-drag", holdPrefix) << "touchDragDirtyEnd" << 3 << 100 << dirtyDragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
-        QTest::addRow("%sdirty-end-2p-tap", holdPrefix) << "touchDragDirtyEnd" << 2 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{21} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
-        QTest::addRow("%sdirty-end-3p-tap", holdPrefix) << "touchDragDirtyEnd" << 3 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{22} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sdirty-end-2p-tap", holdPrefix) << "touchDragDirtyEnd" << 2 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{21} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sdirty-end-3p-tap", holdPrefix) << "touchDragDirtyEnd" << 3 << 10 << tapOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{22} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // the current implementation is expected to switch to a "more-fingers-rich" shortcut immetiately
-        QTest::addRow("%sclean-2p-then-3p-drag", holdPrefix) << "touchDragTwoThenThree" << 2 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{16, 17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-2p-then-3p-drag", holdPrefix) << "touchDragTwoThenThree" << 2 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{16, 17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // the current implementation is expected to stay on the "finger-richest" shortcut and,
         // not to switch to a "finger-poorer" shortcut
-        QTest::addRow("%sclean-3p-then-2p-drag", holdPrefix) << "touchDragThreeThenTwo" << 3 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-3p-then-2p-drag", holdPrefix) << "touchDragThreeThenTwo" << 3 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // the 3-point gesture should be run twice during the same run
-        QTest::addRow("%sclean-3p-then-2p-then-3p-drag", holdPrefix) << "touchDragThreeThenTwoThenThree" << 3 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << QList<int>{17, 17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+        QTest::addRow("%sclean-3p-then-2p-then-3p-drag", holdPrefix) << "touchDragThreeThenTwoThenThree" << 3 << 100 << dragOffset << touchPaintingOff << enableHoldShortcuts << cancelShortcutOff << QList<int>{17, 17} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
 
         // the amount of paint events should **not** depend on whether we have hold enabled or not
-        QTest::addRow("%sclean-1p-drag-paint-very-short", holdPrefix) << "touchCleanDrag" << 1 << 15 << QPointF(1.0, 0) << touchPaintingOn << enableHoldShortcuts << QList<int>{} << QList<int>{30} << ignoreActionEventCount << 13;
+        QTest::addRow("%sclean-1p-drag-paint-very-short", holdPrefix) << "touchCleanDrag" << 1 << 15 << QPointF(1.0, 0) << touchPaintingOn << enableHoldShortcuts << cancelShortcutOff << QList<int>{} << QList<int>{30} << ignoreActionEventCount << 13;
 
         // clang-format on
     }
@@ -934,8 +937,36 @@ void KisInputManagerTest::testTouchMoves_data()
     // clang-format off
 
     const bool holdShortcutsOn = true;
+    const bool holdShortcutsOff = false;
 
-    QTest::addRow("hold-drag-1p") << "touchHoldFirstFourUpdateEventsFor50ms" << 1 << 100 << QPointF(1.0, 0) << touchPaintingOn << holdShortcutsOn << QList<int>{40} << QList<int>{} << 97 << ignorePaintEventCount;
+    QTest::addRow("hold-drag-1p") << "touchHoldFirstFourUpdateEventsFor50ms" << 1 << 100 << QPointF(1.0, 0) << touchPaintingOn << holdShortcutsOn << cancelShortcutOff<< QList<int>{40} << QList<int>{} << 97 << ignorePaintEventCount;
+
+    /// the cancellation test cases
+
+    // normal ending shortcuts, i.e. the last event is "TouchEnd"
+    QTest::addRow("normal_ending-clean-2p-drag-hold-off") << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOff << holdShortcutsOff << cancelShortcutOff << QList<int>{16} << QList<int>{} << 98 << ignorePaintEventCount;
+    QTest::addRow("normal_ending-clean-2p-tap-hold-off") << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOff << holdShortcutsOff << cancelShortcutOff << QList<int>{21} << QList<int>{} << 2 << ignorePaintEventCount;
+    QTest::addRow("normal_ending-clean-3p-tap-hold-off") << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOff << holdShortcutsOff << cancelShortcutOff <<QList<int>{22} << QList<int>{} << 2 << ignorePaintEventCount;
+    // hold timeout was not reached, so the touch-paiting-tap shortcut is triggered instead
+    QTest::addRow("normal_ending-hold-drag-1p-before-delay") << "touchHoldFirstFourUpdateEventsFor50ms" << 1 << 3 << QPointF(1.0, 0) << touchPaintingOn << holdShortcutsOn << cancelShortcutOff << QList<int>{} << QList<int>{31} << ignoreActionEventCount << 2;
+    QTest::addRow("normal_ending-hold-drag-1p-after-delay") << "touchHoldFirstFourUpdateEventsFor50ms" << 1 << 6 << QPointF(1.0, 0) << touchPaintingOn << holdShortcutsOn << cancelShortcutOff <<QList<int>{40} << QList<int>{} << 3 << ignorePaintEventCount;
+
+    // cancelled shortcuts
+    // the drag shortcut is ended normally
+    QTest::addRow("cancelled-clean-2p-drag-hold-off") << "touchCleanDrag" << 2 << 100 << dragOffset << touchPaintingOff << holdShortcutsOff << cancelShortcutOn << QList<int>{16} << QList<int>{} << 98 << ignorePaintEventCount;
+    // tap shortcut is cancelled
+    QTest::addRow("cancelled-clean-2p-tap-hold-off") << "touchCleanDrag" << 2 << 10 << tapOffset << touchPaintingOff << holdShortcutsOff << cancelShortcutOn <<QList<int>{} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+    // hold shortcut didn't have time to start, so it is completely cancelled, no touch-painting stroke is started
+    QTest::addRow("cancelled-hold-drag-1p-before-delay") << "touchHoldFirstFourUpdateEventsFor50ms" << 1 << 3 << QPointF(1.0, 0) << touchPaintingOn << holdShortcutsOn << cancelShortcutOn << QList<int>{} << QList<int>{} << ignoreActionEventCount << ignorePaintEventCount;
+    // hold shortcut has already started, so just end it gracefully
+    QTest::addRow("cancelled-hold-drag-1p-after-delay") << "touchHoldFirstFourUpdateEventsFor50ms" << 1 << 6 << QPointF(1.0, 0) << touchPaintingOn << holdShortcutsOn << cancelShortcutOn << QList<int>{40} << QList<int>{} << 3 << ignorePaintEventCount;
+
+    // 3+ finger shortcuts have a special workaround on Android, they should never be cancelled,
+    // because some Xiaomi tablets deliver Cancel events for them even when three-finger shortcuts
+    // are disabled in the system.
+
+    // three-finger-tap shortcut is still present, even though it is cancelled
+    QTest::addRow("cancelled-clean-3p-tap-hold-off") << "touchCleanDrag" << 3 << 10 << tapOffset << touchPaintingOff << holdShortcutsOff << cancelShortcutOn <<QList<int>{22} << QList<int>{} << 2 << ignorePaintEventCount;
 
     // clang-format on
 }
@@ -948,6 +979,7 @@ void KisInputManagerTest::testTouchMoves()
     KisShortcutMatcher m;
     // the timeout should happen on the fourth event after the first (with a 30 ms margin)
     m.setTouchHoldDelay(170);
+    m.setIgnoreMultiFingerCancelWorkaroundEnalbed(true);
     m.enterEvent();
 
     m.addShortcut(
@@ -995,6 +1027,7 @@ void KisInputManagerTest::testTouchMoves()
     QFETCH(QPointF, pointOffset);
     QFETCH(bool, enableTouchPainting);
     QFETCH(bool, enableHoldShortcuts);
+    QFETCH(bool, cancelShortcut);
     QFETCH(QList<int>, triggeredTouchShortcuts);
     QFETCH(QList<int>, triggeredPaintShortcuts);
     QFETCH(int, actionEventsCount);
@@ -1046,12 +1079,17 @@ void KisInputManagerTest::testTouchMoves()
 #endif
             m.touchUpdateEvent(&e);
         } else if (eventIndex == eventsCount - 1) {
+            QEvent::Type endingType = !cancelShortcut ? QEvent::TouchEnd : QEvent::TouchCancel;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
+            QTouchEvent e(endingType, &device, Qt::NoModifier, calcTouchPointStates(touchPoints), touchPoints);
 #else
-            QTouchEvent e(QEvent::TouchEnd, &device, Qt::NoModifier, touchPoints);
+            QTouchEvent e(endingType, &device, Qt::NoModifier, touchPoints);
 #endif
-            m.touchEndEvent(&e);
+            if (e.type() == QEvent::TouchEnd) {
+                m.touchEndEvent(&e);
+            } else {
+                m.touchCancelEvent(&e);
+            }
         } else {
             qFatal("invalid step value");
         }

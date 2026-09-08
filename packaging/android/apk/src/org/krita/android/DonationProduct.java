@@ -73,7 +73,7 @@ public final class DonationProduct {
                             1L << 1L,
                             "kritasupportersubscription1",
                             activity.getString(R.string.product_subscription_title),
-                            activity.getString(R.string.product_subscription_description, 8, 150),
+                            activity.getString(R.string.product_subscription_description, 11, 200),
                             activity.getDrawable(R.drawable.product_subscription),
                             true,
                             true),

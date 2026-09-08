@@ -41,6 +41,7 @@
 #include "kis_config_notifier.h"
 #include "kis_group_layer.h"
 
+#include "KisLongPressEventFilter.h"
 #include <KoCanvasController.h>
 #include <KisRepaintDebugger.h>
 #include <KisDisplayConfig.h>
@@ -59,6 +60,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
         , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
+    setProperty(KisLongPressEventFilter::ENABLED_PROPERTY, false);
+
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);

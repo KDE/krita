@@ -22,6 +22,7 @@
 #include <KisViewManager.h>
 #include "KisRepaintDebugger.h"
 
+#include "KisLongPressEventFilter.h"
 #include "KisOpenGLModeProber.h"
 #include "KisOpenGLContextSwitchLock.h"
 #include <KisPlatformPluginInterfaceFactory.h>
@@ -90,6 +91,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , d(new Private())
 {
     setProperty("krita_skip_srgb_surface_manager_assignment", true);
+    setProperty(KisLongPressEventFilter::ENABLED_PROPERTY, false);
 
     KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");

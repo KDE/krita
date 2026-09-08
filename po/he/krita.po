@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 02:43+0000\n"
-"PO-Revision-Date: 2026-09-04 10:55+0300\n"
+"POT-Creation-Date: 2026-09-08 02:52+0000\n"
+"PO-Revision-Date: 2026-09-07 08:56+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1228,20 +1228,20 @@ msgid "A_eroded-cercle_2"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_lucky_star."
 "gbr"
 msgid "A-5 Lucky-star"
-msgstr "מחיקת טקסט"
+msgstr "א-5 כוכב-מזל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_mountain-"
 "texture.gbr"
 msgid "A_mountain-texture"
-msgstr "עירובים"
+msgstr "א_מרקם-הרים"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1274,25 +1274,25 @@ msgid "A_smoke"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle1.gbr"
 msgid "A -2 Sparkle 1"
-msgstr "ציור קו על ידי עט"
+msgstr "א -2 נצנוץ 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle2.gbr"
 msgid "A -2 Sparkle 2"
-msgstr "ציור קו על ידי עט"
+msgstr "א -2 נצנוץ 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle3.gbr"
 msgid "A -2 Sparkle 3"
-msgstr "ציור קו על ידי עט"
+msgstr "א -2 נצנוץ 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1302,12 +1302,12 @@ msgid "A_splat1"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_starfield2."
 "gbr"
 msgid "A_starfield2"
-msgstr "כלי &עט"
+msgstr "א_שדה_כוכבים2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1332,12 +1332,12 @@ msgid "C_Dust_1"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/D_Normal_dust."
 "gbr"
 msgid "D_Normal dust"
-msgstr "&לבן"
+msgstr "ד_אבק רגיל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1590,12 +1590,12 @@ msgid "Real Oil 1"
 msgstr "שמן אמיתי 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "S_Smudge_Cheese.gbr"
 msgid "S_Smudge Cheese"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1637,12 +1637,12 @@ msgid "Te_Techno_Angular_Cross"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_circuit.gbr"
 msgid "U_Circle circuit"
-msgstr "גל משולש"
+msgstr "ו_מעגל חשמלי עגול"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1708,27 +1708,27 @@ msgid "Z_Chain_1"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Pixel_1.gbr"
 msgid "Z_Pixel 1"
-msgstr "&תמונה"
+msgstr "ז_פיקסל 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel_4x4_rounded.gbr"
 msgid "Z_Pixel 4x4 rounded"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Pixel_Cross."
 "gbr"
 msgid "Z_Pixel Cross"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -1785,11 +1785,11 @@ msgid "Rake_textured_02"
 msgstr "תבניות"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/texture-a.png"
 msgid "texture-a"
-msgstr "תבניות"
+msgstr "מרקם-א"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14069,20 +14069,20 @@ msgstr "מילוי מיוחד"
 
 #. i18n: context: text @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:535
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Stro&ke selected shapes"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:537 krita/kritamenu.action:538
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Stroke selected shapes"
-msgstr "&מברשת"
+msgstr ""
 
 #. i18n: context: text @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:547
@@ -14278,10 +14278,10 @@ msgstr "גלישה בשני הכיוונים"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "גל משולש"
+msgstr "גלישה אופקית"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -16313,21 +16313,20 @@ msgstr "ניהול"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
-#, fuzzy, kde-format
-#| msgid "Manage recordings..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
-msgstr "ניהול הקלטות…"
+msgstr "ניהול יתרונות תומכים…"
 
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:24 krita/kritamenu_android.action:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr "ערוצים"
+msgstr "ניהול יתרונות תומכים"
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
@@ -17903,10 +17902,10 @@ msgid "Coptic Epact Numbers"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "נטוי:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, fuzzy, kde-format
@@ -18535,10 +18534,10 @@ msgid "Kana Extended-B"
 msgstr "אפשרויות עירוב"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "שינוי יישור"
+msgstr "השלמה של קאנה"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
 #, fuzzy, kde-format
@@ -18643,10 +18642,10 @@ msgid "Latin Extended-G"
 msgstr "לטינית מורחבת ז׳"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr "שינוי יישור"
+msgstr "השלמה של גלגוליטי"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
 #, kde-format
@@ -18945,10 +18944,10 @@ msgid ""
 msgstr "החלפת רצפים של גליפים בליגטורות כתלות בהקשר שלהם בטקסט."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr "זוויות:"
+msgstr "סוואש לפי הקשר"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -25092,10 +25091,10 @@ msgid "Color Primaries: %1"
 msgstr "מחליף צבעים"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
-msgstr "מחליף צבעים"
+msgstr "העברת צבעים: %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:389
 #, kde-format
@@ -26307,15 +26306,15 @@ msgstr "התמונית האחרונה:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Images"
-msgstr "&תמונה"
+msgstr "תמונות"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Video"
-msgstr "יצירת שכבה חדשה"
+msgstr "וידאו"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -27690,10 +27689,10 @@ msgid "Pop-up Palette"
 msgstr "לוח צבעים צץ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2607
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr "מחבר"
+msgstr "יצירה"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2609
 #: libs/ui/KoDocumentInfoDlg.cpp:114
@@ -27866,9 +27865,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Max group duration:"
-msgstr "סובב &90"
+msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -28058,9 +28057,9 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSaveBrushPreset)
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:85
 #: libs/ui/forms/wdgsavebrushpreset.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Brush Preset"
-msgstr "מאפייני שכבה..."
+msgstr "שמירת ערכת מכחולים"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:133
 #, fuzzy, kde-format
@@ -28068,16 +28067,14 @@ msgid "Preset Icon Library"
 msgstr "מאפייני שכבה..."
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
-#, fuzzy, kde-format
-#| msgid "Unsupported unit"
+#, kde-format
 msgid "Supporter Benefits"
-msgstr "יחידה לא נתמכת"
+msgstr "יתרונות תומכים"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscriptions"
-msgstr "תיאור"
+msgstr "ניהול מינויים"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:114
 #, kde-format
@@ -28144,10 +28141,10 @@ msgid "Absolute Colorimetric"
 msgstr "מאפייני שכבה..."
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "בחירת מילוי"
+msgstr "להשתמש בהגדרות התצוגה הכלליות"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:93
 #, kde-format
@@ -28262,9 +28259,9 @@ msgstr "תמונות סימוכין"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisMatrixWidget)
 #: libs/ui/forms/kis_matrix_widget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Matrix Widget"
-msgstr "רוחב:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: libs/ui/forms/KisDetailsPaneBase.ui:156
@@ -28471,15 +28468,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage Supporter Benefits"
-msgstr "ערוצים"
+msgstr "ניהול יתרונות תומכים"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
-#, fuzzy, kde-format
+#, kde-format
 msgid "Support Krita!"
-msgstr "Krita"
+msgstr "תמיכה ב־Krita!"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -42512,9 +42509,9 @@ msgid "Hold Frame Columns"
 msgstr "החזקת עמודות תמוניות"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto Frame Mode"
-msgstr "&מברשת"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:27
 #, kde-format
@@ -43896,7 +43893,7 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, fuzzy, kde-format
 #| msgctxt "Status for the export of the video record"
 #| msgid "Starting FFmpeg..."
@@ -43904,76 +43901,76 @@ msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "FFmpeg מופעל…"
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "ייצוא"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "אין תמוניות לייצוא"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "פרטי הקלטה"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "פיקסלים"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "תמוניות"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "אין תמוניות לעיון."
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "בחירת קובץ הרצה של FFmpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, kde-format
 msgid "No frames to export."
 msgstr "אין תמוניות לייצוא."
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "הסרטון כבר קיים. לשכתב אותו?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, fuzzy, kde-format
 #| msgid "Export failed. FFmpeg message:"
 msgid "Export failed. Error message:"
 msgstr "הייצוא נכשל. ההודעה מ־FFmpeg:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -43983,7 +43980,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -56293,13 +56290,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
-msgstr ""
+msgstr "ביקור באתר מיזם LibRaw"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:308
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
-msgstr ""
+msgstr "לא למתוח או לסובב פיקסלים"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:310
 #, kde-format
@@ -57064,16 +57061,16 @@ msgid "Pixar Log"
 msgstr ""
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "TIFF options"
 msgid "Horizontal Differencing"
-msgstr "גל משולש"
+msgstr "בידול אופקי"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
-msgstr "גל משולש"
+msgstr "בידול אופקי לפי נקודה צפה"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1043
 #, kde-format
@@ -57121,10 +57118,10 @@ msgstr "סוג דחיסה"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "TIFF encoder options"
 msgid "Predictor"
-msgstr "מאפייני שכבה..."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kComboBoxPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:69
@@ -57219,9 +57216,9 @@ msgstr "קטנה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxPixarLog)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:441
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixar Log Compression Options"
-msgstr "אפשרויות עירוב"
+msgstr "אפשרויות דחיסת יומן Pixar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFast_2)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:473
@@ -57329,9 +57326,9 @@ msgstr "ערכה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lossless encoding"
-msgstr "מאפייני שכבה..."
+msgstr "הצפנה ללא אובדן איכות"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQuality)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, quality)
@@ -57390,10 +57387,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:261
-#, fuzzy, kde-format
-#| msgid "Target:"
+#, kde-format
 msgid "Target PSNR"
-msgstr "יעד:"
+msgstr "PSNR ייעודי"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSegments)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
@@ -57419,9 +57415,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:322
-#, fuzzy, kde-format
+#, kde-format
 msgid "SNS Strength"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "עוצמת SNS"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
@@ -57490,9 +57486,9 @@ msgstr "התאמת חוזק מסנן אוטומטית"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:691
 #: plugins/impex/webp/kis_wdg_options_webp.ui:737
 #: plugins/impex/webp/kis_wdg_options_webp.ui:757
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enabled"
-msgstr "כחול"
+msgstr "פעיל"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:419
@@ -57519,9 +57515,9 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:441
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fast"
-msgstr "&לבן"
+msgstr "מהיר"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaQuality)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, alphaQuality)
@@ -57563,9 +57559,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:544
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Compressed"
-msgstr "מאפייני שכבה..."
+msgstr "הצגת דחוס"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:561
@@ -59407,7 +59403,7 @@ msgstr "להכהות או להבהיר את המרקם"
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:40
 #, kde-format
 msgid "Set gray value to be considered neutral for lightness mode"
-msgstr ""
+msgstr "הגדרת ערך אפור שנחשב לנייטרלי למצב בהירות"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
 #, kde-format
@@ -59446,9 +59442,9 @@ msgid "Linear Height (Photoshop)"
 msgstr "גובה קווי (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cut Off Brush"
-msgstr "&מברשת"
+msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
 #, fuzzy, kde-format
@@ -65411,7 +65407,7 @@ msgstr "מרווח עוגן: "
 #, kde-format
 msgctxt "Complete the selection"
 msgid "Complete"
-msgstr ""
+msgstr "השלמה"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:767
 #, kde-format
@@ -65443,7 +65439,7 @@ msgstr "אזור נוסף לחיפוש"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr ""
+msgstr "רווח בין שני עוגנים במצב אינטראקטיבי"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
 #, kde-format
@@ -66099,7 +66095,7 @@ msgstr "העברת בחירת הטקסט שמאלה"
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr ""
+msgstr "העברת בחירת הטקסט שמאלה בפיקסל אחד"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -66108,7 +66104,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
-msgstr ""
+msgstr "כאשר מצב הגדרת סוג פעיל, להעלות את תחילת הבחירה שמאלה בפיקסל אחד."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
@@ -66131,7 +66127,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
-msgstr ""
+msgstr "כאשר מצב הגדרת סוג פעיל, להעלות את תחילת הבחירה ימינה בפיקסל אחד."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66149,7 +66145,7 @@ msgstr "הסרת התמרות תווים"
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "הסרת התמרות תווים מהבחירה."
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66167,7 +66163,7 @@ msgstr "ה&סרת עיצוב"
 #, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr ""
+msgstr "הסרת כל מאפייני הטקסט מהבחירה."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
@@ -66197,7 +66193,7 @@ msgstr "מאפייני הטקסט הנוכחי"
 msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
-msgstr ""
+msgstr "להשתמש במאפיינים הנוכחיים במעגן מאפייני הטקסט כדי ליצור טקסטים חדשים."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, kde-format
@@ -66279,8 +66275,7 @@ msgid "Edit the currently selected text as SVG XML."
 msgstr "לערוך את הטקסט הנבחר כ־XML של SVG."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "לוח גליפים"
@@ -66836,7 +66831,7 @@ msgstr "כלי תיחום ומילוי"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"
-msgstr ""
+msgstr "כלי סכין: חיתוך מבעד לצורות"
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
 #, kde-format
@@ -67009,9 +67004,10 @@ msgid "Diagonal type angle threshold:"
 msgstr "סף זויות סוג אלכסוני:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
-msgstr ""
+msgstr "כלי סכין: הסרת "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
 #, fuzzy
@@ -67359,7 +67355,7 @@ msgstr "&לבן"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Size of the deformation brush"
-msgstr ""
+msgstr "גודל מכחול העיוות"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:225
 #, kde-format

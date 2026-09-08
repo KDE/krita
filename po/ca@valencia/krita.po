@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 02:43+0000\n"
-"PO-Revision-Date: 2026-09-02 08:52+0200\n"
+"POT-Creation-Date: 2026-09-08 02:52+0000\n"
+"PO-Revision-Date: 2026-09-06 18:41+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8705,7 +8705,7 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
-"Pren una mostra de color de la pantalla mentre es pren una mostra d'un color "
+"Pren una color de mostra de la pantalla mentre es pren una mostra d'un color "
 "real des del llenç si el cursor està sobre seu"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
@@ -30623,7 +30623,7 @@ msgstr "Color del contorn d'esborrador:"
 #: libs/ui/forms/wdggeneralsettings.ui:886
 #, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Forma del mostrejador de color:"
+msgstr "Forma del color de mostra:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -34328,7 +34328,7 @@ msgstr "Canvia el pinzell predefinit previ"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Mostrejador de color"
+msgstr "Color de mostra"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:91
@@ -35449,7 +35449,7 @@ msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
 "Display Mode: %5"
 msgstr ""
-"Selecció: x = %1 y = %2 amplària = %3 alçària = %4\n"
+"Selecció: x = %1 y = %2 amplària = %3 altura = %4\n"
 "Mode de visualització: %5"
 
 #: libs/ui/kis_statusbar.cc:425
@@ -36723,7 +36723,7 @@ msgstr "ID de la mostra:"
 #: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
-msgstr "Nom de la mostra de color:"
+msgstr "Nom del color de mostra:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:117
@@ -38291,7 +38291,7 @@ msgstr "Grup no editable."
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:581
 #, kde-format
 msgid "Color sampler does not work on this layer."
-msgstr "El mostrejador de color no funciona sobre esta capa."
+msgstr "El color de mostra no funciona sobre esta capa."
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
 #, kde-format
@@ -44979,81 +44979,81 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr "Voleu interrompre la codificació del vídeo de la filmació a intervals?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "S'està iniciant l'exportador…"
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Exporta el vídeo de la filmació a intervals com a"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Exporta"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "No hi ha cap fotograma que s'haja d'exportar"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Informació de la gravació"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "fotogrames"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "No hi ha cap fotograma que s'haja d'explorar."
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Trieu el fitxer executable de FFmpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, kde-format
 msgid "No frames to export."
 msgstr "No hi ha cap fotograma que s'haja d'exportar."
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "El fitxer de vídeo ja existix. Voleu sobreescriure'l?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "S'està codificant el vídeo de la filmació a intervals…"
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, kde-format
 msgid "Export failed. Error message:"
 msgstr "No s'ha pogut fer l'exportació. Missatge d'error:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45068,7 +45068,7 @@ msgstr ""
 "\n"
 "Voleu continuar?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -46885,7 +46885,7 @@ msgstr "Calcula"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
-"Calcula la relació alçària x a la mida de la lletra per a la primera família "
+"Calcula la relació d'alçària x la mida de la lletra per a la primera família "
 "de la lletra."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
@@ -52210,7 +52210,7 @@ msgstr "Llindar:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Mostrejador de color:"
+msgstr "Color de mostra:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -52584,7 +52584,7 @@ msgstr "Filtre de mapa d'alçàries a normal"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "Mapa d'a&lçàries a normal…"
+msgstr "Mapa d'al&çades a normal…"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
@@ -65770,7 +65770,7 @@ msgstr "Eina de pinzell a mà alçada"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Eina de mostreig de color"
+msgstr "Eina «Color de mostra»"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -66336,8 +66336,8 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>Determina si el mostrejador de color mostrarà</nobr> els colors de "
-"totes les capes visibles o només de la capa actualment seleccionada."
+"<nobr>Determina si el color de mostra mostrarà</nobr> els colors de totes "
+"les capes visibles o només de la capa actualment seleccionada."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
@@ -66364,8 +66364,8 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>El radi controla l'àrea de mostreig del mostrejador de color.</nobr> "
-"Els colors dels píxels dins d'este radi es mesclaran conjuntament."
+"<nobr>El radi controla l'àrea de mostreig del color de mostra.</nobr> Els "
+"colors dels píxels dins d'este radi es mesclaran conjuntament."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:207
@@ -66402,8 +66402,8 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Controla si el mostrejador de color actualitzarà el </nobr> fons "
-"actual o no."
+"<nobr>Controla si el color de mostra actualitzarà el </nobr> fons actual o "
+"no."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:251
@@ -70149,7 +70149,7 @@ msgstr "Eina de selecció de formes"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Mostrejador de color"
+msgstr "Color de mostra"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76

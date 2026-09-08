@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 02:43+0000\n"
+"POT-Creation-Date: 2026-09-08 02:52+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -46428,7 +46428,7 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr "타임랩스 비디오 인코딩을 중단하시겠습니까?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, fuzzy, kde-format
 #| msgctxt "Status for the export of the video record"
 #| msgid "Starting FFMpeg..."
@@ -46436,44 +46436,44 @@ msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "FFMpeg 시작 중..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "다음으로 타임랩스 비디오 내보내기"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "내보내기"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "내보낼 프레임 없음"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "녹화 정보"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "픽셀"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "프레임"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, fuzzy, kde-format
 #| msgctxt "Can't export recording because nothing to export"
 #| msgid "No frames to export"
@@ -46481,37 +46481,37 @@ msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "내보낼 프레임 없음"
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, fuzzy, kde-format
 #| msgid "Select FFMpeg Executable File"
 msgid "Select FFmpeg Executable File"
 msgstr "FFMpeg 실행 파일 선택"
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, fuzzy, kde-format
 #| msgctxt "Can't export recording because nothing to export"
 #| msgid "No frames to export"
 msgid "No frames to export."
 msgstr "내보낼 프레임 없음"
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, fuzzy, kde-format
 #| msgid "The video file is already exists. Do you wish to overwrite?"
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "비디오 파일이 이미 존재합니다. 덮어쓰시겠습니까?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "타임랩스 비디오 인코딩 중..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, fuzzy, kde-format
 #| msgid "Export failed. FFMpeg message:"
 msgid "Export failed. Error message:"
 msgstr "내보내기에 실패했습니다. FFMpeg 메시지:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, fuzzy, kde-format
 #| msgid ""
 #| "The recordings for this document will be deleted and you will not be able "
@@ -46529,7 +46529,7 @@ msgstr ""
 "보낸 타임 랩스는 보존됩니다)\n"
 "계속 진행하시겠습니까?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"

@@ -115,6 +115,18 @@ public:
         connect(&pausedTimer, SIGNAL(timeout()), q, SLOT(onPausedTimeout()));
     }
 
+    // For technical reasons recorder can not capture an image that is larger than 2^31 - 1 bytes in size, It is also
+    // kinda absurd that you'd even want to do it, so we just shouldn't support it
+    bool canRecord()
+    {
+        QSize imageSize = canvas->image()->size();
+
+        // We always convert to RGBA8, so can assume 4 bytes/pixel
+        quint64 totalSize = (quint64)imageSize.width() * (quint64)imageSize.height() * 4;
+
+        return totalSize <= 2147483647;
+    }
+
     void loadSettings()
     {
         RecorderConfig config(true);
@@ -273,8 +285,14 @@ public:
         ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
         ui->buttonRecordToggle->setText(isRecording ? i18nc("Stop recording the canvas", "Stop")
                                         : i18nc("Start recording the canvas", "Record"));
-        ui->buttonRecordToggle->setEnabled(true);
 
+        if (canRecord()) {
+            ui->buttonRecordToggle->setEnabled(true);
+            ui->buttonRecordToggle->setToolTip("");
+        } else {
+            ui->buttonRecordToggle->setEnabled(false);
+            ui->buttonRecordToggle->setToolTip(i18n("Image too large to be recorded"));
+        }
         ui->widgetSettings->setEnabled(!isRecording);
 
         statusBarLabel->setVisible(isRecording);
@@ -499,7 +517,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->prefix = d->getPrefix();
     bool wasToggled = false;
     if (d->recordAutomatically && !d->snapshotDirectory.isEmpty()
-        && !d->enabledIds.contains(document->linkedResourcesStorageId())) {
+        && !d->enabledIds.contains(document->linkedResourcesStorageId()) && d->canRecord()) {
         wasToggled = onRecordButtonToggled(true);
     }
     if (!wasToggled) { // onRecordButtonToggled(true) may call these, don't call them twice.

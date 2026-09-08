@@ -25,29 +25,45 @@ struct RecorderExportPreprocessor::Private {
     {
     }
 
-    void processTail()
+    void getTail()
     {
         if (!directory.exists())
             return;
 
-        Q_FOREACH (QString file, directory.entryList({"*-tail.*"})) {
-            QString oldFile = file;
-            directory.rename(oldFile, file.remove("-tail"));
+        const QString filename = "tail";
 
-            tails.append(file);
+        QFile file(directory.filePath(filename));
+
+        if (!file.exists()) {
+            return;
         }
+
+        if (!file.open(QIODevice::ReadOnly)) {
+            return;
+        }
+
+        tails.clear();
+        QDataStream out(&file);
+        out >> tails;
     }
 
-    void restoreTail()
+    void saveTail()
     {
         if (!directory.exists())
             return;
 
-        Q_FOREACH (QString tail, tails) {
-            QString oldName = tail;
-            directory.rename(oldName, tail.replace(".", "-tail."));
+        const QString filename = "tail";
+
+        QFile file(directory.filePath(filename));
+
+        if (!file.open(QIODevice::WriteOnly)) {
+            return;
         }
 
+        QDataStream out(&file);
+        out << tails;
+
+        file.close();
         tails.clear();
     }
 };
@@ -74,7 +90,7 @@ void RecorderExportPreprocessor::doPreprocessing()
         return;
     }
 
-    d->processTail();
+    d->getTail();
 
     QStringList fileNames = d->directory.entryList({"*." % RecorderFormatInfo::fileExtension(d->format)});
 
@@ -141,10 +157,8 @@ void RecorderExportPreprocessor::doPreprocessing()
         d->directory.rename(oldName, newName);
     }
 
-    d->tails = new_tails;
-}
-
-void RecorderExportPreprocessor::undoPreprocessing()
-{
-    d->restoreTail();
+    if (d->tails != new_tails) {
+        d->tails = new_tails;
+        d->saveTail();
+    }
 }

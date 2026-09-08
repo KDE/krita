@@ -44,6 +44,15 @@ namespace
         "KritaShape/KisToolRectangle",
         "KritaShape/KisToolEllipse",
     }; // disable recorder when toggled to one of these tools and activated tool(left button pressed on canvas).
+
+    static QString filePathForIndex(int index, QString directory, RecorderFormat format )
+    {
+        QString fileName = QString("%1").arg(index, 7, 10, QLatin1Char('0'));
+
+        return QString("%1%2.%3").arg(directory,
+                                      fileName,
+                                      RecorderFormatInfo::fileExtension(format));
+    }
 }
 
 bool ThreadCounter::set(int value)
@@ -302,7 +311,7 @@ RecorderWriter::~RecorderWriter()
     delete d;
 }
 
-bool RecorderWriter::onCaptureImageImpl(int index, bool tail, QRect region, KisPaintDevice* device)
+bool RecorderWriter::onCaptureImageImpl(int index, QRect region, KisPaintDevice *device)
 {
     d->captureImage(region, device);
 
@@ -314,7 +323,7 @@ bool RecorderWriter::onCaptureImageImpl(int index, bool tail, QRect region, KisP
 
     d->partIndex = index;
 
-    return d->writeFrame(tail);
+    return d->writeFrame();
 }
 
 bool RecorderWriter::isActive()
@@ -335,7 +344,7 @@ void RecorderWriter::onCaptureImage(int writerId, int index, QVector<QRect> regi
     bool framesWrittens = true;
 
     Q_FOREACH (QRect region, regions) {
-        framesWrittens &= onCaptureImageImpl(index, tail, region, device.data());
+        framesWrittens &= onCaptureImageImpl(index, region, device.data());
         index++;
     }
 
@@ -443,7 +452,7 @@ public:
         for (auto &el : writerPool) {
             el.thread->quit();
             el.thread->wait(RecorderConst::waitThreadTimeoutMs);
-            disconnect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>, KisPaintDeviceSP)));
+            disconnect(q, SIGNAL(startCapturing(int, int, QVector<QRect>, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, QVector<QRect>, KisPaintDeviceSP)));
             disconnect(el.writer.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             if (el.thread->isRunning())
             {
@@ -487,7 +496,7 @@ public:
             auto writerPtr = writerPool[newWorkerId].writer;
             auto threadPtr = writerPool[newWorkerId].thread;
             threadPtr->setObjectName(QString("Krita-Recorder-WriterPool#%1").arg(newWorkerId));
-            connect(q, SIGNAL(startCapturing(int, int, bool, QVector<QRect>, KisPaintDeviceSP)), writerPtr.get(), SLOT(onCaptureImage(int, int, bool, QVector<QRect>, KisPaintDeviceSP)));
+            connect(q, SIGNAL(startCapturing(int, int,  QVector<QRect>, KisPaintDeviceSP)), writerPtr.get(), SLOT(onCaptureImage(int, int, QVector<QRect>, KisPaintDeviceSP)));
             connect(writerPtr.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             writerPtr->moveToThread(threadPtr.get());
             threadPtr->start(QThread::IdlePriority);
@@ -858,20 +867,76 @@ void RecorderWriterManager::tryRestoreRegion()
 void RecorderWriterManager::saveState()
 {
     saveRegion();
+
     // Capture some tail frames, but only if we're zoomed in, and if some frames were captured
-    if (d->oldRegion != d->canvas->image()->bounds() && d->oldRegion != QRect(-1, -1, -1, -1)) {
-        d->captureTail = true;
-        onTimer();
+    const QString filename = "tail";
+
+    if (d->oldRegion == d->canvas->image()->bounds() || d->oldRegion == QRect(-1, -1, -1, -1)) {
+        return;
     }
+
+    int beginIndex = d->partIndex + 1;
+
+    d->captureTail = true;
+    onTimer();
+
+    int endIndex = d->partIndex;
+
+    QStringList fileNames;
+
+    for (int i = beginIndex; i <= endIndex; i++) {
+        fileNames.push_back(filePathForIndex(i, "", d->settings.format));
+    }
+
+    QFile file(d->outputDir.filePath(filename));
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        return;
+    }
+
+    QDataStream out(&file);
+    out << fileNames;
+
+    file.close();
 }
 
 void RecorderWriterManager::restoreState()
 {
     tryRestoreRegion();
+
     // Remove all tail frames
-    if(d->outputDir.exists()) {
-        Q_FOREACH (QString f, d->outputDir.entryList({"*-tail.*"}, QDir::Files)) {
-            d->outputDir.remove(f);
-        }
+    const QString filename = "tail";
+
+    QStringList fileNames;
+
+    QFile file(d->outputDir.filePath(filename));
+
+    if (!file.exists()) {
+        return;
+    }
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
+    QDataStream out(&file);
+    out >> fileNames;
+
+    file.close();
+    d->outputDir.remove(filename);
+
+    Q_FOREACH (QString name, fileNames) {
+        d->outputDir.remove(name);
+    }
+
+    // Move the frame index back
+    QRegularExpression fileRegex =
+        RecorderConst::snapshotFilePatternFor(RecorderFormatInfo::fileExtension(d->settings.format));
+
+    QRegularExpressionMatch match = fileRegex.match(fileNames.first());
+
+    if (match.hasMatch()) {
+        int index = match.captured(1).toInt();
+        d->partIndex = index - 1;
     }
 }

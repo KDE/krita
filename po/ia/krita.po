@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:43+0000\n"
+"POT-Creation-Date: 2026-09-08 00:43+0000\n"
 "PO-Revision-Date: 2026-07-17 12:04+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -45451,7 +45451,7 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Settings..."
@@ -45459,14 +45459,14 @@ msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "Preferentias..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, fuzzy, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Krita Gemini"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45474,7 +45474,7 @@ msgstr "Krita Gemini"
 msgid "Export"
 msgstr "Exporta"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy selection to clipboard"
@@ -45482,26 +45482,26 @@ msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Copia selection a area de transferentia"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Registrante"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, fuzzy, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "Remove strato (layer)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy selection to clipboard"
@@ -45509,36 +45509,36 @@ msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Copia selection a area de transferentia"
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy selection to clipboard"
 msgid "No frames to export."
 msgstr "Copia selection a area de transferentia"
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, fuzzy, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr ""
 "Un pacchetto de script con le nomine \"%1\" jam existe. Reimplacia iste "
 "pacchetto?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, fuzzy, kde-format
 msgid "Export failed. Error message:"
 msgstr "Importa imagines"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45548,7 +45548,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"

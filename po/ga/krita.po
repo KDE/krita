@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:43+0000\n"
+"POT-Creation-Date: 2026-09-08 00:43+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -45428,7 +45428,7 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr "An bhfuil tú ag iarraidh an físeán luasghéaraithe a ionchódú?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, fuzzy, kde-format
 #| msgctxt "Status for the export of the video record"
 #| msgid "Starting FFmpeg..."
@@ -45436,14 +45436,14 @@ msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "Ag tosú FFmpeg..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Easpórtáil Físeán Timelapse Mar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45451,63 +45451,63 @@ msgstr "Easpórtáil Físeán Timelapse Mar"
 msgid "Export"
 msgstr "Easpórtáil"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Gan aon fhrámaí le honnmhairiú"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Eolas taifeadta"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "fráma(í)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Gan frámaí le brabhsáil."
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Roghnaigh Comhad Inrite FFmpeg"
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, kde-format
 msgid "No frames to export."
 msgstr "Gan aon frámaí le honnmhairiú."
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "Tá an comhad físe ann cheana féin. Ar mhaith leat é a athscríobh?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "Tá an físeán luasghéaraithe á ionchódú..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, fuzzy, kde-format
 #| msgid "Export failed. FFmpeg message:"
 msgid "Export failed. Error message:"
 msgstr "Theip ar an easpórtáil. Teachtaireacht FFmpeg:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45522,7 +45522,7 @@ msgstr ""
 "\n"
 "Ar mhaith leat leanúint ar aghaidh?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"

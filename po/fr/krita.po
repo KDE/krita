@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:43+0000\n"
+"POT-Creation-Date: 2026-09-08 00:43+0000\n"
 "PO-Revision-Date: 2026-08-04 18:27+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -14989,7 +14989,7 @@ msgstr "Intersection de l'aimantation"
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr "Boîte de délimitation aimantée"
+msgstr "Boite de délimitation aimantée"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -26859,7 +26859,7 @@ msgid ""
 msgstr ""
 "AVERTISSEMENT : le mode « HDR » a été activé sur la surface fonctionnant en "
 "mode 8 bits !\n"
-"Veuillez activer le mode 10 bits dans la boîte de dialogue « Préférences » "
+"Veuillez activer le mode 10 bits dans la boite de dialogue « Préférences » "
 "de Krita et redémarrer Krita pour éviter les bandes de couleurs !"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
@@ -27015,7 +27015,7 @@ msgstr "Intersection"
 #: libs/ui/canvas/kis_guides_manager.cpp:785
 #, kde-format
 msgid "Bounding Box"
-msgstr "Boîte de délimitation"
+msgstr "Boite de délimitation"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
@@ -27236,7 +27236,7 @@ msgstr "Filtre : %1"
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "Boîte de dialogue"
+msgstr "Boite de dialogue"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:20
@@ -30420,7 +30420,7 @@ msgstr "Barres d'outils"
 #: libs/ui/forms/wdgfullscreensettings.ui:49
 #, kde-format
 msgid "Toolbox and dockers"
-msgstr "Boîte à outils et panneaux"
+msgstr "Boite à outils et panneaux"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScrollbars)
 #: libs/ui/forms/wdgfullscreensettings.ui:56
@@ -34943,7 +34943,7 @@ msgstr "Attirail de &peintre"
 #: libs/ui/kis_control_frame.cpp:203
 #, kde-format
 msgid "&Docker Box"
-msgstr "Boîte de &panneaux"
+msgstr "Boite de &panneaux"
 
 #: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
@@ -34971,12 +34971,12 @@ msgstr "Dégradés"
 #: libs/ui/kis_control_frame.cpp:358
 #, kde-format
 msgid "Docker box"
-msgstr "Boîte de panneaux"
+msgstr "Boite de panneaux"
 
 #: libs/ui/kis_control_frame.cpp:364
 #, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Boîte de panneaux de la barre d'outils"
+msgstr "Boite de panneaux de la barre d'outils"
 
 #: libs/ui/kis_custom_pattern.cc:103
 #, kde-format
@@ -38851,7 +38851,7 @@ msgstr "%1x%2"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:26
 #, kde-format
 msgid "Toolbox"
-msgstr "Boîte à outils"
+msgstr "Boite à outils"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
 #, kde-format
@@ -45016,7 +45016,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Boîte à cocher pour la sélection de calques"
+msgstr "Boite à cocher pour la sélection de calques"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
@@ -45565,20 +45565,20 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr "Annuler l'encodage de la vidéo en accéléré ?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "Démarrage de l'exportateur..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Exporter la vidéo en accéléré comme"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45586,62 +45586,62 @@ msgstr "Exporter la vidéo en accéléré comme"
 msgid "Export"
 msgstr "Exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Aucune image à exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Informations d'enregistrement"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "Image(s)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Aucune image à exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Sélectionner le fichier exécutable de « FFMpeg »"
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, kde-format
 msgid "No frames to export."
 msgstr "Aucune image à exporter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "Le fichier vidéo existe déjà. Voulez-vous vraiment l'écraser ?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "La vidéo en accéléré est en cours d'encodage..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, kde-format
 msgid "Export failed. Error message:"
 msgstr "Échec de l'exportation. Message d'erreur :"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45657,7 +45657,7 @@ msgstr ""
 "\n"
 "Voulez-vous vraiment continuer ?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -69283,7 +69283,7 @@ msgstr "Activer le mode de réglage du type."
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Boîtes de dialogue"
+msgstr "Boites de dialogue"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:207
 #, kde-format
@@ -69382,14 +69382,14 @@ msgstr "Déboguer"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Afficher les boîtes de liaison de caractères"
+msgstr "Afficher les boites de liaison de caractères"
 
 # Timeline laissé volontairement en anglais
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:335
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Afficher les boîtes avec lignes"
+msgstr "Afficher les boites avec lignes"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25

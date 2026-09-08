@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-05 00:43+0000\n"
+"POT-Creation-Date: 2026-09-08 00:43+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -45407,7 +45407,7 @@ msgstr ""
 msgid "Abort encoding the timelapse video?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:327
+#: plugins/dockers/recorder/recorder_export.cpp:328
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Settings..."
@@ -45415,14 +45415,14 @@ msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "Nuostatos..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:446
+#: plugins/dockers/recorder/recorder_export.cpp:447
 #, fuzzy, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Dalinis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:536
+#: plugins/dockers/recorder/recorder_export.cpp:537
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:373
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
@@ -45430,67 +45430,67 @@ msgstr "Dalinis"
 msgid "Export"
 msgstr "Ekspozicija"
 
-#: plugins/dockers/recorder/recorder_export.cpp:550
+#: plugins/dockers/recorder/recorder_export.cpp:551
 #, fuzzy, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Kopijuoti pažymėjimą į naują sluoksnį"
 
-#: plugins/dockers/recorder/recorder_export.cpp:554
+#: plugins/dockers/recorder/recorder_export.cpp:555
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Įrašymas"
 
-#: plugins/dockers/recorder/recorder_export.cpp:557
+#: plugins/dockers/recorder/recorder_export.cpp:558
 #, fuzzy, kde-format
 #| msgid "px"
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "piks"
 
-#: plugins/dockers/recorder/recorder_export.cpp:559
+#: plugins/dockers/recorder/recorder_export.cpp:560
 #, fuzzy, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "Pašalinti sluoksnį"
 
-#: plugins/dockers/recorder/recorder_export.cpp:619
+#: plugins/dockers/recorder/recorder_export.cpp:620
 #, fuzzy, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Kopijuoti pažymėjimą į naują sluoksnį"
 
-#: plugins/dockers/recorder/recorder_export.cpp:731
+#: plugins/dockers/recorder/recorder_export.cpp:732
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:811
+#: plugins/dockers/recorder/recorder_export.cpp:812
 #, fuzzy, kde-format
 msgid "No frames to export."
 msgstr "Kopijuoti pažymėjimą į naują sluoksnį"
 
-#: plugins/dockers/recorder/recorder_export.cpp:825
+#: plugins/dockers/recorder/recorder_export.cpp:826
 #, fuzzy, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr ""
 "Dokumentas šiuo vardu jau egzistuoja.\n"
 "Ar norite jį perrašyti?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:853
+#: plugins/dockers/recorder/recorder_export.cpp:854
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:868
+#: plugins/dockers/recorder/recorder_export.cpp:869
 #, fuzzy, kde-format
 #| msgid "Export Layer"
 msgid "Export failed. Error message:"
 msgstr "Eksportuoti sluoksnį"
 
-#: plugins/dockers/recorder/recorder_export.cpp:891
+#: plugins/dockers/recorder/recorder_export.cpp:892
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -45500,7 +45500,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:898
+#: plugins/dockers/recorder/recorder_export.cpp:899
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, fuzzy, kde-format
 #| msgid "Facing pages"

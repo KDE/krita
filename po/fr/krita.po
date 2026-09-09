@@ -63777,7 +63777,7 @@ msgstr "Plugin pour modifier l'espace de couleurs des documents sélectionnés."
 #: plugins/python/exportlayers/uiexportlayers.py:35
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:20
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Rafraichir"
 
 #: plugins/python/colorspace/uicolorspace.py:70
 #: plugins/python/documenttools/uidocumenttools.py:50
@@ -70017,7 +70017,7 @@ msgstr "Diagonal :"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
 #, kde-format
 msgid "Diagonal type angle threshold:"
-msgstr "Seuil d’angle de type diagonal :"
+msgstr "Seuil d'angle de type diagonal :"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:281
 msgctxt "(qtundo-format)"

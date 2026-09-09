@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-08 00:43+0000\n"
-"PO-Revision-Date: 2026-09-06 18:41+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2026-09-08 14:56+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -47034,7 +47034,8 @@ msgid ""
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
 "La línia base dominant especifica com s'alineen els fragments de text de "
-"mides diferents, també és la predeterminada per a la línia base d'alineació."
+"mides diferents, també és el valor predeterminat per a la línia base "
+"d'alineació."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -48958,8 +48959,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Augmenta el valor, claredat, intensitat o luma del color seleccionat, "
-"depenent del model de color seleccionat"
+"Augmenta el valor, la claredat, la intensitat o la luminància del color "
+"seleccionat, depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -48980,8 +48981,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Disminueix el valor, claredat, intensitat o luma del color seleccionat, "
-"depenent del model de color seleccionat"
+"Disminueix el valor, la claredat, la intensitat o la luminància del color "
+"seleccionat, depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -49588,7 +49589,7 @@ msgstr "Situa totes les capes noves en una capa de grup"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:39
 #, kde-format
 msgid "Put every layer in its own, separate group layer"
-msgstr "Situa cada capa en la seva pròpia capa de grup separada"
+msgstr "Situa cada capa en la seva pròpia capa de grup independent"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAlphaLock)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:46
@@ -51219,8 +51220,8 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
-"Més d'un dels recursos comparteix el mateix nom de fitxer «%1». Exporteu-los "
-"en paquets separats."
+"Més d'un recurs comparteix el mateix nom de fitxer «%1». Exporteu-los en "
+"paquets separats."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
 #, kde-format
@@ -55646,9 +55647,9 @@ msgid ""
 "scene linear.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Hybrid Log Gamma necessita un pas de conversió "
-"addicional en el mig, ja que el Krita actualment no pot enviar dades HLG "
-"directament a la pantalla. Per tant, apliquem la corba opto-òptica HLG per a "
-"convertir des de pantalla a escena lineal.</p></body></html>"
+"intermedi, ja que el Krita actualment no pot enviar dades HLG directament a "
+"la pantalla. Per tant, apliquem la corba opto-òptica d'HLG per a convertir "
+"des de lineal de la pantalla a lineal de l'escena.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
@@ -57207,9 +57208,9 @@ msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Estableix la mida del mosaic per a la compressió. Els "
-"grups més grans poden millorar la compressió, però requereixen més memòria.</"
-"p></body></html>"
+"<html><head/><body><p>Estableix la mida de les tessel·les per a la "
+"compressió. Els grups més grans poden millorar la compressió, però "
+"requereixen més memòria.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
@@ -58228,9 +58229,9 @@ msgstr ""
 "píxels verds de les files parelles són més sensibles a la llum ultraviolada "
 "que els de les files senars, aquesta diferència provoca un patró mallat a la "
 "sortida; usant aquesta opció això es resol amb una pèrdua de detall mínima.</"
-"p><p>Resumint, aquesta opció difumina una mica la imatge, però elimina el "
-"patró mallat 2x2 amb un mètode de qualitat VNG o amb un mètode imbricat de "
-"qualitat AHD.</p>"
+"p><p>Resumint, aquesta opció difumina una mica la imatge, però elimina els "
+"patrons de malla de 2x2 amb el mètode de qualitat VNG o els efectes de "
+"laberint amb el mètode de qualitat AHD.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:298
 #, kde-format
@@ -65631,8 +65632,7 @@ msgstr "&Selecciona l'eina del pinzell a mà alçada en prémer una drecera"
 #: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr ""
-"Mostra els missatges emer&gents en el llenç en activar els pinzells "
-"predefinits"
+"Mostra els missatges emer&gents en el llenç en activar el pinzell predefinit"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""

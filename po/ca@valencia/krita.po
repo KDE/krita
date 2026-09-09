@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-08 02:52+0000\n"
-"PO-Revision-Date: 2026-09-06 18:41+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"PO-Revision-Date: 2026-09-08 14:56+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7748,7 +7748,7 @@ msgid ""
 msgstr ""
 "El text utilitza transformacions de caràcters SVG 1.1 per a posicionar cada "
 "línia. Els espais i les línies noves estan reduïts. Açò és per a la "
-"compatibilitat amb SVG 1.1."
+"compatibilitat cap arrere amb SVG 1.1."
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
@@ -9029,7 +9029,7 @@ msgstr "Trieu l'esborrador predefinit"
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
-msgstr "Tria l'esborrador predefinit, junt amb l'eina de pinzell a mà alçada"
+msgstr "Tria l'esborrador predefinit, junt amb l'eina «Pinzell a mà alçada»"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -9046,7 +9046,7 @@ msgstr "Trieu el pinzell predefinit"
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr "Tria el pinzell predefinit, junt amb l'eina de pinzell a mà alçada"
+msgstr "Tria el pinzell predefinit, junt amb l'eina «Pinzell a mà alçada»"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -9824,7 +9824,7 @@ msgstr "Relleu en totes les direccions"
 #, kde-format
 msgctxt "action"
 msgid "&Small Tiles..."
-msgstr "&Mosaics petits…"
+msgstr "&Tessel·les xicotetes…"
 
 #. i18n: context: toolTip @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
@@ -9834,7 +9834,7 @@ msgstr "&Mosaics petits…"
 #, kde-format
 msgctxt "action"
 msgid "Small Tiles"
-msgstr "Mosaics petits"
+msgstr "Tessel·les xicotetes"
 
 #. i18n: context: text @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1174
@@ -11563,7 +11563,7 @@ msgstr "Activa la capa germana anterior"
 #, kde-format
 msgctxt "action"
 msgid "Activate previously selected layer"
-msgstr "Activa la capa seleccionada anteriorment"
+msgstr "Activa la capa triada anteriorment"
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2590
@@ -11745,14 +11745,14 @@ msgstr "Afig una màscara de superp&osició de color"
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Afig una màscara de filtre de superposició ràpida de color nova"
+msgstr "Afig una màscara de filtre de superposició ràpida del color nova"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2689
 #, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Màscara de superposició ràpida de color"
+msgstr "Màscara de superposició ràpida del color"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2698
@@ -12099,7 +12099,7 @@ msgstr "Agrupa ràpid"
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
-msgstr "Crea una capa de grup que continga les capes seleccionades"
+msgstr "Crea una capa de grup que continga les capes triades"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -12133,8 +12133,7 @@ msgstr "Agrupa ràpid de retall"
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
-msgstr ""
-"Agrupa les capes seleccionades i afig una capa amb el canal alfa retallat"
+msgstr "Agrupa les capes triades i afig una capa amb el canal alfa retallat"
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2950
@@ -22637,7 +22636,7 @@ msgstr "Col·lecció d'imatges de referència de Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Gamut Mask"
-msgstr "Màscares de gamma de Krita"
+msgstr "Màscares de gamut de Krita"
 
 #: libs/koplugin/KisMimeDatabase.cpp:294
 #, kde-format
@@ -24241,7 +24240,7 @@ msgstr "Nom del fitxer"
 #: libs/resources/KisTagResourceModel.cpp:631
 #, kde-format
 msgid "Tooltip"
-msgstr "Consell"
+msgstr "Consell d'eina"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
@@ -24448,7 +24447,7 @@ msgstr "Sessions"
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
-msgstr "Màscares de gamma"
+msgstr "Màscares de gamut"
 
 #: libs/resources/KisResourceTypes.cpp:54
 #, kde-format
@@ -25026,7 +25025,7 @@ msgstr "Apega l'estil"
 #: libs/ui/actions/KisTransformToolActivationCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
-msgstr "Activa l'eina de transformació"
+msgstr "Activa l'eina «Transforma»"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:84
 #, kde-format
@@ -30211,14 +30210,14 @@ msgstr "Barra d'estat"
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:51
 #, kde-format
 msgid "Toggle gamut mask"
-msgstr "Canvia la màscara de gamma"
+msgstr "Canvia la màscara de gamut"
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "Tria una màscara en l'acoblador «Màscares de gamma»"
+msgstr "Tria una màscara en l'acoblador «Màscares de gamut»"
 
 #. i18n: ectx: attribute (title), widget (QWidget, File)
 #: libs/ui/forms/wdggeneralsettings.ui:52
@@ -30757,7 +30756,7 @@ msgstr "Activa la sensibilitat a la pressió tàctil (pot ser incorrecta)"
 #: libs/ui/forms/wdggeneralsettings.ui:1080
 #, kde-format
 msgid "Activate transform tool after pasting"
-msgstr "Activa l'eina de transformació després d'apegar"
+msgstr "Activa l'eina «Transforma» després d'apegar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
 #: libs/ui/forms/wdggeneralsettings.ui:1087
@@ -31747,7 +31746,7 @@ msgid ""
 "reconfigured in `Image > Properties.`"
 msgstr ""
 "Utilitza el color de fons i l'opacitat com a color base del llenç. Açò es "
-"pot reconfigurar en «Imatge --> Propietats»."
+"pot reconfigurar en «Imatge → Propietats»."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -32434,7 +32433,7 @@ msgstr "Vista prèvia instantània"
 #: libs/ui/forms/wdgperformancesettings.ui:565
 #, kde-format
 msgid "Use in-stack preview in Transform Tool"
-msgstr "Utilitza la vista prèvia de la pila en l'eina de transformació"
+msgstr "Utilitza la vista prèvia de la pila en l'eina «Transforma»"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdgperformancesettings.ui:572
@@ -32468,7 +32467,7 @@ msgid ""
 "preview, even if instant preview is disabled in the &quot;View&quot; menu</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>La vista prèvia de l'eina de transformació sempre "
+"<html><head/><body><p>La vista prèvia de l'eina «Transforma» sempre "
 "utilitzarà la vista prèvia instantània, encara que estiga inhabilitada en el "
 "menú «Visualitza»</p></body></html>"
 
@@ -32476,7 +32475,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:591
 #, kde-format
 msgid "in Transform Tool"
-msgstr "en l'eina de transformació"
+msgstr "en l'eina «Transforma»"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:598
@@ -32486,15 +32485,15 @@ msgid ""
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>La vista prèvia de l'eina de moure sempre utilitzarà "
-"la vista prèvia instantània, encara que estiga inhabilitada en el menú "
+"<html><head/><body><p>La vista prèvia de l'eina «Mou» sempre utilitzarà la "
+"vista prèvia instantània, encara que estiga inhabilitada en el menú "
 "«Visualitza»</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:601
 #, kde-format
 msgid "in Move Tool"
-msgstr "en l'eina de moure"
+msgstr "en l'eina «Mou»"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
@@ -32561,7 +32560,7 @@ msgstr "Selector del triangle sRGB"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:65
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Selector de gamma àmplia"
+msgstr "Selector de gamut àmplia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:103
@@ -34129,58 +34128,58 @@ msgstr "Confirma"
 #: libs/ui/input/kis_tool_invocation_action.cpp:45
 #, kde-format
 msgid "Activate Line Tool"
-msgstr "Activa l'eina de línies"
+msgstr "Activa l'eina «Línies»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:46
 #, kde-format
 msgid "Activate Ellipse Tool"
-msgstr "Activa l'eina d'el·lipses"
+msgstr "Activa l'eina «El·lipses»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:47
 #, kde-format
 msgid "Activate Rectangle Tool"
-msgstr "Activa l'eina de rectangles"
+msgstr "Activa l'eina «Rectangles»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:48
 #: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
 msgid "Activate Move Tool"
-msgstr "Activa l'eina de moure"
+msgstr "Activa l'eina «Mou»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:49
 #, kde-format
 msgid "Activate Fill Tool"
-msgstr "Activa l'eina d'emplenar"
+msgstr "Activa l'eina «Emplenat»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:50
 #, kde-format
 msgid "Activate Gradient Tool"
-msgstr "Activa l'eina de degradat"
+msgstr "Activa l'eina «Degradat»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:51
 #, kde-format
 msgid "Activate Measure Tool"
-msgstr "Activa l'eina de mesura"
+msgstr "Activa l'eina «Mesura»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:52
 #, kde-format
 msgid "Activate Elliptical Selection Tool"
-msgstr "Activa l'eina de selecció el·líptica"
+msgstr "Activa l'eina «Selecció el·líptica»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:53
 #, kde-format
 msgid "Activate Rectangular Selection Tool"
-msgstr "Activa l'eina de selecció rectangular"
+msgstr "Activa l'eina «Selecció rectangular»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:54
 #, kde-format
 msgid "Activate Contiguous Selection Tool"
-msgstr "Activa l'eina de selecció d'àrees contigües"
+msgstr "Activa l'eina «Selecció d'àrees contigües»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:55
 #, kde-format
 msgid "Activate Freehand Selection Tool"
-msgstr "Activa l'eina de selecció a mà alçada"
+msgstr "Activa l'eina «Selecció a mà alçada»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
@@ -34349,7 +34348,7 @@ msgstr "Activa la capa anterior"
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "Activa l'eina de pinzell a mà alçada"
+msgstr "Activa l'eina «Pinzell a mà alçada»"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:33
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -34360,7 +34359,7 @@ msgstr "Eina de selecció a mà alçada"
 #: libs/ui/input/KisTouchGestureAction.cpp:35
 #, kde-format
 msgid "Activate Transform Tool"
-msgstr "Activa l'eina de transformació"
+msgstr "Activa l'eina «Transforma»"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -34571,7 +34570,7 @@ msgstr "Tria un color"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
-msgstr "Fusiona les capes seleccionades"
+msgstr "Fusiona les capes triades"
 
 #: libs/ui/kis_layer_manager.cc:196
 #, kde-format
@@ -34737,7 +34736,7 @@ msgstr "Afig una màscara de transformació"
 #: libs/ui/kis_mask_manager.cc:307
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Afig una superposició ràpida de color"
+msgstr "Afig una superposició ràpida del color"
 
 #: libs/ui/kis_mask_manager.cc:311
 #, kde-format
@@ -34960,13 +34959,13 @@ msgstr "Desagrupa ràpid"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
-msgstr "Desactivat: no es permeten les màscares en grups de pas a través!"
+msgstr "Desactivat: no es permeten les màscares en grups «Pas a través»!"
 
 #: libs/ui/kis_node_model.cpp:561
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
-msgstr "Desactivat: no es permet clonar grups de pas a través!"
+msgstr "Desactivat: no es permet clonar grups «Pas a través»!"
 
 #: libs/ui/kis_node_model.cpp:602
 #, kde-format
@@ -35517,7 +35516,7 @@ msgstr "Disposicions de la finestra"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:273
 #, kde-format
 msgid "Gamut masks"
-msgstr "Màscares de gamma"
+msgstr "Màscares de gamut"
 
 #: libs/ui/KisApplication.cpp:460
 #, kde-format
@@ -37764,7 +37763,7 @@ msgstr "&Distància:"
 #: libs/ui/layerstyles/wdgdropshadow.ui:214
 #, kde-format
 msgid "Sp&read:"
-msgstr "Estend&re:"
+msgstr "Dispe&rsió:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -38281,7 +38280,7 @@ msgstr "Mida del pinzell: %1 px"
 #: libs/ui/tool/kis_tool_utils.cpp:425
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
-msgstr "La capa només es pot pintar en el mode Rentatge."
+msgstr "La capa només es pot pintar en el mode «Rentatge»."
 
 #: libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
@@ -38384,8 +38383,8 @@ msgid ""
 "New AppImage was downloaded to %1. To complete the update, close Krita and "
 "run the new AppImage."
 msgstr ""
-"S'ha baixat una «appimage» nova a %1. Per a completar l'actualització, "
-"tanqueu Krita i executeu l'«appimage» nova."
+"S'ha baixat una AppImage nova a %1. Per a completar l'actualització, tanqueu "
+"Krita i executeu AppImage nova."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLinks)
 #: libs/ui/wdgsplash.ui:439
@@ -39216,7 +39215,7 @@ msgstr ""
 "inclou tots els cians, verds i grocs-verds imprimibles, especialment quan "
 "s'imprimix emprant impressores d'injecció de tinta de gamma alta d'hui en "
 "dia. El BetaRGB (no inclòs en el paquet de perfils) i el Rec.2020 són més "
-"coincidents per a les gammes de color de les impressores de gamma àmplia "
+"coincidents per a les gammes de color de les impressores de gamut àmplia "
 "d'hui en dia.</p><p>La gamma de colors Adobe RGB 1998 és una aproximació "
 "raonable a alguns dels monitors de gamma alta.</p>"
 
@@ -39400,7 +39399,7 @@ msgid ""
 msgstr ""
 "<p>Per a evitar possibles problemes d'infracció dels drets d'ús, he emprat "
 "«WideRGB» com a nom base per a estos perfils.</p><p>El WideGamutRGB va ser "
-"dissenyat per Adobe per a ser un espai de color de gamma àmplia que utilitza "
+"dissenyat per Adobe per a ser un espai de color de gamut àmplia que utilitza "
 "colors espectrals com a primaris. Els valors dels primaris de Pascale "
 "produïxen un perfil que correspon amb els antics perfils V2 Widegamut "
 "d'Adobe i Canon. És un espai de color interessant, però poc després de la "
@@ -42927,7 +42926,7 @@ msgstr "Tipus de model del color"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:103
 #, kde-format
 msgid "Luma Coefficients"
-msgstr "Coeficients de luma"
+msgstr "Coeficients de luminància"
 
 #. i18n: ectx: property (text), widget (QLabel, redlabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:134
@@ -43840,13 +43839,13 @@ msgstr "HS&V"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:256
 #, kde-format
 msgid "Gamut Mask Behavior"
-msgstr "Comportament de la màscara de gamma"
+msgstr "Comportament de la màscara de gamut"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enforceGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:264
 #, kde-format
 msgid "Enforce gamut &mask"
-msgstr "Força la &màscara de gamma"
+msgstr "Força la &màscara de gamut"
 
 #. i18n: ectx: property (text), widget (QRadioButton, permissiveGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:271
@@ -44068,19 +44067,19 @@ msgstr "Suprimix la màscara seleccionada"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:126
 #, kde-format
 msgid "Edit the gamut mask"
-msgstr "Edita la màscara de gamma"
+msgstr "Edita la màscara de gamut"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:56
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:59
 #, kde-format
 msgid "Gamut Masks"
-msgstr "Màscares de gamma"
+msgstr "Màscares de gamut"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:128
 #, kde-format
 msgid "Could not open gamut mask for editing."
-msgstr "No s'ha pogut obrir la màscara de gamma per a edició."
+msgstr "No s'ha pogut obrir la màscara de gamut per a edició."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:129
 #, kde-format
@@ -44090,7 +44089,7 @@ msgstr "No s'ha trobat l'editor de la plantilla."
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:262
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
-msgstr "La guardada de la màscara de gamma «%1» s'ha interromput."
+msgstr "La guardada de la màscara de gamut «%1» s'ha interromput."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
@@ -44106,7 +44105,7 @@ msgstr ""
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
 #, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
-msgstr "La màscara de gamma <b>«%1»</b> ha sigut modificada."
+msgstr "La màscara de gamut <b>«%1»</b> ha sigut modificada."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, kde-format
@@ -44331,7 +44330,7 @@ msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 "Mostra la selecció global com a una màscara de selecció normal en "
-"l'acoblador de <b>Capes</b>"
+"l'acoblador <b>Capes</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
@@ -44536,7 +44535,7 @@ msgstr "Registres"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:148
 #, kde-format
 msgid "Tile Engine"
-msgstr "Motor del mosaic"
+msgstr "Motor de tessel·les"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
@@ -45524,7 +45523,8 @@ msgid ""
 "Depending on timelapse speed, this may cause flickering in the resulting "
 "video."
 msgstr ""
-"Grava els fotogrames quan està actiu el mode Capa aïllada o Grup aïllat.\n"
+"Grava els fotogrames quan està actiu el mode «Aïlla la capa» o «Aïlla el "
+"grup».\n"
 "Depenent de la velocitat de la filmació a intervals, açò pot provocar "
 "parpelleig en el vídeo final."
 
@@ -45562,13 +45562,13 @@ msgstr "Grava"
 msgid "Export..."
 msgstr "Exporta…"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:171
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Qualitat:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:172
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45581,13 +45581,13 @@ msgstr ""
 "No es recomanen valors inferiors a 50 perquè causen una gran quantitat de "
 "defectes."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Compressió:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:181
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45603,25 +45603,25 @@ msgstr ""
 "No es recomanen valors superiors a 3 perquè causen un alt impacte en el "
 "rendiment."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:209
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "FPS del vídeo:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Interval de captura:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:259
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Original"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:260
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45629,7 +45629,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Meitat"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:261
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45637,35 +45637,40 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Un quart"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:286
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Para"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:287
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Grava"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:294
+#, kde-format
+msgid "Image too large to be recorded"
+msgstr ""
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:344
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr "Gravació actiu amb %1 de %2 fils disponibles"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:344
 #, kde-format
 msgid "Recorder is paused"
 msgstr "El gravador està en pausa"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:368
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45679,7 +45684,7 @@ msgstr ""
 "Cal tindre en compte que un nombre superior a %1 probablement no millorarà "
 "el rendiment."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:379
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45694,35 +45699,35 @@ msgstr ""
 "Podeu jugar amb un o dos fils més, però vigileu el rendiment general del "
 "sistema."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:384
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "Establix el nombre de fils que s'utilitzaran per a la gravació."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:410
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Gravador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:489
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "Este sistema no és prou eficient per a esta característica"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:629
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:647
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Trieu una carpeta per a les gravacions"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:750
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:756
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:768
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:774
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Gravador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:751
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:769
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45731,14 +45736,14 @@ msgstr ""
 "El gravador s'ha parat a causa d'una fallada en escriure un fotograma. "
 "Comproveu l'espai lliure al disc i torneu a iniciar-lo."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:757
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:775
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 "Probablement, Krita no ha pogut parar el gravador. Intenteu reiniciar Krita."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:780
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45751,7 +45756,7 @@ msgstr ""
 "Intenteu reduir la velocitat dels fotogrames per a l'exportació de «ffmpeg» "
 "o reduir el filtre d'escalat a la configuració d'acceleració del llenç."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:764
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:782
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45801,7 +45806,7 @@ msgstr "Elimina la instantània seleccionada"
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:81
 #, kde-format
 msgid "Snapshot Docker"
-msgstr "Acoblador d'instantànies"
+msgstr "Acoblador «Instantànies»"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
 #, kde-format
@@ -46410,7 +46415,7 @@ msgstr "Alinea al centre del quadro em ideogràfic."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Suspensió"
+msgstr "Amb sagnat francés"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -46735,7 +46740,8 @@ msgid ""
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
 "La línia base dominant especifica com s'alineen els fragments de text de "
-"mides diferents, també és la predeterminada per a la línia base d'alineació."
+"mides diferents, també és el valor predeterminat per a la línia base "
+"d'alineació."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -47021,9 +47027,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
-"La puntuació suspesa permet l'obertura i el tancament de la puntuació "
-"suspesa, així com les comes. Esta implementació només implementa la "
-"puntuació suspesa de l'estil asiàtic oriental."
+"La puntuació suspesa permet fer penjar tant els signes de puntuació "
+"d'obertura i de tancament, així com les comes. Esta implementació només "
+"implementa la puntuació suspesa de l'estil asiàtic oriental."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -47037,7 +47043,7 @@ msgstr "puntuació suspesa, burasagari"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr "Primera suspensió"
+msgstr "Sagnat de la primera línia"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -47049,25 +47055,25 @@ msgstr "Final de línia:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Sense suspensió"
+msgstr "Sense sagnat francés"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr "Permet les comes suspeses"
+msgstr "Permet les comes penjades"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr "Força les comes suspeses"
+msgstr "Força les comes penjades"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr "Últim sagnat"
+msgstr "Sagnat de l'última línia"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -47701,7 +47707,7 @@ msgstr "Última alineació:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
-msgstr "Àncora del text:"
+msgstr "Àncora de text:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
 #, kde-format
@@ -47847,7 +47853,7 @@ msgstr "sagnat de text, indentació"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Sagnat de suspensió"
+msgstr "Sagnat francés"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
@@ -48326,7 +48332,7 @@ msgstr "Configureu les propietats del text"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Acoblador Tàctil"
+msgstr "Acoblador «Tàctil»"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -48338,7 +48344,7 @@ msgstr "Model de color"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
 #, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "Aparença de l'anell de to:"
+msgstr "Aparença de l'anell de matís:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
@@ -48607,21 +48613,21 @@ msgstr "Vista prèvia:"
 #, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Accions del selector de color WG"
+msgstr "Accions del selector de color de gamut àmplia"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Mostra el selector de color de gamma àmplia (WG)"
+msgstr "Mostra el selector de color de gamut àmplia (WG)"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Mostra el selector d'ombres de gamma àmplia"
+msgstr "Mostra el selector d'ombres de gamut àmplia"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -48664,8 +48670,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Augmenta el valor, claredat, intensitat o luma del color seleccionat, "
-"depenent del model de color seleccionat"
+"Augmenta el valor, la claredat, la intensitat o la luminància del color "
+"seleccionat, depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -48686,8 +48692,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Disminuïx el valor, claredat, intensitat o luma del color seleccionat, "
-"depenent del model de color seleccionat"
+"Disminuïx el valor, la claredat, la intensitat o la luminància del color "
+"seleccionat, depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -48764,7 +48770,7 @@ msgstr "Desplaça el to del color seleccionat en sentit antihorari"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:49
 #, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Selector de color de gamma àmplia"
+msgstr "Selector de color de gamut àmplia"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:313
 #, kde-format
@@ -48775,7 +48781,7 @@ msgstr "Configura…"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Configureu el selector de color de gamma àmplia"
+msgstr "Configureu el selector de color de gamut àmplia"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
@@ -49294,7 +49300,7 @@ msgstr "Situa totes les capes noves en una capa de grup"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:39
 #, kde-format
 msgid "Put every layer in its own, separate group layer"
-msgstr "Situa cada capa en la seua pròpia capa de grup separada"
+msgstr "Situa cada capa en la seua pròpia capa de grup independent"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAlphaLock)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:46
@@ -49525,7 +49531,7 @@ msgstr "Índex de l'exposició:"
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure bias:"
-msgstr "Compensació de l'exposició:"
+msgstr "Biaix de l'exposició:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/metadataeditor/editors/exif.ui:200
@@ -50925,8 +50931,8 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
-"Més d'un dels recursos compartix el mateix nom de fitxer «%1». Exporteu-los "
-"en paquets separats."
+"Més d'un recurs compartix el mateix nom de fitxer «%1». Exporteu-los en "
+"paquets separats."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
 #, kde-format
@@ -51163,8 +51169,8 @@ msgstr "Ha fallat mentre es recuperaven els paquets: %1"
 #, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "%1 predefinit de pinzells"
-msgstr[1] "%1 predefinits de pinzells"
+msgstr[0] "%1 pinzell predefinit"
+msgstr[1] "%1 pinzells predefinits"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
 #, kde-format
@@ -51668,7 +51674,7 @@ msgstr "Descarta el canal alfa"
 #: plugins/extensions/separate_channels/wdg_separations.ui:113
 #, kde-format
 msgid "Create separate separation from alpha channel"
-msgstr "Crea una descomposició separada a partir del canal alfa"
+msgstr "Crea una descomposició independent a partir del canal alfa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownscale)
 #: plugins/extensions/separate_channels/wdg_separations.ui:123
@@ -52187,14 +52193,14 @@ msgstr "Minimitza el canal"
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
 #, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Superp&osició ràpida de color…"
+msgstr "Superp&osició ràpida del color…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
 #, kde-format
 msgid "Fast Color Overlay"
-msgstr "Superposició ràpida de color"
+msgstr "Superposició ràpida del color"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -52579,7 +52585,7 @@ msgstr "Controlador del canal"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "Filtre de mapa d'alçàries a normal"
+msgstr "Filtre «Mapa d'alçàries a normal»"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
@@ -52890,7 +52896,7 @@ msgstr "Colors del degradat"
 #: plugins/filters/palettize/palettize.ui:109
 #, kde-format
 msgid "Color Mode"
-msgstr "Mode de color"
+msgstr "Mode «Color»"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxColorMode)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:109
@@ -53711,7 +53717,7 @@ msgstr "&Propaga els colors…"
 #, kde-format
 msgctxt "action"
 msgid "Propagate Colors Filter"
-msgstr "Filtre de propagació de colors"
+msgstr "Filtre «Propaga els colors»"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
@@ -53778,17 +53784,17 @@ msgstr "Cantons arredonits"
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:43
 #, kde-format
 msgid "&Small Tiles..."
-msgstr "&Mosaics petits…"
+msgstr "&Tessel·les xicotetes…"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:90
 #, kde-format
 msgid "Number of tiles"
-msgstr "Nombre de mosaics"
+msgstr "Nombre de tessel·les"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.h:29
 #, kde-format
 msgid "Small Tiles"
-msgstr "Mosaics petits"
+msgstr "Tessel·les xicotetes"
 
 #. i18n: context: text @ Action (krita_filter_threshold), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_threshold), Actions (Filters), ActionCollection (Krita)
@@ -55336,9 +55342,9 @@ msgid ""
 "scene linear.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Hybrid Log Gamma necessita un pas de conversió "
-"addicional en el mig, ja que Krita actualment no pot enviar dades HLG "
-"directament a la pantalla. Per tant, apliquem la corba opto-òptica HLG per a "
-"convertir des de pantalla a escena lineal.</p></body></html>"
+"intermedi, ja que Krita actualment no pot enviar dades HLG directament a la "
+"pantalla. Per tant, apliquem la corba opto-òptica d'HLG per a convertir des "
+"de lineal de la pantalla a lineal de l'escena.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
@@ -55772,7 +55778,7 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
-"Rasteritza les capes (incloent-hi les capes de grup i de filtre) i guarda "
+"Rasteritza les capes (incloent-hi les capes de grup i de filtratge) i guarda "
 "com a imatge multicapa"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
@@ -55782,7 +55788,7 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
-"Rasteritza les capes (incloent-hi les capes de grup i de filtre) i guarda "
+"Rasteritza les capes (incloent-hi les capes de grup i de filtratge) i guarda "
 "com a imatge multipàgina"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
@@ -56402,8 +56408,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Separa els patrons de soroll del sensor de la càmera "
 "per a una compressió millor. Els valors més alts reconstruïxen més soroll, "
-"útil per a mantindre l'aspecte natural de les fotos d'ISO alt.</p></body></"
-"html>"
+"útil per a mantindre l'aspecte natural de les fotografies amb un ISO alt.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
@@ -56487,9 +56493,9 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Suavitza àrees, conservant vores agudes, millorant la "
-"compressió sense difuminar detalls importants. Els valors més alts apliquen "
-"un filtratge més intens.</p></body></html>"
+"<html><head/><body><p>Suavitza les àrees mentre mantín les vores nítides, "
+"millorant la compressió sense difuminar detalls importants. Els valors més "
+"alts apliquen un filtratge més intens.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:531
@@ -56545,7 +56551,7 @@ msgid ""
 "body></html>"
 msgstr ""
 "<html><head/><body><p>Filtre avançat d'anàlisi de textures que millora la "
-"compressió d'àrees texturades complexes mantenint la qualitat visual.</p></"
+"compressió d'àrees complexes amb textura mantenint la qualitat visual.</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
@@ -56564,7 +56570,7 @@ msgid ""
 "lossy.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Utilitza el sistema de compressió modular que destaca "
-"per comprimir gràfics amb vores afilades i colors limitats. Pot ser sense "
+"per comprimir gràfics amb vores nítides i colors limitats. Pot ser sense "
 "pèrdua o amb pèrdua.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
@@ -56622,8 +56628,8 @@ msgid ""
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Determina l'ordre en què es codifiquen els mosaics de "
-"la imatge. «Primer el centre» prioritza el centre de la imatge per a la "
+"<html><head/><body><p>Determina l'ordre en què es codifiquen les tessel·les "
+"de la imatge. «Primer el centre» prioritza el centre de la imatge per a la "
 "càrrega progressiva, útil per al contingut web.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
@@ -56650,7 +56656,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr "Croma a partir de la luma"
+msgstr "Croma a partir de la luminància"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
@@ -56807,7 +56813,7 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Controla l'assignació de color dins dels mosaics "
+"<html><head/><body><p>Controla l'assignació de color dins de les tessel·les "
 "locals de 256×256 píxels. Més eficient per a imatges amb àrees de varietat "
 "de color limitada.</p></body></html>"
 
@@ -56874,7 +56880,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Activa la codificació relativa de color que "
 "emmagatzema diferències entre els colors predits i els reals. Excel·lent per "
-"a una compressió quasi sense pèrdua de degradats suaus sense defectes de "
+"a una compressió quasi sense pèrdua de degradats suaus sense efecte de "
 "bandes.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
@@ -56897,9 +56903,9 @@ msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Establix la mida del mosaic per a la compressió. Els "
-"grups més grans poden millorar la compressió, però requerixen més memòria.</"
-"p></body></html>"
+"<html><head/><body><p>Establix la mida de les tessel·les per a la "
+"compressió. Els grups més grans poden millorar la compressió, però "
+"requerixen més memòria.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
@@ -57809,7 +57815,7 @@ msgstr ""
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
 msgid "Duotone Colormode Block"
-msgstr "Bloc de mode de color dual"
+msgstr "Bloc de mode «Color» dual"
 
 #: plugins/impex/psd/psd_loader.cpp:255
 #, kde-format
@@ -57826,7 +57832,7 @@ msgid ""
 "to the original file."
 msgstr ""
 "S'han trobat objectes de text. Voleu carregar-los com a formes de text "
-"editables? En cas contrari, es carregaran com a dades de píxels, que seran "
+"editables? En cas contrari, es carregaran com a dades dels píxels, que seran "
 "visualment més precisos al fitxer original."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
@@ -57922,9 +57928,9 @@ msgstr ""
 "les files parelles són més sensibles a la llum ultraviolada que els de les "
 "files senars, esta diferència provoca un patró mallat en l'eixida; "
 "utilitzant esta opció açò es resol amb una pèrdua de detall mínima.</"
-"p><p>Resumint, esta opció difumina una mica la imatge, però elimina el patró "
-"mallat 2x2 amb un mètode de qualitat VNG o amb un mètode imbricat de "
-"qualitat AHD.</p>"
+"p><p>Resumint, esta opció difumina una mica la imatge, però elimina els "
+"patrons de malla de 2x2 amb el mètode de qualitat VNG o els efectes de "
+"laberint amb el mètode de qualitat AHD.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:298
 #, kde-format
@@ -58229,7 +58235,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<title>Temperature</title><p>Set here the color temperature in Kelvin.</p>"
 msgstr ""
-"<title>Temperatura</title><p>Establiu ací la temperatura de color en graus "
+"<title>Temperatura</title><p>Establiu ací la temperatura del color en graus "
 "Kelvin.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
@@ -58534,8 +58540,8 @@ msgstr ""
 "interpolació.</li><li><emphasis strong='true'>FBDD</emphasis>: La reducció "
 "del soroll abans de la reconstrucció de color («Fake Before Demosaicing "
 "Denoising»). S'aplica abans de la interpolació.</li><li><emphasis "
-"strong='true'>Reducció de soroll CFA</emphasis>: La reducció del soroll per "
-"bandes. S'aplica després de la interpolació.</li><li><emphasis "
+"strong='true'>Reducció de soroll CFA</emphasis>: La reducció de bandes. "
+"S'aplica després de la interpolació.</li><li><emphasis "
 "strong='true'>Reducció del soroll per impulsos</emphasis>: La reducció del "
 "soroll per impulsos. S'aplica després de la interpolació.</li></ul></p>"
 
@@ -58692,7 +58698,7 @@ msgstr "Adobe RGB"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
-msgstr "Gamma àmplia"
+msgstr "Gamut àmplia"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
 #, kde-format
@@ -58735,11 +58741,11 @@ msgstr ""
 "imatges destinades a la Web i al retrat fotogràfic.</li><li><emphasis "
 "strong='true'>Adobe RGB</emphasis>: este espai de color és un espai de color "
 "RGB ampliat, desenvolupat per Adobe. S'utilitza en aplicacions fotogràfiques "
-"com la publicitat i l'art.</li><li><emphasis strong='true'>Gamma àmplia</"
+"com la publicitat i l'art.</li><li><emphasis strong='true'>Gamut àmplia</"
 "emphasis>: este espai de color és una versió expandida de l'espai de color "
 "RGB Adobe.</li><li><emphasis strong='true'>Pro-Photo</emphasis>: este espai "
 "de color és un espai de color RGB, desenvolupat per Kodak, que oferix una "
-"gamma gran i es va dissenyar en la seua concepció per a ser emprada en les "
+"gamut gran i es va dissenyar en la seua concepció per a ser emprada en les "
 "eixides fotogràfiques.</li><li><emphasis strong='true'>A mida</emphasis>: "
 "utilitza un perfil d'espai de color d'eixida personalitzat.</li></ul></p>"
 
@@ -59597,7 +59603,7 @@ msgstr "Iptc"
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
 #, kde-format
 msgid "Color Smudge"
-msgstr "Esborronat del color"
+msgstr "Amb esborronat del color"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSmudgeMode)
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:41
@@ -59945,7 +59951,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Pinzell de clonat:</"
 "span></p><p>Trieu el punt d'origen de la capa actual amb «Ctrl+clic». "
-"Utilitzeu «Ctrl+Alt+clic» per a triar un origen des de la capa seleccionada "
+"Utilitzeu «Ctrl+Alt+clic» per a triar un origen des de la capa triada "
 "anteriorment.</p></body></html>"
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
@@ -60460,7 +60466,7 @@ msgstr "Suca tinta"
 #: plugins/paintops/hairy/wdgInkOptions.ui:171
 #, kde-format
 msgid "Bristle Ink Weight:"
-msgstr "Estil de la tinta del pèl:"
+msgstr "Estil de la tinta al pèl:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hairy/wdgInkOptions.ui:178
@@ -60779,7 +60785,7 @@ msgstr "Triat:"
 #, kde-format
 msgid "Turn the preset into an Eraser preset (overrides the blending mode)"
 msgstr ""
-"Activa el predefinit en un predefinit d'esborrador (substituïx el mode de "
+"Activa el predefinit en un predefinit esborrador (substituïx el mode de "
 "barreja)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -61108,8 +61114,8 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
-"Aplica menys textura quan la força siga menor. Utilitzeu esta opció si voleu "
-"que el pinzell canvie entre l'aparença sense textura i amb textura"
+"Aplica menys textura quan la intensitat siga menor. Utilitzeu esta opció si "
+"voleu que el pinzell canvie entre l'aparença sense textura i amb textura"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
@@ -61650,7 +61656,8 @@ msgstr "Verticalment"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
-msgstr "El mode Rentatge només és possible en utilitzar el pinzell emmascarat."
+msgstr ""
+"El mode «Rentatge» només és possible en utilitzar el pinzell emmascarat."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
@@ -62135,7 +62142,7 @@ msgstr "Acolorix"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
 #, kde-format
 msgid "Posterization Levels"
-msgstr "Nivells de posterització"
+msgstr "Nivells de l'efecte de posterització"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -62517,12 +62524,12 @@ msgid ""
 "the spray area.\n"
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
-"Establix com s'han d'estendre les partícules en l'àrea de ruixat.\n"
+"Establix com s'han de dispersar les partícules a l'àrea de ruixat.\n"
 "Els valors positius faran que les partícules es concentren cap al centre de "
 "l'àrea de ruixat.\n"
 "Els valors negatius faran que les partícules es concentren cap a la vora de "
 "l'àrea de ruixat.\n"
-"Els valors propers a 0 faran que les partícules s'estenguen de forma més "
+"Els valors propers a 0 faran que les partícules es dispersen de forma més "
 "uniforme."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:103
@@ -62961,7 +62968,7 @@ msgstr ""
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
 #, kde-format
 msgid "Direction/Tilt Mix"
-msgstr "Direcció/inclinació de la mescla"
+msgstr "Direcció i Inclinació de la mescla"
 
 #. i18n: ectx: property (text), widget (QLabel, L_elevation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
@@ -62973,7 +62980,7 @@ msgstr "Sensibilitat de l'elevació"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:291
 #, kde-format
 msgid "Direction/Tilt Mix Value"
-msgstr "Valor de la direcció/inclinació de la mescla"
+msgstr "Valor de «Direcció» i «Inclinació» de la mescla"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "Assign Profile"
@@ -64035,8 +64042,8 @@ msgid ""
 "the extra auto-completion keys, each on a new line. This path is stored in "
 "the Krita configuration, and not the project configuration."
 msgstr ""
-"La ubicació de les tecles addicionals de compleció automàtica en l'editor de "
-"metadades. Apunteu açò cap a la carpeta que continga key_characters/"
+"La ubicació de les tecles addicionals de compleció automàtica en l'«Editor "
+"de les metadades». Apunteu açò cap a la carpeta que continga key_characters/"
 "key_format/key_genre/key_rating/key_author_roles/key_other amb fitxers TXT a "
 "dins (CSV per a les valoracions) amb les tecles addicionals de compleció "
 "automàtica, una a cada línia nova. Este camí s'emmagatzema en la "
@@ -64759,7 +64766,7 @@ msgstr "Crea un script"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
-msgstr "Acoblador Darrers documents"
+msgstr "Acoblador «Darrers documents»"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
@@ -64767,7 +64774,7 @@ msgstr "Canvia les opcions de configuració"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr "Acoblador Control lliscant del mesclador"
+msgstr "Acoblador «Controls lliscants del mesclador»"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -64855,7 +64862,7 @@ msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
 msgstr ""
-"Controla el grau en què la mutació afecta la saturació de color de primer "
+"Controla el grau en què la mutació afecta la saturació del color de primer "
 "pla del pinzell de Krita."
 
 #: plugins/python/mutator/mutator.py:217
@@ -64889,7 +64896,7 @@ msgstr ""
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
-msgstr "Acoblador Paletes en Python"
+msgstr "Acoblador «Paleta» en Python"
 
 #: plugins/python/palette_docker/palette_docker.py:74
 msgid "Set"
@@ -65070,7 +65077,7 @@ msgstr "Arxius «zip»"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:36
 msgid "Quick Settings Docker"
-msgstr "Acoblador Configuració ràpida"
+msgstr "Acoblador «Configuració ràpida»"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -65078,7 +65085,7 @@ msgstr "Afig un script"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Acoblador Script"
+msgstr "Acoblador «Scripts»"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -65324,13 +65331,12 @@ msgstr ""
 
 #: plugins/python/tenbrushes/uitenbrushes.py:35
 msgid "&Select freehand brush tool when pressing a shortcut"
-msgstr "&Tria l'eina del pinzell a mà alçada en prémer una drecera"
+msgstr "&Tria l'eina «Pinzell a mà alçada» en prémer una drecera"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr ""
-"Mostra els missatges emer&gents en el llenç en activar els pinzells "
-"predefinits"
+"Mostra els missatges emer&gents en el llenç en activar el pinzell predefinit"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
@@ -65495,7 +65501,7 @@ msgstr "Suprimix el botó seleccionat de flux de treball"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 msgid "Select icon mode:"
-msgstr "Trieu el mode d'icona:"
+msgstr "Trieu el mode «Icones»:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 msgid "Select a custom icon:"
@@ -65523,7 +65529,7 @@ msgstr "Trieu una eina:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 msgid "Select a brush preset:"
-msgstr "Trieu una predefinició de pinzell:"
+msgstr "Trieu un pinzell predefinit:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 msgid "Brush preset name"
@@ -65531,7 +65537,7 @@ msgstr "Nom del pinzell predefinit"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 msgid "Select the brush preset"
-msgstr "Trieu la predefinició de pinzell"
+msgstr "Trieu un pinzell predefinit"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 msgid "Select foreground color:"
@@ -65602,7 +65608,7 @@ msgstr "Botons del flux de treball"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
-msgstr "Obri el diàleg dels paràmetres dels botons del flux de treball"
+msgstr "Obri el diàleg de configuració dels botons del flux de treball"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"
@@ -65819,13 +65825,13 @@ msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensió: {n}%"
+msgstr "Dispersió: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Tanca el buit:"
+msgstr "Tanca la separació:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -65903,7 +65909,7 @@ msgstr "Establix una opacitat personalitzada per a l'emplenat"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:563
 #, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Establix un mode personalitzat de barreja per a l'emplenat"
+msgstr "Establix un mode de barreja personalitzat per a l'emplenat"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:653
 #, kde-format
@@ -66037,7 +66043,7 @@ msgstr "Restablix les opcions als seus valors predeterminats"
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Mode d'emplenament"
+msgstr "Mode «Emplenament»"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:691
 #, kde-format
@@ -66067,7 +66073,7 @@ msgstr "Ajustaments"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr "Mode d'emplenament en arrossegar"
+msgstr "Mode «Emplenament mentre s'arrossega»"
 
 #: plugins/tools/basictools/kis_tool_fill.h:242
 #, kde-format
@@ -66214,7 +66220,7 @@ msgstr "Trasllada la còpia a intervals"
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
-"L'eina de pinzell múltiple no permet més de %1 pinzells. Utilitzeu un "
+"L'eina «Pinzell múltiple» no permet més de %1 pinzells. Utilitzeu un "
 "interval més gran."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:99
@@ -66225,7 +66231,7 @@ msgstr "Eina de pinzell múltiple"
 #: plugins/tools/basictools/kis_tool_pan.cpp:81
 #, kde-format
 msgid "Pan Tool"
-msgstr "Eina de desplaçament"
+msgstr "Eina de desplaçar"
 
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
@@ -66626,7 +66632,7 @@ msgstr "Interval Y:"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:586
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Afig formes al flux de text."
+msgstr "Afig formes al text que fluïx."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:628
 msgctxt "(qtundo-format)"
@@ -66636,12 +66642,12 @@ msgstr "Posa text en el camí"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:688
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "Sostrau formes del flux de text."
+msgstr "Sostrau formes del text que fluïx."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Elimina formes del flux de text."
+msgstr "Elimina formes del text que fluïx."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:742
 msgctxt "(qtundo-format)"
@@ -66704,7 +66710,7 @@ msgstr ""
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Esta eina només funciona amb capes vectorials. Probablement vos cal l'eina "
-"de moure."
+"«Mou»."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1670
 msgctxt "(qtundo-format)"
@@ -67276,7 +67282,7 @@ msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensió: {n}%"
+msgstr "Dispersió: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, kde-format
@@ -67332,7 +67338,7 @@ msgstr ""
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Tanca el buit:"
+msgstr "Tanca la separació:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -67382,12 +67388,12 @@ msgstr "Tria el camí"
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:170
 msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
-msgstr "Selecció per corba de Bézier"
+msgstr "Selecció per corbes de Bézier"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
 #, kde-format
 msgid "Bezier Curve Selection Tool"
-msgstr "Eina de selecció de les corbes de Bézier"
+msgstr "Eina de selecció amb les corbes de Bézier"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
@@ -67444,7 +67450,7 @@ msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensió: {n}%"
+msgstr "Dispersió: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -67537,7 +67543,7 @@ msgstr "Radi de la busca:"
 #, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr "Separació de l'àncora: "
+msgstr "Separació de les àncores: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -67577,7 +67583,7 @@ msgstr "Àrea extra on cal buscar"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr "Espai entre 2 àncores en mode interactiu"
+msgstr "Separació entre 2 àncores en mode interactiu"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
 #, kde-format
@@ -67628,7 +67634,7 @@ msgstr "Eina de selecció a mà alçada"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Selection Tool"
-msgstr "Eina de selecció de corbes de Bézier"
+msgstr "Eina de selecció amb les corbes de Bézier"
 
 #. i18n: context: toolTip @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67729,7 +67735,7 @@ msgstr "Mou el text"
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
-msgstr "Canvia SvgTextTool"
+msgstr "Canvia a l'eina «Text» SVG"
 
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:20
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
@@ -67772,7 +67778,7 @@ msgstr "Ideogràfic"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "Suspensió"
+msgstr "Amb sagnat francés"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, kde-format
@@ -68311,7 +68317,7 @@ msgstr "Neteja el format"
 #, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Elimina totes les propietats de text establides de la selecció."
+msgstr "Elimina totes les propietats del text establides de la selecció."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
@@ -68342,7 +68348,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
-"Utilitza les propietats actuals a l'acoblador de propietats del text per a "
+"Utilitza les propietats actuals a l'acoblador «Propietats del text» per a "
 "crear textos nous."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
@@ -68363,8 +68369,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
-"Obri l'acoblador de propietats del text per a editar propietats com la mida "
-"i l'estil de la lletra."
+"Obri l'acoblador «Propietats del text» per a editar propietats com la mida i "
+"l'estil de la lletra."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
@@ -68496,7 +68502,7 @@ msgid ""
 msgstr ""
 "El text utilitza transformacions de caràcters SVG 1.1 per a posicionar cada "
 "línia. Els espais i les línies noves estan reduïts. Açò és per a la "
-"compatibilitat amb SVG 1.1."
+"compatibilitat cap arrere amb SVG 1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:319
 #, kde-format
@@ -68599,7 +68605,7 @@ msgstr "Bloqueja la relació d'aspecte"
 #: plugins/tools/tool_crop/kis_tool_crop.cc:250
 #, kde-format
 msgid "Crop Tool Actions"
-msgstr "Accions de l'eina per a escapçar"
+msgstr "Accions de l'eina «Escapça»"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:726
 #, kde-format
@@ -68622,14 +68628,14 @@ msgstr ""
 #: plugins/tools/tool_crop/kis_tool_crop.h:215
 #, kde-format
 msgid "Crop Tool"
-msgstr "Eina per a escapçar"
+msgstr "Eina d'escapçar"
 
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
 msgctxt "action"
 msgid "Crop Tool"
-msgstr "Eina per a escapçar"
+msgstr "Eina d'escapçar"
 
 #. i18n: context: toolTip @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -68824,13 +68830,13 @@ msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensió: {n}%"
+msgstr "Dispersió: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Tanca el buit: "
+msgstr "Tanca la separació: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
@@ -68992,7 +68998,7 @@ msgstr "Eina de delimitació i emplenat"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"
-msgstr "Eina de ganivet: retalla segons formes"
+msgstr "Eina «Ganivet»: retalla segons formes"
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
 #, kde-format
@@ -69015,8 +69021,8 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
-"Mode de retall: retalla a través de formes per a crear corondells d'una "
-"amplària especificada."
+"Mode «Retall»: retalla a través de formes per a crear espais d'una amplària "
+"especificada."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
 #, kde-format
@@ -69024,7 +69030,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr "Mode de fusió: elimina el corondell entre formes."
+msgstr "Mode de fusió: elimina l'espai entre formes."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format
@@ -69170,7 +69176,7 @@ msgstr "Llindar de l'angle de tipus de separació:"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:280
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
-msgstr "Eina de ganivet: elimina un corondell"
+msgstr "Eina «Ganivet»: elimina un espai"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
 msgctxt "(qtundo-format)"
@@ -69287,7 +69293,7 @@ msgstr "Eina de polígons: «Majús+clic» acaba el polígon."
 #, kde-format
 msgctxt "action"
 msgid "Polygon Tool"
-msgstr "Eina de polígon"
+msgstr "Eina de polígons"
 
 #. i18n: context: toolTip @ Action (KisToolPolygon), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolygon), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -69298,7 +69304,7 @@ msgstr "Eina de polígon"
 #, kde-format
 msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
-msgstr "Eina de polígon. «Majús+clic» acaba el polígon."
+msgstr "Eina de polígons. «Majús+clic» acaba el polígon."
 
 #: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
@@ -69310,7 +69316,7 @@ msgstr "Eina de polilínies: «Majús+clic» acaba la polilínia."
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool"
-msgstr "Eina de polilínia"
+msgstr "Eina de polilínies"
 
 #. i18n: context: toolTip @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -69444,7 +69450,7 @@ msgstr "Aplica"
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:425
 #, kde-format
 msgid "Transform Tool Actions"
-msgstr "Accions de l'eina de transformació"
+msgstr "Accions de l'eina «Transforma»"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:938
 #, kde-format
@@ -69462,20 +69468,20 @@ msgstr "No es poden transformar les capes ocultes"
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot use transform tool on this set of layers"
-msgstr "No es pot utilitzar l'eina de transformació en este conjunt de capes"
+msgstr "No es pot utilitzar l'eina «Transforma» en este conjunt de capes"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:966
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
-msgstr "El tipus de capa no pot utilitzar l'eina de transformació"
+msgstr "El tipus de capa no pot utilitzar l'eina «Transforma»"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:973
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
-"El tipus de capa no pot utilitzar l'eina de transformació. En el seu lloc "
+"El tipus de capa no pot utilitzar l'eina «Transforma». En el seu lloc "
 "utilitzeu la màscara de transformació."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:992
@@ -69549,8 +69555,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "When in non-buildup mode, shows how fast the deformation limit is reached."
 msgstr ""
-"Quan no està en el mode de construcció, mostra la velocitat en arribar fins "
-"al límit de deformació."
+"Quan no està en el mode «Construïx», mostra la velocitat en arribar fins al "
+"límit de deformació."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:237
 #, kde-format
@@ -69560,9 +69566,9 @@ msgid ""
 "deformations one on top of the other without any limits. Wash mode gradually "
 "deforms the piece to the selected deformation level."
 msgstr ""
-"Canvia entre els modes de pintat Construcció i Rentatge. El mode construcció "
-"afig les deformacions una sobre l'altra sense cap límit. El mode de neteja "
-"deforma gradualment la peça al nivell de deformació seleccionat."
+"Canvia entre els modes de pintat «Construïx» i «Rentatge». El mode "
+"«Construïx» afig les deformacions una sobre l'altra sense cap límit. El mode "
+"«Rentatge» deforma gradualment la peça al nivell de deformació seleccionat."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:245
 #, kde-format
@@ -69601,7 +69607,7 @@ msgstr "Mou: arrossega la imatge al llarg de la pinzellada"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
-msgstr "Escala: fa créixer/encollir la imatge baix el cursor"
+msgstr "Escala: fa créixer o encollir la imatge baix el cursor"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
 #, kde-format
@@ -70074,7 +70080,7 @@ msgstr "Eina de pinzell dinàmic"
 #, kde-format
 msgctxt "action"
 msgid "Rectangle Tool"
-msgstr "Eina de rectangle"
+msgstr "Eina de rectangles"
 
 #. i18n: context: text @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)

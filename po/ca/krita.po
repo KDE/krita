@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-08 02:52+0000\n"
-"PO-Revision-Date: 2026-09-06 18:41+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"PO-Revision-Date: 2026-09-08 14:56+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -45553,13 +45553,13 @@ msgstr "Enregistra"
 msgid "Export..."
 msgstr "Exporta..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:159
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:171
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Qualitat:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:160
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:172
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45572,13 +45572,13 @@ msgstr ""
 "No es recomanen valors inferiors a 50 perquè causen una gran quantitat de "
 "defectes."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:168
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Compressió:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:169
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:181
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45594,25 +45594,25 @@ msgstr ""
 "No es recomanen valors superiors a 3 perquè causen un alt impacte en el "
 "rendiment."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:197
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:209
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "FPS del vídeo:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:206
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Interval de captura:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:247
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:259
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Original"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:248
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:260
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45620,7 +45620,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Meitat"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:249
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:261
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45628,35 +45628,40 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Un quart"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:274
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:286
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Atura"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:275
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:287
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Enregistra"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:323
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:294
+#, kde-format
+msgid "Image too large to be recorded"
+msgstr ""
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:344
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr "Enregistrament actiu amb %1 de %2 fils disponibles"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:326
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:344
 #, kde-format
 msgid "Recorder is paused"
 msgstr "L'enregistrador està en pausa"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:350
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:368
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45670,7 +45675,7 @@ msgstr ""
 "Tingueu en compte que un nombre superior a %1 probablement no millorarà el "
 "rendiment."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:379
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45685,35 +45690,35 @@ msgstr ""
 "Podeu jugar amb un o dos fils més, però vigileu el rendiment general del "
 "sistema."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:366
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:384
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "Estableix el nombre de fils a usar per a l'enregistrament."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:410
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Enregistrador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:471
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:489
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "Aquest sistema no és prou eficient per a aquesta característica"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:629
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:647
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Seleccioneu una carpeta per als enregistraments"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:750
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:756
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:768
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:774
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Enregistrador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:751
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:769
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45722,7 +45727,7 @@ msgstr ""
 "L'enregistrador s'ha aturat a causa d'una fallada en escriure un fotograma. "
 "Comproveu l'espai lliure al disc i torneu a iniciar-lo."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:757
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:775
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
@@ -45730,7 +45735,7 @@ msgstr ""
 "Probablement, el Krita no ha pogut aturar l'enregistrador. Intenteu "
 "reiniciar el Krita."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:762
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:780
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45743,7 +45748,7 @@ msgstr ""
 "Intenteu reduir la velocitat dels fotogrames per a l'exportació del «ffmpeg» "
 "o reduir el filtre d'escalat a la configuració d'acceleració del llenç."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:764
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:782
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -46725,7 +46730,8 @@ msgid ""
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
 "La línia base dominant especifica com s'alineen els fragments de text de "
-"mides diferents, també és la predeterminada per a la línia base d'alineació."
+"mides diferents, també és el valor predeterminat per a la línia base "
+"d'alineació."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -48654,8 +48660,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Augmenta el valor, claredat, intensitat o luma del color seleccionat, "
-"depenent del model de color seleccionat"
+"Augmenta el valor, la claredat, la intensitat o la luminància del color "
+"seleccionat, depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -48676,8 +48682,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Disminueix el valor, claredat, intensitat o luma del color seleccionat, "
-"depenent del model de color seleccionat"
+"Disminueix el valor, la claredat, la intensitat o la luminància del color "
+"seleccionat, depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -49284,7 +49290,7 @@ msgstr "Situa totes les capes noves en una capa de grup"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:39
 #, kde-format
 msgid "Put every layer in its own, separate group layer"
-msgstr "Situa cada capa en la seva pròpia capa de grup separada"
+msgstr "Situa cada capa en la seva pròpia capa de grup independent"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAlphaLock)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:46
@@ -50915,8 +50921,8 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
-"Més d'un dels recursos comparteix el mateix nom de fitxer «%1». Exporteu-los "
-"en paquets separats."
+"Més d'un recurs comparteix el mateix nom de fitxer «%1». Exporteu-los en "
+"paquets separats."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
 #, kde-format
@@ -55324,9 +55330,9 @@ msgid ""
 "scene linear.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Hybrid Log Gamma necessita un pas de conversió "
-"addicional en el mig, ja que el Krita actualment no pot enviar dades HLG "
-"directament a la pantalla. Per tant, apliquem la corba opto-òptica HLG per a "
-"convertir des de pantalla a escena lineal.</p></body></html>"
+"intermedi, ja que el Krita actualment no pot enviar dades HLG directament a "
+"la pantalla. Per tant, apliquem la corba opto-òptica d'HLG per a convertir "
+"des de lineal de la pantalla a lineal de l'escena.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
@@ -56885,9 +56891,9 @@ msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Estableix la mida del mosaic per a la compressió. Els "
-"grups més grans poden millorar la compressió, però requereixen més memòria.</"
-"p></body></html>"
+"<html><head/><body><p>Estableix la mida de les tessel·les per a la "
+"compressió. Els grups més grans poden millorar la compressió, però "
+"requereixen més memòria.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
@@ -57897,9 +57903,9 @@ msgstr ""
 "píxels verds de les files parelles són més sensibles a la llum ultraviolada "
 "que els de les files senars, aquesta diferència provoca un patró mallat a la "
 "sortida; usant aquesta opció això es resol amb una pèrdua de detall mínima.</"
-"p><p>Resumint, aquesta opció difumina una mica la imatge, però elimina el "
-"patró mallat 2x2 amb un mètode de qualitat VNG o amb un mètode imbricat de "
-"qualitat AHD.</p>"
+"p><p>Resumint, aquesta opció difumina una mica la imatge, però elimina els "
+"patrons de malla de 2x2 amb el mètode de qualitat VNG o els efectes de "
+"laberint amb el mètode de qualitat AHD.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:298
 #, kde-format
@@ -65308,8 +65314,7 @@ msgstr "&Selecciona l'eina del pinzell a mà alçada en prémer una drecera"
 #: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr ""
-"Mostra els missatges emer&gents en el llenç en activar els pinzells "
-"predefinits"
+"Mostra els missatges emer&gents en el llenç en activar el pinzell predefinit"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""

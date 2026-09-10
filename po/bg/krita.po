@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-08 00:43+0000\n"
-"PO-Revision-Date: 2026-08-20 17:23+0200\n"
+"PO-Revision-Date: 2026-09-09 14:10+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,1000,-1,-1,-1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7245,12 +7245,10 @@ msgstr "Дясно подравняване"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
-msgstr "Разгрупиране на форми"
+msgstr "Разгрупиране на форма(и)"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7262,6 +7260,8 @@ msgstr "Разгрупиране на форми"
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
 msgstr ""
+"Разделяне на група(и) от форми във векторизиращия инструмент за "
+"взаимодействие"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7315,30 +7315,24 @@ msgstr "Вертикално центриране"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
-msgstr "Групиране на форми"
+msgstr "Групиране на форма(и)"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "Група"
+msgstr "Групиране"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "Група"
+msgstr "Групиране"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12087,12 +12081,10 @@ msgstr "Поставяне на слой от клипборда"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Групов слой"
+msgstr "Групиране на слой/слоеве"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12110,12 +12102,10 @@ msgstr "Бързо групиране"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "Разгрупиране на форми"
+msgstr "Разгрупиране на слой(и)"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -45840,7 +45830,7 @@ msgstr "Запис"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Изображението е твърде голямо за запис"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -57747,19 +57737,14 @@ msgid "Resolution:"
 msgstr "Разделителна способност:"
 
 #: plugins/impex/png/kis_png_export.cc:193
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "The image will be converted plainly to 12bit integer, and values that are "
-#| "out of bounds are clipped, the icc profile will be embedded."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "The image will be converted plainly to 16bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
-"Изображението ще бъде конвертирано директно в 12-битови цели числа, "
-"стойностите извън допустимите граници ще бъдат ограничени, а ICC профилът ще "
-"бъде вграден."
+"Изображението ще бъде преобразувано просто в 16-битов формат, а стойностите "
+"извън границите ще бъдат отрязвани, icc профилът ще бъде вграден."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
 #: plugins/impex/png/kis_wdg_options_png.ui:18
@@ -57960,37 +57945,33 @@ msgstr "Преплитане"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbSaveColorInfo)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
-#, fuzzy, kde-format
-#| msgid "Color Volume Information"
+#, kde-format
 msgid "Save Color Space Information"
-msgstr "Информация за цветовия обем"
+msgstr "Запазване на информация за цветовото пространство"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCICP)
 #: plugins/impex/png/kis_wdg_options_png.ui:213
-#, fuzzy, kde-format
-#| msgid "Save as indexed PNG, if possible"
+#, kde-format
 msgid "Save CICP if possible"
-msgstr "Запис като индексиран PNG, ако е възможно"
+msgstr "Запазване на CICP, ако е възможно"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/png/kis_wdg_options_png.ui:220
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to a Paint Layer"
+#, kde-format
 msgid "Convert Floating Point:"
-msgstr "Преобразуване в слой за рисуване"
+msgstr "Преобразуване на плаваща точка:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:230
 #, kde-format
 msgid "Save Chroma, Gamma and sRGB chunks in addition to ICC or CICP data"
-msgstr ""
+msgstr "Запазване на Chroma, Gamma и sRGB блокове плюс ICC или CICP данни"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:233
 #, kde-format
 msgid "Save Extra Color Chunks"
-msgstr ""
+msgstr "Запазване на допълнителни цветови сегменти"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -70735,54 +70716,3 @@ msgstr ""
 "Превключване между пълен обхват и подмножество.\n"
 "Пълен обхват: [%1, %2]\n"
 "Подмножество: [%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "Ungroup"
-#~ msgstr "Разгрупиране"
-
-#~ msgid "Use system monitor profile"
-#~ msgstr "Използване на системен профил за монитор"
-
-#~ msgid "Save as HDR image (Rec. 2020 PQ)"
-#~ msgstr "Запис като HDR изображение (Rec. 2020 PQ)"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">PNG</span> files "
-#~ "have <span style=\" font-style:italic;\">two</span> options to save <span "
-#~ "style=\" font-weight:600;\">sRGB</span> information: as a tag or as an "
-#~ "explicit profile. For use with in websites, <span style=\" font-style:"
-#~ "italic;\">disable</span> this option. For interchange with other "
-#~ "applications, <span style=\" font-style:italic;\">enable</span> this "
-#~ "option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">PNG</span> "
-#~ "файловете имат <span style=\" font-style:italic;\">две</span> опции за "
-#~ "запазване на <span style=\" font-weight:600;\">sRGB</span> информация: "
-#~ "като таг или като изричен профил. За употреба в уебсайтове <span style=\" "
-#~ "font-style:italic;\">деактивиране</span> на тази опция. За обмен с други "
-#~ "приложения <span style=\" font-style:italic;\">активиране</span> на тази "
-#~ "опция.</p></body></html>"
-
-#~ msgid "Embed sRGB profile"
-#~ msgstr "Вграждане на sRGB профил"
-
-#~ msgid "Master Display:"
-#~ msgstr "Главен дисплей:"
-
-#~ msgid "y"
-#~ msgstr "у"
-
-#~ msgid "Red Primary:"
-#~ msgstr "Основен червен:"
-
-#~ msgid "Green Primary:"
-#~ msgstr "Основен зелен:"
-
-#~ msgid "Blue Primary:"
-#~ msgstr "Основен син:"
-
-#~ msgid "MaxCLL:"
-#~ msgstr "Макс. CLL:"
-
-#~ msgid "MaxFALL:"
-#~ msgstr "Макс. FALL:"

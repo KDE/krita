@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-08 00:43+0000\n"
-"PO-Revision-Date: 2026-09-03 22:44+0200\n"
+"PO-Revision-Date: 2026-09-09 22:37+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -7800,6 +7800,8 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"Dát první vybraný tok textu na tvar. Pokud už tu jsou tvary, do kterých "
+"vtéká, přidá tvar do řetězce."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
@@ -7828,7 +7830,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr ""
+msgstr "Dát první vybraný tok textu na první vybranou cestu."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
@@ -47379,6 +47381,8 @@ msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"Režim zápisu nastavuje zda je tok textu vodorovný nebo svislý, ve druhém "
+"případě také zda je blok obtékaný zprava doleva nebo zleva doprava."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -49991,7 +49995,7 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr ""
+msgstr "Nelze '%1' otevřít pro uložení."
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:56
@@ -63891,7 +63895,7 @@ msgstr "Nástroj pro měření"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
 #, kde-format
 msgid "Reference Images Tool"
-msgstr ""
+msgstr "Nástroj referenčních obrázků"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
@@ -65153,61 +65157,54 @@ msgstr "Interval Y:"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:589
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr ""
+msgstr "Přidat tvary do toku textu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:631
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Dát text na cestu"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:691
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr ""
+msgstr "Odečíst tvary z toku textu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:724
-#, fuzzy
-#| msgid "Remove from other tag"
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Odstranit z jiné značky"
+msgstr "Odebrat tvary z toku textu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr ""
+msgstr "Přepnout typ toku tvaru"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:771
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Nastavit tvar toku jako první"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:773
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Font Size"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Zmenšit velikost písma"
+msgstr "Snížit index tvaru toku"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:775
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Font Size"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Zvětšit velikost písma"
+msgstr "Zvýšit index tvaru toku"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:777
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Nastavit tvar toku jako poslední"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1048
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
+"Levé kliknutí otáčí kolem středu, pravé kliknutí okolo vyznačené pozice."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1051
 #, kde-format
@@ -65217,33 +65214,37 @@ msgstr "Klikněte a  táhněte pro výběr zkosení"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1056
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "Klikněte a táhněte pro změnu velikosti výběru."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1091
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "Klikněte a táhněte pro přesun výběru."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1095
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
+"Klikněte a táhněte pro změnu velikosti výběru. Kliknutí středním tlačítkem "
+"nastaví vybranou pozici."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1171
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
+"Tento nástroj pracuje pouze na vektorových vrstvách. Pravděpodobně chcete "
+"použít nástroj přesunu."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1673
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
-msgstr ""
+msgstr "Otočit objekt o 90° ve směru hodinových ručiček"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1677
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
-msgstr ""
+msgstr "Otočit objekt o 90° proti směru hodinových ručiček"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1681
 msgctxt "(qtundo-format)"
@@ -65268,62 +65269,62 @@ msgstr "Resetovat transformace objektu"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1767
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
-msgstr ""
+msgstr "Sjednocení tvarů"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1781
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
-msgstr ""
+msgstr "Průnik tvarů"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1791
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
-msgstr ""
+msgstr "Rozdíl tvarů"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1836
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
-msgstr ""
+msgstr "Rozdělit tvary"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2268
 #, kde-format
 msgid "Vector Shape Actions"
-msgstr ""
+msgstr "Akce vektorového tvaru"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2287
 #, kde-format
 msgid "Logical Operations"
-msgstr ""
+msgstr "Logické operace"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Výplň, čára, značky"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Výplň, značky, čára"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Čára, výplň, značky"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Čára, značky, výplň"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Značky, výplň, čára"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Značky, čára, výplň"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:119
 #, kde-format
@@ -65335,13 +65336,13 @@ msgstr "Krytí: {n}"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr ""
+msgstr "Krytí [*liší se*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
 #, kde-format
 msgid "Anchor Lock"
-msgstr ""
+msgstr "Zámek kotvy"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
@@ -65358,7 +65359,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205
 #, kde-format
 msgid "Scale Styles"
-msgstr ""
+msgstr "Styly škálování"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:218
@@ -65376,7 +65377,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
 #, kde-format
 msgid "Global Coordinates"
-msgstr ""
+msgstr "Globální souřadnice"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:24
 #, kde-format
@@ -65391,17 +65392,17 @@ msgstr "Vyplnit"
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:48
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
-msgstr ""
+msgstr "Pro podržení pozice x nebo y stiskni Shift."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr ""
+msgstr "Pro změnu velikosti od středu stiskněte CTRL."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:46
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr ""
+msgstr "Pro otočení po krocích 45 stupňů přidržte ALT."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:110
 msgctxt "(qtundo-format)"
@@ -65419,6 +65420,8 @@ msgid ""
 "The following reference images could not be loaded:\n"
 "%1"
 msgstr ""
+"Následující referenční obrázky nemohly být načteny:\n"
+"%1"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:105
 #, kde-format
@@ -65521,12 +65524,12 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:118
 #, kde-format
 msgid "Embed to .KRA"
-msgstr ""
+msgstr "Zabudovat do .KRA"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:119
 #, kde-format
 msgid "Link to Image"
-msgstr ""
+msgstr "Připojit odkaz k obrázku"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepAspectRatio)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:39
@@ -65550,7 +65553,7 @@ msgstr "Smazat vybrané obrázky"
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
 #, kde-format
 msgid "Add/Select an image to show options"
-msgstr ""
+msgstr "Přidejte/vyberte obrázek pro zobrazení možností"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129

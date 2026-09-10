@@ -179,6 +179,11 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
 
     s << "delta: x: " << ev.angleDelta().x() << " y: " << ev.angleDelta().y() << " ";
     s << "source: " << sourceToString(ev.source()) << " ";
+
+    QString phaseString;
+    QDebug(&phaseString) << ev.phase();
+    s << "phase: " << phaseString << " ";
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     s << "dev. type: " << static_cast<int>(ev.device()->type()) << " ";
     s << "dev. caps: " << static_cast<int>(ev.device()->capabilities()) << " ";

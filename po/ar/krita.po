@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-09 02:57+0000\n"
-"PO-Revision-Date: 2026-08-10 16:44+0400\n"
+"PO-Revision-Date: 2026-09-01 17:46+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -45191,7 +45191,7 @@ msgstr "سجّل"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "الصورة أكبر مما يمكن تسجيله"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format

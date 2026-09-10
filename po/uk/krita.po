@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-09 02:57+0000\n"
-"PO-Revision-Date: 2026-07-29 14:29+0300\n"
+"PO-Revision-Date: 2026-09-09 18:47+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -46093,7 +46093,7 @@ msgstr "Запис"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Зображення є надто великим для записування"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format

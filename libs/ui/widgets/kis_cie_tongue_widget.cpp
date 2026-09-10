@@ -454,7 +454,7 @@ void KisCIETongueWidget::drawSmallEllipse(QPointF xy, int r, int g, int b, int s
 }
 
 QPointF xyYToQPointF(KoColorimetryUtils::xyY xy) {
-    return QPointF(xy.x, xy.y);
+    return QPointF(std::isnan(xy.x) ? 0 : xy.x, std::isnan(xy.y) ? 0 : xy.y);
 }
  
 void KisCIETongueWidget::drawColorantTriangle()
@@ -524,17 +524,17 @@ void KisCIETongueWidget::drawGamut()
         gamutPaint.restore();
     }
     if (!d->gamut.empty()) {
-
         gamutPaint.setOpacity(1.0);
         foreach (QPointF Point, d->gamut) {
+            if (std::isnan(Point.x()) || std::isnan(Point.y())) {
+                continue;
+            }
+
             mapPoint(x, y, Point);
-            gamutPaint.drawEllipse(x + d->xBias- 2, y-2, 4, 4);
-            //Point.setX(x);
-            //Point.setY(y);
-            //path.lineTo(Point);
+            gamutPaint.drawEllipse(x + d->xBias - 2, y - 2, 4, 4);
         }
     }
-    
+
     gamutPaint.end();
     d->painter.save();
     d->painter.setOpacity(0.5);

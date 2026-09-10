@@ -178,6 +178,12 @@ void KisCIETongueWidget::setProfileData(QVector <double> p, QVector <double> w, 
     d->profileDataAvailable = profileData;
     if (profileData){
         d->Primaries= p;
+
+        for (int i = 0; i < d->Primaries.size(); i++) {
+            if (std::isnan(d->Primaries[i])) {
+                d->Primaries[i] = 0;
+            }
+        }
         
         d->whitePoint = w;
         d->needUpdatePixmap = true;      
@@ -193,7 +199,13 @@ void KisCIETongueWidget::setRGBData(QVector <double> whitepoint, QVector <double
 {
     if (colorants.size()==9){
         d->Primaries= colorants;
-        
+
+        for (int i = 0; i < d->Primaries.size(); i++) {
+            if (std::isnan(d->Primaries[i])) {
+                d->Primaries[i] = 0;
+            }
+        }
+
         d->whitePoint = whitepoint;
         d->needUpdatePixmap = true;
         d->colorModel = KisCIETongueWidget::RGBA;
@@ -543,14 +555,14 @@ void KisCIETongueWidget::drawGamut()
         gamutPaint.drawPath(path);
         gamutPaint.setOpacity(1.0);
         foreach (QPointF Point, d->gamut) {
+            if (std::isnan(Point.x()) || std::isnan(Point.y())) {
+                continue;
+            }
             mapPoint(x, y, Point);
-            gamutPaint.drawEllipse(x + d->xBias- 2, y-2, 4, 4);
-            //Point.setX(x);
-            //Point.setY(y);
-            //path.lineTo(Point);
+            gamutPaint.drawEllipse(x + d->xBias - 2, y - 2, 4, 4);
         }
     }
-    
+
     gamutPaint.end();
     d->painter.save();
     d->painter.setOpacity(0.5);

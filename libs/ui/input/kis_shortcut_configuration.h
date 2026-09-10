@@ -50,6 +50,7 @@ public:
         WheelDown, ///< Downwards movement, toward the user.
         WheelLeft, ///< Left movement.
         WheelRight, ///< Right movement.
+        WheelReserved_0, ///< Do not use! Previously was used for TouchpadScroll shortcut
     };
 
     /**
@@ -80,6 +81,7 @@ public:
         // but now all three gestures are represented as a single PinchGesture.
 
         SmartZoomGesture = 4, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
+        TouchpadScroll = 5, ///< Two-dimensional pixel scrolling on a touchpad, supported on MacOS and Wayland only
         MaxNativeGesture,
     };
 

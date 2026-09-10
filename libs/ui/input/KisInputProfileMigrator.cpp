@@ -19,6 +19,7 @@
 #include "kis_abstract_input_action.h"
 #include "kis_input_profile_manager.h"
 #include "kis_shortcut_configuration.h"
+#include "kis_pan_action.h"
 #include "kis_zoom_and_rotate_action.h"
 
 KisInputProfileMigrator::~KisInputProfileMigrator()
@@ -140,22 +141,50 @@ QList<KisShortcutConfiguration> KisInputProfileMigratorFrom6::migrate(const Prof
         }
     }
 
-    /**
-     * Now add the default connection between native gestures and
-     * "Zoom and Rotate Canvas" action
-     */
+    for (auto it = shortcuts.begin(); it != shortcuts.end();) {
+        if (it->type() == KisShortcutConfiguration::MouseWheelType
+            && it->wheel() == KisShortcutConfiguration::WheelReserved_0) {
+            it = shortcuts.erase(it);
+        } else {
+            ++it;
+        }
+    }
 
     auto actions = m_manager->actions();
 
-    auto it = std::find_if(actions.begin(), actions.end(), kismpl::mem_equal_to(&KisAbstractInputAction::id, "Zoom and Rotate Canvas"));
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != actions.end(), shortcuts);
+    {
+       /**
+        * Now add the default connection between native gestures and
+        * "Zoom and Rotate Canvas" action
+        */
 
-    KisShortcutConfiguration newNativeGestureShortcut;
-    newNativeGestureShortcut.setAction(*it);
-    newNativeGestureShortcut.setType(KisShortcutConfiguration::NativeGestureType);
-    newNativeGestureShortcut.setNativeGesture(KisShortcutConfiguration::PinchGesture);
-    newNativeGestureShortcut.setMode(KisZoomAndRotateAction::PanAndZoomAndRotateMode);
-    shortcuts.append(newNativeGestureShortcut);
+        auto it = std::find_if(actions.begin(), actions.end(), kismpl::mem_equal_to(&KisAbstractInputAction::id, "Zoom and Rotate Canvas"));
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != actions.end(), shortcuts);
+
+        KisShortcutConfiguration newNativeGestureShortcut;
+        newNativeGestureShortcut.setAction(*it);
+        newNativeGestureShortcut.setType(KisShortcutConfiguration::NativeGestureType);
+        newNativeGestureShortcut.setNativeGesture(KisShortcutConfiguration::PinchGesture);
+        newNativeGestureShortcut.setMode(KisZoomAndRotateAction::PanAndZoomAndRotateMode);
+        shortcuts.append(newNativeGestureShortcut);
+    }
+
+    {
+       /**
+        * Now add the default connection between native scroll and
+        * "Pan Canvas" action
+        */
+
+        auto it = std::find_if(actions.begin(), actions.end(), kismpl::mem_equal_to(&KisAbstractInputAction::id, "Pan Canvas"));
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != actions.end(), shortcuts);
+
+        KisShortcutConfiguration newNativeGestureShortcut;
+        newNativeGestureShortcut.setAction(*it);
+        newNativeGestureShortcut.setType(KisShortcutConfiguration::NativeGestureType);
+        newNativeGestureShortcut.setNativeGesture(KisShortcutConfiguration::TouchpadScroll);
+        newNativeGestureShortcut.setMode(KisPanAction::PanModeShortcut);
+        shortcuts.append(newNativeGestureShortcut);
+    }
 
     return shortcuts;
 }

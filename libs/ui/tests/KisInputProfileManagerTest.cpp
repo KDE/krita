@@ -23,6 +23,7 @@
 // for native gestures migration testing
 #include <input/KisInputProfileMigrator.h>
 #include <input/kis_zoom_and_rotate_action.h>
+#include <input/kis_pan_action.h>
 
 
 void KisInputProfileManagerTest::testProfileCreation()
@@ -34,6 +35,13 @@ void KisInputProfileManagerTest::testProfileCreation()
 
     profileManager->setCurrentProfile(profile);
     QCOMPARE(profileManager->currentProfile(), profile);
+}
+
+void KisInputProfileManagerTest::testLoadProfileV6_data()
+{
+    QTest::addColumn<QString>("mode");
+    QTest::addRow("native-gesture-convert") << "pinch-gesture";
+    QTest::addRow("wheel-to-touchpad-scroll-convert") << "touchpad-scroll";
 }
 
 void KisInputProfileManagerTest::testLoadProfileV6()
@@ -58,31 +66,63 @@ void KisInputProfileManagerTest::testLoadProfileV6()
 
     QList< KisShortcutConfiguration* > shortcuts = profile->allShortcuts();
 
-    KisShortcutConfiguration *foundNativeGestureShortcut = nullptr;
-    int numInvalidNativeGestureShortcuts = 0;
-    int totalNativeGestureShortcuts = 0;
+    QFETCH(QString, mode);
 
-    Q_FOREACH(KisShortcutConfiguration *shortcut, shortcuts) {
-        if (shortcut->type() == KisShortcutConfiguration::NativeGestureType) {
-            if (shortcut->nativeGesture() == KisShortcutConfiguration::PinchGesture) {
-                totalNativeGestureShortcuts++;
-                foundNativeGestureShortcut = shortcut;
-            }
-            if (shortcut->nativeGesture() > KisShortcutConfiguration::PinchGesture &&
-                shortcut->nativeGesture() < KisShortcutConfiguration::SmartZoomGesture) {
-                numInvalidNativeGestureShortcuts++;
+    if (mode == "pinch-gesture") {
+        KisShortcutConfiguration *foundNativeGestureShortcut = nullptr;
+        int numInvalidNativeGestureShortcuts = 0;
+        int totalNativeGestureShortcuts = 0;
+
+        Q_FOREACH(KisShortcutConfiguration *shortcut, shortcuts) {
+            if (shortcut->type() == KisShortcutConfiguration::NativeGestureType) {
+                if (shortcut->nativeGesture() == KisShortcutConfiguration::PinchGesture) {
+                    totalNativeGestureShortcuts++;
+                    foundNativeGestureShortcut = shortcut;
+                }
+                if (shortcut->nativeGesture() > KisShortcutConfiguration::PinchGesture &&
+                    shortcut->nativeGesture() < KisShortcutConfiguration::SmartZoomGesture) {
+                    numInvalidNativeGestureShortcuts++;
+                }
             }
         }
+
+        if (foundNativeGestureShortcut) {
+            QCOMPARE(foundNativeGestureShortcut->action()->id(), "Zoom and Rotate Canvas");
+            QCOMPARE(foundNativeGestureShortcut->mode(), KisZoomAndRotateAction::PanAndZoomAndRotateMode);
+
+        }
+
+        QCOMPARE(totalNativeGestureShortcuts, 1);
+        QCOMPARE(numInvalidNativeGestureShortcuts, 0);
+    } else if (mode == "touchpad-scroll") {
+        KisShortcutConfiguration *foundTouchpadScrollShortcut = nullptr;
+        int totalTouchpadScrollShortcuts = 0;
+        int numInvalidWheelShortcuts = 0;
+
+        Q_FOREACH(KisShortcutConfiguration *shortcut, shortcuts) {
+            if (shortcut->type() == KisShortcutConfiguration::MouseWheelType) {
+                if (shortcut->wheel() == KisShortcutConfiguration::WheelReserved_0) {
+                    numInvalidWheelShortcuts++;
+                }
+            }
+            if (shortcut->type() == KisShortcutConfiguration::NativeGestureType) {
+                if (shortcut->nativeGesture() == KisShortcutConfiguration::TouchpadScroll) {
+                    totalTouchpadScrollShortcuts++;
+                    foundTouchpadScrollShortcut = shortcut;
+                }
+            }
+        }
+
+        QCOMPARE(totalTouchpadScrollShortcuts, 1);
+        if (foundTouchpadScrollShortcut) {
+            QCOMPARE(foundTouchpadScrollShortcut->action()->id(), "Pan Canvas");
+            QCOMPARE(foundTouchpadScrollShortcut->mode(), KisPanAction::PanModeShortcut);
+        }
+
+        QCOMPARE(numInvalidWheelShortcuts, 0);
+    } else {
+        qFatal("Unknown testing mode: %s", mode.toLatin1().data());
     }
-
-    if (foundNativeGestureShortcut) {
-        QCOMPARE(foundNativeGestureShortcut->action()->id(), "Zoom and Rotate Canvas");
-        QCOMPARE(foundNativeGestureShortcut->mode(), KisZoomAndRotateAction::PanAndZoomAndRotateMode);
-
-    }
-
-    QCOMPARE(totalNativeGestureShortcuts, 1);
-    QCOMPARE(numInvalidNativeGestureShortcuts, 0);
 
     profileManager->removeProfile(profile->name());
 }
@@ -157,6 +197,7 @@ void KisInputProfileManagerTest::testShortcutConfigurationNativeGesture_data()
 
     QTest::addRow("PinchGesture") << KisShortcutConfiguration::PinchGesture << "{3;5;[];0;0;1}";
     QTest::addRow("SmartZoomGesture") << KisShortcutConfiguration::SmartZoomGesture << "{3;5;[];0;0;4}";
+    QTest::addRow("TouchpadScroll") << KisShortcutConfiguration::TouchpadScroll << "{3;5;[];0;0;5}";
 }
 
 void KisInputProfileManagerTest::testShortcutConfigurationNativeGesture()

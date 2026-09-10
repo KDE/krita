@@ -15,6 +15,7 @@
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
+#include "KisTouchpadScrollShortcut.h"
 #include "kis_config.h"
 #include "kis_extended_modifiers_mapper.h"
 #include "KisTouchHoldEventsPostponer.h"
@@ -92,6 +93,7 @@ public:
         , readyShortcut(0)
         , touchShortcut(0)
         , nativeGestureShortcut(0)
+        , touchpadScrollShortcut(0)
         , actionGroupMask([] () { return AllActionGroup; })
         , suppressAllActions(false)
         , suppressAllKeyboardActions(false)
@@ -110,6 +112,7 @@ public:
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
     QList<KisNativeGestureShortcut*> nativeGestureShortcuts;
+    QList<KisTouchpadScrollShortcut*> touchpadScrollShortcuts;
 
     QSet<Qt::Key> keys; // Model of currently pressed keys
     QSet<Qt::MouseButton> buttons; // Model of currently pressed buttons
@@ -122,7 +125,9 @@ public:
 
     KisTouchShortcut *touchShortcut;
     KisNativeGestureShortcut *nativeGestureShortcut;
+    KisTouchpadScrollShortcut *touchpadScrollShortcut;
     std::optional<KisTouchHoldEventsPostponer> touchHoldEventPostponer;
+
 
     int maxTouchPoints{0};
     int matchingIteration{0};
@@ -220,7 +225,7 @@ KisShortcutMatcher::~KisShortcutMatcher()
 
 bool KisShortcutMatcher::hasRunningShortcut() const
 {
-    return m_d->runningShortcut || m_d->touchShortcut || m_d->nativeGestureShortcut;
+    return m_d->runningShortcut || m_d->touchShortcut || m_d->nativeGestureShortcut || m_d->touchpadScrollShortcut;
 }
 
 bool KisShortcutMatcher::hasTouchHoldShortcut() const
@@ -248,8 +253,14 @@ void KisShortcutMatcher::addShortcut( KisTouchShortcut* shortcut )
     m_d->touchShortcuts.append(shortcut);
 }
 
-void KisShortcutMatcher::addShortcut(KisNativeGestureShortcut *shortcut) {
+void KisShortcutMatcher::addShortcut(KisNativeGestureShortcut *shortcut)
+{
     m_d->nativeGestureShortcuts.append(shortcut);
+}
+
+void KisShortcutMatcher::addShortcut( KisTouchpadScrollShortcut* shortcut )
+{
+    m_d->touchpadScrollShortcuts.append(shortcut);
 }
 
 bool KisShortcutMatcher::supportsHiResInputEvents()
@@ -259,7 +270,9 @@ bool KisShortcutMatcher::supportsHiResInputEvents()
         || (m_d->touchShortcut && m_d->touchShortcut->action()
             && m_d->touchShortcut->action()->supportsHiResInputEvents(m_d->touchShortcut->shortcutIndex()))
         || (m_d->nativeGestureShortcut && m_d->nativeGestureShortcut->action()
-            && m_d->nativeGestureShortcut->action()->supportsHiResInputEvents(m_d->nativeGestureShortcut->shortcutIndex()));
+            && m_d->nativeGestureShortcut->action()->supportsHiResInputEvents(m_d->nativeGestureShortcut->shortcutIndex()))
+        || (m_d->touchpadScrollShortcut && m_d->touchpadScrollShortcut->action()
+            && m_d->touchpadScrollShortcut->action()->supportsHiResInputEvents(m_d->touchpadScrollShortcut->shortcutIndex()));
 }
 
 bool KisShortcutMatcher::keyPressed(Qt::Key key)
@@ -843,8 +856,7 @@ bool KisShortcutMatcher::nativeGestureEndEvent(QNativeGestureEvent *event)
 
     DEBUG_EVENT_ACTION("entered", event);
 
-    // TODO: why &&?
-    if ( m_d->nativeGestureShortcut && !m_d->nativeGestureShortcut->match( event ) ) {
+    if (m_d->nativeGestureShortcut) {
         tryEndNativeGestureShortcut( event );
     }
 
@@ -856,6 +868,69 @@ bool KisShortcutMatcher::nativeGestureEndEvent(QNativeGestureEvent *event)
     }
 
     return true;
+}
+
+bool KisShortcutMatcher::hasTouchpadScrollShortcuts() const
+{
+    return !m_d->touchpadScrollShortcuts.isEmpty();
+}
+
+bool KisShortcutMatcher::touchpadScrollBeginEvent(QWheelEvent *event)
+{
+    Private::RecursionNotifier notifier(this);
+
+    if (notifier.isInRecursion()) return false;
+
+    DEBUG_EVENT_ACTION("entered", event);
+
+    if (!hasRunningShortcut()) {
+        tryRunTouchpadScrollShortcut(event);
+    }
+
+    if (m_d->touchpadScrollShortcut) {
+        m_d->touchpadScrollShortcut->action()->inputEvent(event);
+    }
+
+    return bool(m_d->touchpadScrollShortcut);
+}
+
+bool KisShortcutMatcher::touchpadScrollEvent(QWheelEvent *event)
+{
+    Private::RecursionNotifier notifier(this);
+
+    if (notifier.isInRecursion()) return false;
+
+    DEBUG_EVENT_ACTION("entered", event);
+
+    if (m_d->touchpadScrollShortcut) {
+        m_d->touchpadScrollShortcut->action()->inputEvent(event);
+    }
+
+    return bool(m_d->touchpadScrollShortcut);
+}
+
+bool KisShortcutMatcher::touchpadScrollEndEvent(QWheelEvent *event)
+{
+    Private::RecursionNotifier notifier(this);
+
+    if (notifier.isInRecursion()) return false;
+
+    DEBUG_EVENT_ACTION("entered", event);
+
+    bool retval = false;
+
+    if (m_d->touchpadScrollShortcut) {
+        retval = tryEndTouchpadScrollShortcut(event);
+    }
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!hasRunningShortcut()) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+
+    return retval;
 }
 
 Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
@@ -1039,11 +1114,15 @@ void KisShortcutMatcher::clearShortcuts()
     qDeleteAll(m_d->nativeGestureShortcuts);
     m_d->nativeGestureShortcuts.clear();
 
+    qDeleteAll(m_d->touchpadScrollShortcuts);
+    m_d->touchpadScrollShortcuts.clear();
+
     m_d->candidateShortcuts.clear();
     m_d->runningShortcut = 0;
     m_d->readyShortcut = 0;
     m_d->touchShortcut = 0;
     m_d->nativeGestureShortcut = 0;
+    m_d->touchpadScrollShortcut = 0;
 }
 
 void KisShortcutMatcher::setInputActionGroupsMaskCallback(std::function<KisInputActionGroupsMask ()> func)
@@ -1392,14 +1471,15 @@ bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
     return false;
 }
 
-bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
+template <typename EventType, typename ShortcutType>
+bool KisShortcutMatcher::tryRunGestureBasedShortcutImpl(EventType *event, ShortcutType **resultShortcutPtr, const QList<ShortcutType*> allTypedShortcuts)
 {
-    KisNativeGestureShortcut *goodCandidate = 0;
+    ShortcutType *goodCandidate = 0;
 
     if (m_d->actionsSuppressed())
         return false;
 
-    Q_FOREACH (KisNativeGestureShortcut* shortcut, m_d->nativeGestureShortcuts) {
+    Q_FOREACH (ShortcutType* shortcut, allTypedShortcuts) {
         if (shortcut->match(event) && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
             goodCandidate = shortcut;
         }
@@ -1412,7 +1492,7 @@ bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
         // deactivate an activated readyShortcut, to not throw other statemachines out of place.
         forceDeactivateAllActions();
 
-        m_d->nativeGestureShortcut = goodCandidate;
+        *resultShortcutPtr = goodCandidate;
 
         Private::RecursionGuard guard(this);
 
@@ -1424,29 +1504,29 @@ bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
         // the tool might have opened some dialog, which could break our event loop
         if (guard.brokenByRecursion()) {
             goodCandidate->action()->end(event);
-            m_d->nativeGestureShortcut = 0;
+            *resultShortcutPtr = 0;
 
             forceDeactivateAllActions();
         }
     }
 
-    return m_d->nativeGestureShortcut;
+    return bool(*resultShortcutPtr);
 }
 
-bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
+template <typename EventType, typename ShortcutType>
+bool KisShortcutMatcher::tryEndGestureBasedShortcutImpl(EventType *event, ShortcutType **resultShortcutPtr)
 {
     Private::RecursionNotifier notifier(this);
 
-    if (m_d->nativeGestureShortcut) {
+    if (*resultShortcutPtr) {
         // first reset running shortcut to avoid infinite recursion via end()
-        KisNativeGestureShortcut *nativeGestureShortcut = m_d->nativeGestureShortcut;
+        ShortcutType *runningShortcut = *resultShortcutPtr;
+        *resultShortcutPtr = nullptr;
 
-        DEBUG_SHORTCUT("ending", nativeGestureShortcut)
+        DEBUG_SHORTCUT("ending", runningShortcut)
 
-        nativeGestureShortcut->action()->end(event);
-        nativeGestureShortcut->action()->deactivate(m_d->nativeGestureShortcut->shortcutIndex());
-
-        m_d->nativeGestureShortcut = 0; // empty it out now that we are done with it
+        runningShortcut->action()->end(event);
+        runningShortcut->action()->deactivate(runningShortcut->shortcutIndex());
 
         return true;
     }
@@ -1459,6 +1539,26 @@ bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
     }
 
     return false;
+}
+
+bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
+{
+    return tryRunGestureBasedShortcutImpl(event, &m_d->nativeGestureShortcut, m_d->nativeGestureShortcuts);
+}
+
+bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
+{
+    return tryEndGestureBasedShortcutImpl(event, &m_d->nativeGestureShortcut);
+}
+
+bool KisShortcutMatcher::tryRunTouchpadScrollShortcut(QWheelEvent* event)
+{
+    return tryRunGestureBasedShortcutImpl(event, &m_d->touchpadScrollShortcut, m_d->touchpadScrollShortcuts);
+}
+
+bool KisShortcutMatcher::tryEndTouchpadScrollShortcut(QWheelEvent* event)
+{
+    return tryEndGestureBasedShortcutImpl(event, &m_d->touchpadScrollShortcut);
 }
 
 int KisShortcutMatcher::touchHoldDelay() const

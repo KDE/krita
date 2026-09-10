@@ -21,6 +21,7 @@
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
+#include "KisTouchpadScrollShortcut.h"
 #include "kis_input_profile_manager.h"
 #include "kis_extended_modifiers_mapper.h"
 
@@ -358,28 +359,32 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
                                                 const QList<Qt::Key> &modifiers,
                                                 KisShortcutConfiguration::MouseWheelMovement wheelAction)
 {
-    std::unique_ptr<KisSingleActionShortcut> keyShortcut(
-        new KisSingleActionShortcut(action, index));
 
-    KisSingleActionShortcut::WheelAction a;
+
+    auto addSingleActionShortcut = [&] (KisSingleActionShortcut::WheelAction a) {
+        std::unique_ptr<KisSingleActionShortcut> keyShortcut(
+            new KisSingleActionShortcut(action, index));
+        keyShortcut->setWheel(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), a);
+        matcher.addShortcut(keyShortcut.release());
+    };
+
     switch(wheelAction) {
     case KisShortcutConfiguration::WheelUp:
-        a = KisSingleActionShortcut::WheelUp;
+        addSingleActionShortcut(KisSingleActionShortcut::WheelUp);
         break;
     case KisShortcutConfiguration::WheelDown:
-        a = KisSingleActionShortcut::WheelDown;
+        addSingleActionShortcut(KisSingleActionShortcut::WheelDown);
         break;
     case KisShortcutConfiguration::WheelLeft:
-        a = KisSingleActionShortcut::WheelLeft;
+        addSingleActionShortcut(KisSingleActionShortcut::WheelLeft);
         break;
     case KisShortcutConfiguration::WheelRight:
-        a = KisSingleActionShortcut::WheelRight;
+        addSingleActionShortcut(KisSingleActionShortcut::WheelRight);
         break;
-    default:
-        return;
+    case KisShortcutConfiguration::WheelReserved_0:
+    case KisShortcutConfiguration::NoMovement:
+        break;
     }
-    keyShortcut->setWheel(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), a);
-    matcher.addShortcut(keyShortcut.release());
 }
 
 void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::TouchGestureAction gesture, bool isTouchPainting)
@@ -424,22 +429,33 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
 
 bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::NativeGestureAction gesture)
 {
+    auto addNativeGesture = [&] (KisNativeGestureShortcut::Type type) {
+        KisNativeGestureShortcut *shortcut = new KisNativeGestureShortcut(action, index, type);
+        matcher.addShortcut(shortcut);
+    };
+
+    // Native gestures:
     // Qt5 only implements QNativeGestureEvent for macOS
     // Qt6 implements QNativeGestureEvent for macOS and Wayland
-    KisNativeGestureShortcut::Type type = KisNativeGestureShortcut::PinchNavigation;
+    //
+    // Touchpad pixel scrolling:
+    // Qt5 only implements touchpad pixel scrolling for macOS
+    // Qt6 implements touchpad pixel scrolling for macOS and Wayland
+
     switch (gesture) {
         case KisShortcutConfiguration::PinchGesture:
-            type = KisNativeGestureShortcut::PinchNavigation;
+            addNativeGesture(KisNativeGestureShortcut::PinchNavigation);
             break;
         case KisShortcutConfiguration::SmartZoomGesture:
-            type = KisNativeGestureShortcut::SmartZoomNativeGesture;
+            addNativeGesture(KisNativeGestureShortcut::SmartZoomNativeGesture);
+            break;
+        case KisShortcutConfiguration::TouchpadScroll:
+            matcher.addShortcut(new KisTouchpadScrollShortcut(action, index));
             break;
         default:
             return false;
     }
 
-    KisNativeGestureShortcut *shortcut = new KisNativeGestureShortcut(action, index, type);
-    matcher.addShortcut(shortcut);
     return true;
 }
 

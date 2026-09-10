@@ -492,19 +492,36 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         KisInputEventsEater::debugEvent<QWheelEvent>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
 
+        if (wheelEvent->phase() != Qt::NoScrollPhase && d->matcher.hasTouchpadScrollShortcuts()) {
+            /**
+             * Wayland sends us a duplicated ScrollBegin event (one for
+             * every axis), so we cannot rely just on status of the
+             * running stroke and should use hasTouchpadScrollShortcuts()
+             * instead.
+             */
+
+            if (wheelEvent->phase() == Qt::ScrollBegin) {
+                d->matcher.touchpadScrollBeginEvent(wheelEvent);
+            } else if (wheelEvent->phase() == Qt::ScrollEnd) {
+                d->matcher.touchpadScrollEndEvent(wheelEvent);
+            } else {
+                 d->matcher.touchpadScrollEvent(wheelEvent);
+            }
+
+            break;
+        }
+
         d->accumulatedScrollDelta += wheelEvent->angleDelta().y();
         KisSingleActionShortcut::WheelAction action;
 
         /**
-         * Ignore delta 0 events on OSX, since they are triggered by tablet
-         * proximity when using Wacom devices.
+         * When wheelEvent->phase() is not Qt::NoScrollPhase, the delta
+         * can be easily null, so we should ignore these events.
          */
-#ifdef Q_OS_MACOS
         if (wheelEvent->angleDelta().isNull()) {
             retval = true;
             break;
         }
-#endif
 
         if (wheelEvent->angleDelta().x() < 0) {
             action = KisSingleActionShortcut::WheelRight;
@@ -834,7 +851,6 @@ void KisInputManager::slotTextModeChanged()
         }
     }
 }
-
 
 void KisInputManager::profileChanged()
 {

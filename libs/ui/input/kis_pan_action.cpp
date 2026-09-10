@@ -107,16 +107,19 @@ void KisPanAction::begin(int shortcut, QEvent *event)
 
     switch (shortcut) {
         case PanModeShortcut: {
-            // Some QT wheel events are actually be touch pad pan events. From the QT docs:
-            // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
-            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
-            if (wheelEvent) {
+            if (event->type() == QEvent::Wheel) {
+                // Some QT wheel events are actually be touch pad pan events. From the QT docs:
+                // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
+                QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
                 inputManager()->canvas()->canvasController()->pan(-wheelEvent->pixelDelta());
-                overrideCursor = false;
-                break;
-            }
 
-            d->originalPreferredCenter = inputManager()->canvas()->canvasController()->preferredCenter();
+                // native gestures don't have cursor tracking by the OS, so they shouldn't show any cursor
+                QApplication::restoreOverrideCursor();
+
+                return;
+            } else {
+                d->originalPreferredCenter = inputManager()->canvas()->canvasController()->preferredCenter();
+            }
 
             break;
         }
@@ -154,6 +157,9 @@ void KisPanAction::inputEvent(QEvent *event)
 
     if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
         d->actionStrategy->inputEvent(event);
+    } else if (event->type() == QEvent::Wheel) {
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        inputManager()->canvas()->canvasController()->pan(-wheelEvent->pixelDelta());
     } else {
         KisAbstractInputAction::inputEvent(event);
     }

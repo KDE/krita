@@ -368,6 +368,7 @@ set(kritaui_LIB_SRCS
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
     input/kis_select_layer_action.cpp
+    input/KisTouchpadScrollShortcut.cpp
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
     input/kis_zoom_and_rotate_action.cpp

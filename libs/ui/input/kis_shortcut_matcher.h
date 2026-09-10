@@ -23,6 +23,7 @@ class QPointF;
 class KisStrokeShortcut;
 class KisTouchShortcut;
 class KisNativeGestureShortcut;
+class KisTouchpadScrollShortcut;
 
 
 /**
@@ -82,11 +83,13 @@ public:
 
     bool hasRunningShortcut() const;
     bool hasTouchHoldShortcut() const;
+    bool hasTouchpadScrollShortcuts() const;
 
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
     void addShortcut(KisTouchShortcut *shortcut);
     void addShortcut(KisNativeGestureShortcut *shortcut);
+    void addShortcut(KisTouchpadScrollShortcut *shortcut);
 
     /**
      * Returns true if the currently running shortcut supports
@@ -190,6 +193,10 @@ public:
     bool nativeGestureBeginEvent(QNativeGestureEvent *event);
     bool nativeGestureEvent(QNativeGestureEvent *event);
     bool nativeGestureEndEvent(QNativeGestureEvent *event);
+
+    bool touchpadScrollBeginEvent(QWheelEvent *event);
+    bool touchpadScrollEvent(QWheelEvent *event);
+    bool touchpadScrollEndEvent(QWheelEvent *event);
 
     /**
      * Resets the internal state of the matcher and activates the
@@ -338,8 +345,16 @@ private:
     bool tryEndTouchShortcut(QTouchEvent *event);
     void tryCancelAllCurrentTouchActionsImpl();
 
+    template <typename EventType, typename ShortcutType>
+    bool tryRunGestureBasedShortcutImpl(EventType *event, ShortcutType **resultShortcutPtr, const QList<ShortcutType*> allTypedShortcuts);
+    template <typename EventType, typename ShortcutType>
+    bool tryEndGestureBasedShortcutImpl(EventType *event, ShortcutType **resultShortcutPtr);
+
     bool tryRunNativeGestureShortcut(QNativeGestureEvent *event);
     bool tryEndNativeGestureShortcut(QNativeGestureEvent *event);
+
+    bool tryRunTouchpadScrollShortcut(QWheelEvent* event);
+    bool tryEndTouchpadScrollShortcut(QWheelEvent* event);
 
 private:
     class Private;

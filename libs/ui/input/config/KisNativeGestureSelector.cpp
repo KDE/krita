@@ -11,6 +11,7 @@ KisNativeGestureSelector::KisNativeGestureSelector(QWidget *parent)
 {
     insertItem(0, KisShortcutConfiguration::nativeGestureToText(KisShortcutConfiguration::PinchGesture), static_cast<int>(KisShortcutConfiguration::PinchGesture));
     insertItem(1, KisShortcutConfiguration::nativeGestureToText(KisShortcutConfiguration::SmartZoomGesture), static_cast<int>(KisShortcutConfiguration::SmartZoomGesture));
+    insertItem(2, KisShortcutConfiguration::nativeGestureToText(KisShortcutConfiguration::TouchpadScroll), static_cast<int>(KisShortcutConfiguration::TouchpadScroll));
 }
 
 void KisNativeGestureSelector::setNativeGesture(KisShortcutConfiguration::NativeGestureAction gestureAction)

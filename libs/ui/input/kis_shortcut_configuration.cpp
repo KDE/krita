@@ -7,6 +7,7 @@
 
 #include "kis_shortcut_configuration.h"
 
+#include <QDebug>
 #include <QStringList>
 #include <QKeySequence>
 #include <KLocalizedString>
@@ -156,6 +157,11 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
     //Fourth entry is the button mask
     d->buttons = static_cast<Qt::MouseButtons>(parts.at(3).toInt(nullptr, 16));
     d->wheel = static_cast<MouseWheelMovement>(parts.at(4).toUInt(nullptr, 16));
+
+    if (d->type == MouseWheelType && d->wheel == WheelReserved_0) {
+        qWarning() << "WARNING: input profile contains deprecated Mouse Wheel shortcut (WheelReserved_0), skipping...";
+        return false;
+    }
 
     if (d->type == NativeGestureType) {
         d->nativeGesture = static_cast<NativeGestureAction>(parts.at(5).toUInt(nullptr, 16));
@@ -472,6 +478,8 @@ QString KisShortcutConfiguration::nativeGestureToText(NativeGestureAction action
         return i18n("Pinch Gesture");
     case SmartZoomGesture:
         return i18n("Smart Zoom Gesture");
+    case TouchpadScroll:
+        return i18n("Touchpad Scroll Gesture");
     default:
         return i18n("No Gesture");
     }

@@ -1191,7 +1191,7 @@ msgstr "A_Tresses_b"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Chain.gbr"
 msgid "A_Chain"
-msgstr "A-Chaîne"
+msgstr "A-Chaine"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1768,7 +1768,7 @@ msgstr "U Forme en cercle 5c"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Chain_1.gbr"
 msgid "Z_Chain_1"
-msgstr "Z-Chaîne 1"
+msgstr "Z-Chaine 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7874,7 +7874,7 @@ msgid ""
 msgstr ""
 "Faire en sorte que le premier texte sélectionné se déplace dans la forme. "
 "S'il y avait déjà des formes dans lesquelles il se déplaçait, il ajoutera la "
-"forme à la chaîne."
+"forme à la chaine."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
@@ -7961,56 +7961,56 @@ msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
 "Faire en sorte que ceci déplace la forme vers la dernière position dans la "
-"chaîne de texte, comme utilisé par la disposition de texte."
+"chaine de texte, comme utilisé par la disposition de texte."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr "Plus tôt dans la chaîne."
+msgstr "Plus tôt dans la chaine."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr "Déplacez cette forme plus tôt dans la chaîne de texte."
+msgstr "Déplacez cette forme plus tôt dans la chaine de texte."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr "Déplacer la forme plus tôt dans la chaîne."
+msgstr "Déplacer la forme plus tôt dans la chaine."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr "Plus tard dans la chaîne"
+msgstr "Plus tard dans la chaine"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr "Déplacez cette forme plus tard dans la chaîne de texte."
+msgstr "Déplacez cette forme plus tard dans la chaine de texte."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr "Déplacer la forme plus tard dans la chaîne."
+msgstr "Déplacer la forme plus tard dans la chaine."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
 #, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "En premier dans la chaîne"
+msgstr "En premier dans la chaine"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -8019,7 +8019,7 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
-"Faire en sorte que ceci déplace la forme en premier dans la chaîne de texte "
+"Faire en sorte que ceci déplace la forme en premier dans la chaine de texte "
 "comme utilisée par la disposition du texte."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -50854,7 +50854,7 @@ msgstr "Nombre"
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
 #, kde-format
 msgid "String"
-msgstr "Chaîne"
+msgstr "Chaine"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:60
 #, kde-format
@@ -51016,7 +51016,7 @@ msgid ""
 "or a custom QPixmap or QIcon, or None."
 msgstr ""
 "L'icône associée avec cette action. Elle est affichée à côté du texte dans "
-"la barre de menus et dans les barres d'outils lorsque nécessaire. Une chaîne "
+"la barre de menus et dans les barres d'outils lorsque nécessaire. Une chaine "
 "à utiliser pour le système de chargement d'images de KDE ou dans un "
 "« QPixmap » ou « QIcon » personnalisé ou pour rien du tout."
 
@@ -68560,7 +68560,7 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
-"Recherche les caractères correspondant à la première lettre de la chaîne. La "
+"Recherche les caractères correspondant à la première lettre de la chaine. La "
 "recherche hexadécimale est possible lorsqu'elle est précédée de « U+ » (Par "
 "exemple, U +0045 recherchera « E »)"
 
@@ -70579,7 +70579,7 @@ msgstr "Outil de transformation (Transformation en perspective)"
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Outil de transformation (Transformation en chaîne)"
+msgstr "Outil de transformation (Transformation en chaine)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47

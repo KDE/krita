@@ -58140,7 +58140,7 @@ msgstr ""
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
 msgid "Duotone Colormode Block"
-msgstr "Bloc de mode «Color» dual"
+msgstr "Bloc de mode «Color» bitò"
 
 #: plugins/impex/psd/psd_loader.cpp:255
 #, kde-format

@@ -44840,7 +44840,7 @@ msgstr "开始录制"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "图像太大，无法录像"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format

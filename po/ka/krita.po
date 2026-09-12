@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"POT-Creation-Date: 2026-09-12 02:39+0000\n"
 "PO-Revision-Date: 2026-08-17 08:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -38821,12 +38821,12 @@ msgstr "ჩაკეტვა"
 msgid "Unlock (keep current settings)"
 msgstr "განბლოკვა (მიმდინარე პარამეტრების შენარჩუნება)"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:657
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, kde-format
 msgid "Uncalibrated color space"
 msgstr "კალიბრაციის არმქონე ფერის სივრცე"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:663
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:675
 #, kde-format
 msgid "No profile available..."
 msgstr "პროფილის გარეშე..."

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"POT-Creation-Date: 2026-09-12 02:39+0000\n"
 "PO-Revision-Date: 2026-08-18 19:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -39355,12 +39355,12 @@ msgstr "Kilitle"
 msgid "Unlock (keep current settings)"
 msgstr "Kilidi Aç (geçerli ayarları koru)"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:657
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, kde-format
 msgid "Uncalibrated color space"
 msgstr "Ayarsız renk uzayı"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:663
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:675
 #, kde-format
 msgid "No profile available..."
 msgstr "Kullanılabilir profil yok…"

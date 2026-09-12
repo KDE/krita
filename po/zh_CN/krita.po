@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"POT-Creation-Date: 2026-09-12 02:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -38870,12 +38870,12 @@ msgstr "锁定"
 msgid "Unlock (keep current settings)"
 msgstr "解除锁定 (保留当前设置)"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:657
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, kde-format
 msgid "Uncalibrated color space"
 msgstr "未经校准的色彩空间"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:663
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:675
 #, kde-format
 msgid "No profile available..."
 msgstr "没有可用的色彩特性文件..."

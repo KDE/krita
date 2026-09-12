@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"POT-Creation-Date: 2026-09-12 02:39+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -39275,12 +39275,12 @@ msgstr "Ferskoattele"
 msgid "Unlock (keep current settings)"
 msgstr "Kleurynstellings"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:657
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, fuzzy, kde-format
 msgid "Uncalibrated color space"
 msgstr "Doel kle&urromte:"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:663
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:675
 #, fuzzy, kde-format
 msgid "No profile available..."
 msgstr "Gjin profyl"

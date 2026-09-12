@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-09 02:57+0000\n"
+"POT-Creation-Date: 2026-09-12 02:39+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -39658,12 +39658,12 @@ msgstr "Glasáil"
 msgid "Unlock (keep current settings)"
 msgstr "Díghlasáil (coinnigh socruithe reatha)"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:657
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, kde-format
 msgid "Uncalibrated color space"
 msgstr "Spás datha neamhchalabraithe"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:663
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:675
 #, kde-format
 msgid "No profile available..."
 msgstr "Níl aon phróifíl ar fáil..."

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-09 02:57+0000\n"
-"PO-Revision-Date: 2026-08-04 18:27+0200\n"
+"POT-Creation-Date: 2026-09-12 02:39+0000\n"
+"PO-Revision-Date: 2026-09-11 15:32+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -34097,8 +34097,8 @@ msgctxt ""
 "number of buttons in that list."
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
-msgstr[0] "%1 bouton"
-msgstr[1] "%1 boutons"
+msgstr[0] "Bouton %1"
+msgstr[1] "Boutons %1"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:375
 #, kde-format
@@ -34139,22 +34139,22 @@ msgstr "Aucun"
 #: libs/ui/input/kis_shortcut_configuration.cpp:414
 #, kde-format
 msgid "Mouse Wheel Up"
-msgstr "Clic avec la molette de la souris "
+msgstr "Défilement vers le haut avec la molette de souris"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:418
 #, kde-format
 msgid "Mouse Wheel Down"
-msgstr "Relâcher de la molette de la souris "
+msgstr "Défilement vers le bas avec la molette de souris"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:422
 #, kde-format
 msgid "Mouse Wheel Left"
-msgstr "Action à gauche avec la molette de la souris "
+msgstr "Défilement vers la gauche avec la molette de souris"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:426
 #, kde-format
 msgid "Mouse Wheel Right"
-msgstr "Action à droite avec la molette de la souris "
+msgstr "Défilement vers la droite avec la molette de souris"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:430
 #, kde-format
@@ -39809,12 +39809,12 @@ msgstr "Verrouiller"
 msgid "Unlock (keep current settings)"
 msgstr "Déverrouiller (conserver les réglages actuels)"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:657
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, kde-format
 msgid "Uncalibrated color space"
 msgstr "Espace de couleur non calibré"
 
-#: libs/ui/widgets/kis_cie_tongue_widget.cpp:663
+#: libs/ui/widgets/kis_cie_tongue_widget.cpp:675
 #, kde-format
 msgid "No profile available..."
 msgstr "Aucune profil disponible..."

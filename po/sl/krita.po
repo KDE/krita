@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-12 02:39+0000\n"
-"PO-Revision-Date: 2026-07-28 14:55+0200\n"
+"PO-Revision-Date: 2026-09-11 21:13+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -45441,7 +45441,7 @@ msgstr "Snemaj"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Slika je prevelika za snemanje"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -70048,13 +70048,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Use system monitor profile"
-#~ msgstr "Uporabi sistemski profil zaslona"
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "Ta datoteka XCF je preveč nova; Krita ne podpira datotek XCF, zapisanih z "
-#~ "GIMP 2.9 ali novejšim."

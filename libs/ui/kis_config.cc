@@ -709,6 +709,16 @@ void KisConfig::setEnableCanvasSurfaceColorSpaceManagement(bool value)
     m_cfg.writeEntry("enableCanvasSurfaceColorSpaceManagement", value);
 }
 
+bool KisConfig::effectiveShouldUseNativeSurfaceForCanvas(bool osManagedSurfacePresent) const
+{
+    bool useNativeSurfaceForCanvas = osManagedSurfacePresent && this->enableCanvasSurfaceColorSpaceManagement();
+    if (qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
+        useNativeSurfaceForCanvas = qEnvironmentVariableIntValue("KRITA_USE_NATIVE_CANVAS_SURFACE");
+        qDebug() << "FPS-DEBUG: Krita canvas mode is overridden:" << (useNativeSurfaceForCanvas ? "native surface" : "legacy mode") << useNativeSurfaceForCanvas << qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE");
+    }
+    return useNativeSurfaceForCanvas;
+}
+
 KisConfig::CanvasSurfaceMode KisConfig::canvasSurfaceColorSpaceManagementMode(bool defaultValue) const {
     QString modeStr = defaultValue ? "preferred" : m_cfg.readEntry("canvasSurfaceColorSpaceManagementMode", "preferred");
 

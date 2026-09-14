@@ -187,6 +187,14 @@ public:
     bool enableCanvasSurfaceColorSpaceManagement(bool defaultValue = false) const;
     void setEnableCanvasSurfaceColorSpaceManagement(bool value);
 
+    /**
+     * \return if a native surface should be used for the canvas
+     *
+     * The function encodes the logic of checking user config and environment
+     * variable for calculating the option for the native canvas surface
+     */
+    bool effectiveShouldUseNativeSurfaceForCanvas(bool osManagedSurfacePresent) const;
+
     enum class CanvasSurfaceMode {
         Preferred = 0,
         Rec709g22,

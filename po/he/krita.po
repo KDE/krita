@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-08 00:43+0000\n"
-"PO-Revision-Date: 2026-09-07 08:56+0300\n"
+"PO-Revision-Date: 2026-09-13 21:54+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -44830,7 +44830,7 @@ msgstr "הקלטה"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "התמונה גדולה מכדי שתתועד"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -45035,7 +45035,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:224
 #, kde-format
 msgid "Please choose svg file to specify the layout for exporting."
-msgstr ""
+msgstr "נא לבחור קובץ svg כדי לציין פריסה לייצוא."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:229
 #, kde-format
@@ -48628,7 +48628,7 @@ msgstr "&אורך מוקד:"
 #, kde-format
 msgctxt "EXIF: lens"
 msgid "Focal length (&35mm equivalent):"
-msgstr ""
+msgstr "אורך מוקד (תואם &35 מ״מ):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: plugins/extensions/metadataeditor/editors/exif.ui:292
@@ -49397,24 +49397,24 @@ msgid "Offset Image"
 msgstr "היסט תמונה"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] "היסט:"
-msgstr[1] "היסט:"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "היסט לשכבה"
+msgstr[1] "היסט לשתי שכבות"
+msgstr[2] "היסט ל־%1 שכבות"
+msgstr[3] "היסט ל־%1 שכבות"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] "היסט:"
-msgstr[1] "היסט:"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "היסט לשכבה"
+msgstr[1] "היסט לשתי שכבות"
+msgstr[2] "היסט ל־%1 שכבות"
+msgstr[3] "היסט ל־%1 שכבות"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -50082,7 +50082,7 @@ msgstr "מאגדי תמיכה"
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
 msgid "<strong>Error:</strong> %1"
-msgstr ""
+msgstr "<strong>שגיאה:</strong> %1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
 #, kde-format
@@ -50102,7 +50102,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "טעינה…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
@@ -50113,7 +50113,7 @@ msgstr "לנסות שוב"
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
 msgid "Server responded with error %1."
-msgstr ""
+msgstr "השרת הגיב עם השגיאה %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
 #, kde-format
@@ -50123,22 +50123,22 @@ msgstr "קובץ סיכום ביקורת שגוי."
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
 msgid "Invalid checksums version."
-msgstr ""
+msgstr "גרסת סכומי ביקורת שגויה."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:117
 #, kde-format
 msgid "You have to update Krita to use this service."
-msgstr ""
+msgstr "יש לעדכן את Krita כדי להשתמש בשירות הזה."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:119
 #, kde-format
 msgid "This service is not available in your region."
-msgstr ""
+msgstr "השירות הזה אינו זמין באזור שלך."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:121
 #, kde-format
 msgid "This service is currently unavailable."
-msgstr ""
+msgstr "השירות אינו זמין כרגע."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
 #, kde-format
@@ -50153,7 +50153,7 @@ msgstr "שגיאת שירות לא ידועה %1."
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
 msgid "Not enough data."
-msgstr ""
+msgstr "אין מספיק נתונים."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
 #, kde-format
@@ -50229,7 +50229,7 @@ msgstr[3] "%1 פריסות מרחב עבודה"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
 msgid "%1 (subscribed)"
-msgstr ""
+msgstr "%1 (נרשמת)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
 #, kde-format
@@ -50259,7 +50259,7 @@ msgstr "זמין עם:"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
 msgid "Downloading bundle…"
-msgstr ""
+msgstr "המאגד יורד…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:139
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
@@ -50275,12 +50275,12 @@ msgstr "גודל מאגד שגוי"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
 msgid "Invalid bundle checksum"
-msgstr ""
+msgstr "סיכום ביקורת מאגד שגויה"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
 #, kde-format
 msgid "Activating bundle…"
-msgstr ""
+msgstr "המאגד מופעל…"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
 #, kde-format
@@ -50307,7 +50307,7 @@ msgstr "הורדה"
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
 #, kde-format
 msgid "✔ Owned"
-msgstr ""
+msgstr "✔ בבעלותך"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
@@ -54751,7 +54751,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr ""
+msgstr "ברירת מחדל (רק לאיכות נמוכה)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
@@ -54804,7 +54804,7 @@ msgstr "הקטנת רזולוציה 8×8"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr ""
+msgstr "ברירת מחדל (המקודד בוחר)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:45
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:51

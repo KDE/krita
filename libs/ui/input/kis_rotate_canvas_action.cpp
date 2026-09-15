@@ -98,6 +98,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
         //canvasController->beginCanvasRotation();
 
         Flags flags;
+        flags.setFlag(Flag::PanEnabled);
         flags.setFlag(Flag::RotationEnabled);
         flags.setFlag(Flag::RotationDescrete, shortcut == DiscreteRotateModeShortcut);
 

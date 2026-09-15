@@ -107,6 +107,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
 
         Flags flags;
+        flags.setFlag(Flag::PanEnabled);
         flags.setFlag(Flag::ZoomEnabled);
         flags.setFlag(Flag::ZoomDescrete,
                       shortcut == DiscreteZoomModeShortcut || shortcut == RelativeDiscreteZoomModeShortcut);

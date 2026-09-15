@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-08 00:43+0000\n"
-"PO-Revision-Date: 2022-11-10 18:48+0100\n"
-"Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
+"PO-Revision-Date: 2026-09-14 20:10+0200\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -7269,9 +7269,7 @@ msgstr "Zarovnať vpravo"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
 msgstr "Zrušiť zoskupenie tvarov"
@@ -7286,6 +7284,7 @@ msgstr "Zrušiť zoskupenie tvarov"
 msgctxt "action"
 msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
 msgstr ""
+"\"Zruší zoskupenie tvarov v kontexte nástroja na interakciu s vektormi\""
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7339,30 +7338,24 @@ msgstr "Vycentrovať vertikálne"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
 msgstr "Zoskupiť tvary"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "Skupina"
+msgstr "Zoskupiť"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr "Skupina"
+msgstr "Zoskupiť"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12094,12 +12087,10 @@ msgstr "Vložiť vrstvu zo schránky"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "Skupinová vrstva"
+msgstr "Zoskupiť vrstvy"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12117,12 +12108,10 @@ msgstr "Rýchle zoskupenie"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "Zrušiť zoskupenie tvarov"
+msgstr "Zrušiť zoskupenie vrstiev"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -45678,7 +45667,7 @@ msgstr "Nahrať"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Obrázok je príliš veľký na zaznamenanie"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -57521,18 +57510,14 @@ msgid "Resolution:"
 msgstr "Rozlíšenie:"
 
 #: plugins/impex/png/kis_png_export.cc:193
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "The image will be converted plainly to 12bit integer, and values that are "
-#| "out of bounds are clipped, the icc profile will be embedded."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "The image will be converted plainly to 16bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
-"Obrázok sa prevedie jednoducho na 12bitové celé číslo a hodnoty, ktoré sú "
-"mimo hraníc, sa orežú, vloží sa profil icc."
+"Obrázok sa jednoducho prevedie na 16-bitové celé číslo, hodnoty mimo rozsahu "
+"sa orežú a vloží sa profil ICC."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
 #: plugins/impex/png/kis_wdg_options_png.ui:18
@@ -57729,36 +57714,33 @@ msgstr "Prekladanie"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbSaveColorInfo)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
-#, fuzzy, kde-format
-#| msgid "Color Volume Information"
+#, kde-format
 msgid "Save Color Space Information"
-msgstr "Informácie o objeme farieb"
+msgstr "Uložiť informácie o farebnom priestore"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCICP)
 #: plugins/impex/png/kis_wdg_options_png.ui:213
-#, fuzzy, kde-format
-#| msgid "Save as indexed PNG, if possible"
+#, kde-format
 msgid "Save CICP if possible"
-msgstr "Uložiť ako indexovaný PNG, ak je to možné"
+msgstr "Uložiť CICP, ak je to možné"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/png/kis_wdg_options_png.ui:220
-#, fuzzy, kde-format
-#| msgid "Connection Point"
+#, kde-format
 msgid "Convert Floating Point:"
-msgstr "Bod pripojenia"
+msgstr "Previesť pohyblivú rádovú čiarku:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:230
 #, kde-format
 msgid "Save Chroma, Gamma and sRGB chunks in addition to ICC or CICP data"
-msgstr ""
+msgstr "Uložiť bloky Chroma, Gamma a sRGB navyše k údajom ICC alebo CICP"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:233
 #, kde-format
 msgid "Save Extra Color Chunks"
-msgstr ""
+msgstr "Uložiť ďalšie farebné bloky"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -65191,12 +65173,10 @@ msgstr "Aktivovať predvoľbu štetca 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset 10"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "Aktivovať predvoľbu štetca 10"
+msgstr "Aktivovať predvoľbu štetca 0"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -65326,12 +65306,10 @@ msgstr "Spustiť skript 9"
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:129
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Execute Script 10"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "Spustiť skript 10"
+msgstr "Spustiť skript 0"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"

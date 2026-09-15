@@ -30,8 +30,6 @@ class KisZoomAction::Private
 public:
     Private(KisZoomAction *qq) : q(qq) {}
 
-    QPointF centerPoint(QTouchEvent* event);
-
     KisZoomAction *q {nullptr};
     // Coverity requires sane defaults for all variables (CID 36380)
     Shortcuts mode {ZoomModeShortcut};
@@ -43,25 +41,6 @@ public:
 
     std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 };
-
-QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
-{
-    QPointF result;
-    int count = 0;
-
-    Q_FOREACH (QTouchEvent::TouchPoint point, event->touchPoints()) {
-        if (point.state() != Qt::TouchPointReleased) {
-            result += point.pos();
-            count++;
-        }
-    }
-
-    if (count > 0) {
-        return result / count;
-    } else {
-        return QPointF();
-    }
-}
 
 KisZoomAction::KisZoomAction()
     : KisAbstractInputAction("Zoom Canvas")

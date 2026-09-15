@@ -33,8 +33,6 @@ private:
 
     SnappedRotationData m_rotationData;
     qreal m_lastDistance {0.0};
-
-    const bool m_transformAroundTheFirstFinger = {false};
 };
 
 

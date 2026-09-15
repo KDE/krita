@@ -2969,7 +2969,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr "11 нарисуван косъм"
+msgstr "11 нарисуван пухкав косъм"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6242,7 +6242,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "P_Graphite_Black_Grass.gih"
 msgid "P_Graphite Black Grass"
-msgstr "Графитен молив P черна трева"
+msgstr "P_Графит Черна трева"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/P_Graphite_Pencil.gih:1
@@ -6260,7 +6260,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "P_Graphite_Pencil_grain.gih"
 msgid "GIMP Brush Pipe"
-msgstr "GIMP Brush Pipe"
+msgstr "GIMP четка Pipe"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/P_Graphite_Pencil_grainb.gih:1
@@ -6490,7 +6490,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-Glare."
 "ggr"
 msgid "GPS FG Glare"
-msgstr "GPS FG Glare"
+msgstr "GPS FG Блясък"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-Fire-Blueish.ggr:2
@@ -6553,7 +6553,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-Haze-and-"
 "Atmosphere.ggr"
 msgid "GPS Haze and Atmosphere"
-msgstr "GPS Haze and Atmosphere"
+msgstr "GPS Мъгла и атмосфера"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-Light-Saber-_Use-FG-color_.ggr:2
@@ -6683,7 +6683,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk."
 "gpl"
 msgid "Swatch CMYK"
-msgstr "Swatch CMYK"
+msgstr "Цветова палитра CMYK"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-colored-grey.gpl:2
@@ -27842,17 +27842,17 @@ msgstr "Показвано име: %1 %2"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2212
 #, kde-format
 msgid "Min Luminance: %1"
-msgstr "Мин. яркост: %1"
+msgstr "Мин. луминанс: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2213
 #, kde-format
 msgid "Max Luminance: %1"
-msgstr "Максимална яркост: %1"
+msgstr "Макс. луминанс: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2214
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
-msgstr "Максимална яркост на пълен кадър: %1"
+msgstr "Максимален луминанс на пълен кадър: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2215
 #, kde-format
@@ -40116,7 +40116,7 @@ msgstr "Количество:"
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
 msgid "Spread:"
-msgstr "Разпръскване:"
+msgstr "Разпределение:"
 
 #. i18n: ectx: property (text), widget (QLabel, thresholdModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:39
@@ -44577,7 +44577,7 @@ msgstr "Избиране на конфигурация на OpenColorIO"
 #: plugins/dockers/lut/lutdocker_dock.cpp:514
 #, kde-format
 msgid "Luminance"
-msgstr "Осветеност"
+msgstr "Луминанс"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:515
 #, kde-format
@@ -58623,7 +58623,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
-msgstr "Яркост:"
+msgstr "Луминанс:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
@@ -58631,8 +58631,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<title>Luminance</title><p>Amount of Luminance impulse noise reduction.</p>"
 msgstr ""
-"<title>Яркост</title><p>Степен на намаляване на импулсния шум на яркостта.</"
-"p>"
+"<title>Луминанс</title><p>Степен на намаляване на импулсния шум на луминанса."
+"</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1006
 #, kde-format
@@ -65641,7 +65641,7 @@ msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Мащаб: {n}%"
+msgstr "Мащабиране: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
@@ -67282,7 +67282,7 @@ msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Разпръскване: {n}%"
+msgstr "Разпределение: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format

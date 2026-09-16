@@ -430,6 +430,7 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
     supportedMimeTypes << "video/x-matroska";
     supportedMimeTypes << "video/mp4";
     supportedMimeTypes << "video/webm";
+    supportedMimeTypes << "video/quicktime";
     supportedMimeTypes << "image/gif";
     supportedMimeTypes << "image/apng";    
     supportedMimeTypes << "image/webp";       
@@ -475,6 +476,11 @@ QStringList KisDlgAnimationRenderer::filterMimeTypeListByAvailableEncoders(const
                 encodersPresent << ffmpegEncoderTypes["vp9"];
                 if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::WEBM, encodersPresent))
                     retValue << mime;
+            }
+        } else if (mime == "video/quicktime") {
+            if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::MOV,
+                                                     ffmpegEncoderTypes.value("prores"))) {
+                retValue << mime;
             }
         } else if (mime == "image/gif") {
             if ( ffmpegCodecs.contains("gif") ) {
@@ -626,6 +632,9 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
             int previousMimeTypeIndex = -1;
             Q_FOREACH (const QString &mime, supportedMimeTypes) {
                 QString description = KisMimeDatabase::descriptionForMimeType(mime);
+                if (mime == "video/quicktime") {
+                    description = i18n("ProRes 4444 Video (*.mov)");
+                }
                 if (description.isEmpty()) {
                     description = mime;
                 }
@@ -736,7 +745,8 @@ QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QS
 
     if (!mimeType.isEmpty()) {
         return QString("%1.%2").arg(QFileInfo(docFileName).completeBaseName(),
-                                    KisMimeDatabase::suffixesForMimeType(mimeType).first());
+                                    mimeType == "video/quicktime" ? QStringLiteral("mov")
+                                        : KisMimeDatabase::suffixesForMimeType(mimeType).first());
     } else {
         return docFileName;
     }
@@ -758,7 +768,8 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         const QString path = info.path();
 
         videoFileName = QString("%1%2%3.%4")
-                            .arg(path, "/", baseName, KisMimeDatabase::suffixesForMimeType(mimeType).first());
+                            .arg(path, "/", baseName, mimeType == "video/quicktime" ? QStringLiteral("mov")
+                                : KisMimeDatabase::suffixesForMimeType(mimeType).first());
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
     m_page->videoFilename->setFileName(videoFileName);
@@ -952,7 +963,8 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
         const int pixelFormatIndex = ffmpegOptions.lastIndexOf("-pix_fmt");
         if (options.shouldEncodeVideo && options.frameMimeType == "image/png"
             && pixelFormatIndex >= 0 && pixelFormatIndex + 1 < ffmpegOptions.size()
-            && ffmpegOptions[pixelFormatIndex + 1] == "yuva420p") {
+            && (ffmpegOptions[pixelFormatIndex + 1] == "yuva420p"
+                || ffmpegOptions[pixelFormatIndex + 1] == "yuva444p10le")) {
             if (!cfg) {
                 cfg = new KisPropertiesConfiguration();
             }

@@ -455,6 +455,20 @@
           </item>
          </layout>
         </widget>
+        <widget class="QWidget" name="pgProRes">
+         <layout class="QVBoxLayout" name="proResLayout">
+          <item>
+           <widget class="QLabel" name="lblProResTransparency">
+            <property name="text">
+             <string>ProRes 4444 preserves transparency in MOV video. Hide opaque background layers before rendering.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>

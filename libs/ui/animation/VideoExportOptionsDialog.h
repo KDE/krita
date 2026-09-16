@@ -33,6 +33,7 @@ public:
         APNG,
         WEBP,
         OGV,
+        MOV,
         NUM_CONTAINER_TYPE
     };
 
@@ -44,7 +45,8 @@ public:
         CODEC_VP9,
         CODEC_GIF,
         CODEC_APNG,
-        CODEC_WEBP
+        CODEC_WEBP,
+        CODEC_PRORES
     };
 
 public:

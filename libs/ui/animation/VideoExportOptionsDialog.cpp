@@ -277,6 +277,8 @@ KisVideoExportOptionsDialog::ContainerType KisVideoExportOptionsDialog::mimeToCo
         return ContainerType::WEBM;
     } else if (mimeType == "video/x-matroska") {
         return ContainerType::MKV;
+    } else if (mimeType == "video/quicktime") {
+        return ContainerType::MOV;
     } else if (mimeType == "video/ogg") {
         return ContainerType::OGV;
     } else if (mimeType == "image/gif") {
@@ -304,6 +306,9 @@ QVector<KoID> KisVideoExportOptionsDialog::encoderIdentifiers(ContainerType type
     
 
     switch (type) {
+        case ContainerType::MOV:
+            encoders << KoID("prores_ks", i18nc("ProRes codec name", "ProRes 4444 (with transparency)"));
+            break;
         case ContainerType::OGV:
             encoders << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
             break;
@@ -373,6 +378,8 @@ void KisVideoExportOptionsDialog::slotCodecSelected(int index)
         ui->stackedWidget->setCurrentIndex(CODEC_APNG);
     } else if (codec == "libwebp") {
         ui->stackedWidget->setCurrentIndex(CODEC_WEBP);
+    } else if (codec == "prores_ks") {
+        ui->stackedWidget->setCurrentIndex(CODEC_PRORES);
     }
 }
 
@@ -521,6 +528,10 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
 
     } else if (currentCodecId() == "libtheora") {
         options << "-b" << QString::number(ui->intBitrate->value()) + "k";
+    } else if (currentCodecId() == "prores_ks") {
+        options << "-c:v" << "prores_ks"
+                << "-profile:v" << "4"
+                << "-pix_fmt" << "yuva444p10le";
     } else if (currentCodecId() == "libvpx-vp9") {
         options << "-c:v" << currentCodecId();
         const bool preserveTransparency = (m_d->containerType == WEBM || m_d->containerType == MKV)

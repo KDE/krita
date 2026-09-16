@@ -4,12 +4,36 @@
 
 #include <simpletest.h>
 #include <QCheckBox>
+#include <KoID.h>
 #include "animation/VideoExportOptionsDialog.h"
 
 class KisVideoExportOptionsTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void testProRes4444()
+    {
+        using Dialog = KisVideoExportOptionsDialog;
+        QCOMPARE(Dialog::mimeToContainer("video/quicktime"), Dialog::MOV);
+        const auto encoders = Dialog::encoderIdentifiers(Dialog::MOV);
+        QCOMPARE(encoders.size(), 1);
+        QCOMPARE(encoders.first().id(), QString("prores_ks"));
+
+        Dialog dialog(Dialog::MOV, {"prores_ks"}, KisHDRMetadataOptions());
+        dialog.setConfiguration(new KisPropertiesConfiguration());
+        const QStringList expected {"-c:v", "prores_ks", "-profile:v", "4", "-pix_fmt", "yuva444p10le"};
+        QCOMPARE(dialog.customUserOptions(), expected);
+
+        // Switching from an existing VP9 preset must select the MOV encoder.
+        KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+        cfg->setProperty("CodecId", "libvpx-vp9");
+        dialog.setConfiguration(cfg);
+        QCOMPARE(dialog.customUserOptions(), expected);
+        Dialog restored(Dialog::MOV, {"prores_ks"}, KisHDRMetadataOptions());
+        restored.setConfiguration(dialog.configuration());
+        QCOMPARE(restored.customUserOptions(), expected);
+    }
+
     void testTransparencyContainers()
     {
         using Dialog = KisVideoExportOptionsDialog;

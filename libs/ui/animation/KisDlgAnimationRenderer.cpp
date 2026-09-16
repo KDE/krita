@@ -946,6 +946,19 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
         }
 
 #ifndef Q_OS_ANDROID
+        // A saved PNG preset may disable alpha. Keep the intermediate frames
+        // transparent whenever the requested video pixel format includes alpha.
+        const QStringList ffmpegOptions = options.customFFMpegOptions.split(' ', Qt::SkipEmptyParts);
+        const int pixelFormatIndex = ffmpegOptions.lastIndexOf("-pix_fmt");
+        if (options.shouldEncodeVideo && options.frameMimeType == "image/png"
+            && pixelFormatIndex >= 0 && pixelFormatIndex + 1 < ffmpegOptions.size()
+            && ffmpegOptions[pixelFormatIndex + 1] == "yuva420p") {
+            if (!cfg) {
+                cfg = new KisPropertiesConfiguration();
+            }
+            cfg->setProperty("alpha", true);
+        }
+
         const bool forceNecessaryHDRSettings = m_wantsRenderWithHDR && imageMimeSupportsHDR(options.frameMimeType);
         if (forceNecessaryHDRSettings) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(options.frameMimeType == "image/png");

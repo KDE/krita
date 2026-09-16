@@ -263,6 +263,16 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="vp9PreserveTransparency">
+            <property name="toolTip">
+             <string>Preserve the animation's alpha channel in WebM or Matroska video. Hide opaque background layers before rendering. Playback requires a player that supports video transparency.</string>
+            </property>
+            <property name="text">
+             <string>Preserve transparency</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
         <widget class="QWidget" name="pgGIF">
@@ -505,6 +515,7 @@
   <tabstop>intBitrate</tabstop>
   <tabstop>vp9Mbits</tabstop>
   <tabstop>vp9Lossless</tabstop>
+  <tabstop>vp9PreserveTransparency</tabstop>
   <tabstop>gifLoop</tabstop>
   <tabstop>gifTransDiff</tabstop>
   <tabstop>cmbPalettegenStatsModeGIF</tabstop>

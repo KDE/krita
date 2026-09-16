@@ -1,3 +1,13 @@
+if (NOT ANDROID)
+    kis_add_test(KisVideoExportOptionsTest.cpp
+        ../animation/VideoExportOptionsDialog.cpp
+        ../animation/KisHDRMetadataOptions.cpp
+        TEST_NAME KisVideoExportOptionsTest
+        LINK_LIBRARIES kritaui kritatestsdk
+    )
+    target_include_directories(KisVideoExportOptionsTest PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..)
+endif()
+
 kis_add_tests(
     kis_image_view_converter_test.cpp
     kis_shape_selection_test.cpp

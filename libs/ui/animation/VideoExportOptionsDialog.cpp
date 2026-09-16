@@ -166,6 +166,10 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     ui->intBitrate->setValue(5000);
     ui->intBitrate->setSuffix(i18nc("kilo-bits-per-second, video bitrate suffix", "kbps"));
 
+    // Alpha is stored in WebM/Matroska block additions, not in the VP9 stream
+    // itself. MP4 cannot carry this transparency data.
+    ui->vp9PreserveTransparency->setEnabled(containerType == WEBM || containerType == MKV);
+
     ui->gifReserveTransparent->setChecked(true);
     ui->gifLoop->setChecked(true);
     ui->gifTransDiff->setChecked(true);
@@ -256,6 +260,9 @@ KisPropertiesConfigurationSP KisVideoExportOptionsDialog::configuration() const
     cfg->setProperty("h265UseHDRMetadata", ui->chkUseHDRMetadata->isChecked());
 
     cfg->setProperty("TheoraBitrate", ui->intBitrate->value());
+    cfg->setProperty("vp9PreserveTransparency", ui->vp9PreserveTransparency->isChecked());
+    cfg->setProperty("vp9Lossless", ui->vp9Lossless->isChecked());
+    cfg->setProperty("vp9Mbits", ui->vp9Mbits->value());
     cfg->setProperty("CustomLineValue", ui->txtCustomLine->text());
     cfg->setProperty("customUserOptions", customUserOptions().join(' '));
 
@@ -268,6 +275,8 @@ KisVideoExportOptionsDialog::ContainerType KisVideoExportOptionsDialog::mimeToCo
 {
     if (mimeType == "video/webm") {
         return ContainerType::WEBM;
+    } else if (mimeType == "video/x-matroska") {
+        return ContainerType::MKV;
     } else if (mimeType == "video/ogg") {
         return ContainerType::OGV;
     } else if (mimeType == "image/gif") {
@@ -432,6 +441,9 @@ void KisVideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurat
     ui->chkUseHDRMetadata->setChecked(cfg->getBool("h265UseHDRMetadata", false));
 
     ui->intBitrate->setValue(cfg->getInt("TheoraBitrate", 5000));
+    ui->vp9PreserveTransparency->setChecked(cfg->getBool("vp9PreserveTransparency", false));
+    ui->vp9Lossless->setChecked(cfg->getBool("vp9Lossless", false));
+    ui->vp9Mbits->setValue(cfg->getInt("vp9Mbits", 2));
 
     m_d->currentCustomLine = cfg->getString("CustomLineValue", QString());
     ui->chkCustomLine->setChecked(!m_d->currentCustomLine.isEmpty());
@@ -511,6 +523,9 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
         options << "-b" << QString::number(ui->intBitrate->value()) + "k";
     } else if (currentCodecId() == "libvpx-vp9") {
         options << "-c:v" << currentCodecId();
+        const bool preserveTransparency = (m_d->containerType == WEBM || m_d->containerType == MKV)
+            && ui->vp9PreserveTransparency->isChecked();
+        options << "-pix_fmt" << (preserveTransparency ? "yuva420p" : "yuv420p");
         if (ui->vp9Lossless->isChecked()) {
             options << "-lossless" <<  "1";
         } else {

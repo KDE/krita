@@ -107,10 +107,10 @@ void KisPaletteModel::setColorSet(KoColorSetSP colorSet)
     }
 
     beginResetModel();
-    m_colorSet = colorSet;
     if (m_colorSet) {
         m_colorSet->disconnect(this);
     }
+    m_colorSet = colorSet;
     if (colorSet) {
         connect(colorSet.data(), SIGNAL(modified()), this, SIGNAL(sigPaletteModified()));
         connect(colorSet.data(), SIGNAL(layoutChanged()), this, SLOT(slotLayoutChanged()));

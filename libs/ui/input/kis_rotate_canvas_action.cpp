@@ -95,8 +95,6 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
         using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
         using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
 
-        //canvasController->beginCanvasRotation();
-
         Flags flags;
         flags.setFlag(Flag::PanEnabled);
         flags.setFlag(Flag::RotationEnabled);

@@ -106,7 +106,6 @@ bool KisTouchShortcut::matchHoldType(const QTouchEvent *event, Qt::TouchPointSta
     return isHoldType() && matchTouchPoint(event, allowedStates);
 }
 
-// TODO: const
 int KisTouchShortcut::countTouchPoints(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

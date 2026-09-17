@@ -17,7 +17,7 @@
 class KisAbstractInputAction;
 class KisInputProfile;
 class KisShortcutConfiguration;
-class ProfileEntry;
+struct ProfileEntry;
 
 /**
  * \brief A class to manage a list of profiles and actions.

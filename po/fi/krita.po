@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-12 02:39+0000\n"
+"POT-Creation-Date: 2026-09-17 02:40+0000\n"
 "PO-Revision-Date: 2026-03-08 19:17+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -22825,7 +22825,7 @@ msgstr "Käsitellään"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1464
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1485
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -23659,8 +23659,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Korvaa kuva"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2224
-#: libs/ui/KisMainWindow.cpp:2305
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2326
 #, kde-format
 msgid "Import frames"
 msgstr "Tuo ruutuja"
@@ -25100,11 +25100,11 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/KisApplication.cpp:1342 libs/ui/KisDocument.cpp:1055
 #: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
-#: libs/ui/KisMainWindow.cpp:1026 libs/ui/KisMainWindow.cpp:1096
-#: libs/ui/KisMainWindow.cpp:1240 libs/ui/KisMainWindow.cpp:1337
-#: libs/ui/KisMainWindow.cpp:2084 libs/ui/KisMainWindow.cpp:2093
-#: libs/ui/KisMainWindow.cpp:2232 libs/ui/KisMainWindow.cpp:2293
-#: libs/ui/KisMainWindow.cpp:2312 libs/ui/KisMainWindow.cpp:2955
+#: libs/ui/KisMainWindow.cpp:1047 libs/ui/KisMainWindow.cpp:1117
+#: libs/ui/KisMainWindow.cpp:1261 libs/ui/KisMainWindow.cpp:1358
+#: libs/ui/KisMainWindow.cpp:2105 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2314
+#: libs/ui/KisMainWindow.cpp:2333 libs/ui/KisMainWindow.cpp:2976
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -25694,7 +25694,7 @@ msgid "Delete resource"
 msgstr "Poista resurssi"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2752
+#: libs/ui/KisMainWindow.cpp:2773
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -26279,7 +26279,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Animointikuvien hahmonnus epäonnistui!"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
-#: libs/ui/KisMainWindow.cpp:2335
+#: libs/ui/KisMainWindow.cpp:2356
 #, kde-format
 msgid "Render Animation"
 msgstr "Hahmonna animaatio"
@@ -28437,7 +28437,7 @@ msgid "Numerical"
 msgstr "Pystysuunnassa:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1205
+#: libs/ui/KisMainWindow.cpp:1226
 #, kde-format
 msgid "Import Images"
 msgstr "Tuo kuvia"
@@ -28555,7 +28555,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Anna uuden tyylin nimi"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2763
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2784
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -33182,7 +33182,7 @@ msgstr "Nykyinen esiasetus"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1092
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -38036,62 +38036,62 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Pienoiskuvat"
 
-#: libs/ui/KisMainWindow.cpp:195
+#: libs/ui/KisMainWindow.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Tyylit"
 
-#: libs/ui/KisMainWindow.cpp:196
+#: libs/ui/KisMainWindow.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Telakat"
 
-#: libs/ui/KisMainWindow.cpp:197
+#: libs/ui/KisMainWindow.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Ikkuna"
 
-#: libs/ui/KisMainWindow.cpp:198
+#: libs/ui/KisMainWindow.cpp:199
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Uusi &näkymä"
 
-#: libs/ui/KisMainWindow.cpp:199
+#: libs/ui/KisMainWindow.cpp:200
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Työt&ila"
 
-#: libs/ui/KisMainWindow.cpp:609
+#: libs/ui/KisMainWindow.cpp:610
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Näytä työkalurivi %1"
 
-#: libs/ui/KisMainWindow.cpp:611
+#: libs/ui/KisMainWindow.cpp:612
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Piilota työkalurivi %1"
 
-#: libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/KisMainWindow.cpp:1089
 #, kde-format
 msgid "Save as %1"
 msgstr "Tallenna nimellä %1"
 
-#: libs/ui/KisMainWindow.cpp:1096
+#: libs/ui/KisMainWindow.cpp:1117
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Tiedostoa %1 ei ole olemassa."
 
-#: libs/ui/KisMainWindow.cpp:1205
+#: libs/ui/KisMainWindow.cpp:1226
 #, kde-format
 msgid "Open Images"
 msgstr "Avaa kuvia"
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1359
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -38104,25 +38104,25 @@ msgstr ""
 "\n"
 "Valitse sijainti, jossa alkuperäistä tiedostoa ei korvata!"
 
-#: libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1420
 #, kde-format
 msgid "Exporting"
 msgstr "Vienti"
 
-#: libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1420
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Tallennusmuoto"
 
-#: libs/ui/KisMainWindow.cpp:2053
+#: libs/ui/KisMainWindow.cpp:2074
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Save Layer/Mask"
 msgid "Layers/Masks"
 msgstr "Tallenna taso/maski"
 
-#: libs/ui/KisMainWindow.cpp:2079
+#: libs/ui/KisMainWindow.cpp:2100
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, fuzzy, kde-format
@@ -38130,7 +38130,7 @@ msgstr "Tallenna taso/maski"
 msgid "You don't have any resource bundles enabled."
 msgstr "Tulostiedostoa ei voitu luoda"
 
-#: libs/ui/KisMainWindow.cpp:2083
+#: libs/ui/KisMainWindow.cpp:2104
 #, kde-format
 msgid ""
 "\n"
@@ -38138,7 +38138,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2093
+#: libs/ui/KisMainWindow.cpp:2114
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -38147,7 +38147,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2232 libs/ui/KisMainWindow.cpp:2312
+#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2333
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -38156,41 +38156,41 @@ msgstr ""
 "Ei voitu tuoda\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2293
+#: libs/ui/KisMainWindow.cpp:2314
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Animointikuvien hahmonnus epäonnistui!"
 
-#: libs/ui/KisMainWindow.cpp:2743
+#: libs/ui/KisMainWindow.cpp:2764
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Tuo työtila…"
 
-#: libs/ui/KisMainWindow.cpp:2758
+#: libs/ui/KisMainWindow.cpp:2779
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Uusi työtila…"
 
-#: libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:2783
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Uusi työtila…"
 
-#: libs/ui/KisMainWindow.cpp:2806
+#: libs/ui/KisMainWindow.cpp:2827
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2809
+#: libs/ui/KisMainWindow.cpp:2830
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:2999
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -38202,19 +38202,19 @@ msgstr ""
 "Calligran LittleCMS-värinhallintaliitännäistä ei ole asennettu. Krita "
 "lopetetaan nyt."
 
-#: libs/ui/KisMainWindow.cpp:2994
+#: libs/ui/KisMainWindow.cpp:3015
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Asennusvirhe"
 
-#: libs/ui/KisMainWindow.cpp:3107
+#: libs/ui/KisMainWindow.cpp:3128
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "T&eemat"
 
-#: libs/ui/KisMainWindow.cpp:3193
+#: libs/ui/KisMainWindow.cpp:3214
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Laajeneva erotin"

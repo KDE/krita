@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-12 02:39+0000\n"
+"POT-Creation-Date: 2026-09-17 02:40+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -22601,7 +22601,7 @@ msgstr "Behandling"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1464
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1485
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -23401,8 +23401,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Separér billede"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2224
-#: libs/ui/KisMainWindow.cpp:2305
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2326
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Importér billede"
@@ -24817,11 +24817,11 @@ msgstr "Åbn ressourcemappe"
 #: libs/ui/KisApplication.cpp:1342 libs/ui/KisDocument.cpp:1055
 #: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
-#: libs/ui/KisMainWindow.cpp:1026 libs/ui/KisMainWindow.cpp:1096
-#: libs/ui/KisMainWindow.cpp:1240 libs/ui/KisMainWindow.cpp:1337
-#: libs/ui/KisMainWindow.cpp:2084 libs/ui/KisMainWindow.cpp:2093
-#: libs/ui/KisMainWindow.cpp:2232 libs/ui/KisMainWindow.cpp:2293
-#: libs/ui/KisMainWindow.cpp:2312 libs/ui/KisMainWindow.cpp:2955
+#: libs/ui/KisMainWindow.cpp:1047 libs/ui/KisMainWindow.cpp:1117
+#: libs/ui/KisMainWindow.cpp:1261 libs/ui/KisMainWindow.cpp:1358
+#: libs/ui/KisMainWindow.cpp:2105 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2314
+#: libs/ui/KisMainWindow.cpp:2333 libs/ui/KisMainWindow.cpp:2976
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -25414,7 +25414,7 @@ msgid "Delete resource"
 msgstr "Slet ressource"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2752
+#: libs/ui/KisMainWindow.cpp:2773
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25947,7 +25947,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Kunne ikke oprette en handling."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
-#: libs/ui/KisMainWindow.cpp:2335
+#: libs/ui/KisMainWindow.cpp:2356
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Orientering"
@@ -28031,7 +28031,7 @@ msgid "Numerical"
 msgstr "Nical"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1205
+#: libs/ui/KisMainWindow.cpp:1226
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Importér billede"
@@ -28150,7 +28150,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Indtast gruppenavn:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2763
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2784
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32654,7 +32654,7 @@ msgstr "Aktuelt forvalg"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1092
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -37311,63 +37311,63 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Miniaturer"
 
-#: libs/ui/KisMainWindow.cpp:195
+#: libs/ui/KisMainWindow.cpp:196
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Stil"
 
-#: libs/ui/KisMainWindow.cpp:196
+#: libs/ui/KisMainWindow.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Dokkere"
 
-#: libs/ui/KisMainWindow.cpp:197
+#: libs/ui/KisMainWindow.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Vindue"
 
-#: libs/ui/KisMainWindow.cpp:198
+#: libs/ui/KisMainWindow.cpp:199
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Ny &visning"
 
-#: libs/ui/KisMainWindow.cpp:199
+#: libs/ui/KisMainWindow.cpp:200
 #, fuzzy, kde-format
 #| msgid "Workspace"
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Arbejdsområde"
 
-#: libs/ui/KisMainWindow.cpp:609
+#: libs/ui/KisMainWindow.cpp:610
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis %1-værktøjslinje"
 
-#: libs/ui/KisMainWindow.cpp:611
+#: libs/ui/KisMainWindow.cpp:612
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skjul %1-værktøjslinje"
 
-#: libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/KisMainWindow.cpp:1089
 #, kde-format
 msgid "Save as %1"
 msgstr "Gem som %1"
 
-#: libs/ui/KisMainWindow.cpp:1096
+#: libs/ui/KisMainWindow.cpp:1117
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Filen %1 findes ikke."
 
-#: libs/ui/KisMainWindow.cpp:1205
+#: libs/ui/KisMainWindow.cpp:1226
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Billeder"
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1359
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -37376,23 +37376,23 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1420
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Eksportér"
 
-#: libs/ui/KisMainWindow.cpp:1399
+#: libs/ui/KisMainWindow.cpp:1420
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Format til gemning"
 
-#: libs/ui/KisMainWindow.cpp:2053
+#: libs/ui/KisMainWindow.cpp:2074
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Gem lag/maske..."
 
-#: libs/ui/KisMainWindow.cpp:2079
+#: libs/ui/KisMainWindow.cpp:2100
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, fuzzy, kde-format
@@ -37400,7 +37400,7 @@ msgstr "Gem lag/maske..."
 msgid "You don't have any resource bundles enabled."
 msgstr "Kunne ikke oprette output-dokumentet"
 
-#: libs/ui/KisMainWindow.cpp:2083
+#: libs/ui/KisMainWindow.cpp:2104
 #, kde-format
 msgid ""
 "\n"
@@ -37408,7 +37408,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2093
+#: libs/ui/KisMainWindow.cpp:2114
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -37417,7 +37417,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2232 libs/ui/KisMainWindow.cpp:2312
+#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2333
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -37426,43 +37426,43 @@ msgstr ""
 "Kunne ikke importere\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2293
+#: libs/ui/KisMainWindow.cpp:2314
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Kunne ikke oprette en handling."
 
-#: libs/ui/KisMainWindow.cpp:2743
+#: libs/ui/KisMainWindow.cpp:2764
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importér grafik..."
 
-#: libs/ui/KisMainWindow.cpp:2758
+#: libs/ui/KisMainWindow.cpp:2779
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Importér grafik..."
 
-#: libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:2783
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&Importér grafik..."
 
-#: libs/ui/KisMainWindow.cpp:2806
+#: libs/ui/KisMainWindow.cpp:2827
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2809
+#: libs/ui/KisMainWindow.cpp:2830
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:2999
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -37474,19 +37474,19 @@ msgstr ""
 "Calligras LittleCMS farvehåndteringsplugin er ikke installeret. Krita vil "
 "afslutte nu."
 
-#: libs/ui/KisMainWindow.cpp:2994
+#: libs/ui/KisMainWindow.cpp:3015
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installationsfejl"
 
-#: libs/ui/KisMainWindow.cpp:3107
+#: libs/ui/KisMainWindow.cpp:3128
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temaer"
 
-#: libs/ui/KisMainWindow.cpp:3193
+#: libs/ui/KisMainWindow.cpp:3214
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"

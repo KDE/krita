@@ -41,7 +41,7 @@ typedef KisBaseNode::Property* OptionalProperty;
 class NodeDelegate::Private
 {
 public:
-    Private(NodeDelegate *_q) : q(_q), view(0), edit(0) { }
+    Private(NodeDelegate *_q, NodeView *_view) : q(_q), view(_view), edit(0), tip(_view) { }
 
     NodeDelegate *q;
 
@@ -88,10 +88,8 @@ public:
 
 NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
-    , d(new Private(this))
+    , d(new Private(this, view))
 {
-    d->view = view;
-
     QApplication::instance()->installEventFilter(this);
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(this, SIGNAL(resetVisibilityStasis()), SLOT(slotResetState()));
@@ -1161,12 +1159,10 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                      hoveredProperty->id == KisLayerPropertiesIcons::layerColorSpaceMismatch.id())) {
                 QToolTip::showText(helpEvent->globalPos(), hoveredProperty->state.toString(), d->view);
             } else {
-                d->tip.showTip(d->view, helpEvent->pos(), option, index);
+                d->tip.showTip(helpEvent->pos(), option, index);
             }
         }
         return true;
-    } else if (event->type() == QEvent::Leave) {
-        d->tip.hide();
     }
 
     return false;

@@ -13,6 +13,7 @@
 #include <QOpenGLFunctions>
 #include <QWindow>
 #include <QColorSpace>
+#include <KoConfig.h>
 
 #ifdef HAVE_X11
 #include <qpa/qplatformnativeinterface.h>

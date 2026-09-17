@@ -19,7 +19,8 @@
 
 #include "KoCheckerBoardPainter.h"
 
-KisIconToolTip::KisIconToolTip()
+KisIconToolTip::KisIconToolTip(QWidget *parent)
+    : KoItemToolTip(parent)
 {
 }
 

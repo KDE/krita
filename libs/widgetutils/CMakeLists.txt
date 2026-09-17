@@ -173,7 +173,18 @@ target_link_libraries(kritawidgetutils
 
 if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kritawidgetutils PRIVATE KF6::ColorScheme)
+
+    if (HAVE_WAYLAND)
+        set_source_files_properties(
+            KoItemToolTip.cpp
+            PROPERTIES
+            INCLUDE_DIRECTORIES
+            "${Qt6WaylandGlobalPrivate_INCLUDE_DIRS};${Qt6WaylandClient_PRIVATE_INCLUDE_DIRS};${Qt6Gui_PRIVATE_INCLUDE_DIRS}"
+        )
+    endif()
 endif()
+
+
 
 set_target_properties(kritawidgetutils
     PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

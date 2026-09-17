@@ -29,6 +29,8 @@
 #include <QSettings>
 #include <QScreen>
 
+#include <KoConfig.h>
+
 #include <klocalizedstring.h>
 
 #include <KisRepaintDebugger.h>

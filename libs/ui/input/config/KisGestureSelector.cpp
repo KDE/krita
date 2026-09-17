@@ -11,17 +11,17 @@ KisGestureSelector::KisGestureSelector(QWidget *parent)
 {
     QStringList gestures;
     for (int i = 1; i < KisShortcutConfiguration::MaxGesture; i++) {
-        gestures << KisShortcutConfiguration::gestureToText(static_cast<KisShortcutConfiguration::GestureAction>(i));
+        gestures << KisShortcutConfiguration::touchGestureToText(static_cast<KisShortcutConfiguration::TouchGestureAction>(i));
     }
     addItems(gestures);
 }
 
-void KisGestureSelector::setGesture(KisShortcutConfiguration::GestureAction gestureAction)
+void KisGestureSelector::setTouchGesture(KisShortcutConfiguration::TouchGestureAction gestureAction)
 {
     setCurrentIndex(gestureAction - 1);
 }
 
-KisShortcutConfiguration::GestureAction KisGestureSelector::gesture()
+KisShortcutConfiguration::TouchGestureAction KisGestureSelector::touchGesture()
 {
-    return static_cast<KisShortcutConfiguration::GestureAction>(currentIndex() + 1);
+    return static_cast<KisShortcutConfiguration::TouchGestureAction>(currentIndex() + 1);
 }

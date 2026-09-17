@@ -48,7 +48,7 @@ public:
     /**
      * Returns true if the shortcut is enabled at the moment
      */
-    bool isAvailable(KisInputActionGroupsMask mask) const;
+    virtual bool isAvailable(KisInputActionGroupsMask mask) const;
 
 protected:
     bool compareKeys(const QSet<Qt::Key> &keys1,

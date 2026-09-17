@@ -794,7 +794,6 @@ QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
 
 endif (WIN32)
 
-
 CHECK_CXX_SOURCE_COMPILES("
 #include <QCoreApplication>
 int main(int argc, char *argv[]) {
@@ -854,6 +853,20 @@ return screen->densityAdjustment();
 }
 "
 KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+)
+
+set(CMAKE_REQUIRED_INCLUDES ${Qt${QT_MAJOR_VERSION}Widgets_INCLUDE_DIRS})
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QHeaderView>
+#ifndef KRITA_HEADER_VIEW_MEMORY_MODE_INITIALIZATION_FIX
+#error \"patch is missing\"
+#endif
+int main(int argc, char *argv[]) {
+return 0;
+}
+"
+KRITA_QT_HEADER_VIEW_MEMORY_MODE_INITIALIZATION_FIX
 )
 
 configure_file(config-qt-patches-present.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qt-patches-present.h)
@@ -924,14 +937,11 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
         PURPOSE "Optionally used to provide crash reporting on Linux")
 
     find_package(X11 REQUIRED COMPONENTS Xinput)
-    set(HAVE_X11 TRUE)
-    add_definitions(-DHAVE_X11)
-
 else()
     set(HAVE_DBUS FALSE)
-    set(HAVE_X11 FALSE)
 endif()
 
+set (HAVE_X11 ${X11_FOUND})
 
 add_definitions(
   -DQT_USE_QSTRINGBUILDER

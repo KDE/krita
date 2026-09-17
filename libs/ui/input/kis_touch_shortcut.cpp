@@ -7,6 +7,8 @@
  */
 
 #include "kis_touch_shortcut.h"
+
+#include <kis_algebra_2d.h>
 #include "kis_abstract_input_action.h"
 #include "kis_config.h"
 
@@ -15,20 +17,22 @@
 class KisTouchShortcut::Private
 {
 public:
-    Private(GestureAction type)
+    Private(TouchGestureAction type)
         : minTouchPoints(0)
         , maxTouchPoints(0)
         , type(type)
-        , disableOnTouchPainting(false)
+        , isTouchPainting(false)
+        , minDragThreshold(16)
     { }
 
     int minTouchPoints;
     int maxTouchPoints;
-    GestureAction type;
-    bool disableOnTouchPainting;
+    TouchGestureAction type;
+    bool isTouchPainting;
+    qreal minDragThreshold;
 };
 
-KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type)
+KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, TouchGestureAction type)
     : KisAbstractShortcut(action, index)
     , d(new Private(type))
 {
@@ -40,18 +44,24 @@ KisTouchShortcut::~KisTouchShortcut()
     delete d;
 }
 
+qreal KisTouchShortcut::minDragThreshold() const
+{
+    return d->minDragThreshold;
+}
+
+void KisTouchShortcut::setMinDragThreshold(qreal value)
+{
+    d->minDragThreshold = value;
+}
+
 int KisTouchShortcut::priority() const
 {
-    return action()->priority();
+    return d->isTouchPainting ? std::numeric_limits<int>::max() : action()->priority();
 }
 
 bool KisTouchShortcut::isHoldType() const
 {
-#ifdef Q_OS_MACOS
-    return false; // No equivalent gestures on macOS.
-#else
     return d->type == KisShortcutConfiguration::OneFingerHold;
-#endif
 }
 
 void KisTouchShortcut::setMinimumTouchPoints(int min)
@@ -64,36 +74,81 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
-void KisTouchShortcut::setDisableOnTouchPainting(bool disableOnTouchPainting)
+void KisTouchShortcut::setIsTouchPainting(bool value)
 {
-    d->disableOnTouchPainting = disableOnTouchPainting;
+    d->isTouchPainting = value;
 }
 
-bool KisTouchShortcut::matchTapType(QTouchEvent *event)
+bool KisTouchShortcut::isAvailable(KisInputActionGroupsMask mask) const
 {
-    return matchTouchPoint(event)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap)
+    if (d->isTouchPainting && KisConfig(true).disableTouchOnCanvas()) {
+        return false;
+    }
+
+    return KisAbstractShortcut::isAvailable(mask);
+}
+
+bool KisTouchShortcut::matchTapType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
+{
+    return matchTouchPoint(event, allowedStates)
+        && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap);
+}
+
+bool KisTouchShortcut::matchDragType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
+{
+    return touchDragDistance(event, allowedStates) > d->minDragThreshold &&
+        matchTouchPoint(event, allowedStates)
+        && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag);
+}
+
+bool KisTouchShortcut::matchHoldType(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
+{
+    return isHoldType() && matchTouchPoint(event, allowedStates);
+}
+
+int KisTouchShortcut::countTouchPoints(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = event->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = event->points();
+    using TouchPoint = QEventPoint;
 #endif
-        ;
+
+    const int count =
+        std::count_if(points.begin(), points.end(), [=] (const TouchPoint &point) {
+            auto state = static_cast<Qt::TouchPointState>(point.state());
+            return allowedStates.testFlag(state);
+        });
+
+    return count;
 }
 
-bool KisTouchShortcut::matchDragType(QTouchEvent *event)
+qreal KisTouchShortcut::touchDragDistance(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    return matchTouchPoint(event)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto points = event->touchPoints();
+    using TouchPoint = QTouchEvent::TouchPoint;
+#else
+    auto points = event->points();
+    using TouchPoint = QEventPoint;
 #endif
-        ;
+
+    return std::sqrt(std::accumulate(points.begin(), points.end(), qreal(0),
+        [&] (qreal maxOffsetSq, const TouchPoint &point) {
+            auto state = static_cast<Qt::TouchPointState>(point.state());
+            if (!allowedStates.testFlag(state)) {
+                return maxOffsetSq;
+            }
+
+            return std::max(maxOffsetSq, KisAlgebra2D::normSquared(point.pos() - point.startPos()));
+        }));
 }
 
-bool KisTouchShortcut::matchHoldType(QTouchEvent *event)
+bool KisTouchShortcut::matchTouchPoint(const QTouchEvent *event, Qt::TouchPointStates allowedStates)
 {
-    return isHoldType() && matchTouchPoint(event);
-}
+    const int numStillActivePoints = countTouchPoints(event, allowedStates);
 
-bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)
-{
-    return (!d->disableOnTouchPainting || KisConfig(true).disableTouchOnCanvas())
-        && event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
+    return numStillActivePoints >= d->minTouchPoints && numStillActivePoints <= d->maxTouchPoints;
 }

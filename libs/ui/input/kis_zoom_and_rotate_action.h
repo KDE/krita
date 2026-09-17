@@ -20,8 +20,14 @@ class KisZoomAndRotateAction : public KisAbstractInputAction
 {
 public:
     enum Shortcut {
-        ContinuousRotateMode,
-        DiscreteRotateMode,
+        PanAndZoomAndRotateMode,
+        PanAndZoomAndDiscreteRotateMode,
+        PanAndDiscreteZoomAndRotateMode,
+        PanAndDiscreteZoomAndDiscreteRotateMode,
+        ZoomAndRotateMode,
+        ZoomAndDiscreteRotateMode,
+        DiscreteZoomAndRotateMode,
+        DiscreteZoomAndDiscreteRotateMode,
     };
     KisZoomAndRotateAction();
     ~KisZoomAndRotateAction();
@@ -31,13 +37,11 @@ public:
     void activate(int shortcut) override;
     void deactivate(int shortcut) override;
     void begin(int shortcut, QEvent *event) override;
+    void end(QEvent *event) override;
     void cursorMovedAbsolute(const QPointF &lastPos, const QPointF &pos) override;
     void inputEvent(QEvent* event) override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;
-
-private:
-    qreal canvasRotationAngle(QPointF p0, QPointF p1);
 
 private:
     class Private;

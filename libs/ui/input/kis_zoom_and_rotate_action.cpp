@@ -18,18 +18,35 @@
 #include "kis_input_manager.h"
 #include <KoViewTransformStillPoint.h>
 
+#include "KisCanvasNavigationActionStrategyTouch.h"
+#include "KisCanvasNavigationActionStrategyNativeGesture.h"
+
 class KisZoomAndRotateAction::Private {
 public:
     Private() {}
 
-    int shortcutIndex {0};
-    QPointF lastPosition {0, 0};
-    float lastDistance {0.0};
-    qreal previousAngle {0.0};
-    qreal initialReferenceAngle {0.0};
-    qreal accumRotationAngle {0.0};
+    std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 
-    KoViewTransformStillPoint actionStillPoint;
+    static bool zoomIsDiscrete(int shortcutIndex) {
+        return shortcutIndex == PanAndDiscreteZoomAndRotateMode ||
+            shortcutIndex == PanAndDiscreteZoomAndDiscreteRotateMode ||
+            shortcutIndex == DiscreteZoomAndRotateMode ||
+            shortcutIndex == DiscreteZoomAndDiscreteRotateMode;
+    }
+
+    static bool rotationIsDiscrete(int shortcutIndex) {
+        return shortcutIndex == PanAndZoomAndDiscreteRotateMode ||
+            shortcutIndex == PanAndDiscreteZoomAndDiscreteRotateMode ||
+            shortcutIndex == ZoomAndDiscreteRotateMode ||
+            shortcutIndex == DiscreteZoomAndDiscreteRotateMode;
+    }
+
+    static bool hasPanAction(int shortcutIndex) {
+        return shortcutIndex == PanAndZoomAndRotateMode ||
+            shortcutIndex == PanAndZoomAndDiscreteRotateMode ||
+            shortcutIndex == PanAndDiscreteZoomAndRotateMode ||
+            shortcutIndex == PanAndDiscreteZoomAndDiscreteRotateMode;
+    }
 };
 
 KisZoomAndRotateAction::KisZoomAndRotateAction()
@@ -38,8 +55,14 @@ KisZoomAndRotateAction::KisZoomAndRotateAction()
 {
     setName(i18n("Zoom and Rotate Canvas"));
     QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Rotate Mode"), ContinuousRotateMode);
-    shortcuts.insert(i18n("Discrete Rotate Mode"), DiscreteRotateMode);
+    shortcuts.insert(i18n("Pan, Zoom, Rotate Mode"), PanAndZoomAndRotateMode);
+    shortcuts.insert(i18n("Pan, Zoom, Discrete Rotate Mode"), PanAndZoomAndDiscreteRotateMode);
+    shortcuts.insert(i18n("Pan, Discrete Zoom, Rotate Mode"), PanAndDiscreteZoomAndRotateMode);
+    shortcuts.insert(i18n("Pan, Discrete Zoom, Discrete Rotate Mode"), PanAndDiscreteZoomAndDiscreteRotateMode);
+    shortcuts.insert(i18n("Zoom, Rotate Mode"), ZoomAndRotateMode);
+    shortcuts.insert(i18n("Zoom, Discrete Rotate Mode"), ZoomAndDiscreteRotateMode);
+    shortcuts.insert(i18n("Discrete Zoom, Rotate Mode"), DiscreteZoomAndRotateMode);
+    shortcuts.insert(i18n("Discrete Zoom, Discrete Rotate Mode"), DiscreteZoomAndDiscreteRotateMode);
     setShortcutIndexes(shortcuts);
 }
 
@@ -64,131 +87,52 @@ void KisZoomAndRotateAction::deactivate(int shortcut)
 
 void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
 {
-    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
+    if (!event) return;
 
-    if (touchEvent && touchEvent->touchPoints().size() > 0) {
-        d->shortcutIndex = shortcut;
-        d->lastPosition = touchEvent->touchPoints().at(0).pos();
-        d->lastDistance = 0;
-        d->previousAngle = 0;
-        d->initialReferenceAngle = 0;
-        d->accumRotationAngle = 0;
-        d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(d->lastPosition);
+    if (event->type() == QEvent::NativeGesture || event->type() == QEvent::TouchBegin
+        || event->type() == QEvent::TouchUpdate) {
+
+        using Flag = KisCanvasNavigationActionStrategy::Flag;
+        using Flags = KisCanvasNavigationActionStrategy::Flags;
+
+        Flags flags;
+        flags.setFlag(Flag::PanEnabled, d->hasPanAction(shortcut));
+        flags.setFlag(Flag::RotationEnabled);
+        flags.setFlag(Flag::RotationDescrete, d->rotationIsDiscrete(shortcut));
+        flags.setFlag(Flag::ZoomEnabled);
+        flags.setFlag(Flag::ZoomDescrete, d->zoomIsDiscrete(shortcut));
+
+        if (event->type() == QEvent::NativeGesture) {
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+        } else {
+            const QTouchEvent *tevent = static_cast<const QTouchEvent*>(event);
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyTouch(flags, tevent, inputManager()->canvas()));
+        }
     }
+}
+
+void KisZoomAndRotateAction::end(QEvent *event)
+{
+    d->actionStrategy.reset();
+    KisAbstractInputAction::end(event);
 }
 
 void KisZoomAndRotateAction::cursorMovedAbsolute(const QPointF &, const QPointF &)
 {
 }
 
-qreal angleForSnapping(qreal angle)
-{
-    if (angle < 0) {
-        return std::fmod(angle - 2, 45) + 2;
-    } else {
-        return std::fmod(angle + 2, 45) - 2;
-    }
-}
 
 void KisZoomAndRotateAction::inputEvent(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::TouchUpdate: {
-        QTouchEvent *tevent = dynamic_cast<QTouchEvent *>(event);
-        if (tevent && tevent->touchPoints().size() > 1) {
-
-            const QPointF p0 = tevent->touchPoints().at(0).pos();
-            const QPointF p1 = tevent->touchPoints().at(1).pos();
-
-            const qreal rotationAngle = canvasRotationAngle(p0, p1);
-            const float dist = QLineF(p0, p1).length();
-            const float scaleDelta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
-
-            KisCanvas2 *canvas = inputManager()->canvas();
-            KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
-            const qreal newZoom = canvas->viewConverter()->zoom() * scaleDelta;
-            KoViewTransformStillPoint adjustedStillPoint = d->actionStillPoint;
-            adjustedStillPoint.second = p0;
-            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, adjustedStillPoint);
-            controller->rotateCanvas(rotationAngle, adjustedStillPoint);
-
-            d->lastPosition = p0;
-            d->lastDistance = dist;
-
-            return;
-        }
+    if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
+        d->actionStrategy->inputEvent(event);
+    } else {
+        KisAbstractInputAction::inputEvent(event);
     }
-    default:
-        break;
-    }
-    KisAbstractInputAction::inputEvent(event);
 }
 
 KisInputActionGroup KisZoomAndRotateAction::inputActionGroup(int shortcut) const
 {
     Q_UNUSED(shortcut);
     return ViewTransformActionGroup;
-}
-
-qreal KisZoomAndRotateAction::canvasRotationAngle(QPointF p0, QPointF p1)
-{
-    const QPointF slope = p1 - p0;
-    const qreal currentAngle = std::atan2(slope.y(), slope.x());
-
-    switch (d->shortcutIndex) {
-    case ContinuousRotateMode: {
-        if (!d->previousAngle) {
-            d->previousAngle = currentAngle;
-            return 0;
-        }
-        qreal rotationAngle = (180 / M_PI) * (currentAngle - d->previousAngle);
-        d->previousAngle = currentAngle;
-
-        KisCanvas2 *canvas = inputManager()->canvas();
-        KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
-        const qreal canvasAnglePostRotation = controller->rotation() + rotationAngle;
-        const qreal snapDelta = angleForSnapping(canvasAnglePostRotation);
-        // we snap the canvas to an angle that is a multiple of 45
-        if (abs(snapDelta) <= 2 && abs(d->accumRotationAngle) <= 2) {
-            // accumulate the relative angle of finger from the point when we started snapping
-            d->accumRotationAngle += rotationAngle;
-            rotationAngle = rotationAngle - snapDelta;
-        } else {
-            // snap the canvas out using the accumulated angle
-            rotationAngle += d->accumRotationAngle;
-            d->accumRotationAngle = 0;
-        }
-
-        return rotationAngle;
-    }
-    case DiscreteRotateMode: {
-        if (!d->initialReferenceAngle) {
-            d->initialReferenceAngle = currentAngle;
-            return 0;
-        }
-        qreal rotationAngle = 0;
-        const qreal relativeAngle = (180 / M_PI) * (currentAngle - d->initialReferenceAngle);
-        const qreal rotationThreshold = 15;
-
-        // if the canvas is moved in either direction with an angle greater than the threshold, we rotate the canvas in
-        // that direction by 15°.
-        if (std::abs(relativeAngle) >= rotationThreshold && std::abs(relativeAngle) <= (360 - rotationThreshold)) {
-            // set reference as currentAngle to check if we go beyond the threshold next time
-            d->initialReferenceAngle = currentAngle;
-
-            if (std::abs(relativeAngle) <= 180) {
-                rotationAngle = KisAlgebra2D::copysign(15.0, relativeAngle);
-            } else {
-                // if we're over 180, it means the canvas has to be rotated in the opposite direction of the current
-                // angle. E.g if the relative angle is +341° then we move the canvas by -15° (because the actual effect
-                // is 341 - 360 = -19°  on the original theta).
-                rotationAngle = KisAlgebra2D::copysign(15.0, -relativeAngle);
-            }
-        }
-        return rotationAngle;
-    }
-    default:
-        qWarning() << "KisZoomAndRotateAction: Unrecognized shortcut" << d->shortcutIndex;
-        return 0;
-    }
 }

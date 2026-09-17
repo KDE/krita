@@ -12,11 +12,12 @@
 
 #include "kritaui_export.h"
 
-#define PROFILE_VERSION 6
+#define PROFILE_VERSION 7
 
 class KisAbstractInputAction;
 class KisInputProfile;
 class KisShortcutConfiguration;
+struct ProfileEntry;
 
 /**
  * \brief A class to manage a list of profiles and actions.
@@ -140,6 +141,22 @@ Q_SIGNALS:
      * Emitted when the current active profile changes.
      */
     void currentProfileChanged();
+
+private:
+    friend class KisInputProfileManagerTest;
+
+    /**
+     * Loads a single profile from a file without applying any migrations
+     */
+    KisInputProfile* loadProfileInternal(const QString &fullPath);
+
+    /**
+     * Loads a single profile from a file performing all the migrations
+     * necessary. The old profile will be saved into KoResourcePaths::saveLocation
+     * with a version suffix, and the new version will be written with the
+     * profile name.
+     */
+    KisInputProfile* loadProfileWithMigration(const ProfileEntry &profileEntry);
 
 private:
     class Private;

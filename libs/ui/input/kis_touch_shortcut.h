@@ -18,25 +18,42 @@ class QTouchEvent;
  * it _does not_ handle tool invocation i.e painting (which is being
  * handled in KisShortcutMatcher).
  */
-class KisTouchShortcut : public KisAbstractShortcut
+class KRITAUI_EXPORT KisTouchShortcut : public KisAbstractShortcut
 {
-        using GestureAction = KisShortcutConfiguration::GestureAction;
+        using TouchGestureAction = KisShortcutConfiguration::TouchGestureAction;
 
     public:
-        KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type);
+        KisTouchShortcut(KisAbstractInputAction* action, int index, TouchGestureAction type);
         ~KisTouchShortcut() override;
 
         int priority() const override;
         bool isHoldType() const;
+        bool isAvailable(KisInputActionGroupsMask mask) const override;
 
         void setMinimumTouchPoints( int min );
         void setMaximumTouchPoints( int max );
-        void setDisableOnTouchPainting(bool disableOnTouchPainting);
 
-        bool matchTapType(QTouchEvent *event);
-        bool matchDragType(QTouchEvent *event);
-        bool matchHoldType(QTouchEvent *event);
-        bool matchTouchPoint(QTouchEvent *event);
+        void setIsTouchPainting(bool value);
+
+        bool matchTapType(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchDragType(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchHoldType(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+        bool matchTouchPoint(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+
+        qreal minDragThreshold() const;
+        void setMinDragThreshold(qreal value);
+
+        static inline Qt::TouchPointStates allTouchStates() {
+            return Qt::TouchPointStationary | Qt::TouchPointPressed | Qt::TouchPointMoved | Qt::TouchPointReleased;
+        }
+
+        static inline Qt::TouchPointStates pressedOnlyTouchStates() {
+            return Qt::TouchPointStationary | Qt::TouchPointPressed | Qt::TouchPointMoved;
+        }
+
+        static int countTouchPoints(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
+
+        static qreal touchDragDistance(const QTouchEvent *event, Qt::TouchPointStates allowedStates);
 
     private:
         class Private;

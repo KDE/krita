@@ -15,7 +15,7 @@
 
 [General]
 name=Clip Studio Paint Compatible
-version=6
+version=7
 
 [Pan Canvas]
 0={0;2;[20];1;0;0}
@@ -24,7 +24,7 @@ version=6
 3={2;1;[];0;0;0}
 4={3;1;[];0;0;0}
 5={4;1;[];0;0;0}
-6={0;3;[];0;5;0}
+6={0;5;[];0;0;5}
 7={0;4;[];0;0;6}
 
 [Rotate Canvas]
@@ -76,3 +76,4 @@ version=6
 
 [Zoom and Rotate Canvas]
 0={0;4;[];0;0;7}
+1={0;5;[];0;0;1}

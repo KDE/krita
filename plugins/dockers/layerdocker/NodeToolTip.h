@@ -20,7 +20,7 @@ class NodeToolTip: public KoItemToolTip
     Q_OBJECT
 
 public:
-    NodeToolTip();
+    NodeToolTip(QWidget *widget);
     ~NodeToolTip() override;
 
 protected:

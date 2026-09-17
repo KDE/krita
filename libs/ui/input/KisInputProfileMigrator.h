@@ -31,22 +31,23 @@ class KisInputProfileMigrator
 public:
     virtual ~KisInputProfileMigrator();
 
-    virtual QMap<ProfileEntry, QList<KisShortcutConfiguration>>
-    migrate(const QMap<QString, ProfileEntry> profiles) = 0;
+    virtual QList<KisShortcutConfiguration> migrate(const ProfileEntry &profile) = 0;
+
+protected:
+    static QList<KisShortcutConfiguration> getShortcutsFromProfile(QString profile, KisInputProfileManager *manager);
 };
 
 /**
- * Migrates Krita profile version 5 to 6
+ * Migrates Krita profile from version 5 to the current version
  */
-class KisInputProfileMigrator5To6 : public KisInputProfileMigrator
+class KisInputProfileMigratorFrom5 : public KisInputProfileMigrator
 {
 
 public:
-    KisInputProfileMigrator5To6(KisInputProfileManager *manager);
-    ~KisInputProfileMigrator5To6() override;
+    KisInputProfileMigratorFrom5(KisInputProfileManager *manager);
+    ~KisInputProfileMigratorFrom5() override;
 
-    QMap<ProfileEntry, QList<KisShortcutConfiguration>>
-    migrate(const QMap<QString, ProfileEntry> profiles) override;
+    QList<KisShortcutConfiguration> migrate(const ProfileEntry &profile) override;
 
 private:
     QList<KisShortcutConfiguration> defaultTouchShortcuts();
@@ -54,12 +55,26 @@ private:
     template <typename Func>
     void filterShortcuts(QList<KisShortcutConfiguration> &shortcuts, Func func);
 
-    QList<KisShortcutConfiguration> getShortcutsFromProfile(QString profile) const;
-
 private:
     KisInputProfileManager *m_manager;
     QStringList m_profilesList;
     QString m_defaultProfile;
+};
+
+/**
+ * Migrates Krita profile from version 6 to the current version
+ */
+class KisInputProfileMigratorFrom6 : public KisInputProfileMigrator
+{
+
+public:
+    KisInputProfileMigratorFrom6(KisInputProfileManager *manager);
+    ~KisInputProfileMigratorFrom6() override;
+
+    QList<KisShortcutConfiguration> migrate(const ProfileEntry &profile) override;
+
+private:
+    KisInputProfileManager *m_manager;
 };
 
 #endif // __KISINPUTPROFILEMIGRATOR_H_

@@ -8,34 +8,29 @@
 #include <QList>
 #include <QPointer>
 #include <QEvent>
-#include <QTouchEvent>
 #include <QScopedPointer>
-#include <QQueue>
 
+#include "KisInputEventsEater.h"
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"
 #include "kis_shortcut_configuration.h"
 #include "kis_canvas2.h"
 #include "kis_tool_proxy.h"
 #include "kis_signal_compressor.h"
-#include "input/kis_tablet_debugger.h"
 #include "kis_timed_signal_threshold.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_latency_tracker.h"
 
 class KisToolInvocationAction;
 
-
 class KisInputManager::Private
 {
 public:
-    static constexpr int TOUCH_HOLD_DELAY_MS = 400;
-
     Private(KisInputManager *qq);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
-    void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
-    bool addNativeGestureShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
+    void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::TouchGestureAction gesture, bool isTouchPainting = false);
+    bool addNativeGestureShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::NativeGestureAction gesture );
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
@@ -49,9 +44,6 @@ public:
     QPointer<KisToolProxy> toolProxy;
 
     bool forwardAllEventsToTool = false;
-    bool ignoringQtCursorEvents();
-
-    bool touchHasBlockedPressEvents = false;
 
     KisShortcutMatcher matcher;
 
@@ -68,47 +60,15 @@ public:
     PriorityList priorityEventFilter;
     int priorityEventFilterSeqNo;
 
-    bool touchStrokeStarted = false;
-    bool touchStrokeBlocked = false;
     bool popupWasActive = false;
-    int lastPointCount = 0;
-
-    QPointF startingPos;
-    QPointF previousPos;
-    QScopedPointer<QEvent> originatingTouchBeginEvent;
 
     bool useUnbalancedKeyPressEventWorkaround = false;
     bool shouldSynchronizeOnNextKeyPress = false;
 
     KisPopupWidgetInterface *popupWidget;
 
-    QTimer *touchHoldTimer;
-    QVector<QTouchEvent *> bufferedTouchEvents;
-
-    void blockMouseEvents();
-    void allowMouseEvents();
-    void eatOneMousePress();
     void setMaskSyntheticEvents(bool value);
     void resetCompressor();
-    void startBlockingTouch();
-    void stopBlockingTouch();
-    void restartTouchHoldTimer();
-    void cancelTouchHoldTimer();
-    bool isPendingTouchHold() const;
-    bool isWithinTouchHoldSlopRange(const QPointF &currentPos) const;
-    void bufferTouchEvent(QTouchEvent *event);
-    void flushBufferedTouchEvents();
-    void clearBufferedTouchEvents();
-
-    template <class Event, bool useBlocking>
-    void debugEvent(QEvent *event)
-    {
-      if (!KisTabletDebugger::instance()->debugEnabled()) return;
-
-      QString msg1 = useBlocking && ignoringQtCursorEvents() ? "[BLOCKED] " : "[       ]";
-      Event *specificEvent = static_cast<Event*>(event);
-      dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
-    }
 
     class ProximityNotifier : public QObject
     {
@@ -139,34 +99,7 @@ public:
     };
     CanvasSwitcher canvasSwitcher;
 
-    struct EventEater
-    {
-        EventEater();
-
-        bool eventFilter(QObject* target, QEvent* event);
-
-        // This should be called after we're certain a tablet stroke has started.
-        void activate();
-        // This should be called after a tablet stroke has ended.
-        void deactivate();
-
-        // On Windows, we sometimes receive mouse events very late, so watch & wait.
-        void eatOneMousePress();
-
-        // This should be called after the tablet is pressed,
-        void startBlockingTouch();
-        // This should be called after the tablet is released.
-        void stopBlockingTouch();
-
-        bool hungry{false};   // Continue eating mouse strokes
-        bool peckish{false};  // Eat a single mouse press event
-        bool eatSyntheticEvents{false}; // Mask all synthetic events
-        bool activateSecondaryButtonsWorkaround{false}; // Use mouse events for right- and middle-clicks
-        bool eatTouchEvents{false}; // Eat touch interactions
-    };
-    EventEater eventEater;
-
-    bool containsPointer = false;
+    KisInputEventsEater eventEater;
 
     int accumulatedScrollDelta = 0;
 

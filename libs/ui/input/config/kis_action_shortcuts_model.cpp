@@ -65,25 +65,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
-            switch (d->shortcuts.at(index.row())->type()) {
-            case KisShortcutConfiguration::KeyCombinationType:
-                return i18nc("Shortcut type", "Key Combination");
-
-            case KisShortcutConfiguration::MouseButtonType:
-                return i18nc("Shortcut type", "Mouse Button");
-
-            case KisShortcutConfiguration::MouseWheelType:
-                return i18nc("Shortcut type", "Mouse Wheel");
-
-            case KisShortcutConfiguration::GestureType:
-                return i18nc("Shortcut type", "Gesture");
-
-            default:
-                return i18n("Unknown Input");
-            }
-
-            break;
-
+            return KisShortcutConfiguration::shortcutTypeToText(d->shortcuts.at(index.row())->type());
         case 1: {
             KisShortcutConfiguration *s = d->shortcuts.at(index.row());
             QString output;
@@ -103,8 +85,12 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
                     s->keys(), s->wheel());
                 break;
 
-            case KisShortcutConfiguration::GestureType:
-                output = KisShortcutConfiguration::gestureToText(s->gesture());
+            case KisShortcutConfiguration::TouchGestureType:
+                output = KisShortcutConfiguration::touchGestureToText(s->touchGesture());
+                break;
+
+            case KisShortcutConfiguration::NativeGestureType:
+                output = KisShortcutConfiguration::nativeGestureToText(s->nativeGesture());
                 break;
 
             default:
@@ -278,7 +264,8 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         oldData->setKeys(newData->keys());
         oldData->setButtons(newData->buttons());
         oldData->setWheel(newData->wheel());
-        oldData->setGesture(newData->gesture());
+        oldData->setTouchGesture(newData->touchGesture());
+        oldData->setNativeGesture(newData->nativeGesture());
 
         break;
     }

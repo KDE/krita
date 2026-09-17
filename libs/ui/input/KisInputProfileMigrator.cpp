@@ -6,21 +6,27 @@
 
 #include "KisInputProfileMigrator.h"
 
+#include <QDebug>
+
+#include <KisMpl.h>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KoResourcePaths.h>
 
-#include <QDebug>
+#include <kis_assert.h>
 
 #include "kis_abstract_input_action.h"
 #include "kis_input_profile_manager.h"
 #include "kis_shortcut_configuration.h"
+#include "kis_pan_action.h"
+#include "kis_zoom_and_rotate_action.h"
 
 KisInputProfileMigrator::~KisInputProfileMigrator()
 {
 }
 
-KisInputProfileMigrator5To6::KisInputProfileMigrator5To6(KisInputProfileManager *manager)
+KisInputProfileMigratorFrom5::KisInputProfileMigratorFrom5(KisInputProfileManager *manager)
     : m_manager(manager)
 {
     // FIXME(sh_zam): Should we declare this as "the default profile" somewhere?
@@ -37,22 +43,23 @@ KisInputProfileMigrator5To6::KisInputProfileMigrator5To6(KisInputProfileManager 
     }
 }
 
-KisInputProfileMigrator5To6::~KisInputProfileMigrator5To6()
+KisInputProfileMigratorFrom5::~KisInputProfileMigratorFrom5()
 {
 }
 
-QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::defaultTouchShortcuts()
+QList<KisShortcutConfiguration> KisInputProfileMigratorFrom5::defaultTouchShortcuts()
 {
-    QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(m_defaultProfile);
+    QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(m_defaultProfile, m_manager);
     filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {
-        return shortcut.type() == KisShortcutConfiguration::GestureType;
+        return shortcut.type() == KisShortcutConfiguration::TouchGestureType ||
+            shortcut.type() == KisShortcutConfiguration::NativeGestureType;
     });
 
     return shortcuts;
 }
 
 template <typename Func>
-void KisInputProfileMigrator5To6::filterShortcuts(QList<KisShortcutConfiguration> &shortcuts, Func pred)
+void KisInputProfileMigratorFrom5::filterShortcuts(QList<KisShortcutConfiguration> &shortcuts, Func pred)
 {
     auto it = shortcuts.begin();
     while (it != shortcuts.end()) {
@@ -65,13 +72,13 @@ void KisInputProfileMigrator5To6::filterShortcuts(QList<KisShortcutConfiguration
     }
 }
 
-QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::getShortcutsFromProfile(QString profile) const
+QList<KisShortcutConfiguration> KisInputProfileMigrator::getShortcutsFromProfile(QString profile, KisInputProfileManager *manager)
 {
     QList<KisShortcutConfiguration> shortcuts;
 
     KConfig config(profile, KConfig::SimpleConfig);
 
-    const QList<KisAbstractInputAction *> actions = m_manager->actions();
+    const QList<KisAbstractInputAction *> actions = manager->actions();
     for (const auto action : actions) {
         if (!config.hasGroup(action->id())) {
             continue;
@@ -90,23 +97,94 @@ QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::getShortcutsFromPro
     return shortcuts;
 }
 
-QMap<ProfileEntry, QList<KisShortcutConfiguration>>
-KisInputProfileMigrator5To6::migrate(const QMap<QString, ProfileEntry> profiles)
+QList<KisShortcutConfiguration> KisInputProfileMigratorFrom5::migrate(const ProfileEntry &profile)
 {
-    QMap<ProfileEntry, QList<KisShortcutConfiguration>> parsedProfiles;
-    for (const auto &profile : profiles) {
-        QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(profile.fullpath);
+    QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(profile.fullpath, m_manager);
 
-        // we ignore the touch shortcuts, because they're from an older version
-        filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {
-            return shortcut.type() != KisShortcutConfiguration::GestureType;
-        });
+    // we ignore the touch shortcuts, because they're from an older version
+    filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {
+        return shortcut.type() != KisShortcutConfiguration::TouchGestureType
+            && shortcut.type() != KisShortcutConfiguration::NativeGestureType;
+    });
 
-        // now we add the default new shortcuts -- this should complete the migration.
-        shortcuts.append(defaultTouchShortcuts());
+    // now we add the default new shortcuts -- this should complete the migration.
+    shortcuts.append(defaultTouchShortcuts());
 
-        parsedProfiles[profile] = shortcuts;
+    return shortcuts;
+}
+
+
+KisInputProfileMigratorFrom6::KisInputProfileMigratorFrom6(KisInputProfileManager *manager)
+    : m_manager(manager)
+{
+
+}
+
+KisInputProfileMigratorFrom6::~KisInputProfileMigratorFrom6()
+{
+
+}
+
+QList<KisShortcutConfiguration> KisInputProfileMigratorFrom6::migrate(const ProfileEntry &profile)
+{
+    /**
+     * Firstly, remove all native gesture shortcuts, since they change
+     * semantics in Version 7
+     */
+
+    auto shortcuts = getShortcutsFromProfile(profile.fullpath, m_manager);
+    for (auto it = shortcuts.begin(); it != shortcuts.end();) {
+        if (it->type() == KisShortcutConfiguration::NativeGestureType) {
+            it = shortcuts.erase(it);
+        } else {
+            ++it;
+        }
     }
 
-    return parsedProfiles;
+    for (auto it = shortcuts.begin(); it != shortcuts.end();) {
+        if (it->type() == KisShortcutConfiguration::MouseWheelType
+            && it->wheel() == KisShortcutConfiguration::WheelReserved_0) {
+            it = shortcuts.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    auto actions = m_manager->actions();
+
+    {
+       /**
+        * Now add the default connection between native gestures and
+        * "Zoom and Rotate Canvas" action
+        */
+
+        auto it = std::find_if(actions.begin(), actions.end(), kismpl::mem_equal_to(&KisAbstractInputAction::id, "Zoom and Rotate Canvas"));
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != actions.end(), shortcuts);
+
+        KisShortcutConfiguration newNativeGestureShortcut;
+        newNativeGestureShortcut.setAction(*it);
+        newNativeGestureShortcut.setType(KisShortcutConfiguration::NativeGestureType);
+        newNativeGestureShortcut.setNativeGesture(KisShortcutConfiguration::PinchGesture);
+        newNativeGestureShortcut.setMode(KisZoomAndRotateAction::PanAndZoomAndRotateMode);
+        shortcuts.append(newNativeGestureShortcut);
+    }
+
+    {
+       /**
+        * Now add the default connection between native scroll and
+        * "Pan Canvas" action
+        */
+
+        auto it = std::find_if(actions.begin(), actions.end(), kismpl::mem_equal_to(&KisAbstractInputAction::id, "Pan Canvas"));
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != actions.end(), shortcuts);
+
+        KisShortcutConfiguration newNativeGestureShortcut;
+        newNativeGestureShortcut.setAction(*it);
+        newNativeGestureShortcut.setType(KisShortcutConfiguration::NativeGestureType);
+        newNativeGestureShortcut.setNativeGesture(KisShortcutConfiguration::TouchpadScroll);
+        newNativeGestureShortcut.setMode(KisPanAction::PanModeShortcut);
+        shortcuts.append(newNativeGestureShortcut);
+    }
+
+    return shortcuts;
 }

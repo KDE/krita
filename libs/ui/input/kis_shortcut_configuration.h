@@ -8,6 +8,8 @@
 #ifndef KISSHORTCUTCONFIGURATION_H
 #define KISSHORTCUTCONFIGURATION_H
 
+#include <kritaui_export.h>
+
 #include <QList>
 #include <QMetaType>
 
@@ -24,7 +26,7 @@ class KisAbstractInputAction;
  * different behaviour for each mode. Different shortcuts can activate
  * different modes.
  */
-class KisShortcutConfiguration
+class KRITAUI_EXPORT KisShortcutConfiguration
 {
 public:
     /**
@@ -35,8 +37,8 @@ public:
         KeyCombinationType, ///< A list of keys that should be pressed.
         MouseButtonType, ///< A mouse button, possibly with key modifiers.
         MouseWheelType, ///< Mouse wheel movement, possibly with key modifiers.
-        GestureType, ///< A touch gesture.
-        MacOSGestureType, ///< A macOS gesture.
+        TouchGestureType, ///< A touch gesture.
+        NativeGestureType, ///< A macOS gesture.
     };
 
     /**
@@ -48,20 +50,14 @@ public:
         WheelDown, ///< Downwards movement, toward the user.
         WheelLeft, ///< Left movement.
         WheelRight, ///< Right movement.
-        WheelTrackpad, ///< A pan movement on a trackpad.
+        WheelReserved_0, ///< Do not use! Previously was used for TouchpadScroll shortcut
     };
 
     /**
      * The type of gesture.
      */
-    enum GestureAction {
+    enum TouchGestureAction {
         NoGesture, ///< No gesture.
-#ifdef Q_OS_MACOS
-        PinchGesture, ///< Pinch gesture, fingers moving towards or away from each other.
-        PanGesture, ///< Pan gesture, fingers staying together but moving across the screen.
-        RotateGesture, ///<Rotate gesture, two fingers rotating around a pivot point.
-        SmartZoomGesture, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
-#else
         OneFingerTap,
         TwoFingerTap,
         ThreeFingerTap,
@@ -73,8 +69,20 @@ public:
         FourFingerDrag,
         FiveFingerDrag,
         OneFingerHold,
-#endif
         MaxGesture,
+    };
+
+    enum NativeGestureAction {
+        NoNativeGesture = 0, ///< No gesture.
+        PinchGesture = 1, ///< Pinch gesture, a two finger gesture used for navigating the canvas
+
+        // WARNING: elements with indexes 1 and 2 are intentionally skipped,
+        // they used to represent Qt::PanNativeGesture and Qt::RotateNativeGesture,
+        // but now all three gestures are represented as a single PinchGesture.
+
+        SmartZoomGesture = 4, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
+        TouchpadScroll = 5, ///< Two-dimensional pixel scrolling on a touchpad, supported on MacOS and Wayland only
+        MaxNativeGesture,
     };
 
     /**
@@ -213,7 +221,8 @@ public:
      *
      * \note Only applicable when type is GestureType.
      */
-    GestureAction gesture() const;
+    TouchGestureAction touchGesture() const;
+
     /**
      * Set the gesture that will trigger this shortcut.
      *
@@ -221,7 +230,23 @@ public:
      *
      * \note Only applicable when type is GestureType.
      */
-    void setGesture(GestureAction type);
+    void setTouchGesture(TouchGestureAction type);
+
+    /**
+     * \return The native gesture that will trigger this shortcut.
+     *
+     * \note Only applicable when type is MacOSGestureType.
+     */
+    NativeGestureAction nativeGesture() const;
+
+    /**
+     * Set the native gesture that will trigger this shortcut.
+     *
+     * \param type The native gesture to use.
+     *
+     * \note Only applicable when type is MacOSGestureType.
+     */
+    void setNativeGesture(NativeGestureAction type);
 
     /**
      * \return True if shortcut is a no-op, that is it isn't bound to any input which can be performed by the
@@ -320,7 +345,9 @@ public:
      */
     static QString wheelInputToText(const QList<Qt::Key> &keys, MouseWheelMovement wheel);
 
-    static QString gestureToText(GestureAction action);
+    static QString touchGestureToText(TouchGestureAction action);
+    static QString nativeGestureToText(NativeGestureAction action);
+    static QString shortcutTypeToText(ShortcutType type);
 
 private:
     class Private;

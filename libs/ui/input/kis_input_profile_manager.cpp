@@ -211,7 +211,7 @@ void KisInputProfileManager::loadProfiles()
 
         // NOTE: Migrating profiles doesn't just mean porting them to new version. Migrating a profile
         // may override the existing newer profile file.
-        if (entry.version == PROFILE_VERSION - 1) {
+        if (entry.version < PROFILE_VERSION) {
             // we only utilize the first entry, because it is the most local one and the one which has to be
             // migrated.
             profileEntriesToMigrate[entry.name] = entry;
@@ -259,39 +259,8 @@ void KisInputProfileManager::loadProfiles()
         }
     }
 
-    {
-        KisInputProfileMigrator5To6 migrator(this);
-        QMap<ProfileEntry, QList<KisShortcutConfiguration>> parsedProfilesToMigrate =
-            migrator.migrate(profileEntriesToMigrate);
-
-        for (ProfileEntry profileEntry : parsedProfilesToMigrate.keys()) {
-            const QString storagePath = KoResourcePaths::saveLocation("data", "input/", true);
-
-            {
-                // the profile we have here uses the previous config, the only thing we need to make sure is
-                // it doesn't overwrite the existing profile to preserve backwards compatibility.
-                const QString profilePath = profileEntry.fullpath;
-                QString oldProfileName = QFileInfo(profilePath).fileName();
-                oldProfileName.replace(".profile", QString::number(PROFILE_VERSION - 1) + ".profile");
-
-                QString oldProfilePath = storagePath + oldProfileName;
-                // copy the profile to a new file but add version number to the name
-                QFile::copy(profilePath, oldProfilePath);
-
-                KConfig config(oldProfilePath, KConfig::SimpleConfig);
-                config.group("General").writeEntry("migrated", PROFILE_VERSION);
-            }
-
-            KisInputProfile *newProfile = addProfile(profileEntry.name);
-            QList<KisShortcutConfiguration> shortcuts = parsedProfilesToMigrate.value(profileEntry);
-            for (const auto &shortcut : shortcuts) {
-                newProfile->addShortcut(new KisShortcutConfiguration(shortcut));
-            }
-
-            // save the new profile with migrated shortcuts. We overwrite the previous version of file (which
-            // previously has been moved for backward compatibility).
-            saveProfile(newProfile, storagePath);
-        }
+    for (const auto &profileEntry : profileEntriesToMigrate) {
+        loadProfileWithMigration(profileEntry);
     }
 
     Q_FOREACH(const QString & profileName, profileEntries.keys()) {
@@ -304,28 +273,7 @@ void KisInputProfileManager::loadProfiles()
         // because that's the most local one.
         ProfileEntry entry = profileEntries[profileName].first();
 
-        KConfig config(entry.fullpath, KConfig::SimpleConfig);
-
-        KisInputProfile *newProfile = addProfile(entry.name);
-        Q_FOREACH(KisAbstractInputAction * action, d->actions) {
-            if (!config.hasGroup(action->id())) {
-                continue;
-            }
-
-            KConfigGroup grp = config.group(action->id());
-            //Read the settings for the action and create the appropriate shortcuts.
-            Q_FOREACH(const QString & entry, grp.entryMap()) {
-                KisShortcutConfiguration *shortcut = new KisShortcutConfiguration;
-                shortcut->setAction(action);
-
-                if (shortcut->unserialize(entry)) {
-                    newProfile->addShortcut(shortcut);
-                }
-                else {
-                    delete shortcut;
-                }
-            }
-        }
+        loadProfileInternal(entry.fullpath);
     }
 
     QString currentProfile = cfg.currentInputProfile();
@@ -345,6 +293,92 @@ void KisInputProfileManager::loadProfiles()
     if (d->currentProfile) {
         Q_EMIT currentProfileChanged();
     }
+}
+
+KisInputProfile* KisInputProfileManager::loadProfileInternal(const QString &fullPath)
+{
+    KConfig config(fullPath, KConfig::SimpleConfig);
+
+    QList<KisShortcutConfiguration*> loadedShortcuts;
+
+    // Only entries of exactly the right version can be considered
+    const int version = config.group("General").readEntry("version", 0);
+    const QString name = config.group("General").readEntry("name");
+
+    // the profile must be already converted by this point
+    KIS_SAFE_ASSERT_RECOVER_NOOP(version == PROFILE_VERSION);
+
+    Q_FOREACH (KisAbstractInputAction *action, d->actions) {
+        if (!config.hasGroup(action->id())) {
+            continue;
+        }
+
+        KConfigGroup grp = config.group(action->id());
+        // Read the settings for the action and create the appropriate shortcuts.
+        Q_FOREACH (const QString &entry, grp.entryMap()) {
+            KisShortcutConfiguration *shortcut = new KisShortcutConfiguration;
+            shortcut->setAction(action);
+
+            if (shortcut->unserialize(entry)) {
+                loadedShortcuts.append(shortcut);
+            } else {
+                delete shortcut;
+            }
+        }
+    }
+
+    KisInputProfile *newProfile = addProfile(name);
+    Q_FOREACH(KisShortcutConfiguration *shortcut, loadedShortcuts) {
+        newProfile->addShortcut(shortcut);
+    }
+    return newProfile;
+}
+
+KisInputProfile* KisInputProfileManager::loadProfileWithMigration(const ProfileEntry &profileEntry)
+{
+    QList<KisShortcutConfiguration> parsedShortcuts;
+
+    if (profileEntry.version == 5) {
+        KisInputProfileMigratorFrom5 migratorFromV5(this);
+        parsedShortcuts = migratorFromV5.migrate(profileEntry);
+    } else if (profileEntry.version == 6) {
+        KisInputProfileMigratorFrom6 migratorFromV6(this);
+        parsedShortcuts = migratorFromV6.migrate(profileEntry);
+    } else {
+        warnKrita << "Unable to migrate input profile: unknown version:" << profileEntry.version << "("
+                  << profileEntry.fullpath << ")";
+        return nullptr;
+    }
+
+    dbgKrita << "Migrating a profile " << profileEntry.name << "(" << profileEntry.fullpath << ")" << "from version" << profileEntry.version;
+
+    const QString storagePath = KoResourcePaths::saveLocation("data", "input/", true);
+
+    {
+        // the profile we have here uses the previous config, the only thing we need to make sure is
+        // it doesn't overwrite the existing profile to preserve backwards compatibility.
+        const QString profilePath = profileEntry.fullpath;
+        QString oldProfileName = QFileInfo(profilePath).fileName();
+        oldProfileName.replace(".profile", QString::number(PROFILE_VERSION - 1) + ".profile");
+
+        QString oldProfilePath = storagePath + oldProfileName;
+        // copy the profile to a new file but add version number to the name
+        QFile::copy(profilePath, oldProfilePath);
+
+        KConfig config(oldProfilePath, KConfig::SimpleConfig);
+        config.group("General").writeEntry("migrated", PROFILE_VERSION);
+    }
+
+    KisInputProfile *newProfile = addProfile(profileEntry.name);
+    for (const auto &shortcut : parsedShortcuts) {
+        newProfile->addShortcut(new KisShortcutConfiguration(shortcut));
+    }
+
+    // save the new profile with migrated shortcuts. We overwrite the previous version of file (which
+    // previously has been moved for backward compatibility).
+    saveProfile(newProfile, storagePath);
+
+    return newProfile;
 }
 
 void KisInputProfileManager::saveProfiles()

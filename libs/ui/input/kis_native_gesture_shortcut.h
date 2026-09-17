@@ -14,7 +14,13 @@ class QNativeGestureEvent;
 class KisNativeGestureShortcut : public KisAbstractShortcut
 {
 public:
-	KisNativeGestureShortcut(KisAbstractInputAction* action, int index, Qt::NativeGestureType type);
+    enum Type {
+        PinchNavigation,
+        SmartZoomNativeGesture
+    };
+
+public:
+    KisNativeGestureShortcut(KisAbstractInputAction* action, int index, Type type);
 	~KisNativeGestureShortcut() override;
 
 	int priority() const override;

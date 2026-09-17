@@ -19,18 +19,20 @@
 
 #include "kis_input_manager.h"
 
+#include "KisCanvasNavigationActionStrategyTouch.h"
+#include "KisCanvasNavigationActionStrategyNativeGesture.h"
+
+
 class KisPanAction::Private
 {
 public:
     Private() : panDistance(10) { }
 
-    QPointF averagePoint( QTouchEvent* event, int *outCount = nullptr );
-
     const int panDistance;
 
-    QPointF lastPosition;
     QPointF originalPreferredCenter;
-    int touchPointsCount { 0 };
+
+    std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 };
 
 KisPanAction::KisPanAction()
@@ -75,26 +77,49 @@ void KisPanAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
 
+    /**
+     * Firstly, try to handle native gestures and touch events
+     */
+    if (event
+        && (event->type() == QEvent::NativeGesture || event->type() == QEvent::TouchBegin
+            || event->type() == QEvent::TouchUpdate)
+        && shortcut == PanModeShortcut) {
+
+        using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
+        using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
+
+        Flags flags;
+        flags.setFlag(Flag::PanEnabled);
+
+        if (event->type() == QEvent::NativeGesture) {
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+        } else {
+            const QTouchEvent *tevent = static_cast<const QTouchEvent*>(event);
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyTouch(flags, tevent, inputManager()->canvas()));
+        }
+
+        // native gestures don't have cursor tracking by the OS, so they shouldn't show any cursor
+        QApplication::restoreOverrideCursor();
+        return;
+    }
+
     bool overrideCursor = true;
 
     switch (shortcut) {
         case PanModeShortcut: {
-            QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
-            if (tevent) {
-                d->lastPosition = d->averagePoint(tevent, &d->touchPointsCount);
-                break;
-            }
-
-            // Some QT wheel events are actually be touch pad pan events. From the QT docs:
-            // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
-            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
-            if (wheelEvent) {
+            if (event->type() == QEvent::Wheel) {
+                // Some QT wheel events are actually be touch pad pan events. From the QT docs:
+                // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
+                QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
                 inputManager()->canvas()->canvasController()->pan(-wheelEvent->pixelDelta());
-                overrideCursor = false;
-                break;
-            }
 
-            d->originalPreferredCenter = inputManager()->canvas()->canvasController()->preferredCenter();
+                // native gestures don't have cursor tracking by the OS, so they shouldn't show any cursor
+                QApplication::restoreOverrideCursor();
+
+                return;
+            } else {
+                d->originalPreferredCenter = inputManager()->canvas()->canvasController()->preferredCenter();
+            }
 
             break;
         }
@@ -119,6 +144,7 @@ void KisPanAction::begin(int shortcut, QEvent *event)
 
 void KisPanAction::end(QEvent *event)
 {
+    d->actionStrategy.reset();
     QApplication::restoreOverrideCursor();
     KisAbstractInputAction::end(event);
 }
@@ -128,68 +154,20 @@ void KisPanAction::inputEvent(QEvent *event)
     if(!event) {
         return;
     }
-    switch (event->type()) {
-        case QEvent::Gesture: {
-            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
-            if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
-                QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
-                inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint() * 0.2);
-            }
-            return;
-        }
-        case QEvent::TouchUpdate: {
-            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-            int newTouchPointsCount;
-            QPointF newPos = d->averagePoint(tevent, &newTouchPointsCount);
-            // When the number of touch points have changed, the average point
-            // of the touch points will produce a huge jump which we don't want
-            // to happen when panning. This can happen when ending a 3-finger
-            // pan gesture. So we only pan the canvas if the number of touch
-            // points have not changed.
-            if (newTouchPointsCount == d->touchPointsCount) {
-                QPointF delta = newPos - d->lastPosition;
-                inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
-            }
-            d->lastPosition = newPos;
-            d->touchPointsCount = newTouchPointsCount;
-            return;
-        }
-        default:
-            break;
+
+    if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
+        d->actionStrategy->inputEvent(event);
+    } else if (event->type() == QEvent::Wheel) {
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        inputManager()->canvas()->canvasController()->pan(-wheelEvent->pixelDelta());
+    } else {
+        KisAbstractInputAction::inputEvent(event);
     }
-    KisAbstractInputAction::inputEvent(event);
 }
 
 void KisPanAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
 {
     inputManager()->canvas()->canvasController()->setPreferredCenter(-pos + startPos + d->originalPreferredCenter);
-}
-
-QPointF KisPanAction::Private::averagePoint( QTouchEvent* event, int *outCount )
-{
-    if(!event) {
-        return QPointF();
-    }
-
-    QPointF result;
-    int count = 0;
-
-    Q_FOREACH ( QTouchEvent::TouchPoint point, event->touchPoints() ) {
-        if( point.state() != Qt::TouchPointReleased ) {
-            result += point.screenPos();
-            count++;
-        }
-    }
-
-    if (outCount) {
-        *outCount = count;
-    }
-
-    if( count > 0 ) {
-        return result / count;
-    } else {
-        return QPointF();
-    }
 }
 
 bool KisPanAction::isShortcutRequired(int shortcut) const

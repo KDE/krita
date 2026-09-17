@@ -32,13 +32,14 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41008();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41009();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41010();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
-extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41013();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41015();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41016();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41019();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41020();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 
 #define dbgPerformanceIsEnabled() (_41021().isDebugEnabled())
@@ -57,13 +58,14 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define dbgMath qCDebug(_41009)
 #define dbgRender qCDebug(_41010)
 #define dbgScript qCDebug(_41011)
-#define dbgInput qCDebug(_41012)
 #define dbgAction qCDebug(_41013)
 #define dbgTablet qCDebug(_41014)
 #define dbgOpenGL qCDebug(_41015)
 #define dbgMetaData qCDebug(_41016)
 #define dbgAndroid qCDebug(_41017)
 #define dbgLocale qCDebug(_41018)
+#define dbgInputEater qCDebug(_41019)
+#define dbgInputMatcher qCDebug(_41020)
 #define dbgPerformance qCDebug(_41021)
 
 #define infoResources qCInfo(_30009)
@@ -80,11 +82,12 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define infoMath qCInfo(_41009)
 #define infoRender qCInfo(_41010)
 #define infoScript qCInfo(_41011)
-#define infoInput qCInfo(_41012)
-#define infoAction qCDebug(_41013)
-#define infoTablet qCDebug(_41014)
-#define infoOpenGL qCDebug(_41015)
-#define infoMetaData qCDebug(_41016)
+#define infoAction qCInfo(_41013)
+#define infoTablet qCInfo(_41014)
+#define infoOpenGL qCInfo(_41015)
+#define infoMetaData qCInfo(_41016)
+#define infoInputEater qCInfo(_41019)
+#define infoInputMatcher qCInfo(_41020)
 
 #define warnResources qCWarning(_30009)
 #define warnDbMigration qCWarning(_30010)
@@ -100,11 +103,12 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define warnMath qCWarning(_41009)
 #define warnRender qCWarning(_41010)
 #define warnScript qCWarning(_41011)
-#define warnInput qCWarning(_41012)
-#define warnAction qCDebug(_41013)
-#define warnTablet qCDebug(_41014)
-#define warnOpenGL qCDebug(_41015)
-#define warnMetaData qCDebug(_41016)
+#define warnAction qCWarning(_41013)
+#define warnTablet qCWarning(_41014)
+#define warnOpenGL qCWarning(_41015)
+#define warnMetaData qCWarning(_41016)
+#define warnInputEater qCWarning(_41019)
+#define warnInputMatcher qCWarning(_41020)
 
 #define errResources qCCritical(_30009)
 #define errDbMigration qCCritical(_30010)
@@ -120,11 +124,12 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define errMath qCCritical(_41009)
 #define errRender qCCritical(_41010)
 #define errScript qCCritical(_41011)
-#define errInput qCCritical(_41012)
-#define errAction qCDebug(_41013)
-#define errTablet qCDebug(_41014)
-#define errOpenGL qCDebug(_41015)
-#define errMetaData qCDebug(_41016)
+#define errAction qCCritical(_41013)
+#define errTablet qCCritical(_41014)
+#define errOpenGL qCCritical(_41015)
+#define errMetaData qCCritical(_41016)
+#define errInputEater qCCritical(_41019)
+#define errInputMatcher qCCritical(_41020)
 
 // Qt does not yet define qCFatal (TODO: this is an oversight, submit a patch upstream)
 /*
@@ -141,7 +146,6 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41021();
 #define fatalMath qCFatal(_41009)
 #define fatalRender qCFatal(_41010)
 #define fatalScript qCFatal(_41011)
-#define fatalInput qCFatal(_41012)
 #define fatalAction qCDebug(_41013)
 */
 

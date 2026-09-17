@@ -102,17 +102,8 @@ private Q_SLOTS:
     void slotCompressedMoveEvent();
     void deregisterPopupWidget();
     void slotConfigChanged();
-    void slotTouchHoldTriggered();
 
 private:
-    bool startTouch(bool &retval);
-    void endTouch();
-    bool touchHoldBufferUpdate(QTouchEvent *touchEvent);
-
-    // Handlers for events that may have been buffered for a touch hold.
-    bool handleTouchBegin(QTouchEvent *touchEvent);
-    bool handleTouchUpdate(QTouchEvent *touchEvent);
-
     bool eventFilterImpl(QEvent * event);
     template <class Event>
         bool compressMoveEventCommon(Event *event);

@@ -16,6 +16,8 @@
 
 struct  Q_DECL_HIDDEN KisResourceItemListView::Private
 {
+    Private(KisResourceItemListView *_q) : tip(_q) {}
+
     ListViewMode viewMode = ListViewMode::IconGrid;
     bool strictSelectionMode {false};
     KisIconToolTip tip;
@@ -28,7 +30,7 @@ struct  Q_DECL_HIDDEN KisResourceItemListView::Private
 
 KisResourceItemListView::KisResourceItemListView(QWidget *parent)
     : QListView(parent)
-    , m_d(new Private)
+    , m_d(new Private(this))
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
     setContextMenuPolicy(Qt::DefaultContextMenu);   
@@ -204,7 +206,7 @@ bool KisResourceItemListView::viewportEvent(QEvent *event)
         QModelIndex index = model()->buddy(indexAt(he->pos()));
         if (index.isValid()) {
             option.rect = visualRect(index);
-            m_d->tip.showTip(this, he->pos(), option, index);
+            m_d->tip.showTip(he->pos(), option, index);
             return true;
         }
         m_d->tip.hide();

@@ -18,6 +18,9 @@
 
 #include <math.h>
 
+#include "KisCanvasNavigationActionStrategyTouch.h"
+#include "KisCanvasNavigationActionStrategyNativeGesture.h"
+
 constexpr qreal DISCRETE_ANGLE_STEP = 15.0;  // discrete rotation snapping angle
 
 class KisRotateCanvasAction::Private
@@ -28,11 +31,10 @@ public:
     // Coverity requires sane defaults for all variables (CID 36429)
     Shortcut mode {RotateModeShortcut};
 
-    qreal previousAngle {0.0};
     qreal snapRotation {0.0};
-    qreal touchRotation {0.0};
     bool allowRotation {false};
-    KoViewTransformStillPoint actionStillPoint;
+
+    std::unique_ptr<KisCanvasNavigationActionStrategy> actionStrategy;
 };
 
 
@@ -80,14 +82,38 @@ void KisRotateCanvasAction::deactivate(int shortcut)
 void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
-    d->allowRotation = false;
-    d->previousAngle = 0;
-    d->snapRotation = 0;
-    d->touchRotation = 0;
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
     KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
+
+    if (event
+        && (event->type() == QEvent::NativeGesture || event->type() == QEvent::TouchBegin
+            || event->type() == QEvent::TouchUpdate)
+        && (shortcut == RotateModeShortcut || shortcut == DiscreteRotateModeShortcut)) {
+
+        using Flag = KisCanvasNavigationActionStrategyNativeGesture::Flag;
+        using Flags = KisCanvasNavigationActionStrategyNativeGesture::Flags;
+
+        Flags flags;
+        flags.setFlag(Flag::PanEnabled);
+        flags.setFlag(Flag::RotationEnabled);
+        flags.setFlag(Flag::RotationDescrete, shortcut == DiscreteRotateModeShortcut);
+
+        if (event->type() == QEvent::NativeGesture) {
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyNativeGesture(flags, eventPosF(event), inputManager()->canvas()));
+        } else {
+            const QTouchEvent *tevent = static_cast<const QTouchEvent*>(event);
+            d->actionStrategy.reset(new KisCanvasNavigationActionStrategyTouch(flags, tevent, inputManager()->canvas()));
+        }
+
+        // native gestures don't have cursor tracking by the OS, so they shouldn't show any cursor
+        QApplication::restoreOverrideCursor();
+        return;
+    }
+
+    d->allowRotation = false;
+    d->snapRotation = 0;
 
     d->mode = (Shortcut)shortcut;
 
@@ -100,7 +126,6 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             const qreal startRotation = inputManager()->canvas()->rotationAngle();
             d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
             canvasController->beginCanvasRotation();
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(eventPosF(event));
             break;
         }
         case RotateLeftShortcut:
@@ -119,17 +144,21 @@ void KisRotateCanvasAction::end(QEvent *event)
 {
     Q_UNUSED(event);
 
-    KisCanvasController *canvasController =
-        dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
-    KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
+    if (d->actionStrategy) {
+        d->actionStrategy.reset();
+    } else {
+        KisCanvasController *canvasController =
+            dynamic_cast<KisCanvasController *>(inputManager()->canvas()->canvasController());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
 
-    switch(d->mode) {
-    case RotateModeShortcut:
-    case DiscreteRotateModeShortcut:
-        canvasController->endCanvasRotation();
-        break;
-    default:
-        break;
+        switch (d->mode) {
+        case RotateModeShortcut:
+        case DiscreteRotateModeShortcut:
+            canvasController->endCanvasRotation();
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -171,81 +200,11 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
         return;
     }
 
-    switch (event->type()) {
-        case QEvent::NativeGesture: {
-            QNativeGestureEvent *gevent = static_cast<QNativeGestureEvent*>(event);
-            KisCanvas2 *canvas = inputManager()->canvas();
-            KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
-
-            const float angle = gevent->value();
-            QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
-
-            KoViewTransformStillPoint adjustedStillPoint = d->actionStillPoint;
-            adjustedStillPoint.second = widgetPos;
-
-            controller->rotateCanvas(angle, adjustedStillPoint, true);
-            return;
-        }
-        case QEvent::TouchUpdate: {
-            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-
-            if (touchEvent->touchPoints().count() != 2)
-                break;
-
-            QTouchEvent::TouchPoint tp0 = touchEvent->touchPoints().at(0);
-            QTouchEvent::TouchPoint tp1 = touchEvent->touchPoints().at(1);
-
-            if (tp0.state() == Qt::TouchPointReleased ||
-                tp1.state() == Qt::TouchPointReleased)
-            {
-                // Workaround: on some devices, the coordinates of TouchPoints
-                // in state TouchPointReleased are not reliable, and can
-                // "jump" by a significant distance. So we just stop handling
-                // the rotation as soon as the user's finger leaves the tablet.
-                break;
-            }
-
-            QPointF p0 = tp0.pos();
-            QPointF p1 = tp1.pos();
-
-            if ((p0-p1).manhattanLength() < 10)
-            {
-                // The TouchPoints are too close together. Don't update the
-                // rotation as the angle will likely be off. This also deals
-                // with a glitch where a newly pressed TouchPoint incorrectly
-                // reports the existing TouchPoint's coordinates instead of its
-                // own.
-                break;
-            }
-
-            // high school (y2 - y1) / (x2 - x1)
-            QPointF slope = p1 - p0;
-            qreal newAngle = atan2(slope.y(), slope.x());
-
-            // We must have the previous angle measurement to calculate the delta.
-            if (d->allowRotation)
-            {
-                qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
-
-                // Rotate by the effective angle from the beginning of the action.
-                d->touchRotation += delta;
-
-                KisCanvas2 *canvas = inputManager()->canvas();
-                KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
-                controller->rotateCanvas(d->touchRotation);
-            }
-            else
-            {
-                d->allowRotation = true;
-            }
-
-            d->previousAngle = newAngle;
-            return;
-        }
-        default:
-            break;
+    if (d->actionStrategy && d->actionStrategy->supportsEvent(event)) {
+        d->actionStrategy->inputEvent(event);
+    } else {
+        KisAbstractInputAction::inputEvent(event);
     }
-    KisAbstractInputAction::inputEvent(event);
 }
 
 KisInputActionGroup KisRotateCanvasAction::inputActionGroup(int shortcut) const

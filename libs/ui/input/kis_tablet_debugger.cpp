@@ -84,9 +84,24 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
         type == QTouchEvent::TouchUpdate ? "TouchUpdate" :
         type == QTouchEvent::TouchEnd ? "TouchEnd" :
         type == QTouchEvent::TouchCancel ? "TouchCancel" :
+        type == QTouchEvent::NativeGesture ? "NativeGesture" :
         "unknown";
 }
 
+inline QString sourceToString(Qt::MouseEventSource source) {
+    switch (source) {
+        case Qt::MouseEventNotSynthesized:
+            return "NotSynthesized";
+        case Qt::MouseEventSynthesizedBySystem:
+            return "SynthesizedBySystem";
+        case Qt::MouseEventSynthesizedByQt:
+            return "SynthesizedByQt";
+        case Qt::MouseEventSynthesizedByApplication:
+            return "SynthesizedByApplication";
+    }
+
+    return "<unknown>";
+}
 
 KisTabletDebugger::KisTabletDebugger()
     : m_debugEnabled(false)
@@ -119,23 +134,6 @@ bool KisTabletDebugger::debugEnabled() const
     return m_debugEnabled;
 }
 
-bool KisTabletDebugger::initializationDebugEnabled() const
-{
-    // FIXME: make configurable!
-    return true;
-}
-
-bool KisTabletDebugger::debugRawTabletValues() const
-{
-    // FIXME: make configurable!
-    return m_debugEnabled;
-}
-
-bool KisTabletDebugger::shouldEatDriverShortcuts() const
-{
-    return m_shouldEatDriverShortcuts;
-}
-
 QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &prefix)
 {
     QString string;
@@ -144,7 +142,12 @@ QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &p
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
     s << "hires: " << qSetFieldWidth(8) << ev.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.screenPos().y() << qSetFieldWidth(0) << " ";
-    s << "Source:" << ev.source();
+    s << "source: " << sourceToString(ev.source()) << " ";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s << "dev. type: " << static_cast<int>(ev.device()->type()) << " ";
+    s << "dev. caps: " << static_cast<int>(ev.device()->capabilities()) << " ";
+    s << "dev. name: " << ev.device()->name() << " ";
+#endif
 
     return string;
 }
@@ -175,6 +178,17 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
     dumpMouseRelatedParams(s, ev);
 
     s << "delta: x: " << ev.angleDelta().x() << " y: " << ev.angleDelta().y() << " ";
+    s << "source: " << sourceToString(ev.source()) << " ";
+
+    QString phaseString;
+    QDebug(&phaseString) << ev.phase();
+    s << "phase: " << phaseString << " ";
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s << "dev. type: " << static_cast<int>(ev.device()->type()) << " ";
+    s << "dev. caps: " << static_cast<int>(ev.device()->capabilities()) << " ";
+    s << "dev. name: " << ev.device()->name() << " ";
+#endif
 
     return string;
 }
@@ -251,6 +265,46 @@ template <class Event>
 QString KisTabletDebugger::eventToString(const QTabletEvent &ev, const QString &prefix)
 {
     return tabletEventToString(ev, prefix);
+}
+
+QString KisTabletDebugger::eventToString(const QNativeGestureEvent &ev, const QString &prefix)
+{
+    const auto gestureTypeToString = [](Qt::NativeGestureType gestureType) -> const char* {
+        switch (gestureType) {
+        case Qt::BeginNativeGesture:
+            return "BeginNativeGesture";
+        case Qt::EndNativeGesture:
+            return "EndNativeGesture";
+        case Qt::PanNativeGesture:
+            return "PanNativeGesture";
+        case Qt::ZoomNativeGesture:
+            return "ZoomNativeGesture";
+        case Qt::SmartZoomNativeGesture:
+            return "SmartZoomNativeGesture";
+        case Qt::RotateNativeGesture:
+            return "RotateNativeGesture";
+        case Qt::SwipeNativeGesture:
+            return "SwipeNativeGesture";
+        default:
+            return "UnknownNativeGesture";
+        }
+    };
+
+    QString string;
+    QTextStream s(&string);
+    KisPortingUtils::setUtf8OnStream(s);
+
+    dumpBaseParams(s, ev, prefix);
+
+    s << gestureTypeToString(ev.gestureType()) << " "
+    << "value: " << ev.value() << " "
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 2, 0))
+    << "delta: " << ev.delta().x() << "," << ev.delta().y() << " "
+    << "fingerCount: " << ev.fingerCount() << " "
+#endif
+    ;
+
+    return string;
 }
 
 QString KisTabletDebugger::tabletDeviceToString(const QTabletEvent &event)

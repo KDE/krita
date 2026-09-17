@@ -344,6 +344,10 @@ set(kritaui_LIB_SRCS
     utils/KisRecentDocumentsModelWrapper.cpp
     utils/KisRecentFileIconCache.cpp
 
+    input/KisCanvasNavigationActionStrategy.cpp
+    input/KisCanvasNavigationActionStrategyNativeGesture.cpp
+    input/KisCanvasNavigationActionStrategyTouch.cpp
+    input/KisInputEventsEater.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -364,11 +368,13 @@ set(kritaui_LIB_SRCS
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
     input/kis_select_layer_action.cpp
+    input/KisTouchpadScrollShortcut.cpp
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
     input/kis_zoom_and_rotate_action.cpp
     input/KisCanvasOnlyAction.cpp
     input/KisTouchGestureAction.cpp
+    input/KisTouchHoldEventsPostponer.cpp
     input/KisInputProfileMigrator.cpp
 
     operations/kis_operation.cpp
@@ -410,6 +416,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     input/config/KisGestureSelector.cpp
+    input/config/KisNativeGestureSelector.cpp
     processing/fill_processing_visitor.cpp
     processing/KisEncloseAndFillProcessingVisitor.cpp
     canvas/kis_mirror_axis.cpp
@@ -777,6 +784,12 @@ if (QT_MAJOR_VERSION STREQUAL "6")
             Qt6::SvgWidgets
             KF6::ColorScheme
     )
+
+    set_source_files_properties(
+        input/kis_shortcut_matcher.cpp
+        PROPERTIES
+        INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
 endif()
 
 if (Mlt7_FOUND)

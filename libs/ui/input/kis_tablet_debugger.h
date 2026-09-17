@@ -18,16 +18,13 @@ public:
 
     void toggleDebugging();
     bool debugEnabled() const;
-    bool initializationDebugEnabled() const;
-    bool debugRawTabletValues() const;
-
-    bool shouldEatDriverShortcuts() const;
 
     QString eventToString(const QMouseEvent &ev, const QString &prefix);
     QString eventToString(const QKeyEvent &ev, const QString &prefix);
     QString eventToString(const QWheelEvent &ev, const QString &prefix);
     QString eventToString(const QTouchEvent &ev, const QString &prefix);
     QString eventToString(const QTabletEvent &ev, const QString &prefix);
+    QString eventToString(const QNativeGestureEvent &ev, const QString &prefix);
     QString eventToString(const QEvent &ev, const QString &prefix);
 
     static QString tabletDeviceToString(const QTabletEvent &event);

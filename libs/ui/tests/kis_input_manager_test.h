@@ -19,6 +19,15 @@ private Q_SLOTS:
     void testReleaseUnnecessaryModifiers();
     void testMouseMoves();
 
+    void testTouchMoves_data();
+    void testTouchMoves();
+
+    void testTouchHoldPostponer_data();
+    void testTouchHoldPostponer();
+
+    void testTouchOverriddenByTablet_data();
+    void testTouchOverriddenByTablet();
+
     void testIncrementalAverage();
 };
 

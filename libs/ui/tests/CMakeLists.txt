@@ -20,6 +20,7 @@ kis_add_tests(
     kis_shape_layer_test.cpp
     KisSafeDocumentLoaderTest.cpp
     KisSurfaceColorSpaceWrapperTest.cpp
+    KisInputProfileManagerTest.cpp
 
     LINK_LIBRARIES kritaui kritalibkis kritatestsdk
     )
@@ -80,6 +81,12 @@ kis_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
 kis_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.cpp
     TEST_NAME KisNodeJugglerCompressedTest
     LINK_LIBRARIES kritaui kritatestsdk
+    )
+
+set_source_files_properties(
+    kis_input_manager_test.cpp
+    PROPERTIES
+    INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
     )
 
 kis_add_test(

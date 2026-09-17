@@ -1011,7 +1011,8 @@ void KisMainWindow::customizeTabBar()
     QString tabStyleSheet = QStringLiteral(R"(
             QTabBar::close-button {
                 image: url(%1);
-                padding-top: 3px;
+                padding: 1.5px;
+                border-radius: 3px;
             }
             QTabBar::close-button:hover {
                 background-color: %2;

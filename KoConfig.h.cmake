@@ -58,5 +58,11 @@
 /* Defines if KCrash is present */
 #cmakedefine HAVE_KCRASH 1
 
+/* Defines if X11 libraries are present */
+#cmakedefine HAVE_X11 1
+
+/* Defines if Wayland support is present in Qt */
+#cmakedefine HAVE_WAYLAND 1
+
 /* This variable contains the path to the root of the build directory */
 #define KRITA_BUILD_DIR "${CMAKE_BINARY_DIR}"

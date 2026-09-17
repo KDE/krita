@@ -17,6 +17,7 @@
 #include <kis_icon.h>
 #include <ksharedconfig.h>
 #include <KisKineticScroller.h>
+#include <KoConfig.h>
 
 #include <QtDebug>
 #include <QContextMenuEvent>

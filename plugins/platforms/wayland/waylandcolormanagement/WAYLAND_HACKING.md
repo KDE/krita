@@ -129,3 +129,85 @@ KRITA_FORCE_WAYLAND_INTERFACES=wp_color_manager_v1
 ```
 
 Note: The extension will **NOT** function properly if you do this.
+
+# Troubleshooting
+
+## Window placement and popup positioning on Wayland
+
+On Wayland toplevel windows **do not know** their position on screen. They use a fake
+global coordinate system, where the window is "pinned" to the toplevel corner of the
+current screen. I.e. in a single-monitor setup, the global position of any toplevel
+window will always be (0,0). And on dual-monitor setup with FullHD displays, the position
+of a window will always be (0,0) when placed on the left screen, and (1920, 0)
+when placed on the right screen.
+
+This means that we cannot manually position `Qt::Popup` and `Qt::ToolTip` windows on
+screen. The calls to `widget->move()` will work in this parent-related fake coordinate
+system, not related to the actual position on screen.
+
+The proper way to acheve that on Wayland is to use `xdg_positioner` interface. Which
+is (surprise!) not available in the public Qt's API. Here is how to do that with the
+private API:
+
+```cpp
+
+// for HAVE_WAYLAND
+#include <KoConfig.h>
+
+#ifdef HAVE_WAYLAND
+#include <QtWaylandClient/private/qwaylandwindow_p.h>
+#endif
+
+QPoint gpos = somePreferredPointInGlobalCoordinates;
+const QSize size = somePreferredSizeOfThePopup;
+
+// resize **must** come before `setParentControlGeometry()`, otherwise
+// compositor will place the window incorrectly!
+resize(size);
+
+// make sure that all the platform-specific structures for the window
+// are created (i.e. QWaylandWindow) before trying to request them
+// via `windowHandle()->handle()`
+create();
+
+#ifdef HAVE_WAYLAND
+
+if (auto waylandWindow =
+    dynamic_cast<QNativeInterface::Private::QWaylandWindow *>(windowHandle()->handle())) {
+
+    // the positioner rect is measured in the coordinates of the nearest
+    // native parent window
+    const QPoint parentPos = parentWidget()->window()->mapFromGlobal(gpos);
+    QRect gravityRect(parentPos.x() - 20, parentPos.y() - 20, 40, 40);
+    waylandWindow->setParentControlGeometry(gravityRect);
+    waylandWindow->setExtendedWindowType(QNativeInterface::Private::QWaylandWindow::ToolTip);
+
+} else
+
+#endif /* HAVE_WAYLAND */
+
+{
+    QScreen *screen = widget->screen();
+    const QRect availableRect = screen->availableGeometry();
+
+    QRect newRect(gpos, size);
+    newSize = kisEnsureInRect(newRect, availableGeometry);
+
+    move(newSize.topLeft());
+}
+
+```
+
+In the corresponding CMakeLists.txt you should also add the private include
+directories path to this compilation unit:
+
+```cmake
+if (HAVE_WAYLAND)
+    set_source_files_properties(
+        KoItemToolTip.cpp
+        PROPERTIES
+        INCLUDE_DIRECTORIES
+        "${Qt6WaylandGlobalPrivate_INCLUDE_DIRS};${Qt6WaylandClient_PRIVATE_INCLUDE_DIRS};${Qt6Gui_PRIVATE_INCLUDE_DIRS}"
+    )
+endif()
+```

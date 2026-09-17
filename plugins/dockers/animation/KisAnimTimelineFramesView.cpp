@@ -80,6 +80,7 @@ struct KisAnimTimelineFramesView::Private
         , modifiersCatcher(0)
         , kineticScrollInfiniteFrameUpdater()
         , selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
+        , tip(_q)
     {
         kineticScrollInfiniteFrameUpdater.setTimerType(Qt::CoarseTimer);
     }
@@ -1012,7 +1013,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 #endif
             option.rect = visualRect(index);
             // The offset of the headers is needed to get the correct position inside the view.
-            m_d->tip.showTip(this, event->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
+            m_d->tip.showTip(event->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
         }
         event->accept();
         
@@ -1090,7 +1091,7 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 #endif
             option.rect = visualRect(index);
             // The offset of the headers is needed to get the correct position inside the view.
-            m_d->tip.showTip(this, e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
+            m_d->tip.showTip(e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
         }
 
         e->accept();

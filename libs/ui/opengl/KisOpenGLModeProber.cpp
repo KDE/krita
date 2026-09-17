@@ -13,6 +13,7 @@
 #include <QOpenGLFunctions>
 #include <QWindow>
 #include <QColorSpace>
+#include <KoConfig.h>
 
 #ifdef HAVE_HDR
 // for fetching the legacy 80-nits PQ space

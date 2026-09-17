@@ -7,6 +7,8 @@
 #ifndef __KIS_THREADED_TEXT_RENDERING_WORKAROUND_H
 #define __KIS_THREADED_TEXT_RENDERING_WORKAROUND_H
 
+#include <KoConfig.h>
+
 /**
  * There is a bug in Qt/X11 which prevents the QPainter::drawText() call
  * be used in any non-gui thread, even when

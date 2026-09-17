@@ -19,6 +19,7 @@
 
 KisResourceItemView::KisResourceItemView(QWidget *parent)
     : QTableView(parent)
+    , m_tip(this)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
     verticalHeader()->hide();
@@ -50,7 +51,7 @@ bool KisResourceItemView::viewportEvent(QEvent *event)
         QModelIndex index = model()->buddy(indexAt(he->pos()));
         if (index.isValid()) {
             option.rect = visualRect(index);
-            m_tip.showTip(this, he->pos(), option, index);
+            m_tip.showTip(he->pos(), option, index);
             return true;
         }
     }

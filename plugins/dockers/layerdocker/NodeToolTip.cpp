@@ -15,7 +15,8 @@
 #include <kis_base_node.h>
 #include <kis_layer_properties_icons.h>
 
-NodeToolTip::NodeToolTip()
+NodeToolTip::NodeToolTip(QWidget *widget)
+    : KoItemToolTip(widget)
 {
 }
 

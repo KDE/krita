@@ -924,14 +924,11 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
         PURPOSE "Optionally used to provide crash reporting on Linux")
 
     find_package(X11 REQUIRED COMPONENTS Xinput)
-    set(HAVE_X11 TRUE)
-    add_definitions(-DHAVE_X11)
-
 else()
     set(HAVE_DBUS FALSE)
-    set(HAVE_X11 FALSE)
 endif()
 
+set (HAVE_X11 ${X11_FOUND})
 
 add_definitions(
   -DQT_USE_QSTRINGBUILDER

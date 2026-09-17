@@ -19,7 +19,7 @@ class KRITARESOURCEWIDGETS_EXPORT KisIconToolTip: public KoItemToolTip
 {
 
 public:
-    KisIconToolTip();
+    KisIconToolTip(QWidget *parent);
     ~KisIconToolTip() override;
 
     void setFixedToolTipThumbnailSize(const QSize &size);

@@ -1,12 +1,14 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2017 Scott Petrovic <scottpetrovic@gmail.com>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_painting_assistants_decoration.h"
 
+#include <optional>
 #include <cstdint>
 #include <limits>
 
@@ -22,13 +24,24 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_icon_utils.h"
 #include "KisViewManager.h"
+#include <KoColor.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include "kis_tool_proxy.h"
 #include <KoColorDisplayRendererInterface.h>
 
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
+
+#include "kis_temporary_paint_constraint.h"
+
+namespace {
+bool hasLockedValidTemporaryConstraint(const std::optional<KisTemporaryPaintConstraint> &constraint)
+{
+    return constraint && constraint->isLocked() && constraint->hasValidLine();
+}
+}
 
 struct KisPaintingAssistantsDecoration::Private {
     Private()
@@ -52,6 +65,9 @@ struct KisPaintingAssistantsDecoration::Private {
     int m_handleSize; // size of editor handles on assistants
 
     KisCanvas2 * m_canvas = 0;
+    std::optional<KisTemporaryPaintConstraint> temporaryConstraint;
+    QPointF temporaryAdjustedBrushPosition;
+    bool hasTemporaryAdjustedBrushPosition = false;
 };
 
 
@@ -76,7 +92,7 @@ KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
 
 void KisPaintingAssistantsDecoration::slotUpdateDecorationVisibility()
 {
-    const bool shouldBeVisible = !assistants().isEmpty();
+    const bool shouldBeVisible = !assistants().isEmpty() || d->temporaryConstraint.has_value();
 
     if (visible() != shouldBeVisible) {
         setVisible(shouldBeVisible);
@@ -102,7 +118,7 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
     assistant->setAssistantGlobalColorCache(view()->document()->assistantsGlobalColor());
 
     view()->document()->setAssistants(assistants);
-    setVisible(!assistants.isEmpty());
+    slotUpdateDecorationVisibility();
     Q_EMIT assistantChanged();
 }
 
@@ -116,7 +132,7 @@ void KisPaintingAssistantsDecoration::raiseAssistant(KisPaintingAssistantSP assi
     assistants.append(assistant);
 
     view()->document()->setAssistants(assistants);
-    setVisible(!assistants.isEmpty());
+    slotUpdateDecorationVisibility();
     Q_EMIT assistantChanged();
 
 }
@@ -128,7 +144,7 @@ void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistantSP ass
 
     if (assistants.removeAll(assistant)) {
         view()->document()->setAssistants(assistants);
-        setVisible(!assistants.isEmpty());
+        slotUpdateDecorationVisibility();
         Q_EMIT assistantChanged();
     }
 }
@@ -138,7 +154,7 @@ void KisPaintingAssistantsDecoration::removeAll()
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
     assistants.clear();
     view()->document()->setAssistants(assistants);
-    setVisible(!assistants.isEmpty());
+    slotUpdateDecorationVisibility();
 
     Q_EMIT assistantChanged();
 }
@@ -149,13 +165,22 @@ void KisPaintingAssistantsDecoration::setAssistants(const QList<KisPaintingAssis
         assistant->setAssistantGlobalColorCache(view()->document()->assistantsGlobalColor());
     }
     view()->document()->setAssistants(assistants);
-    setVisible(!assistants.isEmpty());
+    slotUpdateDecorationVisibility();
 
     Q_EMIT assistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::setAdjustedBrushPosition(const QPointF position)
 {
+    if (hasLockedValidTemporaryConstraint(d->temporaryConstraint)) {
+        d->temporaryAdjustedBrushPosition = position;
+        d->hasTemporaryAdjustedBrushPosition = true;
+
+        if (d->m_canvas) {
+            d->m_canvas->updateCanvasDecorations();
+        }
+    }
+
     if (!assistants().empty()) {
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
             assistant->setAdjustedBrushPosition(position);
@@ -166,9 +191,16 @@ void KisPaintingAssistantsDecoration::setAdjustedBrushPosition(const QPointF pos
 
 QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
-
-    if (assistants().empty()) {
+    if (assistants().empty() && !hasLockedValidTemporaryConstraint(d->temporaryConstraint)) {
         // No assistants, so no adjustment
+        return point;
+    }
+
+    if (!d->m_canvas && view()) {
+        d->m_canvas = view()->canvasBase();
+    }
+
+    if (!d->m_canvas) {
         return point;
     }
 
@@ -183,6 +215,10 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 
     const KisCoordinatesConverter *converter = d->m_canvas->coordinatesConverter();
     const qreal moveThresholdPt = 4.0 / (converter->effectiveZoom() * qMax(image->xRes(), image->yRes()));
+
+    if (hasLockedValidTemporaryConstraint(d->temporaryConstraint)) {
+        return d->temporaryConstraint->adjustPosition(point, strokeBegin, false, 0.0);
+    }
 
     QPointF best = point;
     qreal minSquareDistance = std::numeric_limits<qreal>::max();
@@ -301,16 +337,42 @@ void KisPaintingAssistantsDecoration::endStroke()
     }
 }
 
-void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas)
+void KisPaintingAssistantsDecoration::setTemporaryConstraint(std::optional<KisTemporaryPaintConstraint> constraint)
 {
-    if(assistants().isEmpty()) {
-        return; // no assistants to worry about, ok to exit
+    const bool hadTemporaryConstraint = d->temporaryConstraint.has_value();
+    d->temporaryConstraint = constraint;
+    const bool hasTemporaryConstraint = d->temporaryConstraint.has_value();
+
+    if (!hasLockedValidTemporaryConstraint(d->temporaryConstraint)) {
+        d->hasTemporaryAdjustedBrushPosition = false;
     }
 
+    if (hadTemporaryConstraint != hasTemporaryConstraint) {
+        Q_EMIT temporaryConstraintAvailabilityChanged();
+    }
+
+    slotUpdateDecorationVisibility();
+
+    if (d->m_canvas) {
+        d->m_canvas->updateCanvasDecorations();
+    }
+}
+
+std::optional<KisTemporaryPaintConstraint> KisPaintingAssistantsDecoration::temporaryConstraint() const
+{
+    return d->temporaryConstraint;
+}
+
+void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas)
+{
     if (!canvas) {
         dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
     } else {
         d->m_canvas = canvas;
+    }
+
+    if(assistants().isEmpty() && !d->temporaryConstraint) {
+        return; // no assistants to worry about, ok to exit
     }
 
     // the preview functionality for assistants. do not show while editing
@@ -324,6 +386,70 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
         outlineVisibility() &&
         !d->m_isEditingAssistants &&
         kritaProxy->supportsPaintingAssistants();
+
+    if (outlineVisible && d->temporaryConstraint && d->temporaryConstraint->hasLine()) {
+        gc.save();
+        gc.resetTransform();
+        gc.setRenderHint(QPainter::Antialiasing, true);
+
+        QTransform initialTransform = converter->documentToWidgetTransform();
+        QPointF p1 = initialTransform.map(d->temporaryConstraint->lineAnchor());
+        QPointF p2 = initialTransform.map(d->temporaryConstraint->lineSecondPoint());
+
+        QColor color = globalAssistantsColor();
+        color.setAlpha(180);
+        QPen pen(canvas->displayRendererInterface()->convertColorToDisplayColorSpace(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())), 1);
+        pen.setCosmetic(true);
+        gc.setPen(pen);
+
+        if (!d->temporaryConstraint->isLocked()) {
+            QPen anchorOutlinePen(QColor(0, 0, 0, 180), 1.0);
+            anchorOutlinePen.setCosmetic(true);
+            gc.setPen(anchorOutlinePen);
+            gc.setBrush(Qt::NoBrush);
+            gc.drawEllipse(p1, 4.0, 4.0);
+
+            QPen anchorPen(canvas->displayRendererInterface()->convertColorToDisplayColorSpace(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())), 1.0);
+            anchorPen.setCosmetic(true);
+            gc.setPen(anchorPen);
+            gc.drawLine(p1 + QPointF(-6.0, 0.0), p1 + QPointF(6.0, 0.0));
+            gc.drawLine(p1 + QPointF(0.0, -6.0), p1 + QPointF(0.0, 6.0));
+        }
+
+        gc.setPen(pen);
+        if (KisAlgebra2D::normSquared(p1 - p2) > 1e-6) {
+            QLineF snapLine(p1, p2);
+            KisAlgebra2D::intersectLineRect(snapLine, gc.viewport(), true);
+
+            QPainterPath path;
+            path.moveTo(snapLine.p1());
+            path.lineTo(snapLine.p2());
+            gc.drawPath(path);
+        }
+
+        if (d->temporaryConstraint) {
+            const QPointF markerDocPos =
+                d->hasTemporaryAdjustedBrushPosition ?
+                    d->temporaryAdjustedBrushPosition :
+                    d->temporaryConstraint->lineSecondPoint();
+
+            const QPointF brushPos = initialTransform.map(markerDocPos);
+            const qreal markerRadius = 9.0;
+
+            QPen markerOutlinePen(QColor(0, 0, 0, 190), 1.0);
+            markerOutlinePen.setCosmetic(true);
+            gc.setPen(markerOutlinePen);
+            gc.setBrush(Qt::NoBrush);
+            gc.drawEllipse(brushPos, markerRadius, markerRadius);
+
+            QPen markerPen(canvas->displayRendererInterface()->convertColorToDisplayColorSpace(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())), 1.0);
+            markerPen.setCosmetic(true);
+            gc.setPen(markerPen);
+            gc.drawEllipse(brushPos, markerRadius - 2.0, markerRadius - 2.0);
+        }
+        gc.restore();
+    }
+
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->drawAssistant(gc, updateRect, converter, canvas->displayRendererInterface(), d->useCache, canvas, assistantVisibility(), outlineVisible);
@@ -422,7 +548,7 @@ QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants() cons
 
 bool KisPaintingAssistantsDecoration::hasPaintableAssistants() const
 {
-    return !assistants().isEmpty();
+    return !assistants().isEmpty() || hasLockedValidTemporaryConstraint(d->temporaryConstraint);
 }
 
 KisPaintingAssistantSP KisPaintingAssistantsDecoration::selectedAssistant()

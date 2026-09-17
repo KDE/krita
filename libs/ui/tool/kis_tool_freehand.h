@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2003-2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,6 +11,8 @@
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_distance_information.h>
+
+#include <Qt>
 
 #include "kis_types.h"
 #include "kis_tool_paint.h"
@@ -94,6 +97,10 @@ private:
      * if available.
      */
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    void updateTemporaryStraightRulerPreview(const QPointF &documentPoint, Qt::KeyboardModifiers modifiers);
+    void lockTemporaryStraightRuler(const QPointF &documentPoint, Qt::KeyboardModifiers modifiers);
+    bool temporaryStraightRulerActive() const;
+    QPointF temporaryStraightRulerOutlinePosition(const QPointF &documentPoint);
 
     /**
      * Calculates a coefficient for KisPaintInformation

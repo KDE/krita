@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1209,8 +1210,14 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
     if (goodCandidate) {
         if (m_d->readyShortcut) {
             if (m_d->readyShortcut != goodCandidate) {
-                m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
-                goodCandidate->action()->activate(goodCandidate->shortcutIndex());
+                if (goodCandidate->action() == m_d->readyShortcut->action() &&
+                    goodCandidate->action()->trySwitchShortcut(
+                        m_d->readyShortcut->shortcutIndex(), goodCandidate->shortcutIndex())) {
+                    m_d->readyShortcut = goodCandidate;
+                } else {
+                    m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
+                    goodCandidate->action()->activate(goodCandidate->shortcutIndex());
+                }
             }
             m_d->readyShortcut = 0;
         } else {
@@ -1250,9 +1257,16 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
 
     if (goodCandidate) {
         if (m_d->readyShortcut && m_d->readyShortcut != goodCandidate) {
-            DEBUG_SHORTCUT("Deactivated previous shortcut action", m_d->readyShortcut);
-            m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
-            m_d->readyShortcut = 0;
+            if (goodCandidate->action() == m_d->readyShortcut->action() &&
+                goodCandidate->action()->trySwitchShortcut(
+                    m_d->readyShortcut->shortcutIndex(), goodCandidate->shortcutIndex())) {
+                DEBUG_SHORTCUT("Switched previous shortcut action", m_d->readyShortcut);
+                m_d->readyShortcut = goodCandidate;
+            } else {
+                DEBUG_SHORTCUT("Deactivated previous shortcut action", m_d->readyShortcut);
+                m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
+                m_d->readyShortcut = 0;
+            }
         }
 
         if (!m_d->readyShortcut) {
@@ -1294,8 +1308,23 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
             DEBUG_EVENT_ACTION("Ending running shortcut at event", event);
             KisAbstractInputAction* action = runningShortcut->action();
             int shortcutIndex = runningShortcut->shortcutIndex();
+
+            // Keep keyed stroke shortcuts in ready state between repeated
+            // button strokes while their activation keys are still held.
+            QSet<Qt::MouseButton> buttonsAfterRelease = m_d->buttons;
+            buttonsAfterRelease.remove(button);
+            const bool keepReadyShortcut =
+                !m_d->keys.isEmpty() &&
+                runningShortcut->isAvailable(m_d->actionGroupMask()) &&
+                runningShortcut->matchReady(m_d->keys, buttonsAfterRelease);
+
             action->end(event);
-            action->deactivate(shortcutIndex);
+
+            if (keepReadyShortcut) {
+                m_d->readyShortcut = runningShortcut;
+            } else {
+                action->deactivate(shortcutIndex);
+            }
         }
     }
 

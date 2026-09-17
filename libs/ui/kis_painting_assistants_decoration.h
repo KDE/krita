@@ -1,12 +1,15 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2017 Scott Petrovic <scottpetrovic@gmail.com>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef _KIS_PAINTING_ASSISTANTS_MANAGER_H_
 #define _KIS_PAINTING_ASSISTANTS_MANAGER_H_
+
+#include <optional>
 
 #include <QPointF>
 #include <QColor>
@@ -16,6 +19,7 @@
 #include "kis_icon_utils.h"
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_painting_assistant.h"
+#include "kis_temporary_paint_constraint.h"
 #include <kritaui_export.h>
 
 class KisView;
@@ -86,6 +90,8 @@ public:
     void adjustLine(QPointF &point, QPointF& strokeBegin);
     void setAdjustedBrushPosition(const QPointF position);
     void endStroke();
+    void setTemporaryConstraint(std::optional<KisTemporaryPaintConstraint> constraint);
+    std::optional<KisTemporaryPaintConstraint> temporaryConstraint() const;
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants() const;
     //store the editor data to be used to control the render/interaction of the editor widget.
@@ -144,6 +150,7 @@ public:
 Q_SIGNALS:
     void assistantChanged();
     void selectedAssistantChanged();
+    void temporaryConstraintAvailabilityChanged();
 
 public Q_SLOTS:
 

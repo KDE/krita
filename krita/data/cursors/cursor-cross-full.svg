@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com> -->
+<!-- SPDX-License-Identifier: CC0-1.0 -->
+<svg width="31" height="31" version="1.1" viewBox="0 0 31 31" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke-linecap="square">
+    <path d="M15.5 1.5v28M1.5 15.5h28" stroke="#fff" stroke-width="3"/>
+    <path d="M15.5 1.5v28M1.5 15.5h28" stroke="#000" stroke-width="1"/>
+  </g>
+</svg>

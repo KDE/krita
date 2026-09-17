@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +19,12 @@ private Q_SLOTS:
     void testKeyEvents();
     void testReleaseUnnecessaryModifiers();
     void testMouseMoves();
+    void testStrokeShortcutSwitchFallback();
+    void testStrokeShortcutSwitchModes();
+    void testStrokeShortcutModifierFirstMode();
+    void testRunReadyShortcutSwitch();
+    void testKeyedStrokeLifecycle();
+    void testStrokeShortcutCleanup();
 
     void testTouchMoves_data();
     void testTouchMoves();

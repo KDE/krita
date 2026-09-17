@@ -801,6 +801,11 @@ QPointer<KisToolProxy> KisInputManager::toolProxy() const
     return d->toolProxy;
 }
 
+KisToolInvocationAction *KisInputManager::defaultInputAction() const
+{
+    return d->defaultInputAction;
+}
+
 void KisInputManager::slotAboutToChangeTool()
 {
     QPointF currentLocalPos;

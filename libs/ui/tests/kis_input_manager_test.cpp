@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -91,6 +92,8 @@ struct TestingAction : public KisAbstractInputAction
         m_state = Activated;
 
         m_activatedShortcut = shortcut;
+        m_activateIndex = shortcut;
+        m_activateCount++;
     }
 
     void deactivate(int shortcut) override
@@ -100,6 +103,8 @@ struct TestingAction : public KisAbstractInputAction
         m_state = Deactivated;
 
         m_activatedShortcut = -1;
+        m_deactivateIndex = shortcut;
+        m_deactivateCount++;
     }
 
     void begin(int shortcut, QEvent *event) override {
@@ -112,6 +117,7 @@ struct TestingAction : public KisAbstractInputAction
 
         m_beginIndex = shortcut;
         m_begunIndexes.append(shortcut);
+        m_beginCount++;
         m_beginNonNull = event;
 
         m_inputEventCount++;
@@ -120,6 +126,7 @@ struct TestingAction : public KisAbstractInputAction
         KIS_ASSERT(m_state == Running);
         m_state = m_stateBeforeRunning;
         m_endedIndexes.append(m_beginIndex);
+        m_endCount++;
 
         m_ended = true; m_endNonNull = event;
 
@@ -130,13 +137,24 @@ struct TestingAction : public KisAbstractInputAction
 
         Q_UNUSED(event);
         m_gotInput = true;
+        m_inputCount++;
 
         m_inputEventCount++;
     }
+    int priority() const override { return m_priority; }
+    bool canIgnoreModifiers() const override { return m_canIgnoreModifiers; }
+    KisInputActionGroup inputActionGroup(int shortcut) const override { Q_UNUSED(shortcut); return m_inputActionGroup; }
 
     void reset() {
+        m_activateIndex = -1;
+        m_deactivateIndex = -1;
         m_beginIndex = -1;
         m_begunIndexes.clear();
+        m_activateCount = 0;
+        m_deactivateCount = 0;
+        m_beginCount = 0;
+        m_endCount = 0;
+        m_inputCount = 0;
         m_ended = false;
         m_gotInput = false;
         m_inputEventCount = 0;
@@ -153,7 +171,14 @@ struct TestingAction : public KisAbstractInputAction
     }
 
     int m_activatedShortcut = -1;
+    int m_activateIndex;
+    int m_deactivateIndex;
     int m_beginIndex;
+    int m_activateCount;
+    int m_deactivateCount;
+    int m_beginCount;
+    int m_endCount;
+    int m_inputCount;
     bool m_ended;
     bool m_gotInput;
     bool m_beginNonNull;
@@ -165,6 +190,49 @@ struct TestingAction : public KisAbstractInputAction
     QList<int> m_begunIndexes;
     QList<int> m_endedIndexes;
     int m_inputEventCount = 0;
+    bool m_canIgnoreModifiers = false;
+    int m_priority = 0;
+    KisInputActionGroup m_inputActionGroup = ModifyingActionGroup;
+};
+
+struct SwitchableTestingAction : public TestingAction
+{
+    void activate(int shortcut) override
+    {
+        TestingAction::activate(shortcut);
+        m_mode = shortcut;
+        m_interactionState = 1;
+    }
+
+    void deactivate(int shortcut) override
+    {
+        TestingAction::deactivate(shortcut);
+        m_interactionState = 0;
+    }
+
+    bool trySwitchShortcut(int oldShortcut, int newShortcut) override
+    {
+        m_switchCount++;
+        m_oldShortcut = oldShortcut;
+        m_newShortcut = newShortcut;
+
+        if (!m_acceptSwitches) {
+            return false;
+        }
+
+        KIS_ASSERT(m_state == Activated);
+        KIS_ASSERT(m_activatedShortcut == oldShortcut);
+        m_activatedShortcut = newShortcut;
+        m_mode = newShortcut;
+        return true;
+    }
+
+    int m_switchCount = 0;
+    int m_oldShortcut = -1;
+    int m_newShortcut = -1;
+    bool m_acceptSwitches = true;
+    int m_mode = -1;
+    int m_interactionState = 0;
 };
 
 KisSingleActionShortcut* createKeyShortcut(KisAbstractInputAction *action,
@@ -1451,6 +1519,279 @@ void KisInputManagerTest::testTouchOverriddenByTablet()
 
     QCOMPARE(a->m_begunIndexes, triggeredShortcuts);
     QCOMPARE(a->m_endedIndexes, triggeredShortcuts);
+}
+
+void KisInputManagerTest::testStrokeShortcutSwitchFallback()
+{
+    constexpr int normalShortcut = 0;
+    constexpr int snappedShortcut = 1;
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    TestingAction *normalAction = new TestingAction();
+    TestingAction *snappedAction = new TestingAction();
+
+    m.addShortcut(
+        createStrokeShortcut(normalAction, normalShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::LeftButton));
+    m.addShortcut(
+        createStrokeShortcut(snappedAction, snappedShortcut,
+                             QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_V,
+                             Qt::LeftButton));
+
+    QVERIFY(!normalAction->trySwitchShortcut(normalShortcut, snappedShortcut));
+
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(normalAction->m_activateCount, 1);
+    QCOMPARE(normalAction->m_deactivateCount, 0);
+
+    QVERIFY(!m.keyPressed(Qt::Key_Shift));
+    QCOMPARE(normalAction->m_deactivateCount, 1);
+    QCOMPARE(normalAction->m_deactivateIndex, normalShortcut);
+    QCOMPARE(snappedAction->m_activateCount, 1);
+    QCOMPARE(snappedAction->m_activateIndex, snappedShortcut);
+
+    QVERIFY(!m.keyReleased(Qt::Key_Shift));
+    QCOMPARE(snappedAction->m_deactivateCount, 1);
+    QCOMPARE(snappedAction->m_deactivateIndex, snappedShortcut);
+    QCOMPARE(normalAction->m_activateCount, 2);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
+    QCOMPARE(normalAction->m_deactivateCount, 2);
+}
+
+void KisInputManagerTest::testStrokeShortcutSwitchModes()
+{
+    constexpr int normalShortcut = 0;
+    constexpr int snappedShortcut = 1;
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    SwitchableTestingAction *action = new SwitchableTestingAction();
+
+    m.addShortcut(
+        createStrokeShortcut(action, normalShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::LeftButton));
+    m.addShortcut(
+        createStrokeShortcut(action, snappedShortcut,
+                             QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_V,
+                             Qt::LeftButton));
+
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_mode, normalShortcut);
+    QCOMPARE(action->m_interactionState, 1);
+
+    QVERIFY(!m.keyPressed(Qt::Key_Shift));
+    QCOMPARE(action->m_switchCount, 1);
+    QCOMPARE(action->m_oldShortcut, normalShortcut);
+    QCOMPARE(action->m_newShortcut, snappedShortcut);
+    QCOMPARE(action->m_mode, snappedShortcut);
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_deactivateCount, 0);
+    QCOMPARE(action->m_interactionState, 1);
+
+    QVERIFY(!m.keyReleased(Qt::Key_Shift));
+    QCOMPARE(action->m_switchCount, 2);
+    QCOMPARE(action->m_oldShortcut, snappedShortcut);
+    QCOMPARE(action->m_newShortcut, normalShortcut);
+    QCOMPARE(action->m_mode, normalShortcut);
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_deactivateCount, 0);
+    QCOMPARE(action->m_interactionState, 1);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
+    QCOMPARE(action->m_deactivateCount, 1);
+    QCOMPARE(action->m_deactivateIndex, normalShortcut);
+    QCOMPARE(action->m_interactionState, 0);
+}
+
+void KisInputManagerTest::testStrokeShortcutModifierFirstMode()
+{
+    constexpr int normalShortcut = 0;
+    constexpr int snappedShortcut = 1;
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    SwitchableTestingAction *action = new SwitchableTestingAction();
+    m.addShortcut(
+        createStrokeShortcut(action, normalShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::LeftButton));
+    m.addShortcut(
+        createStrokeShortcut(action, snappedShortcut,
+                             QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_V,
+                             Qt::LeftButton));
+
+    QVERIFY(!m.keyPressed(Qt::Key_Shift));
+    QCOMPARE(action->m_activateCount, 0);
+
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_activateIndex, snappedShortcut);
+    QCOMPARE(action->m_mode, snappedShortcut);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
+    QCOMPARE(action->m_deactivateCount, 1);
+    QCOMPARE(action->m_deactivateIndex, snappedShortcut);
+    QVERIFY(!m.keyReleased(Qt::Key_Shift));
+}
+
+void KisInputManagerTest::testRunReadyShortcutSwitch()
+{
+    constexpr int normalShortcut = 0;
+    constexpr int snappedShortcut = 1;
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    SwitchableTestingAction *action = new SwitchableTestingAction();
+
+    m.addShortcut(
+        createStrokeShortcut(action, normalShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::LeftButton));
+    m.addShortcut(
+        createStrokeShortcut(action, snappedShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::RightButton));
+
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPoint(),
+                           Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(),
+                             Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_activateIndex, normalShortcut);
+
+    QVERIFY(m.buttonPressed(Qt::RightButton, &pressEvent));
+    QCOMPARE(action->m_switchCount, 1);
+    QCOMPARE(action->m_oldShortcut, normalShortcut);
+    QCOMPARE(action->m_newShortcut, snappedShortcut);
+    QCOMPARE(action->m_mode, snappedShortcut);
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_deactivateCount, 0);
+    QCOMPARE(action->m_beginCount, 1);
+    QCOMPARE(action->m_beginIndex, snappedShortcut);
+    QCOMPARE(action->m_interactionState, 1);
+
+    QVERIFY(m.buttonReleased(Qt::RightButton, &releaseEvent));
+    QCOMPARE(action->m_endCount, 1);
+    QCOMPARE(action->m_switchCount, 2);
+    QCOMPARE(action->m_oldShortcut, snappedShortcut);
+    QCOMPARE(action->m_newShortcut, normalShortcut);
+    QCOMPARE(action->m_mode, normalShortcut);
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_deactivateCount, 0);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
+    QCOMPARE(action->m_deactivateCount, 1);
+}
+
+void KisInputManagerTest::testKeyedStrokeLifecycle()
+{
+    constexpr int normalShortcut = 0;
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    SwitchableTestingAction *action = new SwitchableTestingAction();
+    m.addShortcut(
+        createStrokeShortcut(action, normalShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::LeftButton));
+
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPoint(),
+                           Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent moveEvent(QEvent::MouseMove, QPoint(10, 10),
+                          Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(10, 10),
+                             Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(action->m_activateCount, 1);
+
+    QVERIFY(m.buttonPressed(Qt::LeftButton, &pressEvent));
+    QCOMPARE(action->m_beginCount, 1);
+    QCOMPARE(action->m_beginIndex, normalShortcut);
+    QCOMPARE(action->m_beginNonNull, true);
+
+    QVERIFY(m.pointerMoved(&moveEvent));
+    QCOMPARE(action->m_inputCount, 1);
+
+    QVERIFY(m.buttonReleased(Qt::LeftButton, &releaseEvent));
+    QCOMPARE(action->m_endCount, 1);
+    QCOMPARE(action->m_endNonNull, true);
+    QCOMPARE(action->m_activateCount, 1);
+    QCOMPARE(action->m_deactivateCount, 0);
+    QCOMPARE(action->m_interactionState, 1);
+
+    QVERIFY(m.buttonPressed(Qt::LeftButton, &pressEvent));
+    QCOMPARE(action->m_beginCount, 2);
+    QCOMPARE(action->m_activateCount, 1);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
+    QCOMPARE(action->m_endCount, 1);
+    QCOMPARE(action->m_deactivateCount, 0);
+    QCOMPARE(action->m_interactionState, 1);
+
+    QVERIFY(m.buttonReleased(Qt::LeftButton, &releaseEvent));
+    QCOMPARE(action->m_endCount, 2);
+    QCOMPARE(action->m_deactivateCount, 1);
+    QCOMPARE(action->m_deactivateIndex, normalShortcut);
+    QCOMPARE(action->m_interactionState, 0);
+
+    QVERIFY(!m.buttonPressed(Qt::LeftButton, &pressEvent));
+    QCOMPARE(action->m_beginCount, 2);
+}
+
+void KisInputManagerTest::testStrokeShortcutCleanup()
+{
+    constexpr int normalShortcut = 0;
+
+    KisShortcutMatcher m;
+    m.enterEvent();
+
+    SwitchableTestingAction *action = new SwitchableTestingAction();
+    m.addShortcut(
+        createStrokeShortcut(action, normalShortcut,
+                             QSet<Qt::Key>() << Qt::Key_V,
+                             Qt::LeftButton));
+
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPoint(),
+                           Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(action->m_activateCount, 1);
+    m.leaveEvent();
+    QCOMPARE(action->m_deactivateCount, 1);
+    QCOMPARE(action->m_interactionState, 0);
+
+    m.enterEvent();
+    QCOMPARE(action->m_activateCount, 2);
+    QCOMPARE(action->m_interactionState, 1);
+    m.lostFocusEvent(QPointF());
+    QCOMPARE(action->m_deactivateCount, 2);
+    QCOMPARE(action->m_interactionState, 0);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
+    QVERIFY(!m.keyPressed(Qt::Key_V));
+    QCOMPARE(action->m_activateCount, 3);
+    QVERIFY(m.buttonPressed(Qt::LeftButton, &pressEvent));
+    QCOMPARE(action->m_beginCount, 1);
+
+    m.lostFocusEvent(QPointF(5, 5));
+    QCOMPARE(action->m_endCount, 1);
+    QCOMPARE(action->m_deactivateCount, 3);
+    QCOMPARE(action->m_interactionState, 0);
+
+    QVERIFY(!m.keyReleased(Qt::Key_V));
 }
 
 #include "../input/wintab/kis_incremental_average.h"

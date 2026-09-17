@@ -25,6 +25,7 @@
 #include "kis_rotate_canvas_action.h"
 #include "KisPopupWidgetAction.h"
 #include "kis_tool_invocation_action.h"
+#include "kis_temporary_straight_ruler_action.h"
 #include "kis_zoom_action.h"
 #include "kis_shortcut_configuration.h"
 #include "kis_select_layer_action.h"
@@ -472,6 +473,7 @@ void KisInputProfileManager::Private::createActions()
     //TODO: Make this plugin based
     //Note that the ordering here determines how things show up in the UI
     actions.append(new KisToolInvocationAction());
+    actions.append(new KisTemporaryStraightRulerAction());
     actions.append(new KisAlternateInvocationAction());
     actions.append(new KisChangePrimarySettingAction());
     actions.append(new KisPanAction());

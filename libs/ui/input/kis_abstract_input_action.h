@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,9 +8,9 @@
 #ifndef KIS_ABSTRACT_INPUT_ACTION_H
 #define KIS_ABSTRACT_INPUT_ACTION_H
 
+#include "kritaui_export.h"
 #include <QHash>
 #include <QPoint>
-#include "kritaui_export.h"
 
 #include "KisInputActionGroup.h"
 
@@ -72,6 +73,17 @@ public:
     virtual void deactivate(int shortcut);
 
     /**
+     * Switch the active shortcut mode without deactivating the action.
+     *
+     * Called when modifier keys change while the action is active. Override
+     * this to update action state in-place without resetting ongoing interaction.
+     *
+     * \return true if the switch was handled and the action remains active;
+     *         false to fall back to standard deactivate() / activate().
+     */
+    virtual bool trySwitchShortcut(int oldShortcut, int newShortcut);
+
+    /**
      * Begin the action.
      *
      * \param shortcut The index of the behaviour to trigger.
@@ -94,7 +106,7 @@ public:
      *
      * \param event An event to process.
      */
-    virtual void inputEvent(QEvent* event);
+    virtual void inputEvent(QEvent *event);
 
     /**
      * Returns true if the action can handle HiRes flow of move events
@@ -214,7 +226,7 @@ private:
     static void setInputManager(KisInputManager *manager);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_ABSTRACT_INPUT_ACTION_H

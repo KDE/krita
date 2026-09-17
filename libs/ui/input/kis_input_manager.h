@@ -17,6 +17,7 @@
 class QPointF;
 class QTouchEvent;
 class KisCanvas2;
+class KisToolInvocationAction;
 /**
  * \brief Central object to manage canvas input.
  *
@@ -93,6 +94,11 @@ public:
      * The tool proxy of the current application.
      */
     QPointer<KisToolProxy> toolProxy() const;
+
+    /**
+     * The built-in action that forwards primary strokes to the active tool.
+     */
+    KisToolInvocationAction *defaultInputAction() const;
 
 private Q_SLOTS:
     void slotAboutToChangeTool();

@@ -5,11 +5,13 @@
  *  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
  *  SPDX-FileCopyrightText: 2007, 2008, 2010 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2026 Ayanami Kaine <personal@ayanamikaine.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_freehand.h"
+#include <optional>
 #include <QPainter>
 #include <QRect>
 #include <QThreadPool>
@@ -52,6 +54,20 @@
 
 using namespace std::placeholders; // For _1 placeholder
 
+namespace {
+bool snapsTemporaryStraightRuler(const KisTemporaryPaintConstraint &constraint,
+                                 Qt::KeyboardModifiers modifiers)
+{
+    return constraint.interactionMode() == KisTemporaryPaintConstraint::InteractionMode::SnapToAngle ||
+        modifiers.testFlag(Qt::ShiftModifier);
+}
+
+bool hasLockedValidTemporaryStraightRuler(const std::optional<KisTemporaryPaintConstraint> &constraint)
+{
+    return constraint && constraint->isLocked() && constraint->hasValidLine();
+}
+}
+
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor,
                                  const KUndo2MagicString &transactionText, bool useSavedSmoothing)
@@ -78,6 +94,10 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor,
     connect(provider, SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
     connect(provider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(explicitUpdateOutline()));
     connect(provider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(resetCursorStyle()));
+
+    KisPaintingAssistantsDecorationSP decoration = qobject_cast<KisCanvas2*>(canvas)->paintingAssistantsDecoration();
+    connect(decoration.data(), SIGNAL(temporaryConstraintAvailabilityChanged()), SLOT(explicitUpdateOutline()));
+    connect(decoration.data(), SIGNAL(temporaryConstraintAvailabilityChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -88,8 +108,16 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *event)
 {
-    KisToolPaint::mouseMoveEvent(event);
     m_helper->cursorMoved(convertToPixelCoord(event));
+
+    if (temporaryStraightRulerActive()) {
+        if (mode() == HOVER_MODE) {
+            updateTemporaryStraightRulerPreview(event->point, event->modifiers());
+            requestUpdateOutline(temporaryStraightRulerOutlinePosition(event->point), event);
+        }
+    } else {
+        KisToolPaint::mouseMoveEvent(event);
+    }
 }
 
 KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
@@ -99,6 +127,11 @@ KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
 
 void KisToolFreehand::resetCursorStyle()
 {
+    if (temporaryStraightRulerActive()) {
+        useCursor(KisCursor::loadWithSize("cursor-cross-full.svg", 31, 31));
+        return;
+    }
+
     KisConfig cfg(true);
 
     bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
@@ -171,7 +204,89 @@ void KisToolFreehand::deactivate()
         endStroke();
         setMode(KisTool::HOVER_MODE);
     }
+    if (KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(canvas())) {
+        if (canvas2->paintingAssistantsDecoration()) {
+            canvas2->paintingAssistantsDecoration()->setTemporaryConstraint(std::nullopt);
+        }
+    }
     KisToolPaint::deactivate();
+}
+
+bool KisToolFreehand::temporaryStraightRulerActive() const
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(canvas());
+    return canvas2 &&
+        canvas2->paintingAssistantsDecoration() &&
+        canvas2->paintingAssistantsDecoration()->temporaryConstraint().has_value();
+}
+
+QPointF KisToolFreehand::temporaryStraightRulerOutlinePosition(const QPointF &documentPoint)
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(canvas());
+    if (!canvas2 ||
+        !canvas2->paintingAssistantsDecoration() ||
+        !hasLockedValidTemporaryStraightRuler(canvas2->paintingAssistantsDecoration()->temporaryConstraint())) {
+
+        return documentPoint;
+    }
+
+    return adjustPosition(documentPoint, documentPoint);
+}
+
+void KisToolFreehand::updateTemporaryStraightRulerPreview(const QPointF &documentPoint, Qt::KeyboardModifiers modifiers)
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(canvas());
+    if (!canvas2 || !canvas2->paintingAssistantsDecoration()) {
+        return;
+    }
+
+    std::optional<KisTemporaryPaintConstraint> constraint =
+        canvas2->paintingAssistantsDecoration()->temporaryConstraint();
+
+    if (!constraint || constraint->isLocked()) {
+        return;
+    }
+
+    if (!constraint->hasLine()) {
+        constraint->beginLine(documentPoint);
+    } else {
+        constraint->updateLine(documentPoint, snapsTemporaryStraightRuler(*constraint, modifiers));
+    }
+
+    canvas2->paintingAssistantsDecoration()->setTemporaryConstraint(constraint);
+}
+
+void KisToolFreehand::lockTemporaryStraightRuler(const QPointF &documentPoint, Qt::KeyboardModifiers modifiers)
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(canvas());
+    if (!canvas2 || !canvas2->paintingAssistantsDecoration()) {
+        return;
+    }
+
+    std::optional<KisTemporaryPaintConstraint> constraint =
+        canvas2->paintingAssistantsDecoration()->temporaryConstraint();
+
+    if (!constraint) {
+        return;
+    }
+
+    if (!constraint->hasLine()) {
+        return;
+    }
+
+    if (!constraint->isLocked()) {
+        constraint->updateLine(documentPoint, snapsTemporaryStraightRuler(*constraint, modifiers));
+    }
+
+    if (constraint->hasValidLine()) {
+        constraint->setLocked(true);
+    } else {
+        const KisTemporaryPaintConstraint::InteractionMode interactionMode = constraint->interactionMode();
+        constraint = KisTemporaryPaintConstraint();
+        constraint->setInteractionMode(interactionMode);
+    }
+
+    canvas2->paintingAssistantsDecoration()->setTemporaryConstraint(constraint);
 }
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
@@ -205,7 +320,9 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
     // FIXME: workaround for the Duplicate Op
     trySampleByPaintOp(event, SampleFgImage);
 
-    requestUpdateOutline(event->point, event);
+    lockTemporaryStraightRuler(event->point, event->modifiers());
+
+    requestUpdateOutline(temporaryStraightRulerOutlinePosition(event->point), event);
 
     NodePaintAbility paintability = nodePaintAbility();
     // XXX: move this to KisTool and make it work properly for clone layers: for clone layers, the shape paint tools don't work either
@@ -241,7 +358,7 @@ void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    requestUpdateOutline(event->point, event);
+    requestUpdateOutline(temporaryStraightRulerOutlinePosition(event->point), event);
 
     /**
      * Actual painting
@@ -446,8 +563,19 @@ void KisToolFreehand::slotDoResizeBrush(qreal newSize)
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
-    if (m_assistant && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
-        KisCanvas2* c = static_cast<KisCanvas2*>(canvas());
+    KisCanvas2* c = static_cast<KisCanvas2*>(canvas());
+    if (!c || !c->paintingAssistantsDecoration()) {
+        return point;
+    }
+
+    if (hasLockedValidTemporaryStraightRuler(c->paintingAssistantsDecoration()->temporaryConstraint())) {
+        c->paintingAssistantsDecoration()->setEraserSnap(m_eraser_snapping);
+        QPointF ap = c->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
+        c->paintingAssistantsDecoration()->setAdjustedBrushPosition(ap);
+        return ap;
+    }
+
+    if (m_assistant) {
         c->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(m_only_one_assistant);
         c->paintingAssistantsDecoration()->setEraserSnap(m_eraser_snapping);
         QPointF ap = c->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
@@ -487,6 +615,10 @@ KisOptimizedBrushOutline KisToolFreehand::getOutlinePath(const QPointF &document
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
+    if (temporaryStraightRulerActive()) {
+        return KisOptimizedBrushOutline();
+    }
+
     if (currentPaintOpPreset())
         return m_helper->paintOpOutline(convertToPixelCoord(documentPos),
                                         event,
@@ -495,5 +627,3 @@ KisOptimizedBrushOutline KisToolFreehand::getOutlinePath(const QPointF &document
     else
         return KisOptimizedBrushOutline();
 }
-
-

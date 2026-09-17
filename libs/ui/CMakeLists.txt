@@ -143,6 +143,7 @@ set(kritaui_LIB_SRCS
     KisLayerThumbnailCache.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
+    kis_temporary_paint_constraint.cpp
     kis_selection_actions_panel.cpp
     kis_selection_actions_panel_handle.cpp
     kis_selection_actions_panel_button.cpp
@@ -354,6 +355,7 @@ set(kritaui_LIB_SRCS
     input/KisExtendedModifiersMapperPluginInterface.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
+    input/kis_temporary_straight_ruler_action.cpp
     input/kis_pan_action.cpp
     input/kis_alternate_invocation_action.cpp
     input/kis_rotate_canvas_action.cpp

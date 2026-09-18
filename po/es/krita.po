@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-17 00:42+0000\n"
+"POT-Creation-Date: 2026-09-18 00:43+0000\n"
 "PO-Revision-Date: 2026-08-31 19:09+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -21976,7 +21976,7 @@ msgstr "Procesando"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1486
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1487
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -22757,8 +22757,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Imagen RGBE Radiance"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2246
-#: libs/ui/KisMainWindow.cpp:2327
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2247
+#: libs/ui/KisMainWindow.cpp:2328
 #, kde-format
 msgid "Import frames"
 msgstr "Importar fotogramas"
@@ -24101,7 +24101,7 @@ msgstr "Recursos locales"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
@@ -24111,11 +24111,11 @@ msgstr "Recursos locales"
 #: libs/ui/KisApplication.cpp:1334 libs/ui/KisDocument.cpp:1057
 #: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
 #: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
-#: libs/ui/KisMainWindow.cpp:1048 libs/ui/KisMainWindow.cpp:1118
-#: libs/ui/KisMainWindow.cpp:1262 libs/ui/KisMainWindow.cpp:1359
-#: libs/ui/KisMainWindow.cpp:2106 libs/ui/KisMainWindow.cpp:2115
-#: libs/ui/KisMainWindow.cpp:2254 libs/ui/KisMainWindow.cpp:2315
-#: libs/ui/KisMainWindow.cpp:2334 libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
+#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
+#: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
+#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
+#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2982
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24313,7 +24313,7 @@ msgstr "Estado"
 #: libs/resources/KisResourceModel.cpp:112
 #: libs/resources/KisStorageModel.cpp:514
 #: libs/resources/KisTagResourceModel.cpp:637
-#: libs/resourcewidgets/KisIconToolTip.cpp:115
+#: libs/resourcewidgets/KisIconToolTip.cpp:116
 #, kde-format
 msgid "Location"
 msgstr "Ubicación"
@@ -24343,7 +24343,7 @@ msgstr "md5sum"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
 #: libs/resources/KisTagResourceModel.cpp:647
-#: libs/resourcewidgets/KisIconToolTip.cpp:99
+#: libs/resourcewidgets/KisIconToolTip.cpp:100
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -24367,7 +24367,7 @@ msgstr "Sucio"
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -24630,13 +24630,13 @@ msgstr "Nombre de recurso"
 msgid "Tag File Name"
 msgstr "Nombre de archivo de etiqueta"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:107
+#: libs/resourcewidgets/KisIconToolTip.cpp:108
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
 #, kde-format
 msgid "Resource is broken!"
 msgstr "El recurso está dañado"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:112
+#: libs/resourcewidgets/KisIconToolTip.cpp:113
 #, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -24665,7 +24665,7 @@ msgid "Delete resource"
 msgstr "Borrar recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2775
+#: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25177,7 +25177,7 @@ msgstr ""
 "de salida están incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:65
-#: libs/ui/KisMainWindow.cpp:2357
+#: libs/ui/KisMainWindow.cpp:2358
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderizar animación"
@@ -27145,7 +27145,7 @@ msgid "Numerical"
 msgstr "Numérico"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1227
+#: libs/ui/KisMainWindow.cpp:1228
 #, kde-format
 msgid "Import Images"
 msgstr "Importar imágenes"
@@ -27262,7 +27262,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduzca nuevo nombre de estilo"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2786
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2787
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27504,13 +27504,13 @@ msgid "Show session manager"
 msgstr "Mostrar el gestor de sesiones"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:573
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, kde-format
 msgid "Yes"
 msgstr "Sí"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:574
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, kde-format
 msgid "No"
 msgstr "No"
@@ -28017,7 +28017,7 @@ msgid "Display"
 msgstr "Pantalla"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:323
 #, kde-format
 msgid "Color Management"
 msgstr "Gestión de color"
@@ -28030,7 +28030,7 @@ msgstr "Color"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:319
 #, kde-format
 msgid "Performance"
 msgstr "Rendimiento"
@@ -32007,7 +32007,7 @@ msgstr "Valor predefinido del pincel actual"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1093
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1094
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -33573,54 +33573,25 @@ msgstr "Ajustar el tamaño de impresión por separado"
 msgid "Add shortcut..."
 msgstr "Añadir atajo de teclado…"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
-#, kde-format
-msgctxt "Shortcut type"
-msgid "Key Combination"
-msgstr "Combinación de teclas"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:73
-#, kde-format
-msgctxt "Shortcut type"
-msgid "Mouse Button"
-msgstr "Botón del ratón"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:76
-#, kde-format
-msgctxt "Shortcut type"
-msgid "Mouse Wheel"
-msgstr "Rueda del ratón"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:79
-#, kde-format
-msgctxt "Shortcut type"
-msgid "Gesture"
-msgstr "Gesto"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:82
-#, kde-format
-msgid "Unknown Input"
-msgstr "Entrada desconocida"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:181
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:167
 #, kde-format
 msgctxt "Type of shortcut"
 msgid "Type"
 msgstr "Tipo"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:184
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:170
 #, kde-format
 msgctxt "Input for shortcut"
 msgid "Input"
 msgstr "Entrada"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:187
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:173
 #, kde-format
 msgctxt "Action to trigger with shortcut"
 msgid "Action"
 msgstr "Acción"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:257
 #, kde-format
 msgid "A conflict exists between two or more shortcuts."
 msgstr "Existe un conflicto entre dos o más atajos de teclado."
@@ -33731,30 +33702,6 @@ msgstr "<html><head/><body><p>Descripción de acción</p></body></html>"
 msgid "Action Name"
 msgstr "Nombre de acción"
 
-#: libs/ui/input/config/kis_input_type_delegate.cpp:35
-#, kde-format
-msgid "Key Combination"
-msgstr "Combinación de teclas"
-
-#. i18n: ectx: property (text), widget (QLabel, mouseLabel)
-#: libs/ui/input/config/kis_input_type_delegate.cpp:36
-#: libs/ui/input/config/kis_mouse_input_editor.ui:63
-#, kde-format
-msgid "Mouse Button"
-msgstr "Botón del ratón"
-
-#. i18n: ectx: property (text), widget (QLabel, wheelLabel)
-#: libs/ui/input/config/kis_input_type_delegate.cpp:37
-#: libs/ui/input/config/kis_wheel_input_editor.ui:40
-#, kde-format
-msgid "Mouse Wheel"
-msgstr "Rueda del ratón"
-
-#: libs/ui/input/config/kis_input_type_delegate.cpp:38
-#, kde-format
-msgid "Gesture"
-msgstr "Gesto"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_key_input_editor.ui:33
 #, kde-format
@@ -33774,11 +33721,23 @@ msgstr "Teclas"
 msgid "Modifiers"
 msgstr "Modificadores"
 
+#. i18n: ectx: property (text), widget (QLabel, mouseLabel)
+#: libs/ui/input/config/kis_mouse_input_editor.ui:63
+#, kde-format
+msgid "Mouse Button"
+msgstr "Botón del ratón"
+
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_mouse_input_editor.ui:79
 #, kde-format
 msgid "Edit Mouse Input"
 msgstr "Editar entrada del ratón"
+
+#. i18n: ectx: property (text), widget (QLabel, wheelLabel)
+#: libs/ui/input/config/kis_wheel_input_editor.ui:40
+#, kde-format
+msgid "Mouse Wheel"
+msgstr "Rueda del ratón"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_wheel_input_editor.ui:56
@@ -33786,7 +33745,7 @@ msgstr "Editar entrada del ratón"
 msgid "Edit Mouse Wheel Input"
 msgstr "Editar entrada de la rueda del ratón"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:38
+#: libs/ui/input/kis_abstract_input_action.cpp:39
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -33881,6 +33840,7 @@ msgstr ""
 "herramienta de pincel."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:28
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:62
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
@@ -33958,74 +33918,72 @@ msgstr "Gamma -0,2"
 msgid "Reset Exposure and Gamma"
 msgstr "Reiniciar exposición y gamma"
 
-#: libs/ui/input/kis_pan_action.cpp:40
+#: libs/ui/input/kis_pan_action.cpp:42
 #, kde-format
 msgid "Pan Canvas"
 msgstr "Desplazar el lienzo"
 
-#: libs/ui/input/kis_pan_action.cpp:41
+#: libs/ui/input/kis_pan_action.cpp:43
 #, kde-format
 msgid "The <i>Pan Canvas</i> action pans the canvas."
 msgstr "La acción <i>Desplazar el lienzo</i> desplaza el lienzo."
 
-#: libs/ui/input/kis_pan_action.cpp:44
+#: libs/ui/input/kis_pan_action.cpp:46
 #, kde-format
 msgid "Pan Mode"
 msgstr "Modo de desplazamiento"
 
-#: libs/ui/input/kis_pan_action.cpp:45
+#: libs/ui/input/kis_pan_action.cpp:47
 #, kde-format
 msgid "Pan Left"
 msgstr "Desplazar a la izquierda"
 
-#: libs/ui/input/kis_pan_action.cpp:46
+#: libs/ui/input/kis_pan_action.cpp:48
 #, kde-format
 msgid "Pan Right"
 msgstr "Desplazar a la derecha"
 
-#: libs/ui/input/kis_pan_action.cpp:47
+#: libs/ui/input/kis_pan_action.cpp:49
 #, kde-format
 msgid "Pan Up"
 msgstr "Desplazar hacia arriba"
 
-#: libs/ui/input/kis_pan_action.cpp:48
+#: libs/ui/input/kis_pan_action.cpp:50
 #, kde-format
 msgid "Pan Down"
 msgstr "Desplazar hacia abajo"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Rotar lienzo"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "La acción <i>Rotar lienzo</i> rota el lienzo."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Modo de rotación"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Modo de rotación discreto"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Rotate Left"
 msgstr "Rotar a la izquierda"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:50
+#: libs/ui/input/kis_rotate_canvas_action.cpp:52
 #, kde-format
 msgid "Rotate Right"
 msgstr "Rotar a la derecha"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:51
+#: libs/ui/input/kis_rotate_canvas_action.cpp:53
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Reiniciar rotación"
@@ -34076,61 +34034,61 @@ msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Seleccionar todas las capas"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:293
+#: libs/ui/input/kis_shortcut_configuration.cpp:300
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
 msgstr " + "
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:298
+#: libs/ui/input/kis_shortcut_configuration.cpp:305
 #, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Izquierda"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:307
+#: libs/ui/input/kis_shortcut_configuration.cpp:314
 #, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "Derecha"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:315
+#: libs/ui/input/kis_shortcut_configuration.cpp:322
 #, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Media"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:323
+#: libs/ui/input/kis_shortcut_configuration.cpp:330
 #, kde-format
 msgctxt "Mouse Back Button"
 msgid "Back"
 msgstr "Atrás"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:331
+#: libs/ui/input/kis_shortcut_configuration.cpp:338
 #, kde-format
 msgctxt "Mouse Forward Button"
 msgid "Forward"
 msgstr "Adelante"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:339
+#: libs/ui/input/kis_shortcut_configuration.cpp:346
 #, kde-format
 msgctxt "Mouse Task Button"
 msgid "Task"
 msgstr "Tarea"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:346
+#: libs/ui/input/kis_shortcut_configuration.cpp:353
 #, kde-format
 msgctxt "Mouse Button"
 msgid "Mouse %1"
 msgstr "Ratón %1"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:352
+#: libs/ui/input/kis_shortcut_configuration.cpp:359
 #, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
 msgstr "Ninguno"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:358
+#: libs/ui/input/kis_shortcut_configuration.cpp:365
 #, kde-format
 msgctxt ""
 "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
@@ -34140,174 +34098,222 @@ msgid_plural "%1 Buttons"
 msgstr[0] "%1 botón"
 msgstr[1] "%1 botones"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:375
+#: libs/ui/input/kis_shortcut_configuration.cpp:382
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
 msgstr " + "
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:380
+#: libs/ui/input/kis_shortcut_configuration.cpp:387
 #, kde-format
 msgctxt "Ctrl key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:384
+#: libs/ui/input/kis_shortcut_configuration.cpp:391
 #, kde-format
 msgctxt "Meta key"
 msgid "Meta"
 msgstr "Meta"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:388
+#: libs/ui/input/kis_shortcut_configuration.cpp:395
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
 msgstr "Alt"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:392
+#: libs/ui/input/kis_shortcut_configuration.cpp:399
 #, kde-format
 msgctxt "Shift key"
 msgid "Shift"
 msgstr "Mayúsculas"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:404
+#: libs/ui/input/kis_shortcut_configuration.cpp:411
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
 msgstr "Ninguna"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:414
+#: libs/ui/input/kis_shortcut_configuration.cpp:421
 #, kde-format
 msgid "Mouse Wheel Up"
 msgstr "Rueda del ratón arriba"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:418
+#: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, kde-format
 msgid "Mouse Wheel Down"
 msgstr "Rueda del ratón abajo"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:422
+#: libs/ui/input/kis_shortcut_configuration.cpp:429
 #, kde-format
 msgid "Mouse Wheel Left"
 msgstr "Rueda del ratón a la izquierda"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:426
+#: libs/ui/input/kis_shortcut_configuration.cpp:433
 #, kde-format
 msgid "Mouse Wheel Right"
 msgstr "Rueda del ratón a la derecha"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:430
-#, kde-format
-msgid "Trackpad Pan"
-msgstr "Desplazamiento del panel táctil"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:434
+#: libs/ui/input/kis_shortcut_configuration.cpp:437
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
 msgstr "Ninguna"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:446
+#: libs/ui/input/kis_shortcut_configuration.cpp:449
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
 msgstr "%1 + %2"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:462
+#: libs/ui/input/kis_shortcut_configuration.cpp:465
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
 msgstr "%1 + %2"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:476
+#: libs/ui/input/kis_shortcut_configuration.cpp:478
 #, kde-format
 msgid "Pinch Gesture"
 msgstr "Gesto de pellizcar"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:478
-#, kde-format
-msgid "Pan Gesture"
-msgstr "Gesto de desplazar"
-
 #: libs/ui/input/kis_shortcut_configuration.cpp:480
-#, kde-format
-msgid "Rotate Gesture"
-msgstr "Gesto de rotar"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, kde-format
 msgid "Smart Zoom Gesture"
 msgstr "Gesto de ampliación inteligente"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:485
-#, kde-format
-msgid "One Finger Tap"
-msgstr "Toque con un dedo"
+#: libs/ui/input/kis_shortcut_configuration.cpp:482
+#, fuzzy, kde-format
+#| msgid "Touch Gestures"
+msgid "Touchpad Scroll Gesture"
+msgstr "Gestos de toques"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:487
-#, kde-format
-msgid "Two Finger Tap"
-msgstr "Toque con dos dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:489
-#, kde-format
-msgid "Three Finger Tap"
-msgstr "Toque con tres dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:491
-#, kde-format
-msgid "Four Finger Tap"
-msgstr "Toque con cuatro dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:493
-#, kde-format
-msgid "Five Finger Tap"
-msgstr "Toque con cinco dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:495
-#, kde-format
-msgid "One Finger Drag"
-msgstr "Arrastrar con un dedo"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:497
-#, kde-format
-msgid "Two Finger Drag"
-msgstr "Arrastrar con dos dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:499
-#, kde-format
-msgid "Three Finger Drag"
-msgstr "Arrastrar con tres dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:501
-#, kde-format
-msgid "Four Finger Drag"
-msgstr "Arrastrar con cuatro dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:503
-#, kde-format
-msgid "Five Finger Drag"
-msgstr "Arrastrar con cinco dedos"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:505
-#, kde-format
-msgid "One Finger Hold"
-msgstr "Mantener un dedo"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:508
+#: libs/ui/input/kis_shortcut_configuration.cpp:484
+#: libs/ui/input/kis_shortcut_configuration.cpp:514
 #, kde-format
 msgid "No Gesture"
 msgstr "Ningún gesto"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_shortcut_configuration.cpp:492
+#, kde-format
+msgid "One Finger Tap"
+msgstr "Toque con un dedo"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:494
+#, kde-format
+msgid "Two Finger Tap"
+msgstr "Toque con dos dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:496
+#, kde-format
+msgid "Three Finger Tap"
+msgstr "Toque con tres dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:498
+#, kde-format
+msgid "Four Finger Tap"
+msgstr "Toque con cuatro dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:500
+#, kde-format
+msgid "Five Finger Tap"
+msgstr "Toque con cinco dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:502
+#, kde-format
+msgid "One Finger Drag"
+msgstr "Arrastrar con un dedo"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:504
+#, kde-format
+msgid "Two Finger Drag"
+msgstr "Arrastrar con dos dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:506
+#, kde-format
+msgid "Three Finger Drag"
+msgstr "Arrastrar con tres dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:508
+#, kde-format
+msgid "Four Finger Drag"
+msgstr "Arrastrar con cuatro dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:510
+#, kde-format
+msgid "Five Finger Drag"
+msgstr "Arrastrar con cinco dedos"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:512
+#, kde-format
+msgid "One Finger Hold"
+msgstr "Mantener un dedo"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:522
+#, kde-format
+msgctxt "Shortcut type"
+msgid "Key Combination"
+msgstr "Combinación de teclas"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:525
+#, kde-format
+msgctxt "Shortcut type"
+msgid "Mouse Button"
+msgstr "Botón del ratón"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:528
+#, kde-format
+msgctxt "Shortcut type"
+msgid "Mouse Wheel"
+msgstr "Rueda del ratón"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:531
+#, fuzzy, kde-format
+#| msgid "Touch Gestures"
+msgctxt "Shortcut type"
+msgid "Touch Gesture"
+msgstr "Gestos de toques"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:534
+#, fuzzy, kde-format
+#| msgid "Touch Gestures"
+msgctxt "Shortcut type"
+msgid "Touchpad Gesture"
+msgstr "Gestos de toques"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:537
+#, kde-format
+msgid "Unknown Input"
+msgstr "Entrada desconocida"
+
+#: libs/ui/input/kis_tablet_debugger.cpp:122
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr "Registro de eventos de la tableta activado"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:108
+#: libs/ui/input/kis_tablet_debugger.cpp:123
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr "Registro de eventos de la tableta desactivado"
+
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
+#, fuzzy, kde-format
+#| msgid "Temporary Resources"
+msgid "Temporary Straight Ruler"
+msgstr "Recursos temporales"
+
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
+#, kde-format
+msgid ""
+"The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
+"constrained painting."
+msgstr ""
+
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
+#, fuzzy, kde-format
+#| msgid "End angle:"
+msgid "Snapped Angle"
+msgstr "Ángulo final:"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34389,80 +34395,128 @@ msgstr "Activar herramienta de selección a mano alzada"
 msgid "Activate with Other Color"
 msgstr "Activar con otro color"
 
-#: libs/ui/input/kis_zoom_action.cpp:68
+#: libs/ui/input/kis_zoom_action.cpp:49
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Ampliar lienzo"
 
-#: libs/ui/input/kis_zoom_action.cpp:69
+#: libs/ui/input/kis_zoom_action.cpp:50
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "La acción <i>Ampliar lienzo</i> amplía el lienzo."
 
-#: libs/ui/input/kis_zoom_action.cpp:72
+#: libs/ui/input/kis_zoom_action.cpp:53
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Modo de ampliación"
 
-#: libs/ui/input/kis_zoom_action.cpp:73
+#: libs/ui/input/kis_zoom_action.cpp:54
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Modo de ampliación discreto"
 
-#: libs/ui/input/kis_zoom_action.cpp:74
+#: libs/ui/input/kis_zoom_action.cpp:55
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Modo de ampliación relativo"
 
-#: libs/ui/input/kis_zoom_action.cpp:75
+#: libs/ui/input/kis_zoom_action.cpp:56
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Modo de ampliación discreto relativo"
 
-#: libs/ui/input/kis_zoom_action.cpp:76
+#: libs/ui/input/kis_zoom_action.cpp:57
 #, kde-format
 msgid "Zoom In"
 msgstr "Acercar"
 
-#: libs/ui/input/kis_zoom_action.cpp:77
+#: libs/ui/input/kis_zoom_action.cpp:58
 #, kde-format
 msgid "Zoom Out"
 msgstr "Alejar"
 
-#: libs/ui/input/kis_zoom_action.cpp:78
+#: libs/ui/input/kis_zoom_action.cpp:59
 #, kde-format
 msgid "Zoom In To Cursor"
 msgstr "Acercar hasta el cursor"
 
-#: libs/ui/input/kis_zoom_action.cpp:79
+#: libs/ui/input/kis_zoom_action.cpp:60
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr "Alejar desde el cursor"
 
-#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
+#: libs/ui/input/kis_zoom_action.cpp:61 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Ampliar al 100 %"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:62
 #, kde-format
 msgid "Fit to View"
 msgstr "Ajustar a la vista"
 
-#: libs/ui/input/kis_zoom_action.cpp:82
+#: libs/ui/input/kis_zoom_action.cpp:63
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Ajustar al ancho de la vista"
 
-#: libs/ui/input/kis_zoom_action.cpp:83
+#: libs/ui/input/kis_zoom_action.cpp:64
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Ajustar a la altura de la vista"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:56
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Ampliar y rotar el lienzo"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
+#, fuzzy, kde-format
+#| msgid "Rotate Mode"
+msgid "Pan, Zoom, Rotate Mode"
+msgstr "Modo de rotación"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
+#, fuzzy, kde-format
+#| msgid "Discrete Rotate Mode"
+msgid "Pan, Zoom, Discrete Rotate Mode"
+msgstr "Modo de rotación discreto"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
+#, fuzzy, kde-format
+#| msgid "Discrete Rotate Mode"
+msgid "Pan, Discrete Zoom, Rotate Mode"
+msgstr "Modo de rotación discreto"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
+#, fuzzy, kde-format
+#| msgid "Discrete Rotate Mode"
+msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
+msgstr "Modo de rotación discreto"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
+#, fuzzy, kde-format
+#| msgid "Rotate Mode"
+msgid "Zoom, Rotate Mode"
+msgstr "Modo de rotación"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
+#, fuzzy, kde-format
+#| msgid "Discrete Rotate Mode"
+msgid "Zoom, Discrete Rotate Mode"
+msgstr "Modo de rotación discreto"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
+#, fuzzy, kde-format
+#| msgid "Discrete Rotate Mode"
+msgid "Discrete Zoom, Rotate Mode"
+msgstr "Modo de rotación discreto"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
+#, fuzzy, kde-format
+#| msgid "Discrete Rotate Mode"
+msgid "Discrete Zoom, Discrete Rotate Mode"
+msgstr "Modo de rotación discreto"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -36685,22 +36739,22 @@ msgstr "Mostrar barra de herramientas %1"
 msgid "Hide %1 Toolbar"
 msgstr "Ocultar barra de herramientas %1"
 
-#: libs/ui/KisMainWindow.cpp:1090
+#: libs/ui/KisMainWindow.cpp:1091
 #, kde-format
 msgid "Save as %1"
 msgstr "Guardar como %1"
 
-#: libs/ui/KisMainWindow.cpp:1118
+#: libs/ui/KisMainWindow.cpp:1119
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "El archivo %1 no existe."
 
-#: libs/ui/KisMainWindow.cpp:1227
+#: libs/ui/KisMainWindow.cpp:1228
 #, kde-format
 msgid "Open Images"
 msgstr "Abrir imágenes"
 
-#: libs/ui/KisMainWindow.cpp:1360
+#: libs/ui/KisMainWindow.cpp:1361
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36713,29 +36767,29 @@ msgstr ""
 "\n"
 "Seleccione una ubicación para no sobrescribir el archivo original."
 
-#: libs/ui/KisMainWindow.cpp:1421
+#: libs/ui/KisMainWindow.cpp:1422
 #, kde-format
 msgid "Exporting"
 msgstr "Exportando"
 
-#: libs/ui/KisMainWindow.cpp:1421
+#: libs/ui/KisMainWindow.cpp:1422
 #, kde-format
 msgid "Saving As"
 msgstr "Guardando como"
 
-#: libs/ui/KisMainWindow.cpp:2075
+#: libs/ui/KisMainWindow.cpp:2076
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Capas/máscaras"
 
-#: libs/ui/KisMainWindow.cpp:2101
+#: libs/ui/KisMainWindow.cpp:2102
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "No tiene activado ningún paquete de recursos."
 
-#: libs/ui/KisMainWindow.cpp:2105
+#: libs/ui/KisMainWindow.cpp:2106
 #, kde-format
 msgid ""
 "\n"
@@ -36746,7 +36800,7 @@ msgstr ""
 "No hay disponibles preajustes de pincel. Active un paquete que contenga "
 "preajustes antes de continuar.\n"
 
-#: libs/ui/KisMainWindow.cpp:2115
+#: libs/ui/KisMainWindow.cpp:2116
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -36757,7 +36811,7 @@ msgstr ""
 "\n"
 "Solo están disponibles sus recursos locales."
 
-#: libs/ui/KisMainWindow.cpp:2254 libs/ui/KisMainWindow.cpp:2334
+#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2335
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36766,42 +36820,42 @@ msgstr ""
 "No se ha podido terminar la importación de la animación:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2315
+#: libs/ui/KisMainWindow.cpp:2316
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "No se ha podido crear el nuevo documento. Se ha interrumpido la importación "
 "de la animación."
 
-#: libs/ui/KisMainWindow.cpp:2766
+#: libs/ui/KisMainWindow.cpp:2767
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importar espacio de trabajo…"
 
-#: libs/ui/KisMainWindow.cpp:2781
+#: libs/ui/KisMainWindow.cpp:2782
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nuevo espacio de trabajo…"
 
-#: libs/ui/KisMainWindow.cpp:2785
+#: libs/ui/KisMainWindow.cpp:2786
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nuevo espacio de trabajo…"
 
-#: libs/ui/KisMainWindow.cpp:2829
+#: libs/ui/KisMainWindow.cpp:2830
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2832
+#: libs/ui/KisMainWindow.cpp:2833
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:3005
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36810,19 +36864,19 @@ msgstr ""
 "El complemento de gestión de color LittleCMS de Krita no está instalado. Se "
 "saldrá de Krita ahora."
 
-#: libs/ui/KisMainWindow.cpp:3017
+#: libs/ui/KisMainWindow.cpp:3021
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Error de instalación"
 
-#: libs/ui/KisMainWindow.cpp:3130
+#: libs/ui/KisMainWindow.cpp:3134
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temas"
 
-#: libs/ui/KisMainWindow.cpp:3216
+#: libs/ui/KisMainWindow.cpp:3220
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Espaciador expansible"
@@ -36887,7 +36941,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Eliminando grupo de muestras"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:202
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
@@ -36900,14 +36954,14 @@ msgid "Color %1"
 msgstr "Color %1"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:102
+#: libs/widgets/kis_palette_view.cpp:129
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Añadir una nueva muestra de color"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -36918,31 +36972,31 @@ msgstr ""
 "tintas disponibles. Lo contrario se denomina color de cuatricromía."
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:142
 #, kde-format
 msgid "Swatch ID:"
 msgstr "ID de la muestra:"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:143
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Nombre de la muestra de color:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:117
+#: libs/widgets/kis_palette_view.cpp:144
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Color:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:145
 #, kde-format
 msgid "Spot color:"
 msgstr "Color directo:"
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:141
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Grupo de muestra:"
@@ -38321,7 +38375,7 @@ msgstr "Profun&didad:"
 msgid "Li&nk with Layer"
 msgstr "E&nlazar con capa"
 
-#: libs/ui/opengl/kis_opengl.cpp:170
+#: libs/ui/opengl/kis_opengl.cpp:172
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -38330,14 +38384,14 @@ msgstr ""
 "Los búferes de textura están desactivados explícitamente en el renderizador "
 "ANGLE debido a problemas de rendimiento."
 
-#: libs/ui/opengl/kis_opengl.cpp:687
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Se sabe que el controlador gráfico de Intel que está usando tiene problemas "
 "con OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:689
+#: libs/ui/opengl/kis_opengl.cpp:691
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -38348,7 +38402,7 @@ msgstr ""
 "lo que ANGLE se usará de forma predeterminada. Puede cambiar manualmente a "
 "OpenGL, aunque no hay garantía de que funcione correctamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:1172
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -38357,7 +38411,7 @@ msgstr ""
 "El renderizador preferido no admite el formato de superficie solicitado. Se "
 "ha seleccionado otro renderizador."
 
-#: libs/ui/opengl/kis_opengl.cpp:1174
+#: libs/ui/opengl/kis_opengl.cpp:1176
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -38419,7 +38473,7 @@ msgstr "Sin opciones"
 msgid "Local selection is locked."
 msgstr "La selección local está bloqueada."
 
-#: libs/ui/tool/kis_tool_freehand.cc:215
+#: libs/ui/tool/kis_tool_freehand.cc:332
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -38428,7 +38482,7 @@ msgstr ""
 "La herramienta de pincel no puede pintar en esta capa. Seleccione una capa "
 "de pintura o una máscara."
 
-#: libs/ui/tool/kis_tool_freehand.cc:220
+#: libs/ui/tool/kis_tool_freehand.cc:337
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -40890,37 +40944,37 @@ msgstr "Seleccionar un archivo para cargar…"
 msgid "Select a directory to load..."
 msgstr "Seleccionar un directorio para cargar…"
 
-#: libs/widgets/kis_palette_view.cpp:106
+#: libs/widgets/kis_palette_view.cpp:133
 #, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Predeterminado"
 
-#: libs/widgets/kis_palette_view.cpp:120
+#: libs/widgets/kis_palette_view.cpp:147
 #, kde-format
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Color"
 
-#: libs/widgets/kis_palette_view.cpp:146
+#: libs/widgets/kis_palette_view.cpp:173
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "Añadir un nuevo grupo"
 
-#: libs/widgets/kis_palette_view.cpp:149
+#: libs/widgets/kis_palette_view.cpp:176
 #, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "Grupo color"
 
-#: libs/widgets/kis_palette_view.cpp:150
+#: libs/widgets/kis_palette_view.cpp:177
 #, kde-format
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "Nombre"
 
-#: libs/widgets/kis_palette_view.cpp:172
+#: libs/widgets/kis_palette_view.cpp:199
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"
@@ -43755,42 +43809,42 @@ msgid_plural "Insert %1 frames"
 msgstr[0] "Insertar fotograma"
 msgstr[1] "Insertar %1 fotogramas"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:189
 #, kde-format
 msgid "Edit Layers:"
 msgstr "Editar capas:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:234
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 "Ampliar línea de tiempo. Mantenga pulsado y arrastre a izquierda o derecha."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Insertar o eliminar fotogramas fijos"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Introduzca número de fotogramas"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1630
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Editar fotogramas:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1657
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Fotogramas clave"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1665
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -44694,7 +44748,7 @@ msgstr "Conmutar bloqueos y &visibilidad"
 msgid "&Add"
 msgstr "&Añadir"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1357
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -44807,24 +44861,31 @@ msgstr "Renderización de imágenes"
 msgid "Scripting"
 msgstr "Guiones"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
-#, kde-format
-msgid "Input handling"
-msgstr "Manejo de la entrada"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:295
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Acciones"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:299
 #, kde-format
 msgid "Tablet Handling"
 msgstr "Manejo de la tableta"
 
+#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#, fuzzy, kde-format
+#| msgid "Input handling"
+msgid "Input Filtering"
+msgstr "Manejo de la entrada"
+
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#, fuzzy, kde-format
+#| msgid "Input handling"
+msgid "Input Matching"
+msgstr "Manejo de la entrada"
+
+#: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format
 msgid "GPU Canvas"
 msgstr "Lienzo GPU"
@@ -70833,3 +70894,22 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
+
+#~ msgctxt "Shortcut type"
+#~ msgid "Gesture"
+#~ msgstr "Gesto"
+
+#~ msgid "Key Combination"
+#~ msgstr "Combinación de teclas"
+
+#~ msgid "Gesture"
+#~ msgstr "Gesto"
+
+#~ msgid "Trackpad Pan"
+#~ msgstr "Desplazamiento del panel táctil"
+
+#~ msgid "Pan Gesture"
+#~ msgstr "Gesto de desplazar"
+
+#~ msgid "Rotate Gesture"
+#~ msgstr "Gesto de rotar"

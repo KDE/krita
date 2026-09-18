@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-17 00:42+0000\n"
+"POT-Creation-Date: 2026-09-18 00:43+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -23496,7 +23496,7 @@ msgstr "ਸਥਿਤੀ"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1486
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1487
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, fuzzy, kde-format
 #| msgid "Name"
@@ -24346,8 +24346,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2246
-#: libs/ui/KisMainWindow.cpp:2327
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2247
+#: libs/ui/KisMainWindow.cpp:2328
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Import frames"
@@ -25825,7 +25825,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
@@ -25835,11 +25835,11 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/KisApplication.cpp:1334 libs/ui/KisDocument.cpp:1057
 #: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
 #: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
-#: libs/ui/KisMainWindow.cpp:1048 libs/ui/KisMainWindow.cpp:1118
-#: libs/ui/KisMainWindow.cpp:1262 libs/ui/KisMainWindow.cpp:1359
-#: libs/ui/KisMainWindow.cpp:2106 libs/ui/KisMainWindow.cpp:2115
-#: libs/ui/KisMainWindow.cpp:2254 libs/ui/KisMainWindow.cpp:2315
-#: libs/ui/KisMainWindow.cpp:2334 libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
+#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
+#: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
+#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
+#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2982
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -26086,7 +26086,7 @@ msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 #: libs/resources/KisResourceModel.cpp:112
 #: libs/resources/KisStorageModel.cpp:514
 #: libs/resources/KisTagResourceModel.cpp:637
-#: libs/resourcewidgets/KisIconToolTip.cpp:115
+#: libs/resourcewidgets/KisIconToolTip.cpp:116
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Location"
@@ -26119,7 +26119,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
 #: libs/resources/KisTagResourceModel.cpp:647
-#: libs/resourcewidgets/KisIconToolTip.cpp:99
+#: libs/resourcewidgets/KisIconToolTip.cpp:100
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -26144,7 +26144,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26440,14 +26440,14 @@ msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 msgid "Tag File Name"
 msgstr "ਸੰਭਾਲੋ"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:107
+#: libs/resourcewidgets/KisIconToolTip.cpp:108
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Resource is broken!"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:112
+#: libs/resourcewidgets/KisIconToolTip.cpp:113
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgctxt "a placeholder name for the default storage of resources"
@@ -26481,7 +26481,7 @@ msgid "Delete resource"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2775
+#: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -27034,7 +27034,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:65
-#: libs/ui/KisMainWindow.cpp:2357
+#: libs/ui/KisMainWindow.cpp:2358
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Render Animation"
@@ -29038,7 +29038,7 @@ msgid "Numerical"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1227
+#: libs/ui/KisMainWindow.cpp:1228
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Import Images"
@@ -29162,7 +29162,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "ਮਾਸਟਰ ਸਲਾਈਡ ਬਦਲੋ"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2786
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2787
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@label:textbox"
@@ -29441,13 +29441,13 @@ msgid "Show session manager"
 msgstr "ਗਰਿੱਡ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:573
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, kde-format
 msgid "Yes"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:574
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgid "No"
@@ -29952,7 +29952,7 @@ msgid "Display"
 msgstr "ਤਬਦੀਲ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:323
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Color Management"
@@ -29967,7 +29967,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:319
 #, kde-format
 msgid "Performance"
 msgstr ""
@@ -34039,7 +34039,7 @@ msgstr "...ਸੰਰਚਨਾ"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1093
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1094
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -35609,62 +35609,28 @@ msgstr ""
 msgid "Add shortcut..."
 msgstr "...ਸੰਰਚਨਾ"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
-#, fuzzy, kde-format
-#| msgid "Position"
-msgctxt "Shortcut type"
-msgid "Key Combination"
-msgstr "ਸਥਿਤੀ"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:73
-#, fuzzy, kde-format
-#| msgid "Change parameter"
-msgctxt "Shortcut type"
-msgid "Mouse Button"
-msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:76
-#, fuzzy, kde-format
-#| msgid "Move points"
-msgctxt "Shortcut type"
-msgid "Mouse Wheel"
-msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:79
-#, fuzzy, kde-format
-#| msgid "Change Connection"
-msgctxt "Shortcut type"
-msgid "Gesture"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:82
-#, fuzzy, kde-format
-#| msgid "Change Connection"
-msgid "Unknown Input"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
-
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:181
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:167
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "Type of shortcut"
 msgid "Type"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:184
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:170
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "Input for shortcut"
 msgid "Input"
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:187
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:173
 #, fuzzy, kde-format
 #| msgid "Collection"
 msgctxt "Action to trigger with shortcut"
 msgid "Action"
 msgstr "ਭੰਡਾਰ"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:257
 #, kde-format
 msgid "A conflict exists between two or more shortcuts."
 msgstr ""
@@ -35781,33 +35747,6 @@ msgstr ""
 msgid "Action Name"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: libs/ui/input/config/kis_input_type_delegate.cpp:35
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Key Combination"
-msgstr "ਸਥਿਤੀ"
-
-#. i18n: ectx: property (text), widget (QLabel, mouseLabel)
-#: libs/ui/input/config/kis_input_type_delegate.cpp:36
-#: libs/ui/input/config/kis_mouse_input_editor.ui:63
-#, kde-format
-msgid "Mouse Button"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, wheelLabel)
-#: libs/ui/input/config/kis_input_type_delegate.cpp:37
-#: libs/ui/input/config/kis_wheel_input_editor.ui:40
-#, fuzzy, kde-format
-#| msgid "Move points"
-msgid "Mouse Wheel"
-msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
-
-#: libs/ui/input/config/kis_input_type_delegate.cpp:38
-#, fuzzy, kde-format
-#| msgid "Change Connection"
-msgid "Gesture"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_key_input_editor.ui:33
 #, fuzzy, kde-format
@@ -35828,11 +35767,24 @@ msgstr ""
 msgid "Modifiers"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, mouseLabel)
+#: libs/ui/input/config/kis_mouse_input_editor.ui:63
+#, kde-format
+msgid "Mouse Button"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_mouse_input_editor.ui:79
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Edit Mouse Input"
+msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
+
+#. i18n: ectx: property (text), widget (QLabel, wheelLabel)
+#: libs/ui/input/config/kis_wheel_input_editor.ui:40
+#, fuzzy, kde-format
+#| msgid "Move points"
+msgid "Mouse Wheel"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -35842,7 +35794,7 @@ msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 msgid "Edit Mouse Wheel Input"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:38
+#: libs/ui/input/kis_abstract_input_action.cpp:39
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, fuzzy, kde-format
 #| msgid "Object Name"
@@ -35943,6 +35895,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:28
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:62
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Normal"
@@ -36032,85 +35985,83 @@ msgstr "ਉਚਾਈ"
 msgid "Reset Exposure and Gamma"
 msgstr "ਵੇਖਣ ਮੋਡ"
 
-#: libs/ui/input/kis_pan_action.cpp:40
+#: libs/ui/input/kis_pan_action.cpp:42
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Pan Canvas"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_pan_action.cpp:41
+#: libs/ui/input/kis_pan_action.cpp:43
 #, kde-format
 msgid "The <i>Pan Canvas</i> action pans the canvas."
 msgstr ""
 
-#: libs/ui/input/kis_pan_action.cpp:44
+#: libs/ui/input/kis_pan_action.cpp:46
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Pan Mode"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/input/kis_pan_action.cpp:45
+#: libs/ui/input/kis_pan_action.cpp:47
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgid "Pan Left"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/ui/input/kis_pan_action.cpp:46
+#: libs/ui/input/kis_pan_action.cpp:48
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgid "Pan Right"
 msgstr "ਰੇਖਾ ਭਾਰ"
 
-#: libs/ui/input/kis_pan_action.cpp:47
+#: libs/ui/input/kis_pan_action.cpp:49
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgid "Pan Up"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: libs/ui/input/kis_pan_action.cpp:48
+#: libs/ui/input/kis_pan_action.cpp:50
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Pan Down"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgid "Rotate Canvas"
 msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr ""
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Rotate Mode"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Discrete Rotate Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Rotate Left"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:50
+#: libs/ui/input/kis_rotate_canvas_action.cpp:52
 #, fuzzy, kde-format
 #| msgid "Straight"
 msgid "Rotate Right"
 msgstr "ਸਿੱਧਾ ਉੱਤੇ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:51
+#: libs/ui/input/kis_rotate_canvas_action.cpp:53
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Reset Rotation"
@@ -36171,68 +36122,68 @@ msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:293
+#: libs/ui/input/kis_shortcut_configuration.cpp:300
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:298
+#: libs/ui/input/kis_shortcut_configuration.cpp:305
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:307
+#: libs/ui/input/kis_shortcut_configuration.cpp:314
 #, fuzzy, kde-format
 #| msgid "Height"
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "ਉਚਾਈ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:315
+#: libs/ui/input/kis_shortcut_configuration.cpp:322
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:323
+#: libs/ui/input/kis_shortcut_configuration.cpp:330
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "Mouse Back Button"
 msgid "Back"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:331
+#: libs/ui/input/kis_shortcut_configuration.cpp:338
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgctxt "Mouse Forward Button"
 msgid "Forward"
 msgstr "ਮਾਸਟਰ ਸਫ਼ੇ ਵੇਖੋ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:339
+#: libs/ui/input/kis_shortcut_configuration.cpp:346
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "Mouse Task Button"
 msgid "Task"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:346
+#: libs/ui/input/kis_shortcut_configuration.cpp:353
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgctxt "Mouse Button"
 msgid "Mouse %1"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:352
+#: libs/ui/input/kis_shortcut_configuration.cpp:359
 #, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:358
+#: libs/ui/input/kis_shortcut_configuration.cpp:365
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt ""
@@ -36243,196 +36194,246 @@ msgid_plural "%1 Buttons"
 msgstr[0] "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 msgstr[1] "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:375
+#: libs/ui/input/kis_shortcut_configuration.cpp:382
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:380
+#: libs/ui/input/kis_shortcut_configuration.cpp:387
 #, kde-format
 msgctxt "Ctrl key"
 msgid "Ctrl"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:384
+#: libs/ui/input/kis_shortcut_configuration.cpp:391
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "Meta key"
 msgid "Meta"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:388
+#: libs/ui/input/kis_shortcut_configuration.cpp:395
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:392
+#: libs/ui/input/kis_shortcut_configuration.cpp:399
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgctxt "Shift key"
 msgid "Shift"
 msgstr "ਰੇਖਾ ਭਾਰ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:404
+#: libs/ui/input/kis_shortcut_configuration.cpp:411
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:414
+#: libs/ui/input/kis_shortcut_configuration.cpp:421
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Mouse Wheel Up"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:418
+#: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Mouse Wheel Down"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:422
+#: libs/ui/input/kis_shortcut_configuration.cpp:429
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Mouse Wheel Left"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:426
+#: libs/ui/input/kis_shortcut_configuration.cpp:433
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Mouse Wheel Right"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:430
-#, kde-format
-msgid "Trackpad Pan"
-msgstr ""
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:434
+#: libs/ui/input/kis_shortcut_configuration.cpp:437
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:446
+#: libs/ui/input/kis_shortcut_configuration.cpp:449
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:462
+#: libs/ui/input/kis_shortcut_configuration.cpp:465
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:476
+#: libs/ui/input/kis_shortcut_configuration.cpp:478
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Pinch Gesture"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:478
-#, fuzzy, kde-format
-#| msgid "Change Connection"
-msgid "Pan Gesture"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
-
 #: libs/ui/input/kis_shortcut_configuration.cpp:480
-#, fuzzy, kde-format
-#| msgid "Master Page"
-msgid "Rotate Gesture"
-msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Smart Zoom Gesture"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:485
+#: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, fuzzy, kde-format
-#| msgid "Document"
-msgid "One Finger Tap"
-msgstr "ਡੌਕੂਮੈਂਟ"
+#| msgid "Change Connection"
+msgid "Touchpad Scroll Gesture"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:487
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Two Finger Tap"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:489
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Three Finger Tap"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:491
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Four Finger Tap"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:493
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Five Finger Tap"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:495
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "One Finger Drag"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:497
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Two Finger Drag"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:499
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Three Finger Drag"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:501
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Four Finger Drag"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:503
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "Five Finger Drag"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:505
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "One Finger Hold"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/input/kis_shortcut_configuration.cpp:508
+#: libs/ui/input/kis_shortcut_configuration.cpp:484
+#: libs/ui/input/kis_shortcut_configuration.cpp:514
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "No Gesture"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_shortcut_configuration.cpp:492
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "One Finger Tap"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:494
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Two Finger Tap"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:496
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Three Finger Tap"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:498
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Four Finger Tap"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:500
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Five Finger Tap"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:502
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "One Finger Drag"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:504
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Two Finger Drag"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:506
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Three Finger Drag"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:508
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Four Finger Drag"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:510
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Five Finger Drag"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:512
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "One Finger Hold"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:522
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "Shortcut type"
+msgid "Key Combination"
+msgstr "ਸਥਿਤੀ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:525
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgctxt "Shortcut type"
+msgid "Mouse Button"
+msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:528
+#, fuzzy, kde-format
+#| msgid "Move points"
+msgctxt "Shortcut type"
+msgid "Mouse Wheel"
+msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:531
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgctxt "Shortcut type"
+msgid "Touch Gesture"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:534
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgctxt "Shortcut type"
+msgid "Touchpad Gesture"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: libs/ui/input/kis_shortcut_configuration.cpp:537
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgid "Unknown Input"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: libs/ui/input/kis_tablet_debugger.cpp:122
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr ""
 
-#: libs/ui/input/kis_tablet_debugger.cpp:108
+#: libs/ui/input/kis_tablet_debugger.cpp:123
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr ""
+
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Temporary Straight Ruler"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
+#, kde-format
+msgid ""
+"The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
+"constrained painting."
+msgstr ""
+
+#: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Snapped Angle"
+msgstr "ਸਥਿਤੀ"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, fuzzy, kde-format
@@ -36526,94 +36527,142 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 msgid "Activate with Other Color"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: libs/ui/input/kis_zoom_action.cpp:68
+#: libs/ui/input/kis_zoom_action.cpp:49
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Zoom Canvas"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:69
+#: libs/ui/input/kis_zoom_action.cpp:50
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
 
-#: libs/ui/input/kis_zoom_action.cpp:72
+#: libs/ui/input/kis_zoom_action.cpp:53
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Zoom Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:73
+#: libs/ui/input/kis_zoom_action.cpp:54
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Discrete Zoom Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:74
+#: libs/ui/input/kis_zoom_action.cpp:55
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Relative Zoom Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:75
+#: libs/ui/input/kis_zoom_action.cpp:56
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Relative Discrete Zoom Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:76
+#: libs/ui/input/kis_zoom_action.cpp:57
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Zoom In"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:77
+#: libs/ui/input/kis_zoom_action.cpp:58
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Zoom Out"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:78
+#: libs/ui/input/kis_zoom_action.cpp:59
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "Zoom In To Cursor"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/ui/input/kis_zoom_action.cpp:79
+#: libs/ui/input/kis_zoom_action.cpp:60
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "Zoom Out From Cursor"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
+#: libs/ui/input/kis_zoom_action.cpp:61 libs/ui/kis_popup_palette.cpp:214
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Zoom to 100%"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:62
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Fit to View"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/input/kis_zoom_action.cpp:82
+#: libs/ui/input/kis_zoom_action.cpp:63
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgid "Fit to View Width"
 msgstr "ਰੇਖਾ ਭਾਰ"
 
-#: libs/ui/input/kis_zoom_action.cpp:83
+#: libs/ui/input/kis_zoom_action.cpp:64
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Fit to View Height"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:56
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgid "Zoom and Rotate Canvas"
 msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Pan, Zoom, Rotate Mode"
+msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Pan, Zoom, Discrete Rotate Mode"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Pan, Discrete Zoom, Rotate Mode"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Zoom, Rotate Mode"
+msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Zoom, Discrete Rotate Mode"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Discrete Zoom, Rotate Mode"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Discrete Zoom, Discrete Rotate Mode"
+msgstr "ਜ਼ੂਮ"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, fuzzy, kde-format
@@ -39058,25 +39107,25 @@ msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 msgid "Hide %1 Toolbar"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: libs/ui/KisMainWindow.cpp:1090
+#: libs/ui/KisMainWindow.cpp:1091
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Save as %1"
 msgstr "ਸੰਭਾਲੋ"
 
-#: libs/ui/KisMainWindow.cpp:1118
+#: libs/ui/KisMainWindow.cpp:1119
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgid "The file %1 does not exist."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/ui/KisMainWindow.cpp:1227
+#: libs/ui/KisMainWindow.cpp:1228
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Open Images"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/KisMainWindow.cpp:1360
+#: libs/ui/KisMainWindow.cpp:1361
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -39085,25 +39134,25 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1421
+#: libs/ui/KisMainWindow.cpp:1422
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgid "Exporting"
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/KisMainWindow.cpp:1421
+#: libs/ui/KisMainWindow.cpp:1422
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "Saving As"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/KisMainWindow.cpp:2075
+#: libs/ui/KisMainWindow.cpp:2076
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "Layers/Masks"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/ui/KisMainWindow.cpp:2101
+#: libs/ui/KisMainWindow.cpp:2102
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, fuzzy, kde-format
@@ -39115,7 +39164,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/KisMainWindow.cpp:2105
+#: libs/ui/KisMainWindow.cpp:2106
 #, kde-format
 msgid ""
 "\n"
@@ -39123,7 +39172,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2115
+#: libs/ui/KisMainWindow.cpp:2116
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -39132,7 +39181,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2254 libs/ui/KisMainWindow.cpp:2334
+#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2335
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -39144,64 +39193,64 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/KisMainWindow.cpp:2315
+#: libs/ui/KisMainWindow.cpp:2316
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/KisMainWindow.cpp:2766
+#: libs/ui/KisMainWindow.cpp:2767
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/KisMainWindow.cpp:2781
+#: libs/ui/KisMainWindow.cpp:2782
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/KisMainWindow.cpp:2785
+#: libs/ui/KisMainWindow.cpp:2786
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/KisMainWindow.cpp:2829
+#: libs/ui/KisMainWindow.cpp:2830
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2832
+#: libs/ui/KisMainWindow.cpp:2833
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:3005
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3017
+#: libs/ui/KisMainWindow.cpp:3021
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
-#: libs/ui/KisMainWindow.cpp:3130
+#: libs/ui/KisMainWindow.cpp:3134
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3216
+#: libs/ui/KisMainWindow.cpp:3220
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Expanding Spacer"
@@ -39286,7 +39335,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:202
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgctxt "Shows up when deleting a swatch group"
@@ -39301,7 +39350,7 @@ msgid "Color %1"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:102
+#: libs/widgets/kis_palette_view.cpp:129
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "@title:dialog"
@@ -39309,7 +39358,7 @@ msgid "Add a new Color Swatch"
 msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39318,21 +39367,21 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:142
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Swatch ID:"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:143
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Color swatch name:"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:117
+#: libs/widgets/kis_palette_view.cpp:144
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Color as the Color of a Swatch in a Palette"
@@ -39340,13 +39389,13 @@ msgid "Color:"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:145
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Spot color:"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:141
 #, fuzzy, kde-format
 #| msgid "Change master slide"
 msgid "Swatch Group:"
@@ -40880,19 +40929,19 @@ msgstr ""
 msgid "Li&nk with Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/ui/opengl/kis_opengl.cpp:170
+#: libs/ui/opengl/kis_opengl.cpp:172
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:687
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:689
+#: libs/ui/opengl/kis_opengl.cpp:691
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -40900,14 +40949,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1172
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1174
+#: libs/ui/opengl/kis_opengl.cpp:1176
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -40962,14 +41011,14 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Local selection is locked."
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/tool/kis_tool_freehand.cc:215
+#: libs/ui/tool/kis_tool_freehand.cc:332
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:220
+#: libs/ui/tool/kis_tool_freehand.cc:337
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -43375,42 +43424,42 @@ msgstr "ਹਟਾਓ(&e)"
 msgid "Select a directory to load..."
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/widgets/kis_palette_view.cpp:106
+#: libs/widgets/kis_palette_view.cpp:133
 #, fuzzy, kde-format
 #| msgid "Remove points"
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: libs/widgets/kis_palette_view.cpp:120
+#: libs/widgets/kis_palette_view.cpp:147
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/widgets/kis_palette_view.cpp:146
+#: libs/widgets/kis_palette_view.cpp:173
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "ਗਰੁੱਪ"
 
-#: libs/widgets/kis_palette_view.cpp:149
+#: libs/widgets/kis_palette_view.cpp:176
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/widgets/kis_palette_view.cpp:150
+#: libs/widgets/kis_palette_view.cpp:177
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: libs/widgets/kis_palette_view.cpp:172
+#: libs/widgets/kis_palette_view.cpp:199
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "@title:dialog"
@@ -46428,46 +46477,46 @@ msgid_plural "Insert %1 frames"
 msgstr[0] "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 msgstr[1] "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:189
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgid "Edit Layers:"
 msgstr "ਪਰਤ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:234
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1630
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Edit Frames:"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1657
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1665
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "@item:inmenu"
@@ -47493,7 +47542,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1357
 #, kde-format
 msgid "%1 %"
 msgstr ""
@@ -47628,27 +47677,33 @@ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 msgid "Scripting"
 msgstr "ਸਕ੍ਰਿਪਟ"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
-#, fuzzy, kde-format
-#| msgid "Document Settings"
-msgid "Input handling"
-msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:295
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, fuzzy, kde-format
 #| msgid "Collection"
 msgid "Actions"
 msgstr "ਭੰਡਾਰ"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:299
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Tablet Handling"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
+#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#, fuzzy, kde-format
+#| msgid "Document Settings"
+msgid "Input Filtering"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#, fuzzy, kde-format
+#| msgid "Document Settings"
+msgid "Input Matching"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
+#: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "GPU Canvas"
@@ -75599,6 +75654,32 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Change Connection"
+#~ msgctxt "Shortcut type"
+#~ msgid "Gesture"
+#~ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgid "Key Combination"
+#~ msgstr "ਸਥਿਤੀ"
+
+#, fuzzy
+#~| msgid "Change Connection"
+#~ msgid "Gesture"
+#~ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#, fuzzy
+#~| msgid "Change Connection"
+#~ msgid "Pan Gesture"
+#~ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#, fuzzy
+#~| msgid "Master Page"
+#~ msgid "Rotate Gesture"
+#~ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #, fuzzy
 #~| msgid "Group"

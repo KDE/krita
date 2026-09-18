@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-17 02:40+0000\n"
+"POT-Creation-Date: 2026-09-18 02:39+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -22350,7 +22350,7 @@ msgstr "Nabewerken"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1485
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1486
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -23127,8 +23127,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Bild aftrennen"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2245
-#: libs/ui/KisMainWindow.cpp:2326
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2246
+#: libs/ui/KisMainWindow.cpp:2327
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Bild importeren"
@@ -24543,11 +24543,11 @@ msgstr "Borndateien:"
 #: libs/ui/KisApplication.cpp:1342 libs/ui/KisDocument.cpp:1055
 #: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
-#: libs/ui/KisMainWindow.cpp:1047 libs/ui/KisMainWindow.cpp:1117
-#: libs/ui/KisMainWindow.cpp:1261 libs/ui/KisMainWindow.cpp:1358
-#: libs/ui/KisMainWindow.cpp:2105 libs/ui/KisMainWindow.cpp:2114
-#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2314
-#: libs/ui/KisMainWindow.cpp:2333 libs/ui/KisMainWindow.cpp:2976
+#: libs/ui/KisMainWindow.cpp:1048 libs/ui/KisMainWindow.cpp:1118
+#: libs/ui/KisMainWindow.cpp:1262 libs/ui/KisMainWindow.cpp:1359
+#: libs/ui/KisMainWindow.cpp:2106 libs/ui/KisMainWindow.cpp:2115
+#: libs/ui/KisMainWindow.cpp:2254 libs/ui/KisMainWindow.cpp:2315
+#: libs/ui/KisMainWindow.cpp:2334 libs/ui/KisMainWindow.cpp:2980
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24749,7 +24749,7 @@ msgstr "Statusbalken"
 #: libs/resources/KisResourceModel.cpp:112
 #: libs/resources/KisStorageModel.cpp:514
 #: libs/resources/KisTagResourceModel.cpp:637
-#: libs/resourcewidgets/KisIconToolTip.cpp:115
+#: libs/resourcewidgets/KisIconToolTip.cpp:116
 #, fuzzy, kde-format
 #| msgid "Rotation: "
 msgid "Location"
@@ -24781,7 +24781,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
 #: libs/resources/KisTagResourceModel.cpp:647
-#: libs/resourcewidgets/KisIconToolTip.cpp:99
+#: libs/resourcewidgets/KisIconToolTip.cpp:100
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -25085,13 +25085,13 @@ msgstr "&Ressourcen"
 msgid "Tag File Name"
 msgstr "Dateinaam"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:107
+#: libs/resourcewidgets/KisIconToolTip.cpp:108
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
 #, fuzzy, kde-format
 msgid "Resource is broken!"
 msgstr "&Ressourcen"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:112
+#: libs/resourcewidgets/KisIconToolTip.cpp:113
 #, fuzzy, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -25121,7 +25121,7 @@ msgid "Delete resource"
 msgstr "Ressource wegdoon"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2773
+#: libs/ui/KisMainWindow.cpp:2774
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
@@ -25645,7 +25645,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Akschoon lett sik nich opstellen"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:63
-#: libs/ui/KisMainWindow.cpp:2356
+#: libs/ui/KisMainWindow.cpp:2357
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Utrichten"
@@ -27706,7 +27706,7 @@ msgid "Numerical"
 msgstr "Pielrecht"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1226
+#: libs/ui/KisMainWindow.cpp:1227
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Bild importeren"
@@ -27825,7 +27825,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Koppelnaam ingeven:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2784
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2785
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32285,7 +32285,7 @@ msgstr "Aktuell Vörinstellen"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1092
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1093
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -36822,22 +36822,22 @@ msgstr "Orginaal-Laag wiesen"
 msgid "Hide %1 Toolbar"
 msgstr "Rullbalkens"
 
-#: libs/ui/KisMainWindow.cpp:1089
+#: libs/ui/KisMainWindow.cpp:1090
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Flake-Formen %1"
 
-#: libs/ui/KisMainWindow.cpp:1117
+#: libs/ui/KisMainWindow.cpp:1118
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "De Datei \"%1\" gifft dat nich."
 
-#: libs/ui/KisMainWindow.cpp:1226
+#: libs/ui/KisMainWindow.cpp:1227
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Biller"
 
-#: libs/ui/KisMainWindow.cpp:1359
+#: libs/ui/KisMainWindow.cpp:1360
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36846,30 +36846,30 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1420
+#: libs/ui/KisMainWindow.cpp:1421
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Exporteren"
 
-#: libs/ui/KisMainWindow.cpp:1420
+#: libs/ui/KisMainWindow.cpp:1421
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Formaat för't Sekern"
 
-#: libs/ui/KisMainWindow.cpp:2074
+#: libs/ui/KisMainWindow.cpp:2075
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Laag as Bild sekern..."
 
-#: libs/ui/KisMainWindow.cpp:2100
+#: libs/ui/KisMainWindow.cpp:2101
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Datei för't Sekern lett sik nich opstellen"
 
-#: libs/ui/KisMainWindow.cpp:2104
+#: libs/ui/KisMainWindow.cpp:2105
 #, kde-format
 msgid ""
 "\n"
@@ -36877,7 +36877,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2115
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -36886,7 +36886,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2253 libs/ui/KisMainWindow.cpp:2333
+#: libs/ui/KisMainWindow.cpp:2254 libs/ui/KisMainWindow.cpp:2334
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36895,43 +36895,43 @@ msgstr ""
 "%1\n"
 "lett sik nich importeren"
 
-#: libs/ui/KisMainWindow.cpp:2314
+#: libs/ui/KisMainWindow.cpp:2315
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Akschoon lett sik nich opstellen"
 
-#: libs/ui/KisMainWindow.cpp:2764
+#: libs/ui/KisMainWindow.cpp:2765
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Grafik &importeren..."
 
-#: libs/ui/KisMainWindow.cpp:2779
+#: libs/ui/KisMainWindow.cpp:2780
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Grafik &importeren..."
 
-#: libs/ui/KisMainWindow.cpp:2783
+#: libs/ui/KisMainWindow.cpp:2784
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Grafik &importeren..."
 
-#: libs/ui/KisMainWindow.cpp:2827
+#: libs/ui/KisMainWindow.cpp:2828
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2830
+#: libs/ui/KisMainWindow.cpp:2831
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2999
+#: libs/ui/KisMainWindow.cpp:3003
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -36943,19 +36943,19 @@ msgstr ""
 "Dat Calligra-Klöörpleegmoduul \"LittleCMS\" is nich installeert. Krita warrt "
 "nu utmaakt."
 
-#: libs/ui/KisMainWindow.cpp:3015
+#: libs/ui/KisMainWindow.cpp:3019
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Schaadhaftig Installatschoon"
 
-#: libs/ui/KisMainWindow.cpp:3128
+#: libs/ui/KisMainWindow.cpp:3132
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3214
+#: libs/ui/KisMainWindow.cpp:3218
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"
@@ -37026,7 +37026,7 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Laag wegdoon"
 
-#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:175
+#: libs/ui/KisPaletteEditor.cpp:280 libs/widgets/kis_palette_view.cpp:202
 #, fuzzy, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
@@ -37040,14 +37040,14 @@ msgid "Color %1"
 msgstr "Klöör"
 
 #: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
-#: libs/widgets/kis_palette_view.cpp:102
+#: libs/widgets/kis_palette_view.cpp:129
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Profil anwennen"
 
 #: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
-#: libs/widgets/kis_palette_view.cpp:113
+#: libs/widgets/kis_palette_view.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -37056,20 +37056,20 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
-#: libs/widgets/kis_palette_view.cpp:115
+#: libs/widgets/kis_palette_view.cpp:142
 #, fuzzy, kde-format
 msgid "Swatch ID:"
 msgstr "Klöörplackens"
 
 #: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/widgets/kis_palette_view.cpp:143
 #, fuzzy, kde-format
 #| msgid "Color name:"
 msgid "Color swatch name:"
 msgstr "Klöörnaam:"
 
 #: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
-#: libs/widgets/kis_palette_view.cpp:117
+#: libs/widgets/kis_palette_view.cpp:144
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgctxt "Color as the Color of a Swatch in a Palette"
@@ -37077,13 +37077,13 @@ msgid "Color:"
 msgstr "Klöör:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/widgets/kis_palette_view.cpp:145
 #, fuzzy, kde-format
 #| msgid "Stop color."
 msgid "Spot color:"
 msgstr "Stopklöör"
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:141
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch Group:"
@@ -38460,19 +38460,19 @@ msgstr "&Deepde:"
 msgid "Li&nk with Layer"
 msgstr "&Klöörlaag"
 
-#: libs/ui/opengl/kis_opengl.cpp:170
+#: libs/ui/opengl/kis_opengl.cpp:172
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:687
+#: libs/ui/opengl/kis_opengl.cpp:689
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:689
+#: libs/ui/opengl/kis_opengl.cpp:691
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -38480,14 +38480,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1172
+#: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1174
+#: libs/ui/opengl/kis_opengl.cpp:1176
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -40825,21 +40825,21 @@ msgstr "All kören"
 msgid "Select a directory to load..."
 msgstr "All kören"
 
-#: libs/widgets/kis_palette_view.cpp:106
+#: libs/widgets/kis_palette_view.cpp:133
 #, fuzzy, kde-format
 #| msgid "Default"
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Standard"
 
-#: libs/widgets/kis_palette_view.cpp:120
+#: libs/widgets/kis_palette_view.cpp:147
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Klöör"
 
-#: libs/widgets/kis_palette_view.cpp:146
+#: libs/widgets/kis_palette_view.cpp:173
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Add shapes to group"
@@ -40847,20 +40847,20 @@ msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "Formen na Koppel tofögen"
 
-#: libs/widgets/kis_palette_view.cpp:149
+#: libs/widgets/kis_palette_view.cpp:176
 #, fuzzy, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "&Klöör:"
 
-#: libs/widgets/kis_palette_view.cpp:150
+#: libs/widgets/kis_palette_view.cpp:177
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "Naam"
 
-#: libs/widgets/kis_palette_view.cpp:172
+#: libs/widgets/kis_palette_view.cpp:199
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"
@@ -43661,42 +43661,42 @@ msgid_plural "Insert %1 frames"
 msgstr[0] "Naam infögen"
 msgstr[1] "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:189
 #, fuzzy, kde-format
 msgid "Edit Layers:"
 msgstr "Lagen"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:234
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:235
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1521
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1522
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Koppelnaam ingeven:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1629
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1630
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Aktuell Akschoon wegmaken"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1656
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1657
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1664
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1665
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -44632,17 +44632,17 @@ msgstr "Eerst Laag ut Twischenaflaag"
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1361
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1357
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, fuzzy, kde-format
 msgid "No"
 msgstr "Noppen"
 
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, fuzzy, kde-format
 msgid "Yes"
 msgstr "Geeltöön"

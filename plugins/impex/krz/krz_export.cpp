@@ -79,6 +79,10 @@ QString KrzExport::verify(const QString &fileName) const
     return error;
 }
 
+bool KrzExport::exportSupportsGuides() const {
+    return true;
+}
+
 
 #include <krz_export.moc>
 

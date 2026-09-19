@@ -50,7 +50,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-09-09 22:37+0200\n"
+"PO-Revision-Date: 2026-09-19 00:04+0200\n"
 "Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
 "Language-Team: Czech <kde-i18n-cs@kde.org>\n"
 "Language: cs\n"
@@ -7707,14 +7707,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr ""
+msgstr "Převést text na předformátovaný"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
 #, kde-format
 msgctxt "action"
 msgid "Preformatted"
-msgstr ""
+msgstr "Předformátovaný"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
@@ -7730,14 +7730,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr ""
+msgstr "Převést na text se zalomením řádků"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
 #, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
-msgstr ""
+msgstr "Zalamování řádků"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
@@ -7747,20 +7747,22 @@ msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
+"Text se zalamuje podle pevné délky, mezery a nové řádky jsou zachovány. Nové "
+"řádky se neodstraní."
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr ""
+msgstr "Převést text na pozicovaný"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
 #, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr ""
+msgstr "Pozicovaný"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
@@ -7770,14 +7772,16 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
+"Text pro pozicování každého řádku používá znakové transformace SVG 1.1. "
+"Mezery a nové řádky jsou sloučeny. Toto slouží pro zpětnou kompatibilitu s "
+"SVG 1.1."
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "SVG Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Tvar textu SVG"
+msgstr "Přidat text na tvar"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
@@ -7795,7 +7799,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr ""
+msgstr "Odečíst tvar z textového řetězce"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7804,13 +7808,14 @@ msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
+"Provede přidání tvarů do oblasti odečtených tvarů z prvního vybraného textu."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Přidat text na cestu"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
@@ -7821,11 +7826,10 @@ msgstr "Dát první vybraný tok textu na první vybranou cestu."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove from this tag"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Odstranit z této značky"
+msgstr "Odstranit tvary z textového řetězce"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
@@ -7843,14 +7847,14 @@ msgstr "Odebrat tvary z textového řetězce a přidat je do vrstvy."
 #, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr ""
+msgstr "Přepnout typ toku tvaru"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Přepnout současný tok tvaru mezi režimy Uvnitř a Odečíst"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7861,7 +7865,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Nastavit tok tvaru jako poslední"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7869,56 +7873,57 @@ msgstr ""
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
+"Provést tento tok tvaru posledním v textovém řetězci používaném v rozvržení "
+"textu."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "Dřívější v řetězci."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "Přesunout tento tvar na dřívější v textovém řetězci."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Přesunout tvar na dřívější v řetězci."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "Pozdější v řetězci"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "Přesunout tento tvar na pozdější v textovém řetězci."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Přesunout tvar na pozdější v řetězci."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Odsazení prvního řádku"
+msgstr "První v řetězci"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7927,13 +7932,15 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
+"Provést tento tok tvaru prvním v textovém řetězci používaném v rozvržení "
+"textu."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
 #, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr ""
+msgstr "Nastavit tvar jako první v řetězci"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -8126,7 +8133,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Break at point"
-msgstr ""
+msgstr "Přerušit v bodě"
 
 #. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
@@ -8139,7 +8146,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr ""
+msgstr "Přerušit na výběru"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -8522,21 +8529,21 @@ msgstr "Zobrazit informace o systému pro hlášení chyb."
 #, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr ""
+msgstr "Zobrazit informace správy barev"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
 #, kde-format
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
-msgstr ""
+msgstr "Zobrazit informace správy barev pro povrch současného obrázku"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
 #, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr ""
+msgstr "Zobrazit informace o systému pro hlášení chyb"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -15593,19 +15600,17 @@ msgstr "Hladké"
 
 #. i18n: context: text @ Action (enable_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1609
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Enable Selection Actions Bar"
 msgstr "Povolit Panel akcí výběru"
 
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
-#, fuzzy, kde-format
-#| msgid "Enable Selection Actions Bar"
+#, kde-format
 msgctxt "action"
 msgid "Configure selection actions bar"
-msgstr "Povolit Panel akcí výběru"
+msgstr "Konfigurovat Panel akcí výběru"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1634
@@ -16303,46 +16308,41 @@ msgstr "Pracovní plochy"
 
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgctxt "action"
 msgid "Resources"
 msgstr "Zdroje"
 
 #. i18n: context: text @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources..."
-msgstr "Spravovat zdroje..."
+msgstr "Získat více zdrojů..."
 
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
-#, fuzzy, kde-format
-#| msgid "Delete Resources"
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources"
-msgstr "Smazat zdroje"
+msgstr "Získat více zdrojů"
 
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgctxt "action"
 msgid "Management"
-msgstr "Správa barev"
+msgstr "Správa"
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
 #, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
-msgstr ""
+msgstr "Spravovat benefity podporovatelů..."
 
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
@@ -16352,56 +16352,48 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr ""
+msgstr "Spravovat benefity podporovatelů"
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions..."
-msgstr "Spravovat zdroje..."
+msgstr "Spravovat odběry..."
 
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:36 krita/kritamenu_android.action:37
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions"
-msgstr "Popis"
+msgstr "Spravovat odběry"
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr "Uživatelské rozhraní"
+msgstr "Rozhraní"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr "Změnit obdélník"
+msgstr "Změnit škálování rozhraní..."
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:51 krita/kritamenu_android.action:52
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr "Změnit obdélník"
+msgstr "Změnit škálování rozhraní"
 
 #: krita/main.cc:723
 #, kde-format
@@ -16584,7 +16576,7 @@ msgstr "Převést na cestu"
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "Rozbít podcestu v bodech"
+msgstr "Přerušit podcestu v bodech"
 
 #: libs/flake/commands/KoPathCombineCommand.cpp:54
 msgctxt "(qtundo-format)"
@@ -16631,17 +16623,17 @@ msgstr "Obrátit cesty"
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr ""
+msgstr "Přerušit podcestu"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr ""
+msgstr "Změnit segmenty na křivky"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:123
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr ""
+msgstr "Změnit segmenty na čáry"
 
 #: libs/flake/commands/KoPathShapeMarkerCommand.cpp:29
 msgctxt "(qtundo-format)"
@@ -16664,7 +16656,7 @@ msgstr "Nastavit pozadí"
 #: libs/flake/commands/KoShapeClipCommand.cpp:72
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
-msgstr ""
+msgstr "Oříznout tvar"
 
 #: libs/flake/commands/KoShapeCreateCommand.cpp:50
 #, kde-format
@@ -16691,7 +16683,7 @@ msgstr[2] "Smazat tvary"
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
-msgstr ""
+msgstr "Rozmístit tvary"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
@@ -16703,7 +16695,7 @@ msgstr "Seskupit tvary"
 #: libs/flake/commands/KoShapeGroupCommand.cpp:69
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr ""
+msgstr "Přidat tvary do skupiny"
 
 #: libs/flake/commands/KoShapeKeepAspectRatioCommand.cpp:14
 msgctxt "(qtundo-format)"
@@ -16713,7 +16705,7 @@ msgstr "Zachovat poměr"
 #: libs/flake/commands/KoShapeLockCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr ""
+msgstr "Uzamknout tvary"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -16724,12 +16716,12 @@ msgstr "Změnit vlastnosti tvaru textu"
 #: libs/flake/commands/KoShapeMoveCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
-msgstr ""
+msgstr "Přesunout tvary"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr ""
+msgstr "Nastavit pořadí malování"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -16740,7 +16732,7 @@ msgstr "Přejmenovat tvar"
 #: libs/flake/commands/KoShapeReorderCommand.cpp:66
 msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
-msgstr ""
+msgstr "Přeskupit tvary"
 
 #: libs/flake/commands/KoShapeResizeCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -16755,7 +16747,7 @@ msgstr "Zkosit tvary"
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
-msgstr ""
+msgstr "Upravit velikost tvarů"
 
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:55
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:74
@@ -16774,12 +16766,12 @@ msgstr "Nastavit krytí"
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr ""
+msgstr "Zrušit ořez tvaru"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:92
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr ""
+msgstr "Zrušit ořez tvarů"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1636
@@ -16790,25 +16782,22 @@ msgstr "Zrušit seskupení tvarů"
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
-msgstr ""
+msgstr "Uzavřít podcestu"
 
 #: libs/flake/commands/KoSubpathRemoveCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
-msgstr ""
+msgstr "Odstranit podcestu"
 
 #: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr ""
+msgstr "Převést typ textu"
 
 #: libs/flake/commands/KoSvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Shape Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Změnit vlastnosti tvaru textu"
+msgstr "Změnit vlastnosti textu na cestě"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -16818,17 +16807,17 @@ msgstr "Ukládání KoShapeLayer do html není implementováno!"
 #: libs/flake/html/HtmlWriter.cpp:76
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
-msgstr ""
+msgstr "KoShapeGroup na html ještě není implementována!"
 
 #: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
-msgstr ""
+msgstr "ukládání do html selhalo"
 
 #: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
-msgstr ""
+msgstr "Nelze uložit %1 do html"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
@@ -16844,7 +16833,7 @@ msgstr ""
 #: libs/flake/KoPathShapeFactory.cpp:23
 #, kde-format
 msgid "Simple path shape"
-msgstr ""
+msgstr "Jednoduchý tvar cesty"
 
 #: libs/flake/KoPathShapeFactory.cpp:25
 #, kde-format
@@ -16874,13 +16863,13 @@ msgstr "Přizpůsobit šířce"
 #: libs/flake/KoZoomMode.cpp:29
 #, kde-format
 msgid "Fit Height"
-msgstr ""
+msgstr "Přizpůsobit výšce"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:33
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr ""
+msgstr "Vzorek stylu"
 
 #: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
@@ -16895,2005 +16884,2006 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr ""
+msgstr "Základní latinka"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
 #, kde-format
 msgctxt "@title"
 msgid "Latin-1 Supplement"
-msgstr ""
+msgstr "Dodatečná latinka-1"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:23
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-A"
-msgstr ""
+msgstr "Rozšířená latinka-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:24
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-B"
-msgstr ""
+msgstr "Rozšířená latinka-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:25
 #, kde-format
 msgctxt "@title"
 msgid "IPA Extensions"
-msgstr ""
+msgstr "Rozšíření IPA"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:26
 #, kde-format
 msgctxt "@title"
 msgid "Spacing Modifier Letters"
-msgstr ""
+msgstr "Prostorové modifikátory písmen"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:27
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks"
-msgstr ""
+msgstr "Kombinace diakritických značek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:28
 #, kde-format
 msgctxt "@title"
 msgid "Greek and Coptic"
-msgstr ""
+msgstr "Řecké a koptské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cyrilice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:30
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Supplement"
-msgstr ""
+msgstr "Dodatečná cyrilice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:31
 #, kde-format
 msgctxt "@title"
 msgid "Armenian"
-msgstr ""
+msgstr "Arménské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:32
 #, kde-format
 msgctxt "@title"
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrejské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:33
 #, kde-format
 msgctxt "@title"
 msgid "Arabic"
-msgstr ""
+msgstr "Arabské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:34
 #, kde-format
 msgctxt "@title"
 msgid "Syriac"
-msgstr ""
+msgstr "Syrské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:35
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Supplement"
-msgstr ""
+msgstr "Dodatečné arabské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:36
 #, kde-format
 msgctxt "@title"
 msgid "Thaana"
-msgstr ""
+msgstr "Tána"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "NKo"
-msgstr ""
+msgstr "NKo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:38
 #, kde-format
 msgctxt "@title"
 msgid "Samaritan"
-msgstr ""
+msgstr "Samaritánské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:39
 #, kde-format
 msgctxt "@title"
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandaické"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:40
 #, kde-format
 msgctxt "@title"
 msgid "Syriac Supplement"
-msgstr ""
+msgstr "Dodatečné syrské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:41
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-B"
-msgstr ""
+msgstr "Rozšířené arabské B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:42
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-A"
-msgstr ""
+msgstr "Rozšířené arabské A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:43
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari"
-msgstr ""
+msgstr "Dévanágarí"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:44
 #, kde-format
 msgctxt "@title"
 msgid "Bengali"
-msgstr ""
+msgstr "Bengálské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmukhí"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:46
 #, kde-format
 msgctxt "@title"
 msgid "Gujarati"
-msgstr ""
+msgstr "Gudžarátské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:47
 #, kde-format
 msgctxt "@title"
 msgid "Oriya"
-msgstr ""
+msgstr "Orijské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:48
 #, kde-format
 msgctxt "@title"
 msgid "Tamil"
-msgstr ""
+msgstr "Tamilské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:49
 #, kde-format
 msgctxt "@title"
 msgid "Telugu"
-msgstr ""
+msgstr "Telugské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:50
 #, kde-format
 msgctxt "@title"
 msgid "Kannada"
-msgstr ""
+msgstr "Kannadské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:51
 #, kde-format
 msgctxt "@title"
 msgid "Malayalam"
-msgstr ""
+msgstr "Malajálamské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:52
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala"
-msgstr ""
+msgstr "Sinhalské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:53
 #, kde-format
 msgctxt "@title"
 msgid "Thai"
-msgstr ""
+msgstr "Thajské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:54
 #, kde-format
 msgctxt "@title"
 msgid "Lao"
-msgstr ""
+msgstr "Laoské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:55
 #, kde-format
 msgctxt "@title"
 msgid "Tibetan"
-msgstr ""
+msgstr "Tibetské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:56
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar"
-msgstr ""
+msgstr "Myanmarské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:57
 #, kde-format
 msgctxt "@title"
 msgid "Georgian"
-msgstr ""
+msgstr "Gruzínské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:58
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo"
-msgstr ""
+msgstr "Hangul Jamo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:59
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic"
-msgstr ""
+msgstr "Etiopské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:60
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Supplement"
-msgstr ""
+msgstr "Dodatečné etiopské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:61
 #, kde-format
 msgctxt "@title"
 msgid "Cherokee"
-msgstr ""
+msgstr "Čerokézské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:62
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics"
-msgstr ""
+msgstr "Unifikované kanadské domorodé slabiky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:63
 #, kde-format
 msgctxt "@title"
 msgid "Ogham"
-msgstr ""
+msgstr "Oghamské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:64
 #, kde-format
 msgctxt "@title"
 msgid "Runic"
-msgstr ""
+msgstr "Runové"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:65
 #, kde-format
 msgctxt "@title"
 msgid "Tagalog"
-msgstr ""
+msgstr "Tagalog"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:66
 #, kde-format
 msgctxt "@title"
 msgid "Hanunoo"
-msgstr ""
+msgstr "Hanunoo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:67
 #, kde-format
 msgctxt "@title"
 msgid "Buhid"
-msgstr ""
+msgstr "Buhid"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:68
 #, kde-format
 msgctxt "@title"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "Tagbanwa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:69
 #, kde-format
 msgctxt "@title"
 msgid "Khmer"
-msgstr ""
+msgstr "Khmérské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:70
 #, kde-format
 msgctxt "@title"
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongolské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:71
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended"
-msgstr ""
+msgstr "Unifikované kanadské domorodé rozšířené slabiky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:72
 #, kde-format
 msgctxt "@title"
 msgid "Limbu"
-msgstr ""
+msgstr "Limbu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:73
 #, kde-format
 msgctxt "@title"
 msgid "Tai Le"
-msgstr ""
+msgstr "Tai Le"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:74
 #, kde-format
 msgctxt "@title"
 msgid "New Tai Lue"
-msgstr ""
+msgstr "Nové Tai Lue"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
 #, kde-format
 msgctxt "@title"
 msgid "Khmer Symbols"
-msgstr ""
+msgstr "Khmérské symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:76
 #, kde-format
 msgctxt "@title"
 msgid "Buginese"
-msgstr ""
+msgstr "Bugijské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:77
 #, kde-format
 msgctxt "@title"
 msgid "Tai Tham"
-msgstr ""
+msgstr "Tai Tham"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:78
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Extended"
-msgstr ""
+msgstr "Rozšířená kombinace diakritických značek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:79
 #, kde-format
 msgctxt "@title"
 msgid "Balinese"
-msgstr ""
+msgstr "Balijština"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:80
 #, kde-format
 msgctxt "@title"
 msgid "Sundanese"
-msgstr ""
+msgstr "Sundanéské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:81
 #, kde-format
 msgctxt "@title"
 msgid "Batak"
-msgstr ""
+msgstr "Batak"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:82
 #, kde-format
 msgctxt "@title"
 msgid "Lepcha"
-msgstr ""
+msgstr "Lepcha"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:83
 #, kde-format
 msgctxt "@title"
 msgid "Ol Chiki"
-msgstr ""
+msgstr "Ol Chiki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:84
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-C"
-msgstr ""
+msgstr "Rozšířená cyrilice C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
 #, kde-format
 msgctxt "@title"
 msgid "Georgian Extended"
-msgstr ""
+msgstr "Rozšířené gruzínské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:86
 #, kde-format
 msgctxt "@title"
 msgid "Sundanese Supplement"
-msgstr ""
+msgstr "Dodatečné Sundanéské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:87
 #, kde-format
 msgctxt "@title"
 msgid "Vedic Extensions"
-msgstr ""
+msgstr "Védické rozšíření"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
 #, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr ""
+msgstr "Fonetická rozšíření"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
 #, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions Supplement"
-msgstr ""
+msgstr "Dodatečné fonetické rozšíření"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:90
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Supplement"
-msgstr ""
+msgstr "Kombinace dodatečných diakritických značek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:91
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended Additional"
-msgstr ""
+msgstr "Dodatečná rozšířená latinka"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
 #, kde-format
 msgctxt "@title"
 msgid "Greek Extended"
-msgstr ""
+msgstr "Rozšířené řecké"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
 #, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr ""
+msgstr "Obecná interpunkce"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
 msgctxt "@title"
 msgid "Superscripts and Subscripts"
-msgstr ""
+msgstr "Horní a dolní indexy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:95
 #, kde-format
 msgctxt "@title"
 msgid "Currency Symbols"
-msgstr ""
+msgstr "Měnové symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks for Symbols"
-msgstr ""
+msgstr "Kombinace diakritických značek pro symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:97
 #, kde-format
 msgctxt "@title"
 msgid "Letterlike Symbols"
-msgstr ""
+msgstr "Písmenné symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:98
 #, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr ""
+msgstr "Číselné formy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
 #, kde-format
 msgctxt "@title"
 msgid "Arrows"
-msgstr ""
+msgstr "Šipky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
-msgstr ""
+msgstr "Matematické operátory"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Technical"
-msgstr ""
+msgstr "Různé technické"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:102
 #, kde-format
 msgctxt "@title"
 msgid "Control Pictures"
-msgstr ""
+msgstr "Kontrolní obrázky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
 #, kde-format
 msgctxt "@title"
 msgid "Optical Character Recognition"
-msgstr ""
+msgstr "Optické rozpoznávání znaků"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:104
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumerics"
-msgstr ""
+msgstr "Vložené alfanumeriky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:105
 #, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr ""
+msgstr "Kreslení rámečků"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
 #, kde-format
 msgctxt "@title"
 msgid "Block Elements"
-msgstr ""
+msgstr "Blokové prvky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:107
 #, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr ""
+msgstr "Geometrické tvary"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols"
-msgstr ""
+msgstr "Různé symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:109
 #, kde-format
 msgctxt "@title"
 msgid "Dingbats"
-msgstr ""
+msgstr "Dingbaty"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:110
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Mathematical Symbols-A"
-msgstr ""
+msgstr "Různé matematické symboly A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:111
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-A"
-msgstr ""
+msgstr "Dodatečné šipky A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
 #, kde-format
 msgctxt "@title"
 msgid "Braille Patterns"
-msgstr ""
+msgstr "Braillovy vzory"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:113
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-B"
-msgstr ""
+msgstr "Dodatečné šipky B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:114
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Mathematical Symbols-B"
-msgstr ""
+msgstr "Různé matematické symboly B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:115
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Mathematical Operators"
-msgstr ""
+msgstr "Dodatečné matematické operátory"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:116
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Arrows"
-msgstr ""
+msgstr "Různé symboly a šipky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:117
 #, kde-format
 msgctxt "@title"
 msgid "Glagolitic"
-msgstr ""
+msgstr "Hlaholice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:118
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-C"
-msgstr ""
+msgstr "Rozšířená latinka C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:119
 #, kde-format
 msgctxt "@title"
 msgid "Coptic"
-msgstr ""
+msgstr "Koptské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:120
 #, kde-format
 msgctxt "@title"
 msgid "Georgian Supplement"
-msgstr ""
+msgstr "Dodatečné gruzínské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:121
 #, kde-format
 msgctxt "@title"
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinagh"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:122
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended"
-msgstr ""
+msgstr "Rozšířené etiopské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:123
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-A"
-msgstr ""
+msgstr "Rozšířená cyrilice A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:124
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Punctuation"
-msgstr ""
+msgstr "Dodatečná interpunkce"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:125
 #, kde-format
 msgctxt "@title"
 msgid "CJK Radicals Supplement"
-msgstr ""
+msgstr "Doplňkové radikály CJK"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:126
 #, kde-format
 msgctxt "@title"
 msgid "Kangxi Radicals"
-msgstr ""
+msgstr "Kangxi radikály"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:127
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Description Characters"
-msgstr ""
+msgstr "Znaky pro ideografický popis"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:128
 #, kde-format
 msgctxt "@title"
 msgid "CJK Symbols and Punctuation"
-msgstr ""
+msgstr "CJK symboly a interpunkce"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:129
 #, kde-format
 msgctxt "@title"
 msgid "Hiragana"
-msgstr ""
+msgstr "Hiragana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:130
 #, kde-format
 msgctxt "@title"
 msgid "Katakana"
-msgstr ""
+msgstr "Katakana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:131
 #, kde-format
 msgctxt "@title"
 msgid "Bopomofo"
-msgstr ""
+msgstr "Bopomofo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:132
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Compatibility Jamo"
-msgstr ""
+msgstr "Hangul kompatibilní Jamo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:133
 #, kde-format
 msgctxt "@title"
 msgid "Kanbun"
-msgstr ""
+msgstr "Kanbun"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:134
 #, kde-format
 msgctxt "@title"
 msgid "Bopomofo Extended"
-msgstr ""
+msgstr "Bopomofo rozšířené"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:135
 #, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr ""
+msgstr "CJK tahy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
 #, kde-format
 msgctxt "@title"
 msgid "Katakana Phonetic Extensions"
-msgstr ""
+msgstr "Fonetická rozšíření Katakana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:137
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed CJK Letters and Months"
-msgstr ""
+msgstr "Vložená CJK písmena a měsíce"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:138
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility"
-msgstr ""
+msgstr "CJK kompatibilita"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:139
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension A"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:140
 #, kde-format
 msgctxt "@title"
 msgid "Yijing Hexagram Symbols"
-msgstr ""
+msgstr "Symboly Yijing hexagram"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:141
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs"
-msgstr ""
+msgstr "CJK unifikované ideogramy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:142
 #, kde-format
 msgctxt "@title"
 msgid "Yi Syllables"
-msgstr ""
+msgstr "Yi slabiky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:143
 #, kde-format
 msgctxt "@title"
 msgid "Yi Radicals"
-msgstr ""
+msgstr "Yi radikály"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:144
 #, kde-format
 msgctxt "@title"
 msgid "Lisu"
-msgstr ""
+msgstr "Lisu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:145
 #, kde-format
 msgctxt "@title"
 msgid "Vai"
-msgstr ""
+msgstr "Vai"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:146
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-B"
-msgstr ""
+msgstr "Rozšířená cyrilice B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:147
 #, kde-format
 msgctxt "@title"
 msgid "Bamum"
-msgstr ""
+msgstr "Bamum"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:148
 #, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr ""
+msgstr "Modifikátory písmen tónů"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-D"
-msgstr ""
+msgstr "Rozšířená latinka D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:150
 #, kde-format
 msgctxt "@title"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "Syloti Nagri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:151
 #, kde-format
 msgctxt "@title"
 msgid "Common Indic Number Forms"
-msgstr ""
+msgstr "Obecné indické číselné formy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:152
 #, kde-format
 msgctxt "@title"
 msgid "Phags-pa"
-msgstr ""
+msgstr "Phags Pa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:153
 #, kde-format
 msgctxt "@title"
 msgid "Saurashtra"
-msgstr ""
+msgstr "Saurashtra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:154
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended"
-msgstr ""
+msgstr "Rozšířené Dévanágarí"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:155
 #, kde-format
 msgctxt "@title"
 msgid "Kayah Li"
-msgstr ""
+msgstr "Kayah Li"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:156
 #, kde-format
 msgctxt "@title"
 msgid "Rejang"
-msgstr ""
+msgstr "Rejang"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:157
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo Extended-A"
-msgstr ""
+msgstr "Rozšířené Hangul Jamo A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:158
 #, kde-format
 msgctxt "@title"
 msgid "Javanese"
-msgstr ""
+msgstr "Jávské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:159
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-B"
-msgstr ""
+msgstr "Rozšířené Myanmarské B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:160
 #, kde-format
 msgctxt "@title"
 msgid "Cham"
-msgstr ""
+msgstr "Cham"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:161
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-A"
-msgstr ""
+msgstr "Rozšířené Myanmarské A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:162
 #, kde-format
 msgctxt "@title"
 msgid "Tai Viet"
-msgstr ""
+msgstr "Tai Viet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:163
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek Extensions"
-msgstr ""
+msgstr "Rozšíření Meetei Mayek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:164
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-A"
-msgstr ""
+msgstr "Rozšířené etiopské A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:165
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-E"
-msgstr ""
+msgstr "Rozšířená latinka E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
 #, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr ""
+msgstr "Dodatečné Čerokézské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "Meetei Mayek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:168
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Syllables"
-msgstr ""
+msgstr "Hangul slabiky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:169
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo Extended-B"
-msgstr ""
+msgstr "Rozšířené Hangul Jamo B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:170
 #, kde-format
 msgctxt "@title"
 msgid "High Surrogates"
-msgstr ""
+msgstr "Vyšší náhrady"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
 #, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr ""
+msgstr "Vyšší náhrady pro soukromé použití"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
 msgctxt "@title"
 msgid "Low Surrogates"
-msgstr ""
+msgstr "Nižší náhrady"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:173
 #, kde-format
 msgctxt "@title"
 msgid "Private Use Area"
-msgstr ""
+msgstr "Oblast soukromého využití"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:174
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs"
-msgstr ""
+msgstr "CJK kompatibilní ideogramy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:175
 #, kde-format
 msgctxt "@title"
 msgid "Alphabetic Presentation Forms"
-msgstr ""
+msgstr "Formy prezentace abecedy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:176
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-A"
-msgstr ""
+msgstr "Arabské prezentační formy A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr ""
+msgstr "Selektory variací"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr ""
+msgstr "Svislé formy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
 #, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr ""
+msgstr "Poloviční znaky pro kombinování"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Forms"
-msgstr ""
+msgstr "CJK kompatibilní formy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:181
 #, kde-format
 msgctxt "@title"
 msgid "Small Form Variants"
-msgstr ""
+msgstr "Varianty malých forem"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:182
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-B"
-msgstr ""
+msgstr "Arabské prezentační formy B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:183
 #, kde-format
 msgctxt "@title"
 msgid "Halfwidth and Fullwidth Forms"
-msgstr ""
+msgstr "Formy s poloviční a úplnou šířkou"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
 #, kde-format
 msgctxt "@title"
 msgid "Specials"
-msgstr ""
+msgstr "Speciální"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
 #, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr ""
+msgstr "Lineární B slabiky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
 #, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr ""
+msgstr "Lineární B ideogramy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
 #, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr ""
+msgstr "Egejské číslice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Numbers"
-msgstr ""
+msgstr "Starověká řecká čísla"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr ""
+msgstr "Starověké symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
 msgctxt "@title"
 msgid "Phaistos Disc"
-msgstr ""
+msgstr "Faistský disk"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:191
 #, kde-format
 msgctxt "@title"
 msgid "Lycian"
-msgstr ""
+msgstr "Lycijské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
 #, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr ""
+msgstr "Karijské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
 msgctxt "@title"
 msgid "Coptic Epact Numbers"
-msgstr ""
+msgstr "Koptské epact číslice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
 #, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr ""
+msgstr "Staroitalské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
 msgctxt "@title"
 msgid "Gothic"
-msgstr ""
+msgstr "Gótské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
 #, kde-format
 msgctxt "@title"
 msgid "Old Permic"
-msgstr ""
+msgstr "Staropermské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
 #, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr ""
+msgstr "Ugaritské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
 msgctxt "@title"
 msgid "Old Persian"
-msgstr ""
+msgstr "Staroperské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
 #, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr ""
+msgstr "Deseret"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
 msgctxt "@title"
 msgid "Shavian"
-msgstr ""
+msgstr "Shavský"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:201
 #, kde-format
 msgctxt "@title"
 msgid "Osmanya"
-msgstr ""
+msgstr "Osmanské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:202
 #, kde-format
 msgctxt "@title"
 msgid "Osage"
-msgstr ""
+msgstr "Osage"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:203
 #, kde-format
 msgctxt "@title"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:204
 #, kde-format
 msgctxt "@title"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Kavkazskoalbánské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Vithkuqi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:206
 #, kde-format
 msgctxt "@title"
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
 #, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr ""
+msgstr "Lineární A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr ""
+msgstr "Rozšířená latinka F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
 #, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr ""
+msgstr "Kyperské slabiky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
 msgctxt "@title"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Imperiální aramejské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmyrské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:212
 #, kde-format
 msgctxt "@title"
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabataean"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:213
 #, kde-format
 msgctxt "@title"
 msgid "Hatran"
-msgstr ""
+msgstr "Hatran"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:214
 #, kde-format
 msgctxt "@title"
 msgid "Phoenician"
-msgstr ""
+msgstr "Fénické"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:215
 #, kde-format
 msgctxt "@title"
 msgid "Lydian"
-msgstr ""
+msgstr "Lydijské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:216
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Meroitické hieroglyfy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:217
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Meroitská kurzíva"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:218
 #, kde-format
 msgctxt "@title"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Kharoshthi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Staré jihoarabské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:220
 #, kde-format
 msgctxt "@title"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Staré severoarabské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:221
 #, kde-format
 msgctxt "@title"
 msgid "Manichaean"
-msgstr ""
+msgstr "Maničejské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:222
 #, kde-format
 msgctxt "@title"
 msgid "Avestan"
-msgstr ""
+msgstr "Avestské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Nápisové parthské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Nápisové pahlaví"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:225
 #, kde-format
 msgctxt "@title"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Žalmové pahlaví"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
 #, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Staroturecké"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
 msgctxt "@title"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "Staromaďarské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:228
 #, kde-format
 msgctxt "@title"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Hanifi Rohingya"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:229
 #, kde-format
 msgctxt "@title"
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:230
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "Číselné symboly Rumi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Yezidi"
-msgstr ""
+msgstr "Jezídské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:232
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-C"
-msgstr ""
+msgstr "Rozšířené arabské C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:233
 #, kde-format
 msgctxt "@title"
 msgid "Old Sogdian"
-msgstr ""
+msgstr "Staré Soghdské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:234
 #, kde-format
 msgctxt "@title"
 msgid "Sogdian"
-msgstr ""
+msgstr "Soghdské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:235
 #, kde-format
 msgctxt "@title"
 msgid "Old Uyghur"
-msgstr ""
+msgstr "Staroujgurské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:236
 #, kde-format
 msgctxt "@title"
 msgid "Chorasmian"
-msgstr ""
+msgstr "Choresmijské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:237
 #, kde-format
 msgctxt "@title"
 msgid "Elymaic"
-msgstr ""
+msgstr "Elymské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:238
 #, kde-format
 msgctxt "@title"
 msgid "Brahmi"
-msgstr ""
+msgstr "Bráhmí"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:239
 #, kde-format
 msgctxt "@title"
 msgid "Kaithi"
-msgstr ""
+msgstr "Kaithi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:240
 #, kde-format
 msgctxt "@title"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:241
 #, kde-format
 msgctxt "@title"
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:242
 #, kde-format
 msgctxt "@title"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajanské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
 #, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr ""
+msgstr "Sharada"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala Archaic Numbers"
-msgstr ""
+msgstr "Sinhalské starobylé číslice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:245
 #, kde-format
 msgctxt "@title"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
 #, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr ""
+msgstr "Multani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
 msgctxt "@title"
 msgid "Khudawadi"
-msgstr ""
+msgstr "Khudawadi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:248
 #, kde-format
 msgctxt "@title"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:250
 #, kde-format
 msgctxt "@title"
 msgid "Newa"
-msgstr ""
+msgstr "Newa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:251
 #, kde-format
 msgctxt "@title"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:252
 #, kde-format
 msgctxt "@title"
 msgid "Siddham"
-msgstr ""
+msgstr "Siddham"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
 #, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr ""
+msgstr "Modi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
 msgctxt "@title"
 msgid "Mongolian Supplement"
-msgstr ""
+msgstr "Dodatečné mongolské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:255
 #, kde-format
 msgctxt "@title"
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:256
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-C"
-msgstr ""
+msgstr "Rozšířené myanmarské C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:257
 #, kde-format
 msgctxt "@title"
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:258
 #, kde-format
 msgctxt "@title"
 msgid "Dogra"
-msgstr ""
+msgstr "Dogra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:259
 #, kde-format
 msgctxt "@title"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:260
 #, kde-format
 msgctxt "@title"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Nandinagari"
-msgstr ""
+msgstr "Nandinagari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:262
 #, kde-format
 msgctxt "@title"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Dzanabadzarské pravoúhlé"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:263
 #, kde-format
 msgctxt "@title"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:264
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr ""
+msgstr "Unifikované kanadské domorodé rozšířené slabiky A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:266
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended-A"
-msgstr ""
+msgstr "Rozšířené Dévanágarí A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:267
 #, kde-format
 msgctxt "@title"
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunuwar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:268
 #, kde-format
 msgctxt "@title"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
 #, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr ""
+msgstr "Marchen"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
 msgctxt "@title"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:271
 #, kde-format
 msgctxt "@title"
 msgid "Gunjala Gondi"
-msgstr ""
+msgstr "Gunjala Gondi"
 
+# MG
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:272
 #, kde-format
 msgctxt "@title"
 msgid "Makasar"
-msgstr ""
+msgstr "Makasarské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Kawi"
-msgstr ""
+msgstr "Kawi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:274
 #, kde-format
 msgctxt "@title"
 msgid "Lisu Supplement"
-msgstr ""
+msgstr "Dodatečné lisu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:275
 #, kde-format
 msgctxt "@title"
 msgid "Tamil Supplement"
-msgstr ""
+msgstr "Dodatečné tamil"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:276
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr ""
+msgstr "Klínové písmo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform Numbers and Punctuation"
-msgstr ""
+msgstr "Čísla a interpunkce klínového písma"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:278
 #, kde-format
 msgctxt "@title"
 msgid "Early Dynastic Cuneiform"
-msgstr ""
+msgstr "Rané klínové písmo dynastie"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:279
 #, kde-format
 msgctxt "@title"
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Kyprominoské"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:280
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "Egyptské hieroglyfy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:281
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr ""
+msgstr "Ovládání formátu egyptských hieroglyfů"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:282
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr ""
+msgstr "Rozšířené egyptské hieroglyfy A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:283
 #, kde-format
 msgctxt "@title"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Anatolijské hieroglyfy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:284
 #, kde-format
 msgctxt "@title"
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:285
 #, kde-format
 msgctxt "@title"
 msgid "Bamum Supplement"
-msgstr ""
+msgstr "Doplňkové bambum"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
 #, kde-format
 msgctxt "@title"
 msgid "Mro"
-msgstr ""
+msgstr "Mro"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:287
 #, kde-format
 msgctxt "@title"
 msgid "Tangsa"
-msgstr ""
+msgstr "Tangsa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:288
 #, kde-format
 msgctxt "@title"
 msgid "Bassa Vah"
-msgstr ""
+msgstr "Bassa Vah"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:290
 #, kde-format
 msgctxt "@title"
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:291
 #, kde-format
 msgctxt "@title"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "Medefaidrin"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:292
 #, kde-format
 msgctxt "@title"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Symbols and Punctuation"
-msgstr ""
+msgstr "Ideografické symboly a interpunkce"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:294
 #, kde-format
 msgctxt "@title"
 msgid "Tangut"
-msgstr ""
+msgstr "Tangut"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
 #, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr ""
+msgstr "Komponenty tangutu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
 #, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Malý kitanský skript "
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
 #, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr ""
+msgstr "Dodatečné tangut"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
 #, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr ""
+msgstr "Rozšířené kana B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
 #, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr ""
+msgstr "Dodatečné kana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
 #, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr ""
+msgstr "Rozšířené kana A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
 #, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr ""
+msgstr "Rozšířené malé kana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
 msgctxt "@title"
 msgid "Nushu"
-msgstr ""
+msgstr "Nushu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:303
 #, kde-format
 msgctxt "@title"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployan"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:304
 #, kde-format
 msgctxt "@title"
 msgid "Shorthand Format Controls"
-msgstr ""
+msgstr "Ovládání formátu těsnopisu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "Dodatečné symboly pro původní počítače"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:306
 #, kde-format
 msgctxt "@title"
 msgid "Znamenny Musical Notation"
-msgstr ""
+msgstr "Hudební zápis znamenný"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:307
 #, kde-format
 msgctxt "@title"
 msgid "Byzantine Musical Symbols"
-msgstr ""
+msgstr "Byzantské hudební symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:308
 #, kde-format
 msgctxt "@title"
 msgid "Musical Symbols"
-msgstr ""
+msgstr "Hudební symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Musical Notation"
-msgstr ""
+msgstr "Starověká řecká hudební notace"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:310
 #, kde-format
 msgctxt "@title"
 msgid "Kaktovik Numerals"
-msgstr ""
+msgstr "Kaktovské číslice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
 #, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr ""
+msgstr "Mayské číslice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
 msgctxt "@title"
 msgid "Tai Xuan Jing Symbols"
-msgstr ""
+msgstr "Symboly Tai Xuan Jing"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Counting Rod Numerals"
-msgstr ""
+msgstr "Číslice počítací tyčinky"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:314
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Alphanumeric Symbols"
-msgstr ""
+msgstr "Matematické alfanumerické symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
 #, kde-format
 msgctxt "@title"
 msgid "Sutton SignWriting"
-msgstr ""
+msgstr "Suttonský znakopis"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:316
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-G"
-msgstr ""
+msgstr "Rozšířená latinka G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
 #, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr ""
+msgstr "Dodatečná hlaholice"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-D"
-msgstr ""
+msgstr "Rozšířená cyrilice A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:319
 #, kde-format
 msgctxt "@title"
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng Puachue Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:320
 #, kde-format
 msgctxt "@title"
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
 #, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr ""
+msgstr "Wancho"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
 msgctxt "@title"
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag Mundari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
 #, kde-format
 msgctxt "@title"
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:324
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-B"
-msgstr ""
+msgstr "Rozšířené etiopské B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:325
 #, kde-format
 msgctxt "@title"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende Kikakui"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:326
 #, kde-format
 msgctxt "@title"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:327
 #, kde-format
 msgctxt "@title"
 msgid "Indic Siyaq Numbers"
-msgstr ""
+msgstr "Indická čísla siyaq"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:328
 #, kde-format
 msgctxt "@title"
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Otomanská čísla siyaq"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:329
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "Arabské matematické písmenné symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
 #, kde-format
 msgctxt "@title"
 msgid "Mahjong Tiles"
-msgstr ""
+msgstr "Dílky Mahjongg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
 #, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr ""
+msgstr "Dílky domina"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
 #, kde-format
 msgctxt "@title"
 msgid "Playing Cards"
-msgstr ""
+msgstr "Hrací karty"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:333
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumeric Supplement"
-msgstr ""
+msgstr "Dodatečné vložené alfanumerické"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:334
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Ideographic Supplement"
-msgstr ""
+msgstr "Dodatečné vložené ideografické"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:335
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr ""
+msgstr "Různé symboly a piktogramy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:336
 #, kde-format
 msgctxt "@title"
 msgid "Emoticons"
-msgstr ""
+msgstr "Emotikony"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:337
 #, kde-format
 msgctxt "@title"
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Zdobené dingbaty"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:338
 #, kde-format
 msgctxt "@title"
 msgid "Transport and Map Symbols"
-msgstr ""
+msgstr "Dopravní a mapové symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:339
 #, kde-format
 msgctxt "@title"
 msgid "Alchemical Symbols"
-msgstr ""
+msgstr "Alchymistické symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:340
 #, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr ""
+msgstr "Rozšířené geometrické tvary"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-C"
-msgstr ""
+msgstr "Dodatečné šipky C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:342
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "Dodatečné symboly a piktogramy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:343
 #, kde-format
 msgctxt "@title"
 msgid "Chess Symbols"
-msgstr ""
+msgstr "Šachové symboly"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:344
 #, kde-format
 msgctxt "@title"
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Rozšířené symboly a piktogramy A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:345
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Symboly pro původní počítače"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:346
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension B"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:347
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension C"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:348
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension D"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:349
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension E"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:350
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension F"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:351
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension I"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření I"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:352
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs Supplement"
-msgstr ""
+msgstr "Dodatečné CJK kompatibilní ideogramy"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:353
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension G"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:354
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension H"
-msgstr ""
+msgstr "CJK unifikované ideogramy rozšíření H"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:355
 #, kde-format
@@ -18905,61 +18895,61 @@ msgstr "Značky"
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors Supplement"
-msgstr ""
+msgstr "Dodatečné selektory variací"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:357
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-A"
-msgstr ""
+msgstr "Dodatečné pro soukromé použití A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:358
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-B"
-msgstr ""
+msgstr "Dodatečné pro soukromé použití B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
 #, kde-format
 msgctxt "@title"
 msgid "No Block"
-msgstr ""
+msgstr "Žádný blok"
 
 #: libs/flake/text/KoFontGlyphModel.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
-msgstr ""
+msgstr "%1 varianty glyfů."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
 #, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr ""
+msgstr "Zpřístupnit všechny alternativy"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
 msgctxt "@tooltip"
 msgid "Access any possible substitutions."
-msgstr ""
+msgstr "Zpřístupnit všechny možné náhrady."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Kontextové alternativy"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr ""
+msgstr "Nahrazuje glyfy na základě jejich kontextu v rámci textu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Kontextové ligatury"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
 #, kde-format
@@ -18968,12 +18958,13 @@ msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
 msgstr ""
+"Nahrazuje sekvence glyfů ligaturami na základě jejich kontextu v rámci textu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Kontextové swash"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18981,12 +18972,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
 msgstr ""
+"Nahrazuje glyfy swashovanými glyfy na základě jejich kontextu v rámci textu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Diskreční ligatury"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18994,31 +18986,32 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
 msgstr ""
+"Nahrazuje sekvence glyfů ligaturami zamýšlenými pro typografický efekt."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Alternativní konečné glyfy na lince"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr ""
+msgstr "Nahrazuje glyfy jejich formami na konci řádku."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
 #, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Historické formy"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their historical forms."
-msgstr ""
+msgstr "Nahrazuje glyfy jejich historickými formami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
 #, kde-format
@@ -19027,30 +19020,32 @@ msgid ""
 "Replaces sequences glyphs with ligatures that were in use in the past, but "
 "rare today."
 msgstr ""
+"Nahrazuje sekvence glyfů ligaturami, které byly používány v minulosti, ale "
+"nyní jsou ojedinělé."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:57
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Alternativy zarovnání"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
-msgstr ""
+msgstr "Nahrazuje glyfy jejich alternativami myšlenými pro zarovnání."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
 #, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr ""
+msgstr "Standardní ligatury"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr ""
+msgstr "Nahrazuje sekvence glyfů běžnými ligaturami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, kde-format
@@ -37893,7 +37888,7 @@ msgstr ""
 msgctxt ""
 "Button to evenly distribute the segments in the segment gradient editor"
 msgid "Distribute segments evenly"
-msgstr ""
+msgstr "Rozmístit segmenty stejnoměrně"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:159
 #, kde-format
@@ -37946,67 +37941,67 @@ msgstr "Vybrat barvu"
 #, kde-format
 msgctxt "Button to select previous stop in the stop gradient editor"
 msgid "Select previous stop"
-msgstr ""
+msgstr "Vybrat předchozí zarážku"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:40
 #, kde-format
 msgctxt "Button to select next stop in the stop gradient editor"
 msgid "Select next stop"
-msgstr ""
+msgstr "Vybrat následující zarážku"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:44
 #, kde-format
 msgctxt "Button to edit the selected stop color in the stop gradient editor"
 msgid "Edit stop"
-msgstr ""
+msgstr "Upravit zarážku"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:48
 #, kde-format
 msgctxt "Button to delete the selected stop in the stop gradient editor"
 msgid "Delete stop"
-msgstr ""
+msgstr "Smazat zarážku"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:52
 #, kde-format
 msgctxt "Button to flip the stops in the stop gradient editor"
 msgid "Flip gradient"
-msgstr ""
+msgstr "Překlopit přechod"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:56
 #, kde-format
 msgctxt "Button to sort the stops by value in the stop gradient editor"
 msgid "Sort stops by value"
-msgstr ""
+msgstr "Seřadit zarážky podle hodnoty"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:60
 #, kde-format
 msgctxt "Button to sort the stops by hue in the stop gradient editor"
 msgid "Sort stops by hue"
-msgstr ""
+msgstr "Seřadit zarážky podle odstínu"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:64
 #, kde-format
 msgctxt "Button to evenly distribute the stops in the stop gradient editor"
 msgid "Distribute stops evenly"
-msgstr ""
+msgstr "Rozmístit zarážky stejnoměrně"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:194
 #, kde-format
 msgctxt "Text that indicates the selected stop in the stop gradient editor"
 msgid "Stop #%1"
-msgstr "Zastavit #%1"
+msgstr "Zarážka #%1"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:232
 #, kde-format
 msgctxt "Text that indicates no stop is selected in the stop gradient editor"
 msgid "No stop selected"
-msgstr ""
+msgstr "Nebyla vybrána žádná zarážka"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:453
 #, kde-format
 msgctxt "Title for the gradient stop editor"
 msgid "Edit Stop"
-msgstr ""
+msgstr "Upravit zarážku"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:112
 #: libs/ui/widgets/kis_color_space_selector.cc:66
@@ -38527,7 +38522,7 @@ msgstr "Vložit jako novou vrstvu"
 #: libs/ui/widgets/kis_canvas_drop.cpp:34
 #, kde-format
 msgid "Insert as New File Layer"
-msgstr ""
+msgstr "Vložit jako novou vrstvu souboru"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:35
 #, kde-format
@@ -38537,7 +38532,7 @@ msgstr "Otevřít v novém dokumentu"
 #: libs/ui/widgets/kis_canvas_drop.cpp:36
 #, kde-format
 msgid "Insert as Reference Image"
-msgstr ""
+msgstr "Vložit jako referenční obrázek"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:38
 #, kde-format
@@ -38547,7 +38542,7 @@ msgstr "Vložit mnoho vrstev"
 #: libs/ui/widgets/kis_canvas_drop.cpp:39
 #, kde-format
 msgid "Insert Many File Layers"
-msgstr ""
+msgstr "Vložit mnoho vrstev souboru"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:40
 #, kde-format
@@ -38557,12 +38552,12 @@ msgstr "Otevřít mnoho dokumentů"
 #: libs/ui/widgets/kis_canvas_drop.cpp:41
 #, kde-format
 msgid "Insert as Reference Images"
-msgstr ""
+msgstr "Vložit jako referenční obrázky"
 
 #: libs/ui/widgets/kis_categorized_list_view.cpp:160
 #, kde-format
 msgid "Unlock (restore settings from preset)"
-msgstr ""
+msgstr "Odemknout (obnovit nastavení z předvolby)"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnLock)
 #: libs/ui/widgets/kis_categorized_list_view.cpp:161
@@ -38574,7 +38569,7 @@ msgstr "Uzamknout"
 #: libs/ui/widgets/kis_categorized_list_view.cpp:166
 #, kde-format
 msgid "Unlock (keep current settings)"
-msgstr ""
+msgstr "Odemknout (ponechat stávající nastavení)"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:669
 #, kde-format
@@ -38634,16 +38629,13 @@ msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
 msgstr ""
-"Nelze uložit %1\n"
-"Důvod: %2"
+"Nelze uložit %1.\n"
+"Důvod: %2."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
@@ -38670,7 +38662,7 @@ msgstr "Žádné možnosti nastavení"
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:145
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr ""
+msgstr "Schránka je prázdná nebo neobsahuje obrázek."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -38680,7 +38672,7 @@ msgstr "Filtrovat podle názvu..."
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:59
 #, kde-format
 msgid "Filter by color label..."
-msgstr ""
+msgstr "Filtrovat podle barevného popisku..."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:81
 #, kde-format
@@ -38941,6 +38933,7 @@ msgstr ""
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
+"Vybrat regiony nalezené po sloučení vrstev se specifickým barevným popiskem"
 
 #: libs/ui/widgets/kis_selection_options.cc:265
 #, kde-format
@@ -43563,7 +43556,7 @@ msgstr ""
 #: plugins/dockers/lut/lutdocker_dock.cpp:120
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
-msgstr ""
+msgstr "Vyberte expozice (zarážky) pro HDR obrázky."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:130
 #, kde-format
@@ -66375,7 +66368,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr ""
+msgstr "Pozicovaný"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:307
 #, kde-format

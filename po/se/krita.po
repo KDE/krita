@@ -68228,7 +68228,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Key Combination"
-#~ msgstr "Boallokombinašuvdna"

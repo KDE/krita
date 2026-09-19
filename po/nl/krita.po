@@ -63,14 +63,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 11:30+0200\n"
+"PO-Revision-Date: 2026-09-18 10:22+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -34225,10 +34225,9 @@ msgid "Smart Zoom Gesture"
 msgstr "Slim zoomgebaar"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "Aanraakgebaren"
+msgstr "Schuifgebaren op touchpad"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -34310,18 +34309,16 @@ msgid "Mouse Wheel"
 msgstr "Muiswiel"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Aanraakgebaren"
+msgstr "Aanraakgebaar"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "Aanraakgebaren"
+msgstr "Aanraakgebaar op touchpad"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -34339,10 +34336,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "Loggen van gebeurtenissen op het tablet uitgeschakeld"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "Tijdelijke hulpbronnen"
+msgstr "Tijdelijke rechte liniaal"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -34350,13 +34346,13 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
+"De actie <i>Tijdelijke rechte liniaal</i> maakt een tijdelijke liniaal aan "
+"voor beperkt schilderen."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Snap single:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "Koppeling maken met een enkeling:"
+msgstr "Afgebroken hoek"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34511,55 +34507,47 @@ msgstr "Aanpassen aan weergavehoogte"
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:56
 #, kde-format
 msgid "Zoom and Rotate Canvas"
-msgstr "Werkblad zoomen en draaien"
+msgstr "Werkblad zoomen en roteren"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "Roteermodus"
+msgstr "Zwenk-, zoom- en roteermodus"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "Roteermodus in stapjes"
+msgstr "Zwenk-, zoom- en roteermodus in stapjes"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "Roteermodus in stapjes"
+msgstr "Zwenk-, in stapjes zoom- en roteermodus"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "Roteermodus in stapjes"
+msgstr "Zwenk-, in stapjes zoom- en in stapjes roteermodus"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "Roteermodus"
+msgstr "Zoom-, roteermodus"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "Roteermodus in stapjes"
+msgstr "Zoom-, in stapjes roteermodus"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "Roteermodus in stapjes"
+msgstr "Instapjes zoom-, roteermodus"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "Roteermodus in stapjes"
+msgstr "In stapjes zoom-, in stapjes roteermodus"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44916,16 +44904,14 @@ msgid "Tablet Handling"
 msgstr "Behandeling van tablet"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "Invoerverwerking"
+msgstr "Invoerfiltering"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "Invoerverwerking"
+msgstr "Invoer overeen laten komen"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format

@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-09-13 21:54+0300\n"
+"PO-Revision-Date: 2026-09-18 23:14+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -23197,10 +23197,10 @@ msgid "Linear Dodge"
 msgstr "שינוי גבולות"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Blending mode - Lighten"
 msgid "Lighten"
-msgstr "ירוק בהיר"
+msgstr "הבהרה"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format

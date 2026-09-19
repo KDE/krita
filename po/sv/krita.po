@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 19:37+0200\n"
+"PO-Revision-Date: 2026-09-18 20:33+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -33856,12 +33856,12 @@ msgstr "Åtgärden <i>Rotera duk</i> roterar duken."
 #: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Mode"
-msgstr "Roteringsmetod"
+msgstr "Rotationsmetod"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Discrete Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Diskret rotationsmetod"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
@@ -34073,10 +34073,9 @@ msgid "Smart Zoom Gesture"
 msgstr "Smartzoomgest"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "Beröringsgester"
+msgstr "Rullningsgest med tryckplatta"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -34158,18 +34157,16 @@ msgid "Mouse Wheel"
 msgstr "Mushjul"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Beröringsgester"
+msgstr "Beröringsgest"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "Beröringsgester"
+msgstr "Gest med tryckplatta"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -34187,10 +34184,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "Loggning av ritplatta inaktiverad"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "Tillfälliga resurser"
+msgstr "Tillfällig rak linjal"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -34198,13 +34194,13 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
+"Åtgärden <i>Tillfällig rak linjal</i> skapar en tillfällig linjal för "
+"begränsad målning."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Snap single:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "Enstaka lås:"
+msgstr "Låst vinkel"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34362,52 +34358,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "Zooma och rotera duk"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "Roteringsmetod"
+msgstr "Panorera, zooma, rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Panorera, zooma, diskret rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Panorera, diskret zoom, rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Panorera, diskret zoom, diskret rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "Roteringsmetod"
+msgstr "Zooma, rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Zooma, diskret rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Diskret zoom, rotationsmetod"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "Diskret roteringsmetod"
+msgstr "Diskret zoom, diskret rotationsmetod"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44699,16 +44687,14 @@ msgid "Tablet Handling"
 msgstr "Hantering av ritplatta"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "Indatahantering"
+msgstr "Indatafiltrering"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "Indatahantering"
+msgstr "Indatamatchning"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format

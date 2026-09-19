@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-09-08 14:56+0200\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2026-09-18 11:32+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -34232,10 +34232,9 @@ msgid "Smart Zoom Gesture"
 msgstr "Gest de zoom intel·ligent"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "Gestos de toc"
+msgstr "Gestos de desplaçament del ratolí tàctil"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -34317,18 +34316,16 @@ msgid "Mouse Wheel"
 msgstr "Roda del ratolí"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Gestos de toc"
+msgstr "Gestos tàctils"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "Gestos de toc"
+msgstr "Gestos de ratolí tàctil"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -34346,10 +34343,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "S'ha desactivat el registre d'esdeveniments de tauleta"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "Recursos temporals"
+msgstr "Regle recte temporal"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -34357,12 +34353,13 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
+"L'acció <i>Regle recte temporal</i> crea un regle temporal per a pintar de "
+"manera restringida."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "End angle:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "Angle final:"
+msgstr "Angle ajustat"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34520,52 +34517,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "Zoom i gira el llenç"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "Mode de gir"
+msgstr "Mode de gir, panoràmica, zoom"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "Mode de gir discret"
+msgstr "Mode de gir discret, panoràmica, zoom"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "Mode de gir discret"
+msgstr "Mode de gir, panoràmica, zoom discret"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "Mode de gir discret"
+msgstr "Mode de gir discret, panoràmica, zoom discret"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "Mode de gir"
+msgstr "Mode de gir, zoom"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "Mode de gir discret"
+msgstr "Mode de gir discret, zoom"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "Mode de gir discret"
+msgstr "Mode de gir, zoom discret"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "Mode de gir discret"
+msgstr "Mode de gir discret, zoom discret"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44915,16 +44904,14 @@ msgid "Tablet Handling"
 msgstr "Maneig de les tauletes"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "Maneig de l'entrada"
+msgstr "Filtratge de l'entrada"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "Maneig de l'entrada"
+msgstr "Coincidència de l'entrada"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format

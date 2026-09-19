@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 06:01+0200\n"
+"PO-Revision-Date: 2026-09-18 06:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -33551,7 +33551,7 @@ msgstr "ქმედება <i>ტილოს მობრუნება</i>
 #: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Mode"
-msgstr "მობრუნების რეჟიმი"
+msgstr "ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
@@ -33768,10 +33768,9 @@ msgid "Smart Zoom Gesture"
 msgstr "ჭკვიანი გადიდების ჟესტი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "შეხების ჟესტები"
+msgstr "სენსორული პანელით გადახვევის ჟესტი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -33853,18 +33852,16 @@ msgid "Mouse Wheel"
 msgstr "თაგუნას რგოლი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
 msgstr "შეხების ჟესტები"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "შეხების ჟესტები"
+msgstr "სენსორული პანელის ჟესტი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -33882,10 +33879,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "ტაბლეტის მოვლენების ჟურნალში ჩაწერა გამორთულია"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "დროებითი რესურსები"
+msgstr "დროებითი სწორი სახაზავი"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -33895,10 +33891,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "End angle:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "საბოლოო კუთხე:"
+msgstr "მიმაგრებული კუთხე"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34056,52 +34051,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "ტილოს შემობრუნება და გადიდება"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "მობრუნების რეჟიმი"
+msgstr "პანორამირების, გადიდების, ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "დისკრეტული ბრუნვის რეჟიმი"
+msgstr "პანორამირების, გადიდების, დისკრეტული ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "დისკრეტული ბრუნვის რეჟიმი"
+msgstr "პანორამირების, დისკრეტული გადიდების, ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "დისკრეტული ბრუნვის რეჟიმი"
+msgstr "პანორამირების, დისტკრეტული გადიდების, დისკრეტული ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "მობრუნების რეჟიმი"
+msgstr "გადიდების, ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "დისკრეტული ბრუნვის რეჟიმი"
+msgstr "გადიდების, დისკრეტული ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "დისკრეტული ბრუნვის რეჟიმი"
+msgstr "დისკრეტული გადიდების, ბრუნვის რეჟიმი"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "დისკრეტული ბრუნვის რეჟიმი"
+msgstr "დისკრეტული გადიდების, დისკრეტული ბრუნვის რეჟიმი"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44097,16 +44084,14 @@ msgid "Tablet Handling"
 msgstr "ტაბლეტის მართვა"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "შეყვანის მართვა"
+msgstr "შეყვანის გაფილტვრა"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "შეყვანის მართვა"
+msgstr "შეყვანის დამთხვევა"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format
@@ -45149,7 +45134,7 @@ msgstr "ჩაწერა"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "გამოსახულების ფაილი ჩასაწერად ძალიან დიდია"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -55962,6 +55947,9 @@ msgid ""
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>განსაზღვრავს მიმდევრობას, რომლითაც გამოსახულების "
+"ფილების კოდირება ხდება. 'ჯერ ცენტრი' პრიორიტეტს ანიჭებს გამოსახულების "
+"ცენტრის ჩატვირთვას. ეს სასარგებლოა ვებისთვის</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
@@ -55978,6 +55966,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>გამოიცნობს ფერს სიკაშკაშის ინფორმაციიდან და ამით "
+"ფაილის ზომას ამცირებს. ძალიან ეფექტურია ბუნებრივი გამოსახულებებისთვის, სადაც "
+"სიკაშკაშის და ფერის კორელაცია ხდება.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -57080,6 +57071,9 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
+"აღმოჩენილია ტექსტის ობიექტები. გნებავთ მათი ჩატვირთვა ჩასწორებადი ტექსტური "
+"ფიგურების სახით? თუ არა, ისინი პიქსელის მონაცემები სახით ჩაიტვირთება, "
+"რომელიც ვიზუალურად ორიგინალ ფაილზე უფრო ზუსტი იქნება."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
@@ -68615,7 +68609,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate the affected area back toward its original orientation"
-msgstr ""
+msgstr "გავლენის ქვეშ მყოფი არეს ბრუნვა უკან თავისი ორიგინალი ორიენტაციისკენ"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:305
 #, kde-format

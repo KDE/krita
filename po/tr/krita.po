@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 20:12+0300\n"
+"PO-Revision-Date: 2026-09-18 19:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34051,10 +34051,9 @@ msgid "Smart Zoom Gesture"
 msgstr "Akıllı Yakınlaştırma Hareketi"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "Dokunma Hareketleri"
+msgstr "Dokunmatik Yüzey Sarma Hareketi"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -34136,18 +34135,16 @@ msgid "Mouse Wheel"
 msgstr "Fare Tekerleği"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Dokunma Hareketleri"
+msgstr "Dokunma Hareketi"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "Dokunma Hareketleri"
+msgstr "Dokunmatik Yüzey Hareketi"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -34165,10 +34162,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "Tablet Olay Günlükleme Devre Dışı Bırakıldı"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "Geçici Özkaynaklar"
+msgstr "Geçici Düz Cetvel"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -34176,12 +34172,13 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
+"<i>Geçici Düz Cetvel</i> eylemi, kısıtlanmış boyama için geçici bir cetvel "
+"oluşturur."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "End angle:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "Bitiş açısı:"
+msgstr "Tutturulmuş Açı"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34339,52 +34336,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "Yakınlaştır ve Tuvali Döndür"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "Döndürme Kipi"
+msgstr "Kaydırma, Yakınlaştırma, Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "Kesikli Döndürme Kipi"
+msgstr "Kaydırma, Yakınlaştırma, Kesikli Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "Kesikli Döndürme Kipi"
+msgstr "Kaydırma, Kesikli Yakınlaştırma, Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "Kesikli Döndürme Kipi"
+msgstr "Kaydırma, Kesikli Yakınlaştırma, Kesikli Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "Döndürme Kipi"
+msgstr "Yakınlaştırma, Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "Kesikli Döndürme Kipi"
+msgstr "Yakınlaştırma, Kesikli Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "Kesikli Döndürme Kipi"
+msgstr "Kesikli Yakınlaştırma, Döndürme Kipi"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "Kesikli Döndürme Kipi"
+msgstr "Kesikli Yakınlaştırma, Kesikli Döndürme Kipi"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44671,16 +44660,14 @@ msgid "Tablet Handling"
 msgstr "Tablet Kullanımı"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "Girdi Kullanımı"
+msgstr "Girdi Süzme"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "Girdi Kullanımı"
+msgstr "Girdi Eşleştirme"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format

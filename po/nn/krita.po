@@ -70279,23 +70279,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgctxt "Shortcut type"
-#~ msgid "Gesture"
-#~ msgstr "Muse-/fingerrørsle"
-
-# Snøggtast, i motsetning til musetrykk eller hjulrulling.
-#~ msgid "Key Combination"
-#~ msgstr "Snøggtast"
-
-#~ msgid "Gesture"
-#~ msgstr "Muse-/fingerrørsle"
-
-#~ msgid "Trackpad Pan"
-#~ msgstr "Teikneplate-panorering"
-
-#~ msgid "Pan Gesture"
-#~ msgstr "Panoreringsrørsle"
-
-#~ msgid "Rotate Gesture"
-#~ msgstr "Dreiingsrørsle"

@@ -15,14 +15,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 19:09+0100\n"
+"PO-Revision-Date: 2026-09-19 18:15+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -34183,10 +34183,9 @@ msgid "Smart Zoom Gesture"
 msgstr "Gesto de ampliación inteligente"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "Gestos de toques"
+msgstr "Gesto de desplazamiento del panel táctil"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -34268,18 +34267,16 @@ msgid "Mouse Wheel"
 msgstr "Rueda del ratón"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Gestos de toques"
+msgstr "Gestos táctil"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "Gestos de toques"
+msgstr "Gesto del panel táctil"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -34297,10 +34294,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "Registro de eventos de la tableta desactivado"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "Recursos temporales"
+msgstr "Regla recta temporal"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -34308,12 +34304,13 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
+"La acción <i>Regla recta temporal</i> crea una regla transitoria para pintar "
+"con restricciones."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "End angle:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "Ángulo final:"
+msgstr "Ángulo ajustado"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34471,52 +34468,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "Ampliar y rotar el lienzo"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "Modo de rotación"
+msgstr "Modo de desplazamiento, ampliación y rotación"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "Modo de rotación discreto"
+msgstr "Modo de desplazamiento, ampliación y rotación discreto"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "Modo de rotación discreto"
+msgstr "Modo de desplazamiento, ampliación discreta y rotación"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "Modo de rotación discreto"
+msgstr "Modo de desplazamiento, ampliación discreta y rotación discreta"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "Modo de rotación"
+msgstr "Modo de ampliación y rotación"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "Modo de rotación discreto"
+msgstr "Modo de ampliación y rotación discreta"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "Modo de rotación discreto"
+msgstr "Modo de ampliación discreta y rotación"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "Modo de rotación discreto"
+msgstr "Modo de ampliación discreta y rotación discreta"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44874,16 +44863,14 @@ msgid "Tablet Handling"
 msgstr "Manejo de la tableta"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "Manejo de la entrada"
+msgstr "Filtrado de entrada"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "Manejo de la entrada"
+msgstr "Coincidencia de entrada"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format
@@ -70894,22 +70881,3 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
-
-#~ msgctxt "Shortcut type"
-#~ msgid "Gesture"
-#~ msgstr "Gesto"
-
-#~ msgid "Key Combination"
-#~ msgstr "Combinación de teclas"
-
-#~ msgid "Gesture"
-#~ msgstr "Gesto"
-
-#~ msgid "Trackpad Pan"
-#~ msgstr "Desplazamiento del panel táctil"
-
-#~ msgid "Pan Gesture"
-#~ msgstr "Gesto de desplazar"
-
-#~ msgid "Rotate Gesture"
-#~ msgstr "Gesto de rotar"

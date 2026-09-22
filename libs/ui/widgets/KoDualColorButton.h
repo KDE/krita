@@ -134,13 +134,6 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 
     /**
-     * @brief setColorSpace
-     * set ColorSpace so we can lock the selector. Right now this'll be changed per view-change.
-     * @param cs
-     */
-    void updateColorSpace();
-
-    /**
      * @brief getColorFromDisplayRenderer
      * convenience function to get the right qcolor from the display renderer, including checking
      * whether the display renderer actually exists.
@@ -159,6 +152,15 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
     void openForegroundDialog();
 
     void openBackgroundDialog();
+
+  private Q_SLOTS:
+    /**
+     * @brief updateColorSpace() from the current display renderer
+     * set ColorSpace so we can lock the selector. Right now this'll be changed per view-change.
+     * @param cs
+     */
+    void updateColorSpace();
+
   Q_SIGNALS:
     /**
      * Emitted when the foreground color is changed.

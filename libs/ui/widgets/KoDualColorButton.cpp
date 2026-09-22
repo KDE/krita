@@ -178,22 +178,35 @@ void KoDualColorButton::setBackgroundColor( const KoColor &color )
 
 void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
-    if (d->displayRenderer && d->displayRenderer != KoDumbColorDisplayRenderer::instance()) {
+    if (!displayRenderer) {
+        displayRenderer = KoDumbColorDisplayRenderer::instance();
+    }
+
+    if (displayRenderer == d->displayRenderer) return;
+
+    if (d->displayRenderer) {
         d->displayRenderer->disconnect(this);
     }
+
+    d->displayRenderer = displayRenderer;
+
     if (displayRenderer) {
         d->displayRenderer = displayRenderer;
         d->colorSelectorDialog->setDisplayRenderer(displayRenderer);
-        connect(d->displayRenderer, SIGNAL(destroyed()), this, SLOT(setDisplayRenderer()), Qt::UniqueConnection);
-        connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(update()));
-    } else {
-        d->displayRenderer = KoDumbColorDisplayRenderer::instance();
+
+        connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(updateColorSpace()));
+        updateColorSpace();
+
+        connect(d->displayRenderer, SIGNAL(destroyed()), this, SLOT(setDisplayRenderer()));
     }
 }
 
 void KoDualColorButton::updateColorSpace()
 {
     d->colorSelectorDialog->lockUsedColorSpace(d->displayRenderer->getPaintingColorSpace());
+
+    // we need to update preview tiles, so a paint event is necessary
+    update();
 }
 
 QColor KoDualColorButton::getColorFromDisplayRenderer(KoColor c)

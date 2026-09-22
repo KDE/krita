@@ -207,14 +207,15 @@ void KisControlFrame::setup(QWidget *parent)
 
 void KisControlFrame::slotUpdateDisplayRenderer(KoDualColorButton* colourSelector)
 {
-    if (m_viewManager->canvasBase()){
-        colourSelector->setDisplayRenderer(m_viewManager->canvasBase()->displayColorConverter()->displayRendererInterface());
-        colourSelector->updateColorSpace();
-        m_viewManager->canvasBase()->image()->disconnect(colourSelector);
-        connect(m_viewManager->canvasBase()->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), colourSelector, SLOT(updateColorSpace()), Qt::UniqueConnection);
-    } else if (m_viewManager->viewCount()==0) {
-        colourSelector->setDisplayRenderer();
+    KoColorDisplayRendererInterface *displayRenderer = nullptr;
+
+    if (m_viewManager->canvasBase()) {
+        displayRenderer = m_viewManager->canvasBase()->displayColorConverter()->displayRendererInterface();
+    } else {
+        displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
+
+    colourSelector->setDisplayRenderer(displayRenderer);
 }
 
 

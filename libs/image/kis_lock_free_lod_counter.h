@@ -54,11 +54,9 @@ public:
     }
 
     int readLod() const {
-        int value = m_num;
-
-        int counter;
-        int lod;
-        unpackLod(value, &counter, &lod);
+        int counter = 0;
+        int lod = 0;
+        unpackLod(m_num, &counter, &lod);
 
         return counter ? lod : -1;
     }

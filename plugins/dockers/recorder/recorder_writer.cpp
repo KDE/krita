@@ -5,6 +5,7 @@
  */
 
 #include "recorder_writer.h"
+#include "recorder_image_copying_job.h"
 #include "recorder_const.h"
 #include "recorder_export_settings.h"
 
@@ -127,11 +128,10 @@ bool ThreadCounter::setUsedImpl(int value)
 class RecorderWriter::Private
 {
 public:
-    Private(QPointer<KisCanvas2> c, const RecorderWriterSettings &s, const QDir &d, RecorderWriterManager *m)
+    Private(QPointer<KisCanvas2> c, const RecorderWriterSettings& s, const QDir& d)
         : canvas(c)
         , settings(&s)
         , outputDir(&d)
-        , manager(m)
     {}
     Private() = delete;
     Private(const Private&) = default;
@@ -148,35 +148,15 @@ public:
     int partIndex = 0;                                     // Consecutive file number
     const RecorderWriterSettings* settings;
     const QDir* outputDir;
-    RecorderWriterManager *manager;
 
     const KoColorSpace *targetCs =
         KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                      Integer8BitsColorDepthID.id(),
                                                      KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
-    int captureImage()
+    void captureImage(KisPaintDeviceSP device)
     {
         KisImageSP image = canvas->image();
-
-        // Make sure we can actually capture something right now
-        {
-            QMutexLocker lock(manager->captureMutex());
-            if (manager->canStartCapture()) {
-                // we don't want image->barrierLock() because it will wait until
-                // the full stroke is finished
-                image->immediateLockForReadOnly();
-                // Grab the next index while the capture mutex is held
-                partIndex = manager->incrementAndGetIndex();
-            } else {
-                return STATUS_BLOCKED;
-            }
-        }
-
-        // Create detached paint device that can be converted to target colorspace
-        KisPaintDeviceSP device = new KisPaintDevice(image->colorSpace());
-        device->makeCloneFromRough(image->projection(), image->bounds());
-        image->unlock();
 
         const bool needSrgbConversion = [&]() {
             if (image->colorSpace()->colorDepthId() != Integer8BitsColorDepthID
@@ -221,7 +201,6 @@ public:
 
         imageBufferWidth = width;
         imageBufferHeight = height;
-        return STATUS_OK;
     }
 
     // Calculate ARGB average value using carry save adder:
@@ -288,12 +267,12 @@ public:
         }
     }
 
-    int writeFrame()
+    int writeFrame(int index)
     {
         if (!outputDir->exists() && !outputDir->mkpath(settings->outputDirectory))
-            return STATUS_ERROR;
+            return false;
 
-        const QString fileName = QString("%1").arg(partIndex, 7, 10, QLatin1Char('0'));
+        const QString fileName = QString("%1").arg(index, 7, 10, QLatin1Char('0'));
         const QString &filePath = QString("%1%2.%3").arg(settings->outputDirectory, fileName,
                                                          RecorderFormatInfo::fileExtension(settings->format));
 
@@ -307,12 +286,10 @@ public:
                 break;
         }
 
-        if (!frame.save(filePath, RecorderFormatInfo::fileFormat(settings->format).data(), factor)) {
+        bool result = frame.save(filePath, RecorderFormatInfo::fileFormat(settings->format).data(), factor);
+        if (!result)
             QFile(filePath).remove(); // remove corrupted frame
-            return STATUS_ERROR;
-        }
-
-        return STATUS_OK;
+        return result;
     }
 
 };
@@ -321,9 +298,8 @@ RecorderWriter::RecorderWriter(
     unsigned int i,
     QPointer<KisCanvas2> c,
     const RecorderWriterSettings& s,
-    const QDir& d,
-    RecorderWriterManager *m)
-    : d(new Private(c, s, d, m))
+    const QDir& d)
+    : d(new Private(c, s, d))
     , id(i)
 {}
 
@@ -332,16 +308,12 @@ RecorderWriter::~RecorderWriter()
     delete d;
 }
 
-void  RecorderWriter::onCaptureImage(int writerId)
+void RecorderWriter::onCaptureImage(int writerId, int index, KisPaintDeviceSP device)
 {
     if (static_cast<int>(id) != writerId)
         return;
 
-    int captureStatus = d->captureImage();
-    if (captureStatus != STATUS_OK) {
-        Q_EMIT capturingDone(id, captureStatus);
-        return;
-    }
+    d->captureImage(device);
 
     // downscale image buffer
     for (int res = 0; res < d->settings->resolution; ++res)
@@ -349,9 +321,9 @@ void  RecorderWriter::onCaptureImage(int writerId)
 
     d->removeFrameTransparency();
 
-    int writeStatus = d->writeFrame();
+    bool isFrameWritten = d->writeFrame(index);
 
-    Q_EMIT capturingDone(id, writeStatus);
+    Q_EMIT capturingDone(id, isFrameWritten);
 }
 
 
@@ -361,14 +333,14 @@ struct WriterPoolEl
     using RecorderWriterPtr = QSharedPointer<RecorderWriter>;
 
     WriterPoolEl(
-        RecorderWriterManager* m,
+        QObject* threadParent,
         unsigned int i,
         QPointer<KisCanvas2> c,
         const RecorderWriterSettings& s,
         const QDir& d
     )
-        : thread(QThreadPtr::create(m))
-        , writer(RecorderWriterPtr::create(i, c, s, d, m))
+        : thread(QThreadPtr::create(threadParent))
+        , writer(RecorderWriterPtr::create(i, c, s, d))
     {}
 
     bool    inUse{false};
@@ -401,7 +373,6 @@ public:
     WriterPool writerPool;
     RecorderWriterSettings settings{};
     QDir outputDir;
-    QMutex captureMutex;
 
     int findLastIndex(const QString &directory)
     {
@@ -438,8 +409,8 @@ public:
         {
             el.thread->quit();
             el.thread->wait(RecorderConst::waitThreadTimeoutMs);
-            disconnect(q, SIGNAL(startCapturing(int)), el.writer.get(), SLOT(onCaptureImage(int)));
-            disconnect(el.writer.get(), SIGNAL(capturingDone(int, int)), q, SLOT(onCapturingDone(int, int)));
+            disconnect(q, SIGNAL(startCapturing(int, int, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, KisPaintDeviceSP)));
+            disconnect(el.writer.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             if (el.thread->isRunning())
             {
                 if (!alreadyWarn) {
@@ -482,8 +453,8 @@ public:
             auto writerPtr = writerPool[newWorkerId].writer;
             auto threadPtr = writerPool[newWorkerId].thread;
             threadPtr->setObjectName(QString("Krita-Recorder-WriterPool#%1").arg(newWorkerId));
-            connect(q, SIGNAL(startCapturing(int)), writerPtr.get(), SLOT(onCaptureImage(int)));
-            connect(writerPtr.get(), SIGNAL(capturingDone(int, int)), q, SLOT(onCapturingDone(int, int)));
+            connect(q, SIGNAL(startCapturing(int, int, KisPaintDeviceSP)), writerPtr.get(), SLOT(onCaptureImage(int, int, KisPaintDeviceSP)));
+            connect(writerPtr.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             writerPtr->moveToThread(threadPtr.get());
             threadPtr->start(QThread::IdlePriority);
         }
@@ -499,6 +470,15 @@ public:
                 return;
         }
         freeWriterId = -1;
+    }
+
+    bool canStartCapture() // skip capture when use some tools.
+    {
+        if (isForceBlackTool)
+            return false;
+        if (isActivateBlackTool && toolActivated)
+            return false;
+        return true;
     }
 };
 
@@ -611,25 +591,6 @@ void RecorderWriterManager::setEnabled(bool enabled = false)
     d->enabled = enabled;
 }
 
-bool RecorderWriterManager::canStartCapture() const
-{
-    if (d->isForceBlackTool)
-        return false;
-    if (d->isActivateBlackTool && d->toolActivated)
-        return false;
-    return true;
-}
-
-int RecorderWriterManager::incrementAndGetIndex()
-{
-    return ++d->partIndex;
-}
-
-QMutex *RecorderWriterManager::captureMutex()
-{
-    return &d->captureMutex;
-}
-
 void RecorderWriterManager::onTimer()
 {
     if (!d->enabled || !d->canvas)
@@ -650,7 +611,7 @@ void RecorderWriterManager::onTimer()
 
     d->imageModified = false;
 
-    if (!canStartCapture())
+    if (!d->canStartCapture())
         return;
 
     d->searchForFreeWriter();
@@ -664,17 +625,28 @@ void RecorderWriterManager::onTimer()
     d->writerPool[d->freeWriterId].inUse = true;
     d->writerPool[d->freeWriterId].thread->setPriority(QThread::HighPriority);
     recorderThreads.incUsedAndNotify();
-    Q_EMIT startCapturing(d->freeWriterId);
+
+    RecorderImageCopyingJob *job = new RecorderImageCopyingJob(d->canvas->image()->projection(),
+                                                               d->canvas->image()->bounds(),
+                                                               d->freeWriterId,
+                                                               ++d->partIndex);
+
+    connect(job,
+            SIGNAL(sigImageCopyingDoneWithData(int, int, KisPaintDeviceSP)),
+            this,
+            SIGNAL(startCapturing(int, int, KisPaintDeviceSP)));
+
+    d->canvas->image()->addSpontaneousJob(job);
 }
 
-void RecorderWriterManager::onCapturingDone(int workerId, int status)
+void RecorderWriterManager::onCapturingDone(int workerId, bool success)
 {
     if (workerId >= d->writerPool.size())
         return;
     d->writerPool[workerId].inUse = false;
     d->writerPool[workerId].thread->setPriority(QThread::IdlePriority);
     recorderThreads.decUsedAndNotify();
-    if (status == RecorderWriter::STATUS_ERROR) {
+    if (!success) {
         stop();
         Q_EMIT frameWriteFailed();
     }
@@ -682,7 +654,7 @@ void RecorderWriterManager::onCapturingDone(int workerId, int status)
 
 void RecorderWriterManager::onImageModified()
 {
-    if (!d->enabled || !canStartCapture() )
+    if (!d->enabled || !d->canStartCapture())
         return;
 
     if ((!d->settings.recordIsolateLayerMode) &&
@@ -694,13 +666,11 @@ void RecorderWriterManager::onImageModified()
 
 void RecorderWriterManager::onToolChanged(const QString &toolId)
 {
-    QMutexLocker lock(&d->captureMutex);
     d->isForceBlackTool = forceBlacklistedTools.contains(toolId);
     d->isActivateBlackTool = activateBlacklistedTools.contains(toolId);
 }
 
 void RecorderWriterManager::onToolPrimaryActionActivated(bool activated)
 {
-    QMutexLocker lock(&d->captureMutex);
     d->toolActivated = activated;
 }

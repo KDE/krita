@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-18 00:43+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -34408,7 +34408,7 @@ msgstr "Alat Lukisan"
 msgid "&Docker Box"
 msgstr "Batuan"
 
-#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34417,12 +34417,12 @@ msgstr "Batuan"
 msgid "Patterns"
 msgstr "Corak"
 
-#: libs/ui/kis_control_frame.cpp:274 libs/ui/kis_control_frame.cpp:275
+#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
 #, fuzzy, kde-format
 msgid "Custom Pattern"
 msgstr "Corak"
 
-#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:415
+#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:415
 #: libs/ui/KisApplication.cpp:416
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34431,12 +34431,12 @@ msgstr "Corak"
 msgid "Gradients"
 msgstr "Kecerunan"
 
-#: libs/ui/kis_control_frame.cpp:358
+#: libs/ui/kis_control_frame.cpp:359
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "Batuan"
 
-#: libs/ui/kis_control_frame.cpp:364
+#: libs/ui/kis_control_frame.cpp:365
 #, fuzzy, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Pelet"
@@ -39934,24 +39934,24 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/KoBackgroundColour.cpp:51
-#: libs/ui/widgets/KoDualColorButton.cpp:470
+#: libs/ui/widgets/KoDualColorButton.cpp:483
 #, fuzzy, kde-format
 msgid "Background color selector"
 msgstr "Warna latar belakang"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:459
+#: libs/ui/widgets/KoDualColorButton.cpp:472
 #: libs/ui/widgets/KoForegroundColour.cpp:50
 #, fuzzy, kde-format
 msgid "Foreground color selector"
 msgstr "Pemilihan Skala"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:462
+#: libs/ui/widgets/KoDualColorButton.cpp:475
 #: libs/ui/widgets/KoResetBgFgColours.cpp:43
 #, fuzzy, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr "Warna latar depan"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:467
+#: libs/ui/widgets/KoDualColorButton.cpp:480
 #: libs/ui/widgets/KoSwapBgFgColours.cpp:42
 #, fuzzy, kde-format
 msgid "Swap foreground and background colors"

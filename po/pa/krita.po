@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-18 00:43+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -36925,7 +36925,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 msgid "&Docker Box"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -36935,13 +36935,13 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgid "Patterns"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:274 libs/ui/kis_control_frame.cpp:275
+#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Custom Pattern"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:415
+#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:415
 #: libs/ui/KisApplication.cpp:416
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -36951,13 +36951,13 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Gradients"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:358
+#: libs/ui/kis_control_frame.cpp:359
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "Docker box"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/kis_control_frame.cpp:364
+#: libs/ui/kis_control_frame.cpp:365
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Toolbar Docker Box"
@@ -43079,27 +43079,27 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/KoBackgroundColour.cpp:51
-#: libs/ui/widgets/KoDualColorButton.cpp:470
+#: libs/ui/widgets/KoDualColorButton.cpp:483
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Background color selector"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:459
+#: libs/ui/widgets/KoDualColorButton.cpp:472
 #: libs/ui/widgets/KoForegroundColour.cpp:50
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Foreground color selector"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:462
+#: libs/ui/widgets/KoDualColorButton.cpp:475
 #: libs/ui/widgets/KoResetBgFgColours.cpp:43
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Set foreground and background colors to black and white"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:467
+#: libs/ui/widgets/KoDualColorButton.cpp:480
 #: libs/ui/widgets/KoSwapBgFgColours.cpp:42
 #, fuzzy, kde-format
 #| msgid "Background Color"

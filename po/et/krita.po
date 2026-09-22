@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-18 00:43+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -36618,7 +36618,7 @@ msgstr "&Joonistaja tööriistad"
 msgid "&Docker Box"
 msgstr "&Dokk"
 
-#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -36627,12 +36627,12 @@ msgstr "&Dokk"
 msgid "Patterns"
 msgstr "Mustrid"
 
-#: libs/ui/kis_control_frame.cpp:274 libs/ui/kis_control_frame.cpp:275
+#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Kohandatud muster"
 
-#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:415
+#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:415
 #: libs/ui/KisApplication.cpp:416
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -36641,13 +36641,13 @@ msgstr "Kohandatud muster"
 msgid "Gradients"
 msgstr "Üleminekud"
 
-#: libs/ui/kis_control_frame.cpp:358
+#: libs/ui/kis_control_frame.cpp:359
 #, fuzzy, kde-format
 #| msgid "Docker:"
 msgid "Docker box"
 msgstr "Dokk:"
 
-#: libs/ui/kis_control_frame.cpp:364
+#: libs/ui/kis_control_frame.cpp:365
 #, fuzzy, kde-format
 #| msgid "Toolbox and palettes"
 msgid "Toolbar Docker Box"
@@ -42707,20 +42707,20 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/KoBackgroundColour.cpp:51
-#: libs/ui/widgets/KoDualColorButton.cpp:470
+#: libs/ui/widgets/KoDualColorButton.cpp:483
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Background color selector"
 msgstr "Tausta värv"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:459
+#: libs/ui/widgets/KoDualColorButton.cpp:472
 #: libs/ui/widgets/KoForegroundColour.cpp:50
 #, fuzzy, kde-format
 #| msgid "Color Selector Ng"
 msgid "Foreground color selector"
 msgstr "Uue põlvkonna värvivalija"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:462
+#: libs/ui/widgets/KoDualColorButton.cpp:475
 #: libs/ui/widgets/KoResetBgFgColours.cpp:43
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -42728,7 +42728,7 @@ msgstr "Uue põlvkonna värvivalija"
 msgid "Set foreground and background colors to black and white"
 msgstr "Lähtesta esiplaani ja tausta värv"
 
-#: libs/ui/widgets/KoDualColorButton.cpp:467
+#: libs/ui/widgets/KoDualColorButton.cpp:480
 #: libs/ui/widgets/KoSwapBgFgColours.cpp:42
 #, fuzzy, kde-format
 #| msgctxt "action"

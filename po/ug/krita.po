@@ -67,10 +67,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-18 00:43+0000\n"
-"PO-Revision-Date: 2026-05-31 19:37-0400\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1427,63 +1427,63 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_01.gbr"
 msgid "M_01"
-msgstr "M_01"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_02.gbr"
 msgid "M_02"
-msgstr "M_02"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_03.gbr"
 msgid "M_03"
-msgstr "M_03"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_04.gbr"
 msgid "M_04"
-msgstr "M_04"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_05.gbr"
 msgid "M_05"
-msgstr "M_05"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_06.gbr"
 msgid "M_06"
-msgstr "M_06"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_07.gbr"
 msgid "M_07"
-msgstr "M_07"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_08.gbr"
 msgid "M_08"
-msgstr "M_08"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_09.gbr"
 msgid "M_09"
-msgstr "M_09"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5916,13 +5916,13 @@ msgstr ""
 #, kde-format
 msgctxt "memory/gradients/Foreground to Background.svg"
 msgid "0. Foreground to Background"
-msgstr ""
+msgstr "0. Foreground to Background"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "memory/gradients/Foreground to Transparent.svg"
 msgid "1. Foreground to Transparent"
-msgstr ""
+msgstr "1. Foreground to Transparent"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_eroded.gih:1
@@ -7303,12 +7303,10 @@ msgstr "ئوڭغا توغرىلا"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shape(s)"
-msgstr "شەكىلنى چاچ"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7373,27 +7371,21 @@ msgstr "بويىغا ئوتتۇرىغا توغرىلا"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shape(s)"
-msgstr "شەكىلنى توپلا"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "گۇرۇپپا"
 
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group shape(s) in the context of Vector Interaction Tool"
 msgid "Group"
 msgstr "گۇرۇپپا"
@@ -12099,12 +12091,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
-msgstr "گۇرۇپپا قەۋەت"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12122,12 +12112,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
-msgstr "شەكىلنى چاچ"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -14629,9 +14617,6 @@ msgid ""
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
-"سىزغۇچ نۇر بەلگىسىنىڭ سۈرەتتىكى بويىغا ۋە توغرىسىغا ئورنىنى كۆرسىتىدۇ، "
-"سىزغۇچ ئارقىلىق نۇر بەلگىسىنىڭ كەرگىدىكى دەل ئورنىنى بەلگىلىيەلەيسىز."
-"<p>تاللانمىسا سىزغۇچ يوشۇرۇلىدۇ.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -14664,8 +14649,6 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
-"سىزغۇچ چاشقىنەك نىشانلىغۇچنىڭ ھازىرقى ئورنىنى ئىزلايدۇ ۋە ئېكراندا "
-"كۆرسىتىدۇ. ئۇ ئۈنۈمگە ئازراق تەسىر كۆرسىتىشى مۇمكىن"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -16318,40 +16301,34 @@ msgstr "خىزمەت بوشلۇقى"
 
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgctxt "action"
 msgid "Resources"
 msgstr "مەنبەلەر"
 
 #. i18n: context: text @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources..."
-msgstr "مەنبە باشقۇر…"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources"
+#, kde-format
 msgctxt "action"
 msgid "Get More Resources"
-msgstr "مەنبە باشقۇر"
+msgstr ""
 
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgctxt "action"
 msgid "Management"
-msgstr "رەڭ باشقۇرۇش"
+msgstr ""
 
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
@@ -16365,60 +16342,51 @@ msgstr ""
 #. i18n: context: toolTip @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:24 krita/kritamenu_android.action:25
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgctxt "action"
 msgid "Manage Supporter Benefits"
-msgstr "مەنبەلەر(&R)"
+msgstr ""
 
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions..."
-msgstr "مەنبە باشقۇر…"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:36 krita/kritamenu_android.action:37
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgctxt "action"
 msgid "Manage Subscriptions"
-msgstr "چۈشەندۈرۈش"
+msgstr ""
 
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
-#, fuzzy, kde-format
-#| msgid "User Interface"
+#, kde-format
 msgctxt "action"
 msgid "Interface"
-msgstr "كۆرۈنمەيۈز"
+msgstr "ئارايۈز"
 
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Style"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale..."
-msgstr "قەۋەت ئۇسلۇبىنى ئۆزگەرت"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: toolTip @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:51 krita/kritamenu_android.action:52
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Style"
+#, kde-format
 msgctxt "action"
 msgid "Change Interface Scale"
-msgstr "قەۋەت ئۇسلۇبىنى ئۆزگەرت"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
@@ -16426,7 +16394,7 @@ msgstr "قەۋەت ئۇسلۇبىنى ئۆزگەرت"
 #: libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
-msgstr "Krita"
+msgstr ""
 
 #: krita/main.cc:721
 #, kde-format
@@ -16453,9 +16421,6 @@ msgid ""
 "This is not recommended. Do not report any bugs.\n"
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
-"ئىجرا قىلىۋاتقىنىڭىز قوللىمايدىغان Windows نەشرى: %1.\n"
-"بۇ تەۋسىيە قىلىنمايدۇ. ھەر قانداق كەمتۈك مەلۇم قىلماڭ.\n"
-"قوللايدىغان Windows نەشرىگە يېڭىلاڭ: Windows 7، 8، 8.1 ياكى 10."
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:566
 #, kde-format
@@ -16916,8 +16881,6 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
-"بۇ پۈتۈكتە Krita 4.x قۇرۇلغان ۋېكتور تېكىست بار. پۈتۈك ساقلانغاندا، تېكىست "
-"Krita 5 پىچىمىغا ئايلاندۇرۇلىدۇ شۇنىڭدىن كېيىن Krita 4.x بىلەن ماسلاشمايدۇ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
 #, kde-format
@@ -21023,7 +20986,7 @@ msgstr "چوڭلۇقى"
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:136
 #, kde-format
 msgid " px"
-msgstr " px"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
@@ -21168,11 +21131,9 @@ msgid "Change Clone Layers"
 msgstr ""
 
 #: libs/image/commands_new/KisChangeImageHdrMetadataCommand.cpp:16
-#, fuzzy
-#| msgid "Metadata"
 msgctxt "(qtundo-format)"
 msgid "Set HDR Metadata"
-msgstr "تەپسىلىي ئۇچۇر"
+msgstr ""
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
 msgctxt "(qtundo-format)"
@@ -21383,12 +21344,10 @@ msgid "%1 cd/m²"
 msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:63
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) @label"
-#| msgid "Luminance:"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "XYZ Luminance"
-msgstr "ئارىلىق:"
+msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:64
 #, kde-format
@@ -21397,11 +21356,10 @@ msgid "Rec 2020 Per Component"
 msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:65
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "RGB Per Component"
-msgstr "بۆلەك:"
+msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:67
 #, kde-format
@@ -21639,7 +21597,7 @@ msgstr ""
 #: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:280 libs/ui/widgets/kis_cmb_composite.cc:76
@@ -22845,12 +22803,12 @@ msgstr ""
 #: libs/pigment/KoBasicHistogramProducers.cpp:365
 #, kde-format
 msgid "G"
-msgstr "G"
+msgstr ""
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:366
 #, kde-format
 msgid "B"
-msgstr "B"
+msgstr ""
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:433
 #, kde-format
@@ -23011,7 +22969,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - category HSV"
 msgid "HSV"
-msgstr "HSV"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:42
 #, kde-format
@@ -23053,7 +23011,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - XOR"
 msgid "XOR"
-msgstr "XOR"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:51
 #, kde-format
@@ -23969,7 +23927,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita"
-msgstr "Krita"
+msgstr ""
 
 #: libs/resources/KisResourceCacheDb.cpp:353
 #, kde-format
@@ -23981,12 +23939,12 @@ msgstr ""
 #: libs/resources/KisResourceLocator.cpp:106
 #, kde-format
 msgid "1. Could not create the resource location at %1."
-msgstr ""
+msgstr "1. Could not create the resource location at %1."
 
 #: libs/resources/KisResourceLocator.cpp:113
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
-msgstr ""
+msgstr "2. The resource location at %1 is not writable."
 
 #: libs/resources/KisResourceLocator.cpp:872
 #, kde-format
@@ -24013,7 +23971,7 @@ msgstr ""
 #: libs/resources/KisResourceLocator.cpp:1051
 #, kde-format
 msgid "3. Could not create the resource location at %1."
-msgstr ""
+msgstr "3. Could not create the resource location at %1."
 
 #: libs/resources/KisResourceLocator.cpp:1064
 #: libs/resources/KisResourceLocator.cpp:1080
@@ -24137,7 +24095,7 @@ msgstr ""
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "md5sum"
-msgstr "md5sum"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:122
@@ -24877,22 +24835,19 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
-#, fuzzy, kde-format
-#| msgid "Unsupported Key"
+#, kde-format
 msgid "Unsupported format"
-msgstr "ئىشلەتكىلى بولمايدىغان كۇنۇپكا"
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
-#, fuzzy, kde-format
-#| msgid "Video Location:"
+#, kde-format
 msgid "Video encoder:"
-msgstr "چۆرگىلىتىش:"
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Video bitrate:"
-msgstr "بىت تېزلىكى:"
+msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
 #, kde-format
@@ -24900,10 +24855,9 @@ msgid "Audio encoder:"
 msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
-#, fuzzy, kde-format
-#| msgid "Adaptation State:"
+#, kde-format
 msgid "Audio bitrate:"
-msgstr "مەشغۇلات ئاتى"
+msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:112
 #, kde-format
@@ -25073,7 +25027,7 @@ msgstr ""
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
-msgstr " s"
+msgstr ""
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
 #, kde-format
@@ -25111,7 +25065,7 @@ msgstr ""
 #, kde-format
 msgctxt "Title for a messagebox"
 msgid "Krita"
-msgstr "Krita"
+msgstr ""
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:184
 #, kde-format
@@ -25282,11 +25236,9 @@ msgid "Loading video data... %1 frames examined."
 msgstr ""
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Internal error"
+#, kde-format
 msgid "Internal error (%1)"
-msgstr "ئىچكى خاتالىق"
+msgstr ""
 
 #: libs/ui/animation/KisLibavMediaEncoderRunnable.cpp:76
 #, kde-format
@@ -25299,19 +25251,14 @@ msgid "This format has no preferences."
 msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "(qtundo-format) Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "سەپلىمە ھۆججەت يوق"
+msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
+#, kde-format
 msgid "Rendering animation..."
-msgstr "جانلاندۇرۇم شەكىللەندۈر(&R)…"
+msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:285
 #, kde-format
@@ -25319,11 +25266,9 @@ msgid "No encoder for the selected format found"
 msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "No office:drawing tag found in file: %1"
+#, kde-format
 msgid "Error preparing audio file: %1"
-msgstr "ھۆججەتتىن شەكىل تېپىلمىدى: %1"
+msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:131
 #, kde-format
@@ -25391,7 +25336,7 @@ msgstr "تەڭشە:"
 #, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
-msgstr ""
+msgstr "سەپلىمە ھۆججەت:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
@@ -25406,7 +25351,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
-msgstr ""
+msgstr "سەپلىمە ھۆججەت:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
 #: libs/ui/animation/video_export_options_dialog.ui:199
@@ -25889,7 +25834,7 @@ msgstr ""
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
-msgstr "kbps"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:289
 #, kde-format
@@ -25926,7 +25871,7 @@ msgstr ""
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
-msgstr "WEBP"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
@@ -26010,7 +25955,7 @@ msgstr "ئالدىن كۆزىتىش يوق"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:37
 #, kde-format
 msgid "0"
-msgstr "0"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, fileLoadedDetails)
 #: libs/ui/animation/VideoImportDialog.ui:167
@@ -26243,13 +26188,13 @@ msgstr ""
 #: libs/ui/animation/wdg_animationrenderer.ui:72
 #, kde-format
 msgid "Images"
-msgstr "سۈرەتلەر"
+msgstr "سۈرەت"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
 #, kde-format
 msgid "Video"
-msgstr ""
+msgstr "سىن"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -27092,23 +27037,17 @@ msgid "Center"
 msgstr "ئوتتۇرا"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:338
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgid "Top"
 msgstr "ئۈستى"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:339
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Top left"
+#, kde-format
 msgid "Top Left"
 msgstr "سول ئۈستى"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:340
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Top Right"
+#, kde-format
 msgid "Top Right"
 msgstr "ئوڭ ئۈستى"
 
@@ -27468,7 +27407,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
-msgstr " GiB"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1985
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
@@ -27482,13 +27421,13 @@ msgstr " سېكۇنت"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid " fps"
-msgstr " fps"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2227
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
-msgstr "OpenGL"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2228
 #, kde-format
@@ -27951,7 +27890,7 @@ msgstr ""
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:189
 #, kde-format
 msgid "px"
-msgstr "px"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblXOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:88
@@ -28054,16 +27993,14 @@ msgid "Preset Icon Library"
 msgstr ""
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
-#, fuzzy, kde-format
-#| msgid "Support Krita!"
+#, kde-format
 msgid "Supporter Benefits"
-msgstr "Krita"
+msgstr ""
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscriptions"
-msgstr "چۈشەندۈرۈش"
+msgstr ""
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:114
 #, kde-format
@@ -28079,11 +28016,9 @@ msgstr[0] ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDonationManagementDialog)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Stacked"
+#, kde-format
 msgid "StackedWidget"
-msgstr "دەستىلەنگەن"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblNoBenefits)
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:53
@@ -28097,7 +28032,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDonationManagementDialog.ui:63
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "ئىئانە"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:72
 #, kde-format
@@ -28426,10 +28361,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
 #: libs/ui/forms/KisWelcomePage.ui:1672
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgid "Manage Supporter Benefits"
-msgstr "مەنبەلەر(&R)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
@@ -28950,7 +28884,7 @@ msgstr "چوڭقۇرلۇق:"
 #: libs/ui/forms/wdgcolorspaceselector.ui:73
 #, kde-format
 msgid "Profile:"
-msgstr ""
+msgstr "سەپلىمە ھۆججەت:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnInstallProfile)
 #: libs/ui/forms/wdgcolorspaceselector.ui:119
@@ -29229,6 +29163,10 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
+"problems with drawing assistants.\n"
+"              </p><p>Changing the pixmap cache size requires a restart.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:200
@@ -29437,7 +29375,7 @@ msgstr ""
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #, no-c-format, kde-format
 msgid "%"
-msgstr "%"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:458
@@ -29595,7 +29533,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label of ICC Color Profile in PNG import dialogue"
 msgid "Profile:"
-msgstr ""
+msgstr "سەپلىمە ھۆججەت:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -29977,10 +29915,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: libs/ui/forms/wdggeneralsettings.ui:501
-#, fuzzy, kde-format
-#| msgid "Icon Size"
+#, kde-format
 msgid "Icons in menu:"
-msgstr "سىنبەلگە چوڭلۇقى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -30160,10 +30097,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "No Preview"
+#, kde-format
 msgid "Zoom Preview Scale:"
-msgstr "ئالدىن كۆزىتىش يوق"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
@@ -30173,14 +30109,13 @@ msgstr "ئالدىن كۆزىتىش يوق"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, kde-format
 msgid "x"
-msgstr "x"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewCirclePosition)
 #: libs/ui/forms/wdggeneralsettings.ui:1066
-#, fuzzy, kde-format
-#| msgid "Composition"
+#, kde-format
 msgid "Color Sampler Position:"
-msgstr "يېزىقچىلىق"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -30471,7 +30406,7 @@ msgstr ""
 #, kde-format
 msgctxt "pixel"
 msgid "px"
-msgstr "px"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:1665
@@ -30756,31 +30691,27 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpHdrMeta)
 #: libs/ui/forms/wdgimageproperties.ui:302
-#, fuzzy, kde-format
-#| msgid "Metadata"
+#, kde-format
 msgid "HDR Metadata"
-msgstr "تەپسىلىي ئۇچۇر"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxHdrReferenceWhite)
 #: libs/ui/forms/wdgimageproperties.ui:308
-#, fuzzy, kde-format
-#| msgid "Reference Point:"
+#, kde-format
 msgid "HDR Reference White"
-msgstr "نەقىل"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxContentLightLevel)
 #: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Content Light Level Information"
-msgstr "پۈتۈك ئۇچۇرى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdgimageproperties.ui:338
-#, fuzzy, kde-format
-#| msgid "Change List Level"
+#, kde-format
 msgid "Max Content Light Level:"
-msgstr "تىزىم دەرىجىسىنى ئۆزگەرتىش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdgimageproperties.ui:345
@@ -30790,19 +30721,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCalculateClli)
 #: libs/ui/forms/wdgimageproperties.ui:362
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Calculate"
+#, kde-format
 msgid "Calculate"
 msgstr "ھېسابلا"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Color Deformation"
+#, kde-format
 msgid "Color Volume Information"
-msgstr "رەڭ تەڭشىكى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, GreenLabel)
@@ -30860,19 +30787,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgimageproperties.ui:566
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) @label"
-#| msgid "Luminance:"
+#, kde-format
 msgid "Maximum Luminance:"
-msgstr "ئارىلىق:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdgimageproperties.ui:589
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) @label"
-#| msgid "Luminance:"
+#, kde-format
 msgid "Minimum Luminance:"
-msgstr "ئارىلىق:"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgimageproperties.ui:634
@@ -30968,7 +30891,7 @@ msgstr ""
 #: libs/ui/forms/wdgimportimagesequence.ui:115
 #, kde-format
 msgid "Step"
-msgstr "Step"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, spinStep)
 #: libs/ui/forms/wdgimportimagesequence.ui:122
@@ -31019,7 +30942,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label of ICC Color Profile in Layer Properties dialogue"
 msgid "Profile:"
-msgstr ""
+msgstr "سەپلىمە ھۆججەت:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorLabel)
 #: libs/ui/forms/wdglayerproperties.ui:167
@@ -31620,7 +31543,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:171
 #, kde-format
 msgid " MiB"
-msgstr " MiB"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgperformancesettings.ui:118
@@ -32120,7 +32043,7 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:256
 #, kde-format
 msgid "°"
-msgstr "°"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -32431,7 +32354,7 @@ msgstr ""
 #: plugins/filters/palettize/palettize.ui:72
 #, kde-format
 msgid "RGB"
-msgstr "RGB"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentColorInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:385
@@ -33315,7 +33238,7 @@ msgstr "ھەممە قەۋەتنى تاللا"
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
-msgstr " + "
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:305
 #, kde-format
@@ -33378,31 +33301,31 @@ msgstr[0] ""
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
-msgstr " + "
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:387
 #, kde-format
 msgctxt "Ctrl key"
 msgid "Ctrl"
-msgstr "Ctrl"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:391
 #, kde-format
 msgctxt "Meta key"
 msgid "Meta"
-msgstr "Meta"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:395
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
-msgstr "Alt"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:399
 #, kde-format
 msgctxt "Shift key"
 msgid "Shift"
-msgstr "Shift"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:411
 #, kde-format
@@ -33440,13 +33363,13 @@ msgstr "يوق"
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
-msgstr "%1 + %2"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:465
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
-msgstr "%1 + %2"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:478
 #, kde-format
@@ -33543,18 +33466,16 @@ msgid "Mouse Wheel"
 msgstr "چاشقىنەك غالتىكى"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Mouse Shape Gesture"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "چاشقىنەك غالتىكى"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Mouse Shape Gesture"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "چاشقىنەك غالتىكى"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -33742,11 +33663,9 @@ msgid "Zoom and Rotate Canvas"
 msgstr ""
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "سولغا ئايلاندۇر"
+msgstr ""
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
 #, kde-format
@@ -33764,11 +33683,9 @@ msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
 msgstr ""
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "سولغا ئايلاندۇر"
+msgstr ""
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
 #, kde-format
@@ -33889,7 +33806,7 @@ msgstr ""
 #: libs/ui/input/wintab/drawpile_tablettester/tablettester.cpp:18
 #, kde-format
 msgid "Tablet Tester"
-msgstr ""
+msgstr "سەزگۈر تاختا سىنىغۇچ"
 
 #: libs/ui/kis_animation_importer.cpp:65
 msgctxt "(qtundo-format)"
@@ -33975,32 +33892,24 @@ msgid "&Choose foreground and background colors"
 msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Foreground Color"
+#, kde-format
 msgid "&Choose foreground colour"
-msgstr "ئالدى كۆرۈنۈش رەڭگىنى تاللا(&C)"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Choose Background Color"
+#, kde-format
 msgid "&Choose background colour"
-msgstr "تەگلىك رەڭگىنى تاللا(&C)"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:160
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Swap Foreground and Background Color"
+#, kde-format
 msgid "&Swap Foreground and Background Colors"
-msgstr "تەگلىك رەڭگى"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Reset Foreground and Background Color"
+#, kde-format
 msgid "&reset Foreground and Background Colors"
-msgstr "ئالدى رەڭ"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:195
 #, kde-format
@@ -34012,7 +33921,7 @@ msgstr ""
 msgid "&Docker Box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34021,12 +33930,12 @@ msgstr ""
 msgid "Patterns"
 msgstr "ئەندىزە"
 
-#: libs/ui/kis_control_frame.cpp:274 libs/ui/kis_control_frame.cpp:275
+#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
 #, kde-format
 msgid "Custom Pattern"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:415
+#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:415
 #: libs/ui/KisApplication.cpp:416
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34035,12 +33944,12 @@ msgstr ""
 msgid "Gradients"
 msgstr "رەڭ ئۆزگىرىشى"
 
-#: libs/ui/kis_control_frame.cpp:358
+#: libs/ui/kis_control_frame.cpp:359
 #, kde-format
 msgid "Docker box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:364
+#: libs/ui/kis_control_frame.cpp:365
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr ""
@@ -34500,7 +34409,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1%"
+msgstr ""
 
 #: libs/ui/kis_node_model.cpp:605
 #, kde-format
@@ -34668,7 +34577,7 @@ msgstr ""
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "100%"
-msgstr "100%"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:220
 #, kde-format
@@ -34723,10 +34632,9 @@ msgid "Crop to Selection"
 msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:99
-#, fuzzy, kde-format
-#| msgid "Copy selection to clipboard"
+#, kde-format
 msgid "Toggle pin selection actions bar"
-msgstr "تاللانمىدى"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:155
 #, kde-format
@@ -34846,7 +34754,7 @@ msgstr ""
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
-msgstr "Tyson Tan"
+msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:294
 #, kde-format
@@ -35517,6 +35425,7 @@ msgstr ""
 #, kde-format
 msgid "Permission denied. Krita is not allowed to read or write to the file."
 msgstr ""
+"ئىجازەت رەت قىلىندى. Krita is not allowed to read or write to the file."
 
 #: libs/ui/KisImportExportErrorCode.cpp:52
 #, kde-format
@@ -35526,12 +35435,12 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:65
 #, kde-format
 msgid "Cannot open file for reading. Reason: %1"
-msgstr ""
+msgstr "Cannot open file for reading. سەۋەب:%1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:81
 #, kde-format
 msgid "Cannot open file for writing. Reason: %1"
-msgstr ""
+msgstr "Cannot open file for writing. سەۋەب:%1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:146
 #, kde-format
@@ -35963,12 +35872,12 @@ msgstr "يېڭى خىزمەت بوشلۇقى…"
 #: libs/ui/KisMainWindow.cpp:2830
 #, kde-format
 msgid "&%1 %2"
-msgstr "&%1 %2"
+msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:2833
 #, kde-format
 msgid "%1 %2"
-msgstr "%1 %2"
+msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:3005
 #, kde-format
@@ -36858,7 +36767,7 @@ msgstr ""
 #: libs/ui/layerstyles/wdgblendingoptions.ui:191
 #, kde-format
 msgid "1"
-msgstr "1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:200
@@ -37645,7 +37554,7 @@ msgstr "كۆڭۈلدىكى"
 #: libs/ui/toolbox/KoToolBox.cpp:367
 #, kde-format
 msgid "%1x%2"
-msgstr "%1x%2"
+msgstr ""
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:26
 #, kde-format
@@ -39375,16 +39284,14 @@ msgid "Current dockers"
 msgstr ""
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Manage Resource Bundles"
+#, kde-format
 msgid "Download Resource Bundles"
-msgstr "مەنبەلەر(&R)"
+msgstr ""
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Manage Subscription"
-msgstr "چۈشەندۈرۈش"
+msgstr ""
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -39404,24 +39311,24 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/KoBackgroundColour.cpp:51
-#: libs/ui/widgets/KoDualColorButton.cpp:470
+#: libs/ui/widgets/KoDualColorButton.cpp:483
 #, kde-format
 msgid "Background color selector"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:459
+#: libs/ui/widgets/KoDualColorButton.cpp:472
 #: libs/ui/widgets/KoForegroundColour.cpp:50
 #, kde-format
 msgid "Foreground color selector"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:462
+#: libs/ui/widgets/KoDualColorButton.cpp:475
 #: libs/ui/widgets/KoResetBgFgColours.cpp:43
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:467
+#: libs/ui/widgets/KoDualColorButton.cpp:480
 #: libs/ui/widgets/KoSwapBgFgColours.cpp:42
 #, kde-format
 msgid "Swap foreground and background colors"
@@ -39661,7 +39568,7 @@ msgstr ""
 #: libs/widgets/kis_color_input.cpp:54
 #, kde-format
 msgid "%1:"
-msgstr "%1:"
+msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:337
 #: libs/widgets/KoEditColorSetDialog.cpp:158
@@ -39816,7 +39723,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:79
 #, kde-format
 msgid "HSV"
-msgstr "HSV"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
@@ -40104,12 +40011,12 @@ msgstr "رەڭلەرنى قوش/چىقىرىۋەت"
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
 msgid "1. Foreground to Transparent"
-msgstr ""
+msgstr "1. Foreground to Transparent"
 
 #: libs/widgets/KoResourceServerProvider.cpp:57
 #, kde-format
 msgid "0. Foreground to Background"
-msgstr ""
+msgstr "0. Foreground to Background"
 
 #: libs/widgets/KoRuler.cpp:1301
 #, kde-format
@@ -40136,7 +40043,7 @@ msgstr "قورال تاللانمىلىرى"
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"
-msgstr "%1 (%2)"
+msgstr ""
 
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
@@ -40372,7 +40279,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format
@@ -40409,14 +40316,6 @@ msgid ""
 "improvement then you are welcome to use the bug tracking system to register "
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
-"<html>يۇمشاق دېتاللار ئۈزلۈكسىز ياخشىلىنىۋاتىدۇ ۋە KDE ئەترىتى شۇنداق "
-"قىلىشقا ھەر ۋاقىت تەييار. ئىشلەتكۈچى يەنى سىز، بىرەر نەرسە ياخشى ئىشلىمىسە "
-"ياكى ئويلىغىنىڭىزدەك بولمىسا بىزگە خەۋەر قىلسىڭىزلا بولىدۇ. <br /><br />KDE "
-"نىڭ كەمتۈك مەلۇم قىلىش سىستېمىسى بار. <a href=«%1»>%1</a> نى زىيارەت "
-"قىلسىڭىز ياكى «ياردەم» تىزىملىكىدىكى \"كەمتۈك مەلۇم قىلىش...\" سۆزلەشكۈسىنى "
-"ئىشلەتسىڭىز بولىدۇ.<br /><br />سىزنىڭ ئارزۇ-تەلەپلىرىڭىز بولسا، ئۇنى كەمتۈك "
-"مەلۇم قىلىش سىستېمىسىغا ئەۋەتىشىڭىزنى قارشى ئالىمىز بۇ چاغدا سىز چوقۇم "
-"ئېغىرلىقىغا «ئارزۇ-تەلەپ» نى تاللاڭ.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:90
 #, kde-format
@@ -40429,14 +40328,6 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>KDE ئەترىتىنىڭ ئەزايى بولۇش ئۈچۈن، سىزنىڭ يۇمشاق دېتال ئىنژېنېرى "
-"بۆلىشىڭىز تەلەپ قىلىنمايدۇ. سىز كۆرۈنمە يۈز ئۇچۇرلىرىنى تەرجىمە قىلىدىغان "
-"ئەترەتكە قوشۇلسىڭىزمۇ بولىدۇ. سىز گرافىك، ئۇسلۇب، ئۈن، ۋە پۈتۈكلەرنى "
-"ياخشىلاش ئىشلىرىنى قىلسىڭىزمۇ بولىدۇ. بۇلارنى ئۆزىڭىز بەلگىلەيسىز!<br /><br /"
-"><a href=«%1»>%1</a> نى زىيارەت قىلىپ كۆرۈڭ، سىز قاتنىشالايدىغان قۇرۇلۇشلار "
-"بار. <br /><br />ئەگەر تېخىمۇ كۆپ ئۇچۇر ۋە پۈتۈكلەرگە ئېرىشمەكچى بولسىڭىز، "
-"<a href=\"%2\">%2</a> نى زىيارەت قىلىڭ. سىزگە ئېھتىياجلىق بولغان نەرسە چوقۇم "
-"چىقىدۇ.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:115
 #, kde-format
@@ -40613,8 +40504,6 @@ msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr ""
-"پىروگراممىنىڭ بارلىق قورال بالدىقىنى ئەسلىگە قايتۇرۇپ كۆڭۈلدىكى قىممەتلىرىنى "
-"ئىشلىتەمسىز؟ ئۆزگەرتىشلەر شۇ ھامان كۈچكە ئىگە بولىدۇ."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #, kde-format
@@ -40664,7 +40553,7 @@ msgstr "سۈزگۈچ"
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
 #, kde-format
@@ -40689,8 +40578,6 @@ msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
 msgstr ""
-"بۇ ھەرىكەتلەرنىڭ ھەرىكەتچان تىزىملىكىدۇر. ھەرىكەتنى ئۆچۈرگىلى بولىدۇ، بىراق "
-"ئۆچۈرۈلگەندىن كېيىن ئۇنى قايتا قوشقىلى بولمايدۇ."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1250
 #, kde-format
@@ -40702,7 +40589,7 @@ msgstr "ھەرىكەت تىزىملىكى: %1"
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1567
 #, kde-format
@@ -40774,7 +40661,6 @@ msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
 "one?"
 msgstr ""
-"ھازىرقى تېزلەتمە لايىھە ئۆزگەردى. يېڭىسىغا ئالمىشىشتىن بۇرۇن ساقلامسىز؟"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:244
 #, kde-format
@@ -40807,7 +40693,7 @@ msgstr "چۈشەندۈرۈش"
 #, kde-format
 msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:168
 #, kde-format
@@ -40833,9 +40719,6 @@ msgid_plural ""
 "Do you want to assign an empty shortcut to these actions?\n"
 "%3"
 msgstr[0] ""
-"تېزلەتمە \"%2\" تۆۋەندىكى تېزلەتمە بىلەن توقۇنۇشۇپ قالدى.\n"
-"بۇ مەشغۇلاتقا بوش تېزلەتمە بەلگىلىسۇنمۇ؟\n"
-"%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
@@ -40863,8 +40746,6 @@ msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
-"توپچىنى چېكىپ، ئاندىن بۇ پىروگراممىغا تېزلەتمە كىرگۈزۈلىدۇ.\n"
-"مەسىلەن، Ctrl+A يەنى Ctrl كۇنۇپكىسىنى بېسىپ تۇرۇپ ئاندىن A كۇنۇپكا بېسىلىدۇ."
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
@@ -40878,9 +40759,6 @@ msgid ""
 "some applications use.\n"
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
-"«%1» بىرىكمە كۇنۇپكا بەزى پىروگراممىدا «%2» ئۆلچەملىك مەشغۇلات ئۈچۈن "
-"بېكىتىلگەن.\n"
-"بۇنى راستتىنلا ئومۇمىيەت تېزلەتمە سۈپىتىدە ئىشلىتەمسىز؟"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
@@ -40963,6 +40841,9 @@ msgid ""
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
+"Do you really want to delete the scheme %1?\n"
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -41015,8 +40896,6 @@ msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
 msgstr ""
-"پىروگراممىنىڭ تىلى ئۆزگەردى. بۇ ئۆزگىرىش پىروگرامما قايتا قوزغىتىلغاندا "
-"ئاندىن كۈچكە ئىگە بولىدۇ."
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
 #, kde-format
@@ -41142,13 +41021,13 @@ msgstr "قورال بالدىقىنىڭ ئورنىنى قۇلۇپلا"
 #, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:93
 #, kde-format
@@ -41623,7 +41502,7 @@ msgstr "كۈلرەڭ"
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:23
 #, kde-format
 msgid "Y"
-msgstr "Y"
+msgstr ""
 
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:29
@@ -41631,7 +41510,7 @@ msgstr "Y"
 #: plugins/color/lcms2engine/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:24
 #, kde-format
 msgid "Z"
-msgstr "Z"
+msgstr ""
 
 #: plugins/color/lcms2engine/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:28
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:23
@@ -42664,7 +42543,7 @@ msgstr ""
 #: plugins/python/palette_docker/palette_docker.py:79
 #, kde-format
 msgid "+"
-msgstr "+"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrevColor)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:169
@@ -42879,7 +42758,7 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
 #, kde-format
 msgid "Reset to default"
-msgstr ""
+msgstr "كۆڭۈلدىكىگە قايتۇر"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
 #, kde-format
@@ -43414,7 +43293,7 @@ msgstr "قوش(&A)"
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1357
 #, kde-format
 msgid "%1 %"
-msgstr "%1 %"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KisCompositeOpComboBox, cmbComposite)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:59
@@ -43537,11 +43416,9 @@ msgid "Tablet Handling"
 msgstr ""
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Bilinear Filtering"
+#, kde-format
 msgid "Input Filtering"
-msgstr "قوش سىزىقلىق"
+msgstr ""
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
 #, kde-format
@@ -43926,11 +43803,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:328
-#, fuzzy, kde-format
-#| msgid "Loading resources..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
-msgstr "مەنبەنى يۈكلەۋاتىدۇ…"
+msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
@@ -43963,7 +43839,7 @@ msgstr ""
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
-msgstr "px"
+msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
 #, kde-format
@@ -44341,7 +44217,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:272
 #, kde-format
 msgid "0 B"
-msgstr "0 B"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -44797,7 +44673,7 @@ msgstr ""
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
 msgid "s"
-msgstr "s"
+msgstr ""
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:314
@@ -44805,7 +44681,7 @@ msgstr "s"
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
 msgid "f"
-msgstr "f"
+msgstr ""
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:171
 #, kde-format
@@ -44941,10 +44817,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
-#, fuzzy, kde-format
-#| msgid "Image Size"
+#, kde-format
 msgid "Page Setup"
-msgstr "سۈرەت چوڭلۇقى"
+msgstr "بەت تەڭشەك"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:67
@@ -45002,17 +44877,15 @@ msgstr "يۆنىلىش:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgid "Board Layout"
-msgstr "بەت جايلاشتۇرۇلۇشى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:153
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange By:"
-msgstr "تەرتىپلە"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:167
@@ -45034,17 +44907,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, gridLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:196
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Rows x Columns:"
-msgstr "رەت:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
-#, fuzzy, kde-format
-#| msgid "templates"
+#, kde-format
 msgid "Template File:"
-msgstr "قېلىپ"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, textGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:341
@@ -45414,7 +45285,7 @@ msgstr "ئۇزۇنلۇقى"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Super"
-msgstr "Super"
+msgstr ""
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:134
 #: plugins/dockers/textproperties/qml/OTPosition.qml:80
@@ -45503,7 +45374,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
-msgstr ""
+msgstr "… داۋامى"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
 #, kde-format
@@ -45851,7 +45722,7 @@ msgstr "قىيپاش"
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
-msgstr "°"
+msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:440
 #, kde-format
@@ -46048,7 +45919,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Anywhere"
-msgstr ""
+msgstr "خالىغان جاي"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:86
 #: plugins/dockers/textproperties/qml/WordBreak.qml:82
@@ -46705,7 +46576,7 @@ msgstr "ھەرپ"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Preset"
-msgstr ""
+msgstr "ئەسلىگە قايتۇرۇش"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:134
 #, kde-format
@@ -46895,13 +46766,13 @@ msgstr "باش ھەرپنى چوڭايت"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
-msgstr ""
+msgstr "يۇقىرىسى"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:107
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lower Case"
-msgstr ""
+msgstr "تۆۋەنرەك"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:125
 #, kde-format
@@ -47165,7 +47036,7 @@ msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr ""
+msgstr "ھەرىكەتچان"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -48988,7 +48859,7 @@ msgstr "Dublin يادروسى"
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
 msgid "Exif"
-msgstr "Exif"
+msgstr ""
 
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:174
 #, kde-format
@@ -49776,11 +49647,9 @@ msgid "What resource do you want to import these %1 files as?"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Import Bundles"
+#, kde-format
 msgid "Supporter Bundles"
-msgstr "قۇرلارنى ئىمپورت قىلىش:"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:55
 #, kde-format
@@ -49788,11 +49657,9 @@ msgid "<strong>Error:</strong> %1"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "No profile available..."
+#, kde-format
 msgid "No supporter bundles available."
-msgstr "سەپلىمە ھۆججەت يوق"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:108
 #, kde-format
@@ -49807,14 +49674,13 @@ msgstr ""
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:40
 #, kde-format
 msgid "Loading…"
-msgstr ""
+msgstr "يۈكلەۋاتىدۇ…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
-#, fuzzy, kde-format
-#| msgid "Symmetry"
+#, kde-format
 msgid "Retry"
-msgstr "سىممېترىك"
+msgstr "قايتا سىنا"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:55
 #, kde-format
@@ -49822,11 +49688,9 @@ msgid "Server responded with error %1."
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksums file."
-msgstr "ئىناۋەتسىز ئات."
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:92
 #, kde-format
@@ -49854,10 +49718,9 @@ msgid "This service has been discontinued."
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
-#, fuzzy, kde-format
-#| msgid "Unknown error."
+#, kde-format
 msgid "Unknown service error %1."
-msgstr "نامەلۇم خاتالىق."
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:184
 #, kde-format
@@ -49865,37 +49728,29 @@ msgid "Not enough data."
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
-#, fuzzy, kde-format
-#| msgid "Invalid value."
+#, kde-format
 msgid "Invalid version."
-msgstr "ئىناۋەتسىز قىممەت."
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgid "Invalid checksum."
-msgstr "ئىناۋەتسىز ئات."
+msgstr "ئىناۋەتسىز مۇكەممەللىك يىغىندىسى."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to create directory %1."
-msgstr "سۈرەتلەر"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
-#, fuzzy, kde-format
-#| msgid "Could not open %1 for writing!"
+#, kde-format
 msgid "Failed to open %1 for writing."
-msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to write %1."
-msgstr "سۈرەتلەر"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:317
 #, kde-format
@@ -49903,19 +49758,15 @@ msgid "Failed to retrieve bundle checksums: %1"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Failed to open %1."
+#, kde-format
 msgid "Failed to retrieve bundles: %1"
-msgstr "سۈرەتلەر"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate Brush Preset"
+#, kde-format
 msgid "%1 brush preset"
 msgid_plural "%1 brush presets"
-msgstr[0] "رەسىم قەلىمى تاللاش"
+msgstr[0] ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
 #, kde-format
@@ -49930,12 +49781,10 @@ msgid_plural "%1 texture patterns"
 msgstr[0] ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "resource type"
-#| msgid "workspaces"
+#, kde-format
 msgid "%1 workspace layout"
 msgid_plural "%1 workspace layouts"
-msgstr[0] "خىزمەت رايونلىرى"
+msgstr[0] ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:53
 #, kde-format
@@ -49943,35 +49792,29 @@ msgid "%1 (subscribed)"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "%1 (Copy)"
+#, kde-format
 msgid "%1 (owned)"
-msgstr "كۆچۈر"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
-msgstr "سېلىشتۇرمىسى:"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "No profile available..."
+#, kde-format
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
-msgstr "سەپلىمە ھۆججەت يوق"
+msgstr "ئىشلەتكىلى بولمايدۇ."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
-#, fuzzy, kde-format
-#| msgid "Available"
+#, kde-format
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
 msgid "Available with:"
-msgstr "ئىشلەتكىلى بولىدۇ"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:138
 #, kde-format
@@ -49982,13 +49825,12 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
 #, kde-format
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:194
-#, fuzzy, kde-format
-#| msgid "Inactive Bundles"
+#, kde-format
 msgid "Invalid bundle size"
-msgstr "ئاكتىپ"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:202
 #, kde-format
@@ -49996,11 +49838,9 @@ msgid "Invalid bundle checksum"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:206
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Active Bundles"
+#, kde-format
 msgid "Activating bundle…"
-msgstr "ئاكتىپ"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
 #, kde-format
@@ -50015,14 +49855,13 @@ msgstr ""
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
 #, kde-format
 msgid "Download failed"
-msgstr ""
+msgstr "چۈشۈرەلمىدى"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Down"
+#, kde-format
 msgid "Download"
-msgstr "ئاستى"
+msgstr "چۈشۈرۈش"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:196
@@ -50166,10 +50005,9 @@ msgid "Manage Resources..."
 msgstr "مەنبە باشقۇر…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:50
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Get More Resources..."
-msgstr "مەنبە باشقۇر…"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -50202,11 +50040,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSupport)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Create Resource Bundle"
+#, kde-format
 msgid "Get More Bundles"
-msgstr "مەنبەلەر(&R)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:433
@@ -51360,7 +51196,7 @@ msgstr ""
 #: plugins/filters/convertheightnormalmap/wdg_convert_height_to_normal_map.ui:55
 #, kde-format
 msgid "XYZ"
-msgstr "XYZ"
+msgstr ""
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:48
 #, kde-format
@@ -55909,7 +55745,7 @@ msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
 #: plugins/impex/libkra/kra_converter.cpp:226
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "«%1» غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+msgstr ""
 
 #: plugins/impex/libkra/kra_converter.cpp:318
 #, kde-format
@@ -56190,26 +56026,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbSaveColorInfo)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Color Deformation"
+#, kde-format
 msgid "Save Color Space Information"
-msgstr "رەڭ تەڭشىكى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCICP)
 #: plugins/impex/png/kis_wdg_options_png.ui:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Save ICC Profile"
+#, kde-format
 msgid "Save CICP if possible"
-msgstr "سەپلىمە ھۆججەت"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/png/kis_wdg_options_png.ui:220
-#, fuzzy, kde-format
-#| msgid "Connection Point"
+#, kde-format
 msgid "Convert Floating Point:"
-msgstr "باغلىنىش"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExtraColorChunks)
 #: plugins/impex/png/kis_wdg_options_png.ui:230
@@ -57369,7 +57200,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
 #, kde-format
 msgid "Preset"
-msgstr ""
+msgstr "ئەسلىگە قايتۇرۇش"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:60
@@ -57420,7 +57251,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:248
 #, kde-format
 msgid " B"
-msgstr " B"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
@@ -59197,7 +59028,7 @@ msgstr "تېكىست:"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:139
 #, kde-format
 msgid "The Quick Brown Fox Jumps Over The Lazy Dog"
-msgstr "The Quick Brown Fox Jumps Over The Lazy Dog"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171
@@ -59392,6 +59223,8 @@ msgid ""
 "Creates a brush tip from the current image selection.\n"
 " If no selection is present the whole image will be used."
 msgstr ""
+"Creates a brush tip from the current image selection.\n"
+" If no selection is present the whole image will be used."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
 #, kde-format
@@ -59547,7 +59380,7 @@ msgstr "كۈچى: "
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:69
 #, kde-format
 msgid "%1 px"
-msgstr "%1 px"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
@@ -59613,12 +59446,12 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:58
 #, kde-format
 msgid " ms"
-msgstr " ms"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr "%1 ms"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -60541,7 +60374,7 @@ msgstr "قايتىلا : "
 #, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
-msgstr "x"
+msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:76
 #, kde-format
@@ -60801,7 +60634,7 @@ msgstr ""
 #, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr ""
+msgstr "توپلاشتۇرغۇچ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -61384,7 +61217,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:415
 msgid "TIFF"
-msgstr "TIFF"
+msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:428
 #, python-brace-format
@@ -62537,11 +62370,11 @@ msgstr ""
 
 #: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "JPEG"
-msgstr "JPEG"
+msgstr ""
 
 #: plugins/python/exportlayers/uiexportlayers.py:84
 msgid "PNG"
-msgstr "PNG"
+msgstr ""
 
 #: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "dpi:"
@@ -63222,12 +63055,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) description of a file type"
-#| msgid "Krita Brush Preset"
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 0"
-msgstr "رەسىم قەلىمى تاللاش"
+msgstr ""
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
@@ -63351,12 +63182,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (execute_script_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select path"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 0"
-msgstr "مۇندەرىجە تاللاش"
+msgstr ""
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
@@ -63431,25 +63260,16 @@ msgid "Ellipse Tool"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Polygon Tool"
 msgid "Polygon Tool"
-msgstr "كۆپ تەرەپلىك"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Polyline Tool"
 msgid "Polyline Tool"
-msgstr "قۇر سانى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Bezier Curve Tool"
 msgid "Bezier Curve Tool"
-msgstr "رەسىم قەلىمى تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
 #: plugins/tools/basictools/kis_tool_pencil.h:76
@@ -63470,11 +63290,8 @@ msgid "Multibrush Tool"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Transform Tool"
 msgid "Transform Tool"
-msgstr "سۈزۈك"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
 #: plugins/tools/basictools/kis_tool_move.h:183
@@ -63495,11 +63312,8 @@ msgid "Gradient Tool"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:46
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Colorize Mask"
 msgid "Colorize Mask Tool"
-msgstr "بويا(&C)"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
@@ -63520,11 +63334,8 @@ msgid "Enclose and Fill Tool"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
-#, fuzzy
-#| msgctxt "(qtundo-format) action"
-#| msgid "Measurement Tool"
 msgid "Measurement Tool"
-msgstr "تىك تۆت بۇلۇڭ"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
@@ -63575,10 +63386,8 @@ msgid "Magnetic Selection Tool"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
-#, fuzzy
-#| msgid "Zoom to All"
 msgid "Zoom Tool"
-msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
 #: plugins/tools/basictools/kis_tool_pan.cpp:81
@@ -63603,20 +63412,14 @@ msgid "Workflow Buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
-#, fuzzy
-#| msgctxt "left mouse button"
-#| msgid "left button"
 msgctxt "@label"
 msgid "Selected button:"
-msgstr "چاشقىنەك غالتىكى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Workflow Buttons"
 msgctxt "@info:tooltip"
 msgid "Add a workflow button"
-msgstr "ئىختىيارى توپچە كۆزنەكچە"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
 msgctxt "@info:tooltip"
@@ -63634,111 +63437,76 @@ msgid "Delete selected workflow button"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
-#, fuzzy
-#| msgid "Selection Mode"
 msgctxt "@label:listbox"
 msgid "Select icon mode:"
-msgstr "تاللاش ھالىتى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
-#, fuzzy
-#| msgid "Select a list image"
 msgctxt "@label:chooser"
 msgid "Select a custom icon:"
-msgstr "سۈرەت تاللاش:"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
 msgctxt "@info:tooltip"
 msgid "Custom icon path"
-msgstr "يولنى بىرلەشتۈر"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
-#, fuzzy
-#| msgid "..."
 msgctxt "@action:button"
 msgid "..."
 msgstr "…"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Select by Outline"
 msgctxt "@info:tooltip"
 msgid "Select the custom icon"
-msgstr "مۇندەرىجە تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Interaction Tool"
 msgctxt "@label:textbox"
 msgid "Enter a Tooltip:"
-msgstr "تەسىرلىشىش قورالى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
-#| msgid "Tooltip"
 msgctxt "@info:tooltip"
 msgid "Tooltip text"
-msgstr "كۆرسەتمە"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Select a "
 msgctxt "@label:listbox"
 msgid "Select a tool:"
-msgstr "مۇندەرىجە تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Activate Brush Preset"
 msgctxt "@label:chooser"
 msgid "Select a brush preset:"
-msgstr "رەسىم قەلىمى تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Brush Preset History"
 msgctxt "@info:tooltip"
 msgid "Brush preset name"
-msgstr "رەسىم قەلىمى تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Activate Brush Preset"
 msgctxt "@info:tooltip"
 msgid "Select the brush preset"
-msgstr "رەسىم قەلىمى تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
-#, fuzzy
-#| msgid "Select backround color:"
 msgctxt "@label"
 msgid "Select foreground color:"
-msgstr "تەگلىك رەڭگى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
-#, fuzzy
-#| msgid "Foreground color"
 msgctxt "@action:button"
 msgid "Load current foreground color"
-msgstr "ئالدى كۆرۈنۈش رەڭگى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
-#, fuzzy
-#| msgid "Foreground color"
 msgctxt "@action:button"
 msgid "Clear foreground color"
-msgstr "ئالدى كۆرۈنۈش رەڭگى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgctxt "@info:tooltip"
@@ -63746,56 +63514,39 @@ msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
-#, fuzzy
-#| msgid "Select backround color:"
 msgctxt "@label"
 msgid "Select background color:"
-msgstr "تەگلىك رەڭگى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Fill area with background color"
 msgctxt "@action:button"
 msgid "Load current background color"
-msgstr "تەگلىك رەڭگى بىلەن بوياش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
-#, fuzzy
-#| msgid "Select backround color:"
 msgctxt "@action:button"
 msgid "Clear background color"
-msgstr "تەگلىك رەڭگى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
-#, fuzzy
-#| msgid "Select a list image"
 msgctxt "@label"
 msgid "Select a script file:"
-msgstr "سۈرەت تاللاش:"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Select path"
 msgctxt "@info:tooltip"
 msgid "Script path"
-msgstr "مۇندەرىجە تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Select path"
 msgctxt "@info:tooltip"
 msgid "Select the script"
-msgstr "مۇندەرىجە تاللاش"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
-#, fuzzy
-#| msgid "Buttons"
 msgctxt "@label:listbox"
 msgid "Buttons size:"
-msgstr "توپچە"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 msgctxt "@label:listbox"
@@ -63803,28 +63554,20 @@ msgid "Settings button position:"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
-#, fuzzy
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
 msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
-msgstr "ئاستى"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
-#, fuzzy
-#| msgid "Inline"
 msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Inline"
 msgstr "سىڭدۈر"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Color Engine:"
 msgctxt "@label"
 msgid "Color info: "
-msgstr "رەڭ ئاتى:"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
 msgid "Script files "
@@ -64332,7 +64075,7 @@ msgstr ""
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
-msgstr "%1°"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_measure.cc:177
 #, kde-format
@@ -66546,7 +66289,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
 #, kde-format
 msgid "SVG"
-msgstr "SVG"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
@@ -67877,7 +67620,7 @@ msgstr "توغرىسىغا چوڭايتىش"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:998
 #, no-c-format, kde-format
 msgid " %"
-msgstr " %"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
@@ -68003,11 +67746,9 @@ msgstr "ھەقىقىي"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShape)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1952
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
+#, kde-format
 msgid "Restore Shape"
-msgstr "شەكىلنى قايتا تەرتىپلە"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationOriginal)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScaleOriginal)
@@ -68015,10 +67756,9 @@ msgstr "شەكىلنى قايتا تەرتىپلە"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2117
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2247
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgid "To original"
-msgstr "ئەسلى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeRotationPreserve)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRestoreShapeScalePreserve)
@@ -68026,17 +67766,15 @@ msgstr "ئەسلى"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2136
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgid "Preserve"
-msgstr "بېسىم"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeStretch)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2229
-#, fuzzy, kde-format
-#| msgid "Stretched"
+#, kde-format
 msgid "Stretch:"
-msgstr "سوزۇلغان"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2306

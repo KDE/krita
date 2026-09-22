@@ -135,6 +135,7 @@ public:
     QImage frame;
     int frameResolution = -1;
     int partIndex = 0;                                     // Consecutive file number
+    bool isActive = false;
     const RecorderWriterSettings* settings;
     const QDir* outputDir;
 
@@ -302,6 +303,8 @@ void RecorderWriter::onCaptureImage(int writerId, int index, KisPaintDeviceSP de
     if (static_cast<int>(id) != writerId)
         return;
 
+    d->isActive = true;
+
     d->captureImage(device);
 
     // downscale image buffer
@@ -312,9 +315,14 @@ void RecorderWriter::onCaptureImage(int writerId, int index, KisPaintDeviceSP de
 
     bool isFrameWritten = d->writeFrame(index);
 
+    d->isActive = false;
     Q_EMIT capturingDone(id, isFrameWritten);
 }
 
+bool RecorderWriter::isActive()
+{
+    return d->isActive;
+}
 
 struct WriterPoolEl
 {
@@ -394,8 +402,23 @@ public:
         bool result = true;
         bool alreadyWarn = false;
         bool alreadyErr = false;
-        for(auto& el: writerPool)
-        {
+
+        for (auto &el : writerPool) {
+            if (el.inUse && !el.writer->isActive()) {
+                // There's a pending job, but the writer didn't recieve the signal yet
+
+                // Wait until all the jobs processes
+                canvas->image()->waitForDone();
+
+                // Make sure the signals are delivered
+                QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+                //we can exit the loop, all the signals have been delivered and we don't need to check further
+                break;
+            }
+        }
+
+        for (auto &el : writerPool) {
             el.thread->quit();
             el.thread->wait(RecorderConst::waitThreadTimeoutMs);
             disconnect(q, SIGNAL(startCapturing(int, int, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, KisPaintDeviceSP)));
@@ -563,6 +586,7 @@ void RecorderWriterManager::start(bool toggleEnabled)
 
 bool RecorderWriterManager::stop(bool toggleEnabled)
 {
+    //Check if the timer is active, so that we don't try to clear the writer pool multiple times
     if (!d->timer.isActive())
         return true;
 

@@ -83,6 +83,8 @@ public:
     RecorderWriter& operator=(const RecorderWriter&) = delete;
     RecorderWriter& operator=(RecorderWriter&&) = delete;
 
+    bool isActive();
+
 Q_SIGNALS:
     void capturingDone(int writerId, bool success);
 

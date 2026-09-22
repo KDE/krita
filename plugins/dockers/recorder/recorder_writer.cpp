@@ -35,22 +35,11 @@ namespace
         "KisToolTransform",
         "KisToolPolyline",
         "KisToolPolygon",
-        "KisToolSelectOutline",
-        "KisToolSelectPolygonal",
-        "KisToolEncloseAndFill",
-        "KisToolPath",
-        "KisToolCrop",
-        "KisToolSelectPath",
-        "KisToolSelectMagnetic",
-        "SvgTextTool",
     }; // disable recorder when toggled to one of these tools.
     const QStringList activateBlacklistedTools = {
-        "KritaTransform/KisToolMove",
         "KritaShape/KisToolLine",
         "KritaShape/KisToolRectangle",
         "KritaShape/KisToolEllipse",
-        "KisToolSelectRectangular",
-        "KisToolSelectElliptical",
     }; // disable recorder when toggled to one of these tools and activated tool(left button pressed on canvas).
 }
 

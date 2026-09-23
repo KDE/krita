@@ -44,6 +44,19 @@ QString PythonPlugin::moduleFilePathPart() const
     return filePath.replace(".", "/");
 }
 
+QString PythonPlugin::manual()
+{
+    if (m_manual.isNull() && !m_manualPath.isEmpty()) {
+        QFile f(m_manualPath);
+        if (f.open(QFile::ReadOnly)) {
+            QByteArray ba = f.readAll();
+            f.close();
+            m_manual = QString::fromUtf8(ba);
+        }
+    }
+    return m_manual;
+}
+
 bool PythonPlugin::isValid() const
 {
     dbgScript << "Got Krita/PythonPlugin: " << name()
@@ -291,12 +304,7 @@ void PythonPluginManager::scanPlugins()
 
             QString manual = dg.readEntry("X-Krita-Manual");
             if (!manual.isEmpty()) {
-                QFile f(QFileInfo(desktopFile).path() + "/" + plugin.m_moduleName + "/" + manual);
-                if (f.open(QFile::ReadOnly)) {
-                    QByteArray ba = f.readAll();
-                    f.close();
-                    plugin.m_manual = QString::fromUtf8(ba);
-                }
+                plugin.m_manualPath = QFileInfo(desktopFile).path() + "/" + plugin.m_moduleName + "/" + manual;
             }
             if (!plugin.isValid()) {
                 dbgScript << plugin.name() << "is not usable";

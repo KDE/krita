@@ -27,6 +27,8 @@ public:
      */
     QString moduleFilePathPart() const;
 
+    QString manual();
+
     bool isValid() const;
 
     QString statusText();
@@ -76,11 +78,6 @@ public:
         return m_comment;
     }
 
-    QString manual() const
-    {
-        return m_manual;
-    }
-
 private:
     friend class PythonPluginManager;
 
@@ -98,6 +95,7 @@ private:
     QString m_moduleName;
     QString m_desktopFilePath;
     QString m_comment;
+    QString m_manualPath;
     QString m_manual;
 
     QMap<QString, QVariant> m_properties;

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-23 00:47+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -21143,7 +21143,7 @@ msgstr "Zrušiť výber"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
+#: libs/ui/kis_layer_manager.cc:744 libs/ui/kis_layer_manager.cc:797
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Pridať vrstvu"
@@ -21543,7 +21543,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadie"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr "Maľovať vrstvu"
@@ -22320,30 +22320,30 @@ msgstr ""
 "to nedokáže znázorniť a trvanie snímky sa zaokrúhli na najbližšiu "
 "milisekundu."
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:716
 #, kde-format
 msgid "Clone Layer"
 msgstr "Klonovať vrstvu"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
 #: libs/ui/kis_node_manager.cpp:1629
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Skupina"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1037
 #, kde-format
 msgid "File Layer"
 msgstr "Vrstva súborov"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:729
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektorová vrstva"
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "Filter Layer"
 msgstr "Vrstva filtrov"
@@ -22353,23 +22353,23 @@ msgstr "Vrstva filtrov"
 msgid "Generator Layer"
 msgstr "Vrstva generátora"
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:281
 #, kde-format
 msgid "Colorize Mask"
 msgstr "Zafarbiť masku"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127
-#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
+#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:230
 #, kde-format
 msgid "Filter Mask"
 msgstr "Maska filtra"
 
-#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:293
 #, kde-format
 msgid "Transform Mask"
 msgstr "Maska transformácie"
 
-#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -24023,8 +24023,8 @@ msgstr "Lokálne zdroje"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
 #: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
 #: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
 #: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
@@ -26880,16 +26880,6 @@ msgstr "Zatvoriť, neuložiť"
 #, kde-format
 msgid "Waiting for image operation to complete..."
 msgstr "Čakanie na dokončenie operácie obrázka..."
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
-#, kde-format
-msgid "Layer name:"
-msgstr "Názov vrstvy:"
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
-#, kde-format
-msgid "No configuration options are available for this filter"
-msgstr "Pre tento filter nie sú k dispozícii žiadne možnosti"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:77
@@ -34676,25 +34666,25 @@ msgstr "Importovať obrázok"
 msgid "Select a Color"
 msgstr "Vybrať farbu."
 
-#: libs/ui/kis_layer_manager.cc:194
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Zlúčiť vybrané vrstvy"
 
-#: libs/ui/kis_layer_manager.cc:196
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Zlúčiť skupinu"
 
-#: libs/ui/kis_layer_manager.cc:198
+#: libs/ui/kis_layer_manager.cc:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Zlúčiť so spodnou vrstvou"
 
-#: libs/ui/kis_layer_manager.cc:220
+#: libs/ui/kis_layer_manager.cc:219
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
@@ -34705,37 +34695,37 @@ msgstr "Vrstva je prázdna "
 msgid "Filter Layer Properties"
 msgstr "Vlastnosti filtrovej vrstvy"
 
-#: libs/ui/kis_layer_manager.cc:315
+#: libs/ui/kis_layer_manager.cc:316
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Vlastnosti vrstvy súborov"
 
-#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
+#: libs/ui/kis_layer_manager.cc:327 libs/ui/kis_layer_manager.cc:1045
 #, kde-format
 msgid "No file name specified"
 msgstr "Nezadané žiadne meno súboru"
 
-#: libs/ui/kis_layer_manager.cc:364
+#: libs/ui/kis_layer_manager.cc:365
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Vlastnosti vyplnenia vrstvy"
 
-#: libs/ui/kis_layer_manager.cc:421
+#: libs/ui/kis_layer_manager.cc:422
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Zmeniť klonovanú vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:536
+#: libs/ui/kis_layer_manager.cc:537
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Previesť skupinu na &animovanú vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:556
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid "Save layers to..."
 msgstr "Uložiť vrstvy do..."
 
-#: libs/ui/kis_layer_manager.cc:557
+#: libs/ui/kis_layer_manager.cc:558
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34744,28 +34734,28 @@ msgstr ""
 "Zvoliť umiestnenie, do ktorého sa uloží vrstva. Nová vrstva súborov potom "
 "bude odkazovať na toto umiestnenie."
 
-#: libs/ui/kis_layer_manager.cc:620
+#: libs/ui/kis_layer_manager.cc:621
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Previesť na vrstvu súborov"
 
-#: libs/ui/kis_layer_manager.cc:752
+#: libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nová vrstva filtra"
 
-#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Vyplniť vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:827
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Zarovnať obrázok"
 
-#: libs/ui/kis_layer_manager.cc:828
+#: libs/ui/kis_layer_manager.cc:829
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -34773,7 +34763,7 @@ msgid ""
 msgstr ""
 "Obrázok obsahuje skryté vrstvy, ktoré budú stratené. Chcete zarovnať obrázok?"
 
-#: libs/ui/kis_layer_manager.cc:906
+#: libs/ui/kis_layer_manager.cc:907
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34782,13 +34772,13 @@ msgstr[0] "Vrstva je zamknutá."
 msgstr[1] "Vrstvy sú zamknuté."
 msgstr[2] "Vrstvy sú zamknuté."
 
-#: libs/ui/kis_layer_manager.cc:928
+#: libs/ui/kis_layer_manager.cc:929
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Vrstva je zamknutá"
 
-#: libs/ui/kis_layer_manager.cc:945
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34800,62 +34790,62 @@ msgstr ""
 "Neanimovaná vrstva je zlúčená do aktuálnej snímky. Ak ju chcete zlúčiť do "
 "celého klipu, vytvorte aspoň jednu snímku"
 
-#: libs/ui/kis_layer_manager.cc:994
+#: libs/ui/kis_layer_manager.cc:995
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Previesť neviditeľné skupiny"
 
-#: libs/ui/kis_layer_manager.cc:997
+#: libs/ui/kis_layer_manager.cc:998
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exportovať iba skupiny najvyššej úrovne"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr "Pridať masku výberu"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 #, kde-format
 msgid "Selection"
 msgstr "Výber"
 
-#: libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_mask_manager.cc:217
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr "Pridať masku priehľadnosti"
 
-#: libs/ui/kis_mask_manager.cc:229
+#: libs/ui/kis_mask_manager.cc:230
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr "Pridať masku filtra"
 
-#: libs/ui/kis_mask_manager.cc:244
+#: libs/ui/kis_mask_manager.cc:245
 #, kde-format
 msgid "New Filter Mask"
 msgstr "Nová maska filtra"
 
-#: libs/ui/kis_mask_manager.cc:280
+#: libs/ui/kis_mask_manager.cc:281
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr "Pridať zafarbenie masky"
 
-#: libs/ui/kis_mask_manager.cc:292
+#: libs/ui/kis_mask_manager.cc:293
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr "Pridať masku transformácie"
 
-#: libs/ui/kis_mask_manager.cc:307
+#: libs/ui/kis_mask_manager.cc:308
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
 msgstr "Pridať rýchle prekrytie farby"
 
-#: libs/ui/kis_mask_manager.cc:311
+#: libs/ui/kis_mask_manager.cc:312
 #, kde-format
 msgid "Color Overlay Mask"
 msgstr "Maska prekrytia farby"
 
-#: libs/ui/kis_mask_manager.cc:352
+#: libs/ui/kis_mask_manager.cc:354
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr "Vlastnosti filtrovej masky"
@@ -70477,6 +70467,12 @@ msgstr ""
 "Prepnúť medzi plným a čiastkovým rozsahom.\n"
 "Plný rozsah: [%1, %2]\n"
 "Čiastkový rozsah: [%3, %4]"
+
+#~ msgid "Layer name:"
+#~ msgstr "Názov vrstvy:"
+
+#~ msgid "No configuration options are available for this filter"
+#~ msgstr "Pre tento filter nie sú k dispozícii žiadne možnosti"
 
 #~ msgctxt "Shortcut type"
 #~ msgid "Gesture"

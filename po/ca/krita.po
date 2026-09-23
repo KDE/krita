@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-23 00:47+0000\n"
 "PO-Revision-Date: 2026-09-18 11:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21275,7 +21275,7 @@ msgstr "Desselecciona"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
+#: libs/ui/kis_layer_manager.cc:744 libs/ui/kis_layer_manager.cc:797
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Afegeix capa"
@@ -21677,7 +21677,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fons"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr "Capa de pintura"
@@ -22453,30 +22453,30 @@ msgstr ""
 "mil·lisegon</b>. El format no pot representar això, i la durada del "
 "fotograma s'arrodonirà al mil·lisegon més proper."
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:716
 #, kde-format
 msgid "Clone Layer"
 msgstr "Capa clonada"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
 #: libs/ui/kis_node_manager.cpp:1629
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grup"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1037
 #, kde-format
 msgid "File Layer"
 msgstr "Capa de fitxer"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:729
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Capa vectorial"
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "Filter Layer"
 msgstr "Capa de filtratge"
@@ -22486,23 +22486,23 @@ msgstr "Capa de filtratge"
 msgid "Generator Layer"
 msgstr "Capa de generació"
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:281
 #, kde-format
 msgid "Colorize Mask"
 msgstr "Màscara d'acoloriment"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127
-#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
+#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:230
 #, kde-format
 msgid "Filter Mask"
 msgstr "Màscara de filtratge"
 
-#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:293
 #, kde-format
 msgid "Transform Mask"
 msgstr "Màscara de transformació"
 
-#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -24163,8 +24163,8 @@ msgstr "Recursos locals"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
 #: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
 #: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
 #: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
@@ -27041,16 +27041,6 @@ msgstr "Tanca, no desis"
 #, kde-format
 msgid "Waiting for image operation to complete..."
 msgstr "S'està esperant que l'operació sobre la imatge es completi..."
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
-#, kde-format
-msgid "Layer name:"
-msgstr "Nom de la capa:"
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
-#, kde-format
-msgid "No configuration options are available for this filter"
-msgstr "No hi ha cap opció de configuració disponible per a aquest filtre"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:77
@@ -34873,25 +34863,25 @@ msgstr "Importa una imatge"
 msgid "Select a Color"
 msgstr "Selecciona un color"
 
-#: libs/ui/kis_layer_manager.cc:194
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Fusiona les capes seleccionades"
 
-#: libs/ui/kis_layer_manager.cc:196
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Combina un grup"
 
-#: libs/ui/kis_layer_manager.cc:198
+#: libs/ui/kis_layer_manager.cc:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Combina amb la capa inferior"
 
-#: libs/ui/kis_layer_manager.cc:220
+#: libs/ui/kis_layer_manager.cc:219
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
@@ -34902,37 +34892,37 @@ msgstr "La capa està buida "
 msgid "Filter Layer Properties"
 msgstr "Propietats de la capa de filtratge"
 
-#: libs/ui/kis_layer_manager.cc:315
+#: libs/ui/kis_layer_manager.cc:316
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Propietats de la capa de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
+#: libs/ui/kis_layer_manager.cc:327 libs/ui/kis_layer_manager.cc:1045
 #, kde-format
 msgid "No file name specified"
 msgstr "No s'ha indicat cap nom de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:364
+#: libs/ui/kis_layer_manager.cc:365
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Propietats de la capa d'emplenat"
 
-#: libs/ui/kis_layer_manager.cc:421
+#: libs/ui/kis_layer_manager.cc:422
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Canvia la capa clonada"
 
-#: libs/ui/kis_layer_manager.cc:536
+#: libs/ui/kis_layer_manager.cc:537
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Converteix un grup a una capa animada"
 
-#: libs/ui/kis_layer_manager.cc:556
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid "Save layers to..."
 msgstr "Desa les capes a..."
 
-#: libs/ui/kis_layer_manager.cc:557
+#: libs/ui/kis_layer_manager.cc:558
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34941,35 +34931,35 @@ msgstr ""
 "Tria la ubicació a on es desarà la capa. La capa de fitxer nova referenciarà "
 "aquesta ubicació."
 
-#: libs/ui/kis_layer_manager.cc:620
+#: libs/ui/kis_layer_manager.cc:621
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Converteix a una capa de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:752
+#: libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Capa de filtratge nova"
 
-#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Capa d'emplenat"
 
-#: libs/ui/kis_layer_manager.cc:827
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Aplana la imatge"
 
-#: libs/ui/kis_layer_manager.cc:828
+#: libs/ui/kis_layer_manager.cc:829
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "La imatge conté capes ocultes que es perdran. Voleu aplanar la imatge?"
 
-#: libs/ui/kis_layer_manager.cc:906
+#: libs/ui/kis_layer_manager.cc:907
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34977,13 +34967,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "La capa està bloquejada"
 msgstr[1] "Les capes estan bloquejades"
 
-#: libs/ui/kis_layer_manager.cc:928
+#: libs/ui/kis_layer_manager.cc:929
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "La capa està bloquejada"
 
-#: libs/ui/kis_layer_manager.cc:945
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34995,62 +34985,62 @@ msgstr ""
 "La capa no animada es fusiona amb el fotograma actual. Per a fusionar-la amb "
 "el clip sencer, creeu almenys un fotograma"
 
-#: libs/ui/kis_layer_manager.cc:994
+#: libs/ui/kis_layer_manager.cc:995
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Converteix els grups invisibles"
 
-#: libs/ui/kis_layer_manager.cc:997
+#: libs/ui/kis_layer_manager.cc:998
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exporta només els grups de primer nivell"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr "Afegeix una màscara de selecció"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 #, kde-format
 msgid "Selection"
 msgstr "Selecció"
 
-#: libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_mask_manager.cc:217
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr "Afegeix una màscara de transparència"
 
-#: libs/ui/kis_mask_manager.cc:229
+#: libs/ui/kis_mask_manager.cc:230
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr "Afegeix una màscara de filtratge"
 
-#: libs/ui/kis_mask_manager.cc:244
+#: libs/ui/kis_mask_manager.cc:245
 #, kde-format
 msgid "New Filter Mask"
 msgstr "Màscara de filtratge nova"
 
-#: libs/ui/kis_mask_manager.cc:280
+#: libs/ui/kis_mask_manager.cc:281
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr "Afegeix una màscara d'acoloriment"
 
-#: libs/ui/kis_mask_manager.cc:292
+#: libs/ui/kis_mask_manager.cc:293
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr "Afegeix una màscara de transformació"
 
-#: libs/ui/kis_mask_manager.cc:307
+#: libs/ui/kis_mask_manager.cc:308
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
 msgstr "Afegeix una superposició ràpida de color"
 
-#: libs/ui/kis_mask_manager.cc:311
+#: libs/ui/kis_mask_manager.cc:312
 #, kde-format
 msgid "Color Overlay Mask"
 msgstr "Màscara de superposició de color"
 
-#: libs/ui/kis_mask_manager.cc:352
+#: libs/ui/kis_mask_manager.cc:354
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr "Propietats de la màscara de filtratge"
@@ -70906,6 +70896,12 @@ msgstr ""
 "Commuta entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
+
+#~ msgid "Layer name:"
+#~ msgstr "Nom de la capa:"
+
+#~ msgid "No configuration options are available for this filter"
+#~ msgstr "No hi ha cap opció de configuració disponible per a aquest filtre"
 
 #~ msgctxt "Shortcut type"
 #~ msgid "Gesture"

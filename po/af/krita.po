@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-23 00:47+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -21054,7 +21054,7 @@ msgstr "Keuse"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
+#: libs/ui/kis_layer_manager.cc:744 libs/ui/kis_layer_manager.cc:797
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -21461,7 +21461,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "agtergrond"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Laag"
@@ -22259,12 +22259,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:716
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "Volgende Laag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
 #: libs/ui/kis_node_manager.cpp:1629
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -22272,18 +22272,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Groep:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1037
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "Wit"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:729
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "Volgende Laag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:753
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "Wit"
@@ -22293,23 +22293,23 @@ msgstr "Wit"
 msgid "Generator Layer"
 msgstr "Voeg by Laag..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:281
 #, fuzzy, kde-format
 msgid "Colorize Mask"
 msgstr "Kleur"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127
-#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
+#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:230
 #, fuzzy, kde-format
 msgid "Filter Mask"
 msgstr "Wit"
 
-#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:293
 #, fuzzy, kde-format
 msgid "Transform Mask"
 msgstr "Uitveer Program"
 
-#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -23959,8 +23959,8 @@ msgstr "Verwyder Laag"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
 #: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
 #: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
 #: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
@@ -26733,16 +26733,6 @@ msgstr "Kon nie voeg by laag na beeld."
 #, kde-format
 msgid "Waiting for image operation to complete..."
 msgstr ""
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
-#, fuzzy, kde-format
-msgid "Layer name:"
-msgstr "Laag Fout"
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
-#, fuzzy, kde-format
-msgid "No configuration options are available for this filter"
-msgstr "Hoeke:"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:77
@@ -34172,25 +34162,25 @@ msgstr "In voer Beeld..."
 msgid "Select a Color"
 msgstr "Keuse Nutsprogramme"
 
-#: libs/ui/kis_layer_manager.cc:194
+#: libs/ui/kis_layer_manager.cc:193
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Voeg by Laag..."
 
-#: libs/ui/kis_layer_manager.cc:196
+#: libs/ui/kis_layer_manager.cc:195
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Verwyder Laag"
 
-#: libs/ui/kis_layer_manager.cc:198
+#: libs/ui/kis_layer_manager.cc:197
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Saamvlans Alle Lae"
 
-#: libs/ui/kis_layer_manager.cc:220
+#: libs/ui/kis_layer_manager.cc:219
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
@@ -34201,74 +34191,74 @@ msgstr "Beeld"
 msgid "Filter Layer Properties"
 msgstr "Laag Eienskappe..."
 
-#: libs/ui/kis_layer_manager.cc:315
+#: libs/ui/kis_layer_manager.cc:316
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "Laag Eienskappe..."
 
-#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
+#: libs/ui/kis_layer_manager.cc:327 libs/ui/kis_layer_manager.cc:1045
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:364
+#: libs/ui/kis_layer_manager.cc:365
 #, fuzzy, kde-format
 msgid "Fill Layer Properties"
 msgstr "Laag Eienskappe..."
 
-#: libs/ui/kis_layer_manager.cc:421
+#: libs/ui/kis_layer_manager.cc:422
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "Wit"
 
-#: libs/ui/kis_layer_manager.cc:536
+#: libs/ui/kis_layer_manager.cc:537
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Sagter Huidige Laag"
 
-#: libs/ui/kis_layer_manager.cc:556
+#: libs/ui/kis_layer_manager.cc:557
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Stoor Laag as Beeld..."
 
-#: libs/ui/kis_layer_manager.cc:557
+#: libs/ui/kis_layer_manager.cc:558
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:620
+#: libs/ui/kis_layer_manager.cc:621
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Sagter Huidige Laag"
 
-#: libs/ui/kis_layer_manager.cc:752
+#: libs/ui/kis_layer_manager.cc:753
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "Wit"
 
-#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:357
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "Wit"
 
-#: libs/ui/kis_layer_manager.cc:827
+#: libs/ui/kis_layer_manager.cc:828
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Herbenaam Beeld..."
 
-#: libs/ui/kis_layer_manager.cc:828
+#: libs/ui/kis_layer_manager.cc:829
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:906
+#: libs/ui/kis_layer_manager.cc:907
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34276,13 +34266,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Beeld"
 msgstr[1] "Beeld"
 
-#: libs/ui/kis_layer_manager.cc:928
+#: libs/ui/kis_layer_manager.cc:929
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Beeld"
 
-#: libs/ui/kis_layer_manager.cc:945
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34292,68 +34282,68 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:994
+#: libs/ui/kis_layer_manager.cc:995
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:997
+#: libs/ui/kis_layer_manager.cc:998
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr "Keuse"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 #, kde-format
 msgid "Selection"
 msgstr "Keuse"
 
-#: libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_mask_manager.cc:217
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr "Voorgrond na Transparent"
 
-#: libs/ui/kis_mask_manager.cc:229
+#: libs/ui/kis_mask_manager.cc:230
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr "Wit"
 
-#: libs/ui/kis_mask_manager.cc:244
+#: libs/ui/kis_mask_manager.cc:245
 #, fuzzy, kde-format
 msgid "New Filter Mask"
 msgstr "Wit"
 
-#: libs/ui/kis_mask_manager.cc:280
+#: libs/ui/kis_mask_manager.cc:281
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr "Wit"
 
-#: libs/ui/kis_mask_manager.cc:292
+#: libs/ui/kis_mask_manager.cc:293
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr "Voorgrond na Transparent"
 
-#: libs/ui/kis_mask_manager.cc:307
+#: libs/ui/kis_mask_manager.cc:308
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
 msgstr "Keuse"
 
-#: libs/ui/kis_mask_manager.cc:311
+#: libs/ui/kis_mask_manager.cc:312
 #, fuzzy, kde-format
 msgid "Color Overlay Mask"
 msgstr "Keuse"
 
-#: libs/ui/kis_mask_manager.cc:352
+#: libs/ui/kis_mask_manager.cc:354
 #, fuzzy, kde-format
 msgid "Filter Mask Properties"
 msgstr "Laag Eienskappe..."
@@ -68930,6 +68920,14 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Layer name:"
+#~ msgstr "Laag Fout"
+
+#, fuzzy
+#~ msgid "No configuration options are available for this filter"
+#~ msgstr "Hoeke:"
 
 #, fuzzy
 #~ msgctxt "Shortcut type"

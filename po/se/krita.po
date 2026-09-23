@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-18 00:43+0000\n"
+"POT-Creation-Date: 2026-09-23 00:47+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@nuug.no>\n"
@@ -16232,7 +16232,6 @@ msgstr ""
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
 #, fuzzy, kde-format
-#| msgid "&Resources"
 msgctxt "action"
 msgid "Resources"
 msgstr "&Resurssat"
@@ -16250,7 +16249,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
 #, fuzzy, kde-format
-#| msgid "&Resources"
 msgctxt "action"
 msgid "Get More Resources"
 msgstr "&Resurssat"
@@ -20977,7 +20975,7 @@ msgstr ""
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
+#: libs/ui/kis_layer_manager.cc:744 libs/ui/kis_layer_manager.cc:797
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr ""
@@ -21366,7 +21364,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr ""
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr ""
@@ -22118,30 +22116,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:716
 #, kde-format
 msgid "Clone Layer"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
 #: libs/ui/kis_node_manager.cpp:1629
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1037
 #, kde-format
 msgid "File Layer"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:729
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "Filter Layer"
 msgstr ""
@@ -22151,23 +22149,23 @@ msgstr ""
 msgid "Generator Layer"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:281
 #, kde-format
 msgid "Colorize Mask"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:127
-#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
+#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:230
 #, kde-format
 msgid "Filter Mask"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:293
 #, kde-format
 msgid "Transform Mask"
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -23803,8 +23801,8 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
 #: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
 #: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
 #: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
@@ -24773,7 +24771,6 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, fuzzy, kde-format
-#| msgid "Unsupported Key"
 msgid "Unsupported format"
 msgstr "Doarjjokeahtes boallu"
 
@@ -24784,7 +24781,6 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
 #, fuzzy, kde-format
-#| msgid "Bitrate:"
 msgid "Video bitrate:"
 msgstr "Bihttáleaktu:"
 
@@ -24795,7 +24791,6 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
 #, fuzzy, kde-format
-#| msgid "Bitrate:"
 msgid "Audio bitrate:"
 msgstr "Bihttáleaktu:"
 
@@ -26540,16 +26535,6 @@ msgstr ""
 msgid "Waiting for image operation to complete..."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
-#, kde-format
-msgid "Layer name:"
-msgstr "Laiggahatnamma:"
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
-#, kde-format
-msgid "No configuration options are available for this filter"
-msgstr ""
-
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:77
 #, kde-format
@@ -26974,22 +26959,16 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
 msgid "Top"
 msgstr "Badjin"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Left"
 msgid "Top Left"
 msgstr "Gurutbealde"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:340
 #, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Right"
 msgid "Top Right"
 msgstr "Olgešbealde"
 
@@ -27287,7 +27266,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1457
 #, fuzzy, kde-format
-#| msgid "Current Layer"
 msgctxt "@info:radiobutton"
 msgid "Current Display"
 msgstr "Dála laiggahat"
@@ -27412,7 +27390,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2321
 #, fuzzy, kde-format
-#| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "Dálá"
@@ -27425,7 +27402,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2323
 #, fuzzy, kde-format
-#| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "Dálá"
@@ -33840,7 +33816,6 @@ msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:122
 #, fuzzy, kde-format
-#| msgid "Foreground Color"
 msgid "&Choose foreground colour"
 msgstr "Ovdabealivdni"
 
@@ -33856,7 +33831,6 @@ msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:179
 #, fuzzy, kde-format
-#| msgid "Foreground Color"
 msgid "&reset Foreground and Background Colors"
 msgstr "Ovdabealivdni"
 
@@ -33870,7 +33844,7 @@ msgstr ""
 msgid "&Docker Box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:271 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:430
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33879,12 +33853,12 @@ msgstr ""
 msgid "Patterns"
 msgstr "Minsttarat"
 
-#: libs/ui/kis_control_frame.cpp:274 libs/ui/kis_control_frame.cpp:275
+#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
 #, kde-format
 msgid "Custom Pattern"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:323 libs/ui/KisApplication.cpp:415
+#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:415
 #: libs/ui/KisApplication.cpp:416
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -33893,12 +33867,12 @@ msgstr ""
 msgid "Gradients"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:358
+#: libs/ui/kis_control_frame.cpp:359
 #, kde-format
 msgid "Docker box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:364
+#: libs/ui/kis_control_frame.cpp:365
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr ""
@@ -33962,25 +33936,25 @@ msgstr ""
 msgid "Select a Color"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:194
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:196
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:198
+#: libs/ui/kis_layer_manager.cc:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:220
+#: libs/ui/kis_layer_manager.cc:219
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
@@ -33991,72 +33965,72 @@ msgstr ""
 msgid "Filter Layer Properties"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:315
+#: libs/ui/kis_layer_manager.cc:316
 #, kde-format
 msgid "File Layer Properties"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
+#: libs/ui/kis_layer_manager.cc:327 libs/ui/kis_layer_manager.cc:1045
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:364
+#: libs/ui/kis_layer_manager.cc:365
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:421
+#: libs/ui/kis_layer_manager.cc:422
 #, kde-format
 msgid "Change Clone Layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:536
+#: libs/ui/kis_layer_manager.cc:537
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:556
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid "Save layers to..."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:557
+#: libs/ui/kis_layer_manager.cc:558
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:620
+#: libs/ui/kis_layer_manager.cc:621
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:752
+#: libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "New Filter Layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:827
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:828
+#: libs/ui/kis_layer_manager.cc:829
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:906
+#: libs/ui/kis_layer_manager.cc:907
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34064,13 +34038,13 @@ msgid_plural "Layers are locked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/ui/kis_layer_manager.cc:928
+#: libs/ui/kis_layer_manager.cc:929
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:945
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34080,62 +34054,62 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:994
+#: libs/ui/kis_layer_manager.cc:995
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:997
+#: libs/ui/kis_layer_manager.cc:998
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 #, kde-format
 msgid "Selection"
 msgstr "Merken"
 
-#: libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_mask_manager.cc:217
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:229
+#: libs/ui/kis_mask_manager.cc:230
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:244
+#: libs/ui/kis_mask_manager.cc:245
 #, kde-format
 msgid "New Filter Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:280
+#: libs/ui/kis_mask_manager.cc:281
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:292
+#: libs/ui/kis_mask_manager.cc:293
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:307
+#: libs/ui/kis_mask_manager.cc:308
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:311
+#: libs/ui/kis_mask_manager.cc:312
 #, kde-format
 msgid "Color Overlay Mask"
 msgstr ""
 
-#: libs/ui/kis_mask_manager.cc:352
+#: libs/ui/kis_mask_manager.cc:354
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr ""
@@ -37520,7 +37494,6 @@ msgstr ""
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:183
 #, fuzzy, kde-format
-#| msgid "Company:"
 msgid "Compact"
 msgstr "Fitnodat:"
 
@@ -37559,7 +37532,6 @@ msgstr ""
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:227
 #, fuzzy, kde-format
-#| msgid "Curr&ent actions:"
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "&Dálá doaimmat:"
@@ -37578,7 +37550,6 @@ msgstr ""
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:244
 #, fuzzy, kde-format
-#| msgid "&Vertical"
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "&Ceaggu"
@@ -38573,9 +38544,6 @@ msgstr ""
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
@@ -39276,24 +39244,24 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/KoBackgroundColour.cpp:51
-#: libs/ui/widgets/KoDualColorButton.cpp:470
+#: libs/ui/widgets/KoDualColorButton.cpp:483
 #, kde-format
 msgid "Background color selector"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:459
+#: libs/ui/widgets/KoDualColorButton.cpp:472
 #: libs/ui/widgets/KoForegroundColour.cpp:50
 #, kde-format
 msgid "Foreground color selector"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:462
+#: libs/ui/widgets/KoDualColorButton.cpp:475
 #: libs/ui/widgets/KoResetBgFgColours.cpp:43
 #, kde-format
 msgid "Set foreground and background colors to black and white"
 msgstr ""
 
-#: libs/ui/widgets/KoDualColorButton.cpp:467
+#: libs/ui/widgets/KoDualColorButton.cpp:480
 #: libs/ui/widgets/KoSwapBgFgColours.cpp:42
 #, kde-format
 msgid "Swap foreground and background colors"
@@ -44815,7 +44783,6 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, pageSetupGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:38
 #, fuzzy, kde-format
-#| msgid "Image Size"
 msgid "Page Setup"
 msgstr "Govvasturrodat"
 
@@ -44876,7 +44843,6 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, boardLayoutGroupBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:141
 #, fuzzy, kde-format
-#| msgid "Layout"
 msgid "Board Layout"
 msgstr "Fárda"
 
@@ -44913,7 +44879,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:328
 #, fuzzy, kde-format
-#| msgid "Open File"
 msgid "Template File:"
 msgstr "Raba fiilla"
 
@@ -46126,7 +46091,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
 #, fuzzy, kde-format
-#| msgid "Properties"
 msgctxt "@label:inlistbox, east-asian proportional width"
 msgid "Proportional"
 msgstr "Iešvuođat"
@@ -46232,7 +46196,6 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
 #, fuzzy, kde-format
-#| msgid "Properties"
 msgctxt "@label:inlistbox, proportional width numbers"
 msgid "Proportional"
 msgstr "Iešvuođat"
@@ -49666,7 +49629,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgid "No supporter bundles available."
 msgstr "Eai leat govat olamuttus."
 
@@ -49688,7 +49650,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
 #, fuzzy, kde-format
-#| msgid "Geometry"
 msgid "Retry"
 msgstr "Geometriija"
 
@@ -49729,7 +49690,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
 #, fuzzy, kde-format
-#| msgid "Unknown error."
 msgid "Unknown service error %1."
 msgstr "Amas meattáhus."
 
@@ -49740,7 +49700,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
 #, fuzzy, kde-format
-#| msgid "Invalid"
 msgid "Invalid version."
 msgstr "Gustohis"
 
@@ -49814,21 +49773,18 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
 #, fuzzy, kde-format
-#| msgid "Contact:"
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
 msgstr "Oktavuohta:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
 msgstr "Eai leat govat olamuttus."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
 #, fuzzy, kde-format
-#| msgid "A&vailable actions:"
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
@@ -49879,7 +49835,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
 #, fuzzy, kde-format
-#| msgid "Down"
 msgid "Download"
 msgstr "Vulos"
 
@@ -63298,7 +63253,6 @@ msgstr "Moanačiegahas"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
 #, fuzzy
-#| msgid "Ellipse Tool"
 msgid "Polyline Tool"
 msgstr "Gierdoreaidu"
 
@@ -63326,7 +63280,6 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
 #, fuzzy
-#| msgid "Transform"
 msgid "Transform Tool"
 msgstr "Earáhuhte"
 
@@ -63372,7 +63325,6 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:51
 #, fuzzy
-#| msgid "Reset Toolbars"
 msgid "Measurement Tool"
 msgstr "Máhcat reaidoholggaid"
 
@@ -63453,7 +63405,6 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
-#| msgid "Selected:"
 msgctxt "@label"
 msgid "Selected button:"
 msgstr "Merkejuvvon:"
@@ -63480,14 +63431,12 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
-#| msgid "Selection mode:"
 msgctxt "@label:listbox"
 msgid "Select icon mode:"
 msgstr "Válljenmodus:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
-#| msgid "Selection"
 msgctxt "@label:chooser"
 msgid "Select a custom icon:"
 msgstr "Merken"
@@ -63501,7 +63450,6 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, fuzzy
-#| msgid "..."
 msgctxt "@action:button"
 msgid "..."
 msgstr " …"
@@ -63518,14 +63466,12 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
-#| msgid "No text"
 msgctxt "@info:tooltip"
 msgid "Tooltip text"
 msgstr "Ii leat teaksta"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
-#| msgid "Selection mode:"
 msgctxt "@label:listbox"
 msgid "Select a tool:"
 msgstr "Válljenmodus:"
@@ -63547,7 +63493,6 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
-#| msgid "Foreground Color"
 msgctxt "@label"
 msgid "Select foreground color:"
 msgstr "Ovdabealivdni"
@@ -63560,7 +63505,6 @@ msgstr "Duogášivdni:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
-#| msgid "Foreground Color"
 msgctxt "@action:button"
 msgid "Clear foreground color"
 msgstr "Ovdabealivdni"
@@ -63595,7 +63539,6 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
-#| msgid "Scripts"
 msgctxt "@info:tooltip"
 msgid "Script path"
 msgstr "Skriptat"
@@ -63617,8 +63560,6 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
 msgctxt "@item:inlistbox Workflow Buttons settings button position"
 msgid "Bottom bar"
 msgstr "Vuollin"
@@ -63631,7 +63572,6 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
-#| msgid "Color model:"
 msgctxt "@label"
 msgid "Color info: "
 msgstr "Ivdnemálle:"
@@ -67837,7 +67777,6 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2201
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2266
 #, fuzzy, kde-format
-#| msgid "Pressure"
 msgid "Preserve"
 msgstr "Deaddu"
 
@@ -68228,3 +68167,6 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid "Layer name:"
+#~ msgstr "Laiggahatnamma:"

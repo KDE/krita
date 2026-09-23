@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-23 00:47+0000\n"
 "PO-Revision-Date: 2026-09-18 19:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21165,7 +21165,7 @@ msgstr "Seçimi Kaldır"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:743 libs/ui/kis_layer_manager.cc:796
+#: libs/ui/kis_layer_manager.cc:744 libs/ui/kis_layer_manager.cc:797
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Katman Ekle"
@@ -21567,7 +21567,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arka Plan"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:686
+#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr "Boya Katmanı"
@@ -22342,30 +22342,30 @@ msgstr ""
 "canlandırılır. Biçim bunu temsil edemez ve kare süresi en yakın milisaniyeye "
 "yuvarlanır."
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:715
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:716
 #, kde-format
 msgid "Clone Layer"
 msgstr "Klon Katman"
 
-#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:699
+#: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
 #: libs/ui/kis_node_manager.cpp:1629
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grup"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1036
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:1037
 #, kde-format
 msgid "File Layer"
 msgstr "Dosya Katman"
 
-#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:728
+#: libs/impex/KisExportCheckRegistry.cpp:119 libs/ui/kis_layer_manager.cc:729
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektör Katmanı"
 
-#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:752
+#: libs/impex/KisExportCheckRegistry.cpp:121 libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "Filter Layer"
 msgstr "Süzgeç Katman"
@@ -22375,23 +22375,23 @@ msgstr "Süzgeç Katman"
 msgid "Generator Layer"
 msgstr "Üreteç Katman"
 
-#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:280
+#: libs/impex/KisExportCheckRegistry.cpp:125 libs/ui/kis_mask_manager.cc:281
 #, kde-format
 msgid "Colorize Mask"
 msgstr "Renklendirme Maskesi"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127
-#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:229
+#: libs/ui/dialogs/kis_dlg_filter.cpp:217 libs/ui/kis_mask_manager.cc:230
 #, kde-format
 msgid "Filter Mask"
 msgstr "Süzgeç Maskesi"
 
-#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:292
+#: libs/impex/KisExportCheckRegistry.cpp:129 libs/ui/kis_mask_manager.cc:293
 #, kde-format
 msgid "Transform Mask"
 msgstr "Dönüşüm Maskesi"
 
-#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:216
+#: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
@@ -24046,8 +24046,8 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
-#: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1316
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
 #: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
 #: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
 #: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
@@ -26909,16 +26909,6 @@ msgstr "Kapat, kaydetme"
 #, kde-format
 msgid "Waiting for image operation to complete..."
 msgstr "Görsel işleminin tamamlanması bekleniyor…"
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
-#, kde-format
-msgid "Layer name:"
-msgstr "Katmanın adı:"
-
-#: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
-#, kde-format
-msgid "No configuration options are available for this filter"
-msgstr "Bu süzgeç için bir yapılandırma seçeneği bulunmuyor"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:77
@@ -34692,25 +34682,25 @@ msgstr "Görsel İçe Aktar"
 msgid "Select a Color"
 msgstr "Renk Seç"
 
-#: libs/ui/kis_layer_manager.cc:194
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Seçili Katmanları Birleştir"
 
-#: libs/ui/kis_layer_manager.cc:196
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Grubu Birleştir"
 
-#: libs/ui/kis_layer_manager.cc:198
+#: libs/ui/kis_layer_manager.cc:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Alttaki Katman ile Birleştir"
 
-#: libs/ui/kis_layer_manager.cc:220
+#: libs/ui/kis_layer_manager.cc:219
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
@@ -34721,37 +34711,37 @@ msgstr "Katman boş "
 msgid "Filter Layer Properties"
 msgstr "Süzgeç Katman Özellikleri"
 
-#: libs/ui/kis_layer_manager.cc:315
+#: libs/ui/kis_layer_manager.cc:316
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Dosya Katman Özellikleri"
 
-#: libs/ui/kis_layer_manager.cc:326 libs/ui/kis_layer_manager.cc:1044
+#: libs/ui/kis_layer_manager.cc:327 libs/ui/kis_layer_manager.cc:1045
 #, kde-format
 msgid "No file name specified"
 msgstr "Dosya adı belirtilmedi"
 
-#: libs/ui/kis_layer_manager.cc:364
+#: libs/ui/kis_layer_manager.cc:365
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Katman Özelliklerini Doldur"
 
-#: libs/ui/kis_layer_manager.cc:421
+#: libs/ui/kis_layer_manager.cc:422
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Klon Katmanı Değiştir"
 
-#: libs/ui/kis_layer_manager.cc:536
+#: libs/ui/kis_layer_manager.cc:537
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Grubu Canlandırılmış Katmana Dönüştür"
 
-#: libs/ui/kis_layer_manager.cc:556
+#: libs/ui/kis_layer_manager.cc:557
 #, kde-format
 msgid "Save layers to..."
 msgstr "Katmanı şuraya kaydet…"
 
-#: libs/ui/kis_layer_manager.cc:557
+#: libs/ui/kis_layer_manager.cc:558
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -34760,28 +34750,28 @@ msgstr ""
 "Katmanın kaydedileceği konumu seçin. Yeni dosya katman, daha sonra bu konuma "
 "başvuracaktır."
 
-#: libs/ui/kis_layer_manager.cc:620
+#: libs/ui/kis_layer_manager.cc:621
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Dosya Katmana Dönüştür"
 
-#: libs/ui/kis_layer_manager.cc:752
+#: libs/ui/kis_layer_manager.cc:753
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Yeni Süzgeç Katman"
 
-#: libs/ui/kis_layer_manager.cc:800 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Katmanı Doldur"
 
-#: libs/ui/kis_layer_manager.cc:827
+#: libs/ui/kis_layer_manager.cc:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Görseli Düzleştir"
 
-#: libs/ui/kis_layer_manager.cc:828
+#: libs/ui/kis_layer_manager.cc:829
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -34790,7 +34780,7 @@ msgstr ""
 "Görsel, kaybedilecek gizli katmanlar içeriyor. Görseli düzleştirmek istiyor "
 "musunuz?"
 
-#: libs/ui/kis_layer_manager.cc:906
+#: libs/ui/kis_layer_manager.cc:907
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -34798,13 +34788,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Katman kilitli"
 msgstr[1] "Katmanlar kilitli"
 
-#: libs/ui/kis_layer_manager.cc:928
+#: libs/ui/kis_layer_manager.cc:929
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Katman kilitli"
 
-#: libs/ui/kis_layer_manager.cc:945
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -34816,62 +34806,62 @@ msgstr ""
 "Canlandırmasız katman geçerli kareyle birleştirilir. Bunu klibin tamamıyla "
 "birleştirmek için en az bir kare oluşturun"
 
-#: libs/ui/kis_layer_manager.cc:994
+#: libs/ui/kis_layer_manager.cc:995
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Görünmez Grupları Dönüştür"
 
-#: libs/ui/kis_layer_manager.cc:997
+#: libs/ui/kis_layer_manager.cc:998
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Yalnızca En Üst Düzey Grupları Dışa Aktar"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr "Seçim Maskesi Ekle"
 
-#: libs/ui/kis_mask_manager.cc:203
+#: libs/ui/kis_mask_manager.cc:204
 #, kde-format
 msgid "Selection"
 msgstr "Seçim"
 
-#: libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_mask_manager.cc:217
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr "Saydamlık Maskesi Ekle"
 
-#: libs/ui/kis_mask_manager.cc:229
+#: libs/ui/kis_mask_manager.cc:230
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr "Süzgeç Maskesi Ekle"
 
-#: libs/ui/kis_mask_manager.cc:244
+#: libs/ui/kis_mask_manager.cc:245
 #, kde-format
 msgid "New Filter Mask"
 msgstr "Yeni Süzgeç Maskesi"
 
-#: libs/ui/kis_mask_manager.cc:280
+#: libs/ui/kis_mask_manager.cc:281
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr "Renklendirme Maskesi Ekle"
 
-#: libs/ui/kis_mask_manager.cc:292
+#: libs/ui/kis_mask_manager.cc:293
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr "Dönüşüm Maskesi Ekle"
 
-#: libs/ui/kis_mask_manager.cc:307
+#: libs/ui/kis_mask_manager.cc:308
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
 msgstr "Hızlı Renk Kaplaması Ekle"
 
-#: libs/ui/kis_mask_manager.cc:311
+#: libs/ui/kis_mask_manager.cc:312
 #, kde-format
 msgid "Color Overlay Mask"
 msgstr "Renk Kaplama Maskesi"
 
-#: libs/ui/kis_mask_manager.cc:352
+#: libs/ui/kis_mask_manager.cc:354
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr "Maske Özelliklerini Süz"
@@ -70490,6 +70480,12 @@ msgstr ""
 "Tam erim ve alt erim arasında geçiş yapın.\n"
 "Tam erim: [%1, %2]\n"
 "Alt erim: [%3, %4]"
+
+#~ msgid "Layer name:"
+#~ msgstr "Katmanın adı:"
+
+#~ msgid "No configuration options are available for this filter"
+#~ msgstr "Bu süzgeç için bir yapılandırma seçeneği bulunmuyor"
 
 #~ msgctxt "Shortcut type"
 #~ msgid "Gesture"

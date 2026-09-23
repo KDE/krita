@@ -24,8 +24,6 @@
 class KisAutoBrushWidget;
 class KisPredefinedBrushChooser;
 class KisTextBrushChooser;
-class KisCustomBrushWidget;
-class KisClipboardBrushWidget;
 class KisBrush;
 class QStackedWidget;
 class KisAutoBrushModel;
@@ -53,7 +51,6 @@ public:
 
     KisBrushSP brush() const;
 
-    void setImage(KisImageWSP image);
     void hideOptions(const QStringList &options);
 
     lager::reader<bool> lightnessModeEnabled() const;

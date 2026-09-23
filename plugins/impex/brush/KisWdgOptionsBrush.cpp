@@ -12,6 +12,11 @@
 #include <KoProperties.h>
 #include <KisDocument.h>
 
+enum BrushStyle {
+    Regular,
+    Animated
+};
+
 KisWdgOptionsBrush::KisWdgOptionsBrush(QWidget *parent)
     : KisConfigWidget(parent)
     , m_currentDimensions(0)
@@ -21,6 +26,15 @@ KisWdgOptionsBrush::KisWdgOptionsBrush(QWidget *parent)
     setupUi(this);
     connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotEnableSelectionMethod(int)));
     connect(this->dimensionSpin, SIGNAL(valueChanged(int)), SLOT(slotActivateDimensionRanks()));
+    connect(this->colorAsMask, SIGNAL(toggled(bool)), this->preserveAlpha, SLOT(setEnabled(bool)));
+
+    connect(this->spacingWidget, SIGNAL(sigSpacingChanged()), this, SIGNAL(sigConfigurationUpdated()));
+    connect(this->nameLineEdit, SIGNAL(textChanged(QString)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(this->colorAsMask, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(this->preserveAlpha, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(this->dimensionSpin, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    //todo: connect ranks to sigConfigurationUpdated?
 
     slotEnableSelectionMethod(brushStyle->currentIndex());
 
@@ -36,21 +50,22 @@ KisWdgOptionsBrush::KisWdgOptionsBrush(QWidget *parent)
 
 void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
-    spacingWidget->setSpacing(false, cfg->getDouble("spacing"));
-    if (!cfg->getString("name").isEmpty()) {
-        nameLineEdit->setText(cfg->getString("name"));
+    spacingWidget->setSpacing(false, cfg->getDouble(KEY_SPACING));
+    if (!cfg->getString(KEY_NAME).isEmpty()) {
+        nameLineEdit->setText(cfg->getString(KEY_NAME));
     }
-    colorAsMask->setChecked(cfg->getBool("mask"));
-    brushStyle->setCurrentIndex(cfg->getInt("brushStyle"));
-    dimensionSpin->setValue(cfg->getInt("dimensions"));
+    colorAsMask->setChecked(cfg->getBool(KEY_MASK));
+    preserveAlpha->setChecked(cfg->getBool(KEY_PRESERVE_ALPHA));
+    brushStyle->setCurrentIndex(cfg->getInt(KEY_BRUSH_STYLE));
+    dimensionSpin->setValue(cfg->getInt(KEY_DIMENSIONS));
 
     QLayoutItem *item;
     BrushPipeSelectionModeHelper *bp;
     for (int i = 0; i < dimensionSpin->maximum(); ++i) {
         if ((item = dimRankLayout->itemAt(i)) != 0) {
             bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
-            bp->cmbSelectionMode.setCurrentIndex(cfg->getInt("selectionMode" + QString::number(i)));
-            bp->rankSpinBox.setValue(cfg->getInt("rank" + QString::number(i)));
+            bp->cmbSelectionMode.setCurrentIndex(bp->cmbSelectionMode.findData(cfg->getInt(KEY_SELECTION_MODE + QString::number(i))));
+            bp->rankSpinBox.setValue(cfg->getInt(KEY_RANK + QString::number(i)));
         }
     }
 }
@@ -58,19 +73,20 @@ void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg
 KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("spacing", spacingWidget->spacing());
-    cfg->setProperty("name", nameLineEdit->text());
-    cfg->setProperty("mask", colorAsMask->isChecked());
-    cfg->setProperty("brushStyle", brushStyle->currentIndex());
-    cfg->setProperty("dimensions", dimensionSpin->value());
+    cfg->setProperty(KEY_SPACING, spacingWidget->spacing());
+    cfg->setProperty(KEY_NAME, nameLineEdit->text());
+    cfg->setProperty(KEY_MASK, colorAsMask->isChecked());
+    cfg->setProperty(KEY_PRESERVE_ALPHA, preserveAlpha->isChecked());
+    cfg->setProperty(KEY_BRUSH_STYLE, brushStyle->currentIndex());
+    cfg->setProperty(KEY_DIMENSIONS, dimensionSpin->value());
 
     QLayoutItem *item;
     BrushPipeSelectionModeHelper *bp;
     for (int i = 0; i < dimensionSpin->maximum(); ++i) {
         if ((item = dimRankLayout->itemAt(i)) != 0) {
             bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
-            cfg->setProperty("selectionMode" + QString::number(i), bp->cmbSelectionMode.currentIndex());
-            cfg->setProperty("rank" + QString::number(i),  bp->rankSpinBox.value());
+            cfg->setProperty(KEY_SELECTION_MODE + QString::number(i), bp->cmbSelectionMode.currentData());
+            cfg->setProperty(KEY_RANK + QString::number(i),  bp->rankSpinBox.value());
         }
     }
 
@@ -81,9 +97,14 @@ void KisWdgOptionsBrush::setView(KisViewManager *view)
 {
     if (view) {
         m_view = view;
-        KoProperties properties;
-        properties.setProperty("visible", true);
-        m_layersCount = m_view->image()->root()->childNodes(QStringList("KisLayer"), properties).count();
+        if (m_view->image()) {
+            KoProperties properties;
+            properties.setProperty("visible", true);
+            m_layersCount = m_view->image()->root()->childNodes(QStringList("KisLayer"), properties).count();
+        } else {
+            m_layersCount = 0;
+        }
+        framesNumLbl->setText(i18nc("@label %1 number of animation frames", "Frames: %1", m_layersCount));
 
         slotRecalculateRanks();
     }
@@ -91,11 +112,7 @@ void KisWdgOptionsBrush::setView(KisViewManager *view)
 
 void KisWdgOptionsBrush::slotEnableSelectionMethod(int value)
 {
-    if (value == 0) {
-        animStyleGroup->setEnabled(false);
-    } else {
-        animStyleGroup->setEnabled(true);
-    }
+    animStyleGroup->setEnabled(value == BrushStyle::Animated);
 }
 
 void KisWdgOptionsBrush::slotActivateDimensionRanks()
@@ -103,24 +120,16 @@ void KisWdgOptionsBrush::slotActivateDimensionRanks()
     QLayoutItem *item;
     BrushPipeSelectionModeHelper *bp;
     int dim = this->dimensionSpin->value();
-    if (dim >= m_currentDimensions) {
-        for (int i = m_currentDimensions; i < dim; ++i) {
-            if ((item = dimRankLayout->itemAt(i)) != 0) {
-                bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
-                bp->setEnabled(true);
-                bp->show();
-            }
+
+    for (int i = 0; i < qMax(dim, m_currentDimensions); i++) {
+        bool enabled = i < dim;
+        if ((item = dimRankLayout->itemAt(i))) {
+            bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
+            bp->setEnabled(enabled);
+            bp->setVisible(enabled);
         }
     }
-    else {
-        for (int i = m_currentDimensions -1; i >= dim; --i) {
-            if ((item = dimRankLayout->itemAt(i)) != 0) {
-               bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
-               bp->setEnabled(false);
-               bp->hide();
-            }
-        }
-    }
+
     m_currentDimensions = dim;
 }
 
@@ -148,7 +157,7 @@ void KisWdgOptionsBrush::slotRecalculateRanks(int rankDimension)
 
         if (currentBrushHelper != callerBrushHelper) {
             int currentValue = currentBrushHelper->rankSpinBox.value();
-            currentBrushHelper->rankSpinBox.setValue(currentValue -1);
+            currentBrushHelper->rankSpinBox.setValue(currentValue - 1);
             rankSum -= currentValue;
         }
     }
@@ -159,6 +168,5 @@ void KisWdgOptionsBrush::slotRecalculateRanks(int rankDimension)
 
     if (rankSum == 0) {
         bp.at(0)->rankSpinBox.setValue(m_layersCount);
-        return;
     }
 }

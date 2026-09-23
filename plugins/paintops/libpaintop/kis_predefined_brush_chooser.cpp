@@ -41,7 +41,6 @@
 
 #include "kis_imagepipe_brush.h"
 #include "kis_custom_brush_widget.h"
-#include "kis_clipboard_brush_widget.h"
 #include <kis_image_config.h>
 #include <KisMimeDatabase.h>
 
@@ -165,9 +164,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
                                                      KisPredefinedBrushModel *model,
                                                      QWidget *parent, const char *name)
     : QWidget(parent),
-      m_d(new Private(model)),
-      m_stampBrushWidget(0),
-      m_clipboardBrushWidget(0)
+      m_d(new Private(model))
 {
     setObjectName(name);
 
@@ -225,15 +222,10 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
     connect(addPresetButton, SIGNAL(clicked(bool)), this, SLOT(slotImportNewBrushResource()));
     connect(deleteBrushTipButton, SIGNAL(clicked(bool)), this, SLOT(slotDeleteBrushResource()));
 
-    stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
-    stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
-                               "\n If no selection is present the whole image will be used."));
+    customButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    customButton->setToolTip(i18n("Creates a brush tip from the current image, selection, or clipboard."));
 
-    clipboardButton->setIcon(KisIconUtils::loadIcon("list-add"));
-    clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
-
-    connect(stampButton, SIGNAL(clicked()), this,  SLOT(slotOpenStampBrush()));
-    connect(clipboardButton, SIGNAL(clicked()), SLOT(slotOpenClipboardBrush()));
+    connect(customButton, SIGNAL(clicked()), this,  SLOT(slotOpenCustomBrush()));
 
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
@@ -301,37 +293,12 @@ void KisPredefinedBrushChooser::slotResetBrush()
     }
 }
 
-void KisPredefinedBrushChooser::slotOpenStampBrush()
+void KisPredefinedBrushChooser::slotOpenCustomBrush()
 {
-    if(!m_stampBrushWidget) {
-        m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
-        m_stampBrushWidget->setModal(false);
-        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
-                                    SLOT(slotNewPredefinedBrush(KoResourceSP )));
-    } else {
-        m_stampBrushWidget->setImage(m_image);
-    }
-
-    QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();
-
-    if(result) {
-        // noop
-    }
-}
-void KisPredefinedBrushChooser::slotOpenClipboardBrush()
-{
-    if(!m_clipboardBrushWidget) {
-        m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
-        m_clipboardBrushWidget->setModal(true);
-        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
-                                        SLOT(slotNewPredefinedBrush(KoResourceSP )));
-    }
-
-    QDialog::DialogCode result = (QDialog::DialogCode)m_clipboardBrushWidget->exec();
-
-    if(result) {
-        // noop
-    }
+    KisCustomBrushWidget* customBrushWidget = new KisCustomBrushWidget(this, i18n("Create New Brushtip"));
+    connect(customBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP)),
+                              SLOT(slotNewPredefinedBrush(KoResourceSP)));
+    customBrushWidget->show();
 }
 
 void KisPredefinedBrushChooser::slotBrushSelected(KoResourceSP resource)
@@ -384,11 +351,6 @@ void KisPredefinedBrushChooser::slotResetAdjustments()
 void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResourceSP resource)
 {
     m_itemChooser->setCurrentResource(resource);
-}
-
-void KisPredefinedBrushChooser::setImage(KisImageWSP image)
-{
-    m_image = image;
 }
 
 lager::reader<bool> KisPredefinedBrushChooser::lightnessModeEnabled() const

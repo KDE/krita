@@ -81,12 +81,6 @@ KisBrushSP KisBrushOptionWidget::brush() const
     return m_brushSelectionWidget->brush();
 }
 
-
-void KisBrushOptionWidget::setImage(KisImageWSP image)
-{
-    m_brushSelectionWidget->setImage(image);
-}
-
 void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     using namespace KisBrushModel;

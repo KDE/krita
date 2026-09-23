@@ -77,7 +77,6 @@ set(kritalibpaintop_LIB_SRCS
     KisFilterOptionModel.cpp
     KisFilterOptionWidget.cpp
     kis_custom_brush_widget.cpp
-    kis_clipboard_brush_widget.cpp
     KisDabCacheUtils.cpp
     kis_dab_cache_base.cpp
     kis_dab_cache.cpp
@@ -112,8 +111,6 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgBrushSizeOptions.ui
     forms/wdgcurveoption.ui
     forms/wdgcurveoption2.ui
-    forms/wdgcustombrush.ui
-    forms/wdgclipboardbrush.ui
     forms/wdgtextbrush.ui
     forms/wdgincremental.ui
     forms/wdgmultisensorsselector.ui

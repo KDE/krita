@@ -41,7 +41,6 @@ public:
     ~KisPredefinedBrushChooser() override;
 
     void setBrush(KisBrushSP brush);
-    void setImage(KisImageWSP image);
 
     lager::reader<bool> lightnessModeEnabled() const;
 
@@ -49,8 +48,7 @@ private Q_SLOTS:
 
     void slotResetBrush();
     void slotResetAdjustments();
-    void slotOpenStampBrush();
-    void slotOpenClipboardBrush();
+    void slotOpenCustomBrush();
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResourceSP);
@@ -63,9 +61,6 @@ private:
 
     KisBrushSP m_brush;
     KisResourceItemChooser* m_itemChooser;
-    KisImageWSP m_image;
-    KisCustomBrushWidget* m_stampBrushWidget;
-    KisClipboardBrushWidget* m_clipboardBrushWidget;
 };
 
 #endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

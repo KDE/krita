@@ -165,15 +165,6 @@ lager::reader<qreal> KisPaintOpSettingsWidget::effectiveBrushSize() const
     return lager::make_constant(1.0);
 }
 
-void KisPaintOpSettingsWidget::setImage(KisImageWSP image)
-{
-    KisPaintOpConfigWidget::setImage(image);
-
-    Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->setImage(image);
-    }
-}
-
 void KisPaintOpSettingsWidget::setNode(KisNodeWSP node)
 {
     KisPaintOpConfigWidget::setNode(node);

@@ -52,10 +52,20 @@
          </property>
         </widget>
        </item>
+       <item column="1" row="3">
+        <widget class="QCheckBox" name="preserveAlpha">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Preserve alpha channel</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="styleGroupBox">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -147,6 +157,10 @@
           <property name="sizeConstraint">
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
+          <item>
+            <widget class="QLabel" name="framesNumLbl">
+            </widget>
+          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
             <item>

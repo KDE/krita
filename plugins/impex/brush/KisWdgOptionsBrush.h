@@ -16,6 +16,16 @@
 #include <ui_wdg_export_gih.h>
 #include <kis_config_widget.h>
 #include <kis_properties_configuration.h>
+#include "kis_imagepipe_brush.h"
+
+const QString KEY_SPACING = "spacing";
+const QString KEY_NAME = "name";
+const QString KEY_MASK = "mask";
+const QString KEY_PRESERVE_ALPHA = "preserveAlpha";
+const QString KEY_BRUSH_STYLE = "brushStyle";
+const QString KEY_DIMENSIONS = "dimensions";
+const QString KEY_SELECTION_MODE = "selectionMode";
+const QString KEY_RANK = "rank";
 
 class BrushPipeSelectionModeHelper : public QWidget
 {
@@ -30,12 +40,12 @@ public:
         , horizLayout(this)
         , dimension(dimension)
     {
-        cmbSelectionMode.addItem(i18n("Constant"));
-        cmbSelectionMode.addItem(i18n("Random"));
-        cmbSelectionMode.addItem(i18n("Incremental"));
-        cmbSelectionMode.addItem(i18n("Pressure"));
-        cmbSelectionMode.addItem(i18n("Angular"));
-        cmbSelectionMode.addItem(i18n("Velocity"));
+        cmbSelectionMode.addItem(i18n("Constant"), KisParasite::Constant);
+        cmbSelectionMode.addItem(i18n("Random"), KisParasite::Random);
+        cmbSelectionMode.addItem(i18n("Incremental"), KisParasite::Incremental);
+        cmbSelectionMode.addItem(i18n("Pressure"), KisParasite::Pressure);
+        cmbSelectionMode.addItem(i18n("Angular"), KisParasite::Angular);
+        cmbSelectionMode.addItem(i18n("Velocity"), KisParasite::Velocity);
 
         horizLayout.setSpacing(6);
         horizLayout.setContentsMargins(0, 0, 0, 0);
@@ -47,7 +57,7 @@ public:
         this->setSizePolicy(sizePolicy);
 
         cmbSelectionMode.setSizePolicy(sizePolicy);
-        cmbSelectionMode.setCurrentIndex(2);
+        cmbSelectionMode.setCurrentIndex(2); // Incremental
 
         rankSpinBox.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
         rankLbl.setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));

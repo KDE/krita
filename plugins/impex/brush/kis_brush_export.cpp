@@ -33,6 +33,7 @@
 struct KisBrushExportOptions {
     qreal spacing;
     bool mask;
+    bool preserveAlpha;
     int brushStyle;
     int dimensions;
     qint32 ranks[KisPipeBrushParasite::MaxDim];
@@ -68,34 +69,32 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
 
     if (document->savingImage()->dynamicPropertyNames().contains("brushspacing")) {
         exportOptions.spacing = document->savingImage()->property("brushspacing").toFloat();
+    } else {
+        exportOptions.spacing = configuration->getDouble(KEY_SPACING);
     }
-    else {
-        exportOptions.spacing = configuration->getInt("spacing");
-    }
-    if (!configuration->getString("name").isEmpty()) {
-        exportOptions.name = configuration->getString("name");
-    }
-    else {
+
+    if (!configuration->getString(KEY_NAME).isEmpty()) {
+        exportOptions.name = configuration->getString(KEY_NAME);
+    } else {
         exportOptions.name = document->savingImage()->objectName();
     }
 
-    exportOptions.mask = configuration->getBool("mask");
-    exportOptions.brushStyle = configuration->getInt("brushStyle");
-    exportOptions.dimensions = configuration->getInt("dimensions");
+    exportOptions.mask = configuration->getBool(KEY_MASK);
+    exportOptions.preserveAlpha = configuration->getBool(KEY_PRESERVE_ALPHA);
+    exportOptions.brushStyle = configuration->getInt(KEY_BRUSH_STYLE);
+    exportOptions.dimensions = configuration->getInt(KEY_DIMENSIONS);
 
     for (int i = 0; i < KisPipeBrushParasite::MaxDim; ++i) {
-        exportOptions.selectionModes[i] = configuration->getInt("selectionMode" + QString::number(i));
-        exportOptions.ranks[i] = configuration->getInt("rank" + QString::number(i));
+        exportOptions.selectionModes[i] = configuration->getInt(KEY_SELECTION_MODE + QString::number(i));
+        exportOptions.ranks[i] = configuration->getInt(KEY_RANK + QString::number(i));
     }
 
     KisGbrBrush *brush = 0;
     if (mimeType() == "image/x-gimp-brush") {
         brush = new KisGbrBrush(filename());
-    }
-    else if (mimeType() == "image/x-gimp-brush-animated") {
+    } else if (mimeType() == "image/x-gimp-brush-animated") {
         brush = new KisImagePipeBrush(filename());
-    }
-    else {
+    } else {
         return ImportExportCodes::FileFormatIncorrect;
     }
 
@@ -107,35 +106,24 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
 
     KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
     if (pipeBrush) {
-        // Create parasite. XXX: share with KisCustomBrushWidget
+        // Create parasite.
         QVector< QVector<KisPaintDevice*> > devices;
-        devices.push_back(QVector<KisPaintDevice*>());
+        devices.append(QVector<KisPaintDevice*>());
 
         KoProperties properties;
         properties.setProperty("visible", true);
         QList<KisNodeSP> layers = document->savingImage()->root()->childNodes(QStringList("KisLayer"), properties);
-
         Q_FOREACH (KisNodeSP node, layers) {
             // push_front to behave exactly as gimp for gih creation
-            devices[0].push_front(node->projection().data());
+            devices[0].prepend(node->projection().data());
         }
 
-        QVector<KisParasite::SelectionMode > modes;
-
+        QVector<KisParasite::SelectionMode> modes;
         for (int i = 0; i < KisPipeBrushParasite::MaxDim; ++i) {
-            switch (exportOptions.selectionModes[i]) {
-            case 0: modes.push_back(KisParasite::Constant); break;
-            case 1: modes.push_back(KisParasite::Random); break;
-            case 2: modes.push_back(KisParasite::Incremental); break;
-            case 3: modes.push_back(KisParasite::Pressure); break;
-            case 4: modes.push_back(KisParasite::Angular); break;
-            case 5: modes.push_back(KisParasite::Velocity); break;
-            default: modes.push_back(KisParasite::Incremental);
-            }
+            modes.append((KisParasite::SelectionMode)exportOptions.selectionModes[i]);
         }
 
         KisPipeBrushParasite parasite;
-
         parasite.dim = exportOptions.dimensions;
         parasite.ncells = devices.at(0).count();
 
@@ -154,8 +142,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         parasite.setBrushesCount();
         pipeBrush->setParasite(parasite);
         pipeBrush->setDevices(devices, rc.width(), rc.height());
-    }
-    else {
+    } else {
         if (exportOptions.mask) {
             QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
             brush->setImage(image);
@@ -167,14 +154,20 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
 
     brush->setName(exportOptions.name);
     // brushes are created after devices are loaded, call mask mode after that
-    brush->setBrushApplication(exportOptions.mask ? ALPHAMASK : IMAGESTAMP);
+    enumBrushApplication maskMode;
+    if (exportOptions.mask) {
+        brush->makeMaskImage(exportOptions.preserveAlpha);
+        maskMode = exportOptions.preserveAlpha ? LIGHTNESSMAP : ALPHAMASK;
+    } else {
+        maskMode = IMAGESTAMP;
+    }
+    brush->setBrushApplication(maskMode);
     brush->setWidth(rc.width());
     brush->setHeight(rc.height());
 
     if (brush->saveToDevice(io)) {
         return ImportExportCodes::OK;
-    }
-    else {
+    } else {
         return ImportExportCodes::Failure;
     }
 }
@@ -182,15 +175,16 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
 KisPropertiesConfigurationSP KisBrushExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("spacing", 1.0);
-    cfg->setProperty("name", "");
-    cfg->setProperty("mask", true);
-    cfg->setProperty("brushStyle", 0);
-    cfg->setProperty("dimensions", 1);
+    cfg->setProperty(KEY_SPACING, 1.0);
+    cfg->setProperty(KEY_NAME, "");
+    cfg->setProperty(KEY_MASK, true);
+    cfg->setProperty(KEY_PRESERVE_ALPHA, false);
+    cfg->setProperty(KEY_BRUSH_STYLE, 0);
+    cfg->setProperty(KEY_DIMENSIONS, 1);
 
     for (int i = 0; i < KisPipeBrushParasite::MaxDim; ++i) {
-        cfg->setProperty("selectionMode" + QString::number(i), 2);
-        cfg->getInt("rank" + QString::number(i), 0);
+        cfg->setProperty(KEY_SELECTION_MODE + QString::number(i), KisParasite::Incremental);
+        cfg->getInt(KEY_RANK + QString::number(i), 0);
     }
     return cfg;
 }
@@ -199,13 +193,14 @@ KisConfigWidget *KisBrushExport::createConfigurationWidget(QWidget *parent, cons
 {
     KisWdgOptionsBrush *wdg = new KisWdgOptionsBrush(parent);
     if (to == "image/x-gimp-brush") {
-        wdg->groupBox->setVisible(false);
+        wdg->styleGroupBox->setVisible(false);
         wdg->animStyleGroup->setVisible(false);
-    }
-    else if (to == "image/x-gimp-brush-animated") {
-        wdg->groupBox->setVisible(true);
+    } else if (to == "image/x-gimp-brush-animated") {
+        wdg->styleGroupBox->setVisible(true);
         wdg->animStyleGroup->setVisible(true);
     }
+
+    wdg->setConfiguration(defaultConfiguration());
 
     // preload gih name with chosen filename
     QFileInfo fileLocation(filename());

@@ -270,11 +270,6 @@ void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP
     m_d->maskingModel.startPreserveMode();
 }
 
-void KisMaskingBrushOption::setImage(KisImageWSP image)
-{
-    m_d->brushChooser->setImage(image);
-}
-
 void KisMaskingBrushOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
     *l |= KisBrushModel::brushLodLimitations(m_d->maskingData->brush);

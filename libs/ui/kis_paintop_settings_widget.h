@@ -45,9 +45,6 @@ public:
     lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
     lager::reader<qreal> effectiveBrushSize() const override;
 
-    ///Reimplemented, sets image on option widgets
-    void setImage(KisImageWSP image) override;
-
     ///Reimplemented, sets node on option widgets
     void setNode(KisNodeWSP node) override;
 

@@ -24,8 +24,6 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void setImage(KisImageWSP image) override;
-
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
     lager::reader<bool> maskingBrushEnabledReader() const;

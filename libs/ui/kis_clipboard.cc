@@ -486,7 +486,6 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
                                          imageBounds,
                                          showPopup,
                                          pasteBehaviourOverride,
-                                         useClipboardFallback,
                                          source);
 }
 
@@ -495,7 +494,6 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContentsWithData(QImage qimage,
                                                              const QRect &imageBounds,
                                                              bool showPopup,
                                                              int pasteBehaviourOverride,
-                                                             bool useClipboardFallback,
                                                              QPair<bool, PasteFormatBehaviour> source) const
 {
     KisPaintDeviceSP clip;

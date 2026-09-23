@@ -107,7 +107,6 @@ public:
         const QRect &imageBounds,
         bool showPopup,
         int overridePasteBehaviour = -1,
-        bool useClipboardFallback = false,
         QPair<bool, PasteFormatBehaviour> source = {false, PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
 
     QImage getImageWithFallback(const QMimeData *cbData, bool useClipboardFallback = false) const;

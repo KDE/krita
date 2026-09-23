@@ -577,7 +577,7 @@ void KisView::dropEvent(QDropEvent *event)
                 }
             }
 
-            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromBoardContentsWithData(qimage, urls, QRect(), true, -1, false, source);
+            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromBoardContentsWithData(qimage, urls, QRect(), true, -1, source);
             if (clip) {
                 const auto pos = this->viewConverter()
                                      ->imageToDocument(imgCursorPos)

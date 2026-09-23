@@ -22,9 +22,15 @@ public:
     PythonPluginsModel(QObject *parent, PythonPluginManager *pluginManager);
     PythonPlugin *plugin(const QModelIndex &) const;
 
-protected:
-    enum Column {COl_NAME, COL_COMMENT, COLUMN_COUNT};
+    enum Column {
+        COL_ENABLED,
+        COL_NAME,
+        COL_COMMENT,
+        COL_STATUS,
+        COLUMN_COUNT
+    };
 
+protected:
     int columnCount(const QModelIndex&) const override;
     int rowCount(const QModelIndex&) const override;
     QModelIndex index(int row, int column, const QModelIndex& parent) const override;

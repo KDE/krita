@@ -29,6 +29,8 @@ public:
 
     bool isValid() const;
 
+    QString statusText();
+
     inline const QString& errorReason() const
     {
         return m_errorReason;
@@ -57,6 +59,11 @@ public:
     QString moduleName() const
     {
         return m_moduleName;
+    }
+
+    QString desktopFilePath() const
+    {
+        return m_desktopFilePath;
     }
 
     QVariant property(const QString &name) const
@@ -89,6 +96,7 @@ private:
 
     QString m_name;
     QString m_moduleName;
+    QString m_desktopFilePath;
     QString m_comment;
     QString m_manual;
 

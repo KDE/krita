@@ -14,6 +14,7 @@ class ManagerPage;
 }
 
 class QIcon;
+class QTextBrowser;
 class PythonPluginManager;
 
 class PyQtPluginSettings : public KisPreferenceSet
@@ -39,11 +40,13 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void updateManual(const QModelIndex &index);
+    void updateTextBrowser(const QModelIndex &index);
 
 private:
     PythonPluginManager *m_pluginManager;
     Ui::ManagerPage *m_page;
+    QTextBrowser *m_manualBrowser;
+    QTextBrowser *m_statusBrowser;
 
 };
 

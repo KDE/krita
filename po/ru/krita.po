@@ -83,8 +83,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-08-06 10:38+0300\n"
-"Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
+"PO-Revision-Date: 2026-09-23 11:07+0200\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1203,7 +1203,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_abstract-"
 "textured1.gbr"
 msgid "A_abstract-textured1"
-msgstr "Aбстрактная текстура 1"
+msgstr "Абстрактная текстура 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -23903,7 +23903,7 @@ msgstr "Среднее арифметическое"
 #, kde-format
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
-msgstr "Cреднее геометрическое"
+msgstr "Среднее геометрическое"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
 #, kde-format
@@ -24264,7 +24264,7 @@ msgstr "Заморозка-отражение"
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
-msgstr "Гибрид «нагрев-сияние» и заморозки-отражения«заморозка-отражение»"
+msgstr "Гибрид «нагрев-сияние» и «заморозка-отражение»"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:217
 #, kde-format
@@ -27319,7 +27319,7 @@ msgid ""
 "away, in contrast to trial or educational versions of commercial software "
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
-"<html><head/><body><h1 align=\"center\"><b>Ваши права</h1><p>Krita "
+"<html><head/><body><h1 align=\"center\"><b>Ваши права</b></h1><p>Krita "
 "распространяется под лицензией GNU General Public License (версии 2 или "
 "более поздней).</p><p>Эта лицензия гарантирует людям ряд свобод:</"
 "p><ul><li>Вы можете свободно использовать Krita для любых целей,</li> <li>Вы "
@@ -27479,7 +27479,7 @@ msgid ""
 "<html><head/><body><p>The display brightness in nits. By default this is set "
 "to 1000 for converting to display linear.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Яркость дисплея в натах. По умолчанию это значение "
+"<html><head/><body><p>Яркость дисплея в нитах. По умолчанию это значение "
 "равно 1000 для преобразования в линейное отображение.</p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
@@ -28115,10 +28115,10 @@ msgstr "Использовать временные метки драйвера 
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Максимальная скорость кисти: : {n} пикс./мс"
-msgstr[1] "Максимальная скорость кисти: : {n} пикс./мс"
-msgstr[2] "Максимальная скорость кисти: : {n} пикс./мс"
-msgstr[3] "Максимальная скорость кисти: : {n} пикс./мс"
+msgstr[0] "Максимальная скорость кисти: {n} пикс./мс"
+msgstr[1] "Максимальная скорость кисти: {n} пикс./мс"
+msgstr[2] "Максимальная скорость кисти: {n} пикс./мс"
+msgstr[3] "Максимальная скорость кисти: {n} пикс./мс"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -31855,7 +31855,7 @@ msgstr "&Выделение"
 #: libs/ui/forms/wdgmasksource.ui:51
 #, kde-format
 msgid "current &Layer"
-msgstr "Текущий &cлой"
+msgstr "Текущий &слой"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:27
@@ -34590,8 +34590,8 @@ msgid ""
 "The Toggle Canvas Only action switches between full interface and canvas "
 "only mode"
 msgstr ""
-"Действие «Переключить \"Только холст\"» переключает режим между полноценным "
-"интерфейсом и отображением только холста"
+"Действие «Переключить режим „Только холст“» переключает режим между "
+"полноценным интерфейсом и отображением только холста"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:44
 #, kde-format
@@ -39389,11 +39389,11 @@ msgid ""
 "brighter. XYZ is <b>not</b> recommended for painting, but can be useful to "
 "encode in. The Tone Response Curve is assumed to be linear."
 msgstr ""
-" <b><a href=\"https://en.wikipedia.org/wiki/CIE_1931_color_space\">CIE XYZ</"
+"<b><a href=\"https://en.wikipedia.org/wiki/CIE_1931_color_space\">CIE XYZ</"
 "a></b> — пространство CIE, которое охватывает все цвета. Оно используется "
-"для преобразования цветов между профилями. Это аддитивное "
-"цветовоепространство (цвета при смешивании становятся светлее). XYZ <b>не</"
-"b> рекомендуется для редактирования, но может быть использовано для "
+"для преобразования цветов между профилями. Это аддитивное цветовое "
+"пространство (цвета при смешивании становятся светлее). XYZ <b>не</b> "
+"рекомендуется для редактирования, но может быть использовано для "
 "кодирования. Кривая отклика линейна."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
@@ -46186,7 +46186,7 @@ msgstr "Запись"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "Изображение слишком велико для записи"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -55924,8 +55924,8 @@ msgid ""
 "<html><head/><body><p>The display brightness in nits. By default this is set "
 "to 1000 for converting from PQ.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Яркость дисплея. По умолчанию это значение равно 1000 "
-"для преобразования из PQ.</p></body></html>"
+"<html><head/><body><p>Яркость дисплея в нитах. По умолчанию это значение "
+"равно 1000 для преобразования из PQ.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)

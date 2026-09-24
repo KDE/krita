@@ -70038,9 +70038,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid "Layer name:"
-#~ msgstr "Namn på lag:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "Det finst ingen oppsettval for dette filteret"

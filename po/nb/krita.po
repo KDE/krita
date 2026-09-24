@@ -68357,9 +68357,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid "Layer name:"
-#~ msgstr "Lagnavn:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "Ingen innstillingsvalg tilgjengelig for dette filteret"

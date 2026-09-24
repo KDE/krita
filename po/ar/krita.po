@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-23 00:47+0000\n"
-"PO-Revision-Date: 2026-09-14 19:10+0400\n"
+"PO-Revision-Date: 2026-09-23 19:05+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -33876,10 +33876,9 @@ msgid "Smart Zoom Gesture"
 msgstr "إيماءة التكبير الذكي"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "إيماءات اللمس"
+msgstr "إيماءة تمرير لوحة اللمس"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -33961,18 +33960,16 @@ msgid "Mouse Wheel"
 msgstr "عجلة الفأرة"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "إيماءات اللمس"
+msgstr "إيماءة اللمس"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "إيماءات اللمس"
+msgstr "إيماءة لوحة اللمس"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -33990,23 +33987,21 @@ msgid "Tablet Event Logging Disabled"
 msgstr "عُطّل تسجيل أحداث اللوحيّ"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "موارد مؤقتة"
+msgstr "مسطرة مستقيمة مؤقتة"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
 msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
-msgstr ""
+msgstr "ينشئ إجراء <i>المسطرة المستقيمة المؤقتة</i> مسطرة عابرة للرسم المقيّد."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "End angle:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "زاوية النّهاية:"
+msgstr "زاوية ملتقطة"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -34164,52 +34159,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "تكبير وتدوير لوحة الرسم"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "وضع التّدوير"
+msgstr "وضع التحريك والتقريب والتدوير"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "أهمل وضع التّدوير"
+msgstr "وضع التحريك والتقريب والتدوير المتقطع"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "أهمل وضع التّدوير"
+msgstr "وضع التحريك والتقريب المتقطع والتدوير"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "أهمل وضع التّدوير"
+msgstr "وضع التحريك والتقريب المتقطع والتدوير المتقطع"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "وضع التّدوير"
+msgstr "وضع التقريب والتدوير"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "أهمل وضع التّدوير"
+msgstr "وضع التقريب والتدوير المتقطع"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "أهمل وضع التّدوير"
+msgstr "وضع التقريب المتقطع والتدوير"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "أهمل وضع التّدوير"
+msgstr "وضع التقريب المتقطع والتدوير المتقطع"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -44469,16 +44456,14 @@ msgid "Tablet Handling"
 msgstr "معالجة اللوحة الرقمية"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "معالجة المدخلات"
+msgstr "ترشيح الإدخال"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "معالجة المدخلات"
+msgstr "مطابقة الإدخال"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format

@@ -96,6 +96,7 @@ protected:
     QWidget* createInput() override;
 public Q_SLOTS:
     void setValue();
+    void textChanged(const QString &text);
     void update();
 private:
     QLineEdit* m_hexInput {nullptr};

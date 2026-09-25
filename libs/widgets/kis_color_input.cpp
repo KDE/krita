@@ -348,8 +348,14 @@ KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDispl
     }
 
     connect(m_input, SIGNAL(textChanged(const QString&)), SLOT(setValue()));
+    connect(m_input, SIGNAL(textEdited(const QString &)), SLOT(textChanged(const QString &)));
 
     m_layout->addWidget(m_input);
+}
+
+void KisHexColorInput::textChanged(const QString &text)
+{
+    this->m_hexInput->setText(text.trimmed());
 }
 
 void KisHexColorInput::setValue()
@@ -397,7 +403,7 @@ QWidget* KisHexColorInput::createInput()
     m_hexInput->setAlignment(Qt::AlignRight);
 
     int digits = 2*m_color->colorSpace()->colorChannelCount();
-    QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);
+    QString pattern = QString("\\s*#?[a-fA-F0-9]{%1,%2}\\s*").arg(digits).arg(digits);
     m_hexInput->setValidator(new QRegularExpressionValidator(QRegularExpression(pattern), this));
     connect(m_hexInput, SIGNAL(editingFinished()), this, SLOT(setValue()));
     return m_hexInput;

@@ -48,7 +48,23 @@ bool KisChangeFrameAction::isAvailable() const
     KisImageWSP image = canvas->image();
     if (!bool(image)) return false;
 
-    return image->animationInterface()->hasAnimation();
+    // Only works when this image has animation
+    if (!image->animationInterface()->hasAnimation()) {
+        return false;
+    }
+
+    // Prevents when in Edit Selection
+    KisNodeSP activeNode = canvas->viewManager()->activeNode();
+    if (activeNode && activeNode->inherits("KisSelectionMask")) {
+        return false;
+    }
+
+    // Prevents when a shape is selected
+    if (canvas->toolProxy() && canvas->toolProxy()->hasSelection()) {
+        return false;
+    }
+
+    return true;
 }
 
 void KisChangeFrameAction::begin(int shortcut, QEvent *event)

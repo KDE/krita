@@ -347,6 +347,8 @@ KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDispl
         m_layout->addWidget(m_colorPreview);
     }
 
+    connect(m_input, SIGNAL(textChanged(const QString&)), SLOT(setValue()));
+
     m_layout->addWidget(m_input);
 }
 

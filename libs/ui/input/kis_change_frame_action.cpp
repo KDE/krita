@@ -13,7 +13,8 @@
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_node.h"
-
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 
 struct KisChangeFrameAction::Private
 {
@@ -38,9 +39,16 @@ KisChangeFrameAction::~KisChangeFrameAction()
 
 bool KisChangeFrameAction::isAvailable() const
 {
-    KisNodeSP node = inputManager()->canvas()->viewManager()->activeNode();
+    KisInputManager *im = inputManager();
+    if (!im) return false;
 
-    return node ? node->isAnimated() : false;
+    KisCanvas2 *canvas = im->canvas();
+    if (!canvas) return false;
+
+    KisImageWSP image = canvas->image();
+    if (!bool(image)) return false;
+
+    return image->animationInterface()->hasAnimation();
 }
 
 void KisChangeFrameAction::begin(int shortcut, QEvent *event)

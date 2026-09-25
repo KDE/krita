@@ -147,7 +147,7 @@ void KisCanvasController::keyPressEvent(QKeyEvent *event)
      * Do not call the KoCanvasControllerWidget::keyPressEvent()
      * to avoid activation of Pan and Default tool activation shortcuts
      */
-    Q_UNUSED(event);
+    event->ignore();
 }
 
 void KisCanvasController::wheelEvent(QWheelEvent *event)
@@ -157,7 +157,7 @@ void KisCanvasController::wheelEvent(QWheelEvent *event)
      * Do not call the KoCanvasControllerWidget::wheelEvent()
      * to disable the default behavior of KoCanvasControllerWidget and QAbstractScrollArea
      */
-    Q_UNUSED(event);
+    event->ignore();
 }
 
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)

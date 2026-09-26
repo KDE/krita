@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-08-31 16:33+0200\n"
+"PO-Revision-Date: 2026-09-22 20:25+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -34011,22 +34011,22 @@ msgstr "%1 + %2"
 #: libs/ui/input/kis_shortcut_configuration.cpp:476
 #, kde-format
 msgid "Pinch Gesture"
-msgstr "Pizzica gesto"
+msgstr "Gesto Pizzica"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:478
 #, kde-format
 msgid "Pan Gesture"
-msgstr "Gesto di scorrimento"
+msgstr "Gesto Sposta"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:480
 #, kde-format
 msgid "Rotate Gesture"
-msgstr "Ruota gesto"
+msgstr "Gesto Ruota"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, kde-format
 msgid "Smart Zoom Gesture"
-msgstr "Ingrandimento intelligente gesto"
+msgstr "Gesto Ingrandisci intelligente"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:485
 #, kde-format

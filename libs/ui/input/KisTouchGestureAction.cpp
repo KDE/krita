@@ -33,6 +33,7 @@ KisTouchGestureAction::KisTouchGestureAction()
     shortcuts.insert(i18n("Freehand Selection Tool"), KisToolSelectContiguous);
     shortcuts.insert(i18n("Activate Move Tool"), KisToolMove);
     shortcuts.insert(i18n("Activate Transform Tool"), KisToolTransform);
+    shortcuts.insert(i18n("Mirror View"), MirrorView);
     setShortcutIndexes(shortcuts);
 }
 
@@ -92,6 +93,9 @@ void KisTouchGestureAction::end(QEvent *event)
         break;
     case ToggleEraserPreset:
         actionName = QStringLiteral("eraser_preset_action");
+        break;
+    case MirrorView:
+        actionName = QStringLiteral("mirror_canvas");
         break;
     }
 

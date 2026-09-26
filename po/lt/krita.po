@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-23 00:47+0000\n"
+"POT-Creation-Date: 2026-09-26 00:43+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -16711,8 +16711,8 @@ msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr ""
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:507
-#: libs/ui/KisApplication.cpp:840
+#: krita/main.cc:820 libs/ui/KisApplication.cpp:503
+#: libs/ui/KisApplication.cpp:836
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -24635,10 +24635,10 @@ msgstr "Valyti resursų failus"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1241
-#: libs/ui/KisApplication.cpp:1244 libs/ui/KisApplication.cpp:1260
-#: libs/ui/KisApplication.cpp:1292 libs/ui/KisApplication.cpp:1306
-#: libs/ui/KisApplication.cpp:1334 libs/ui/KisDocument.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1237
+#: libs/ui/KisApplication.cpp:1240 libs/ui/KisApplication.cpp:1256
+#: libs/ui/KisApplication.cpp:1288 libs/ui/KisApplication.cpp:1302
+#: libs/ui/KisApplication.cpp:1330 libs/ui/KisDocument.cpp:1057
 #: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
 #: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
 #: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
@@ -33468,7 +33468,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:434
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:430
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -35072,7 +35072,7 @@ msgstr "&Dailinko įrankiai"
 msgid "&Docker Box"
 msgstr "Užrakinta"
 
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:430
+#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35086,8 +35086,8 @@ msgstr "Šablonai"
 msgid "Custom Pattern"
 msgstr "Šablonas"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:415
-#: libs/ui/KisApplication.cpp:416
+#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:272
@@ -36074,22 +36074,22 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Atstatyti mastelį į 100%"
 
-#: libs/ui/KisApplication.cpp:407
+#: libs/ui/KisApplication.cpp:403
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Teptuko ruošiniai"
 
-#: libs/ui/KisApplication.cpp:410 libs/ui/KisApplication.cpp:411
-#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:406 libs/ui/KisApplication.cpp:407
+#: libs/ui/KisApplication.cpp:408 libs/ui/KisApplication.cpp:409
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:267
 #, fuzzy, kde-format
 #| msgid "Brush Tip"
 msgid "Brush tips"
 msgstr "Teptuko patarimas"
 
-#: libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:414
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:270
@@ -36097,7 +36097,7 @@ msgstr "Teptuko patarimas"
 msgid "Palettes"
 msgstr "Paletės"
 
-#: libs/ui/KisApplication.cpp:431 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:427 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:268
@@ -36105,49 +36105,49 @@ msgstr "Paletės"
 msgid "Workspaces"
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektorinis sluoksnis"
 
-#: libs/ui/KisApplication.cpp:433 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:429 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "Lango dydis"
 
-#: libs/ui/KisApplication.cpp:435
+#: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:273
 #, fuzzy, kde-format
 #| msgid "Rotate Canvas"
 msgid "Gamut masks"
 msgstr "Sukti drobę"
 
-#: libs/ui/KisApplication.cpp:437
+#: libs/ui/KisApplication.cpp:433
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Apatinis indeksas"
 
-#: libs/ui/KisApplication.cpp:442
+#: libs/ui/KisApplication.cpp:438
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Sluoksnio dydis"
 
-#: libs/ui/KisApplication.cpp:445
+#: libs/ui/KisApplication.cpp:441
 #, fuzzy, kde-format
 msgid "Font Families"
 msgstr "Šriftų šeima"
 
-#: libs/ui/KisApplication.cpp:446
+#: libs/ui/KisApplication.cpp:442
 #, fuzzy, kde-format
 #| msgid "Style"
 msgid "Style Presets"
 msgstr "Stilius"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:454
 #, kde-format
 msgid ""
 "%1\n"
@@ -36155,13 +36155,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:458 libs/ui/KisApplication.cpp:464
+#: libs/ui/KisApplication.cpp:454 libs/ui/KisApplication.cpp:460
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "&Skiriamoji geba:"
 
-#: libs/ui/KisApplication.cpp:464
+#: libs/ui/KisApplication.cpp:460
 #, kde-format
 msgid ""
 "\n"
@@ -36169,7 +36169,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:504
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -36177,68 +36177,68 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:525
+#: libs/ui/KisApplication.cpp:521
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "&Ištekliai"
 
-#: libs/ui/KisApplication.cpp:563
+#: libs/ui/KisApplication.cpp:559
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Ištekliai"
 
-#: libs/ui/KisApplication.cpp:567
+#: libs/ui/KisApplication.cpp:563
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Valyti resursų failus"
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:569
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Teptuko ruošiniai"
 
-#: libs/ui/KisApplication.cpp:582
+#: libs/ui/KisApplication.cpp:578
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Perėjimas"
 
-#: libs/ui/KisApplication.cpp:614
+#: libs/ui/KisApplication.cpp:610
 #, fuzzy, kde-format
 #| msgid "&Oilpaint..."
 msgid "Launching..."
 msgstr "&Aliejinė tapyba..."
 
-#: libs/ui/KisApplication.cpp:735
+#: libs/ui/KisApplication.cpp:731
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:796
+#: libs/ui/KisApplication.cpp:792
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Nepavyko sukurti veiksmo."
 
-#: libs/ui/KisApplication.cpp:821 libs/ui/KisApplication.cpp:1100
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1096
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Filtro sluoksnis..."
 
-#: libs/ui/KisApplication.cpp:829 libs/ui/KisApplication.cpp:834
-#: libs/ui/KisApplication.cpp:1094 libs/ui/KisApplication.cpp:1108
-#: libs/ui/KisApplication.cpp:1113
+#: libs/ui/KisApplication.cpp:825 libs/ui/KisApplication.cpp:830
+#: libs/ui/KisApplication.cpp:1090 libs/ui/KisApplication.cpp:1104
+#: libs/ui/KisApplication.cpp:1109
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Įspėjimas"
 
-#: libs/ui/KisApplication.cpp:830 libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1105
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Nepavyksta parinkti spalvos, nes aktyvus sluoksnis nematomas."
 
-#: libs/ui/KisApplication.cpp:835
+#: libs/ui/KisApplication.cpp:831
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36251,7 +36251,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:837
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36259,35 +36259,35 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1095
+#: libs/ui/KisApplication.cpp:1091
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisApplication.cpp:1114
+#: libs/ui/KisApplication.cpp:1110
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add the file layer: no document is open."
 msgstr "Nepavyksta parinkti spalvos, nes aktyvus sluoksnis nematomas."
 
-#: libs/ui/KisApplication.cpp:1242
+#: libs/ui/KisApplication.cpp:1238
 #, fuzzy, kde-format
 #| msgid "Select a Directory"
 msgid "No template found for: %1"
 msgstr "Pasirinkite aplanką"
 
-#: libs/ui/KisApplication.cpp:1245
+#: libs/ui/KisApplication.cpp:1241
 #, fuzzy, kde-format
 #| msgid "Select a Directory"
 msgid "Too many templates found for: %1"
 msgstr "Pasirinkite aplanką"
 
-#: libs/ui/KisApplication.cpp:1261
+#: libs/ui/KisApplication.cpp:1257
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "&Pažymėti viską"
 
-#: libs/ui/KisApplication.cpp:1293
+#: libs/ui/KisApplication.cpp:1289
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36297,7 +36297,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1307
+#: libs/ui/KisApplication.cpp:1303
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36305,7 +36305,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1335
+#: libs/ui/KisApplication.cpp:1331
 #, fuzzy, kde-format
 #| msgid "Do you really want to remove that group?"
 msgid "Do you want to clear the settings file?"
